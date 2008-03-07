@@ -64,7 +64,7 @@
 	
 	<target name="dist" depends="clean, compile" description="Creates a JAR of the XUL Framework.">
 		<mkdir dir="dist" />
-		<jar destfile="dist/pentaho-console-framework-${release.major.number}.${release.minor.number}.${release.milestone.number}.jar">
+		<jar destfile="dist/pentaho-xul-framework-${release.major.number}.${release.minor.number}.${release.milestone.number}.jar">
 			<manifest>
 				<attribute name="Implementation-Title" value="${impl.title}" />
 				<attribute name="Implementation-Version" value="${impl.version}" />
