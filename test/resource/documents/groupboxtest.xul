@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<window id="label-test" title="Testing groupboxes for SWT, Swing"
+	orient="horizontal"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<groupbox id="test-group-box" orient="horizontal">
+		<!-- <caption id="test-group-box" label="Testing Group Boxes" />  -->  
+		<label id="label-one" value="First Label" />
+		<label id="label-two" value="Second Label" />
+		<label id="label-three" value="Third Label" />
+	</groupbox>
+
+</window>

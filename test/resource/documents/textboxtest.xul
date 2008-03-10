@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<window id="textbox-test" title="Testing textboxes for SWT, Swing"
+	orient="horizontal"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<groupbox id="test-group-box" orient="horizontal">
+		<caption id="test-group-box" label="Testing Group Boxes" />  
+		<label id="label1" value="Label for text box" />
+		<textbox id="textbox1" value="default" maxlength="10" />
+	</groupbox>
+
+</window>
