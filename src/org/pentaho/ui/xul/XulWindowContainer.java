@@ -17,30 +17,28 @@ import org.pentaho.ui.xul.containers.XulWindow;
  */
 public class XulWindowContainer {
   private List<XulWindow> windows;
-  private Document document;
+  private List<Document> documents;
   
   private Map<String, XulEventHandler> eventHandlers;
   
   public XulWindowContainer(){
     windows = new ArrayList<XulWindow>();
+    documents = new ArrayList<Document>();
     eventHandlers = new HashMap<String, XulEventHandler>();
   }
 
   public Document getDocumentRoot(){
-    return this.document;
+    return this.documents.get(0);
   }
 
-  public void setDocumentRoot(Document document){
-    this.document = document;
+  public void addDocument(Document document){
+    this.documents.add(document);
   }
   
   public Document remoteCall(XulServiceCall serviceUrl){
     return null;
   }
   
-  public XulComponent getElementById(String id){
-    return (XulComponent) document.elementByID(id);
-  }
   
   public void addEventHandler(String id, String eventClassName){
     if(eventHandlers.containsKey(id)){ //if already registered
