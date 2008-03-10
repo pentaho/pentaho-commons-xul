@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<window  eventHandler="org.pentaho.ui.xul.samples.SampleEventHandler" width="400" height="300" title="Testing...">
+<window width="400" height="300" title="Testing...">
+	<script src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
+	<script src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>
 	<vbox>
 		<hbox>
 			<label value="What is your name?"/>
 			<textbox id="name"/>
 		</hbox>
-		<button label="Say Hi!" onClick="sayHello()"/>
-
+		<hbox>
+			<button label="Say Hi!" onClick="testHandler.sayHello()"/>
+			<button label="Say Hi2!" onClick="testHandler2.sayHello()"/>
+		</hbox>
 		<label value="" id="response"/>
 	</vbox>
 </window>

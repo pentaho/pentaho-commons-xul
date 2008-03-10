@@ -16,7 +16,7 @@ import org.pentaho.ui.xul.components.XulTextbox;
  * @author OEM
  *
  */
-public class SampleEventHandler extends XulEventHandler{
+public class SampleEventHandler2 extends XulEventHandler{
  
 
   public void sayHello(){
@@ -28,10 +28,11 @@ public class SampleEventHandler extends XulEventHandler{
       
       XulLabel responseLabel = (XulLabel) document.selectSingleNode("/window/vbox/label");
       
-      if(name.equals(""))
-        responseLabel.setText("You should really type in your name");
-      else
-        responseLabel.setText("Hello there "+name);
+      if(name.equals("")){
+        responseLabel.setText("What was that?");
+      } else {
+        responseLabel.setText("Yea nice to meet you "+name);
+      }
         
       
     } else {

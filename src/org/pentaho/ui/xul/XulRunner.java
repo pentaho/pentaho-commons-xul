@@ -3,6 +3,8 @@
  */
 package org.pentaho.ui.xul;
 
+import java.util.List;
+
 import org.dom4j.Document;
 
 
@@ -16,13 +18,8 @@ public interface XulRunner {
   public void initialize() throws XulException;
   public void start() throws XulException;
   public void stop() throws XulException;
-  
-  public Document getDocumentRoot();
-
-  public void setDocumentRoot(Document document);
+  public void addContainer(XulWindowContainer xulWindowContainer);
+  public List<XulWindowContainer> getXulWindowContainers();
   public Document remoteCall(XulServiceCall serviceUrl);
-  
-  public XulComponent getElementById(String id);
-  public XulComponent getElementsById(String id);
   
 }

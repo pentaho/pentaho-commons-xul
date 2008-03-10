@@ -11,6 +11,6 @@ import org.dom4j.Element;
  *
  */
 public interface XulTagHandler {
-  public XulElement parse(Element element, XulContainer parent, XulRunner xulRunner);
+  public XulElement parse(Element element, XulContainer parent, XulWindowContainer xulWindowContainer);
   
 }

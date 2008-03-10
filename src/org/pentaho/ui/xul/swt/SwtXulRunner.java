@@ -1,6 +1,10 @@
 package org.pentaho.ui.xul.swt;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
 
 import org.dom4j.Document;
 import org.eclipse.swt.widgets.Composite;
@@ -13,8 +17,10 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulParser;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulServiceCall;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.SwingXulRunner;
+import org.pentaho.ui.xul.swing.tags.SwingWindow;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 
@@ -25,18 +31,11 @@ public class SwtXulRunner implements XulRunner {
   private Composite rootFrame;
 
   private XulEventHandler eventHandler;
+  
+  private List<XulWindowContainer> containers; 
 
   public SwtXulRunner() {
-
-    XulParser.registerHandler("WINDOW", "org.pentaho.ui.xul.swt.tags.SwtWindow");
-    XulParser.registerHandler("BUTTON", "org.pentaho.ui.xul.swt.tags.SwtButton");
-    XulParser.registerHandler("BOX", "org.pentaho.ui.xul.swt.tags.SwtBox");
-    XulParser.registerHandler("VBOX", "org.pentaho.ui.xul.swt.tags.SwtVbox");
-    XulParser.registerHandler("HBOX", "org.pentaho.ui.xul.swt.tags.SwtHbox");
-    XulParser.registerHandler("LABEL", "org.pentaho.ui.xul.swt.tags.SwtLabel");
-    XulParser.registerHandler("TEXTBOX", "org.pentaho.ui.xul.swt.tags.SwtTextbox");
-    XulParser.registerHandler("GROUPBOX", "org.pentaho.ui.xul.swt.tags.SwtGroupbox");
-
+    containers = new ArrayList<XulWindowContainer>();
   }
 
   public Document getDocumentRoot() {
@@ -53,19 +52,16 @@ public class SwtXulRunner implements XulRunner {
 
   public void initialize() throws XulException {
 
-    // TODO Should initialize return a status? 
+    // TODO Should initialize return a status? Reply: Just let them catch the Exception
 
-    if (document != null) {
+    XulElement rootEle = (XulElement) containers.get(0).getDocumentRoot().getRootElement();
 
-      XulElement rootEle = (XulElement) document.getRootElement();
-      eventHandler = ((XulWindow) rootEle).getEventHandler();
-      if (rootEle instanceof SwtWindow) {
-        rootFrame = (Composite) rootEle.getManagedObject();
-      } else {
-        throw new XulException("Unexpected root element: " + rootEle.getManagedObject().toString());
-      }
-
+    if (rootEle instanceof SwtWindow) {
+      rootFrame = (Composite) rootEle.getManagedObject();
+    } else {
+      throw new XulException("Unexpected root element: " + rootEle.getManagedObject().toString());
     }
+
   }
 
   public Document remoteCall(XulServiceCall serviceUrl) {
@@ -91,6 +87,15 @@ public class SwtXulRunner implements XulRunner {
       return;
     }
     ((Shell)rootFrame).dispose();
+  }
+  
+  public void addContainer(XulWindowContainer xulWindowContainer) {
+    this.containers.add(xulWindowContainer);
+  }
+  
+
+  public List<XulWindowContainer> getXulWindowContainers() {
+    return containers;
   }
 
   public static void main(String[] args) {

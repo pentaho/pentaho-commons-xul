@@ -4,6 +4,8 @@
 package org.pentaho.ui.xul.swing;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -17,6 +19,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulParser;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulServiceCall;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.tags.SwingButtonHandler;
 import org.pentaho.ui.xul.swing.tags.SwingHboxHandler;
@@ -35,49 +38,20 @@ public class SwingXulRunner implements XulRunner {
   private Document document;
   private JFrame rootFrame;
   private XulEventHandler eventHandler;
+  private List<XulWindowContainer> containers; 
   
   public SwingXulRunner(){
+    containers = new ArrayList<XulWindowContainer>();
   }
   
-  public void setDocumentRoot(Document document){
-
-    this.document = document;
-    String className = "not initialized";
-   
-  }
   
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulRunner#getDocumentRoot()
-   */
-  public Document getDocumentRoot() {
-    // TODO Auto-generated method stub
-    return document;
-  }
-
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulRunner#getElementById(java.lang.String)
-   */
-  public XulComponent getElementById(String id) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulRunner#getElementsById(java.lang.String)
-   */
-  public XulComponent getElementsById(String id) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulRunner#initialize()
    */
   public void initialize() throws XulException{
     //get first Element, should be a JFrame and show it.
-    XulElement rootEle = (XulElement) document.getRootElement();
+    XulElement rootEle = (XulElement) containers.get(0).getDocumentRoot().getRootElement();
 
-    eventHandler = ((XulWindow) rootEle).getEventHandler();
     if(rootEle instanceof SwingWindow){
       rootFrame = (JFrame) rootEle.getManagedObject();
     } else {
@@ -110,20 +84,21 @@ public class SwingXulRunner implements XulRunner {
 
   }
 
-  /**
-   * @param args
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.XulRunner#addContainer(org.pentaho.ui.xul.XulWindowContainer)
    */
+  public void addContainer(XulWindowContainer xulWindowContainer) {
+    this.containers.add(xulWindowContainer);
+    
+  }
+
+  public List<XulWindowContainer> getXulWindowContainers() {
+    return containers;
+  }
+
   public static void main(String[] args) {
     // TODO Auto-generated method stub
     try{
-
-      //register handlers, done with Spring in the future?
-      XulParser.registerHandler("WINDOW", new SwingWindowHandler());
-      XulParser.registerHandler("BUTTON", new SwingButtonHandler());
-      XulParser.registerHandler("VBOX", new SwingVboxHandler());
-      XulParser.registerHandler("HBOX", new SwingHboxHandler());
-      XulParser.registerHandler("LABEL", new SwingLabelHandler());
-      XulParser.registerHandler("TEXTBOX", new SwingTextboxHandler());
       
       InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/sampleXul.xml");
       if(in == null){
@@ -133,7 +108,7 @@ public class SwingXulRunner implements XulRunner {
       
       Document doc = CleanXmlHelper.getDocFromStream(in);
       
-      SwingXulRunner runner = new SwingXulLoader().loadXul(doc);
+      XulRunner runner = new SwingXulLoader().loadXul(doc);
       runner.initialize();
       runner.start();
       

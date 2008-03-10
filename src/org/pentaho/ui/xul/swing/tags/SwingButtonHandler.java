@@ -9,6 +9,7 @@ import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulTagHandler;
+import org.pentaho.ui.xul.XulWindowContainer;
 
 /**
  * @author OEM
@@ -16,7 +17,7 @@ import org.pentaho.ui.xul.XulTagHandler;
  */
 public class SwingButtonHandler implements XulTagHandler{
   
-  public SwingButton parse(Element element, XulContainer parent, XulRunner xulRunner) {
+  public SwingButton parse(Element element, XulContainer parent, XulWindowContainer xulWindowContainer) {
     //TODO: break out to factory
     String text = element.attributeValue("label");
     SwingButton button = new SwingButton(text);

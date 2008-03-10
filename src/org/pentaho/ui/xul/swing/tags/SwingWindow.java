@@ -9,6 +9,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -23,6 +24,7 @@ import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulTagHandler;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 
 
@@ -33,12 +35,12 @@ import org.pentaho.ui.xul.containers.XulWindow;
 public class SwingWindow extends XulElement implements XulWindow  {
 
   JFrame frame;
-  private XulEventHandler eventHandler;
   private int width;
   private int height;
   private Document rootDocument;
   private Box contentPane;
-  private XulRunner xulRunner;
+  private XulWindowContainer xulWindowContainer;
+
   
   public SwingWindow(String title){
     super("window");
@@ -56,6 +58,10 @@ public class SwingWindow extends XulElement implements XulWindow  {
 
   public void add(XulComponent c){
     Component component = (Component) c.getManagedObject();
+    if(component == null){
+      System.out.println("skipping over empty element: "+c.getName());
+      return;
+    }
     //force components to fill horizontal space
     component.setMaximumSize(null);
     component.setPreferredSize(null);
@@ -70,25 +76,6 @@ public class SwingWindow extends XulElement implements XulWindow  {
     frame.setTitle(title);
   }
 
-  
-  public void setEventHandlerClass(String str){
-    try{
-      Class cls = Class.forName(str);
-      eventHandler = (XulEventHandler) cls.newInstance();
-      eventHandler.setXulRunner(this.xulRunner);
-      
-    } catch(ClassNotFoundException e){
-      System.out.println("backing class not found");
-      e.printStackTrace(System.out);
-    } catch(Exception e){
-      System.out.println("Error with Backing class creation");
-      e.printStackTrace(System.out);
-    }
-  }
-  
-  public XulEventHandler getEventHandler(){
-    return eventHandler;
-  }
 
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulPage#getHeight()
@@ -120,9 +107,19 @@ public class SwingWindow extends XulElement implements XulWindow  {
    * @see org.pentaho.ui.xul.containers.XulWindow#invoke(java.lang.String, java.lang.Object[])
    */
   public void invoke(String method, Object[] args) {
+    
     try{
+      if(method.indexOf('.') == -1){
+        throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
+      }
+      
       method = method.replace("()", "");
-      Method m = eventHandler.getClass().getMethod(method, new Class[0]);
+      String[] pair = method.split("\\.");
+      String eventID = pair[0];
+      String methodName = pair[1];
+      
+      XulEventHandler eventHandler = this.xulWindowContainer.getEventHandler(eventID);
+      Method m = eventHandler.getClass().getMethod(methodName, new Class[0]);
       m.invoke(eventHandler, args);
       
     } catch(Exception e){
@@ -135,7 +132,12 @@ public class SwingWindow extends XulElement implements XulWindow  {
     this.rootDocument = document;
   }
   
-  public void setXulRunner(XulRunner xulRunner){
-    this.xulRunner = xulRunner;
+  public void setXulWindowContainer(XulWindowContainer xulWindowContainer){
+    this.xulWindowContainer = xulWindowContainer;
+  }
+
+  public XulWindowContainer getXulWindowContainer(XulWindowContainer xulWindowContainer) {
+    // TODO Auto-generated method stub
+    return xulWindowContainer;
   }
 }

@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulRunner;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 
 public class SwtWindow extends XulElement implements XulWindow {
@@ -22,7 +23,7 @@ public class SwtWindow extends XulElement implements XulWindow {
   private int width;
   private int height;
   private Document rootDocument;
-  private XulRunner xulRunner;
+  private XulWindowContainer xulWindowContainer;
   
   public SwtWindow(XulElement parent, String tagName) {
     super(tagName);
@@ -56,26 +57,28 @@ public class SwtWindow extends XulElement implements XulWindow {
   }
 
   public void invoke(String method, Object[] args) {
+    
     try{
+      if(method.indexOf('.') == -1){
+        throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
+      }
+      
       method = method.replace("()", "");
-      Method m = eventHandler.getClass().getMethod(method, new Class[0]);
+      String[] pair = method.split("\\.");
+      String eventID = pair[0];
+      String methodName = pair[1];
+      
+      XulEventHandler eventHandler = this.xulWindowContainer.getEventHandler(eventID);
+      Method m = eventHandler.getClass().getMethod(methodName, new Class[0]);
       m.invoke(eventHandler, args);
       
     } catch(Exception e){
-      // throw new XulException(e);
+      System.out.println("Error invoking method: "+method);
+      e.printStackTrace(System.out);
     }
   }
 
-  public void setEventHandlerClass(String name) {
-    try{
-      Class cls = Class.forName(name);
-      eventHandler = (XulEventHandler) cls.newInstance();
-      eventHandler.setXulRunner(this.xulRunner);
-      
-    } catch(Exception e){
-      // throw new XulException(e);
-    }
-  }
+  
 
   public void setTitle(String title) {
     shell.getDisplay().setAppName(title);
@@ -86,13 +89,18 @@ public class SwtWindow extends XulElement implements XulWindow {
     this.rootDocument = document;
   }
   
-  public void setXulRunner(XulRunner xulRunner){
-    this.xulRunner = xulRunner;
-  }
-
   public void add(XulComponent component) {
     // intentionally does nothing
 
+  }
+  
+  public void setXulWindowContainer(XulWindowContainer xulWindowContainer){
+    this.xulWindowContainer = xulWindowContainer;
+  }
+
+  public XulWindowContainer getXulWindowContainer(XulWindowContainer xulWindowContainer) {
+    // TODO Auto-generated method stub
+    return xulWindowContainer;
   }
 
 }
