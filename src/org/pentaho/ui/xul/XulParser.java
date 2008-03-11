@@ -37,7 +37,8 @@ public class XulParser {
   public XulParser(XulWindowContainer xulWindowContainer){
     xulDocument = DocumentFactory.getInstance().createDocument();
     this.xulWindowContainer = xulWindowContainer;
-    xulWindowContainer.setDocumentRoot(xulDocument);
+//    xulWindowContainer.setDocumentRoot(xulDocument);
+    xulWindowContainer.addDocument(xulDocument);
   }
   
   public Document parseDocument(Element rootSrc) throws XulException{
@@ -54,7 +55,7 @@ public class XulParser {
     //parse element
     XulElement root = getElement(rootSrc, parent);
     
-    //decend down a level and parse children (root would be a container in the case)
+    //descend down a level and parse children (root would be a container in the case)
     for(Object child : rootSrc.elements()){
       XulElement childElement = parse( (Element) child, (XulContainer) root);
       
@@ -62,11 +63,17 @@ public class XulParser {
       if(childElement == null){
         continue;
       }
+      
+      // GEM: I'm missing something here - why are we adding the child to
+      // the root twice? 
+      
       root.add(childElement);
       
       if(root instanceof XulContainer) //more of an assert, should be true.
         ((XulContainer) root).add(childElement);
     }
+    root.layout();
+    
     return root;
   }
   
@@ -84,13 +91,13 @@ public class XulParser {
       return ((XulTagHandler)handler).parse(srcEle, parent, xulWindowContainer);
     } else {  // handler is String class name of the class we want to create an instance of 
       String tagName = srcEle.getName();
-      Class c;
+      Class <?> c;
       try {
         c = Class.forName((String)handler);
-        Constructor constructor = c.getConstructor(new Class [] {XulElement.class, String.class});
+        Constructor <?> constructor = c.getConstructor(new Class [] {XulElement.class, String.class});
         XulElement ele =  (XulElement)constructor.newInstance(parent, tagName);
 
-        Map attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
+        Map <String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
         BeanUtils.populate(ele, attributesMap);
         return ele;
       } catch (Exception e) {

@@ -6,8 +6,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulLabel;
+import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtLabel extends XulElement implements XulLabel {
+public class SwtLabel extends SwtElement implements XulLabel {
   private static final long serialVersionUID = 5202737172518086153L;
   
   private boolean disabled;

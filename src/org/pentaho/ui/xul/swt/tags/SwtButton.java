@@ -4,8 +4,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulButton;
+import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtButton extends XulElement implements XulButton {
+public class SwtButton extends SwtElement implements XulButton {
 
   /**
    * 

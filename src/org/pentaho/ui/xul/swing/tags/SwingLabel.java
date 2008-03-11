@@ -47,6 +47,10 @@ public class SwingLabel extends XulElement implements XulLabel{
     
   }
   
+  public void layout(){
+  }
+
+  
   public void setText(String text){
     label.setText(text);
     

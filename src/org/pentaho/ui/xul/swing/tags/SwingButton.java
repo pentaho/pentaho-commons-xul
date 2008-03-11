@@ -62,4 +62,7 @@ public class SwingButton extends XulElement implements XulButton{
       }
     });
   }
+  
+  public void layout(){
+  }
 }

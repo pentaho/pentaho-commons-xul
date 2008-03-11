@@ -8,11 +8,11 @@ import org.dom4j.Attribute;
 
 public final class XulUtil {
 	
-	public static Map AttributesToMap(List attMap){
+	public static Map <String, String> AttributesToMap(List <Attribute> attMap){
 		
-		Map map = new HashMap();
+		Map <String, String> map = new HashMap <String, String>();
 		for (int i = 0; i < attMap.size(); i++) {
-			Attribute node = (Attribute)attMap.get(i);
+			Attribute node = attMap.get(i);
 			map.put(node.getName(), node.getValue());
 		}
 		return map;

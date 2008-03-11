@@ -1,13 +1,27 @@
 <?xml version="1.0"?>
 <window id="label-test" title="Testing groupboxes for SWT, Swing"
-	orient="horizontal"
+	orient="vertical" 
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
-	<groupbox id="test-group-box" orient="horizontal">
+	<hbox flex="7" align="center">
+	<groupbox id="test-group-box" orient="vertical" flex="1">
 		<!-- <caption id="test-group-box" label="Testing Group Boxes" />  -->  
 		<label id="label-one" value="First Label" />
 		<label id="label-two" value="Second Label" />
 		<label id="label-three" value="Third Label" />
 	</groupbox>
+
+	<groupbox id="test-group-box" orient="vertical" flex="4">
+		<!-- <caption id="test-group-box" label="Testing Group Boxes" />  -->  
+		<label id="label-one" value="First Label" />
+		<label id="label-two" value="Second Label" />
+		<label id="label-three" value="Third Label" />
+	</groupbox>
+	</hbox>
+	<hbox id="test-group-box" align="center">
+		<label flex="1"/>
+		<button label="OK"/>
+		<button label="Cancel" />
+	</hbox>
 
 </window>

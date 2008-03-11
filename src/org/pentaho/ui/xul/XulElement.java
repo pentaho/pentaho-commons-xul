@@ -12,8 +12,12 @@ import org.dom4j.tree.BaseElement;
  * @author OEM
  *
  */
-public class XulElement extends BaseElement implements XulComponent {
+public abstract class XulElement extends BaseElement implements XulComponent {
+  private static final long serialVersionUID = -3629792827245143824L;
+
   protected Object managedObject;
+  
+  private String id;
   
   public XulElement(String tagName){
     super(new QName(tagName.toLowerCase()));
@@ -27,4 +31,14 @@ public class XulElement extends BaseElement implements XulComponent {
   public Object getManagedObject(){
     return managedObject;
   }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
+  
+  public abstract void layout();
 }

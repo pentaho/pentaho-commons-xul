@@ -45,5 +45,9 @@ public class SwingHbox extends XulElement implements XulHbox{
   public void add(XulComponent c){
     hbox.add((Component) c.getManagedObject(), gc);
   }
+  
+  public void layout(){
+  }
+
 }
 

@@ -46,4 +46,8 @@ public class SwingVbox extends XulElement implements XulVbox  {
     Component component = (Component) c.getManagedObject();
     vbox.add(component, gc);
   }
+  
+  public void layout(){
+  }
+
 }

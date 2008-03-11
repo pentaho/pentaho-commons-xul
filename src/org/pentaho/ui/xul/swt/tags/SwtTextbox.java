@@ -4,8 +4,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulTextbox;
+import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtTextbox extends XulElement implements XulTextbox {
+public class SwtTextbox extends SwtElement implements XulTextbox {
   private static final long serialVersionUID = 4928464432190672877L;
 
   private org.eclipse.swt.widgets.Text textBox;

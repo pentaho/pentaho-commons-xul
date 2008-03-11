@@ -10,24 +10,14 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import org.dom4j.Document;
-import org.dom4j.Element;
 import org.pentaho.core.util.CleanXmlHelper;
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.XulParser;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulServiceCall;
 import org.pentaho.ui.xul.XulWindowContainer;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.swing.tags.SwingButtonHandler;
-import org.pentaho.ui.xul.swing.tags.SwingHboxHandler;
-import org.pentaho.ui.xul.swing.tags.SwingLabelHandler;
-import org.pentaho.ui.xul.swing.tags.SwingWindowHandler;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
-import org.pentaho.ui.xul.swing.tags.SwingTextboxHandler;
-import org.pentaho.ui.xul.swing.tags.SwingVboxHandler;
 
 /**
  * @author OEM

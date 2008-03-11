@@ -28,4 +28,7 @@ public class SwingScript extends XulElement implements XulScript{
     return className;
   }
 
+  public void layout(){
+  }
+
 }

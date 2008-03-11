@@ -140,4 +140,8 @@ public class SwingWindow extends XulElement implements XulWindow  {
     // TODO Auto-generated method stub
     return xulWindowContainer;
   }
+  
+  public void layout(){
+  }
+
 }

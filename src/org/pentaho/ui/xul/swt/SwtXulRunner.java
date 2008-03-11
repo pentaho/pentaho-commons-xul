@@ -4,42 +4,27 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFrame;
-
 import org.dom4j.Document;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.XulParser;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulServiceCall;
 import org.pentaho.ui.xul.XulWindowContainer;
-import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.SwingXulRunner;
-import org.pentaho.ui.xul.swing.tags.SwingWindow;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 
 public class SwtXulRunner implements XulRunner {
 
-  private Document document;
-
   private Composite rootFrame;
-
-  private XulEventHandler eventHandler;
-  
   private List<XulWindowContainer> containers; 
 
   public SwtXulRunner() {
     containers = new ArrayList<XulWindowContainer>();
-  }
-
-  public Document getDocumentRoot() {
-    return this.document;
   }
 
   public XulComponent getElementById(String id) {
@@ -68,9 +53,6 @@ public class SwtXulRunner implements XulRunner {
     return null;
   }
 
-  public void setDocumentRoot(Document document) {
-    this.document = document;
-  }
 
   public void start() throws XulException {
     ((Shell)rootFrame).open(); 
@@ -101,7 +83,7 @@ public class SwtXulRunner implements XulRunner {
   public static void main(String[] args) {
 
     try {
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/samplexul.xul");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/groupboxtest.xul");
       if (in == null) {
         System.out.println("Input is null");
         System.exit(123);

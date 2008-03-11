@@ -41,4 +41,8 @@ public class SwingTextbox extends XulElement implements XulTextbox  {
   public void setValue(String text){
     textField.setText(text);
   }
+  
+  public void layout(){
+  }
+
 }
