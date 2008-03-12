@@ -82,7 +82,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   }
 
-  public void add(XulComponent component) {
+  public void addComponent(XulComponent component) {
     // intentionally does nothing
 
   }

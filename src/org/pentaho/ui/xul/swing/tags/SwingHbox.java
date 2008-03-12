@@ -42,7 +42,7 @@ public class SwingHbox extends XulElement implements XulHbox{
     gc.insets = new Insets(2,2,2,2);
   }
   
-  public void add(XulComponent c){
+  public void addComponent(XulComponent c){
     hbox.add((Component) c.getManagedObject(), gc);
   }
   

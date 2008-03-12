@@ -8,5 +8,5 @@ package org.pentaho.ui.xul;
  *
  */
 public interface XulContainer {
-  public void add(XulComponent component);
+  public void addComponent(XulComponent component);
 }

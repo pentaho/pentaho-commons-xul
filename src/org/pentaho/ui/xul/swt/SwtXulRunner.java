@@ -83,7 +83,7 @@ public class SwtXulRunner implements XulRunner {
   public static void main(String[] args) {
 
     try {
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/groupboxtest.xul");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/sampleXul.xml");
       if (in == null) {
         System.out.println("Input is null");
         System.exit(123);

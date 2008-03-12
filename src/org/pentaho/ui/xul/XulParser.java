@@ -62,16 +62,13 @@ public class XulParser {
       if(childElement == null){
         continue;
       }
-      
-      // GEM: I'm missing something here - why are we adding the child to
-      // the root twice? 
-      // Answer: because Swing adds components after their created. 
-      // add should be an empty method in SWT elements
-      
+ 
+      // Add to the XML DOM tree ...
       root.add(childElement);
       
+      // ... then add to the UI component tree.
       if(root instanceof XulContainer) //more of an assert, should be true.
-        ((XulContainer) root).add(childElement);
+        ((XulContainer) root).addComponent(childElement);
     }
     if(root != null){
       root.layout();

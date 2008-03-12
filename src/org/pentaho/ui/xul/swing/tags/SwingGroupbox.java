@@ -39,7 +39,7 @@ public class SwingGroupbox  extends XulElement implements XulGroupbox {
     gc.insets = new Insets(2,2,2,2);
   }
   
-  public void add(XulComponent c){
+  public void addComponent(XulComponent c){
     if(c instanceof XulCaption){
       setCaption(((XulCaption) c).getCaption());
     } else {

@@ -42,7 +42,7 @@ public class SwingVbox extends XulElement implements XulVbox  {
     gc.anchor = gc.NORTHWEST;
   }
   
-  public void add(XulComponent c){
+  public void addComponent(XulComponent c){
     Component component = (Component) c.getManagedObject();
     vbox.add(component, gc);
   }

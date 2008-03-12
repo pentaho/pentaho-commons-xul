@@ -56,7 +56,7 @@ public class SwingWindow extends XulElement implements XulWindow  {
     return (JFrame) managedObject;
   }
 
-  public void add(XulComponent c){
+  public void addComponent(XulComponent c){
     Component component = (Component) c.getManagedObject();
     if(component == null){
       System.out.println("skipping over empty element: "+c.getName());

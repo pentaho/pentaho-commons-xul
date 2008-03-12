@@ -26,7 +26,7 @@ public class SwtBox extends SwtElement implements XulBox {
 
   }
 
-  public void add(XulComponent component) {
+  public void addComponent(XulComponent component) {
     // intentionally do nothing
   }
 
