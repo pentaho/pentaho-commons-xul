@@ -19,7 +19,9 @@ public class SwingLabelHandler implements XulTagHandler{
   public SwingLabel parse(Element element, XulContainer parent, XulWindowContainer xulWindowContainer) {
     //TODO: break out to factory
     String text = element.attributeValue("value");
-    return new SwingLabel(text);
+    SwingLabel label = new SwingLabel(text);
+    label.setAttributeValue("ID", element.attributeValue("id"));
+    return label;
 
   }
 }

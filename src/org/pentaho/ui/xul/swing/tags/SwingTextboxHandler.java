@@ -20,7 +20,7 @@ public class SwingTextboxHandler implements XulTagHandler{
     //TODO: break out to factory
     String text = element.attributeValue("value");
     SwingTextbox textbox = new SwingTextbox();
-    textbox.setAttributeValue("id", element.attributeValue("id"));
+    textbox.setAttributeValue("ID", element.attributeValue("id"));
     return textbox;
 
   }

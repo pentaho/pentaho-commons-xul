@@ -37,7 +37,6 @@ public class XulParser {
   public XulParser(XulWindowContainer xulWindowContainer){
     xulDocument = DocumentFactory.getInstance().createDocument();
     this.xulWindowContainer = xulWindowContainer;
-//    xulWindowContainer.setDocumentRoot(xulDocument);
     xulWindowContainer.addDocument(xulDocument);
   }
   
@@ -66,13 +65,17 @@ public class XulParser {
       
       // GEM: I'm missing something here - why are we adding the child to
       // the root twice? 
+      // Answer: because Swing adds components after their created. 
+      // add should be an empty method in SWT elements
       
       root.add(childElement);
       
       if(root instanceof XulContainer) //more of an assert, should be true.
         ((XulContainer) root).add(childElement);
     }
-    root.layout();
+    if(root != null){
+      root.layout();
+    }
     
     return root;
   }
