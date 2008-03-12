@@ -18,7 +18,7 @@ public interface XulWindow extends XulContainer{
   public int getWidth();
   public int getHeight();
   public void setXulWindowContainer(XulWindowContainer xulWindowContainer);
-  public XulWindowContainer getXulWindowContainer(XulWindowContainer xulWindowContainer);
+  public XulWindowContainer getXulWindowContainer();
   
   public void invoke(String method, Object[] args);
   

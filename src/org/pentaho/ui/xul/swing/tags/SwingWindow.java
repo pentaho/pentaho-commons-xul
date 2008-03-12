@@ -136,8 +136,7 @@ public class SwingWindow extends XulElement implements XulWindow  {
     this.xulWindowContainer = xulWindowContainer;
   }
 
-  public XulWindowContainer getXulWindowContainer(XulWindowContainer xulWindowContainer) {
-    // TODO Auto-generated method stub
+  public XulWindowContainer getXulWindowContainer() {
     return xulWindowContainer;
   }
   

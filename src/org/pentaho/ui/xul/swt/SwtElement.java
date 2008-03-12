@@ -87,8 +87,8 @@ public class SwtElement extends XulElement {
       SwtElement swtChild = (SwtElement)child;
       Control c = (Control) swtChild.getManagedObject();
       GridData data = new GridData();
-      data.horizontalSpan = orient.equals(Orient.HORIZONTAL) ? swtChild.getFlex() + 1 : 3 ;
-      data.verticalSpan = orient.equals(Orient.VERTICAL) ? swtChild.getFlex() + 1 : 3 ;
+      data.horizontalSpan = orient.equals(Orient.HORIZONTAL) ? swtChild.getFlex() + 1 : 1 ;
+      data.verticalSpan = orient.equals(Orient.VERTICAL) ? swtChild.getFlex() + 1 : 1 ;
       
       if (swtChild.getFlex() > 0){
         data.grabExcessHorizontalSpace=true;

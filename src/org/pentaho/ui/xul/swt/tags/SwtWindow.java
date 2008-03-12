@@ -91,7 +91,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
     this.xulWindowContainer = xulWindowContainer;
   }
 
-  public XulWindowContainer getXulWindowContainer(XulWindowContainer containner) {
+  public XulWindowContainer getXulWindowContainer() {
     return xulWindowContainer;
   }
 
