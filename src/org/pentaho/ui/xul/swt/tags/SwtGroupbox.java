@@ -26,6 +26,8 @@ public class SwtGroupbox extends SwtBox implements XulGroupbox {
     return label;
   }
 
+  //Changed it to setCaption to conform with the Xul element model <groupbox><caption label=''>...
+  @Deprecated
   public void setLabel(String text) {
     label = text;
     ((Group)box).setText(text);
@@ -33,6 +35,10 @@ public class SwtGroupbox extends SwtBox implements XulGroupbox {
   
   public void add(XulComponent component) {
     // intentionally do nothing here
+  }
+
+  public void setCaption(String caption) {
+    ((Group)box).setText(caption);    
   }
 
 }
