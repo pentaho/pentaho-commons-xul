@@ -25,12 +25,13 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   private XulWindowContainer xulWindowContainer;
 
-  public SwtWindow(XulElement parent, String tagName) {
+  public SwtWindow(XulElement parent, XulWindowContainer container, String tagName) {
     super(tagName);
     shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.SHELL_TRIM) : 
       new Shell(new Display(),SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());
     managedObject = shell;
+    xulWindowContainer = container;
   }
 
   public XulEventHandler getEventHandler() {

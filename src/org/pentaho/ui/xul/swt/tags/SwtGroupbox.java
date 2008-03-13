@@ -5,6 +5,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.swt.Orient;
 
@@ -14,7 +15,7 @@ public class SwtGroupbox extends SwtBox implements XulGroupbox {
 
   private String label;
   
-  public SwtGroupbox(XulElement parent, String tagName) {
+  public SwtGroupbox(XulElement parent, XulWindowContainer container, String tagName) {
     // XUL groupbox defaults to VERTICAL orientation
     super(parent, tagName, Orient.VERTICAL);
   }

@@ -82,7 +82,7 @@ public class XulParser {
     Object handler = handlers.get(srcEle.getName().toUpperCase());
     
     if (handler == null) {
-      System.out.println("handler not found");
+      System.out.println("handler not found: " + srcEle.getName().toUpperCase());
       return null;
       //throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
     }
@@ -94,8 +94,8 @@ public class XulParser {
       Class <?> c;
       try {
         c = Class.forName((String)handler);
-        Constructor <?> constructor = c.getConstructor(new Class [] {XulElement.class, String.class});
-        XulElement ele =  (XulElement)constructor.newInstance(parent, tagName);
+        Constructor <?> constructor = c.getConstructor(new Class [] {XulElement.class, XulWindowContainer.class, String.class});
+        XulElement ele =  (XulElement)constructor.newInstance(parent, xulWindowContainer, tagName);
 
         Map <String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
         BeanUtils.populate(ele, attributesMap);

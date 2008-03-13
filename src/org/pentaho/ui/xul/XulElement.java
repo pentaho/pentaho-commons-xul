@@ -37,6 +37,7 @@ public abstract class XulElement extends BaseElement implements XulComponent {
   }
 
   public void setId(String id) {
+    this.setAttributeValue("ID", id);
     this.id = id;
   }
   

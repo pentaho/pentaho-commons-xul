@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swt.tags;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -13,7 +14,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private boolean disabled = false;
   private int maxLength;
 
-  public SwtTextbox(XulElement parent, String tagName) {
+  public SwtTextbox(XulElement parent, XulWindowContainer container, String tagName) {
     super(tagName);
     textBox = new org.eclipse.swt.widgets.Text((Composite)parent.getManagedObject(), SWT.BORDER);
     managedObject = textBox;

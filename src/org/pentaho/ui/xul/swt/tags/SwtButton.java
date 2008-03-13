@@ -1,9 +1,16 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.awt.event.ActionEvent;
+
+import org.dom4j.Element;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulButton;
+import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.swing.tags.SwingButton;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtButton extends SwtElement implements XulButton {
@@ -17,7 +24,7 @@ public class SwtButton extends SwtElement implements XulButton {
   // private String command;
   private boolean disabled;
 
-  public SwtButton(XulElement parent, String tagName) {
+  public SwtButton(XulElement parent, XulWindowContainer container, String tagName) {
     super(tagName);
     button = new org.eclipse.swt.widgets.Button((Composite)parent.getManagedObject(), SWT.NONE);
     managedObject = button;
@@ -49,8 +56,14 @@ public class SwtButton extends SwtElement implements XulButton {
 
   }
 
-  public void setOnClick(String method) {
-    // TODO Auto-generated method stub
+  public void setOnClick(final String method) {
+    button.addSelectionListener(new SelectionAdapter(){
+      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
+        Element rootElement = getDocument().getRootElement();
+        XulWindow window = (XulWindow) rootElement;
+        window.invoke(method, new Object[]{});
+      }
+    });
 
   }
 

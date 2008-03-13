@@ -5,6 +5,7 @@ import java.awt.Font;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -14,7 +15,7 @@ public class SwtLabel extends SwtElement implements XulLabel {
   private boolean disabled;
   org.eclipse.swt.widgets.Label label;
   
-  public SwtLabel(XulElement parent, String tagName){
+  public SwtLabel(XulElement parent, XulWindowContainer container, String tagName){
     super(tagName);
     label = new org.eclipse.swt.widgets.Label((Composite)parent.getManagedObject(), SWT.NONE);
     managedObject = label;
@@ -24,13 +25,27 @@ public class SwtLabel extends SwtElement implements XulLabel {
 
   }
   
+  /**
+   * True parameter for bean-able attribute "value" (XUL attribute)
+   * @param text
+   */
   public void setValue( String text ) {
     label.setText(text);
   }
+  
   public String getValue() {
     return label.getText();
   }
  
+  /**
+   * Complies with interface XulLabel, but 
+   * realize this overrides AbstractElement's 
+   * setText().
+   */
+  public void setText( String text ) {
+    setValue(text);
+  }
+
   /**
    * XUL's attribute is "disabled", thus this acts
    * exactly the opposite of SWT. If the property is not 
@@ -45,6 +60,5 @@ public class SwtLabel extends SwtElement implements XulLabel {
     this.disabled = disabled;
     if (!label.isDisposed()) label.setEnabled( !disabled );
   }
-  
 
 }

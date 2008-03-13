@@ -33,6 +33,7 @@ public class SwtXulLoader implements XulLoader {
     parser.registerHandler("GROUPBOX", "org.pentaho.ui.xul.swt.tags.SwtGroupbox");
     parser.registerHandler("CAPTION", "org.pentaho.ui.xul.swt.tags.SwtCaption");
     parser.registerHandler("LISTBOX", "org.pentaho.ui.xul.swt.tags.SwtListbox");
+    parser.registerHandler("SCRIPT", "org.pentaho.ui.xul.swt.tags.SwtScript");
     
     parser.parseDocument(xulDocument.getRootElement());
     
