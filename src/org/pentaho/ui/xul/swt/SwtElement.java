@@ -10,7 +10,8 @@ import org.pentaho.ui.xul.XulElement;
 public class SwtElement extends XulElement {
   private static final long serialVersionUID = -4407080035694005764L;
 
-  private Align align = null;
+  // Per XUL spec, STRETCH is the default align value.
+  private Align align = Align.STRETCH;
   private Orient orient = Orient.HORIZONTAL;
   private int flex=0;
   
@@ -62,15 +63,15 @@ public class SwtElement extends XulElement {
     // If every child has a flex value, then the GridLayout's columns
     // should be of equal width. everyChildIsFlexing gives us that boolean. 
     int totalFlex = 0;
-    int flex = 0;
+    int thisFlex = 0;
     boolean everyChildIsFlexing = true;
     
     for(Object child : elements()){
-      flex = ((SwtElement)child).getFlex();
-      if (flex <= 0){
+      thisFlex = ((SwtElement)child).getFlex();
+      if (thisFlex <= 0){
         everyChildIsFlexing = false;
       }
-      totalFlex += flex;
+      totalFlex += thisFlex;
     }
     
     switch (orient) {
@@ -86,6 +87,8 @@ public class SwtElement extends XulElement {
     for(Object child : elements()){
       SwtElement swtChild = (SwtElement)child;
       Control c = (Control) swtChild.getManagedObject();
+      // some children have no object they are managing... skip these kids!
+      if (c==null) continue;
       GridData data = new GridData();
       data.horizontalSpan = orient.equals(Orient.HORIZONTAL) ? swtChild.getFlex() + 1 : 1 ;
       data.verticalSpan = orient.equals(Orient.VERTICAL) ? swtChild.getFlex() + 1 : 1 ;
@@ -95,7 +98,7 @@ public class SwtElement extends XulElement {
         data.grabExcessVerticalSpace=true;
         
         // In XUL, if align attribute is left off, the 
-        // default is to fill available space ...
+        // default is to fill available space ... (ALIGN=STRETCH)
         
         data.horizontalAlignment=SWT.FILL;
         data.verticalAlignment=SWT.FILL;
@@ -105,11 +108,16 @@ public class SwtElement extends XulElement {
         Align a = Align.valueOf(getAlign());
         if (orient.equals(Orient.HORIZONTAL)){
           data.verticalAlignment = a.getSwtAlign();
+          if (data.verticalAlignment==SWT.FILL){
+            data.grabExcessVerticalSpace=true;
+          }
         }else {  //Orient.VERTICAL
           data.horizontalAlignment = a.getSwtAlign();
+          if (data.horizontalAlignment==SWT.FILL){
+            data.grabExcessHorizontalSpace=true;
+          }
         }
       }
-      
       c.setLayoutData(data);
     }
 

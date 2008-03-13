@@ -15,7 +15,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
 
   public SwtTextbox(XulElement parent, String tagName) {
     super(tagName);
-    textBox = new org.eclipse.swt.widgets.Text((Composite)parent.getManagedObject(), SWT.NONE);
+    textBox = new org.eclipse.swt.widgets.Text((Composite)parent.getManagedObject(), SWT.BORDER);
     managedObject = textBox;
   }
 

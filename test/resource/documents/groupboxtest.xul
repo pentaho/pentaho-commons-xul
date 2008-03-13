@@ -1,27 +1,56 @@
 <?xml version="1.0"?>
-<window id="label-test" title="Testing groupboxes for SWT, Swing"
-	orient="vertical" 
+<window id="general-datasource-window"
+	title="Testing groupboxes for SWT, Swing" orient="vertical"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	
-	<groupbox orient="horizontal" align="center" flex="1">
-	<groupbox id="test-group-box" orient="vertical" flex="1">
-		<!-- <caption id="test-group-box" label="Testing Group Boxes" />  -->  
-		<label id="label-one" value="First Label" />
-		<label id="label-two" value="Second Label" />
-		<label id="label-three" value="Third Label" />
-	</groupbox>
 
-	<groupbox id="test-group-box" orient="vertical" flex="4">
-		<!-- <caption id="test-group-box" label="Testing Group Boxes" />  -->  
-		<label id="label-one" value="First Label" />
-		<label id="label-two" value="Second Label" />
-		<label id="label-three" value="Third Label" />
-	</groupbox>
-	</groupbox>
-	<hbox id="test-group-box" >
-		<label flex="1"/>
-		<button label="OK" />
-		<button label="Cancel" />
+	<hbox id="all-box" flex="1">
+		<groupbox id="options-box" orient="vertical" flex="1">
+			<label id="label-one" value="General" />
+			<label id="label-two" value="Advanced" />
+			<label id="label-three" value="Options" />
+			<label id="label-one" value="Pooling" />
+			<label id="label-two" value="Explore" />
+			<label id="label-three" value="Feature List" />
+		</groupbox>
+
+		<groupbox id="general-settings-box" orient="vertical" flex="8">
+			<label id="connection-name-label" value="Connection Name:" />
+			<textbox id="connection-name-text"  />
+			<hbox id="button-box" flex="1">
+				<vbox id="type-box"  flex="1">
+					<label id="connection-name-label" value="Connection Name:" />
+					<textbox id="connection-name-text" flex="1" />
+					<label id="connection-name-label" value="Connection Name:" />
+					<textbox id="connection-name-text" flex="1" />
+					<label id="connection-name-label" value="Connection Name:" />
+					<textbox id="connection-name-text" flex="1" />
+					<label id="connection-name-label" value="Connection Name:" />
+					<textbox id="connection-name-text" flex="1" />
+					<label id="connection-name-label" value="Connection Name:" />
+					<textbox id="connection-name-text" flex="1" />
+				</vbox>
+				<groupbox id="options-box" orient="vertical" flex="1">
+					<caption label="Settings" />
+					<label id="server-host-name-label" value="Server Host Name:" />
+					<textbox id="server-host-name-text"  />
+					<label id="database-name-label" value="Database Name:" />
+					<textbox id="database-name-text"  />
+					<label id="port-number-label" value="Port Number:" />
+					<textbox id="port-number-text" />
+					<label id="username-label" value="Username:" />
+					<textbox id="username-text" />
+					<label id="password-label" value="Password:" />
+					<textbox id="password-text" />
+					<!--   <label id="space" flex="1" /> -->
+				</groupbox>
+			</hbox>
+		</groupbox>
+	</hbox>
+	<hbox id="button-box">
+		<!--  flexing all three controls allows me to control the size of the OK, Cancel buttons -->
+		<label id="spacer-label" flex="20" />
+		<button id="ok-button" label="OK" flex="1" />
+		<button id="cancel-button" label="Cancel" flex="1" />
 	</hbox>
 
 </window>
