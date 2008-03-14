@@ -117,7 +117,7 @@ public class XulParser {
     
   }
 
-  public static void registerHandler(String type, String handler) {
+  public void registerHandler(String type, String handler) {
 
     XulParser.handlers.put(type.toUpperCase(), handler);
 
