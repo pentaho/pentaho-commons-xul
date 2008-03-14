@@ -3,8 +3,8 @@
  */
 package org.pentaho.ui.xul;
 
-import org.dom4j.Document;
 import org.pentaho.ui.xul.XulWindowContainer;
+import org.pentaho.ui.xul.dom.Document;
 
 /**
  * @author OEM

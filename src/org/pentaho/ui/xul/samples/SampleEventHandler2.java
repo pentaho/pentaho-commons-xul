@@ -12,6 +12,8 @@ import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
+import org.pentaho.ui.xul.containers.XulVbox;
+import org.pentaho.ui.xul.containers.XulWindow;
 
 /**
  * @author OEM
@@ -21,9 +23,9 @@ public class SampleEventHandler2 extends XulEventHandler{
  
 
   public void sayHello(){
-    XulTextbox textbox = (XulTextbox) document.elementByID("name");
-    XulCheckbox checkbox = (XulCheckbox) document.elementByID("yell");
-    XulLabel responseLabel = (XulLabel) document.selectSingleNode("/window/vbox/groupbox/vbox/label");
+    XulTextbox textbox = (XulTextbox) document.getElementById("name");
+    XulCheckbox checkbox = (XulCheckbox) document.getElementById("yell");
+    XulLabel responseLabel = (XulLabel) document.getElementByXPath("/window/vbox/groupbox/vbox/label");
     
     if(textbox != null){
       System.out.println("found it");
@@ -40,7 +42,7 @@ public class SampleEventHandler2 extends XulEventHandler{
         response = response.toUpperCase();
       }
       
-      responseLabel.setText(response);
+      responseLabel.setValue(response);
       
     } else {
       System.out.println("name textbox not found");

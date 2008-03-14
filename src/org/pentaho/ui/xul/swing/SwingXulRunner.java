@@ -40,7 +40,7 @@ public class SwingXulRunner implements XulRunner {
    */
   public void initialize() throws XulException{
     //get first Element, should be a JFrame and show it.
-    XulElement rootEle = (XulElement) containers.get(0).getDocumentRoot().getRootElement();
+    XulElement rootEle = containers.get(0).getDocumentRoot().getRootElement().getXulElement();
 
     if(rootEle instanceof SwingWindow){
       rootFrame = (JFrame) rootEle.getManagedObject();

@@ -4,7 +4,6 @@
 package org.pentaho.ui.xul.swing;
 
 import org.dom4j.Document;
-import org.dom4j.Element;
 import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
@@ -12,6 +11,9 @@ import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.XulParser;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulWindowContainer;
+import org.pentaho.ui.xul.dom.DocumentFactory;
+import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
+import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 import org.pentaho.ui.xul.swing.tags.SwingButtonHandler;
 import org.pentaho.ui.xul.swing.tags.SwingCaptionHandler;
 import org.pentaho.ui.xul.swing.tags.SwingCheckboxHandler;
@@ -35,6 +37,9 @@ public class SwingXulLoader implements XulLoader {
    * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
    */
   public XulRunner loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
+
+    DocumentFactory.registerDOMClass(DocumentDom4J.class);
+    DocumentFactory.registerElementClass(ElementDom4J.class);
     
     XulWindowContainer container = new XulWindowContainer();
     XulParser parser = new XulParser(container);
@@ -51,8 +56,10 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("CHECKBOX", new SwingCheckboxHandler());
     parser.registerHandler("GROUPBOX", new SwingGroupboxHandler());
     parser.registerHandler("CAPTION", new SwingCaptionHandler());
-    
+
+
     parser.parseDocument(xulDocument.getRootElement());
+    
     
     XulRunner runner = new SwingXulRunner();
     runner.addContainer(container);

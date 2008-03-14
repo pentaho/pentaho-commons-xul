@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
-import org.dom4j.Document;
 import org.dom4j.Element;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulRunner;
@@ -20,7 +19,7 @@ public class SwingTextboxHandler implements XulTagHandler{
     //TODO: break out to factory
     String text = element.attributeValue("value");
     SwingTextbox textbox = new SwingTextbox();
-    textbox.setAttributeValue("ID", element.attributeValue("id"));
+    textbox.setAttribute("ID", element.attributeValue("id"));
     return textbox;
 
   }

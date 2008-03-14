@@ -66,7 +66,7 @@ public class SwtElement extends XulElement {
     int thisFlex = 0;
     boolean everyChildIsFlexing = true;
     
-    for(Object child : elements()){
+    for(Object child : this.getChildNodes()){
       thisFlex = ((SwtElement)child).getFlex();
       if (thisFlex <= 0){
         everyChildIsFlexing = false;
@@ -76,7 +76,7 @@ public class SwtElement extends XulElement {
     
     switch (orient) {
       case HORIZONTAL:
-        int columnCount = elements().size() + totalFlex;
+        int columnCount = this.getChildNodes().size() + totalFlex;
         container.setLayout(new GridLayout(columnCount, everyChildIsFlexing));
         break;
       case VERTICAL:
@@ -84,7 +84,7 @@ public class SwtElement extends XulElement {
         break;
     }
     
-    for(Object child : elements()){
+    for(Object child : this.getChildNodes()){
       SwtElement swtChild = (SwtElement)child;
       Control c = (Control) swtChild.getManagedObject();
       // some children have no object they are managing... skip these kids!

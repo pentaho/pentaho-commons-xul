@@ -3,8 +3,8 @@
  */
 package org.pentaho.ui.xul;
 
-import org.dom4j.Document;
 import org.dom4j.Element;
+
 
 /**
  * @author OEM

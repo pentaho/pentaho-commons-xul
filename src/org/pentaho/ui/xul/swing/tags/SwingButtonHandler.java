@@ -3,13 +3,13 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
-import org.dom4j.Document;
 import org.dom4j.Element;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulTagHandler;
 import org.pentaho.ui.xul.XulWindowContainer;
+
 
 /**
  * @author OEM

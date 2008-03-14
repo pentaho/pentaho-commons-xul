@@ -2,7 +2,6 @@ package org.pentaho.ui.xul.swt.tags;
 
 import java.awt.event.ActionEvent;
 
-import org.dom4j.Element;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Composite;
@@ -10,6 +9,7 @@ import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.tags.SwingButton;
 import org.pentaho.ui.xul.swt.SwtElement;
 

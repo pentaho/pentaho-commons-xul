@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Document;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
 
 /**
  * @author OEM

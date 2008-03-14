@@ -1,10 +1,12 @@
 package org.pentaho.ui.xul.utilites;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.dom4j.Attribute;
+
 
 public final class XulUtil {
 	
@@ -18,5 +20,15 @@ public final class XulUtil {
 		return map;
 		
 	}
+	
+
+  public static List<org.pentaho.ui.xul.dom.Attribute> convertAttributes(List <Attribute> inList){
+    List<org.pentaho.ui.xul.dom.Attribute>  outList = new ArrayList<org.pentaho.ui.xul.dom.Attribute>();
+    
+    for(Attribute attr : inList){
+      outList.add(new org.pentaho.ui.xul.dom.Attribute(attr.getName(), attr.getValue()));
+    }
+    return outList;
+  }
 
 }

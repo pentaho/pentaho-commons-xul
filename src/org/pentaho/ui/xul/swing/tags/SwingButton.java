@@ -10,10 +10,11 @@ import java.lang.reflect.Method;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import org.dom4j.Element;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author OEM
@@ -45,8 +46,8 @@ public class SwingButton extends XulElement implements XulButton{
     
   }
   
-  public void setText(String text){
-    button.setText(text);
+  public void setLabel(String label){
+    button.setText(label);
   }
 
   /* (non-Javadoc)
@@ -55,7 +56,8 @@ public class SwingButton extends XulElement implements XulButton{
   public void setOnClick( final String method) {
     button.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt){
-        Element rootElement = SwingButton.this.getDocument().getRootElement();
+        Document doc = SwingButton.this.getDocument();
+        Element rootElement = doc.getRootElement();
         XulWindow window = (XulWindow) rootElement;
         window.invoke(method, new Object[]{});
         

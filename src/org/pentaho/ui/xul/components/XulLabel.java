@@ -10,7 +10,7 @@ import java.awt.Font;
  *
  */
 public interface XulLabel {
-  public void setText(String str);
+  public void setValue(String value);
   public void setFont(Font font);
 
 }

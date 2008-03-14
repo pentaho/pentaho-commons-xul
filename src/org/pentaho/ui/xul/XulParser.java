@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.dom4j.Document;
-import org.dom4j.DocumentFactory;
-import org.dom4j.Element;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.dom.DocumentFactory;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.utilites.XulUtil;
 
 /**
@@ -34,29 +34,33 @@ public class XulParser {
     TEXTBOX
   }
    
-  public XulParser(XulWindowContainer xulWindowContainer){
-    xulDocument = DocumentFactory.getInstance().createDocument();
+  public XulParser(XulWindowContainer xulWindowContainer) throws XulException{
+    try{
+      xulDocument = DocumentFactory.createDocument();
+    } catch(Exception e){
+      throw new XulException(e);
+    }
     this.xulWindowContainer = xulWindowContainer;
     xulWindowContainer.addDocument(xulDocument);
   }
   
-  public Document parseDocument(Element rootSrc) throws XulException{
+  public Document parseDocument(org.dom4j.Element rootSrc) throws XulException{
     XulWindow root = (XulWindow) parse(rootSrc, null);
     
     //give root reference to runner for service calls
     root.setXulWindowContainer(this.xulWindowContainer);
     
-    xulDocument.add((XulElement)root);
+    xulDocument.addChild((Element) root);
     return xulDocument;
   }
   
-  public XulElement parse(Element rootSrc, XulContainer parent) throws XulException{
+  public XulElement parse(org.dom4j.Element rootSrc, XulContainer parent) throws XulException{
     //parse element
     XulElement root = getElement(rootSrc, parent);
     
     //descend down a level and parse children (root would be a container in the case)
     for(Object child : rootSrc.elements()){
-      XulElement childElement = parse( (Element) child, (XulContainer) root);
+      XulElement childElement = parse( (org.dom4j.Element) child, (XulContainer) root);
       
       //TODO: remove once exception handling in place
       if(childElement == null){
@@ -64,7 +68,7 @@ public class XulParser {
       }
  
       // Add to the XML DOM tree ...
-      root.add(childElement);
+      root.addChild(childElement);
       
       // ... then add to the UI component tree.
       if(root instanceof XulContainer) //more of an assert, should be true.
@@ -77,7 +81,7 @@ public class XulParser {
     return root;
   }
   
-  protected XulElement getElement(Element srcEle, XulContainer parent) throws XulException{
+  protected XulElement getElement(org.dom4j.Element srcEle, XulContainer parent) throws XulException{
       
     Object handler = handlers.get(srcEle.getName().toUpperCase());
     

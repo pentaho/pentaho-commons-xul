@@ -21,9 +21,10 @@ public class SampleEventHandler extends XulEventHandler{
  
 
   public void sayHello(){
-    XulTextbox textbox = (XulTextbox) document.elementByID("name");
-    XulCheckbox checkbox = (XulCheckbox) document.elementByID("yell");
-    XulLabel responseLabel = (XulLabel) document.elementByID("response");
+    
+    XulTextbox textbox = (XulTextbox) document.getElementById("name");
+    XulCheckbox checkbox = (XulCheckbox) document.getElementById("yell");
+    XulLabel responseLabel = (XulLabel) document.getElementById("response");
     
     if(textbox != null){
       System.out.println("found it");
@@ -41,7 +42,7 @@ public class SampleEventHandler extends XulEventHandler{
         response = response.toUpperCase();
       }
       
-      responseLabel.setText(response);
+      responseLabel.setValue(response);
     } else {
       System.out.println("name textbox not found");
     }

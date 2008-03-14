@@ -9,6 +9,7 @@ import org.dom4j.Element;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulTagHandler;
 import org.pentaho.ui.xul.XulWindowContainer;
+import org.pentaho.ui.xul.utilites.XulUtil;
 
 /**
  * @author OEM
@@ -23,8 +24,8 @@ public class SwingCheckboxHandler implements XulTagHandler{
     List attributes = element.attributes();
     
     SwingCheckbox checkBox = new SwingCheckbox(label);
-    checkBox.setAttributes(attributes);
-    checkBox.setAttributeValue("ID", element.attributeValue("id"));
+    checkBox.setAttributes(XulUtil.convertAttributes(attributes));
+    checkBox.setAttribute("ID", element.attributeValue("id"));
     return checkBox;
 
   }
