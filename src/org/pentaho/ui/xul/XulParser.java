@@ -23,7 +23,7 @@ public class XulParser {
   Document xulDocument;
   static Map<String, Object> handlers = new HashMap<String, Object>();
   
-  private XulWindowContainer xulWindowContainer;
+  private XulDomContainer xulDomContainer;
   
   public enum TAG{
     PAGE,
@@ -34,21 +34,23 @@ public class XulParser {
     TEXTBOX
   }
    
-  public XulParser(XulWindowContainer xulWindowContainer) throws XulException{
+  public XulParser() throws XulException{
     try{
       xulDocument = DocumentFactory.createDocument();
     } catch(Exception e){
-      throw new XulException(e);
+      throw new XulException("Error getting Document instance", e);
     }
-    this.xulWindowContainer = xulWindowContainer;
-    xulWindowContainer.addDocument(xulDocument);
+  }
+  public void setContainer(XulDomContainer xulDomContainer){
+    this.xulDomContainer = xulDomContainer;
+    xulDomContainer.addDocument(xulDocument);
   }
   
   public Document parseDocument(org.dom4j.Element rootSrc) throws XulException{
     XulWindow root = (XulWindow) parse(rootSrc, null);
     
     //give root reference to runner for service calls
-    root.setXulWindowContainer(this.xulWindowContainer);
+    root.setXulDomContainer(this.xulDomContainer);
     
     xulDocument.addChild((Element) root);
     return xulDocument;
@@ -92,14 +94,14 @@ public class XulParser {
     }
     
     if (handler instanceof XulTagHandler) {
-      return ((XulTagHandler)handler).parse(srcEle, parent, xulWindowContainer);
+      return ((XulTagHandler)handler).parse(srcEle, parent, xulDomContainer);
     } else {  // handler is String class name of the class we want to create an instance of 
       String tagName = srcEle.getName();
       Class <?> c;
       try {
         c = Class.forName((String)handler);
-        Constructor <?> constructor = c.getConstructor(new Class [] {XulElement.class, XulWindowContainer.class, String.class});
-        XulElement ele =  (XulElement)constructor.newInstance(parent, xulWindowContainer, tagName);
+        Constructor <?> constructor = c.getConstructor(new Class [] {XulElement.class, XulDomContainer.class, String.class});
+        XulElement ele =  (XulElement)constructor.newInstance(parent, xulDomContainer, tagName);
 
         Map <String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
         BeanUtils.populate(ele, attributesMap);

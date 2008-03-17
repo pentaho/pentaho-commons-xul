@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 
 import org.dom4j.Document;
 import org.pentaho.core.util.CleanXmlHelper;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulException;
@@ -28,10 +29,10 @@ public class SwingXulRunner implements XulRunner {
   private Document document;
   private JFrame rootFrame;
   private XulEventHandler eventHandler;
-  private List<XulWindowContainer> containers; 
+  private List<XulDomContainer> containers; 
   
   public SwingXulRunner(){
-    containers = new ArrayList<XulWindowContainer>();
+    containers = new ArrayList<XulDomContainer>();
   }
   
   
@@ -77,12 +78,12 @@ public class SwingXulRunner implements XulRunner {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulRunner#addContainer(org.pentaho.ui.xul.XulWindowContainer)
    */
-  public void addContainer(XulWindowContainer xulWindowContainer) {
-    this.containers.add(xulWindowContainer);
+  public void addContainer(XulDomContainer xulDomContainer) {
+    this.containers.add(xulDomContainer);
     
   }
 
-  public List<XulWindowContainer> getXulWindowContainers() {
+  public List<XulDomContainer> getXulDomContainers() {
     return containers;
   }
 
@@ -90,7 +91,7 @@ public class SwingXulRunner implements XulRunner {
     // TODO Auto-generated method stub
     try{
       
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/sampleXul.xml");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/flexGroupboxes.xul");
       if(in == null){
         System.out.println("Input is null");
         System.exit(123);
@@ -98,7 +99,11 @@ public class SwingXulRunner implements XulRunner {
       
       Document doc = CleanXmlHelper.getDocFromStream(in);
       
-      XulRunner runner = new SwingXulLoader().loadXul(doc);
+      XulDomContainer container = new SwingXulLoader().loadXul(doc);
+
+      XulRunner runner = new SwingXulRunner();
+      runner.addContainer(container);
+      
       runner.initialize();
       runner.start();
       

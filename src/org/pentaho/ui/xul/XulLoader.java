@@ -12,5 +12,7 @@ import org.dom4j.Document;
  *
  */
 public interface XulLoader {
-  public XulRunner loadXul(Document xulDocument) throws IllegalArgumentException, XulException;
+  public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException;
+  
+  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException;
 }

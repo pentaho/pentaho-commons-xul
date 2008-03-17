@@ -4,6 +4,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulBox;
@@ -15,7 +16,7 @@ public class SwtBox extends SwtElement implements XulBox {
 
   protected Composite box;
 
-  public SwtBox(XulElement parent, XulWindowContainer container, String tagName) {
+  public SwtBox(XulElement parent, XulDomContainer container, String tagName) {
     this(parent, tagName, Orient.HORIZONTAL);
   }
 
@@ -34,5 +35,10 @@ public class SwtBox extends SwtElement implements XulBox {
   protected Composite createNewComposite(Composite parent) {
     return new Composite(parent, SWT.NONE);
   }
+
+  public Orient getOrientation() {
+    return null;
+  }
+  
 
 }

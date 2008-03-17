@@ -10,6 +10,7 @@ import java.awt.Font;
  *
  */
 public interface XulSpacer {
-  public void setSize(int size);
+  public void setHeight(int size);
+  public void setWidth(int size);
 
 }

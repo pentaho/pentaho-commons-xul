@@ -8,18 +8,20 @@ import java.awt.Font;
 
 import javax.swing.JTextField;
 
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
+import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
  * @author OEM
  *
  */
-public class SwingTextbox extends XulElement implements XulTextbox  {
+public class SwingTextbox extends SwingElement implements XulTextbox  {
   private JTextField textField;
   
-  public SwingTextbox(){
+  public SwingTextbox(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
     textField = new JTextField();
     textField.setPreferredSize(new Dimension(150,18));

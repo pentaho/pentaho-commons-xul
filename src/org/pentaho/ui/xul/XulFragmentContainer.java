@@ -15,21 +15,20 @@ import org.pentaho.ui.xul.dom.Document;
  * @author OEM
  *
  */
-public class XulWindowContainer extends XulDomContainer{
-  private List<Document> windows;
+public class XulFragmentContainer extends XulDomContainer {
+  private Document fragment;
   
   
-  public XulWindowContainer(){
+  public XulFragmentContainer(){
     super();
-    windows = new ArrayList<Document>();
   }
 
   public Document getDocumentRoot(){
-    return this.windows.get(0);
+    return fragment;
   }
 
   public void addDocument(Document document){
-    this.windows.add(document);
+    this.fragment = document;
   }
   
 }

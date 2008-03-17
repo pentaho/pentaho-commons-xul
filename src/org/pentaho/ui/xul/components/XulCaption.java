@@ -8,5 +8,6 @@ package org.pentaho.ui.xul.components;
  *
  */
 public interface XulCaption {
-  public String getCaption();
+  public String getLabel();
+  public void setLabel(String label);
 }

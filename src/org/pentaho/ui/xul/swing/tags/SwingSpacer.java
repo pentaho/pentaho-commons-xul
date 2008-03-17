@@ -10,28 +10,32 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
+import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulSpacer;
+import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swt.Orient;
 
 /**
  * @author OEM
  *
  */
-public class SwingSpacer extends XulElement implements XulSpacer{
+public class SwingSpacer extends SwingElement implements XulSpacer{
   private Component strut;
-  public SwingSpacer(int size, int orientation){
+  
+  public SwingSpacer(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("spacer");
-    if(orientation == BoxLayout.Y_AXIS){
-      strut = Box.createVerticalStrut(size);
-    } else {
-      strut = Box.createHorizontalStrut(size);
-    }
-    managedObject = strut;
-        
+
   }
-  public void setSize(int size){
-    
+  public void setWidth(int size){
+    strut = Box.createHorizontalStrut(size);
+    managedObject = strut;
+  }
+  public void setHeight(int size){
+    strut = Box.createVerticalStrut(size);
+    managedObject = strut;
   }
 
   public void layout(){

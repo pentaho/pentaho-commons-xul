@@ -7,10 +7,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.swt.Orient;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtWindow extends SwtElement implements XulWindow {
@@ -23,15 +25,15 @@ public class SwtWindow extends SwtElement implements XulWindow {
   private int width;
   private int height;
 
-  private XulWindowContainer xulWindowContainer;
+  private XulDomContainer xulDomContainer;
 
-  public SwtWindow(XulElement parent, XulWindowContainer container, String tagName) {
+  public SwtWindow(XulElement parent, XulDomContainer container, String tagName) {
     super(tagName);
     shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.SHELL_TRIM) : 
       new Shell(new Display(),SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());
     managedObject = shell;
-    xulWindowContainer = container;
+    xulDomContainer = container;
   }
 
   public XulEventHandler getEventHandler() {
@@ -68,7 +70,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
       String eventID = pair[0];
       String methodName = pair[1];
 
-      XulEventHandler evt = this.xulWindowContainer.getEventHandler(eventID);
+      XulEventHandler evt = this.xulDomContainer.getEventHandler(eventID);
       Method m = evt.getClass().getMethod(methodName, new Class[0]);
       m.invoke(evt, args);
 
@@ -88,12 +90,16 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   }
 
-  public void setXulWindowContainer(XulWindowContainer xulWindowContainer) {
-    this.xulWindowContainer = xulWindowContainer;
+  public void setXulDomContainer(XulDomContainer xulDomContainer) {
+    this.xulDomContainer = xulDomContainer;
   }
 
-  public XulWindowContainer getXulWindowContainer() {
-    return xulWindowContainer;
+  public XulDomContainer getXulDomContainer() {
+    return xulDomContainer;
   }
 
+  public Orient getOrientation() {
+    return null;
+  }
+  
 }

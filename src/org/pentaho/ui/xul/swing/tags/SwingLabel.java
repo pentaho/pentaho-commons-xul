@@ -7,19 +7,22 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulLabel;
+import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
  * @author OEM
  *
  */
-public class SwingLabel extends XulElement implements XulLabel{
+public class SwingLabel extends SwingElement implements XulLabel{
   private JLabel label;
-  public SwingLabel(String text){
+  
+  public SwingLabel(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("label");
-    label = new JLabel(text);
+    label = new JLabel();
     managedObject = label;
   }
   
@@ -53,6 +56,10 @@ public class SwingLabel extends XulElement implements XulLabel{
   
   public void setValue(String value){
     label.setText(value);
+    
+  }
+  public String getValue(){
+    return label.getText();
     
   }
 

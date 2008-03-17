@@ -4,50 +4,81 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Rectangle;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulTagHandler;
 import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swt.Orient;
 
 
 /**
  * @author OEM
  *
  */
-public class SwingWindow extends XulElement implements XulWindow  {
+public class SwingWindow extends SwingElement implements XulWindow  {
 
   JFrame frame;
   private int width;
   private int height;
   private Document rootDocument;
-  private Box contentPane;
-  private XulWindowContainer xulWindowContainer;
+  private XulDomContainer xulDomContainer;
 
   
-  public SwingWindow(String title){
+  public SwingWindow(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("window");
-    frame = new JFrame(title);
-    contentPane =  Box.createVerticalBox();
+    frame = new JFrame();
+
+    
+    this.orientation = Orient.VERTICAL;
+    
+    children = new ArrayList<XulComponent>();
+    
+    container = new JPanel(new GridBagLayout());
+    container.setBorder(BorderFactory.createLineBorder(Color.green));
+    managedObject = container;
+    
+    
+    gc = new GridBagConstraints();
+    gc.gridy = gc.RELATIVE;
+    gc.gridx = 0;
+    gc.gridheight = 1;
+    gc.gridwidth = gc.REMAINDER;
+    gc.insets = new Insets(2,2,2,2);
+    gc.fill = gc.HORIZONTAL;
+    gc.anchor = gc.NORTHWEST;
+    gc.weightx = 1;
+    
+    
+    
     frame.getContentPane().setLayout(new BorderLayout());
-    frame.getContentPane().add(contentPane, BorderLayout.NORTH);
+    frame.getContentPane().add(container, BorderLayout.CENTER);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     managedObject = frame;
   }
@@ -56,18 +87,6 @@ public class SwingWindow extends XulElement implements XulWindow  {
     return (JFrame) managedObject;
   }
 
-  public void addComponent(XulComponent c){
-    Component component = (Component) c.getManagedObject();
-    if(component == null){
-      System.out.println("skipping over empty element: "+c.getName());
-      return;
-    }
-    //force components to fill horizontal space
-    component.setMaximumSize(null);
-    component.setPreferredSize(null);
-    
-    contentPane.add(component);
-  }
 
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulPage#setTitle(java.lang.String)
@@ -118,7 +137,7 @@ public class SwingWindow extends XulElement implements XulWindow  {
       String eventID = pair[0];
       String methodName = pair[1];
       
-      XulEventHandler eventHandler = this.xulWindowContainer.getEventHandler(eventID);
+      XulEventHandler eventHandler = this.xulDomContainer.getEventHandler(eventID);
       Method m = eventHandler.getClass().getMethod(methodName, new Class[0]);
       m.invoke(eventHandler, args);
       
@@ -132,15 +151,13 @@ public class SwingWindow extends XulElement implements XulWindow  {
     this.rootDocument = document;
   }
   
-  public void setXulWindowContainer(XulWindowContainer xulWindowContainer){
-    this.xulWindowContainer = xulWindowContainer;
+  public void setXulDomContainer(XulDomContainer xulDomContainer){
+    this.xulDomContainer = xulDomContainer;
   }
 
-  public XulWindowContainer getXulWindowContainer() {
-    return xulWindowContainer;
+  public XulDomContainer getXulDomContainer() {
+    return xulDomContainer;
   }
+
   
-  public void layout(){
-  }
-
 }

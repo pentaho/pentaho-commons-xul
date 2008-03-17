@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
@@ -23,10 +24,10 @@ import org.pentaho.ui.xul.swt.tags.SwtWindow;
 public class SwtXulRunner implements XulRunner {
 
   private Composite rootFrame;
-  private List<XulWindowContainer> containers; 
+  private List<XulDomContainer> containers; 
 
   public SwtXulRunner() {
-    containers = new ArrayList<XulWindowContainer>();
+    containers = new ArrayList<XulDomContainer>();
   }
 
   public XulComponent getElementById(String id) {
@@ -73,19 +74,19 @@ public class SwtXulRunner implements XulRunner {
     ((Shell)rootFrame).dispose();
   }
   
-  public void addContainer(XulWindowContainer xulWindowContainer) {
-    this.containers.add(xulWindowContainer);
+  public void addContainer(XulDomContainer xulDomContainer) {
+    this.containers.add(xulDomContainer);
   }
   
 
-  public List<XulWindowContainer> getXulWindowContainers() {
+  public List<XulDomContainer> getXulDomContainers() {
     return containers;
   }
 
   public static void main(String[] args) {
 
     try {
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/samplexul.xul");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/sampleXul.xml");
       if (in == null) {
         System.out.println("Input is null");
         System.exit(123);
@@ -93,8 +94,11 @@ public class SwtXulRunner implements XulRunner {
 
       Document doc = CleanXmlHelper.getDocFromStream(in);
 
-      XulRunner runner = new SwtXulLoader().loadXul(doc);
+      XulDomContainer container = new SwtXulLoader().loadXul(doc);
 
+      XulRunner runner = new SwtXulRunner();
+      runner.addContainer(container);
+      
       runner.initialize();
       runner.start();
 

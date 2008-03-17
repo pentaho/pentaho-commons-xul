@@ -5,8 +5,11 @@ package org.pentaho.ui.xul.swing;
 
 import org.dom4j.Document;
 import org.pentaho.core.util.CleanXmlHelper;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.XulFragment;
+import org.pentaho.ui.xul.XulFragmentContainer;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.XulParser;
 import org.pentaho.ui.xul.XulRunner;
@@ -14,17 +17,6 @@ import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
-import org.pentaho.ui.xul.swing.tags.SwingButtonHandler;
-import org.pentaho.ui.xul.swing.tags.SwingCaptionHandler;
-import org.pentaho.ui.xul.swing.tags.SwingCheckboxHandler;
-import org.pentaho.ui.xul.swing.tags.SwingGroupboxHandler;
-import org.pentaho.ui.xul.swing.tags.SwingHboxHandler;
-import org.pentaho.ui.xul.swing.tags.SwingLabelHandler;
-import org.pentaho.ui.xul.swing.tags.SwingScriptHandler;
-import org.pentaho.ui.xul.swing.tags.SwingSpacerHandler;
-import org.pentaho.ui.xul.swing.tags.SwingTextboxHandler;
-import org.pentaho.ui.xul.swing.tags.SwingVboxHandler;
-import org.pentaho.ui.xul.swing.tags.SwingWindowHandler;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
 
 /**
@@ -33,38 +25,57 @@ import org.pentaho.ui.xul.swing.tags.SwingWindow;
  */
 public class SwingXulLoader implements XulLoader {
 
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
-   */
-  public XulRunner loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
+  private XulParser parser;
+  public SwingXulLoader() throws XulException{
 
     DocumentFactory.registerDOMClass(DocumentDom4J.class);
     DocumentFactory.registerElementClass(ElementDom4J.class);
+  
     
-    XulWindowContainer container = new XulWindowContainer();
-    XulParser parser = new XulParser(container);
+    try{
+      parser = new XulParser();
+    } catch(Exception e){
+      throw new XulException("Error getting XulParser Instance, probably a DOM Factory problem: "+e.getMessage(), e);
+    }
+     
 
     //attach Renderers
-    parser.registerHandler("WINDOW", new SwingWindowHandler());
-    parser.registerHandler("BUTTON", new SwingButtonHandler());
-    parser.registerHandler("VBOX", new SwingVboxHandler());
-    parser.registerHandler("HBOX", new SwingHboxHandler());
-    parser.registerHandler("LABEL", new SwingLabelHandler());
-    parser.registerHandler("TEXTBOX", new SwingTextboxHandler());
-    parser.registerHandler("SCRIPT", new SwingScriptHandler());
-    parser.registerHandler("SPACER", new SwingSpacerHandler());
-    parser.registerHandler("CHECKBOX", new SwingCheckboxHandler());
-    parser.registerHandler("GROUPBOX", new SwingGroupboxHandler());
-    parser.registerHandler("CAPTION", new SwingCaptionHandler());
+    parser.registerHandler("WINDOW", "org.pentaho.ui.xul.swing.tags.SwingWindow");
+    parser.registerHandler("BUTTON", "org.pentaho.ui.xul.swing.tags.SwingButton");
+    parser.registerHandler("VBOX", "org.pentaho.ui.xul.swing.tags.SwingVbox");
+    parser.registerHandler("HBOX", "org.pentaho.ui.xul.swing.tags.SwingHbox");
+    parser.registerHandler("LABEL", "org.pentaho.ui.xul.swing.tags.SwingLabel");
+    parser.registerHandler("TEXTBOX", "org.pentaho.ui.xul.swing.tags.SwingTextbox");
+    parser.registerHandler("SCRIPT", "org.pentaho.ui.xul.swing.tags.SwingScript");
+    parser.registerHandler("SPACER", "org.pentaho.ui.xul.swing.tags.SwingSpacer");
+    parser.registerHandler("CHECKBOX", "org.pentaho.ui.xul.swing.tags.SwingCheckbox");
+    parser.registerHandler("GROUPBOX", "org.pentaho.ui.xul.swing.tags.SwingGroupbox");
+    parser.registerHandler("CAPTION", "org.pentaho.ui.xul.swing.tags.SwingCaption");
 
+  
+  }
+  
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
+   */
+  public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
 
+    XulWindowContainer container = new XulWindowContainer();
+    parser.setContainer(container);
+    parser.parseDocument(xulDocument.getRootElement());
+   
+    return container;
+  }
+
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
+   */
+  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
+    XulFragmentContainer container = new XulFragmentContainer();
+    parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
     
-    
-    XulRunner runner = new SwingXulRunner();
-    runner.addContainer(container);
-    
-    return runner;
+    return container;
   }
   
 

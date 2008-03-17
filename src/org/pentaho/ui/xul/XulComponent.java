@@ -32,4 +32,8 @@ public interface XulComponent {
    * @return the id for this component. 
    */
   public String getId();
+  
+  public int getFlex();
+  public void setFlex(int flex);
+  
 }

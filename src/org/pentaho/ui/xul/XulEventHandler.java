@@ -11,11 +11,11 @@ import org.pentaho.ui.xul.dom.Document;
  *
  */
 public abstract class XulEventHandler {
-  protected XulWindowContainer xulWindowContainer;
+  protected XulDomContainer xulDomContainer;
   protected Document document;
   
-  public void setXulWindowContainer(XulWindowContainer xulWindowContainer) {
-    this.xulWindowContainer = xulWindowContainer;
-    this.document = xulWindowContainer.getDocumentRoot();
+  public void setXulDomContainer(XulDomContainer xulDomContainer) {
+    this.xulDomContainer = xulDomContainer;
+    this.document = xulDomContainer.getDocumentRoot();
   }
 }

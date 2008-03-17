@@ -3,56 +3,72 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.containers.XulVbox;
+import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swt.Orient;
 
 /**
  * @author OEM
  *
  */
-public class SwingGroupbox  extends XulElement implements XulGroupbox {
+public class SwingGroupbox  extends SwingElement implements XulGroupbox {
 
-  private JPanel groupbox;
-  private GridBagConstraints gc;
-  public SwingGroupbox(){
+
+  public SwingGroupbox(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("groupbox");
-    groupbox = new JPanel(new GridBagLayout());
-    managedObject = groupbox;
+    this.orientation = Orient.VERTICAL;
+    
+    children = new ArrayList<XulComponent>();
+    
+    container = new JPanel(new GridBagLayout());
+    container.setBorder(BorderFactory.createLineBorder(Color.green));
+    managedObject = container;
+    
     
     gc = new GridBagConstraints();
-    gc.gridx = gc.RELATIVE;
-    gc.gridy = 0;
-    gc.fill = gc.HORIZONTAL;
+    gc.gridy = gc.RELATIVE;
+    gc.gridx = 0;
     gc.gridheight = 1;
-    gc.gridwidth = 1;
+    gc.gridwidth = gc.REMAINDER;
     gc.insets = new Insets(2,2,2,2);
+    gc.fill = gc.HORIZONTAL;
+    gc.anchor = gc.NORTHWEST;
+    gc.weightx = 1;
   }
   
-  public void addComponent(XulComponent c){
-    if(c instanceof XulCaption){
-      setCaption(((XulCaption) c).getCaption());
-    } else {
-      Component component = (Component) c.getManagedObject();
-      groupbox.add(component, gc);
+  
+  public void setCaption(String caption){
+    container.setBorder(BorderFactory.createTitledBorder(caption));
+    
+  }
+  
+  @Override
+  public void layout(){
+    super.layout();
+    for(XulComponent comp : children){
+      if(comp instanceof SwingCaption){
+        this.setCaption(((SwingCaption) comp).getLabel());
+      }
     }
   }
   
-  public void setCaption(String caption){
-    groupbox.setBorder(BorderFactory.createTitledBorder(caption));
-    
+  public Orient getOrientation() {
+    return Orient.VERTICAL;
   }
 
-  public void layout(){
-  }
 }

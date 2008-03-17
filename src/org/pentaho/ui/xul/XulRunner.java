@@ -18,8 +18,8 @@ public interface XulRunner {
   public void initialize() throws XulException;
   public void start() throws XulException;
   public void stop() throws XulException;
-  public void addContainer(XulWindowContainer xulWindowContainer);
-  public List<XulWindowContainer> getXulWindowContainers();
+  public void addContainer(XulDomContainer xulDomContainer);
+  public List<XulDomContainer> getXulDomContainers();
   public Document remoteCall(XulServiceCall serviceUrl);
   
 }

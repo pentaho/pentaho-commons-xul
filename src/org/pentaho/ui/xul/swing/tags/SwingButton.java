@@ -10,23 +10,25 @@ import java.lang.reflect.Method;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
  * @author OEM
  *
  */
-public class SwingButton extends XulElement implements XulButton{
+public class SwingButton extends SwingElement implements XulButton{
   private JButton button;
   private String onClickFunction;
   
-  public SwingButton(String label){
+  public SwingButton(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("Button");
-    button = new JButton(label);
+    button = new JButton();
     this.managedObject = button;
   }
 
@@ -65,6 +67,4 @@ public class SwingButton extends XulElement implements XulButton{
     });
   }
   
-  public void layout(){
-  }
 }
