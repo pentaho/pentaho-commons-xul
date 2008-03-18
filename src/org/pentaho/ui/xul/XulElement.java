@@ -109,6 +109,11 @@ public abstract class XulElement implements XulComponent, Element {
     
   }
 
+  public void removeChild(Element element) {
+    this.element.removeChild(element);
+    
+  }
+
   public List<Element> getChildNodes() {
     return this.element.getChildNodes();
   }

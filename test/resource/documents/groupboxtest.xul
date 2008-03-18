@@ -2,7 +2,7 @@
 <window id="general-datasource-window"
 	title="Testing groupboxes for SWT, Swing" orient="vertical"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-
+	<script id="testHandler" src="org.pentaho.ui.sandbox.events.TestFragmentHandler" />
 	<hbox id="all-box" flex="1">
 		<groupbox id="options-box" orient="vertical" flex="1">
 			<label id="label-one" value="General" />
@@ -35,7 +35,7 @@
 					</listbox>
 				</vbox>
 				
-				<groupbox id="options-box" orient="vertical" flex="1">
+				<groupbox id="database-options-box" orient="vertical" flex="1">
 					<caption label="Settings" />
 					<label id="server-host-name-label" value="Server Host Name:" />
 					<textbox id="server-host-name-text" />
@@ -53,7 +53,7 @@
 			</hbox>
 			<hbox id="test-button-box">
 				<label id="spacer-label" flex="10" />
-				<button id="test-button" label="Test" flex="1" />
+				<button id="test-button" label="Test" flex="1" onClick="testHandler.loadFragment()" />
 			</hbox>
 		</groupbox>
 	

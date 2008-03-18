@@ -7,7 +7,6 @@ import java.lang.reflect.Constructor;
 
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 
 /**
  * @author OEM

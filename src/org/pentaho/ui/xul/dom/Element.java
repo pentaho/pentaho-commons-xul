@@ -27,6 +27,7 @@ public interface Element {
   public List<Element> getElementsByTagName(String tagName);
   
   public void addChild(Element element);
+  public void removeChild(Element element);
   
   public Object getElementObject();
   

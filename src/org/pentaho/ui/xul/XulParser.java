@@ -55,10 +55,11 @@ public class XulParser {
     xulDocument.addChild((Element) root);
     return xulDocument;
   }
-  
+ 
   public XulElement parse(org.dom4j.Element rootSrc, XulContainer parent) throws XulException{
     //parse element
     XulElement root = getElement(rootSrc, parent);
+    
     
     //descend down a level and parse children (root would be a container in the case)
     for(Object child : rootSrc.elements()){
