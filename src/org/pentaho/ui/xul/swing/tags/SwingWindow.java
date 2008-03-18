@@ -159,5 +159,10 @@ public class SwingWindow extends SwingElement implements XulWindow  {
     return xulDomContainer;
   }
 
+  public void setOnload(String method) {
+    // TODO Auto-generated method stub
+    
+  }
+
   
 }

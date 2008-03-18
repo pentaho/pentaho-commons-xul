@@ -5,13 +5,15 @@ import java.lang.reflect.Method;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.Orient;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -24,6 +26,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   private int width;
   private int height;
+  
 
   private XulDomContainer xulDomContainer;
 
@@ -101,5 +104,21 @@ public class SwtWindow extends SwtElement implements XulWindow {
   public Orient getOrientation() {
     return null;
   }
+  
+  public void setOnload(final String method) {
+    shell.addListener(EVENT_ON_LOAD, new Listener(){
+      public void handleEvent(Event e){
+        invoke(method, new Object[]{});
+      }
+    });
+
+  }
+
+  public void notifyListeners(int event) {
+    if (!shell.isDisposed()){
+      shell.notifyListeners(event, new Event());
+    }
+  }
+
   
 }

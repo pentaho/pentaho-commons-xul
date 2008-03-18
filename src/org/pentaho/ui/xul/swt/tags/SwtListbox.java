@@ -4,14 +4,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulWindowContainer;
+import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.swt.Orient;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtListbox extends SwtElement implements XulContainer{
+public class SwtListbox extends SwtElement implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
 
   private List listBox;
@@ -59,6 +58,16 @@ public class SwtListbox extends SwtElement implements XulContainer{
 
   public Orient getOrientation() {
     return null;
+  }
+
+  public void addItem(Object item) {
+    
+    // SWT limitation - these can only be strings ...
+    if (!(item instanceof String)){
+      // log error... only strings supported...
+    }
+    listBox.add((String)item);
+    
   }
 
 }

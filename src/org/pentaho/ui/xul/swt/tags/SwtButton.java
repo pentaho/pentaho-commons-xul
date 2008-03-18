@@ -57,7 +57,7 @@ public class SwtButton extends SwtElement implements XulButton {
 
   }
 
-  public void setOnClick(final String method) {
+  public void setOnclick(final String method) {
     button.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
         Element rootElement = getDocument().getRootElement();

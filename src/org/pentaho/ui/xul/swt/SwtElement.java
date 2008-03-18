@@ -62,6 +62,7 @@ public class SwtElement extends XulElement {
     // Total all flex values.
     // If every child has a flex value, then the GridLayout's columns
     // should be of equal width. everyChildIsFlexing gives us that boolean. 
+    
     int totalFlex = 0;
     int thisFlex = 0;
     boolean everyChildIsFlexing = true;

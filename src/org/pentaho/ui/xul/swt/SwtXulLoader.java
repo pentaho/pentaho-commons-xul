@@ -4,20 +4,19 @@
 package org.pentaho.ui.xul.swt;
 
 import org.dom4j.Document;
-import org.pentaho.core.util.CleanXmlHelper;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.XulFragment;
 import org.pentaho.ui.xul.XulFragmentContainer;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.XulParser;
-import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulWindowContainer;
+import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
-import org.pentaho.ui.xul.swing.tags.SwingWindow;
+import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 /**
  * @author OEM
@@ -63,7 +62,15 @@ public class SwtXulLoader implements XulLoader {
     XulWindowContainer container = new XulWindowContainer();
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
-   
+    
+    // SWT has no notion of an "onload" event, so we must simulate it...
+    
+    XulElement maybeWindow = container.getDocumentRoot().getXulElement();
+    if ( maybeWindow instanceof SwtWindow){
+      SwtWindow window = (SwtWindow) maybeWindow;
+      window.notifyListeners(XulWindow.EVENT_ON_LOAD);
+    }
+
     return container;
   }
 
@@ -78,5 +85,16 @@ public class SwtXulLoader implements XulLoader {
     return container;
   }
   
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
+   */
+  public XulDomContainer loadXulFragment(Document xulDocument, XulContainer parent) throws IllegalArgumentException, XulException {
+    XulFragmentContainer container = new XulFragmentContainer();
+    parser.setContainer(container);
+    XulElement element = parser.parse(xulDocument.getRootElement(), parent);
+    parser.getDocumentRoot().addChild(element);
+    
+    return container;
+  }
 
 }

@@ -5,10 +5,8 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Method;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
@@ -24,7 +22,6 @@ import org.pentaho.ui.xul.swing.SwingElement;
  */
 public class SwingButton extends SwingElement implements XulButton{
   private JButton button;
-  private String onClickFunction;
   
   public SwingButton(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("Button");
@@ -55,7 +52,7 @@ public class SwingButton extends SwingElement implements XulButton{
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.components.XulButton#setOnClick(java.lang.String)
    */
-  public void setOnClick( final String method) {
+  public void setOnclick( final String method) {
     button.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt){
         Document doc = SwingButton.this.getDocument();

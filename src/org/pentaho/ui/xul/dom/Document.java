@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul.dom;
 
-import java.util.List;
 
 /**
  * @author OEM
