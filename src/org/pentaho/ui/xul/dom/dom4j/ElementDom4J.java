@@ -213,4 +213,13 @@ public class ElementDom4J implements Element{
       return null;
   }
 
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.dom.Element#removeChild(org.pentaho.ui.xul.dom.Element)
+   */
+  public void removeChild(Element ele) {
+    if(ele instanceof XulElementDom4J)
+    this.element.remove((org.dom4j.Element) ele.getElementObject());
+    
+  }
+
 }

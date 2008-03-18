@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -40,6 +41,7 @@ public abstract class XulElement implements XulComponent, Element {
 
   public XulElement(Element element){
     this.element = element;
+    children = new ArrayList<XulComponent>();
     
     
   }
@@ -47,6 +49,7 @@ public abstract class XulElement implements XulComponent, Element {
   public XulElement(String name){
     try{
       this.element = DocumentFactory.createElement(name, this);
+      children = new ArrayList<XulComponent>();
     } catch(XulException e) {
       //TODO: add logging and perhaps throw illegalArgumentException or rethrow XulEx.
       System.out.println(String.format("error creating XulElement (%s)", name));
@@ -57,6 +60,7 @@ public abstract class XulElement implements XulComponent, Element {
     try{
       this.element = DocumentFactory.createElement(tagName, this);
       this.managedObject = managedObject;
+      children = new ArrayList<XulComponent>();
     } catch(XulException e) {
       //TODO: add logging and perhaps throw illegalArgumentException or rethrow XulEx.
       System.out.println(String.format("error creating XulElement (%s)", tagName));

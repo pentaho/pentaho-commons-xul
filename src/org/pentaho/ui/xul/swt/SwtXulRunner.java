@@ -86,7 +86,7 @@ public class SwtXulRunner implements XulRunner {
   public static void main(String[] args) {
 
     try {
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/sampleXul.xml");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/groupboxtest.xul");
       if (in == null) {
         System.out.println("Input is null");
         System.exit(123);

@@ -36,7 +36,7 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
     children = new ArrayList<XulComponent>();
     
     container = new JPanel(new GridBagLayout());
-    container.setBorder(BorderFactory.createLineBorder(Color.green));
+    container.setBorder(BorderFactory.createTitledBorder(""));
     managedObject = container;
     
     

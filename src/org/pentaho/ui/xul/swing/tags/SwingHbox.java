@@ -35,7 +35,7 @@ public class SwingHbox extends SwingElement implements XulHbox{
     children = new ArrayList<XulComponent>();
     
     container = new JPanel(new GridBagLayout());
-    container.setBorder(BorderFactory.createLineBorder(Color.green));
+    //container.setBorder(BorderFactory.createLineBorder(Color.green));
     managedObject = container;
     
     

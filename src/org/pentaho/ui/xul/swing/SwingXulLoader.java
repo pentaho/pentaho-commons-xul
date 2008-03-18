@@ -51,6 +51,8 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("CHECKBOX", "org.pentaho.ui.xul.swing.tags.SwingCheckbox");
     parser.registerHandler("GROUPBOX", "org.pentaho.ui.xul.swing.tags.SwingGroupbox");
     parser.registerHandler("CAPTION", "org.pentaho.ui.xul.swing.tags.SwingCaption");
+    parser.registerHandler("LISTBOX", "org.pentaho.ui.xul.swing.tags.SwingListbox");
+    parser.registerHandler("LISTITEM", "org.pentaho.ui.xul.swing.tags.SwingListitem");
 
   
   }
