@@ -217,8 +217,7 @@ public class ElementDom4J implements Element{
    * @see org.pentaho.ui.xul.dom.Element#removeChild(org.pentaho.ui.xul.dom.Element)
    */
   public void removeChild(Element ele) {
-    if(ele instanceof XulElementDom4J)
-    this.element.remove((org.dom4j.Element) ele.getElementObject());
+    element.remove((org.dom4j.Element) ele.getElementObject());
     
   }
 
