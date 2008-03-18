@@ -11,3 +11,4 @@ public interface XulListitem {
   public void setLabel(String label);
   public String getLabel();
 }
+

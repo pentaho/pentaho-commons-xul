@@ -70,4 +70,12 @@ public class SwtListbox extends SwtElement implements XulListbox{
     
   }
 
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulListbox#getSelectedItem()
+   */
+  public Object getSelectedItem() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }

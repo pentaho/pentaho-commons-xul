@@ -49,11 +49,13 @@ public class SwingWindow extends SwingElement implements XulWindow  {
   private int height;
   private Document rootDocument;
   private XulDomContainer xulDomContainer;
+  private String onload;
 
   
   public SwingWindow(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("window");
     frame = new JFrame();
+    this.xulDomContainer = domContainer;
 
     
     this.orientation = Orient.VERTICAL;
@@ -158,11 +160,32 @@ public class SwingWindow extends SwingElement implements XulWindow  {
   public XulDomContainer getXulDomContainer() {
     return xulDomContainer;
   }
-
-  public void setOnload(String method) {
-    // TODO Auto-generated method stub
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulWindow#getOnload(java.lang.String)
+   */
+  public String getOnload() {
+    return onload;
     
   }
 
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulWindow#setOnload(java.lang.String)
+   */
+  public void setOnload(String onload) {
+    this.onload = onload;
+    
+  }
+  
+
+  @Override
+  public void layout(){
+    super.layout();
+    for(XulComponent comp : children){
+      if(comp instanceof SwingScript){
+        SwingScript script = (SwingScript) comp;
+        this.xulDomContainer.addEventHandler(script.getId(), script.getSrc());
+      }
+    }
+  }
   
 }

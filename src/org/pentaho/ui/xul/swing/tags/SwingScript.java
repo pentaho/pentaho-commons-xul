@@ -14,7 +14,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
  */
 public class SwingScript extends SwingElement implements XulScript{
   private String id;
-  private String className;
+  private String src;
 
   public SwingScript(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("script");
@@ -27,12 +27,12 @@ public class SwingScript extends SwingElement implements XulScript{
     this.id = id;
   }
 
-  public String getClassName() {
-    return className;
+  public String getSrc() {
+    return src;
   }
   
-  public void setClassName(String className) {
-    this.className = className;
+  public void setSrc(String className) {
+    this.src = className;
   }
 
   public void layout(){

@@ -20,9 +20,10 @@ public interface XulWindow extends XulContainer{
   public int getHeight();
   public void setXulDomContainer(XulDomContainer xulDomContainer);
   public XulDomContainer getXulDomContainer();
-  public void setOnload(String method);
   
   public void invoke(String method, Object[] args);
+  public void setOnload(String onload);
+  public String getOnload();
   
   
 }

@@ -26,7 +26,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   private int width;
   private int height;
-  
+  private String onload;
 
   private XulDomContainer xulDomContainer;
 
@@ -104,8 +104,17 @@ public class SwtWindow extends SwtElement implements XulWindow {
   public Orient getOrientation() {
     return null;
   }
-  
+
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulWindow#getOnload()
+   */
+  public String getOnload() {
+
+    return onload;
+  }
+
   public void setOnload(final String method) {
+    this.onload = onload;
     shell.addListener(EVENT_ON_LOAD, new Listener(){
       public void handleEvent(Event e){
         invoke(method, new Object[]{});

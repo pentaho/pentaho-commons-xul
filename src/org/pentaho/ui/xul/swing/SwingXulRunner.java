@@ -18,6 +18,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulServiceCall;
 import org.pentaho.ui.xul.XulWindowContainer;
+import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
 
 /**
@@ -41,8 +42,13 @@ public class SwingXulRunner implements XulRunner {
    */
   public void initialize() throws XulException{
     //get first Element, should be a JFrame and show it.
-    XulElement rootEle = containers.get(0).getDocumentRoot().getRootElement().getXulElement();
-
+    SwingWindow rootEle = (SwingWindow) containers.get(0).getDocumentRoot().getRootElement().getXulElement();
+    System.out.println("onload: "+ rootEle.getOnload());
+    String onLoad = rootEle.getOnload();
+    if(onLoad != null){
+      rootEle.invoke(rootEle.getOnload(), new Object[]{});
+    }
+    
     if(rootEle instanceof SwingWindow){
       rootFrame = (JFrame) rootEle.getManagedObject();
     } else {
@@ -91,7 +97,9 @@ public class SwingXulRunner implements XulRunner {
     // TODO Auto-generated method stub
     try{
       
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/groupboxtest.xul");
+      //InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/sampleXul.xml");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/datasource.xul");
+
       if(in == null){
         System.out.println("Input is null");
         System.exit(123);

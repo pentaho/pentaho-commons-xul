@@ -11,5 +11,6 @@ public interface XulListbox extends XulContainer {
   public void setRows(int rows);
   public boolean isSeltype();
   public void setSeltype(boolean selType);
+  public Object getSelectedItem();
 
 }
