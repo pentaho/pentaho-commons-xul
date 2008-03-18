@@ -19,21 +19,11 @@ import org.pentaho.ui.xul.utilites.XulUtil;
  *
  */
 public class XulParser {
-  Document sourceDocument;
   Document xulDocument;
   static Map<String, Object> handlers = new HashMap<String, Object>();
   
   private XulDomContainer xulDomContainer;
   
-  public enum TAG{
-    PAGE,
-    BUTTON,
-    VBOX,
-    HBOX,
-    LABEL,
-    TEXTBOX
-  }
-   
   public XulParser() throws XulException{
     try{
       xulDocument = DocumentFactory.createDocument();

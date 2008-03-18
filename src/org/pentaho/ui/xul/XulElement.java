@@ -3,21 +3,15 @@
  */
 package org.pentaho.ui.xul;
 
-import java.awt.Component;
 import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.Namespace;
-import org.pentaho.ui.xul.swt.Orient;
 
 
 
@@ -34,6 +28,8 @@ public abstract class XulElement implements XulComponent, Element {
   protected int flex = 0;
   protected String id;
   protected boolean flexLayout = false;
+  
+  // TODO: This should be moved out to a Swing specific subclass of xulelement
   protected  GridBagConstraints gc;
 
   protected List<XulComponent> children;
@@ -100,21 +96,19 @@ public abstract class XulElement implements XulComponent, Element {
   
   }
 
-  
-  
   //passthrough DOM methods below
   //TODO: extract methods below into abstract class
   public String getName() {
     return element.getName();
   }
 
-  public void addChild(Element element) {
-    this.element.addChild(element);
+  public void addChild(Element ele) {
+    this.element.addChild(ele);
     
   }
 
-  public void removeChild(Element element) {
-    this.element.removeChild(element);
+  public void removeChild(Element ele) {
+    this.element.removeChild(ele);
     
   }
 
@@ -126,8 +120,8 @@ public abstract class XulElement implements XulComponent, Element {
     return this.element.getDocument();
   }
 
-  public Element getElementById(String id) {
-    return this.element.getElementById(id);
+  public Element getElementById(String elementId) {
+    return this.element.getElementById(elementId);
   }
 
   public Element getElementByXPath(String path) {
