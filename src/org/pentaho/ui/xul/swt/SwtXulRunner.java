@@ -14,9 +14,6 @@ import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulServiceCall;
-import org.pentaho.ui.xul.XulWindowContainer;
-import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
-import org.pentaho.ui.xul.swing.SwingXulLoader;
 import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
@@ -86,7 +83,7 @@ public class SwtXulRunner implements XulRunner {
   public static void main(String[] args) {
 
     try {
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/groupboxtest.xul");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/database/databasedialog.xul");
       if (in == null) {
         System.out.println("Input is null");
         System.exit(123);

@@ -3,16 +3,11 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
-import java.awt.Container;
-import java.awt.GridBagLayout;
-
 import javax.swing.JCheckBox;
-import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulCheckbox;
-import org.pentaho.ui.xul.components.XulGrid;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
@@ -20,6 +15,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
  *
  */
 public class SwingCheckbox extends SwingElement implements XulCheckbox{
+  
   private JCheckBox checkBox;
   
   public SwingCheckbox(XulElement parent, XulDomContainer domContainer, String tagName) {
@@ -48,6 +44,27 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
   
   public void setLabel(String label){
     checkBox.setText(label);
+  }
+
+  public String getLabel() {
+    return checkBox.getText();
+  }
+
+  public boolean isChecked() {
+    return checkBox.isSelected();
+
+  }
+
+  public boolean isDisabled() {
+    return !checkBox.isEnabled();
+  }
+
+  public void setChecked(boolean checked) {
+   checkBox.setSelected(checked); 
+  }
+
+  public void setDisabled(boolean dis) {
+    checkBox.setEnabled(!dis);
   }
   
   

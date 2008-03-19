@@ -1,35 +1,33 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.awt.event.ActionEvent;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.tags.SwingButton;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtButton extends SwtElement implements XulButton {
-
-  /**
-   * 
-   */
   private static final long serialVersionUID = -7218075117194366698L;
-  private org.eclipse.swt.widgets.Button button;
+
+  protected org.eclipse.swt.widgets.Button button;
   private String label;
-  // private String command;
   private boolean disabled;
 
   public SwtButton(XulElement parent, XulDomContainer container, String tagName) {
     super(tagName);
-    button = new org.eclipse.swt.widgets.Button((Composite)parent.getManagedObject(), SWT.NONE);
+    button = createNewButton((Composite)parent.getManagedObject());
     managedObject = button;
   }
+  
+  protected Button createNewButton(Composite parent) {
+    return new Button(parent, SWT.NONE);
+  }
+
   
   /**
    * XUL's attribute is "disabled", thus this acts

@@ -8,7 +8,13 @@ package org.pentaho.ui.xul.components;
  *
  */
 public interface XulCheckbox {
-  public void setSelected(boolean selected);
-  public boolean getSelected();
+  public void setChecked(boolean checked);
+  public boolean isChecked();
+  public String getLabel();
+  public void setLabel(String label);
+  public boolean isDisabled();
+  public void setDisabled(boolean dis);
+  
+  
   
 }

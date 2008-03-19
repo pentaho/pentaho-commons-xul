@@ -5,6 +5,6 @@
 			<label value="Test Label"/>
 			<textbox id="name"/>
 		</hbox>
-		<button label="Say Hi!" onClick="sayHello()"/>
+		<button label="Say Hi!" onclick="sayHello()"/>
 	</vbox>
 </window>

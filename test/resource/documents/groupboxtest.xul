@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <window id="general-datasource-window"
-	title="Testing groupboxes for SWT, Swing" orient="vertical"
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<script id="testHandler" src="org.pentaho.ui.sandbox.events.TestFragmentHandler" />
+	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="dataHandler.loadConnectionData()">
+	<script id="fragmentHandler" src="org.pentaho.ui.database.swt.event.FragmentHandler" />
+	<script id="dataHandler" src="org.pentaho.ui.database.swt.event.DataHandler" />
 	<hbox id="all-box" flex="1">
 		<groupbox id="options-box" orient="vertical" flex="1">
 			<label id="label-one" value="General" />
@@ -18,14 +19,8 @@
 			<textbox id="connection-name-text" />
 			<hbox id="button-box" flex="1">
 				<vbox id="type-box" flex="1">
-					<label id="connection-type-label"
-						value="Connection Type:" />
-					<listbox id="connection-type-list" rows="8">
-						<listitem label="MySQL" />
-						<listitem label="MS SQL Server" />
-						<listitem label="Oracle" />
-						<listitem label="Oracle RDB" />
-						<listitem label="Teradata" />
+					<label id="connection-type-label" value="Connection Type:" />
+					<listbox id="connection-type-list" rows="8" onselect="dataHandler.loadAccessData()">
 					</listbox>
 					<label id="access-type-label" value="Access:" />
 					<listbox id="access-type-list" rows="5">
@@ -53,7 +48,7 @@
 			</hbox>
 			<hbox id="test-button-box">
 				<label id="spacer-label" flex="10" />
-				<button id="test-button" label="Test" flex="1" onClick="testHandler.loadFragment()" />
+				<button id="test-button" label="Test" flex="1" onclick="fragmentHandler.loadDatabaseOptionsFragment()" />
 			</hbox>
 		</groupbox>
 	

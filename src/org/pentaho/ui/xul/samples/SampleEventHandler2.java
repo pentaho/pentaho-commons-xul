@@ -38,7 +38,7 @@ public class SampleEventHandler2 extends XulEventHandler{
         response = "Yea nice to meet you "+name;
       }
       
-      if(checkbox.getSelected()){
+      if(checkbox.isChecked()){
         response = response.toUpperCase();
       }
       

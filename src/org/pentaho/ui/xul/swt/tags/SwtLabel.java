@@ -18,7 +18,7 @@ public class SwtLabel extends SwtElement implements XulLabel {
   
   public SwtLabel(XulElement parent, XulDomContainer container, String tagName){
     super(tagName);
-    label = new org.eclipse.swt.widgets.Label((Composite)parent.getManagedObject(), SWT.NONE);
+    label = new org.eclipse.swt.widgets.Label((Composite)parent.getManagedObject(), SWT.WRAP);
     managedObject = label;
   }
 

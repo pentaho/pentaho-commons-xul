@@ -60,6 +60,9 @@ public class ElementDom4J implements Element{
    */
   public Element getElementById(String id) {
     org.dom4j.Element ele = element.elementByID(id);
+    if (ele == null){
+      return null;
+    }
     return ((XulElementDom4J) ele).getXulElement();
   }
 

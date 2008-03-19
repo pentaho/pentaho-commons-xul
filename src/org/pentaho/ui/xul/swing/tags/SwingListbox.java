@@ -8,21 +8,15 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.swt.Orient;
-import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwingListbox extends SwingElement implements XulListbox, ListSelectionListener{
   private static final long serialVersionUID = 3064125049914932493L;
@@ -87,11 +81,11 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     }
   }
 
-  public String getOnchange() {
+  public String getOnselect() {
     return onchange;
   }
 
-  public void setOnchange(String onchange) {
+  public void setOnselect(String onchange) {
     this.onchange = onchange;
     
   }
@@ -107,19 +101,35 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     
   }
 
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.containers.XulListbox#getSelectedItem()
-   */
   public Object getSelectedItem() {
     return this.listBox.getSelectedValue();
   }
 
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.containers.XulListbox#addItem(java.lang.Object)
-   */
-  public void addItem(Object item) {
-    // TODO Auto-generated method stub
+  public Object[] getSelectedItems() {
+    return listBox.getSelectedValues();
+  }
+
+  public void setSelectedItem(Object item) {
+   listBox.setSelectedValue(item, true);
+  }
+
+  public void setSelectedItems(Object[] items) {
     
+    // TODO check this logic, untested...
+    int[] indices = new int[items.length];
+    int index = -1;
+    for (Object object : items) {
+      indices[++index] = model.indexOf(object); 
+    }
+    listBox.setSelectedIndices(indices);
+  }
+
+  public void addItem(Object item) {
+    this.model.addElement(item);
+  }
+  
+  public void removeItems(){
+    this.model.removeAllElements();
   }
   
 

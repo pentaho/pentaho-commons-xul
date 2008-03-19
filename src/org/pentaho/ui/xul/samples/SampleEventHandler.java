@@ -38,7 +38,7 @@ public class SampleEventHandler extends XulEventHandler{
         response = "Hello there "+name;
       }
       
-      if(checkbox.getSelected()){
+      if(checkbox.isChecked()){
         response = response.toUpperCase();
       }
       
