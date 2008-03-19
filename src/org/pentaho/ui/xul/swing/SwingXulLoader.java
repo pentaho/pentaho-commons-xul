@@ -4,23 +4,18 @@
 package org.pentaho.ui.xul.swing;
 
 import org.dom4j.Document;
-import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.XulFragment;
 import org.pentaho.ui.xul.XulFragmentContainer;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.XulParser;
-import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
-import org.pentaho.ui.xul.swing.tags.SwingWindow;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class SwingXulLoader implements XulLoader {

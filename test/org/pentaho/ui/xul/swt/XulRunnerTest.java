@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 
 public class XulRunnerTest {
 

@@ -10,6 +10,8 @@ import org.pentaho.ui.xul.XulElement;
  *
  */
 public class XulElementDom4J extends org.dom4j.tree.BaseElement{
+  private static final long serialVersionUID = -2463576912677723967L;
+
   private XulElement xulElement;
   public XulElementDom4J(){
     super("blank");

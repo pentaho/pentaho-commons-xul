@@ -27,7 +27,7 @@ public class DocumentFactory {
   public static Document createDocument() throws XulException{
     try{
       Constructor constructor = concreteClass.getConstructor(new Class[]{});
-      Object concreteDOM = constructor.newInstance(null);
+      Object concreteDOM = constructor.newInstance((Object[])null);
       return (Document) concreteDOM;
       
     } catch(Exception e){

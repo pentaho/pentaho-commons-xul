@@ -33,10 +33,10 @@ public class DocumentDom4J extends ElementDom4J implements Document {
   }
 
   @Override
-  public void addChild(Element element) {
+  public void addChild(Element ele) {
     // TODO Auto-generated method stub
-    document.add((org.dom4j.Element) element.getElementObject());
-    this.element = (org.dom4j.Element) element.getElementObject();
+    document.add((org.dom4j.Element) ele.getElementObject());
+    this.element = (org.dom4j.Element) ele.getElementObject();
   }
   
 }

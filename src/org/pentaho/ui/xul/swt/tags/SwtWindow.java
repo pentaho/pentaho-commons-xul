@@ -108,7 +108,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
   }
 
   public void setOnload(final String method) {
-    this.onload = onload;
+    this.onload = method;
     shell.addListener(EVENT_ON_LOAD, new Listener(){
       public void handleEvent(Event e){
         invoke(method, new Object[]{});

@@ -2,7 +2,6 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.swt.SwtElement;
 

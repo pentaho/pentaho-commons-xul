@@ -5,9 +5,7 @@ package org.pentaho.ui.xul.swing.tags;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.components.XulListitem;
-import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**

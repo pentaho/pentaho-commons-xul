@@ -73,7 +73,9 @@ public class ElementDom4J implements Element{
     org.dom4j.Node ele = element.selectSingleNode(path);
     return ((XulElementDom4J) ele).getXulElement();
   }
-  
+
+
+  @SuppressWarnings("unused")
   private void printTree(org.dom4j.Element ele, int indent){
     System.out.println(getIndent(indent)+ele.getName());
     ++indent;
@@ -159,8 +161,8 @@ public class ElementDom4J implements Element{
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#addChild(org.pentaho.ui.xul.dom.Element)
    */
-  public void addChild(Element element) {
-    this.element.add((org.dom4j.Element) element.getElementObject());
+  public void addChild(Element ele) {
+    this.element.add((org.dom4j.Element) ele.getElementObject());
     
   }
   

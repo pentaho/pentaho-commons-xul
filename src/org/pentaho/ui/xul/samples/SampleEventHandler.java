@@ -3,12 +3,7 @@
  */
 package org.pentaho.ui.xul.samples;
 
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.Node;
 import org.pentaho.ui.xul.XulEventHandler;
-import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;

@@ -4,10 +4,11 @@
 package org.pentaho.ui.xul;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class XulException extends Exception {
+  private static final long serialVersionUID = -4430086632572793141L;
 
   public XulException() {
     super();

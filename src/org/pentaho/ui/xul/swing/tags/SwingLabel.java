@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.swing.SwingElement;
 

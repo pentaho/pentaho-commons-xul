@@ -6,7 +6,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.swt.SwtElement;
 

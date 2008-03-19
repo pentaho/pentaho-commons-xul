@@ -3,22 +3,17 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulHbox;
-import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -40,13 +35,13 @@ public class SwingHbox extends SwingElement implements XulHbox{
     
     
     gc = new GridBagConstraints();
-    gc.gridx = gc.RELATIVE;
+    gc.gridx = GridBagConstraints.RELATIVE;
     gc.gridy = 0;
-    gc.gridheight = gc.REMAINDER;
+    gc.gridheight = GridBagConstraints.REMAINDER;
     gc.gridwidth = 1;
     gc.insets = new Insets(2,2,2,2);
-    gc.fill = gc.HORIZONTAL;
-    gc.anchor = gc.NORTHWEST;
+    gc.fill = GridBagConstraints.HORIZONTAL;
+    gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weighty = 1;
     
    

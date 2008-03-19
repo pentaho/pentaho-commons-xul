@@ -6,7 +6,6 @@ import org.eclipse.swt.widgets.Group;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.util.Orient;
 

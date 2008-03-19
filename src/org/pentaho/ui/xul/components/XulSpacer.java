@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul.components;
 
-import java.awt.Font;
 
 /**
  * @author OEM

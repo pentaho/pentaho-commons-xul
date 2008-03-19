@@ -4,6 +4,7 @@
 package org.pentaho.ui.xul.swing;
 
 import java.awt.Component;
+import java.awt.GridBagConstraints;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
@@ -42,26 +43,26 @@ public class SwingElement extends XulElement{
     }
     
     if(flexLayout)
-      gc.fill = gc.BOTH;
+      gc.fill = GridBagConstraints.BOTH;
 
     for(int i=0; i<children.size(); i++){
-      XulComponent comp = (XulComponent) children.get(i);
+      XulComponent comp = children.get(i);
     
-      Object managedObject = comp.getManagedObject();
-      if(managedObject == null || !(managedObject instanceof Component)){
+      Object maybeComponent = comp.getManagedObject();
+      if(maybeComponent == null || !(maybeComponent instanceof Component)){
         continue;
       }
       if(this.getOrientation() == Orient.VERTICAL){ //VBox and such
         gc.gridheight = comp.getFlex()+1;
-        gc.gridwidth = gc.REMAINDER;
+        gc.gridwidth = GridBagConstraints.REMAINDER;
         gc.weighty = (totalFlex == 0)? 0 : (comp.getFlex()/totalFlex);
       } else {
         gc.gridwidth = comp.getFlex()+1;
-        gc.gridheight = gc.REMAINDER;
+        gc.gridheight = GridBagConstraints.REMAINDER;
         gc.weightx = (totalFlex == 0)? 0 : (comp.getFlex()/totalFlex);
       }
       
-      Component component = (Component) managedObject;
+      Component component = (Component) maybeComponent;
       container.add(component, gc);
 
       if(i+1 == children.size() && !flexLayout){

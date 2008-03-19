@@ -1,12 +1,10 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulBox;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;

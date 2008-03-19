@@ -4,35 +4,21 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Rectangle;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.dom4j.Document;
-import org.dom4j.Element;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
-import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.XulTagHandler;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
@@ -68,13 +54,13 @@ public class SwingWindow extends SwingElement implements XulWindow  {
     
     
     gc = new GridBagConstraints();
-    gc.gridy = gc.RELATIVE;
+    gc.gridy = GridBagConstraints.RELATIVE;
     gc.gridx = 0;
     gc.gridheight = 1;
-    gc.gridwidth = gc.REMAINDER;
+    gc.gridwidth = GridBagConstraints.REMAINDER;
     gc.insets = new Insets(2,2,2,2);
-    gc.fill = gc.HORIZONTAL;
-    gc.anchor = gc.NORTHWEST;
+    gc.fill = GridBagConstraints.HORIZONTAL;
+    gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;
     
     
@@ -85,10 +71,6 @@ public class SwingWindow extends SwingElement implements XulWindow  {
     managedObject = frame;
   }
   
-  private JFrame getFrame(){
-    return (JFrame) managedObject;
-  }
-
 
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulPage#setTitle(java.lang.String)

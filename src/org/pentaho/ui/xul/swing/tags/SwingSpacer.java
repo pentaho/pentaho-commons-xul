@@ -4,19 +4,13 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Component;
-import java.awt.Font;
 
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulSpacer;
 import org.pentaho.ui.xul.swing.SwingElement;
-import org.pentaho.ui.xul.util.Orient;
 
 /**
  * @author OEM

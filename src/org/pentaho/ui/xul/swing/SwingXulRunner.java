@@ -12,12 +12,9 @@ import javax.swing.JFrame;
 import org.dom4j.Document;
 import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.XulServiceCall;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
 
@@ -27,9 +24,7 @@ import org.pentaho.ui.xul.swing.tags.SwingWindow;
  */
 public class SwingXulRunner implements XulRunner {
 
-  private Document document;
   private JFrame rootFrame;
-  private XulEventHandler eventHandler;
   private List<XulDomContainer> containers; 
   
   public SwingXulRunner(){
@@ -42,7 +37,7 @@ public class SwingXulRunner implements XulRunner {
    */
   public void initialize() throws XulException{
     //get first Element, should be a JFrame and show it.
-    SwingWindow rootEle = (SwingWindow) containers.get(0).getDocumentRoot().getRootElement().getXulElement();
+    XulWindow rootEle = (XulWindow) containers.get(0).getDocumentRoot().getRootElement().getXulElement();
     System.out.println("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
@@ -50,7 +45,7 @@ public class SwingXulRunner implements XulRunner {
     }
     
     if(rootEle instanceof SwingWindow){
-      rootFrame = (JFrame) rootEle.getManagedObject();
+      rootFrame = (JFrame) ((SwingWindow)rootEle).getManagedObject();
     } else {
       throw new XulException("Root element not a Frame");
     }
