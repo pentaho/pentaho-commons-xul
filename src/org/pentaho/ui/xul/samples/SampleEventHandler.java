@@ -47,5 +47,11 @@ public class SampleEventHandler extends XulEventHandler{
       System.out.println("name textbox not found");
     }
   }
- 
+
+  @Override
+  public Object getData() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
 }

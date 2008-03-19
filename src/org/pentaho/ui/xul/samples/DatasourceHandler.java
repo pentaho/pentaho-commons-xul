@@ -49,6 +49,13 @@ public class DatasourceHandler extends XulEventHandler{
     password.setValue( String.format("%s password", selectedValue) );
     
   }
+
+
+  @Override
+  public Object getData() {
+    // TODO Auto-generated method stub
+    return null;
+  }
  
   
   

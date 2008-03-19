@@ -24,6 +24,8 @@ public interface XulWindow extends XulContainer{
   public void invoke(String method, Object[] args);
   public void setOnload(String onload);
   public String getOnload();
+  public void open();
+  public void close();
   
   
 }

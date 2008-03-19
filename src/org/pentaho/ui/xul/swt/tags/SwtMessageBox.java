@@ -24,7 +24,7 @@ public class SwtMessageBox implements XulMessageBox {
   }
 
   public SwtMessageBox(Shell parent, String message, String title, Object[] buttons) {
-    this(parent, message, title, buttons, null);
+    this(parent, message, title, buttons, new Integer(SWT.ICON_INFORMATION));
   }
 
   public SwtMessageBox(Shell parent, String message, String title, Object[] buttons, Object icon) {
@@ -41,11 +41,11 @@ public class SwtMessageBox implements XulMessageBox {
 
   private int getBitwiseStyle() {
     int style=0;
-    for (Object button : buttons) {
-     style |=((Integer)button).intValue(); 
-    }
     if (icon != null){
       style |= ((Integer)icon).intValue();
+    }
+    for (Object button : buttons) {
+     style |=((Integer)button).intValue(); 
     }
     return style;
   }

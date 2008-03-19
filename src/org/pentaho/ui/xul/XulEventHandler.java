@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul;
 
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.dom.Document;
 
 /**
@@ -18,4 +17,10 @@ public abstract class XulEventHandler {
     this.xulDomContainer = xulDomContainer;
     this.document = xulDomContainer.getDocumentRoot();
   }
+  
+  /**
+   * A generic way of returning data from event handlers... can we do better than this? 
+   * @return any data associated with events that have been executed.
+   */
+  public abstract Object getData();
 }

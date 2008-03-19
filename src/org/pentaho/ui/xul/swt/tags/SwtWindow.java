@@ -13,7 +13,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.Orient;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -21,8 +20,6 @@ public class SwtWindow extends SwtElement implements XulWindow {
   private static final long serialVersionUID = 6711745093238802441L;
 
   Shell shell;
-
-  private XulEventHandler eventHandler;
 
   private int width;
   private int height;
@@ -37,10 +34,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
     shell.setLayout(new GridLayout());
     managedObject = shell;
     xulDomContainer = container;
-  }
-
-  public XulEventHandler getEventHandler() {
-    return eventHandler;
+    
   }
 
   public int getHeight() {
@@ -127,6 +121,20 @@ public class SwtWindow extends SwtElement implements XulWindow {
     if (!shell.isDisposed()){
       shell.notifyListeners(event, new Event());
     }
+  }
+
+  public void open() {
+    shell.open(); 
+
+    while(!shell.isDisposed()) {
+      if(!shell.getDisplay().readAndDispatch()) {
+        shell.getDisplay().sleep();
+      }
+    }
+  }
+  
+  public void close(){
+    shell.dispose();
   }
 
   
