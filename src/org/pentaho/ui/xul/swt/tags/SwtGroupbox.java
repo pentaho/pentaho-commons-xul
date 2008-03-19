@@ -8,7 +8,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulGroupbox;
-import org.pentaho.ui.xul.swt.Orient;
+import org.pentaho.ui.xul.util.Orient;
 
 
 public class SwtGroupbox extends SwtBox implements XulGroupbox {
