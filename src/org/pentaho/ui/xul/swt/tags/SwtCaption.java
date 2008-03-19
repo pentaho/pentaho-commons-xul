@@ -25,8 +25,4 @@ public class SwtCaption extends SwtElement implements XulCaption {
     return label;
   }
  
-  public String getCaption() {
-    return label;
-  }
-
 }

@@ -9,15 +9,15 @@ import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class SwingCaption extends SwingElement implements XulCaption{
   private String caption;
+
   public SwingCaption(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("caption");
     managedObject = caption;
-
   }
   
   public String getLabel(){
@@ -27,9 +27,7 @@ public class SwingCaption extends SwingElement implements XulCaption{
   public void setLabel(String caption){
     this.caption = caption;
     managedObject = caption;
-
   }
-  
 
   public void layout(){
   }
