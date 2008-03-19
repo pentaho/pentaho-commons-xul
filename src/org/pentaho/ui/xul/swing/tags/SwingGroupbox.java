@@ -20,7 +20,7 @@ import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.swing.SwingElement;
-import org.pentaho.ui.xul.swt.Orient;
+import org.pentaho.ui.xul.util.Orient;
 
 /**
  * @author OEM

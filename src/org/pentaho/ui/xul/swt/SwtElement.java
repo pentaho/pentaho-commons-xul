@@ -6,13 +6,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.util.Align;
+import org.pentaho.ui.xul.util.Orient;
 
 public class SwtElement extends XulElement {
   private static final long serialVersionUID = -4407080035694005764L;
 
   // Per XUL spec, STRETCH is the default align value.
   private Align align = Align.STRETCH;
-  private Orient orient = Orient.HORIZONTAL;
+  protected Orient orient = Orient.HORIZONTAL;
   private int flex=0;
   
   public SwtElement(String tagName, Object managedObject) {
@@ -51,6 +53,11 @@ public class SwtElement extends XulElement {
 
 
   @Override
+  /**
+   * This method attempts to follow the XUL rules
+   * of layouting, using an SWT GridLayout. Any deviations 
+   * from the general rules are applied in overrides to this method. 
+   */
   public void layout() {
     
     if (!(getManagedObject() instanceof Composite)){
@@ -75,6 +82,10 @@ public class SwtElement extends XulElement {
       totalFlex += thisFlex;
     }
     
+    // By adding the total flex "points" with the number
+    // of child controls, we get a close relative size, using
+    // columns in the GridLayout. 
+    
     switch (orient) {
       case HORIZONTAL:
         int columnCount = this.getChildNodes().size() + totalFlex;
@@ -86,13 +97,24 @@ public class SwtElement extends XulElement {
     }
     
     for(Object child : this.getChildNodes()){
+     
       SwtElement swtChild = (SwtElement)child;
       Control c = (Control) swtChild.getManagedObject();
+      
       // some children have no object they are managing... skip these kids!
+      
       if (c==null) continue;
+      
       GridData data = new GridData();
+      
+      // How many columns or rows should the control span? Use the flex value plus
+      // 1 "point" for the child itself. 
+      
       data.horizontalSpan = orient.equals(Orient.HORIZONTAL) ? swtChild.getFlex() + 1 : 1 ;
       data.verticalSpan = orient.equals(Orient.VERTICAL) ? swtChild.getFlex() + 1 : 1 ;
+      
+      // In XUL, flex defines how the children grab the excess space 
+      // in the container - therefore, we need to grab the excess space... 
       
       if (swtChild.getFlex() > 0){
         data.grabExcessHorizontalSpace=true;
@@ -104,6 +126,10 @@ public class SwtElement extends XulElement {
         data.horizontalAlignment=SWT.FILL;
         data.verticalAlignment=SWT.FILL;
       }
+      
+      // And finally, deal with the align attribute...
+      // Align is the PARENT'S attribute, and affects the 
+      // opposite direction of the orientation.
       
       if (getAlign() != null){
         Align a = Align.valueOf(getAlign());
@@ -119,10 +145,9 @@ public class SwtElement extends XulElement {
           }
         }
       }
+      
       c.setLayoutData(data);
     }
-
-    
   }
 
 }

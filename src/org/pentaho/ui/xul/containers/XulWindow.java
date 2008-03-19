@@ -7,8 +7,8 @@ import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 
 /**
- * @author OEM
- *
+ * @author nbaker
+ * 
  */
 public interface XulWindow extends XulContainer{
   

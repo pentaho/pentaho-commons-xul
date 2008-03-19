@@ -16,7 +16,7 @@ import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulSpacer;
 import org.pentaho.ui.xul.swing.SwingElement;
-import org.pentaho.ui.xul.swt.Orient;
+import org.pentaho.ui.xul.util.Orient;
 
 /**
  * @author OEM

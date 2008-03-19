@@ -35,7 +35,7 @@ import org.pentaho.ui.xul.XulTagHandler;
 import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.SwingElement;
-import org.pentaho.ui.xul.swt.Orient;
+import org.pentaho.ui.xul.util.Orient;
 
 
 /**

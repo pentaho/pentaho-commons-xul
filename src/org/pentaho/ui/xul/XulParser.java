@@ -12,7 +12,7 @@ import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.utilites.XulUtil;
+import org.pentaho.ui.xul.util.XulUtil;
 
 /**
  * @author OEM

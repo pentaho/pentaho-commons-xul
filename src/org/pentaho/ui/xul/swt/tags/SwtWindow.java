@@ -13,8 +13,8 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.swt.Orient;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.util.Orient;
 
 public class SwtWindow extends SwtElement implements XulWindow {
   private static final long serialVersionUID = 6711745093238802441L;

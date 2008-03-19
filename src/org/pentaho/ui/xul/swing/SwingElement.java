@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.swt.Orient;
+import org.pentaho.ui.xul.util.Orient;
 
 /**
  * @author OEM
