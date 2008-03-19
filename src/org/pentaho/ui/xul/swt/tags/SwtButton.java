@@ -44,17 +44,6 @@ public class SwtButton extends SwtElement implements XulButton {
     if (!button.isDisposed()) button.setEnabled( !disabled );
   }
 
-
-  public void click() {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void dblClick() {
-    // TODO Auto-generated method stub
-
-  }
-
   public void setOnclick(final String method) {
     button.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){

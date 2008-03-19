@@ -17,7 +17,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class SwingButton extends SwingElement implements XulButton{
@@ -29,21 +29,6 @@ public class SwingButton extends SwingElement implements XulButton{
     this.managedObject = button;
   }
 
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.components.XulButton#click()
-   */
-  public void click() {
-    // TODO Auto-generated method stub
-    
-  }
-
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.components.XulButton#dblClick()
-   */
-  public void dblClick() {
-    // TODO Auto-generated method stub
-    
-  }
   
   public void setLabel(String label){
     button.setText(label);
@@ -62,6 +47,21 @@ public class SwingButton extends SwingElement implements XulButton{
         
       }
     });
+  }
+
+
+  public String getLabel() {
+    return button.getText();
+  }
+
+
+  public boolean isDisabled() {
+    return ! button.isEnabled();
+  }
+
+
+  public void setDisabled(boolean dis) {
+    button.setEnabled(!dis);
   }
   
 }
