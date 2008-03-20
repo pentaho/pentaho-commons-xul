@@ -21,11 +21,6 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   }
 
   /**
-   * Per XUL documentation, the value attribute "only holds the 
-   * default value and is never modified when the user enters 
-   * text". So we do not provide a getter, we only provide the 
-   * setter method to allow the default to be set, and then do 
-   * not hold on to it.   
    * @param text
    */
   public void setValue( String text ) {
@@ -36,12 +31,6 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     return textBox.getText();
   }
  
-  /**
-   * XUL's attribute is "disabled", thus this acts
-   * exactly the opposite of SWT. If the property is not 
-   * available, then the control is enabled. 
-   * @return boolean true if the control is disabled.
-   */
   public boolean isDisabled() {
     return disabled;
   }

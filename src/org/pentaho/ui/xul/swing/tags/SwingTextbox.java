@@ -4,7 +4,6 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Dimension;
-import java.awt.Font;
 
 import javax.swing.JTextField;
 
@@ -14,7 +13,7 @@ import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class SwingTextbox extends SwingElement implements XulTextbox  {
@@ -27,14 +26,6 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     managedObject = textField;
   }
 
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.components.XulLabel#setFont(java.awt.Font)
-   */
-  public void setFont(Font font) {
-    // TODO Auto-generated method stub
-    
-  }
-  
   public String getValue(){
     return textField.getText();
   }
@@ -44,6 +35,21 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
   
   public void layout(){
+  }
+
+  public int getMaxlength() {
+    return 0;
+  }
+
+  public boolean isDisabled() {
+    return !textField.isEnabled();
+  }
+
+  public void setDisabled(boolean dis) {
+    textField.setEnabled(!dis);
+  }
+
+  public void setMaxlength(int length) {
   }
 
 }
