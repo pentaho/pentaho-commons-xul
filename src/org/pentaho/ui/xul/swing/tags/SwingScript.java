@@ -9,7 +9,7 @@ import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class SwingScript extends SwingElement implements XulScript{
