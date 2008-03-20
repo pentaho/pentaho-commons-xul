@@ -38,15 +38,6 @@ public class SwtLabel extends SwtElement implements XulLabel {
   }
  
   /**
-   * Complies with interface XulLabel, but 
-   * realize this overrides AbstractElement's 
-   * setText().
-   */
-  public void setText( String text ) {
-    setValue(text);
-  }
-
-  /**
    * XUL's attribute is "disabled", thus this acts
    * exactly the opposite of SWT. If the property is not 
    * available, then the control is enabled. 

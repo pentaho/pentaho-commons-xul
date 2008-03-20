@@ -25,28 +25,7 @@ public class SwingLabel extends SwingElement implements XulLabel{
     managedObject = label;
   }
   
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.components.XulButton#click()
-   */
-  public void click() {
-    // TODO Auto-generated method stub
-    
-  }
-
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.components.XulButton#dblClick()
-   */
-  public void dblClick() {
-    // TODO Auto-generated method stub
-    
-  }
-
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.components.XulLabel#setFont(java.awt.Font)
-   */
   public void setFont(Font font) {
-    // TODO Auto-generated method stub
-    
   }
   
   public void layout(){
@@ -60,6 +39,14 @@ public class SwingLabel extends SwingElement implements XulLabel{
   public String getValue(){
     return label.getText();
     
+  }
+
+  public boolean isDisabled() {
+    return !label.isEnabled();
+  }
+
+  public void setDisabled(boolean dis) {
+    label.setEnabled(!dis);
   }
 
 }
