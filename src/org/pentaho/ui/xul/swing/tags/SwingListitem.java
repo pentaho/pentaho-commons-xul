@@ -9,14 +9,16 @@ import org.pentaho.ui.xul.components.XulListitem;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class SwingListitem extends SwingElement implements XulListitem{
+  
   private String label;
+  private Object value;
+  
   public SwingListitem(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("listitem");
-    
   }
   
   public String getLabel(){
@@ -26,15 +28,28 @@ public class SwingListitem extends SwingElement implements XulListitem{
   public void setLabel(String label){
     this.label = label;
     managedObject = this.label;
-
   }
   
   public String toString(){
     return this.label;
   }
   
-
   public void layout(){
+  }
+
+  public Object getValue() {
+    return value;
+  }
+
+  public boolean isSelected() {
+    return false;
+  }
+
+  public void setSelected(boolean selected) {
+  }
+
+  public void setValue(Object value) {
+    this.value = value;
   }
   
 }
