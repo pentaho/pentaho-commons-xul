@@ -30,7 +30,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
   public SwtWindow(XulElement parent, XulDomContainer container, String tagName) {
     super(tagName);
     shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.SHELL_TRIM) : 
-      new Shell(new Display(),SWT.SHELL_TRIM);
+      new Shell(SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());
     managedObject = shell;
     xulDomContainer = container;

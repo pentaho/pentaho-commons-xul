@@ -48,4 +48,10 @@ public class SampleEventHandler2 extends XulEventHandler{
     return null;
   }
 
+  @Override
+  public void setData(Object data) {
+    // TODO Auto-generated method stub
+    
+  }
+
 }
