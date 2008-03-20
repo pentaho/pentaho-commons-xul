@@ -35,7 +35,7 @@ public class SwtBox extends SwtElement implements XulBox {
   }
 
   public Orient getOrientation() {
-    return null;
+    return Orient.valueOf(getOrient());
   }
   
 
