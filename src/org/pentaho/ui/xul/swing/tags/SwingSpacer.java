@@ -13,7 +13,7 @@ import org.pentaho.ui.xul.components.XulSpacer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public class SwingSpacer extends SwingElement implements XulSpacer{
