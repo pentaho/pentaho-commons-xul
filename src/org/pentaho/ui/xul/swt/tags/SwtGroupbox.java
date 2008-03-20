@@ -25,16 +25,6 @@ public class SwtGroupbox extends SwtBox implements XulGroupbox {
     return new Group(c, SWT.NONE);
   }
 
-  public String getLabel() {
-    return label;
-  }
-
-  //Changed it to setCaption to conform with the Xul element model <groupbox><caption label=''>...
-  @Deprecated
-  public void setLabel(String text) {
-    label = text;
-    ((Group)box).setText(text);
-  }
   
   public void addComponent(XulComponent component) {
     // intentionally do nothing here
