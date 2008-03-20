@@ -4,6 +4,8 @@
 package org.pentaho.ui.xul;
 
 /**
+ * The base interface for any XUL widget. 
+ * 
  * @author nbaker
  *
  */

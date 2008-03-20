@@ -6,7 +6,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwtElement extends XulElement {

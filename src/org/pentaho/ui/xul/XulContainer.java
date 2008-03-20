@@ -20,8 +20,8 @@ public interface XulContainer {
   public void addComponent(XulComponent component);
   
   /**
-   * @see Orient
-   * @return
+   * @see org.pentaho.ui.xul.util.Orient
+   * @return the orientation for this container. Valid values are found in the Orient enum. 
    */
   public Orient getOrientation();
 }
