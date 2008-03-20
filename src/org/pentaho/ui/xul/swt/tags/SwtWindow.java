@@ -22,19 +22,20 @@ public class SwtWindow extends SwtElement implements XulWindow {
   Shell shell;
 
   private int width;
+
   private int height;
+
   private String onload;
 
   private XulDomContainer xulDomContainer;
 
   public SwtWindow(XulElement parent, XulDomContainer container, String tagName) {
     super(tagName);
-    shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.SHELL_TRIM) : 
-      new Shell(SWT.SHELL_TRIM);
+    shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.SHELL_TRIM) : new Shell(SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());
     managedObject = shell;
     xulDomContainer = container;
-    
+
   }
 
   public int getHeight() {
@@ -96,46 +97,41 @@ public class SwtWindow extends SwtElement implements XulWindow {
   }
 
   public Orient getOrientation() {
-    return null;
+    return Orient.valueOf(getOrient());
   }
 
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.containers.XulWindow#getOnload()
-   */
   public String getOnload() {
-
     return onload;
   }
 
   public void setOnload(final String method) {
     this.onload = method;
-    shell.addListener(EVENT_ON_LOAD, new Listener(){
-      public void handleEvent(Event e){
-        invoke(method, new Object[]{});
+    shell.addListener(EVENT_ON_LOAD, new Listener() {
+      public void handleEvent(Event e) {
+        invoke(method, new Object[] {});
       }
     });
 
   }
 
   public void notifyListeners(int event) {
-    if (!shell.isDisposed()){
+    if (!shell.isDisposed()) {
       shell.notifyListeners(event, new Event());
     }
   }
 
   public void open() {
-    shell.open(); 
+    shell.open();
 
-    while(!shell.isDisposed()) {
-      if(!shell.getDisplay().readAndDispatch()) {
+    while (!shell.isDisposed()) {
+      if (!shell.getDisplay().readAndDispatch()) {
         shell.getDisplay().sleep();
       }
     }
   }
-  
-  public void close(){
+
+  public void close() {
     shell.dispose();
   }
 
-  
 }
