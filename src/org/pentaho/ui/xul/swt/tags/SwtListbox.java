@@ -20,7 +20,7 @@ public class SwtListbox extends SwtElement implements XulListbox{
 
   private List listBox;
   private boolean disabled = false;
-  private boolean selType;
+  private String selType;
   private int rowsToDisplay = 0;
   String onSelect = null;
   
@@ -53,11 +53,17 @@ public class SwtListbox extends SwtElement implements XulListbox{
     }
   }
 
-  public boolean isSeltype() {
+  
+  public String getSeltype() {
     return selType;
   }
 
-  public void setSeltype(boolean selType) {
+  /**
+   * TODO: PARTIAL IMPL: Because this is needed on construction, 
+   * we need to rework this class a bit to allow setting of 
+   * multiple selection. 
+   */
+  public void setSeltype(String selType) {
     this.selType = selType;
     
   }
@@ -74,6 +80,16 @@ public class SwtListbox extends SwtElement implements XulListbox{
   public void addItem(Object item) {
     
     // SWT limitation - these can only be strings ...
+    
+    // We could still attempt to load the object using 
+    // its toString() method, but then what you recieved
+    // back from getItem() or getSelection() would 
+    // be inconsistent with what you put into the list... 
+    
+    // TODO: Could possibly simulate a model 
+    // by holding onto real objects and syncing them
+    // with the listbox. 
+    
     if (!(item instanceof String)){
       // log error... only strings supported...
     }
@@ -129,6 +145,10 @@ public class SwtListbox extends SwtElement implements XulListbox{
     // SWT doesn't seem to fire this event when the selection
     // is made via code, only with a mouse or keyboard action.
     listBox.notifyListeners(SWT.Selection, new Event());
+  }
+
+  public int getRowCount() {
+    return (!listBox.isDisposed()) ? listBox.getItemCount() : 0;
   }
 
 }

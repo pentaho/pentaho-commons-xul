@@ -24,7 +24,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private JList listBox;
   private DefaultListModel model;
   private boolean disabled = false;
-  private boolean selType;
+  private String selType;
   private int rowsToDisplay = 0;
   private String onchange;
   
@@ -58,11 +58,11 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     this.listBox.setVisibleRowCount(rowsToDisplay);
   }
 
-  public boolean isSeltype() {
+  public String getSeltype() {
     return selType;
   }
 
-  public void setSeltype(boolean selType) {
+  public void setSeltype(String selType) {
     this.selType = selType;
     
   }
@@ -131,6 +131,8 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   public void removeItems(){
     this.model.removeAllElements();
   }
-  
 
+  public int getRowCount() {
+    return model.getSize();
+  }
 }
