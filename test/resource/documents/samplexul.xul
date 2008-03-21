@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window   id="label-test" title="Testing Nick's Sample"
-	orient="horizontal"
+
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<!--  <command id="say_hello" oncommand="java:org.pentaho.commons.ui.database.test.Something.sayHello" />  -->
-	<box id="vbox1" orient="vertical">
-		<box id="vbox1" orient="horizontal">
+	<vbox id="vbox1">
+		<hbox id="vbox1" orient="horizontal">
 			<label id="namelabel" value="What is your name?"/>
 			<textbox id="name" value="" maxlength="10"/>
-		</box>
+		</hbox>
 		<button id="button1" label="Say Hi!" command="say_hello"/>
 		<label id="response" value="                                                                                            " />
-	</box>
+	</vbox>
 </window>

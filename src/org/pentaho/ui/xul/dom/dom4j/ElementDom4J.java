@@ -226,4 +226,12 @@ public class ElementDom4J implements Element{
     
   }
 
+  public void replaceChild(Element oldElement, Element newElement) {
+
+    List contentOfParent = element.content();
+    int index = contentOfParent.indexOf((org.dom4j.Element) oldElement.getElementObject());
+    contentOfParent.set(index, (org.dom4j.Element) newElement.getElementObject());
+    
+  }
+
 }

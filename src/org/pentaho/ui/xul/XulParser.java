@@ -39,10 +39,12 @@ public class XulParser {
   }
 
   public Document parseDocument(org.dom4j.Element rootSrc) throws XulException {
-    XulWindow root = (XulWindow) parse(rootSrc, null);
+    XulElement root = parse(rootSrc, null);
 
     //give root reference to runner for service calls
-    root.setXulDomContainer(this.xulDomContainer);
+    if(root instanceof XulWindow){
+      ((XulWindow)root).setXulDomContainer(this.xulDomContainer);
+    }
 
     xulDocument.addChild((Element) root);
     return xulDocument;

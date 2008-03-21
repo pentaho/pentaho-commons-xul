@@ -9,11 +9,13 @@ import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulHbox;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -49,6 +51,20 @@ public class SwingHbox extends SwingElement implements XulHbox{
   
   public Orient getOrientation() {
     return Orient.HORIZONTAL;
+  }
+
+  @Override
+  public void replaceChild(Element oldElement, Element newElement) {
+    super.replaceChild(oldElement, newElement);
+    int idx = children.indexOf(oldElement);
+    children.set(idx, (XulComponent) newElement);
+    SwingUtilities.invokeLater(new Runnable(){
+      public void run(){
+        SwingHbox.this.container.removeAll();
+      }
+    });
+    
+    //this.container.add((Component) newElement.getXulElement().getManagedObject());
   }
 
 }

@@ -176,4 +176,8 @@ public abstract class XulElement implements XulComponent, Element {
     return this;
   }
 
+  public void replaceChild(Element oldElement, Element newElement){
+    this.element.replaceChild(oldElement, newElement);
+  }
+  
 }

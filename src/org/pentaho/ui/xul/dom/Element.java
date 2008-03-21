@@ -40,4 +40,6 @@ public interface Element {
   
   public XulElement getXulElement();
   
+  public void replaceChild(Element oldElement, Element newElement);
+  
 }

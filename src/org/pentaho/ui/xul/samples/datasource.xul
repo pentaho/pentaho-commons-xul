@@ -50,7 +50,6 @@
 					<textbox id="username-text" />
 					<label id="password-label" value="Password:" />
 					<textbox id="password-text" />
-					<!--   <label id="space" flex="1" /> -->
 				</groupbox>
 			
 			</hbox>
