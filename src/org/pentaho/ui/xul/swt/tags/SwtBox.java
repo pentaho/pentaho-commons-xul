@@ -2,7 +2,6 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulBox;
@@ -26,17 +25,8 @@ public class SwtBox extends SwtElement implements XulBox {
 
   }
 
-  public void addComponent(XulComponent component) {
-    // intentionally do nothing
-  }
-
   protected Composite createNewComposite(Composite parent) {
     return new Composite(parent, SWT.NONE);
   }
-
-  public Orient getOrientation() {
-    return Orient.valueOf(getOrient());
-  }
-  
 
 }

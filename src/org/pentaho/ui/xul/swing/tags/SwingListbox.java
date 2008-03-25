@@ -135,4 +135,12 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   public int getRowCount() {
     return model.getSize();
   }
+
+  public int getSelectedIndex() {
+    return listBox.getSelectedIndex();
+  }
+
+  public int[] getSelectedIndices() {
+    return listBox.getSelectedIndices();
+  }
 }

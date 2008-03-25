@@ -5,7 +5,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.containers.XulDeck;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwtElement extends XulElement {
@@ -50,6 +53,9 @@ public class SwtElement extends XulElement {
     return orient.toString();
   }
 
+  public Orient getOrientation() {
+    return Orient.valueOf(getOrient());
+  }
 
   @Override
   /**
@@ -59,6 +65,10 @@ public class SwtElement extends XulElement {
    */
   public void layout() {
     
+    if (this instanceof XulDeck){
+      return;
+    }
+
     if (!(getManagedObject() instanceof Composite)){
       return;
     }
@@ -144,9 +154,32 @@ public class SwtElement extends XulElement {
           }
         }
       }
-      
       c.setLayoutData(data);
     }
+    container.layout(true);
+  }
+
+  @Override
+  /**
+   * Important to understand that when using this method in the 
+   * SWT implementation:
+   * 
+   * SWT adds new children positionally based on add order. This
+   * means that a child that was added third in a list of 5 can't be 
+   * "replaced" to its third position in the dialog, it can only 
+   * be added to the end of the child list. 
+   * 
+   * Major SWT limitation. Replacement can only be used in 
+   * a limited number of cases. 
+   */
+  public void replaceChild(Element oldElement, Element newElement) {
+    
+    super.replaceChild(oldElement, newElement);
+    Widget thisWidget = (Widget)oldElement.getXulElement().getManagedObject();
+    if (!thisWidget.isDisposed()){
+      thisWidget.dispose();
+    }
+    layout();
   }
 
 }

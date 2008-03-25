@@ -52,4 +52,12 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   public void setMaxlength(int length) {
   }
 
+  public boolean isMultiline() {
+    return false;
+  }
+
+  public void setMultiline(boolean multi) {
+    
+  }
+
 }

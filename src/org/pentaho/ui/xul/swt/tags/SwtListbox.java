@@ -6,14 +6,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
-import org.pentaho.ui.xul.util.Orient;
 
 public class SwtListbox extends SwtElement implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
@@ -68,15 +66,6 @@ public class SwtListbox extends SwtElement implements XulListbox{
     
   }
 
-  public void addComponent(XulComponent component) {
-    // intentionally do nothing
-    
-  }
-
-  public Orient getOrientation() {
-    return null;
-  }
-
   public void addItem(Object item) {
     
     // SWT limitation - these can only be strings ...
@@ -126,6 +115,14 @@ public class SwtListbox extends SwtElement implements XulListbox{
 
   public Object[] getSelectedItems() {
     return listBox.getSelection();
+  }
+  
+  public int getSelectedIndex(){
+    return listBox.getSelectionIndex();
+  }
+  
+  public int[] getSelectedIndices(){
+    return listBox.getSelectionIndices();
   }
 
   public void setSelectedItem(Object item) {

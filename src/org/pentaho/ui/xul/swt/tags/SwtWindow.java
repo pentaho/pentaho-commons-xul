@@ -8,13 +8,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swt.SwtElement;
-import org.pentaho.ui.xul.util.Orient;
 
 public class SwtWindow extends SwtElement implements XulWindow {
   private static final long serialVersionUID = 6711745093238802441L;
@@ -83,21 +81,12 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   }
 
-  public void addComponent(XulComponent component) {
-    // intentionally does nothing
-
-  }
-
   public void setXulDomContainer(XulDomContainer xulDomContainer) {
     this.xulDomContainer = xulDomContainer;
   }
 
   public XulDomContainer getXulDomContainer() {
     return xulDomContainer;
-  }
-
-  public Orient getOrientation() {
-    return Orient.valueOf(getOrient());
   }
 
   public String getOnload() {

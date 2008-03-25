@@ -11,12 +11,16 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private static final long serialVersionUID = 4928464432190672877L;
 
   private org.eclipse.swt.widgets.Text textBox;
+  private Composite parentComposite = null;
   private boolean disabled = false;
+  private boolean multiLine = false;
   private int maxLength;
+  private String text;
 
   public SwtTextbox(XulElement parent, XulDomContainer container, String tagName) {
     super(tagName);
-    textBox = new org.eclipse.swt.widgets.Text((Composite)parent.getManagedObject(), SWT.BORDER);
+    parentComposite = (Composite)parent.getManagedObject();
+    textBox = new org.eclipse.swt.widgets.Text(parentComposite, SWT.BORDER);
     managedObject = textBox;
   }
 
@@ -24,11 +28,12 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
    * @param text
    */
   public void setValue( String text ) {
-    textBox.setText(text);
+    this.text = text;
+    if ((!textBox.isDisposed()) && (text != null)) textBox.setText(text);
   }
   
   public String getValue(){
-    return textBox.getText();
+    return text;
   }
  
   public boolean isDisabled() {
@@ -49,7 +54,39 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
 
   public void setMaxlength(int length){
     this.maxLength = length;
-    textBox.setTextLimit(maxLength);
+    if ((!textBox.isDisposed()) && (maxLength > 0)) textBox.setTextLimit(maxLength);
+  }
+
+  public boolean isMultiline() {
+    return multiLine;
+  }
+
+  public void setMultiline(boolean multi) {
+    
+    if (multi == multiLine){
+        return; // nothing has changed...
+    }
+    multiLine = multi;
+    textBox.dispose();
+  }
+
+  @Override
+  /**
+   * Override here because the multiline attribute requires new 
+   * construction; We can't ever guarantee the order of the setters, and
+   * I think this is the most efficient way to reconstruct the textBox... 
+   * May fall down if there are other ways to get to the managed object. 
+   */
+  public Object getManagedObject() {
+    if (textBox.isDisposed()){
+      int style = isMultiline()? SWT.MULTI|SWT.BORDER|SWT.WRAP|SWT.V_SCROLL : SWT.BORDER;
+      textBox = new org.eclipse.swt.widgets.Text(parentComposite, style);
+      setDisabled(disabled);
+      setMaxlength(maxLength);
+      setValue(text);
+      managedObject = textBox;
+    }
+    return managedObject;
   }
   
 
