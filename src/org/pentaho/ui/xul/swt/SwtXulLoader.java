@@ -50,6 +50,8 @@ public class SwtXulLoader implements XulLoader {
     parser.registerHandler("LISTBOX", "org.pentaho.ui.xul.swt.tags.SwtListbox");
     parser.registerHandler("SCRIPT", "org.pentaho.ui.xul.swt.tags.SwtScript");
     parser.registerHandler("CHECKBOX", "org.pentaho.ui.xul.swt.tags.SwtCheckbox");
+    parser.registerHandler("MESSAGEBOX", "org.pentaho.ui.xul.swt.tags.SwtMessageBox");
+    
 
     
      

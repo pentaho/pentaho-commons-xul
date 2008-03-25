@@ -6,6 +6,7 @@ package org.pentaho.ui.xul;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 
 /**
@@ -57,4 +58,10 @@ public abstract class XulDomContainer {
   public abstract Document getDocumentRoot();
 
   public abstract void addDocument(Document document);
+  
+  public abstract XulMessageBox createMessageBox(String message);
+  
+  public abstract void close();
+  
+  
 }

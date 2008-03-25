@@ -18,6 +18,10 @@ public abstract class XulEventHandler {
     this.document = xulDomContainer.getDocumentRoot();
   }
   
+  public XulDomContainer getXulDomContainer(){
+    return this.xulDomContainer;
+  }
+  
   /**
    * A generic way of returning data from event handlers... can we do better than this?
    * Handle return values from invoked methods? possibly?  

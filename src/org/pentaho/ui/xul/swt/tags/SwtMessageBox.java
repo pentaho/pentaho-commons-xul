@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swt.tags;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulMessageBox;
 
 public class SwtMessageBox implements XulMessageBox {
@@ -13,21 +14,21 @@ public class SwtMessageBox implements XulMessageBox {
   private Object[] defaultButtons = new Integer[]{SWT.OK};
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(SWT.ICON_INFORMATION);
-  private Shell parent;
+  private XulElement parent;
 
-  public SwtMessageBox(Shell parent, String message) {
+  public SwtMessageBox(XulElement parent, String message) {
     this(parent, message, null);
   }
 
-  public SwtMessageBox(Shell parent, String message, String title) {
+  public SwtMessageBox(XulElement parent, String message, String title) {
     this(parent, message, title, null);
   }
 
-  public SwtMessageBox(Shell parent, String message, String title, Object[] buttons) {
+  public SwtMessageBox(XulElement parent, String message, String title, Object[] buttons) {
     this(parent, message, title, buttons, new Integer(SWT.ICON_INFORMATION));
   }
 
-  public SwtMessageBox(Shell parent, String message, String title, Object[] buttons, Object icon) {
+  public SwtMessageBox(XulElement parent, String message, String title, Object[] buttons, Object icon) {
     this.parent = parent;
     setMessage(message);
     setTitle(title);
@@ -55,7 +56,7 @@ public class SwtMessageBox implements XulMessageBox {
    */
   private void createNewMessageBox(){
     
-    messageBox = new MessageBox(parent, getBitwiseStyle());
+    messageBox = new MessageBox((Shell) parent.getManagedObject(), getBitwiseStyle());
     messageBox.setMessage(getMessage());
     messageBox.setText(getTitle());
   }

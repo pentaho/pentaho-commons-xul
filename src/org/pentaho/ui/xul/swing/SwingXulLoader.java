@@ -48,6 +48,8 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("CAPTION", "org.pentaho.ui.xul.swing.tags.SwingCaption");
     parser.registerHandler("LISTBOX", "org.pentaho.ui.xul.swing.tags.SwingListbox");
     parser.registerHandler("LISTITEM", "org.pentaho.ui.xul.swing.tags.SwingListitem");
+    parser.registerHandler("MESSAGEBOX", "org.pentaho.ui.xul.swing.tags.SwingMessageBox");
+    
 
   
   }

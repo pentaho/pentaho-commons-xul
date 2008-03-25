@@ -5,6 +5,7 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
+import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulMessageBox;
 
 public class SwingMessageBox implements XulMessageBox {
@@ -22,21 +23,21 @@ public class SwingMessageBox implements XulMessageBox {
   private Object[] defaultButtons = new Object[]{OK};
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(JOptionPane.INFORMATION_MESSAGE);
-  private Component parent;
+  private XulElement parent;
 
-  public SwingMessageBox(Component parent, String message) {
+  public SwingMessageBox(XulElement parent, String message) {
     this(parent, message, null);
   }
 
-  public SwingMessageBox(Component parent, String message, String title) {
+  public SwingMessageBox(XulElement parent, String message, String title) {
     this(parent, message, title, null);
   }
 
-  public SwingMessageBox(Component parent, String message, String title, Object[] buttons) {
+  public SwingMessageBox(XulElement parent, String message, String title, Object[] buttons) {
     this(parent, message, title, buttons, JOptionPane.INFORMATION_MESSAGE);
   }
 
-  public SwingMessageBox(Component parent, String message, String title, Object[] buttons, Object icon) {
+  public SwingMessageBox(XulElement parent, String message, String title, Object[] buttons, Object icon) {
     this.parent = parent;
     setMessage(message);
     setTitle(title);
@@ -86,7 +87,7 @@ public class SwingMessageBox implements XulMessageBox {
     int messageType = (icon instanceof Integer) ? ((Integer)icon).intValue() : JOptionPane.INFORMATION_MESSAGE;
     Icon imageIcon = (icon instanceof Icon) ? (Icon)icon : null;
     
-    return JOptionPane.showOptionDialog(parent, message, title, 
+    return JOptionPane.showOptionDialog((Component) parent.getManagedObject(), message, title, 
         JOptionPane.DEFAULT_OPTION, messageType, imageIcon, buttons, buttons[0]);
   }
 

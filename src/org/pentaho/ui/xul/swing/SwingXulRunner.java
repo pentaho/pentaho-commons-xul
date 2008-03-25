@@ -89,7 +89,6 @@ public class SwingXulRunner implements XulRunner {
   }
 
   public static void main(String[] args) {
-    // TODO Auto-generated method stub
     try{
       
       //InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/sampleXul.xml");

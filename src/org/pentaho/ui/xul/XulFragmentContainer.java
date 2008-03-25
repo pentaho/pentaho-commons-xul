@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul;
 
+import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 
 /**
@@ -24,5 +25,14 @@ public class XulFragmentContainer extends XulDomContainer {
   public void addDocument(Document document){
     this.fragment = document;
   }
-  
+
+  @Override
+  public XulMessageBox createMessageBox(String message) {
+  	return null;
+  }
+
+  @Override
+  public void close() {
+  }
+    
 }
