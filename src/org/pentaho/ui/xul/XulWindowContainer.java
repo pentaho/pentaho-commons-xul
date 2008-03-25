@@ -6,13 +6,10 @@ package org.pentaho.ui.xul;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.util.XulUtil;
 
 /**
  * @author OEM

@@ -130,5 +130,18 @@ public interface XulListbox extends XulContainer {
    * @return the method string used for this list's selection event.
    */
   public String getOnselect();
+  
+  /**
+   * Helper method returning the zero based index of selected item.
+   * @return The selected item's index.
+   */
+  public int getSelectedIndex();
+  
+  /**
+   * Helper method returning the zero based indices of selected items.
+   * @return The selected items' indices as an array of native int values.
+   */
+  public int[] getSelectedIndices();
+
 
 }

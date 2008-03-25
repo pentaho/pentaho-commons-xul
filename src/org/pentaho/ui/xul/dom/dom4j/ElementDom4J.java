@@ -132,6 +132,9 @@ public class ElementDom4J implements Element{
    * @see org.pentaho.ui.xul.dom.Element#getParent()
    */
   public Element getParent() {
+    if (element.getParent()==null){
+      return null;
+    }
     return ((XulElementDom4J) element.getParent()).getXulElement();
   }
 

@@ -51,5 +51,24 @@ public interface XulTextbox {
    * @param length The number of characters allowed. 
    */
   public void setMaxlength(int length);
+  
+  /**
+   * If true, the textbox displays multiple lines. The text entered in the 
+   * textbox will wrap, and scrollbars are available. 
+   *  
+   * @return If true, is multiline; otherwise is a single line textbox. 
+   */
+  public boolean isMultiline();
+  
+  /** 
+   * Sets whether the textbox will be multiline or single; Single is
+   * the default. 
+   * @param multi If true, set to multiple line. 
+   */
+  public void setMultiline(boolean multi);
+  
+  
+  
+  
 
 }
