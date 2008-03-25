@@ -33,10 +33,16 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   }
   
   public String getValue(){
+    if (!textBox.isDisposed()){
+      text = textBox.getText();
+    }
     return text;
   }
  
   public boolean isDisabled() {
+    if (!textBox.isDisposed()){
+      disabled = !textBox.isEnabled();
+    }
     return disabled;
   }
 
@@ -49,6 +55,9 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
    * @return int The maximum number of characters that the textbox allows to be entered.
    */
   public int getMaxlength(){
+    if (!textBox.isDisposed()){
+      maxLength = textBox.getTextLimit();
+    }
     return maxLength;
   }
 
@@ -58,6 +67,9 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   }
 
   public boolean isMultiline() {
+    if (!textBox.isDisposed()){
+      multiLine = textBox.getLineCount() > 1;
+    }
     return multiLine;
   }
 
