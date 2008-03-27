@@ -27,9 +27,11 @@ public abstract class XulDomContainer {
   
   
   public void addEventHandler(String id, String eventClassName){
-    if(eventHandlers.containsKey(id)){ //if already registered
-      return;
-    }
+   
+    // Allow overrides of eventHandlers
+    //if(eventHandlers.containsKey(id)){ //if already registered
+    //  return;
+    //}
     
     try{
       Class cls = Class.forName(eventClassName);
