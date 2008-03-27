@@ -4,10 +4,15 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import javax.swing.JCheckBox;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulCheckbox;
+import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
@@ -65,6 +70,17 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
 
   public void setDisabled(boolean dis) {
     checkBox.setEnabled(!dis);
+  }
+
+  public void setCommand(final String method) {
+    checkBox.addChangeListener(new ChangeListener(){
+      public void stateChanged(ChangeEvent evt){
+        Document doc = getDocument();
+        Element rootElement = doc.getRootElement();
+        XulWindow window = (XulWindow) rootElement;
+        window.invoke(method, new Object[]{});
+      }
+    });
   }
   
   
