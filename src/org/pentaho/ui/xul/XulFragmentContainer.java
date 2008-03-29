@@ -12,10 +12,12 @@ import org.pentaho.ui.xul.dom.Document;
  */
 public class XulFragmentContainer extends XulDomContainer {
   private Document fragment;
+  private XulLoader xulLoader;
   
   
-  public XulFragmentContainer(){
+  public XulFragmentContainer(XulLoader xulLoader){
     super();
+    this.xulLoader = xulLoader;
   }
 
   public Document getDocumentRoot(){
@@ -33,6 +35,12 @@ public class XulFragmentContainer extends XulDomContainer {
 
   @Override
   public void close() {
+  }
+
+  @Override
+  public XulFragmentContainer loadFragment(String xulLocation) throws XulException{
+    System.out.println("loadFragment not implemented in XulFragmentContainer");
+    return null;
   }
     
 }

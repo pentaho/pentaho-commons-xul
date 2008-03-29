@@ -15,6 +15,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulGroupbox;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -36,6 +37,13 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
     managedObject = container;
     
     
+    resetContainer();
+  }
+
+  public void resetContainer(){
+    
+    container.removeAll();
+    
     gc = new GridBagConstraints();
     gc.gridy = GridBagConstraints.RELATIVE;
     gc.gridx = 0;
@@ -45,8 +53,8 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
     gc.fill = GridBagConstraints.HORIZONTAL;
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;
+    
   }
-  
   
   public void setCaption(String caption){
     container.setBorder(BorderFactory.createTitledBorder(caption));
@@ -65,6 +73,13 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
   
   public Orient getOrientation() {
     return Orient.VERTICAL;
+  }
+  
+
+  @Override
+  public void replaceChild(Element oldElement, Element newElement) {
+    this.resetContainer();
+    super.replaceChild(oldElement, newElement);
   }
 
 }

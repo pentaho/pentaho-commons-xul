@@ -6,6 +6,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.dom.Element;
@@ -179,6 +180,9 @@ public class SwtElement extends XulElement {
     if (!thisWidget.isDisposed()){
       thisWidget.dispose();
     }
+    this.addComponent((XulComponent) newElement);
+    ((Control) newElement.getXulElement().getManagedObject()).setParent((Composite) this.getManagedObject());
+
     layout();
   }
 

@@ -9,8 +9,10 @@ import java.awt.GridBagConstraints;
 import javax.swing.Box;
 import javax.swing.JPanel;
 
+
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.util.Orient;
 
 /**
@@ -28,6 +30,10 @@ public class SwingElement extends XulElement{
 
   public SwingElement(String tagName) {
     super(tagName);
+  }
+  
+  public void resetContainer(){
+    
   }
   
   public void layout(){
@@ -83,4 +89,22 @@ public class SwingElement extends XulElement{
     return this.orientation;
   }
 
+  
+  @Override
+  public void replaceChild(Element oldElement, Element newElement) {
+    
+    super.replaceChild(oldElement, newElement);
+    
+    int idx = this.children.indexOf(oldElement);
+    if(idx == -1){
+      System.out.println(oldElement.getName()+" not found in children");
+    } else{
+      this.children.set(idx, newElement.getXulElement());
+      
+      container.removeAll();
+  
+      layout();
+      this.container.revalidate();
+    }
+  }
 }

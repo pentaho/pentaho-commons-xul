@@ -23,7 +23,7 @@
 				<vbox id="type-box" flex="1">
 					<label id="connection-type-label"
 						value="Connection Type:" />
-					<listbox id="connection-type-list" rows="8" onchange="dataHandler.changeConnectionType()">
+					<listbox id="connection-type-list" rows="8" onselect="dataHandler.changeConnectionType()">
 						<listitem label="MySQL" />
 						<listitem label="MS SQL Server" />
 						<listitem label="Oracle" />
@@ -55,7 +55,7 @@
 			</hbox>
 			<hbox id="test-button-box">
 				<label id="spacer-label" flex="10" />
-				<button id="test-button" label="Test" flex="1" onClick="testHandler.loadFragment()" />
+				<button id="test-button" label="Test" flex="1" onclick="testHandler.loadFragment()" />
 			</hbox>
 		</groupbox>
 	
@@ -64,7 +64,7 @@
 	<hbox id="button-box">
 		<!--  flexing all three controls allows me to control the size of the OK, Cancel buttons -->
 		<label id="spacer-label" flex="10" />
-		<button id="ok-button" label="OK" flex="1" onClick="dataHandler.postForm()"/>
+		<button id="ok-button" label="OK" flex="1" onclick="dataHandler.postForm()"/>
 		<button id="cancel-button" label="Cancel" flex="1" />
 	</hbox>
 

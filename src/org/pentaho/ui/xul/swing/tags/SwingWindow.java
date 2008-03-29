@@ -20,6 +20,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -54,6 +55,19 @@ public class SwingWindow extends SwingElement implements XulWindow {
     //container.setBorder(BorderFactory.createLineBorder(Color.green));
     managedObject = container;
 
+    resetContainer();
+
+    frame.getContentPane().setLayout(new BorderLayout());
+    frame.getContentPane().add(container, BorderLayout.CENTER);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    managedObject = frame;
+  }
+
+
+  public void resetContainer(){
+    
+    container.removeAll();
+    
     gc = new GridBagConstraints();
     gc.gridy = GridBagConstraints.RELATIVE;
     gc.gridx = 0;
@@ -63,13 +77,9 @@ public class SwingWindow extends SwingElement implements XulWindow {
     gc.fill = GridBagConstraints.HORIZONTAL;
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;
-
-    frame.getContentPane().setLayout(new BorderLayout());
-    frame.getContentPane().add(container, BorderLayout.CENTER);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    managedObject = frame;
+    
   }
-
+  
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulPage#setTitle(java.lang.String)
    */
@@ -175,4 +185,10 @@ public class SwingWindow extends SwingElement implements XulWindow {
     frame.setVisible(true);
   }
 
+
+  @Override
+  public void replaceChild(Element oldElement, Element newElement) {
+    this.resetContainer();
+    super.replaceChild(oldElement, newElement);
+  }
 }

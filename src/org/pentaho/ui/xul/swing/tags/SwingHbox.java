@@ -35,6 +35,13 @@ public class SwingHbox extends SwingElement implements XulHbox{
     //container.setBorder(BorderFactory.createLineBorder(Color.green));
     managedObject = container;
     
+    resetContainer();
+    
+  }
+  
+  public void resetContainer(){
+    
+    container.removeAll();
     
     gc = new GridBagConstraints();
     gc.gridx = GridBagConstraints.RELATIVE;
@@ -46,25 +53,17 @@ public class SwingHbox extends SwingElement implements XulHbox{
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weighty = 1;
     
-   
   }
   
   public Orient getOrientation() {
     return Orient.HORIZONTAL;
   }
 
+
   @Override
   public void replaceChild(Element oldElement, Element newElement) {
+    this.resetContainer();
     super.replaceChild(oldElement, newElement);
-    int idx = children.indexOf(oldElement);
-    children.set(idx, (XulComponent) newElement);
-    SwingUtilities.invokeLater(new Runnable(){
-      public void run(){
-        SwingHbox.this.container.removeAll();
-      }
-    });
-    
-    //this.container.add((Component) newElement.getXulElement().getManagedObject());
   }
 
 }

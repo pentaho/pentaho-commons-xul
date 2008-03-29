@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulVbox;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -23,7 +24,7 @@ import org.pentaho.ui.xul.util.Orient;
  */
 public class SwingVbox extends SwingElement implements XulVbox  {
 
-  
+
   public SwingVbox(XulElement parent, XulDomContainer domContainer, String tagName) {
     super("Vbox");
     this.orientation = Orient.VERTICAL;
@@ -34,6 +35,15 @@ public class SwingVbox extends SwingElement implements XulVbox  {
     //container.setBorder(BorderFactory.createLineBorder(Color.green));
     managedObject = container;
     
+    resetContainer();
+    
+  }
+  
+  
+
+  public void resetContainer(){
+    
+    container.removeAll();
     
     gc = new GridBagConstraints();
     gc.gridy = GridBagConstraints.RELATIVE;
@@ -45,8 +55,14 @@ public class SwingVbox extends SwingElement implements XulVbox  {
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;
     
-   
   }
   
   
+
+  @Override
+  public void replaceChild(Element oldElement, Element newElement) {
+    this.resetContainer();
+    super.replaceChild(oldElement, newElement);
+  }
+
 }

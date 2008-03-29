@@ -55,10 +55,8 @@ public class DatasourceHandler extends XulEventHandler{
     if(selectedValue.equals("Oracle")){
         try{
           SwingXulLoader loader = new SwingXulLoader();
-          InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/datasource_oracle.xul");
-          Document doc = CleanXmlHelper.getDocFromStream(in);
           
-          XulDomContainer container = loader.loadXulFragment(doc);
+          XulDomContainer container = this.xulDomContainer.loadFragment("org/pentaho/ui/xul/samples/datasource_oracle.xul");
           XulGroupbox newBox = (XulGroupbox) container.getDocumentRoot().getRootElement();
           XulGroupbox oldBox = (XulGroupbox) document.getElementById("database-options-box");
           

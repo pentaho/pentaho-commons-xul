@@ -32,6 +32,7 @@ public class XulParser {
       throw new XulException("Error getting Document instance", e);
     }
   }
+  
 
   public void setContainer(XulDomContainer xulDomContainer) {
     this.xulDomContainer = xulDomContainer;
@@ -39,21 +40,49 @@ public class XulParser {
   }
 
   public Document parseDocument(org.dom4j.Element rootSrc) throws XulException {
-    XulElement root = parse(rootSrc, null);
+    
+    XulContainer parent = null;
+    if(!rootSrc.getName().equalsIgnoreCase("window")){
+      parent = getPlaceHolderRoot();
+    }
+    XulElement root = parse(rootSrc, parent);
 
-    //give root reference to runner for service calls
+    //give root reference to runner for service calls and attach root to document
     if(root instanceof XulWindow){
       ((XulWindow)root).setXulDomContainer(this.xulDomContainer);
+      xulDocument.addChild((Element) root);
+    } else { //fragment parsing, wire up dummy
+      ((XulWindow)parent).setXulDomContainer(this.xulDomContainer);
+      ((XulElement) parent).addChild(root);
+      xulDocument.addChild((Element) parent);
     }
-
-    xulDocument.addChild((Element) root);
+    
     return xulDocument;
+  }
+  
+  public XulContainer getPlaceHolderRoot() throws XulException{
+    Object handler = handlers.get("WINDOW");
+
+   
+    Class<?> c;
+    try {
+      c = Class.forName((String) handler);
+      Constructor<?> constructor = c
+          .getConstructor(new Class[] { XulElement.class, XulDomContainer.class, String.class });
+      XulWindow ele = (XulWindow) constructor.newInstance(null, xulDomContainer, "window");
+      return (XulContainer) ele;
+    } catch (Exception e) {
+      throw new XulException(e);
+    }
   }
 
   public XulElement parse(org.dom4j.Element rootSrc, XulContainer parent) throws XulException {
     //parse element
     XulElement root = getElement(rootSrc, parent);
 
+    if(root == null){
+      return null;
+    }
     //descend down a level and parse children (root would be a container in the case)
     for (Object child : rootSrc.elements()) {
       XulElement childElement = parse((org.dom4j.Element) child, (XulContainer) root);
@@ -112,6 +141,18 @@ public class XulParser {
 
   public Document getDocumentRoot() {
     return this.xulDocument;
+  }
+  
+  /**
+   * @throws XulException
+   * Resets the state of the parser.
+   */
+  public void reset() throws XulException{
+    try {
+      xulDocument = DocumentFactory.createDocument();
+    } catch (Exception e) {
+      throw new XulException("Error getting Document instance", e);
+    }
   }
 
 }

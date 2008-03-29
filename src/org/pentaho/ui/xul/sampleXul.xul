@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<window width="400" height="275" title="Testing...">
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window width="400" height="275" title="Testing..."
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
 	<script src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
 	<script src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>
-	
-	<menubar id="my-menubar">
-      <menu label="Radio" accesskey="R" >
-        <menupopup>
-           <menuitem label="Radio1" />
-           <menuitem label="Radio2" />
-			<menuseparator />
-           <menuitem label="Radio3" />
-        </menupopup>
-      </menu>
-	</menubar>
-
 	<vbox>
 		<spacer size="20"/>
 		<groupbox>
@@ -26,9 +17,9 @@
 				<checkbox id="yell" label="Yell so I can hear it"/>
 				
 				<hbox>
-					<button label="Say Hi!" onClick="testHandler.sayHello()"/>
+					<button label="Say Hi!" onclick="testHandler.sayHello()"/>
 					<spacer size="8"/>
-					<button label="Say Hi2!" onClick="testHandler2.sayHello()"/>
+					<button label="Say Hi2!" onclick="testHandler2.sayHello()"/>
 				</hbox>
 				<spacer size="5"/>
 				<label value="" id="response" />

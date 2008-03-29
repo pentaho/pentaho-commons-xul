@@ -58,12 +58,13 @@ public class SwtXulLoader implements XulLoader {
      
   }
   
+  
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
    */
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
 
-    XulWindowContainer container = new XulWindowContainer();
+    XulWindowContainer container = new XulWindowContainer(this);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
     
@@ -81,22 +82,14 @@ public class SwtXulLoader implements XulLoader {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
-  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
-    XulFragmentContainer container = new XulFragmentContainer();
+  public XulFragmentContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
+    XulFragmentContainer container = new XulFragmentContainer(this);
+    parser.reset();
     parser.setContainer(container);
-    parser.parseDocument(xulDocument.getRootElement());
+    parser.parseDocument(xulDocument.getRootElement()).getRootElement().getXulElement();
     
-    return container;
-  }
-  
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
-   */
-  public XulDomContainer loadXulFragment(Document xulDocument, XulContainer parent) throws IllegalArgumentException, XulException {
-    XulFragmentContainer container = new XulFragmentContainer();
-    parser.setContainer(container);
-    XulElement element = parser.parse(xulDocument.getRootElement(), parent);
-    parser.getDocumentRoot().addChild(element);
+    //not sure this is needed
+    //parser.getDocumentRoot().addChild(element);
     
     return container;
   }

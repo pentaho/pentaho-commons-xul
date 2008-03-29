@@ -34,5 +34,5 @@ public interface XulLoader {
    * the XUL library component from the XUL XML.  
    * @throws XulException Exception thrown if errors encountered getting an instance of the parser. 
    */
-  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException;
+  public XulFragmentContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException;
 }

@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -26,15 +27,17 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private boolean disabled = false;
   private String selType;
   private int rowsToDisplay = 0;
-  private String onchange;
+  private String onselect;
+  private JScrollPane scrollPane;
   
   public SwingListbox(XulElement parent, XulDomContainer container, String tagName) {
     super(tagName);
     model = new DefaultListModel();
     listBox = new JList(model);
+    scrollPane = new JScrollPane(listBox);
     listBox.setBorder(BorderFactory.createLineBorder(Color.gray));
     listBox.addListSelectionListener(this);
-    managedObject = listBox;
+    managedObject = scrollPane;
   }
   
   public Object getManagedObject(){
@@ -82,12 +85,11 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   }
 
   public String getOnselect() {
-    return onchange;
+    return onselect;
   }
 
   public void setOnselect(String onchange) {
-    this.onchange = onchange;
-    
+    this.onselect = onchange;
   }
   
   public void valueChanged(ListSelectionEvent e) {
@@ -97,7 +99,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     Document doc = SwingListbox.this.getDocument();
     Element rootElement = doc.getRootElement();
     XulWindow window = (XulWindow) rootElement;
-    window.invoke(onchange, new Object[]{});
+    window.invoke(onselect, new Object[]{});
     
   }
 

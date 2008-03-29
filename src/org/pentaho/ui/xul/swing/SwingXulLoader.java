@@ -4,6 +4,7 @@
 package org.pentaho.ui.xul.swing;
 
 import org.dom4j.Document;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulFragmentContainer;
@@ -49,6 +50,7 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("LISTBOX", "org.pentaho.ui.xul.swing.tags.SwingListbox");
     parser.registerHandler("LISTITEM", "org.pentaho.ui.xul.swing.tags.SwingListitem");
     parser.registerHandler("MESSAGEBOX", "org.pentaho.ui.xul.swing.tags.SwingMessageBox");
+    parser.registerHandler("DECK", "org.pentaho.ui.xul.swing.tags.SwingDeck");
     
 
   
@@ -59,7 +61,7 @@ public class SwingXulLoader implements XulLoader {
    */
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
 
-    XulWindowContainer container = new XulWindowContainer();
+    XulWindowContainer container = new XulWindowContainer(this);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
    
@@ -69,8 +71,9 @@ public class SwingXulLoader implements XulLoader {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
-  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
-    XulFragmentContainer container = new XulFragmentContainer();
+  public XulFragmentContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
+    XulFragmentContainer container = new XulFragmentContainer(this);
+    parser.reset();
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
     

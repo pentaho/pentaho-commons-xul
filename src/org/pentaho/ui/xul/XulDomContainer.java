@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.pentaho.ui.xul.components.XulMessageBox;
+import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 
 /**
@@ -56,12 +57,24 @@ public abstract class XulDomContainer {
     }
   }
   
+  public void initialize(){
+    XulWindow rootEle = (XulWindow) this.getDocumentRoot().getRootElement().getXulElement();
+    System.out.println("onload: "+ rootEle.getOnload());
+    String onLoad = rootEle.getOnload();
+    if(onLoad != null){
+      rootEle.invoke(rootEle.getOnload(), new Object[]{});
+    }
+
+  }
+  
 
   public abstract Document getDocumentRoot();
 
   public abstract void addDocument(Document document);
   
   public abstract XulMessageBox createMessageBox(String message);
+  
+  public abstract XulFragmentContainer loadFragment(String xulLocation) throws XulException;
   
   public abstract void close();
   

@@ -1,0 +1,312 @@
+<!-- ======================================================================
+     description: main build file for pentaho  . .
+     ====================================================================== -->
+<project name="pentaho-main" default="dev-setup">
+	<description>Pentaho BI Platform build process..</description>
+
+	<property file="override.properties" />
+	<property file="${pentaho.proj.dir}/server/pentaho/src/build-res/version.properties" />
+	<property file="dev_build.properties" />
+
+	<path id="classpath">
+		<fileset dir="${project.lib}">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+
+		<fileset dir="${test-lib.lib}">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</fileset>
+	</path>
+
+	<condition property="javac.path.not.set">
+		<equals arg1="${javac.path}" arg2="javac.path not set" />
+	</condition>
+
+	<condition property="is-hsqldb">
+		<equals arg1="${rdbms}" arg2="hsqldb" />
+	</condition>
+
+	<condition property="is-target-pci-set">
+		<not>
+			<equals arg1="${target.server.dir}" arg2="${source.server.dir}" />
+		</not>
+	</condition>
+
+	<condition property="is-target-solutions-set">
+		<not>
+			<equals arg1="${target.solutions.dir}" arg2="${solutions.dir}" />
+		</not>
+	</condition>
+
+
+	<!-- ===================================================================
+        target: clean
+       =================================================================== -->
+	<target name="clean-target-server" if="is-target-pci-set">
+		<delete dir="${target.server.dir}" />
+	</target>
+
+	<target name="clean-target-solutions" if="is-target-solutions-set">
+		<delete dir="${target.solutions.dir}" />
+	</target>
+
+	<target name="clean-target-classes">
+		<delete dir="${dev.deploy.dir}/pentaho.war/WEB-INF/classes" />
+	</target>
+
+	<target name="clean" depends="clean-target-server, clean-target-solutions">
+		<delete dir="${dev.deploy.dir}/pentaho.war" />
+	</target>
+
+	<target name="clean-pentaho-precompiled-jsps" depends="">
+		<ant dir="." antfile="build.xml" target="clean-pentaho-precompiled-jsps" />
+	</target>
+
+	<target name="clean-pentaho-jars" depends="">
+		<ant dir="." antfile="build.xml" target="clean-pentaho-jars" />
+	</target>
+
+	<target name="clean-pentaho-doc" depends="">
+		<ant dir="." antfile="build.xml" target="clean-pentaho-doc" />
+	</target>
+
+	<target name="clean-build-dir" depends="">
+		<ant dir="." antfile="build.xml" target="clean-build" />
+	</target>
+
+
+	<!-- ===================================================================
+        target: init
+       =================================================================== -->
+	<target name="init">
+		<mkdir dir="${dev.deploy.dir}/pentaho.war/WEB-INF/classes" />
+		<mkdir dir="${dev.deploy.dir}/pentaho.war/WEB-INF/lib" />
+	</target>
+	
+	<target name="init-tomcat">
+		<mkdir dir="${dev.deploy.dir}/pentaho/WEB-INF/classes" />
+		<mkdir dir="${dev.deploy.dir}/pentaho/WEB-INF/lib" />
+		<mkdir dir="${dev.deploy.dir}/pentaho/META-INF" />
+		<copy todir="${dev.deploy.dir}/pentaho/META-INF" file="${server.resource.dir}/tomcat/hsqldb/context.xml"/>
+	</target>
+
+	<target name="echo-javac-statement" if="javac.path.not.set">
+		<echo message="${javac.path}" />
+		<echo message="We compile with JDK 1.5" />
+		<echo message="You must set the property javac.path to your compiler's path" />
+		<echo message="For example, in override.properties, javac.path=c:/j2sdk1.4.2_12/bin/javac" />
+	</target>
+
+	<!-- ========================================================================
+		You must set the property javac.path to your compiler's path. For example,
+		in override.properties, javac.path=c:/j2sdk1.4.2_12/bin/javac.
+	========================================================================== -->
+
+	<target name="compile-jsps" depends="echo-javac-statement" unless="javac.path.not.set">
+		<ant dir="." antfile="build.xml" target="compile-pentaho.war-jsps" inheritAll="false">
+			<property name="build.classes.dir" value="${dev.deploy.dir}/pentaho.war/WEB-INF/classes" />
+		</ant>
+	</target>
+
+	<target name="compile" depends="echo-javac-statement" unless="javac.path.not.set">
+		<javac destdir="${dev.deploy.dir}/pentaho.war/WEB-INF/classes" debug="${debug}" optimize="${optimize}" deprecation="${deprecation}" executable="${javac.path}" compiler="modern" source="1.5" target="1.5" fork="true">
+			<src path="${server.src}" />
+			<src path="${test.src}" />
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+	
+	<target name="compile-tomcat" depends="echo-javac-statement" unless="javac.path.not.set">
+		<javac destdir="${dev.deploy.dir}/pentaho/WEB-INF/classes" debug="${debug}" optimize="${optimize}" deprecation="${deprecation}" executable="${javac.path}" compiler="modern" source="1.5" target="1.5" fork="true">
+			<src path="${server.src}" />
+			<src path="${test.src}" />
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+
+	<target name="dev-setup" depends="init, compile">
+
+		<!-- copy source pci to target pci -->
+		<copy toDir="${target.server.dir}">
+			<fileset dir="${source.server.dir}" />
+		</copy>
+
+		<!-- copy database specific datasources to pci -->
+		<copy todir="${dev.deploy.dir}">
+			<fileset dir="${jboss.datasource.dir}" />
+		</copy>
+
+		<!-- Copy WEB-INF files to deployment -->
+		<copy todir="${dev.deploy.dir}/pentaho.war">
+			<fileset dir="${webapp.dir}" />
+		</copy>
+
+		<copy todir="${dev.deploy.dir}/pentaho-style.war">
+			<fileset dir="${style.war.dir}" />
+		</copy>
+
+		<copy todir="${dev.deploy.dir}/sw-style.war">
+			<fileset dir="${sw.style.war.dir}" />
+		</copy>
+
+		<copy todir="${dev.deploy.dir}/pentaho-portal-layout.war">
+			<fileset dir="${jboss.portal.layout.war.dir}" />
+		</copy>
+
+
+		<!-- copy all non-java resources to web-app -->
+		<copy todir="${dev.deploy.dir}/pentaho.war/WEB-INF/classes">
+			<fileset dir="${hibernate.config}" />
+			<fileset dir="${server.src}">
+				<exclude name="**/*.java"/>
+				<exclude name="META-INF/vfs-providers.xml"/>
+			</fileset>
+			<!-- jfreereport.properties -->
+			<fileset file="${server.resource.dir}/jfreereport/jfreereport.properties" />
+			<fileset file="${server.resource.dir}/jfreereport/loader.properties" />
+			<!-- mondrian.properties -->
+			<fileset file="${server.resource.dir}/mondrian/mondrian.properties" />
+			<!-- include config files for various subsystems -->
+			<fileset dir="${log4j.config}" />
+			<!-- include ehcache config -->
+			<fileset dir="${ehcache.config}" />
+		</copy>
+
+		<!-- create the pentaho.war. Use the classes, not the pentaho.jar -->
+		<replace file="${dev.deploy.dir}/pentaho.war/WEB-INF/classes/hibernate.cfg.xml" token="org.hibernate.cache.EhCacheProvider" value="${hibernate.cacheprovider}" />
+
+		<!-- copy all needed jars to webapp -->
+		<copy todir="${dev.deploy.dir}/pentaho.war/WEB-INF/lib" flatten="true">
+			<fileset dir="${project.lib}">
+				<include name="**/*.jar" />
+				<exclude name="**/portal-security-lib.jar" />
+				<exclude name="**/portal-portlet-lib.jar" />
+				<exclude name="**/portal-core-lib.jar" />
+				<!-- this file is setup to run against hsqldb. If you need to run against oracle, you need to replace quartz-version.jar with quartz-oracle-version.jar -->
+				<exclude name="**/quartz-oracle-1.5.2.jar" />
+				<excludesfile name="${pentaho.proj.dir}/excludejars.jboss" />
+				<excludesfile name="${pentaho.proj.dir}/excludejars.generic" />
+			</fileset>
+		</copy>
+
+		<!-- copy pentaho-solutions to target-solutions -->
+		<antcall target="copy-solutions" />
+		<!-- copy jdbc driver to jboss -->
+		<copy todir="${target.server.dir}/server/default/lib" file="${jdbc.driver.location}" failonerror="no" />
+
+		<!-- make lib dir and copy jar so data can operate standalone -->
+		<mkdir dir="${data.dir}/lib" />
+		<copy file="${project.lib}/hsqldb.jar" todir="${data.dir}/lib" />
+
+		<replace dir="${dev.deploy.dir}" includes="*-ds.xml" token="PORT" value="${jdbc.port}" />
+		<replace dir="${dev.deploy.dir}" includes="*-ds.xml" token="HOST" value="${jdbc.host}" />
+
+		<replace dir="${dev.deploy.dir}/pentaho.war/WEB-INF/classes" includes="hibernate.cfg.xml" token="PORT" value="${jdbc.port}" />
+		<replace dir="${dev.deploy.dir}/pentaho.war/WEB-INF/classes" includes="hibernate.cfg.xml" token="HOST" value="${jdbc.host}" />
+
+		<!-- until we only touch when necessary, we'll always be sure to touch the web.xml -->
+		<touch file="${dev.deploy.dir}/pentaho.war/WEB-INF/web.xml" />
+	</target>
+	
+	<target name="dev-setup-tomcat" depends="init-tomcat, compile-tomcat">
+
+		<!-- copy source pci to target pci -->
+		<copy toDir="${target.server.dir}">
+			<fileset dir="${source.server.dir}" />
+		</copy>
+		
+		<!-- copy server.xml with defined datasources to ${target.server.dir}/conf -->
+		<copy todir="${target.server.dir}/conf" file="${server.resource.dir}/tomcat/hsqldb/server.xml" overwrite="true"/>
+
+		<!-- Copy WEB-INF files to deployment -->
+		<copy todir="${dev.deploy.dir}/pentaho">
+			<fileset dir="${webapp.dir}" />
+		</copy>
+
+		<copy todir="${dev.deploy.dir}/pentaho-style">
+			<fileset dir="${style.war.dir}" />
+		</copy>
+
+		<copy todir="${dev.deploy.dir}/sw-style">
+			<fileset dir="${sw.style.war.dir}" />
+		</copy>
+
+		<!-- copy all non-java resources to web-app -->
+		<copy todir="${dev.deploy.dir}/pentaho/WEB-INF/classes">
+			<fileset dir="${hibernate.config}" />
+			<fileset dir="${server.src}">
+				<exclude name="**/*.java"/>
+				<exclude name="META-INF/vfs-providers.xml"/>
+			</fileset>
+			<!-- jfreereport.properties -->
+			<fileset file="${server.resource.dir}/jfreereport/jfreereport.properties" />
+			<fileset file="${server.resource.dir}/jfreereport/loader.properties" />
+			<!-- mondrian.properties -->
+			<fileset file="${server.resource.dir}/mondrian/mondrian.properties" />
+			<!-- include config files for various subsystems -->
+			<fileset dir="${log4j.config}" />
+			<!-- include ehcache config -->
+			<fileset dir="${ehcache.config}" />
+		</copy>
+
+		<!-- create the pentaho.war. Use the classes, not the pentaho.jar -->
+		<replace file="${dev.deploy.dir}/pentaho/WEB-INF/classes/hibernate.cfg.xml" token="org.hibernate.cache.EhCacheProvider" value="${hibernate.cacheprovider}" />
+
+		<!-- copy all needed jars to webapp -->
+		<copy todir="${dev.deploy.dir}/pentaho/WEB-INF/lib" flatten="true">
+			<fileset dir="${project.lib}">
+				<include name="**/*.jar" />
+				<exclude name="**/portal-security-lib.jar" />
+				<exclude name="**/portal-portlet-lib.jar" />
+				<exclude name="**/portal-core-lib.jar" />
+				<!-- this file is setup to run against hsqldb. If you need to run against oracle, you need to replace quartz-version.jar with quartz-oracle-version.jar -->
+				<exclude name="**/quartz-oracle-1.5.2.jar" />
+				<excludesfile name="${pentaho.proj.dir}/excludejars.generic" />
+			</fileset>
+		</copy>
+
+		<!-- copy pentaho-solutions to target-solutions -->
+		<antcall target="copy-solutions-tomcat" />
+
+		<!-- make lib dir and copy jar so data can operate standalone -->
+		<mkdir dir="${data.dir}/lib" />
+		<copy file="${project.lib}/hsqldb.jar" todir="${data.dir}/lib" />
+
+		<!-- until we only touch when necessary, we'll always be sure to touch the web.xml -->
+		<touch file="${dev.deploy.dir}/pentaho/WEB-INF/web.xml" />
+	</target>
+
+	<target name="check-target-solutions-undefined" unless="target.solutions.path">
+		<!-- update web.xml for the default path -->
+		<replace file="${dev.deploy.dir}/pentaho.war/WEB-INF/web.xml" token="pentaho-solutions" value="" />
+	</target>
+	
+	<target name="check-target-solutions-undefined-tomcat" unless="target.solutions.path">
+		<!-- update web.xml for the default path -->
+		<replace file="${dev.deploy.dir}/pentaho/WEB-INF/web.xml" token="pentaho-solutions" value="" />
+	</target>
+
+	<target name="copy-solutions" if="target.solutions.dir" depends="check-target-solutions-undefined">
+		<mkdir dir="${target.solutions.dir}" />
+		<copy todir="${target.solutions.dir}" overwrite="${overwrite-solutions}">
+			<fileset dir="${solutions.dir}" />
+		</copy>
+
+		<!-- update web.xml for the target solution path -->
+		<replace file="${dev.deploy.dir}/pentaho.war/WEB-INF/web.xml" token="pentaho-solutions" value="${target.solutions.path}" />
+	</target>
+	
+	<target name="copy-solutions-tomcat" if="target.solutions.dir" depends="check-target-solutions-undefined-tomcat">
+		<mkdir dir="${target.solutions.dir}" />
+		<copy todir="${target.solutions.dir}" overwrite="${overwrite-solutions}">
+			<fileset dir="${solutions.dir}" />
+		</copy>
+
+		<!-- update web.xml for the target solution path -->
+		<replace file="${dev.deploy.dir}/pentaho/WEB-INF/web.xml" token="pentaho-solutions" value="${target.solutions.path}" />
+	</target>
+
+</project>
