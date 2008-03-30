@@ -26,6 +26,6 @@ public interface XulDomContainer {
   public XulMessageBox createMessageBox(String message);
 
   public void initialize();
-
+  
   public void close();
 }

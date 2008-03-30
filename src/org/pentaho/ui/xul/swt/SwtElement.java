@@ -173,15 +173,15 @@ public class SwtElement extends AbstractXulComponent {
    * Major SWT limitation. Replacement can only be used in 
    * a limited number of cases. 
    */
-  public void replaceChild(Element oldElement, Element newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
     
     super.replaceChild(oldElement, newElement);
-    Widget thisWidget = (Widget)((XulComponent)oldElement).getManagedObject();
+    Widget thisWidget = (Widget) oldElement.getManagedObject();
     if (!thisWidget.isDisposed()){
       thisWidget.dispose();
     }
-    this.addComponent((XulComponent) newElement);
-    ((Control) ((XulComponent)newElement).getManagedObject()).setParent((Composite) this.getManagedObject());
+    this.addComponent(newElement);
+    ((Control) newElement.getManagedObject()).setParent((Composite) this.getManagedObject());
 
     layout();
   }

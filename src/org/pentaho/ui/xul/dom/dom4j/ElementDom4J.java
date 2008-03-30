@@ -19,6 +19,7 @@ import org.pentaho.ui.xul.dom.Namespace;
  */
 public class ElementDom4J implements Element{
   protected org.dom4j.Element element;
+
   
   public ElementDom4J(){
   }
@@ -31,12 +32,12 @@ public class ElementDom4J implements Element{
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#getChildNodes()
    */
-  public List<Element> getChildNodes() {
-    ArrayList<Element> list = new ArrayList<Element>();
+  public List<XulComponent> getChildNodes() {
+    ArrayList<XulComponent> list = new ArrayList<XulComponent>();
     
     List elements = element.elements();
     for(Object ele : elements){
-      list.add( ((XulElementDom4J) ele).getXulElement() );
+      list.add( ((XulElementDom4J) ele).getXulElement());
       
     }
     return list;
@@ -58,18 +59,18 @@ public class ElementDom4J implements Element{
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#getElementById(java.lang.String)
    */
-  public Element getElementById(String id) {
-    org.dom4j.Element ele = element.elementByID(id);
+  public XulComponent getElementById(String id) {
+    XulElementDom4J ele = (XulElementDom4J) element.elementByID(id);
     if (ele == null){
       return null;
     }
-    return ((XulElementDom4J) ele).getXulElement();
+    return (XulComponent) ele.getXulElement();
   }
 
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#getElementByXPath(java.lang.String)
    */
-  public Element getElementByXPath(String path) {
+  public XulComponent getElementByXPath(String path) {
     org.dom4j.Node ele = element.selectSingleNode(path);
     return ((XulElementDom4J) ele).getXulElement();
   }
@@ -96,8 +97,8 @@ public class ElementDom4J implements Element{
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#getElementsByTagName(java.lang.String)
    */
-  public List<Element> getElementsByTagName(String tagName) {
-    ArrayList<Element> list = new ArrayList<Element>();
+  public List<XulComponent> getElementsByTagName(String tagName) {
+    ArrayList<XulComponent> list = new ArrayList<XulComponent>();
     
     List elements = element.elements(tagName);
     for(Object ele : elements){
@@ -110,7 +111,7 @@ public class ElementDom4J implements Element{
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#getFirstChild()
    */
-  public Element getFirstChild() {
+  public XulComponent getFirstChild() {
     return ((XulElementDom4J)  element.elements().get(0)).getXulElement();
   }
 
@@ -131,7 +132,7 @@ public class ElementDom4J implements Element{
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#getParent()
    */
-  public Element getParent() {
+  public XulComponent getParent() {
     if (element.getParent()==null){
       return null;
     }
@@ -214,13 +215,6 @@ public class ElementDom4J implements Element{
     }
   }
   
-  public XulComponent getXulElement(){
-    if(this.element instanceof XulElementDom4J)
-      return ((XulElementDom4J) this.element).getXulElement();
-    else 
-      return null;
-  }
-
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#removeChild(org.pentaho.ui.xul.dom.Element)
    */
@@ -229,7 +223,7 @@ public class ElementDom4J implements Element{
     
   }
 
-  public void replaceChild(Element oldElement, Element newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
 
     List contentOfParent = element.content();
     int index = contentOfParent.indexOf((org.dom4j.Element) oldElement.getElementObject());

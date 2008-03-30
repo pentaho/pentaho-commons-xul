@@ -186,7 +186,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
 
 
   @Override
-  public void replaceChild(Element oldElement, Element newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }

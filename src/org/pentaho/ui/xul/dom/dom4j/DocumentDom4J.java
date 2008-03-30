@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul.dom.dom4j;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 /**
@@ -27,7 +28,7 @@ public class DocumentDom4J extends ElementDom4J implements Document {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Document#getRootElement()
    */
-  public Element getRootElement() {
+  public XulComponent getRootElement() {
     // TODO Auto-generated method stub
     return ((XulElementDom4J) document.getRootElement()).getXulElement();
   }

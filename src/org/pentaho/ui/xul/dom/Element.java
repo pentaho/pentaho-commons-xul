@@ -5,6 +5,8 @@ package org.pentaho.ui.xul.dom;
 
 import java.util.List;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * @author OEM
  *
@@ -13,16 +15,16 @@ public interface Element {
   public String getText();
   public String getName();
   public Document getDocument();
-  public Element getParent();
-  public Element getFirstChild();
-  public List<Element> getChildNodes();
+  public XulComponent getParent();
+  public XulComponent getFirstChild();
+  public List<XulComponent> getChildNodes();
 
   public void setNamespace(String prefix, String uri);
   public Namespace getNamespace();
 
-  public Element getElementById(String id);
-  public Element getElementByXPath(String path);
-  public List<Element> getElementsByTagName(String tagName);
+  public XulComponent getElementById(String id);
+  public XulComponent getElementByXPath(String path);
+  public List<XulComponent> getElementsByTagName(String tagName);
   
   public void addChild(Element element);
   public void removeChild(Element element);
@@ -36,6 +38,6 @@ public interface Element {
   public void setAttribute(String name, String value);
   public String getAttributeValue(String attributeName);
 
-  public void replaceChild(Element oldElement, Element newElement);
+  public void replaceChild(XulComponent oldElement, XulComponent newElement);
   
 }

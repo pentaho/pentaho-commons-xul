@@ -109,7 +109,7 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   }
 
-  public List<Element> getChildNodes() {
+  public List<XulComponent> getChildNodes() {
     return this.element.getChildNodes();
   }
 
@@ -117,11 +117,11 @@ public abstract class AbstractXulComponent implements XulComponent {
     return this.element.getDocument();
   }
 
-  public Element getElementById(String elementId) {
+  public XulComponent getElementById(String elementId) {
     return this.element.getElementById(elementId);
   }
 
-  public Element getElementByXPath(String path) {
+  public XulComponent getElementByXPath(String path) {
     return this.element.getElementByXPath(path);
   }
 
@@ -129,11 +129,11 @@ public abstract class AbstractXulComponent implements XulComponent {
     return this.element.getElementObject();
   }
 
-  public List<Element> getElementsByTagName(String tagName) {
+  public List<XulComponent> getElementsByTagName(String tagName) {
     return this.element.getElementsByTagName(tagName);
   }
 
-  public Element getFirstChild() {
+  public XulComponent getFirstChild() {
     return this.element.getFirstChild();
   }
 
@@ -141,7 +141,7 @@ public abstract class AbstractXulComponent implements XulComponent {
     return this.element.getNamespace();
   }
 
-  public Element getParent() {
+  public XulComponent getParent() {
     return this.element.getParent();
   }
 
@@ -174,11 +174,11 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.element.setAttribute(name, value);
   }
 
-//  public XulAbstractComponent getXulElement() {
-//    return this;
-//  }
+  public AbstractXulComponent getXulElement() {
+    return this;
+  }
 
-  public void replaceChild(Element oldElement, Element newElement){
+  public void replaceChild(XulComponent oldElement, XulComponent newElement){
     this.element.replaceChild(oldElement, newElement);
   }
   

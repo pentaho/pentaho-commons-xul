@@ -91,7 +91,7 @@ public class SwingElement extends AbstractXulComponent{
 
   
   @Override
-  public void replaceChild(Element oldElement, Element newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
     
     super.replaceChild(oldElement, newElement);
     
@@ -99,7 +99,7 @@ public class SwingElement extends AbstractXulComponent{
     if(idx == -1){
       System.out.println(oldElement.getName()+" not found in children");
     } else{
-      this.children.set(idx, (XulComponent)newElement);
+      this.children.set(idx, newElement);
       
       container.removeAll();
   

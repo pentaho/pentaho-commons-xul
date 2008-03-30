@@ -59,7 +59,7 @@ public class SwingHbox extends SwingElement implements XulHbox{
 
 
   @Override
-  public void replaceChild(Element oldElement, Element newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }
