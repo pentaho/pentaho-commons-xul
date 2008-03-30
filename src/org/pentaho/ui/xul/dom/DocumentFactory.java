@@ -5,7 +5,7 @@ package org.pentaho.ui.xul.dom;
 
 import java.lang.reflect.Constructor;
 
-import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulException;
 
 /**
@@ -52,9 +52,9 @@ public class DocumentFactory {
     }
   }
   
-  public static Element createElement(String name, XulElement xulElement) throws XulException{
+  public static Element createElement(String name, XulComponent xulElement) throws XulException{
     try{
-      Object element = elementClass.getConstructor(new Class[]{String.class, XulElement.class}).newInstance(new Object[]{name, xulElement});
+      Object element = elementClass.getConstructor(new Class[]{String.class, XulComponent.class}).newInstance(new Object[]{name, xulElement});
       return (Element) element;
       
     } catch(Exception e){

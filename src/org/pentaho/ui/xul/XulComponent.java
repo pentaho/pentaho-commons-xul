@@ -3,13 +3,15 @@
  */
 package org.pentaho.ui.xul;
 
+import org.pentaho.ui.xul.dom.Element;
+
 /**
  * The base interface for any XUL widget. 
  * 
  * @author nbaker
  *
  */
-public interface XulComponent {
+public interface XulComponent extends Element {
   
   /**
    * The manageObject is the rendering control or container that 

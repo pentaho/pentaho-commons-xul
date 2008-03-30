@@ -3,13 +3,15 @@
  */
 package org.pentaho.ui.xul.components;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * The interface for the listitem widget. A listitem is one entry in a listbox.
  *  
  * @author nbaker
  *
  */
-public interface XulListitem {
+public interface XulListitem extends XulComponent {
   
   /**
    *  The text that is displayed in the box for this listItem.

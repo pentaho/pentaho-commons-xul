@@ -3,7 +3,7 @@ package org.pentaho.ui.xul.swt.tags;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.components.XulMessageBox;
 
 public class SwtMessageBox implements XulMessageBox {
@@ -14,21 +14,21 @@ public class SwtMessageBox implements XulMessageBox {
   private Object[] defaultButtons = new Integer[]{SWT.OK};
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(SWT.ICON_INFORMATION);
-  private XulElement parent;
+  private XulComponent parent;
 
-  public SwtMessageBox(XulElement parent, String message) {
+  public SwtMessageBox(XulComponent parent, String message) {
     this(parent, message, null);
   }
 
-  public SwtMessageBox(XulElement parent, String message, String title) {
+  public SwtMessageBox(XulComponent parent, String message, String title) {
     this(parent, message, title, null);
   }
 
-  public SwtMessageBox(XulElement parent, String message, String title, Object[] buttons) {
+  public SwtMessageBox(XulComponent parent, String message, String title, Object[] buttons) {
     this(parent, message, title, buttons, new Integer(SWT.ICON_INFORMATION));
   }
 
-  public SwtMessageBox(XulElement parent, String message, String title, Object[] buttons, Object icon) {
+  public SwtMessageBox(XulComponent parent, String message, String title, Object[] buttons, Object icon) {
     this.parent = parent;
     setMessage(message);
     setTitle(title);

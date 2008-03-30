@@ -4,16 +4,15 @@
 package org.pentaho.ui.xul.swing;
 
 import org.dom4j.Document;
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.XulFragmentContainer;
 import org.pentaho.ui.xul.XulLoader;
-import org.pentaho.ui.xul.XulParser;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
+import org.pentaho.ui.xul.impl.XulFragmentContainer;
+import org.pentaho.ui.xul.impl.XulParser;
+import org.pentaho.ui.xul.impl.XulWindowContainer;
 
 /**
  * @author nbaker
@@ -51,9 +50,6 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("LISTITEM", "org.pentaho.ui.xul.swing.tags.SwingListitem");
     parser.registerHandler("MESSAGEBOX", "org.pentaho.ui.xul.swing.tags.SwingMessageBox");
     parser.registerHandler("DECK", "org.pentaho.ui.xul.swing.tags.SwingDeck");
-    
-
-  
   }
   
   /* (non-Javadoc)
@@ -61,24 +57,22 @@ public class SwingXulLoader implements XulLoader {
    */
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
 
-    XulWindowContainer container = new XulWindowContainer(this);
+    XulDomContainer container = new XulWindowContainer(this);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
    
     return container;
   }
-
+  
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
-  public XulFragmentContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
-    XulFragmentContainer container = new XulFragmentContainer(this);
+  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
+    XulDomContainer container = new XulFragmentContainer(this);
     parser.reset();
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
     
     return container;
   }
-  
-
 }

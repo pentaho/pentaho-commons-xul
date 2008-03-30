@@ -6,7 +6,7 @@ package org.pentaho.ui.xul.dom.dom4j;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
@@ -23,7 +23,7 @@ public class ElementDom4J implements Element{
   public ElementDom4J(){
   }
   
-  public ElementDom4J(String name, XulElement xulElement){
+  public ElementDom4J(String name, XulComponent xulElement){
     this.element = new XulElementDom4J(name.toLowerCase(), xulElement);
 
   }
@@ -214,7 +214,7 @@ public class ElementDom4J implements Element{
     }
   }
   
-  public XulElement getXulElement(){
+  public XulComponent getXulElement(){
     if(this.element instanceof XulElementDom4J)
       return ((XulElementDom4J) this.element).getXulElement();
     else 

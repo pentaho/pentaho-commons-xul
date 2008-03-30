@@ -3,12 +3,14 @@
  */
 package org.pentaho.ui.xul.components;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * The interface for the button XUL widget.
  * 
  * @author nbaker
  */
-public interface XulButton {
+public interface XulButton extends XulComponent {
   
   /**
    * 

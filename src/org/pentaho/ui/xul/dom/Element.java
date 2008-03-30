@@ -5,8 +5,6 @@ package org.pentaho.ui.xul.dom;
 
 import java.util.List;
 
-import org.pentaho.ui.xul.XulElement;
-
 /**
  * @author OEM
  *
@@ -37,9 +35,7 @@ public interface Element {
   public void setAttribute(Attribute attribute);
   public void setAttribute(String name, String value);
   public String getAttributeValue(String attributeName);
-  
-  public XulElement getXulElement();
-  
+
   public void replaceChild(Element oldElement, Element newElement);
   
 }

@@ -1,13 +1,17 @@
 /**
  * 
  */
-package org.pentaho.ui.xul;
+package org.pentaho.ui.xul.impl;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
@@ -45,16 +49,16 @@ public class XulParser {
     if(!rootSrc.getName().equalsIgnoreCase("window")){
       parent = getPlaceHolderRoot();
     }
-    XulElement root = parse(rootSrc, parent);
+    XulComponent root = parse(rootSrc, parent);
 
     //give root reference to runner for service calls and attach root to document
     if(root instanceof XulWindow){
       ((XulWindow)root).setXulDomContainer(this.xulDomContainer);
-      xulDocument.addChild((Element) root);
+      xulDocument.addChild(root);
     } else { //fragment parsing, wire up dummy
       ((XulWindow)parent).setXulDomContainer(this.xulDomContainer);
-      ((XulElement) parent).addChild(root);
-      xulDocument.addChild((Element) parent);
+      parent.addChild(root);
+      xulDocument.addChild(parent);
     }
     
     return xulDocument;
@@ -68,24 +72,24 @@ public class XulParser {
     try {
       c = Class.forName((String) handler);
       Constructor<?> constructor = c
-          .getConstructor(new Class[] { XulElement.class, XulDomContainer.class, String.class });
+          .getConstructor(new Class[] { XulComponent.class, XulDomContainer.class, String.class });
       XulWindow ele = (XulWindow) constructor.newInstance(null, xulDomContainer, "window");
-      return (XulContainer) ele;
+      return ele;
     } catch (Exception e) {
       throw new XulException(e);
     }
   }
 
-  public XulElement parse(org.dom4j.Element rootSrc, XulContainer parent) throws XulException {
+  public XulComponent parse(org.dom4j.Element rootSrc, XulContainer parent) throws XulException {
     //parse element
-    XulElement root = getElement(rootSrc, parent);
+    XulComponent root = getElement(rootSrc, parent);
 
     if(root == null){
       return null;
     }
     //descend down a level and parse children (root would be a container in the case)
     for (Object child : rootSrc.elements()) {
-      XulElement childElement = parse((org.dom4j.Element) child, (XulContainer) root);
+      XulComponent childElement = parse((org.dom4j.Element) child, (XulContainer) root);
 
       //TODO: remove once exception handling in place
       if (childElement == null) {
@@ -100,13 +104,17 @@ public class XulParser {
         ((XulContainer) root).addComponent(childElement);
     }
     if (root != null) {
-      root.layout();
+      // should layout be part of the public API?
+      // is this the appropriate place for layout?
+      if (root instanceof AbstractXulComponent) {
+        ((AbstractXulComponent)root).layout();
+      }
     }
 
     return root;
   }
 
-  protected XulElement getElement(org.dom4j.Element srcEle, XulContainer parent) throws XulException {
+  protected XulComponent getElement(org.dom4j.Element srcEle, XulContainer parent) throws XulException {
 
     Object handler = handlers.get(srcEle.getName().toUpperCase());
 
@@ -121,8 +129,8 @@ public class XulParser {
     try {
       c = Class.forName((String) handler);
       Constructor<?> constructor = c
-          .getConstructor(new Class[] { XulElement.class, XulDomContainer.class, String.class });
-      XulElement ele = (XulElement) constructor.newInstance(parent, xulDomContainer, tagName);
+          .getConstructor(new Class[] { XulComponent.class, XulDomContainer.class, String.class });
+      XulComponent ele = (XulComponent) constructor.newInstance(parent, xulDomContainer, tagName);
 
       Map<String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
       BeanUtils.populate(ele, attributesMap);

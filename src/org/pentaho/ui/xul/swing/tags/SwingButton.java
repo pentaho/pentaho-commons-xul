@@ -8,8 +8,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -23,7 +23,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingButton extends SwingElement implements XulButton{
   private JButton button;
   
-  public SwingButton(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingButton(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Button");
     button = new JButton();
     this.managedObject = button;

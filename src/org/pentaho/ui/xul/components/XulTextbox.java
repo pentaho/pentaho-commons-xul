@@ -3,13 +3,15 @@
  */
 package org.pentaho.ui.xul.components;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * The interface for a Xul textbox widget. 
  * 
  * @author nbaker
  *
  */
-public interface XulTextbox {
+public interface XulTextbox extends XulComponent {
 
   /**
    * Sets the value that will display as default in the textbox. 

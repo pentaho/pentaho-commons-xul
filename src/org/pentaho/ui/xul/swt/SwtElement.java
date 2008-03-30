@@ -7,12 +7,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwtElement extends XulElement {
+public class SwtElement extends AbstractXulComponent {
   private static final long serialVersionUID = -4407080035694005764L;
 
   // Per XUL spec, STRETCH is the default align value.
@@ -176,12 +176,12 @@ public class SwtElement extends XulElement {
   public void replaceChild(Element oldElement, Element newElement) {
     
     super.replaceChild(oldElement, newElement);
-    Widget thisWidget = (Widget)oldElement.getXulElement().getManagedObject();
+    Widget thisWidget = (Widget)((XulComponent)oldElement).getManagedObject();
     if (!thisWidget.isDisposed()){
       thisWidget.dispose();
     }
     this.addComponent((XulComponent) newElement);
-    ((Control) newElement.getXulElement().getManagedObject()).setParent((Composite) this.getManagedObject());
+    ((Control) ((XulComponent)newElement).getManagedObject()).setParent((Composite) this.getManagedObject());
 
     layout();
   }

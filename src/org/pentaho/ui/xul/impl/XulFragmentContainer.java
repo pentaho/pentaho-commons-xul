@@ -1,8 +1,10 @@
 /**
  * 
  */
-package org.pentaho.ui.xul;
+package org.pentaho.ui.xul.impl;
 
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 
@@ -10,7 +12,7 @@ import org.pentaho.ui.xul.dom.Document;
  * @author OEM
  *
  */
-public class XulFragmentContainer extends XulDomContainer {
+public class XulFragmentContainer extends AbstractXulDomContainer {
   private Document fragment;
   private XulLoader xulLoader;
   

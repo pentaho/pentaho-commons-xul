@@ -4,18 +4,17 @@
 package org.pentaho.ui.xul.swt;
 
 import org.dom4j.Document;
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.XulFragmentContainer;
 import org.pentaho.ui.xul.XulLoader;
-import org.pentaho.ui.xul.XulParser;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.DocumentFactory;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
+import org.pentaho.ui.xul.impl.XulFragmentContainer;
+import org.pentaho.ui.xul.impl.XulParser;
+import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 /**
@@ -64,13 +63,13 @@ public class SwtXulLoader implements XulLoader {
    */
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
 
-    XulWindowContainer container = new XulWindowContainer(this);
+    XulDomContainer container = new XulWindowContainer(this);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
     
     // SWT has no notion of an "onload" event, so we must simulate it...
     
-    XulElement maybeWindow = container.getDocumentRoot().getXulElement();
+    Element maybeWindow = container.getDocumentRoot().getRootElement();
     if ( maybeWindow instanceof SwtWindow){
       SwtWindow window = (SwtWindow) maybeWindow;
       window.notifyListeners(XulWindow.EVENT_ON_LOAD);
@@ -82,16 +81,15 @@ public class SwtXulLoader implements XulLoader {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
-  public XulFragmentContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
-    XulFragmentContainer container = new XulFragmentContainer(this);
+  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
+    XulDomContainer container = new XulFragmentContainer(this);
     parser.reset();
     parser.setContainer(container);
-    parser.parseDocument(xulDocument.getRootElement()).getRootElement().getXulElement();
+    parser.parseDocument(xulDocument.getRootElement()).getRootElement();
     
     //not sure this is needed
     //parser.getDocumentRoot().addChild(element);
     
     return container;
   }
-
 }

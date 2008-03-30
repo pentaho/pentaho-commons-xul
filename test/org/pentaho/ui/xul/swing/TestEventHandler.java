@@ -1,8 +1,6 @@
 package org.pentaho.ui.xul.swing;
 
-import org.pentaho.ui.xul.XulEventHandler;
-import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.components.XulMessageBox;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 
 public class TestEventHandler extends XulEventHandler{
   

@@ -17,10 +17,9 @@ import javax.swing.JPanel;
 import org.dom4j.Document;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -42,7 +41,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
 
   private String onload;
 
-  public SwingWindow(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingWindow(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("window");
     frame = new JFrame();
     this.xulDomContainer = domContainer;

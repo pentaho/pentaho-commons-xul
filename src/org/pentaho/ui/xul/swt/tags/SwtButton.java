@@ -4,8 +4,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
@@ -18,7 +18,7 @@ public class SwtButton extends SwtElement implements XulButton {
   private String label;
   private boolean disabled;
 
-  public SwtButton(XulElement parent, XulDomContainer container, String tagName) {
+  public SwtButton(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     button = createNewButton((Composite)parent.getManagedObject());
     managedObject = button;

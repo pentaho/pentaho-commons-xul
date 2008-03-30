@@ -1,12 +1,14 @@
 /**
  * 
  */
-package org.pentaho.ui.xul;
+package org.pentaho.ui.xul.impl;
 
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
@@ -17,7 +19,7 @@ import org.pentaho.ui.xul.dom.Namespace;
  * @author OEM
  *
  */
-public abstract class XulElement implements XulComponent, Element {
+public abstract class AbstractXulComponent implements XulComponent {
   private static final long serialVersionUID = -3629792827245143824L;
 
   protected Object managedObject;
@@ -35,13 +37,13 @@ public abstract class XulElement implements XulComponent, Element {
 
   protected List<XulComponent> children;
 
-  public XulElement(Element element) {
+  public AbstractXulComponent(Element element) {
     this.element = element;
     children = new ArrayList<XulComponent>();
 
   }
 
-  public XulElement(String name) {
+  public AbstractXulComponent(String name) {
     try {
       this.element = DocumentFactory.createElement(name, this);
       children = new ArrayList<XulComponent>();
@@ -51,7 +53,7 @@ public abstract class XulElement implements XulComponent, Element {
     }
   }
 
-  public XulElement(String tagName, Object managedObject) {
+  public AbstractXulComponent(String tagName, Object managedObject) {
     try {
       this.element = DocumentFactory.createElement(tagName, this);
       this.managedObject = managedObject;
@@ -172,9 +174,9 @@ public abstract class XulElement implements XulComponent, Element {
     this.element.setAttribute(name, value);
   }
 
-  public XulElement getXulElement() {
-    return this;
-  }
+//  public XulAbstractComponent getXulElement() {
+//    return this;
+//  }
 
   public void replaceChild(Element oldElement, Element newElement){
     this.element.replaceChild(oldElement, newElement);

@@ -3,13 +3,15 @@
  */
 package org.pentaho.ui.xul.components;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * The XulCaption widget is the title that gets applied to XulGroupBox container. 
  * 
  * @author nbaker
  *
  */
-public interface XulCaption {
+public interface XulCaption extends XulComponent {
   
   /**
    * 

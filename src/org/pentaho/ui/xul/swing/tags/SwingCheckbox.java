@@ -7,8 +7,8 @@ import javax.swing.JCheckBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -23,7 +23,7 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
   
   private JCheckBox checkBox;
   
-  public SwingCheckbox(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingCheckbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("checkbox");
     checkBox = new JCheckBox();
     managedObject = checkBox;

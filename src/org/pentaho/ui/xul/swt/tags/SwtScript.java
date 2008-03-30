@@ -1,7 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -11,7 +11,7 @@ public class SwtScript extends SwtElement implements XulScript {
   XulDomContainer windowContainer = null;
   String className = null;
   
-  public SwtScript(XulElement parent, XulDomContainer container, String tagName) {
+  public SwtScript(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     windowContainer = container;
   }

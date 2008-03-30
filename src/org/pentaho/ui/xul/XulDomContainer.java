@@ -3,80 +3,29 @@
  */
 package org.pentaho.ui.xul;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.pentaho.ui.xul.components.XulMessageBox;
-import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 
 /**
  * @author OEM
  *
  */
-public abstract class XulDomContainer {
+public interface XulDomContainer {
+  
+  public void addDocument(Document document);
+  
+  public Document getDocumentRoot();
+  
+  public XulDomContainer loadFragment(String xulLocation) throws XulException;
+  
+  public void addEventHandler(String id, String eventClassName);
+  
+  public XulEventHandler getEventHandler(String key) throws XulException;
+  
+  public XulMessageBox createMessageBox(String message);
 
-  private Map<String, XulEventHandler> eventHandlers;
+  public void initialize();
 
-  public XulDomContainer(){
-    eventHandlers = new HashMap<String, XulEventHandler>();
-  }
-
-  public Document remoteCall(XulServiceCall serviceUrl){
-    return null;
-  }
-  
-  
-  public void addEventHandler(String id, String eventClassName){
-   
-    // Allow overrides of eventHandlers
-    //if(eventHandlers.containsKey(id)){ //if already registered
-    //  return;
-    //}
-    
-    try{
-      Class cls = Class.forName(eventClassName);
-      XulEventHandler eventHandler = (XulEventHandler) cls.newInstance();
-      eventHandler.setXulDomContainer(this);
-      eventHandlers.put(id, eventHandler);
-      
-    } catch(ClassNotFoundException e){
-      System.out.println("backing class not found");
-      e.printStackTrace(System.out);
-    } catch(Exception e){
-      System.out.println("Error with Backing class creation");
-      e.printStackTrace(System.out);
-    }
-  }
-  
-  public XulEventHandler getEventHandler(String key) throws XulException{
-    if(eventHandlers.containsKey(key)){
-      return eventHandlers.get(key);
-    } else {
-      throw new XulException(String.format("Could not find Event Handler with the key : %s", key));
-    }
-  }
-  
-  public void initialize(){
-    XulWindow rootEle = (XulWindow) this.getDocumentRoot().getRootElement().getXulElement();
-    System.out.println("onload: "+ rootEle.getOnload());
-    String onLoad = rootEle.getOnload();
-    if(onLoad != null){
-      rootEle.invoke(rootEle.getOnload(), new Object[]{});
-    }
-
-  }
-  
-
-  public abstract Document getDocumentRoot();
-
-  public abstract void addDocument(Document document);
-  
-  public abstract XulMessageBox createMessageBox(String message);
-  
-  public abstract XulFragmentContainer loadFragment(String xulLocation) throws XulException;
-  
-  public abstract void close();
-  
-  
+  public void close();
 }

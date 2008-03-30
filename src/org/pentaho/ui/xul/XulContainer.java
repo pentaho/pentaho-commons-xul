@@ -11,7 +11,7 @@ import org.pentaho.ui.xul.util.Orient;
  * 
  * @author nbaker
  */
-public interface XulContainer {
+public interface XulContainer extends XulComponent {
   
   /**
    * The method used to add child controls\widgets to a container.

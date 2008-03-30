@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -21,13 +20,13 @@ public class SwingDeck extends SwingElement implements XulDeck {
   private CardLayout cardLayout;
   private int selectedChildIndex = 0; 
   private int numChildren = 0;
-  private List<XulElement> children = new ArrayList<XulElement>();
+  private List<XulComponent> children = new ArrayList<XulComponent>();
 
-  public SwingDeck(XulElement parent, XulDomContainer container, String tagName) {
+  public SwingDeck(XulComponent parent, XulDomContainer container, String tagName) {
     this(parent, tagName, Orient.HORIZONTAL);
   }
 
-  public SwingDeck(XulElement parent, String tagName, Orient orient) {
+  public SwingDeck(XulComponent parent, String tagName, Orient orient) {
     super(tagName);
     cardLayout = new CardLayout();
     container = new JPanel(cardLayout);
@@ -40,7 +39,7 @@ public class SwingDeck extends SwingElement implements XulDeck {
   @Override
   public void addChild(Element ele) {
      super.addChild(ele);
-     this.container.add((Component) ele.getXulElement().getManagedObject(), ""+numChildren); 
+     this.container.add((Component) ((XulComponent)ele).getManagedObject(), ""+numChildren); 
      numChildren++;
  
   }

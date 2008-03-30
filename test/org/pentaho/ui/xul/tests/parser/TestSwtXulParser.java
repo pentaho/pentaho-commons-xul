@@ -4,22 +4,19 @@
 package org.pentaho.ui.xul.tests.parser;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.TestCase;
 
 import org.pentaho.core.util.CleanXmlHelper;
-import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.XulParser;
-import org.pentaho.ui.xul.XulWindowContainer;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
+import org.pentaho.ui.xul.impl.XulParser;
+import org.pentaho.ui.xul.impl.XulWindowContainer;
 
 /**
  * @author OEM
@@ -28,7 +25,7 @@ import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 public class TestSwtXulParser extends TestCase{
   org.dom4j.Document testDoc;
 
-  XulWindowContainer container;
+  XulDomContainer container;
   
   private XulParser parser;
   public void setUp() throws Exception{
@@ -72,7 +69,7 @@ public class TestSwtXulParser extends TestCase{
   
   public void testRootIsWindow() throws Exception{
     Document root = container.getDocumentRoot();
-    assertTrue(root.getRootElement().getXulElement() instanceof XulWindow);
+    assertTrue(root.getRootElement() instanceof XulWindow);
   }
   
   public void testElementsByXPath() throws Exception{

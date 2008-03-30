@@ -9,11 +9,9 @@ import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -26,7 +24,7 @@ import org.pentaho.ui.xul.util.Orient;
 public class SwingHbox extends SwingElement implements XulHbox{
  
   
-  public SwingHbox(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingHbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Hbox");
     
     children = new ArrayList<XulComponent>();

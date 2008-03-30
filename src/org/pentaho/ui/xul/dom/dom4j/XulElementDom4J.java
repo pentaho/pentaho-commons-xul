@@ -3,7 +3,7 @@
  */
 package org.pentaho.ui.xul.dom.dom4j;
 
-import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulComponent;
 
 /**
  * @author OEM
@@ -12,17 +12,17 @@ import org.pentaho.ui.xul.XulElement;
 public class XulElementDom4J extends org.dom4j.tree.BaseElement{
   private static final long serialVersionUID = -2463576912677723967L;
 
-  private XulElement xulElement;
+  private XulComponent xulElement;
   public XulElementDom4J(){
     super("blank");
   }
 
-  public XulElementDom4J(String name, XulElement element){
+  public XulElementDom4J(String name, XulComponent element){
     super(name);
     this.xulElement = element;
   }
   
-  public XulElement getXulElement(){
+  public XulComponent getXulElement(){
     return xulElement;
   }
   

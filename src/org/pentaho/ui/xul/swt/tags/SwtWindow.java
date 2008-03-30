@@ -8,10 +8,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtWindow extends SwtElement implements XulWindow {
@@ -27,7 +27,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   private XulDomContainer xulDomContainer;
 
-  public SwtWindow(XulElement parent, XulDomContainer container, String tagName) {
+  public SwtWindow(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.SHELL_TRIM) : new Shell(SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());

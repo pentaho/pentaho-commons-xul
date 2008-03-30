@@ -1,7 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulListitem;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.swt.SwtElement;
@@ -12,10 +12,10 @@ public class SwtListitem extends SwtElement implements XulListitem {
   
   // SWT list boxes only support String items
   String value=null;
-  XulElement parent;
+  XulComponent parent;
   boolean isSelected = false; 
   
-  public SwtListitem(XulElement parent, XulDomContainer container, String tagName){
+  public SwtListitem(XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     this.parent = parent;
   }

@@ -5,13 +5,15 @@ package org.pentaho.ui.xul.components;
 
 import java.awt.Font;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * The interface for the XUL label widget.
  * 
  * @author nbaker
  *
  */
-public interface XulLabel {
+public interface XulLabel extends XulComponent {
   
   /**
    * Sets the text on the label

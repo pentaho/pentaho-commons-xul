@@ -11,15 +11,15 @@ import javax.swing.JPanel;
 
 
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
 /**
  * @author OEM
  *
  */
-public class SwingElement extends XulElement{
+public class SwingElement extends AbstractXulComponent{
 
   protected JPanel container;
   protected Orient orientation;
@@ -99,7 +99,7 @@ public class SwingElement extends XulElement{
     if(idx == -1){
       System.out.println(oldElement.getName()+" not found in children");
     } else{
-      this.children.set(idx, newElement.getXulElement());
+      this.children.set(idx, (XulComponent)newElement);
       
       container.removeAll();
   

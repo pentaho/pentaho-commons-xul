@@ -1,7 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.swt.SwtElement;
@@ -9,9 +9,9 @@ import org.pentaho.ui.xul.swt.SwtElement;
 public class SwtCaption extends SwtElement implements XulCaption {
   
   String label;
-  XulElement parent;
+  XulComponent parent;
   
-  public SwtCaption(XulElement parent, XulDomContainer container, String tagName){
+  public SwtCaption(XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     this.parent = parent;
   }

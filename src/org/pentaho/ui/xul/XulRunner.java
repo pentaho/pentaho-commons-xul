@@ -6,6 +6,7 @@ package org.pentaho.ui.xul;
 import java.util.List;
 
 import org.dom4j.Document;
+import org.pentaho.ui.xul.impl.XulServiceCall;
 
 
 

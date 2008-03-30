@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -25,7 +24,7 @@ import org.pentaho.ui.xul.util.Orient;
 public class SwingVbox extends SwingElement implements XulVbox  {
 
 
-  public SwingVbox(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingVbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Vbox");
     this.orientation = Orient.VERTICAL;
     

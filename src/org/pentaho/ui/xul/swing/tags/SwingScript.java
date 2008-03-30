@@ -3,8 +3,8 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.swing.SwingElement;
 
@@ -16,7 +16,7 @@ public class SwingScript extends SwingElement implements XulScript{
   private String id;
   private String src;
 
-  public SwingScript(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingScript(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("script");
   }
   

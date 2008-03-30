@@ -3,22 +3,12 @@
  */
 package org.pentaho.ui.xul.samples;
 
-import java.io.InputStream;
-
-import org.dom4j.Document;
-import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
-import org.pentaho.ui.xul.XulEventHandler;
-import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.components.XulCheckbox;
-import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulListitem;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.containers.XulListbox;
-import org.pentaho.ui.xul.swing.SwingXulLoader;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 
 /**
  * @author OEM
@@ -54,13 +44,11 @@ public class DatasourceHandler extends XulEventHandler{
     
     if(selectedValue.equals("Oracle")){
         try{
-          SwingXulLoader loader = new SwingXulLoader();
-          
           XulDomContainer container = this.xulDomContainer.loadFragment("org/pentaho/ui/xul/samples/datasource_oracle.xul");
           XulGroupbox newBox = (XulGroupbox) container.getDocumentRoot().getRootElement();
           XulGroupbox oldBox = (XulGroupbox) document.getElementById("database-options-box");
           
-          document.getElementById("button-box").replaceChild((XulElement)oldBox, (XulElement)newBox);
+          document.getElementById("button-box").replaceChild(oldBox, newBox);
           
           
         } catch(Exception e){

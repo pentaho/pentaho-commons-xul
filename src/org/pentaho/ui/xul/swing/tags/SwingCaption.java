@@ -3,8 +3,8 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.swing.SwingElement;
 
@@ -15,7 +15,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingCaption extends SwingElement implements XulCaption{
   private String caption;
 
-  public SwingCaption(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingCaption(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("caption");
     managedObject = caption;
   }

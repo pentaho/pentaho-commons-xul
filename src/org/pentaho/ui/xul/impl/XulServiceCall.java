@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.pentaho.ui.xul;
+package org.pentaho.ui.xul.impl;
 
 import java.util.Map;
 

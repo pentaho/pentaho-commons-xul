@@ -4,8 +4,8 @@ import java.awt.Font;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -15,7 +15,7 @@ public class SwtLabel extends SwtElement implements XulLabel {
   private boolean disabled;
   org.eclipse.swt.widgets.Label label;
   
-  public SwtLabel(XulElement parent, XulDomContainer container, String tagName){
+  public SwtLabel(XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     label = new org.eclipse.swt.widgets.Label((Composite)parent.getManagedObject(), SWT.WRAP);
     managedObject = label;

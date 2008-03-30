@@ -3,6 +3,8 @@
  */
 package org.pentaho.ui.xul.components;
 
+import org.pentaho.ui.xul.XulComponent;
+
 
 /**
  * An interface for a XUL spacer widget. A spacer is an element that 
@@ -13,7 +15,7 @@ package org.pentaho.ui.xul.components;
  * @author nbaker
  *
  */
-public interface XulSpacer {
+public interface XulSpacer extends XulComponent {
   
   /**
    * Set the height that this space should occupy.

@@ -2,8 +2,8 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -17,7 +17,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private int maxLength;
   private String text;
 
-  public SwtTextbox(XulElement parent, XulDomContainer container, String tagName) {
+  public SwtTextbox(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     parentComposite = (Composite)parent.getManagedObject();
     textBox = new org.eclipse.swt.widgets.Text(parentComposite, SWT.BORDER);

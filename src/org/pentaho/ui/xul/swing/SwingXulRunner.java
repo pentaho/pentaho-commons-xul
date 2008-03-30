@@ -14,8 +14,8 @@ import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.XulServiceCall;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.impl.XulServiceCall;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
 
 /**
@@ -37,7 +37,7 @@ public class SwingXulRunner implements XulRunner {
    */
   public void initialize() throws XulException{
     //get first Element, should be a JFrame and show it.
-    XulWindow rootEle = (XulWindow) containers.get(0).getDocumentRoot().getRootElement().getXulElement();
+    XulWindow rootEle = (XulWindow) containers.get(0).getDocumentRoot().getRootElement();
     
     //call the onLoads
     containers.get(0).initialize();

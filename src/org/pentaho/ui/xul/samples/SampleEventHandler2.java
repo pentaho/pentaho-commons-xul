@@ -3,10 +3,10 @@
  */
 package org.pentaho.ui.xul.samples;
 
-import org.pentaho.ui.xul.XulEventHandler;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 
 /**
  * @author OEM

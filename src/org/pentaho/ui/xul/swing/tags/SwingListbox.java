@@ -11,7 +11,6 @@ import javax.swing.event.ListSelectionListener;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -30,7 +29,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private String onselect;
   private JScrollPane scrollPane;
   
-  public SwingListbox(XulElement parent, XulDomContainer container, String tagName) {
+  public SwingListbox(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     model = new DefaultListModel();
     listBox = new JList(model);

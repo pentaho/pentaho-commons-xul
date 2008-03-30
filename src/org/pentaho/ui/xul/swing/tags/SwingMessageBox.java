@@ -5,7 +5,7 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-import org.pentaho.ui.xul.XulElement;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.components.XulMessageBox;
 
 public class SwingMessageBox implements XulMessageBox {
@@ -23,21 +23,21 @@ public class SwingMessageBox implements XulMessageBox {
   private Object[] defaultButtons = new Object[]{OK};
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(JOptionPane.INFORMATION_MESSAGE);
-  private XulElement parent;
+  private XulComponent parent;
 
-  public SwingMessageBox(XulElement parent, String message) {
+  public SwingMessageBox(XulComponent parent, String message) {
     this(parent, message, null);
   }
 
-  public SwingMessageBox(XulElement parent, String message, String title) {
+  public SwingMessageBox(XulComponent parent, String message, String title) {
     this(parent, message, title, null);
   }
 
-  public SwingMessageBox(XulElement parent, String message, String title, Object[] buttons) {
+  public SwingMessageBox(XulComponent parent, String message, String title, Object[] buttons) {
     this(parent, message, title, buttons, JOptionPane.INFORMATION_MESSAGE);
   }
 
-  public SwingMessageBox(XulElement parent, String message, String title, Object[] buttons, Object icon) {
+  public SwingMessageBox(XulComponent parent, String message, String title, Object[] buttons, Object icon) {
     this.parent = parent;
     setMessage(message);
     setTitle(title);

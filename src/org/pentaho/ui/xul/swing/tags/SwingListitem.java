@@ -3,8 +3,8 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulListitem;
 import org.pentaho.ui.xul.swing.SwingElement;
 
@@ -17,7 +17,7 @@ public class SwingListitem extends SwingElement implements XulListitem{
   private String label;
   private Object value;
   
-  public SwingListitem(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingListitem(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("listitem");
   }
   

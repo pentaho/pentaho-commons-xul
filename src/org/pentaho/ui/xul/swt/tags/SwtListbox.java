@@ -6,8 +6,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
@@ -22,7 +22,7 @@ public class SwtListbox extends SwtElement implements XulListbox{
   private int rowsToDisplay = 0;
   String onSelect = null;
   
-  public SwtListbox(XulElement parent, XulDomContainer container, String tagName) {
+  public SwtListbox(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     listBox = new List((Composite)parent.getManagedObject(), SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
     managedObject = listBox;

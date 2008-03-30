@@ -4,15 +4,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
 
 public class SwtCheckbox extends SwtButton implements XulCheckbox {
 
-  public SwtCheckbox(XulElement parent, XulDomContainer container, String tagName) {
+  public SwtCheckbox(XulComponent parent, XulDomContainer container, String tagName) {
     super(parent, container, tagName);
   }
 

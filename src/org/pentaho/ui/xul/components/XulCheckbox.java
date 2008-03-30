@@ -3,12 +3,14 @@
  */
 package org.pentaho.ui.xul.components;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * The interface for the checkbox XUL widget.
  *
  * @author nbaker
  */
-public interface XulCheckbox {
+public interface XulCheckbox extends XulComponent {
   
   /**
    * Sets/clears the check in the box.

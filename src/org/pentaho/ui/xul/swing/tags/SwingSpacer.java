@@ -7,8 +7,8 @@ import java.awt.Component;
 
 import javax.swing.Box;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulElement;
 import org.pentaho.ui.xul.components.XulSpacer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
@@ -19,7 +19,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingSpacer extends SwingElement implements XulSpacer{
   private Component strut;
   
-  public SwingSpacer(XulElement parent, XulDomContainer domContainer, String tagName) {
+  public SwingSpacer(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("spacer");
 
   }
