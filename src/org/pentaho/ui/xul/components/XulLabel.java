@@ -3,8 +3,6 @@
  */
 package org.pentaho.ui.xul.components;
 
-import java.awt.Font;
-
 import org.pentaho.ui.xul.XulComponent;
 
 /**
@@ -22,15 +20,6 @@ public interface XulLabel extends XulComponent {
    */
   public void setValue(String value);
 
-  /**
-   * Sets the font to use to render the label's text. This is 
-   * a java.awt.Font. 
-   * 
-   * @param font The font to use for the label's text. 
-   */
-  public void setFont(Font font);
-  
-  
   /**
    * XUL's attribute is "disabled", thus this acts
    * exactly the opposite of SWT/Swing/AWT. If the property is not 

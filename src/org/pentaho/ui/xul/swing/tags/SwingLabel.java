@@ -3,8 +3,6 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
-import java.awt.Font;
-
 import javax.swing.JLabel;
 
 import org.pentaho.ui.xul.XulComponent;
@@ -23,9 +21,6 @@ public class SwingLabel extends SwingElement implements XulLabel{
     super("label");
     label = new JLabel();
     managedObject = label;
-  }
-  
-  public void setFont(Font font) {
   }
   
   public void layout(){

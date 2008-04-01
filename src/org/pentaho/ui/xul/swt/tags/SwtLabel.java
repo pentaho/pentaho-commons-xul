@@ -1,7 +1,5 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.awt.Font;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
@@ -21,10 +19,6 @@ public class SwtLabel extends SwtElement implements XulLabel {
     managedObject = label;
   }
 
-  public void setFont(Font font) {
-
-  }
-  
   /**
    * True parameter for bean-able attribute "value" (XUL attribute)
    * @param text
