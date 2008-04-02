@@ -5,7 +5,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pentaho.core.util.CleanXmlHelper;
+import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -80,7 +80,9 @@ public class XulWindowContainer extends AbstractXulDomContainer {
         throw new XulException("loadFragment: input document is null");
       }
       
-      org.dom4j.Document doc = CleanXmlHelper.getDocFromStream(in);
+      
+      SAXReader rdr = new SAXReader();
+      final org.dom4j.Document  doc = rdr.read(in);
       
       XulDomContainer container = this.xulLoader.loadXulFragment(doc);
       return container;

@@ -3,7 +3,7 @@ package org.pentaho.ui.xul.swing;
 import java.io.InputStream;
 
 import org.dom4j.Document;
-import org.pentaho.core.util.CleanXmlHelper;
+import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulRunner;
 
@@ -18,8 +18,9 @@ public class SwingTester {
         System.out.println("Input is null");
         System.exit(123);
       }
-      
-      Document doc = CleanXmlHelper.getDocFromStream(in);
+
+      SAXReader rdr = new SAXReader();
+      final Document doc = rdr.read(in);
       
       XulDomContainer container = new SwingXulLoader().loadXul(doc);
 

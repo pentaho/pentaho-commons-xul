@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
-	<classpathentry kind="lib" path="lib-ext/pentaho-core-1.6.1.jar" sourcepath="/pentaho/server/pentaho/src"/>
 	<classpathentry kind="lib" path="lib-ext/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib-ext/jaxen-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib-ext/commons-logging-1.1.jar"/>

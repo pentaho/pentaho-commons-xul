@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 import junit.framework.TestCase;
 
-import org.pentaho.core.util.CleanXmlHelper;
+import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
@@ -32,7 +32,8 @@ public class TestSwtXulParser extends TestCase{
     DocumentFactory.registerDOMClass(DocumentDom4J.class);
     DocumentFactory.registerElementClass(ElementDom4J.class);
     InputStream in = getClass().getResourceAsStream("/resource/documents/allTags.xul");
-    testDoc = CleanXmlHelper.getDocFromStream(in);
+    SAXReader rdr = new SAXReader();
+    final org.dom4j.Document doc = rdr.read(in);
     
     
     try{

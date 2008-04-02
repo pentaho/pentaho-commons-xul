@@ -6,12 +6,12 @@ import static org.junit.Assert.fail;
 import java.io.InputStream;
 
 import org.dom4j.Document;
+import org.dom4j.io.SAXReader;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.pentaho.core.util.CleanXmlHelper;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulRunner;
 
@@ -33,7 +33,8 @@ public class XulRunnerTest {
 
     InputStream in = SwtXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/sampleXul.xul");
     assertNotNull("XUL input not found.", in);
-    doc = CleanXmlHelper.getDocFromStream(in);
+    SAXReader rdr = new SAXReader();
+    final Document doc = rdr.read(in);
     
     XulDomContainer container = new SwtXulLoader().loadXul(doc);
 
