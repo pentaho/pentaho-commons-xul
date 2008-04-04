@@ -72,7 +72,10 @@ public class ElementDom4J implements Element{
    */
   public XulComponent getElementByXPath(String path) {
     org.dom4j.Node ele = element.selectSingleNode(path);
-    return ((XulElementDom4J) ele).getXulElement();
+    if (ele != null){
+      return ((XulElementDom4J) ele).getXulElement();
+    }
+    return null;
   }
 
 
