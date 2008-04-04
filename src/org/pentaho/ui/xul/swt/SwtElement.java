@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulDeck;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 

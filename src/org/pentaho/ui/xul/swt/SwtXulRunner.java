@@ -82,7 +82,7 @@ public class SwtXulRunner implements XulRunner {
   public static void main(String[] args) {
 
     try {
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/database/databasedialog.xul");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/pooling_table.xul");
       if (in == null) {
         System.out.println("Input is null");
         System.exit(123);
@@ -91,13 +91,17 @@ public class SwtXulRunner implements XulRunner {
       SAXReader rdr = new SAXReader();
       final Document doc = rdr.read(in);
 
-      XulDomContainer container = new SwtXulLoader().loadXul(doc);
 
+      XulDomContainer container = new SwtXulLoader().loadXul(doc);
+      
       XulRunner runner = new SwtXulRunner();
       runner.addContainer(container);
       
       runner.initialize();
+
+
       runner.start();
+
 
     } catch (Exception e) {
       System.out.println(e.getMessage());
