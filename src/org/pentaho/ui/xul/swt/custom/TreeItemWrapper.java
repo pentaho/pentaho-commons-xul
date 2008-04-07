@@ -23,6 +23,10 @@ public class TreeItemWrapper implements RowWidget {
   public void setText(int index, String text) {
     item.setText(index,text);
   }
+
+  public void makeCellEditable(int index) {
+    
+  }
   
 
 }

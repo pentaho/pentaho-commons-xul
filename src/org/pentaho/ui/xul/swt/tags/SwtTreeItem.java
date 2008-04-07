@@ -15,29 +15,27 @@ public class SwtTreeItem extends SwtElement implements XulTreeItem {
 
   protected XulTreeChildren parentTreeChildren = null;
   
-  protected List <XulTreeRow> rows;
+  protected XulTreeRow row;
   
-  protected List <XulTreeChildren> treeChildren;
+  protected XulTreeChildren treeChildren;
 
   private boolean container = false;
   
   private boolean empty = false;
   
+  public SwtTreeItem(XulComponent parent){
+    this(parent, null, "treeitem");
+  }
+  
   public SwtTreeItem(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     parentTreeChildren = (XulTreeChildren)parent;
-    rows = new ArrayList <XulTreeRow>();
-    treeChildren = new ArrayList <XulTreeChildren>();
     parentTreeChildren.addItem(this);
     
   }
   
-  public void addRow(XulTreeRow row){
-    rows.add(row);
-  }
-  
   public void addTreeChildren(XulTreeChildren children){
-    treeChildren.add(children);
+    this.treeChildren = children;
   }
   
   public boolean isContainer() {
@@ -65,6 +63,12 @@ public class SwtTreeItem extends SwtElement implements XulTreeItem {
     return parentTreeChildren.getTree();
   }
 
-  
+  public XulTreeRow getRow() {
+    return row;
+  }
+
+  public void setRow(XulTreeRow row) {
+    this.row = row;
+  }
 
 }

@@ -29,5 +29,7 @@ public interface XulTree extends XulContainer {
   public void setColumns(XulTreeCols columns);
   public XulTreeCols getColumns();
 
+  public XulTreeChildren getRootChildren() ;
+  public void setRootChildren(XulTreeChildren rootChildren) ;
 
 }

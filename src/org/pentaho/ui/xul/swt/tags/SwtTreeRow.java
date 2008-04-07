@@ -26,6 +26,10 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
   
   int cellCount = 0;
   
+  public SwtTreeRow(XulComponent parent){
+    this(parent, null, "treerow");
+  }
+  
   public SwtTreeRow(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     rowParent = (XulTreeItem)parent;
@@ -36,6 +40,9 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
     managedObject = item;
     
     cells = new ArrayList<XulTreeCell>();
+    
+    rowParent.setRow(this);
+    
   }
 
   public void addCell(XulTreeCell cell) {
@@ -50,5 +57,7 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
     super.layout();
   }
   
-
+  public void makeCellEditable(int index){
+    widget.makeCellEditable(index);
+  }
 }

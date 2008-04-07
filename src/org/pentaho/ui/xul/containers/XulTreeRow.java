@@ -6,5 +6,7 @@ import org.pentaho.ui.xul.components.XulTreeCell;
 public interface XulTreeRow extends XulContainer {
   
     public void addCell(XulTreeCell cell);
+    
+    public void makeCellEditable(int index);
 
 }

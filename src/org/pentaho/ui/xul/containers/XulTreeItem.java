@@ -13,4 +13,8 @@ public interface XulTreeItem extends XulContainer {
   public boolean isHierarchical();
   public XulTree getTree();
   
+  public XulTreeRow getRow();
+  public void setRow(XulTreeRow row);
+  
+  
 }
