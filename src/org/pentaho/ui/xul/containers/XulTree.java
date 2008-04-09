@@ -31,5 +31,8 @@ public interface XulTree extends XulContainer {
 
   public XulTreeChildren getRootChildren() ;
   public void setRootChildren(XulTreeChildren rootChildren) ;
+  
+  public void setActiveCellCoordinates(int row, int column);
+  public int[] getActiveCellCoordinates();
 
 }

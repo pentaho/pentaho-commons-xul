@@ -16,5 +16,7 @@ public interface XulTreeItem extends XulContainer {
   public XulTreeRow getRow();
   public void setRow(XulTreeRow row);
   
+  public void remove();
+  
   
 }

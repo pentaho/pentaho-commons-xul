@@ -63,4 +63,20 @@ public class SwtTreeChildren extends SwtElement implements XulTreeChildren {
     return items.get(rowIndex);
   }
 
+  public void removeItem(int rowIndex) {
+    if (rowIndex < items.size()){
+      XulTreeItem itemToRemove = getItem(rowIndex);
+      removeItem(itemToRemove);
+    }
+  }
+
+  public void removeItem(XulTreeItem item) {
+    items.remove(item);
+    if (items.contains(item)){
+      System.out.println("Problem!! item not gone...");
+    }
+    item.remove();
+  }
+
+
 }

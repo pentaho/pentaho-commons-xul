@@ -47,7 +47,10 @@ public class SwtTree extends SwtElement implements XulTree {
 
   private TableSelection selType = TableSelection.SINGLE;
 
-  boolean isHierarchical = false;
+  private boolean isHierarchical = false;
+  
+  private int activeRow = -1;
+  private int activeColumn = -1;
 
   public SwtTree(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -197,6 +200,16 @@ public class SwtTree extends SwtElement implements XulTree {
 
   public void setRootChildren(XulTreeChildren rootChildren) {
     this.rootChildren = rootChildren;
+  }
+
+  public int[] getActiveCellCoordinates() {
+    return new int[]{activeRow, activeColumn};
+  }
+
+  public void setActiveCellCoordinates(int row, int column) {
+    activeRow = row;
+    activeColumn = column;
+    
   }
 
   /* =================================================================================== */

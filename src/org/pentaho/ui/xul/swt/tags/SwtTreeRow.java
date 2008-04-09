@@ -60,4 +60,9 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
   public void makeCellEditable(int index){
     widget.makeCellEditable(index);
   }
+  
+  public void remove(){
+    widget.remove();
+    rowParent.setRow(null);
+  }
 }

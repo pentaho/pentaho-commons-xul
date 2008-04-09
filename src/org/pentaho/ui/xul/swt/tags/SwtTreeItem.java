@@ -1,8 +1,5 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -34,8 +31,8 @@ public class SwtTreeItem extends SwtElement implements XulTreeItem {
     
   }
   
-  public void addTreeChildren(XulTreeChildren children){
-    this.treeChildren = children;
+  public void addTreeChildren(XulTreeChildren ch){
+    this.treeChildren = ch;
   }
   
   public boolean isContainer() {
@@ -69,6 +66,11 @@ public class SwtTreeItem extends SwtElement implements XulTreeItem {
 
   public void setRow(XulTreeRow row) {
     this.row = row;
+  }
+
+  public void remove() {
+    row.remove();
+    //parentTreeChildren.removeItem(this);
   }
 
 }

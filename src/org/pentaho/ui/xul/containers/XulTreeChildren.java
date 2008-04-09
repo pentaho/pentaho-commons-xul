@@ -8,10 +8,13 @@ public interface XulTreeChildren extends XulContainer {
   public boolean isAlternatingbackground();
   
   public void addItem(XulTreeItem item);
+  public void removeItem(XulTreeItem item);
+  
   public XulTreeRow addNewRow();
   
   public XulTreeItem getItem(int rowIndex);
-  
+  public void removeItem(int rowIndex);
+
   public boolean isHierarchical();
   public XulTree getTree();
 

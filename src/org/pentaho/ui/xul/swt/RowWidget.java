@@ -9,5 +9,10 @@ public interface RowWidget {
   public Item getItem();
   
   public void setText(int index, String text);
+  
+  public void makeCellEditable(int index);
+  
+  public void remove();
+  
 
 }

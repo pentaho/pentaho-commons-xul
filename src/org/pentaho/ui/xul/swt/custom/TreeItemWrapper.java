@@ -28,5 +28,9 @@ public class TreeItemWrapper implements RowWidget {
     
   }
   
+  public void remove(){
+    
+  }
+  
 
 }
