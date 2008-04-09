@@ -179,6 +179,10 @@ public class SwingWindow extends SwingElement implements XulWindow {
   public void close() {
     frame.setVisible(false);
   }
+  
+  public boolean isClosed(){
+    return !frame.isVisible();
+  }
 
   public void open() {
     frame.setVisible(true);

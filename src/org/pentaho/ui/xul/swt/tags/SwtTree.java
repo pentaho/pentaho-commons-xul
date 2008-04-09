@@ -64,8 +64,8 @@ public class SwtTree extends SwtElement implements XulTree {
 
     isHierarchical = (primaryColumn != null) && (isaContainer != null);
 
-    widget = isHierarchical ? new TreeWrapper(selType, (Composite) parent.getManagedObject(), this) : new TableWrapper(
-        selType, (Composite) parent.getManagedObject(), this);
+    widget = isHierarchical ? new TreeWrapper(selType, (Composite) parent.getManagedObject(), this) : 
+                              new TableWrapper(selType, (Composite) parent.getManagedObject(), this);
 
     tree = widget.getComposite();
 
@@ -210,6 +210,10 @@ public class SwtTree extends SwtElement implements XulTree {
     activeRow = row;
     activeColumn = column;
     
+  }
+
+  public Object[][] getValues() {
+    return widget.getValues();
   }
 
   /* =================================================================================== */

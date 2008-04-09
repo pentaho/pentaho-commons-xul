@@ -13,7 +13,6 @@ import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingXulRunner;
 
 public class XulWindowContainer extends AbstractXulDomContainer {
@@ -47,7 +46,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       
     }
 
-    XulComponent rootElement = (XulComponent)this.getDocumentRoot().getRootElement();
+    XulComponent rootElement = this.getDocumentRoot().getRootElement();
     
     Class<?> c;
     try {
@@ -68,6 +67,10 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   @Override
   public void close() {
     ((XulWindow) this.windows.get(0).getRootElement()).close();
+  }
+
+  public boolean isClosed() {
+    return ((XulWindow) this.windows.get(0).getRootElement()).isClosed();
   }
 
   @Override

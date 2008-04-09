@@ -122,5 +122,9 @@ public class SwtWindow extends SwtElement implements XulWindow {
   public void close() {
     shell.dispose();
   }
+  
+  public boolean isClosed(){
+    return shell.isDisposed();
+  }
 
 }

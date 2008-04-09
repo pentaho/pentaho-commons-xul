@@ -34,5 +34,7 @@ public interface XulTree extends XulContainer {
   
   public void setActiveCellCoordinates(int row, int column);
   public int[] getActiveCellCoordinates();
+  
+  public Object[][] getValues();
 
 }

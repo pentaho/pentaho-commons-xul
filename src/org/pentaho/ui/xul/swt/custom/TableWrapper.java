@@ -12,6 +12,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
@@ -55,6 +56,27 @@ public class TableWrapper implements TabularWidget {
 
   public Composite getComposite() {
     return table;
+  }
+  
+  public Object[][] getValues(){
+    String [][] values = null;
+
+    int columnCount = table.getColumnCount();
+    int rowCount = table.getItemCount();
+    
+    if ((columnCount <= 0) || (rowCount <=0)){
+      return new String[0][0];
+    }
+    
+    values = new String[rowCount][columnCount];
+    
+    for (int i = 0; i < rowCount; i++) {
+      for (int j = 0; j < columnCount; j++) {
+        values[i][j] = table.getItem(i).getText(j);
+      }
+    }
+    
+    return values;
   }
 
   /* ================================================================================ */

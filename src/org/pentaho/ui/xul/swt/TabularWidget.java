@@ -10,6 +10,8 @@ public interface TabularWidget {
   
   public Composite getComposite();
   
+  public Object[][] getValues();
+  
   
   
 }

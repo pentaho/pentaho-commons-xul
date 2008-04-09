@@ -7,6 +7,8 @@ public interface XulTreeRow extends XulContainer {
   
     public void addCell(XulTreeCell cell);
     
+    public void addCellText(int index, String text);
+    
     public void makeCellEditable(int index);
     
     public void remove();

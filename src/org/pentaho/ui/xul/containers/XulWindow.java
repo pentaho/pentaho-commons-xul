@@ -87,5 +87,7 @@ public interface XulWindow extends XulContainer{
    */
   public void close();
   
+  public boolean isClosed();
+  
   
 }

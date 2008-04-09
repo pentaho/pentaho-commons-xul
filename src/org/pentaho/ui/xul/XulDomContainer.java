@@ -28,4 +28,6 @@ public interface XulDomContainer {
   public void initialize();
   
   public void close();
+  
+  public boolean isClosed();
 }

@@ -28,4 +28,8 @@ public class TreeWrapper implements TabularWidget {
     return tree;
   }
 
+  public Object[][] getValues() {
+    return null;
+  }
+
 }

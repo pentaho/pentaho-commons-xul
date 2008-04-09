@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Item;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Tree;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
@@ -23,8 +21,6 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
   protected XulTreeItem rowParent;
   
   private List <XulTreeCell> cells = null;
-  
-  int cellCount = 0;
   
   public SwtTreeRow(XulComponent parent){
     this(parent, null, "treerow");
@@ -49,8 +45,22 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
     cells.add(cell);
   }
 
+  public void addCellText(int index, String text) {
+    
+    SwtTreeCell cell  = null;
+    if(index < cells.size()){
+      cell = (SwtTreeCell)cells.get(index);
+      cell.setLabel(text);
+    }else{
+      cell = new SwtTreeCell(this);
+      cell.setLabel(text);
+    }
+    layout();
+  }
+
   @Override
   public void layout() {
+    int cellCount = 0;
     for (XulTreeCell cell : cells) {
       widget.setText(cellCount++, cell.getLabel());
     }

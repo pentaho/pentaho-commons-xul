@@ -14,6 +14,10 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
   XulTreeRow parentRow;
   boolean isEditable=false;
   
+  public SwtTreeCell(XulComponent parent){
+    this(parent,null,"treecell");
+  }
+
   public SwtTreeCell(XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     parentRow = (XulTreeRow)parent;

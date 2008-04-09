@@ -39,6 +39,10 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
   public void close() {
   }
 
+  public boolean isClosed(){
+    return false;
+  }
+
   @Override
   public XulFragmentContainer loadFragment(String xulLocation) throws XulException{
     System.out.println("loadFragment not implemented in XulFragmentContainer");
