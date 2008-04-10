@@ -12,7 +12,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
@@ -30,9 +29,10 @@ public class TableWrapper implements TabularWidget {
 
     this.owner = owner;
 
-    table = new Table(parent, selection.getSwtStyle());
+    table = new Table(parent, selection.getSwtStyle()|SWT.BORDER);
     table.setHeaderVisible(true);
     table.setLinesVisible(true);
+    
 
     table.addMouseListener(new TableMouseAdapter());
     table.addKeyListener(new TableKeyAdapter());
@@ -77,6 +77,10 @@ public class TableWrapper implements TabularWidget {
     }
     
     return values;
+  }
+  
+  public int getSelectionIndex(){
+    return table.getSelectionIndex();
   }
 
   /* ================================================================================ */

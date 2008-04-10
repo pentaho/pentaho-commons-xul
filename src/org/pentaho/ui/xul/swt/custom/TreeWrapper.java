@@ -32,4 +32,8 @@ public class TreeWrapper implements TabularWidget {
     return null;
   }
 
+  public int getSelectionIndex() {
+    return 0;
+  }
+
 }

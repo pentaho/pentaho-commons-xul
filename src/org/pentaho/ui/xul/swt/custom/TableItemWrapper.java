@@ -7,19 +7,14 @@ import org.apache.commons.collections.map.HashedMap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -164,14 +159,6 @@ public class TableItemWrapper implements RowWidget {
     Listener textListener = new Listener () {
       public void handleEvent (final Event e) {
         switch (e.type) {
-          case SWT.MouseHover:
-          case SWT.MouseEnter:
-
-            Element rootElement = parentTree.getDocument().getRootElement();
-            XulWindow window = (XulWindow) rootElement;
-            window.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
-            
-            break;
           case SWT.FocusOut:
             item.setText (index, ((Text)e.widget).getText ());
             ((Text)e.widget).dispose ();
@@ -190,8 +177,6 @@ public class TableItemWrapper implements RowWidget {
       }
     };
     
-    edit.addListener (SWT.MouseHover, textListener);
-    edit.addListener (SWT.MouseEnter, textListener);
     edit.addListener (SWT.FocusOut, textListener);
     edit.addListener (SWT.Traverse, textListener);
     edit.addTraverseListener(new TraverseListener(){
@@ -232,11 +217,13 @@ public class TableItemWrapper implements RowWidget {
     check.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(SelectionEvent e){
         item.setText(index, String.valueOf(((Button)e.widget).getSelection()));
-       
+
+        // send all selection events back through to the parent table with the selection index... 
         Element rootElement = parentTree.getDocument().getRootElement();
         XulWindow window = (XulWindow) rootElement;
         window.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
-      }
+      
+        }
     });
     
     Listener textListener = new Listener () {
