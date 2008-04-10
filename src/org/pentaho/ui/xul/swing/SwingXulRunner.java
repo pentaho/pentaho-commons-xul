@@ -89,7 +89,7 @@ public class SwingXulRunner implements XulRunner {
   public static void main(String[] args) {
     try{
       
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/sampleXul.xul");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/menuTest.xul");
       //InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/datasource.xul");
 
       if(in == null){

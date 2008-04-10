@@ -45,8 +45,11 @@ public class SwtListbox extends SwtElement implements XulListbox{
     this.rowsToDisplay = rowsToDisplay;
     if ((!listBox.isDisposed()) && (rowsToDisplay > 0)){
       int height = rowsToDisplay * listBox.getItemHeight();
+
+      //listBox.setSize(listBox.getSize().x,height);
       if (listBox.getLayoutData() != null){
         ((GridData)listBox.getLayoutData()).heightHint = height;
+        ((GridData)listBox.getLayoutData()).minimumHeight = height;
       }
     }
   }

@@ -7,14 +7,19 @@ import org.apache.commons.collections.map.HashedMap;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -28,6 +33,8 @@ import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
+import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.RowWidget;
 import org.pentaho.ui.xul.util.ColumnType;
 
@@ -51,7 +58,6 @@ public class TableItemWrapper implements RowWidget {
     textEditor = new TableEditor(parentTable);
     
     parentTree = parent;
-    
     
     XulTreeCols columns = parent.getColumns();
    
@@ -152,10 +158,20 @@ public class TableItemWrapper implements RowWidget {
         item.setText(index, ((Text)event.widget).getText());
       }
     });
-   
+    
+      
+    
     Listener textListener = new Listener () {
       public void handleEvent (final Event e) {
         switch (e.type) {
+          case SWT.MouseHover:
+          case SWT.MouseEnter:
+
+            Element rootElement = parentTree.getDocument().getRootElement();
+            XulWindow window = (XulWindow) rootElement;
+            window.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
+            
+            break;
           case SWT.FocusOut:
             item.setText (index, ((Text)e.widget).getText ());
             ((Text)e.widget).dispose ();
@@ -168,11 +184,14 @@ public class TableItemWrapper implements RowWidget {
               case SWT.TRAVERSE_ESCAPE:
                e.doit = false;
             }
+
             break;
         }
       }
     };
     
+    edit.addListener (SWT.MouseHover, textListener);
+    edit.addListener (SWT.MouseEnter, textListener);
     edit.addListener (SWT.FocusOut, textListener);
     edit.addListener (SWT.Traverse, textListener);
     edit.addTraverseListener(new TraverseListener(){
@@ -204,6 +223,7 @@ public class TableItemWrapper implements RowWidget {
     checkEditor = new TableEditor(parentTable);
     checkEditor.setEditor(check, item, index);
     checkEditor.grabHorizontal=true;
+
     checkedEditors.put(new Integer(index), checkEditor);
     
     check.setSelection(Boolean.valueOf(item.getText(index)));
@@ -212,6 +232,10 @@ public class TableItemWrapper implements RowWidget {
     check.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(SelectionEvent e){
         item.setText(index, String.valueOf(((Button)e.widget).getSelection()));
+       
+        Element rootElement = parentTree.getDocument().getRootElement();
+        XulWindow window = (XulWindow) rootElement;
+        window.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
       }
     });
     

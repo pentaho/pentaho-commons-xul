@@ -172,7 +172,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
       if (comp instanceof SwingScript) {
         SwingScript script = (SwingScript) comp;
         this.xulDomContainer.addEventHandler(script.getId(), script.getSrc());
-      }
+      } 
     }
   }
 

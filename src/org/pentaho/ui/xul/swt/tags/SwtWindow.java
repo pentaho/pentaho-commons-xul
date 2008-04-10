@@ -29,7 +29,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   public SwtWindow(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
-    shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.SHELL_TRIM) : new Shell(SWT.SHELL_TRIM);
+    shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.DIALOG_TRIM) : new Shell(SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());
     managedObject = shell;
     xulDomContainer = container;
@@ -67,9 +67,19 @@ public class SwtWindow extends SwtElement implements XulWindow {
       String methodName = pair[1];
 
       XulEventHandler evt = this.xulDomContainer.getEventHandler(eventID);
-      Method m = evt.getClass().getMethod(methodName, new Class[0]);
-      m.invoke(evt, args);
-
+      if(args.length > 0){
+        Class[] classes = new Class[args.length];
+        
+        for(int i=0; i<args.length; i++){
+          classes[i] = args[i].getClass();
+        }
+        
+        Method m = evt.getClass().getMethod(methodName, classes);
+        m.invoke(evt, args);
+      } else {
+        Method m = evt.getClass().getMethod(methodName, new Class[0]);
+        m.invoke(evt, args);
+      }
     } catch (Exception e) {
       System.out.println("Error invoking method: " + method);
       e.printStackTrace(System.out);
@@ -78,6 +88,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   public void setTitle(String title) {
     Display.setAppName(title);
+    shell.setText(title);
 
   }
 

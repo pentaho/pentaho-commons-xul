@@ -9,6 +9,6 @@ import org.pentaho.ui.xul.XulComponent;
  * @author OEM
  *
  */
-public interface XulMenuseperator extends XulComponent {
+public interface XulMenuseparator extends XulComponent {
 
 }
