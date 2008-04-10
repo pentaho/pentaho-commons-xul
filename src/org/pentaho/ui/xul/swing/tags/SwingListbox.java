@@ -144,4 +144,8 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   public int[] getSelectedIndices() {
     return listBox.getSelectedIndices();
   }
+
+  public void setSelectedIndex(int index) {
+    listBox.setSelectedIndex(index);
+  }
 }

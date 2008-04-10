@@ -101,6 +101,12 @@ public interface XulListbox extends XulContainer {
   
   /**
    * 
+   * @param index Set the given index as selected in the listbox. 
+   */
+  public void setSelectedIndex(int index);
+
+  /**
+   * 
    * @return if the list is a multiple selection listbox, 
    * then return the list of selected items. If single select, 
    * this will be a list of one, and you should use the 

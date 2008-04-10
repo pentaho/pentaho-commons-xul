@@ -148,4 +148,11 @@ public class SwtListbox extends SwtElement implements XulListbox{
     return (!listBox.isDisposed()) ? listBox.getItemCount() : 0;
   }
 
+  public void setSelectedIndex(int index) {
+    if (listBox.isDisposed()){
+      // TODO log error .. 
+    }
+    listBox.setSelection(index);
+  }
+
 }

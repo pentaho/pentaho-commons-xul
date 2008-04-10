@@ -116,6 +116,14 @@ public class TableItemWrapper implements RowWidget {
     if ((control != null) && (control instanceof Text)){
       ((Text)control).setText(item.getText(index));
     }
+    
+    if(checkedEditors.containsKey(new Integer(index))){
+      control = ((TableEditor)checkedEditors.get(new Integer(index))).getEditor();
+      if ((control != null) && (control instanceof Button)){
+        boolean checked = item.getText(index).equalsIgnoreCase("true");
+        ((Button)control).setSelection(checked);
+      }
+    }
   }
   
   private void createEditableText(final int index){
@@ -184,8 +192,8 @@ public class TableItemWrapper implements RowWidget {
     TableEditor checkEditor = null;
     Button check = null;
     
-    if (checkedEditors.containsKey(index)){
-      checkEditor = (TableEditor)checkedEditors.get(index);
+    if (checkedEditors.containsKey(new Integer(index))){
+      checkEditor = (TableEditor)checkedEditors.get(new Integer(index));
       check = (Button) checkEditor.getEditor();
       check.setSelection(Boolean.valueOf(item.getText(index)));
       check.setFocus();
@@ -196,7 +204,8 @@ public class TableItemWrapper implements RowWidget {
     checkEditor = new TableEditor(parentTable);
     checkEditor.setEditor(check, item, index);
     checkEditor.grabHorizontal=true;
-
+    checkedEditors.put(new Integer(index), checkEditor);
+    
     check.setSelection(Boolean.valueOf(item.getText(index)));
     check.setFocus();
     
