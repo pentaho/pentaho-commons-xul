@@ -107,7 +107,7 @@
 			<classpath location="${bin.dir}" />
 			
 			<classpath location="${test-bin.dir}" />
-		  <formatter type="plain" usefile="false"/>
+		  <formatter type="xml" usefile="false"/>
 		
 		  <batchtest todir="${src.tests}">
 			
