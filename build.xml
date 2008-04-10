@@ -44,7 +44,7 @@
 		<delete dir="dist"/>
 	</target>
 
-	<target name="compile" depends="clean, init">
+	<target name="compile" depends="init">
 		<!-- Compile all java classes -->
 		<mkdir dir="${bin.dir}"/>
 		<javac destdir="${bin.dir}" debug="true" optimize="true" deprecation="true" fork="true" source="1.5" target="1.5">
