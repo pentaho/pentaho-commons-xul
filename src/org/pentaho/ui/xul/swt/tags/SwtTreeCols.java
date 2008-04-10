@@ -94,7 +94,7 @@ public class SwtTreeCols extends SwtElement implements XulTreeCols {
       for (XulTreeCol col : columns) {
         if (col.getFlex() > 0){
           float width = ((float)col.getFlex()/(float)totalFlex);
-          col.setWidth((int)(width * treeWidth));
+          col.setWidth((int)(width * treeWidth - 3));
         }else {
           col.autoSize();
         }

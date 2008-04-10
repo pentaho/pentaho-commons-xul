@@ -1,16 +1,8 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -26,12 +18,11 @@ import org.pentaho.ui.xul.swt.custom.TreeWrapper;
 
 public class SwtTree extends SwtElement implements XulTree {
 
-  // TODO Code review! This may be a bit hokey - tables and trees 
+  // Tables and trees 
   // share so much of the same API, I wrapped their common methods 
   // into an interface (TabularWidget) and set the component to two
   // separate member variables here so that I don't have to reference 
-  // them separately. Too much work for a little convenience? 
-  // Is there a better way? 
+  // them separately.  
 
   protected TabularWidget widget;
 
@@ -106,6 +97,7 @@ public class SwtTree extends SwtElement implements XulTree {
         tree.setSize(tree.getSize().x,height);
         ((GridData) tree.getLayoutData()).heightHint = height;
         ((GridData) tree.getLayoutData()).minimumHeight = height;
+        tree.getParent().layout(true);
       }
     }
   }
@@ -152,42 +144,17 @@ public class SwtTree extends SwtElement implements XulTree {
     }
     onSelect = method;
 
-
-    Listener textListener = new Listener () {
-      public void handleEvent (final Event e) {
-        switch (e.type) {
-          case SWT.MouseHover:
-          case SWT.MouseEnter:
-          case SWT.MouseDown:
-            
-
-            Element rootElement = getDocument().getRootElement();
-            XulWindow window = (XulWindow) rootElement;
-            Table tbl = ((Table) tree);
-            //not working on anythin but checkbox
-            /*TableItem item = ((Table) tree).getItem(new Point(e.x, e.y));
-            if(item == null)
-              return;
-            int index = ((Table) e.widget).indexOf(item);
-            */
-            int height = tbl.getItemHeight();
-            int index = (int) Math.ceil(e.y / height) - 1;
-            
-            window.invoke(getOnselect(), new Object[] {new Integer(index)});
-            
-            break;
-        }
-      }
-    };
-    
-    tree.addListener (SWT.MouseHover, textListener);
-    tree.addListener (SWT.MouseEnter, textListener);
-    tree.addListener (SWT.MouseDown, textListener);
-    
-    
     if (tree.isDisposed()) {
       return;
     }
+
+    widget.addSelectionListener(new SelectionAdapter() {
+      public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        Element rootElement = getDocument().getRootElement();
+        XulWindow window = (XulWindow) rootElement;
+        window.invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
+      }
+    });
   }
 
   @Override
