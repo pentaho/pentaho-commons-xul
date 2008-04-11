@@ -25,7 +25,7 @@ public class SwtCheckbox extends SwtButton implements XulCheckbox {
   }
 
   public void setChecked(boolean checked) {
-    button.setSelection(checked);
+    if ((!button.isDisposed()) && (button != null)) button.setSelection(checked);
   }
   
   public void setCommand(final String method) {
