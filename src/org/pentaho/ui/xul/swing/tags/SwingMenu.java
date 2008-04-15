@@ -45,42 +45,34 @@ public class SwingMenu extends SwingElement implements XulMenu{
   
   
   
-  @Override
   public String getAcceltext() {
     return String.valueOf(menu.getAccelerator().getKeyChar());
   }
 
-  @Override
   public String getAccesskey() {
     return String.valueOf(menu.getText().charAt(menu.getDisplayedMnemonicIndex()));
   }
 
-  @Override
   public boolean getDisabled() {
     return menu.isEnabled();
   }
 
-  @Override
   public String getLabel() {
     return menu.getText();
   }
 
-  @Override
   public void setAcceltext(String accel) {
     menu.setAccelerator(KeyStroke.getKeyStroke(accel));
   }
 
-  @Override
   public void setAccesskey(String accessKey) {
     menu.setMnemonic(accessKey.charAt(0));
   }
 
-  @Override
   public void setDisabled(boolean disabled) {
     menu.setEnabled(disabled);
   }
 
-  @Override
   public void setLabel(String label) {
     menu.setText(label);
   }
