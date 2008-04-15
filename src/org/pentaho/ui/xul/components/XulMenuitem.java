@@ -28,5 +28,8 @@ public interface XulMenuitem extends XulComponent {
   
   public boolean isSelected();
   
+  public void setCommand(String command);
+  public String getCommand();
+  
 
 }

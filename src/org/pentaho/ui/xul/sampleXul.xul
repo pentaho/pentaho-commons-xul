@@ -3,8 +3,10 @@
 <window width="400" height="275" title="Testing..."
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-	<script src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
-	<script src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>
+	<script type="java" src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
+	<script type="java" src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>
+	<script type="groovy" src="org.pentaho.ui.xul.samples.SampleHandler.groovy" id="testHandler3"/>
+	
 	<vbox>
 		<spacer size="20"/>
 		<groupbox>
@@ -19,7 +21,7 @@
 				<hbox>
 					<button label="Say Hi!" onclick="testHandler.sayHello()"/>
 					<spacer size="8"/>
-					<button label="Say Hi2!" onclick="testHandler2.sayHello()"/>
+					<button label="Say Hi2!" onclick="testHandler3.sayHello()"/>
 				</hbox>
 				<spacer size="5"/>
 				<label value="" id="response" />

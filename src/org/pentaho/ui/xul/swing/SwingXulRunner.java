@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.impl.XulServiceCall;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
+import org.pentaho.ui.xul.util.XulUtil;
 
 /**
  * @author OEM
@@ -89,7 +90,8 @@ public class SwingXulRunner implements XulRunner {
   public static void main(String[] args) {
     try{
       
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/menuTest.xul");
+      InputStream in = XulUtil.getResourceFromClassPath("org/pentaho/ui/xul/samples/menuTest.xul");
+      
       //InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/datasource.xul");
 
       if(in == null){
