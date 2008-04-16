@@ -70,7 +70,14 @@ public interface XulTextbox extends XulComponent {
   public void setMultiline(boolean multi);
   
   
+  public boolean isReadonly();
   
+  public void setReadonly(boolean readOnly);
+
+  public String getType();
+
+  public void setType(String type);
+
   
 
 }

@@ -60,4 +60,20 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     
   }
 
+  public boolean isReadonly() {
+    return false;
+  }
+
+  public void setReadonly(boolean readOnly) {
+    
+  }
+
+  public String getType() {
+    return null;
+  }
+
+  public void setType(String type) {
+    
+  }
+
 }

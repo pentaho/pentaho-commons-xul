@@ -6,6 +6,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.util.TextType;
 
 public class SwtTextbox extends SwtElement implements XulTextbox {
   private static final long serialVersionUID = 4928464432190672877L;
@@ -14,8 +15,10 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private Composite parentComposite = null;
   private boolean disabled = false;
   private boolean multiLine = false;
+  private boolean readOnly = false;
   private int maxLength;
   private String text;
+  private TextType type = null;
 
   public SwtTextbox(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -81,6 +84,8 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     multiLine = multi;
     textBox.dispose();
   }
+  
+  
 
   @Override
   /**
@@ -96,10 +101,56 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
       setDisabled(disabled);
       setMaxlength(maxLength);
       setValue(text);
+      setReadonly(readOnly);
+      setType(type);
       managedObject = textBox;
     }
     return managedObject;
   }
+
+  public boolean isReadonly() {
+    if (!textBox.isDisposed()){
+      readOnly = !textBox.getEditable();
+    }
+    return readOnly;
+  }
+
+  public void setReadonly(boolean readOnly) {
+    this.readOnly = readOnly;
+    if (!textBox.isDisposed()) textBox.setEditable(!readOnly);
+  }
+
+  public String getType() {
+    if (type == null){
+      return null;
+    }
+    
+    return type.toString();
+  }
+
+  public void setType(String type) {
+    if (type == null){
+      return;
+    }
+    setType(TextType.valueOf(type.toUpperCase()));
+  }
   
+  public void setType(TextType type) {
+    this.type = type;
+    if (this.type == null){
+      return;
+    }
+    if (!textBox.isDisposed()) {
+      
+      switch(this.type){
+        case PASSWORD:
+          textBox.setEchoChar('*');
+          break;
+        default:
+          // TODO log not implemented yet for autocomplete, number, timed
+      }
+    }
+    
+  }
 
 }
