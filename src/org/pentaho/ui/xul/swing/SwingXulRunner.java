@@ -6,6 +6,7 @@ package org.pentaho.ui.xul.swing;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 
@@ -90,20 +91,16 @@ public class SwingXulRunner implements XulRunner {
   public static void main(String[] args) {
     try{
       
-      InputStream in = XulUtil.getResourceFromClassPath("org/pentaho/ui/xul/samples/menuTest.xul");
-      
-      //InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/samples/datasource.xul");
+ 
+//      XulDomContainer container = new SwingXulLoader().loadXul(
+//    		  "resource/documents/internationalization.xul", 
+//    		  ResourceBundle.getBundle("resource/documents/internationalization2")
+//      );
 
-      if(in == null){
-        System.out.println("Input is null");
-        System.exit(123);
-      }
-
-      SAXReader rdr = new SAXReader();
-      final Document doc = rdr.read(in);
-      
-      XulDomContainer container = new SwingXulLoader().loadXul(doc);
-
+    	XulDomContainer container = new SwingXulLoader().loadXul(
+      		  "resource/documents/internationalization.xul"
+        );
+    	
       XulRunner runner = new SwingXulRunner();
       runner.addContainer(container);
       

@@ -7,8 +7,9 @@
 	<classpathentry kind="lib" path="lib-ext/jaxen-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib-ext/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib-test/junit-4.4.jar"/>
-	<classpathentry kind="lib" path="lib-swt/win32/swt.jar"/>
 	<classpathentry kind="lib" path="lib-ext/commons-beanutils-1.8.0-BETA.jar"/>
 	<classpathentry kind="lib" path="lib-ext/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib-swt/linux/x86/swt.jar"/>
+	<classpathentry kind="lib" path="lib/freemarker-2.3.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

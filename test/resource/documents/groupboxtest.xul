@@ -16,7 +16,7 @@
 		</groupbox>
 
 		<groupbox id="general-settings-box" orient="vertical" flex="8">
-			<label id="connection-name-label" value="Connection Name:" />
+			<label id="connection-name-label" value="${connection_name}" />
 			<textbox id="connection-name-text" />
 			<hbox id="button-box" flex="1">
 				<vbox id="type-box" flex="1">
