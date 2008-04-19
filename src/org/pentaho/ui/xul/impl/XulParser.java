@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.dom4j.Attribute;
+import org.dom4j.Namespace;
+import org.dom4j.QName;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -15,7 +18,6 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.util.XulUtil;
 
 /**
@@ -116,7 +118,18 @@ public class XulParser {
 
   protected XulComponent getElement(org.dom4j.Element srcEle, XulContainer parent) throws XulException {
 
-    Object handler = handlers.get(srcEle.getName().toUpperCase());
+    String handlerName = srcEle.getName().toUpperCase();
+    Attribute att = srcEle.attribute(new QName("customclass",new Namespace("pen", "http://www.pentaho.org/2008/xul")));
+    
+    // If the custom handler is registered, use it; otherwise, fall back to the original element handler...
+    if (att != null){
+      String potentialHandlerName = att.getValue().toUpperCase();
+      if (handlers.get(potentialHandlerName)!=null){
+        handlerName = potentialHandlerName;
+      }
+    }
+
+    Object handler = handlers.get(handlerName);
 
     if (handler == null) {
       System.out.println("handler not found: " + srcEle.getName().toUpperCase());

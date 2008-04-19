@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
@@ -11,8 +12,8 @@ import org.pentaho.ui.xul.util.TextType;
 public class SwtTextbox extends SwtElement implements XulTextbox {
   private static final long serialVersionUID = 4928464432190672877L;
 
-  private org.eclipse.swt.widgets.Text textBox;
-  private Composite parentComposite = null;
+  protected org.eclipse.swt.widgets.Text textBox;
+  protected Composite parentComposite = null;
   private boolean disabled = false;
   private boolean multiLine = false;
   private boolean readOnly = false;
@@ -23,8 +24,12 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   public SwtTextbox(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     parentComposite = (Composite)parent.getManagedObject();
-    textBox = new org.eclipse.swt.widgets.Text(parentComposite, SWT.BORDER);
+    textBox = createNewText();
     managedObject = textBox;
+  }
+  
+  public Text createNewText(){
+    return new org.eclipse.swt.widgets.Text(parentComposite, SWT.BORDER);
   }
 
   /**

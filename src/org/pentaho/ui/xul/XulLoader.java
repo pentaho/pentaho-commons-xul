@@ -96,4 +96,6 @@ public interface XulLoader {
    * @throws XulException Exception thrown if errors encountered getting an instance of the parser. 
    */
   public XulDomContainer loadXulFragment(String resource, ResourceBundle bundle) throws  XulException;
+  
+  public void register(String tagName, String className);
 }

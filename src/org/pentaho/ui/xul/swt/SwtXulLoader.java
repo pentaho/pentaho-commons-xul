@@ -215,4 +215,9 @@ public class SwtXulLoader implements XulLoader {
     	  throw new XulException("Error processing Xul Document in Freemarker", e);
       }
   }
+
+  public void register(String tagName, String className) {
+    parser.registerHandler(tagName, className);
+  }
+
 }
