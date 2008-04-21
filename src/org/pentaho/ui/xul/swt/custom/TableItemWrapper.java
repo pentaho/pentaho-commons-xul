@@ -34,7 +34,6 @@ import org.pentaho.ui.xul.swt.RowWidget;
 import org.pentaho.ui.xul.util.ColumnType;
 
 public class TableItemWrapper implements RowWidget {
-
   
   TableItem item = null;
   Table parentTable = null;
@@ -73,7 +72,6 @@ public class TableItemWrapper implements RowWidget {
       }
     }
     
-
   }
   
   public void makeCellEditable(int index){
@@ -286,7 +284,6 @@ public class TableItemWrapper implements RowWidget {
     }
     
   }
-  
   
   /* =================================================================================== */
 

@@ -37,4 +37,8 @@ public interface XulTreeCol extends XulComponent {
   public int getWidth();
   
   public void autoSize();
+  
+  public String getCustomclass();
+  public void setCustomclass(String customClass);
+
 }

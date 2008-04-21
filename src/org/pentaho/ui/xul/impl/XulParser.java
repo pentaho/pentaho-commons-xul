@@ -27,7 +27,7 @@ import org.pentaho.ui.xul.util.XulUtil;
 public class XulParser {
   Document xulDocument;
 
-  static Map<String, Object> handlers = new HashMap<String, Object>();
+  public static Map<String, Object> handlers = new HashMap<String, Object>();
 
   private XulDomContainer xulDomContainer;
 
