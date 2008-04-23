@@ -38,7 +38,7 @@ public class SwtXulRunner implements XulRunner {
 
     // TODO Should initialize return a status? Reply: Just let them catch the Exception
 
-    XulComponent rootEle = (XulComponent)containers.get(0).getDocumentRoot().getRootElement();
+    XulComponent rootEle = containers.get(0).getDocumentRoot().getRootElement();
 
     if (rootEle instanceof SwtWindow) {
       rootFrame = (Composite) rootEle.getManagedObject();

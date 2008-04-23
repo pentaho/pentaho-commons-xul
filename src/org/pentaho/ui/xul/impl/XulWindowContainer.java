@@ -38,30 +38,14 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   }
 
   public XulMessageBox createMessageBox(String message) {
-    Object handler = XulParser.handlers.get("MESSAGEBOX");
-
-    if (handler == null) {
-      //TODO: add logging, discuss Exception handling
-      System.out.println("Dialog handler not found: ");
-      
-    }
 
     XulComponent rootElement = this.getDocumentRoot().getRootElement();
-    
-    Class<?> c;
-    try {
-      c = Class.forName((String) handler);
-      Constructor<?> constructor = c
-          .getConstructor(new Class[] { XulComponent.class, String.class });
-      XulMessageBox ele = (XulMessageBox) constructor.newInstance(rootElement, message);
-      
-      return ele;
-    } catch (Exception e) {
-      //TODO: add logging, discuss Exception handling
-      System.out.println(String.format("Error Creating Message Dialog: %s",e.getMessage()));
-      e.printStackTrace(System.out);
-      return null;
-    }
+    return (XulMessageBox)createInstance(rootElement, "MESSAGEBOX", new Object[]{message});
+  }
+
+  public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
+    XulComponent rootElement = this.getDocumentRoot().getRootElement();
+    return (XulMessageBox)createInstance(rootElement, "ERRORMESSAGEBOX", new Object[]{title, message, throwable});
   }
 
   @Override
@@ -95,4 +79,48 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       throw new XulException(e);
     }
   }
+  
+  public Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params) {
+    Object handler = XulParser.handlers.get(widgetHandlerName);
+
+    if (handler == null) {
+      //TODO: add logging, discuss Exception handling
+      System.out.println("Dialog handler not found: ");
+    }
+    
+    if (parent == null) {
+      //TODO: add logging, discuss Exception handling
+      System.out.println("Cannot pass null parent XulComponent... ");
+      return null;
+    }
+
+    Class <?> [] classArgs = null;
+    Object[] constructorArgs = null;
+    if (params != null){
+      int inc = 1;
+      classArgs = new Class[params.length+1];
+      constructorArgs = new Object[params.length+1];
+      classArgs[0] = XulComponent.class;
+      constructorArgs[0] = parent;
+      for (Object param : params) {
+        classArgs[inc]=param.getClass();
+        constructorArgs[inc++]=param;
+      }
+    }
+
+    Class <?> c;
+    try {
+      c = Class.forName((String) handler);
+      Constructor <?> constructor = c.getConstructor(classArgs);
+      Object ele = constructor.newInstance(constructorArgs);
+      
+      return ele;
+    } catch (Exception e) {
+      //TODO: add logging, discuss Exception handling
+      System.out.println(String.format("Error creating new instance: %s",e.getMessage()));
+      e.printStackTrace(System.out);
+      return null;
+    }
+  }
+
 }

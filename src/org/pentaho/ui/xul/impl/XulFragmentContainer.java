@@ -48,5 +48,9 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
     System.out.println("loadFragment not implemented in XulFragmentContainer");
     return null;
   }
+
+  public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
+    return null;
+  }
     
 }
