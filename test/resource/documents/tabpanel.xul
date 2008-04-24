@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="general-datasource-window"
+	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	<tabbox id="myTabList" selectedIndex="2" flex="1">
+	  <tabs>
+	    <tab label="A First tab" disabled="true"/>
+	    <tab label="Second tab"/>
+	    <tab label="Another tab"/>
+	    <tab label="Last tab"/>
+	  </tabs>
+	  <tabpanels>
+	    <tabpanel>
+				<label value="Tab 1"/>
+			</tabpanel>
+	    <tabpanel>
+				<label value="Tab 2"/>
+			</tabpanel>
+	    <tabpanel>
+				<label value="Tab 3"/>
+			</tabpanel>
+	    <tabpanel>
+				<label value="Tab 4"/>
+			</tabpanel>
+	  </tabpanels>
+	</tabbox>
+</window>
