@@ -19,8 +19,8 @@ import org.pentaho.ui.xul.dom.Document;
  */
 public abstract class AbstractXulDomContainer implements XulDomContainer {
 
-  private XulLoader xulLoader;
-  private Map<String, XulEventHandler> eventHandlers;
+  protected XulLoader xulLoader;
+  protected Map<String, XulEventHandler> eventHandlers;
 
   public AbstractXulDomContainer() {
     eventHandlers = new HashMap<String, XulEventHandler>();
@@ -35,6 +35,9 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     return null;
   }
   
+  public XulLoader getXulLoader(){
+  	return xulLoader;
+  }
   
   public void addEventHandler(String id, String eventClassName){
    

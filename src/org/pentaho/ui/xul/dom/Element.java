@@ -8,7 +8,7 @@ import java.util.List;
 import org.pentaho.ui.xul.XulComponent;
 
 /**
- * @author OEM
+ * @author NBaker
  *
  */
 public interface Element {

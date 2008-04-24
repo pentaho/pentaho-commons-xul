@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
@@ -81,6 +82,13 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("TREEITEM", "org.pentaho.ui.xul.swing.tags.SwingTreeItem");
     parser.registerHandler("TREEROW", "org.pentaho.ui.xul.swing.tags.SwingTreeRow");
     parser.registerHandler("TREECELL", "org.pentaho.ui.xul.swing.tags.SwingTreeCell");
+    
+
+    parser.registerHandler("TABBOX", "org.pentaho.ui.xul.swing.tags.SwingTabbox");
+    parser.registerHandler("TABS", "org.pentaho.ui.xul.swing.tags.SwingTabs");
+    parser.registerHandler("TAB", "org.pentaho.ui.xul.swing.tags.SwingTab");
+    parser.registerHandler("TABPANELS", "org.pentaho.ui.xul.swing.tags.SwingTabpanels");
+    parser.registerHandler("TABPANEL", "org.pentaho.ui.xul.swing.tags.SwingTabpanel");
   }
   
   /* (non-Javadoc)
@@ -105,6 +113,10 @@ public class SwingXulLoader implements XulLoader {
     parser.parseDocument(xulDocument.getRootElement());
     
     return container;
+  }
+  
+  public XulComponent createElement(String elementName) throws XulException{
+  	return parser.getElement(elementName);
   }
   
   public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException{

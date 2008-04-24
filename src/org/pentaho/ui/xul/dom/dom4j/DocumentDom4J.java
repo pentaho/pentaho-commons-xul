@@ -4,15 +4,18 @@
 package org.pentaho.ui.xul.dom.dom4j;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 /**
- * @author OEM
+ * @author NBaker
  *
  */
 public class DocumentDom4J extends ElementDom4J implements Document {
 
   private org.dom4j.Document document;
+  private XulDomContainer container;
   public DocumentDom4J(){
     super();
     this.document = org.dom4j.DocumentHelper.createDocument();
@@ -39,5 +42,14 @@ public class DocumentDom4J extends ElementDom4J implements Document {
     document.add((org.dom4j.Element) ele.getElementObject());
     this.element = (org.dom4j.Element) ele.getElementObject();
   }
+  
+  public XulComponent createElement(String elementName) throws XulException{
+  	return this.container.getXulLoader().createElement(elementName);
+  }
+
+	public void setXulDomContainer(XulDomContainer container) {
+		this.container = container;
+		
+	}
   
 }

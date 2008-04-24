@@ -17,7 +17,6 @@ import org.pentaho.ui.xul.swing.SwingXulRunner;
 
 public class XulWindowContainer extends AbstractXulDomContainer {
   private List<Document> windows;
-  private XulLoader xulLoader;
   
   public XulWindowContainer() throws XulException {
     super();
@@ -28,13 +27,14 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     this();
     this.xulLoader = xulLoader;
   }
-
+  
   public Document getDocumentRoot(){
     return this.windows.get(0);
   }
 
   public void addDocument(Document document){
     this.windows.add(document);
+    document.setXulDomContainer(this);
   }
 
   public XulMessageBox createMessageBox(String message) {

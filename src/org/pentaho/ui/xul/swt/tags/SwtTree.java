@@ -3,11 +3,13 @@ package org.pentaho.ui.xul.swt.tags;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Table;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
+import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
@@ -217,6 +219,21 @@ public class SwtTree extends SwtElement implements XulTree {
   public Object[][] getValues() {
     return widget.getValues();
   }
+	
+	public int[] getSelectedRows() {
+		//TODO: implement Tree Selection
+		return (this.isHierarchical)? null : ((Table) widget).getSelectionIndices();
+	}
+
+	public void addTreeRow(XulTreeRow row) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeTreeRows(int[] rows) {
+		// TODO Auto-generated method stub
+		
+	}
 
   /* =================================================================================== */
 

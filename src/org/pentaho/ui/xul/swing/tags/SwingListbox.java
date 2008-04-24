@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -69,6 +70,13 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     
   }
 
+  public void setWidth(int width) {
+	  Dimension dim = new Dimension(width, listBox.getHeight());
+	scrollPane.setPreferredSize(dim);
+	scrollPane.setSize(dim);
+	scrollPane.setMaximumSize(dim);
+  }
+
 
   public Orient getOrientation() {
     return null;
@@ -76,6 +84,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   
   public void layout(){
     super.layout();
+    
     for(XulComponent comp : children){
       if(comp instanceof SwingListitem){
         this.model.addElement(comp);

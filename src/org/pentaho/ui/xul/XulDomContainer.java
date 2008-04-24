@@ -32,4 +32,6 @@ public interface XulDomContainer {
   public void close();
   
   public boolean isClosed();
+  
+  public XulLoader getXulLoader();
 }

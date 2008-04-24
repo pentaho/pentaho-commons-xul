@@ -28,10 +28,8 @@ public class SwingVbox extends SwingElement implements XulVbox  {
     super("Vbox");
     this.orientation = Orient.VERTICAL;
     
-    children = new ArrayList<XulComponent>();
-    
     container = new JPanel(new GridBagLayout());
-    //container.setBorder(BorderFactory.createLineBorder(Color.green));
+
     managedObject = container;
     
     resetContainer();

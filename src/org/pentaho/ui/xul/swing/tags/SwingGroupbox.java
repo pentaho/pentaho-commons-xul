@@ -36,22 +36,37 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
     managedObject = container;
     
     
-    resetContainer();
   }
 
   public void resetContainer(){
     
     container.removeAll();
+  
+    if(this.getOrientation() == Orient.VERTICAL){
     
-    gc = new GridBagConstraints();
-    gc.gridy = GridBagConstraints.RELATIVE;
-    gc.gridx = 0;
-    gc.gridheight = 1;
-    gc.gridwidth = GridBagConstraints.REMAINDER;
-    gc.insets = new Insets(2,2,2,2);
-    gc.fill = GridBagConstraints.HORIZONTAL;
-    gc.anchor = GridBagConstraints.NORTHWEST;
-    gc.weightx = 1;
+	    gc = new GridBagConstraints();
+	    gc.gridy = GridBagConstraints.RELATIVE;
+	    gc.gridx = 0;
+	    gc.gridheight = 1;
+	    gc.gridwidth = GridBagConstraints.REMAINDER;
+	    gc.insets = new Insets(2,2,2,2);
+	    gc.fill = GridBagConstraints.HORIZONTAL;
+	    gc.anchor = GridBagConstraints.NORTHWEST;
+	    gc.weightx = 1;
+	    
+    } else {
+    	
+    	gc = new GridBagConstraints();
+	    gc.gridy = 0;
+	    gc.gridx = GridBagConstraints.RELATIVE;
+	    gc.gridheight = GridBagConstraints.REMAINDER;
+	    gc.gridwidth = 1;
+	    gc.insets = new Insets(2,2,2,2);
+	    gc.fill = GridBagConstraints.VERTICAL;
+	    gc.anchor = GridBagConstraints.NORTHWEST;
+	    gc.weighty = 1;
+	    
+    }
     
   }
   
@@ -60,8 +75,16 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
     
   }
   
+
+  @Override
+  public void setOrient(String orientation){
+	  this.orientation = Orient.valueOf(orientation.toUpperCase());
+  }
+  
+  
   @Override
   public void layout(){
+	resetContainer();
     super.layout();
     for(XulComponent comp : children){
       if(comp instanceof SwingCaption){
@@ -70,11 +93,6 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
     }
   }
   
-  public Orient getOrientation() {
-    return Orient.VERTICAL;
-  }
-  
-
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) {
     this.resetContainer();

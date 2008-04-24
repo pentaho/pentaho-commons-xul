@@ -117,7 +117,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
    */
   public void invoke(String method, Object[] args) {
 
-    try {
+	try {
       if (method.indexOf('.') == -1) {
         throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
       }
@@ -127,10 +127,20 @@ public class SwingWindow extends SwingElement implements XulWindow {
       String eventID = pair[0];
       String methodName = pair[1];
 
-      XulEventHandler eventHandler = this.xulDomContainer.getEventHandler(eventID);
-      Method m = eventHandler.getClass().getMethod(methodName, new Class[0]);
-      m.invoke(eventHandler, args);
-
+      XulEventHandler evt = this.xulDomContainer.getEventHandler(eventID);
+      if(args.length > 0){
+        Class[] classes = new Class[args.length];
+        
+        for(int i=0; i<args.length; i++){
+          classes[i] = args[i].getClass();
+        }
+        
+        Method m = evt.getClass().getMethod(methodName, classes);
+        m.invoke(evt, args);
+      } else {
+        Method m = evt.getClass().getMethod(methodName, new Class[0]);
+        m.invoke(evt, args);
+      }
     } catch (Exception e) {
       System.out.println("Error invoking method: " + method);
       e.printStackTrace(System.out);

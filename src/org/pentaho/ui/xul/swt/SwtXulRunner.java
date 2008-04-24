@@ -82,17 +82,11 @@ public class SwtXulRunner implements XulRunner {
   public static void main(String[] args) {
 
     try {
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/pooling_table.xul");
-      if (in == null) {
-        System.out.println("Input is null");
-        System.exit(123);
-      }
+  
 
-      SAXReader rdr = new SAXReader();
-      final Document doc = rdr.read(in);
-
-
-      XulDomContainer container = new SwtXulLoader().loadXul(doc);
+      XulDomContainer container = new SwtXulLoader().loadXul(
+      		  "resource/documents/pooling_table.xul"
+      );
       
       XulRunner runner = new SwtXulRunner();
       runner.addContainer(container);

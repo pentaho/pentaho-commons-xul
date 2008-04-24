@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
@@ -35,7 +36,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 /**
- * @author OEM
+ * @author NBaker
  *
  */
 public class SwtXulLoader implements XulLoader {
@@ -216,6 +217,12 @@ public class SwtXulLoader implements XulLoader {
     	  throw new XulException("Error processing Xul Document in Freemarker", e);
       }
   }
+  
+
+  public XulComponent createElement(String elementName) throws XulException{
+  	return parser.getElement(elementName);
+  }
+  
 
   public void register(String tagName, String className) {
     parser.registerHandler(tagName, className);

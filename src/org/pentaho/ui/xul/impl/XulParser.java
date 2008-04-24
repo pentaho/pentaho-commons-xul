@@ -153,6 +153,28 @@ public class XulParser {
     }
 
   }
+  
+  public XulComponent getElement(String name) throws XulException{
+  	 Object handler = handlers.get(name.toUpperCase());
+
+     if (handler == null) {
+       System.out.println("handler not found: " + name);
+       return null;
+       //throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
+     }
+
+     Class<?> c;
+     try {
+       c = Class.forName((String) handler);
+       Constructor<?> constructor = c
+           .getConstructor(new Class[] { XulComponent.class, XulDomContainer.class, String.class });
+       XulComponent ele = (XulComponent) constructor.newInstance(null, xulDomContainer, name);
+
+       return ele;
+     } catch (Exception e) {
+       throw new XulException(e);
+     }
+  }
 
   public void registerHandler(String type, String handler) {
 

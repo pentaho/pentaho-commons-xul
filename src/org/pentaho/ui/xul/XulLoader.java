@@ -96,6 +96,17 @@ public interface XulLoader {
    * @throws XulException Exception thrown if errors encountered getting an instance of the parser. 
    */
   public XulDomContainer loadXulFragment(String resource, ResourceBundle bundle) throws  XulException;
+
+  
+  /**
+   * Support methed for creating XulComponents programatically at runtime (event handlers)
+   * 
+   * @param elementName The tag name of the element to create.
+   * @return A XulComponent
+   * @throws XulException Exception thrown if parser cannot handle tag
+   */
+  public XulComponent createElement(String elementName) throws XulException;
+
   
   public void register(String tagName, String className);
 }

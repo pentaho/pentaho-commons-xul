@@ -23,6 +23,7 @@ public class SwingElement extends AbstractXulComponent{
 
   protected JPanel container;
   protected Orient orientation;
+  protected Orient orient = Orient.HORIZONTAL;
   
   public SwingElement(String tagName, Object managedObject) {
     super(tagName, managedObject);
@@ -84,9 +85,18 @@ public class SwingElement extends AbstractXulComponent{
     }
    
   }
+
   
-  public Orient getOrientation(){
-    return this.orientation;
+  public void setOrient(String orientation){
+	  this.orientation = Orient.valueOf(orientation.toUpperCase());
+  }
+  
+  public String getOrient(){
+    return orientation.toString();
+  }
+
+  public Orient getOrientation() {
+    return orientation;
   }
 
   
