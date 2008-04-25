@@ -18,6 +18,7 @@ public class SwingTab extends SwingElement implements XulTab{
 	
 	public SwingTab(XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("tab");
+		managedObject = "empty";
 	}
 
 	public boolean isDisabled() {
