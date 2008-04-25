@@ -5,6 +5,7 @@ package org.pentaho.ui.xul.containers;
 
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 
 /**
  * Typically the top level container, the XulWindow
@@ -89,5 +90,9 @@ public interface XulWindow extends XulContainer{
   
   public boolean isClosed();
   
+  
+  public void paste() throws XulException;
+  public void copy() throws XulException;
+  public void cut() throws XulException;
   
 }
