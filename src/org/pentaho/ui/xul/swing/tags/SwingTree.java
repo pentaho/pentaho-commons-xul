@@ -396,8 +396,8 @@ public class SwingTree extends SwingElement implements XulTree{
 				for(int i=0; i<table.getColumnCount(); i++){
 					int flex = SwingTree.this.columns.getColumn(table.getColumnModel().getColumn(i).getModelIndex()).getFlex();
 					int newColWidth = (int)( newWidth * ((double) flex / totalFlex));
-					System.out.println("Table width: "+newWidth+" flex: "+flex+" raw: "+(((double) flex / SwingTree.this.totalFlex))+" newColWidth: "+newColWidth);
 					
+
 					int headerWidth = table.getColumnModel().getColumn(i).getPreferredWidth();
 					int setWidth = (headerWidth > newColWidth)? headerWidth : newColWidth;
 					
