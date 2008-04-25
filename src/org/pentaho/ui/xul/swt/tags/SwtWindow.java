@@ -2,6 +2,8 @@ package org.pentaho.ui.xul.swt.tags;
 
 import java.lang.reflect.Method;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
@@ -10,8 +12,10 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.impl.XulEventHandler;
+import org.pentaho.ui.xul.swing.tags.SwingWindow;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtWindow extends SwtElement implements XulWindow {
@@ -26,6 +30,8 @@ public class SwtWindow extends SwtElement implements XulWindow {
   private String onload;
 
   private XulDomContainer xulDomContainer;
+  
+  private static final Log logger = LogFactory.getLog(SwtWindow.class);
 
   public SwtWindow(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -54,18 +60,63 @@ public class SwtWindow extends SwtElement implements XulWindow {
     shell.setSize(width, height);
   }
 
+  public Object[] getArgs(String methodCall){
+  	if(methodCall.indexOf("()") > -1){
+  		return null;
+  	}
+  	String argsList = methodCall.substring(methodCall.indexOf("(")+1, methodCall.indexOf(")"));
+  	String[] stringArgs = argsList.split(",");
+  	Object[] args = new Object[ stringArgs.length ];
+  	int i=-1;
+  	for(String obj : stringArgs){
+  		i++;
+  		obj = obj.trim();
+  		try{
+  			Integer num = Integer.valueOf(obj);
+  			args[i] = num;
+  			continue;
+  		} catch(NumberFormatException e){
+  			try{
+    			Double num = Double.valueOf(obj);
+    			args[i] = num;
+    			continue;
+    		} catch(NumberFormatException e2){
+    			try{
+      			String str = obj.replaceAll("'", "");
+      			str = str.replaceAll("\"", "");
+      			args[i] = str;
+      			continue;
+      		} catch(NumberFormatException e3){
+      			logger.error("Error parsing event call argument: "+obj, e3);
+      			continue;
+      		}
+    		}
+  		}
+  	}
+  	return args;
+  	
+  }
+  
   public void invoke(String method, Object[] args) {
 
-    try {
+  	try {
       if (method.indexOf('.') == -1) {
         throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
       }
 
-      method = method.replace("()", "");
+      
       String[] pair = method.split("\\.");
-      String eventID = pair[0];
-      String methodName = pair[1];
-
+      String eventID = method.substring(0, method.indexOf("."));
+      String methodName = method.substring(method.indexOf(".")+1);
+      
+      Object[] arguments = getArgs(methodName);
+      if(arguments != null){
+      	invoke(method.substring(0,method.indexOf("("))+"()", arguments);
+      	return;
+      } else {
+      	methodName = methodName.substring(0,methodName.indexOf("("));
+      }
+      
       XulEventHandler evt = this.xulDomContainer.getEventHandler(eventID);
       if(args.length > 0){
         Class[] classes = new Class[args.length];
@@ -137,5 +188,20 @@ public class SwtWindow extends SwtElement implements XulWindow {
   public boolean isClosed(){
     return shell.isDisposed();
   }
+
+	public void copy() throws XulException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void cut() throws XulException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void paste() throws XulException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
