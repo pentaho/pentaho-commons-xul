@@ -77,6 +77,17 @@ public interface XulTextbox extends XulComponent {
   public String getType();
 
   public void setType(String type);
+  
+  public void selectAll();
+  
+  public void setFocus();
+  
+  /**
+   * 
+   * @return the native control that controls the text manipulation... could be the same as the
+   * managedObject, but does not have to be. (This is added as a bit of a hack for PDI variable support.) 
+   */
+  public Object getTextControl();
 
   
 

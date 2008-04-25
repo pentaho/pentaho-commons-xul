@@ -40,12 +40,12 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   public XulMessageBox createMessageBox(String message) {
 
     XulComponent rootElement = this.getDocumentRoot().getRootElement();
-    return (XulMessageBox)createInstance(rootElement, "MESSAGEBOX", new Object[]{message});
+    return (XulMessageBox)createInstance(rootElement, "MESSAGEBOX", new Object[]{message}, null);
   }
 
   public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
     XulComponent rootElement = this.getDocumentRoot().getRootElement();
-    return (XulMessageBox)createInstance(rootElement, "ERRORMESSAGEBOX", new Object[]{title, message, throwable});
+    return (XulMessageBox)createInstance(rootElement, "ERRORMESSAGEBOX", new Object[]{title, message, throwable}, null);
   }
 
   @Override
@@ -80,8 +80,8 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     }
   }
   
-  public Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params) {
-    Object handler = XulParser.handlers.get(widgetHandlerName);
+  public static Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params, Class[] classes ) {
+    Object handler = XulParser.handlers.get(widgetHandlerName.toUpperCase());
 
     if (handler == null) {
       //TODO: add logging, discuss Exception handling
@@ -103,7 +103,9 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       classArgs[0] = XulComponent.class;
       constructorArgs[0] = parent;
       for (Object param : params) {
-        classArgs[inc]=param.getClass();
+        if ((classes == null) && (param == null))
+          continue;
+        classArgs[inc] = classes == null ? param.getClass() : classes[inc-1] ;
         constructorArgs[inc++]=param;
       }
     }

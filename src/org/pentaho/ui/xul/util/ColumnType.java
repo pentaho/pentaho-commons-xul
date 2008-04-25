@@ -2,6 +2,6 @@ package org.pentaho.ui.xul.util;
 
 public enum ColumnType {
   
-  CHECKBOX, PROGRESSMETER, TEXT;
+  CHECKBOX, PROGRESSMETER, TEXT, PASSWORD;
 
 }

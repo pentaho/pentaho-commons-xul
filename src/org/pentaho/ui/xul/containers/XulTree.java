@@ -36,10 +36,14 @@ public interface XulTree extends XulContainer {
   public int[] getActiveCellCoordinates();
   
   public Object[][] getValues();
-  
+ 
   public int[] getSelectedRows();
   
   public void addTreeRow(XulTreeRow row);
   public void removeTreeRows(int[] rows);
+  
+  public Object getData();
+  public void setData(Object data);
+
 
 }

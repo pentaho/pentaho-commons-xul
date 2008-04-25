@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
@@ -30,23 +32,27 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.RowWidget;
 import org.pentaho.ui.xul.util.ColumnType;
+import org.pentaho.ui.xul.util.TextType;
 
 public class TableItemWrapper implements RowWidget {
   
   TableItem item = null;
   Table parentTable = null;
   XulTree parentTree = null;
-
+  
   TableEditor textEditor = null;
   IterableMap checkedEditors = new HashedMap();
   
   int firstEditableColumn = -1;
   
+  
   public TableItemWrapper(XulTree parent){
 
     parentTable = (Table)parent.getManagedObject();
+    
     item = new TableItem(parentTable, SWT.NONE);
     
     textEditor = new TableEditor(parentTable);
@@ -94,7 +100,14 @@ public class TableItemWrapper implements RowWidget {
         createEditableCheckbox(index);
         break;
       case TEXT:
-        createEditableText(index);
+      case PASSWORD:
+        boolean isPassword = column.getColumnType().equals(ColumnType.PASSWORD);
+        Text edit = null;
+        if (column.getCustomeditor() != null){
+          createCustomText(index, column.getCustomeditor(), isPassword);
+        }else{
+          createEditableText(index, isPassword);
+        }
         break;
       case PROGRESSMETER:
         // TODO Log not supported yet... 
@@ -125,7 +138,7 @@ public class TableItemWrapper implements RowWidget {
     }
   }
   
-  private void createEditableText(final int index){
+  private void createCustomText(final int index, String customClass, boolean isPassword){
 
     Control oldEditor = textEditor.getEditor();
     if (oldEditor != null && !oldEditor.isDisposed()) {
@@ -136,15 +149,18 @@ public class TableItemWrapper implements RowWidget {
       }
     }
 
-    Text edit = new Text(parentTable, SWT.NONE);
-    edit.setText(item.getText(index));
-    edit.selectAll();
-    edit.setFocus();
+    final XulTextbox textBox = (XulTextbox)XulWindowContainer.createInstance(parentTree, customClass, 
+        new Object[]{null, "textbox"}, new Class[]{XulDomContainer.class, String.class});
+
+    textBox.setValue(item.getText(index));
+    textBox.selectAll();
+    textBox.setFocus();
+    if (isPassword){
+      textBox.setType(TextType.PASSWORD.toString());
+    }
+    
+    Text edit = (Text)textBox.getTextControl();
     edit.addKeyListener(new TextKeyAdapter());
-    
-    textEditor.setEditor(edit, item, index);
-    textEditor.grabHorizontal=true;
-    
     
     edit.addModifyListener(new ModifyListener(){
       public void modifyText(ModifyEvent event){
@@ -152,14 +168,100 @@ public class TableItemWrapper implements RowWidget {
       }
     });
     
+    Listener textListener = new Listener () {
+      public void handleEvent (final Event e) {
+        switch (e.type) {
+          case SWT.FocusOut:
+            item.setText (index, ((Text)e.widget).getText ());  
+            
+            // Some custom components may lose focus from the textbox to 
+            // some other part of the component; in that case
+            // we do not to dispose yet. This mechanism allows the 
+            // custom component to alert the XUL layer NOT to dispose. 
+            
+            Object data = ((Text)e.widget).getData();
+            if ((data == null) || ((data != null) && (!(Boolean) data))){
+              ((Control)textBox.getManagedObject()).dispose();
+            }
+            break;
+          case SWT.Traverse:
+            switch (e.detail) {
+              case SWT.TRAVERSE_RETURN:
+                item.setText (index, ((Text)e.widget).getText ());
+                //FALL THROUGH
+                break;
+              case SWT.TRAVERSE_ESCAPE:
+               e.doit = false;
+            }
+
+            break;
+        }
+      }
+    };
+    
+    edit.addListener (SWT.FocusOut, textListener);
+    edit.addListener (SWT.Traverse, textListener);
+    edit.addTraverseListener(new TraverseListener(){
+
+      public void keyTraversed(TraverseEvent e) {
+        e.doit=false;
+      }
       
+    });
+   
+    textEditor.setEditor((Control)textBox.getManagedObject(), item, index);
+    textEditor.grabHorizontal=true;
+    textEditor.grabVertical=true;
+
+    parentTable.showItem(item);
+    parentTable.setSelection(new TableItem[] { item });
+  }
+
+  private void createEditableText(final int index, boolean isPassword){
+
+    Control oldEditor = textEditor.getEditor();
+    if (oldEditor != null && !oldEditor.isDisposed()) {
+      try {
+        oldEditor.dispose();
+      } catch (SWTException swte) {
+        // intentionally swallow exception
+      }
+    }
+    
+    Text edit = new Text(parentTable, SWT.NONE);
+    edit.setText(item.getText(index));
+    edit.selectAll();
+    edit.setFocus();
+    
+    if (isPassword){
+      edit.setEchoChar('*');
+    }
+
+    addTextListeners(edit, index);
+    
+    textEditor.setEditor(edit, item, index);
+    textEditor.grabHorizontal=true;
+
+    parentTable.showItem(item);
+    parentTable.setSelection(new TableItem[] { item });
+  }
+
+  private void addTextListeners(Text edit, final int index){
+
+    edit.addKeyListener(new TextKeyAdapter());
+    
+    edit.addModifyListener(new ModifyListener(){
+      public void modifyText(ModifyEvent event){
+        item.setText(index, ((Text)event.widget).getText());
+      }
+    });
     
     Listener textListener = new Listener () {
       public void handleEvent (final Event e) {
         switch (e.type) {
           case SWT.FocusOut:
             item.setText (index, ((Text)e.widget).getText ());
-            ((Text)e.widget).dispose ();
+            ((Control)e.widget).dispose ();
             break;
           case SWT.Traverse:
             switch (e.detail) {
@@ -185,10 +287,8 @@ public class TableItemWrapper implements RowWidget {
       
     });
     
-    parentTable.showItem(item);
-    parentTable.setSelection(new TableItem[] { item });
   }
-
+  
   private void createEditableCheckbox(final int index){
 
     TableEditor checkEditor = null;
@@ -299,7 +399,7 @@ public class TableItemWrapper implements RowWidget {
       // "ENTER": close the text editor and copy the data over 
       // We edit the data after moving to another cell, only if editNextCell = true;
       
-      if (e.character == SWT.CR || e.keyCode == SWT.ARROW_DOWN || e.keyCode == SWT.ARROW_UP || e.keyCode == SWT.TAB
+    if (e.character == SWT.CR || e.keyCode == SWT.ARROW_DOWN || e.keyCode == SWT.ARROW_UP || e.keyCode == SWT.TAB
           || left || right) {
         
         if ((activeRow <0) || (activeCol < 0))

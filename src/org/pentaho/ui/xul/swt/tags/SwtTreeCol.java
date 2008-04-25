@@ -132,11 +132,11 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     widget.autoSize();
   }
 
-  public String getCustomclass() {
+  public String getCustomeditor() {
     return customClass;
   }
 
-  public void setCustomclass(String customClass) {
+  public void setCustomeditor(String customClass) {
     this.customClass = customClass;
   }
 

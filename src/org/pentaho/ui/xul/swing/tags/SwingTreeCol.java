@@ -139,4 +139,14 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
 		// TODO Auto-generated method stub
 		
 	}
+
+  public String getCustomeditor() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setCustomeditor(String customClass) {
+    // TODO Auto-generated method stub
+    
+  }
 }

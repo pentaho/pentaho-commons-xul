@@ -437,4 +437,14 @@ public class SwingTree extends SwingElement implements XulTree{
 		
 	}
 
+  public Object getData() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setData(Object data) {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

@@ -76,4 +76,17 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     
   }
 
+  public void selectAll() {
+    textField.selectAll();
+    
+  }
+
+  public void setFocus() {
+    
+  }
+
+  public Object getTextControl() {
+    return textField;
+  }
+
 }

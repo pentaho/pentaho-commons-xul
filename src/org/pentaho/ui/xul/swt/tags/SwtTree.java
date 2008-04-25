@@ -35,6 +35,8 @@ public class SwtTree extends SwtElement implements XulTree {
   protected XulTreeChildren rootChildren = null;
 
   protected XulComponent parentComponent = null;
+  
+  private Object data = null;
 
   private boolean disabled = false;
 
@@ -52,11 +54,12 @@ public class SwtTree extends SwtElement implements XulTree {
   
   private int activeRow = -1;
   private int activeColumn = -1;
+  
 
   public SwtTree(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.parentComponent = parent;
-
+    
     // According to XUL spec, in order for a hierarchical tree to be rendered, a 
     // primary column must be identified AND at least one treeitem must be listed as a container. 
 
@@ -218,6 +221,14 @@ public class SwtTree extends SwtElement implements XulTree {
 
   public Object[][] getValues() {
     return widget.getValues();
+  }
+
+  public Object getData() {
+    return data;
+  }
+
+  public void setData(Object data) {
+    this.data = data;
   }
 	
 	public int[] getSelectedRows() {

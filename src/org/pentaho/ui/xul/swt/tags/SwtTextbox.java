@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.TextType;
 
 public class SwtTextbox extends SwtElement implements XulTextbox {
+
   private static final long serialVersionUID = 4928464432190672877L;
 
   protected org.eclipse.swt.widgets.Text textBox;
@@ -157,5 +158,18 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     }
     
   }
+
+  public void selectAll() {
+    textBox.selectAll();
+  }
+
+  public void setFocus() {
+    textBox.setFocus();
+  }
+  
+  public Object getTextControl() {
+    return getManagedObject();
+  }
+
 
 }
