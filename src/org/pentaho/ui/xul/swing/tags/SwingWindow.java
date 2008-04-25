@@ -8,15 +8,29 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
+import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.TextAction;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.XulEventHandler;
@@ -40,6 +54,11 @@ public class SwingWindow extends SwingElement implements XulWindow {
   private XulDomContainer xulDomContainer;
 
   private String onload;
+  
+  private Clipboard clipboard;
+  
+  private static final Log logger = LogFactory.getLog(SwingWindow.class);
+
 
   public SwingWindow(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("window");
@@ -54,6 +73,8 @@ public class SwingWindow extends SwingElement implements XulWindow {
     //container.setBorder(BorderFactory.createLineBorder(Color.green));
     managedObject = container;
 
+    clipboard = Toolkit.getDefaultToolkit( ).getSystemClipboard( );
+    
     resetContainer();
 
     frame.getContentPane().setLayout(new BorderLayout());
@@ -112,6 +133,43 @@ public class SwingWindow extends SwingElement implements XulWindow {
     frame.setSize(new Dimension(this.width, this.height));
   }
 
+  public Object[] getArgs(String methodCall){
+  	if(methodCall.indexOf("()") > -1){
+  		return null;
+  	}
+  	String argsList = methodCall.substring(methodCall.indexOf("(")+1, methodCall.indexOf(")"));
+  	String[] stringArgs = argsList.split(",");
+  	Object[] args = new Object[ stringArgs.length ];
+  	int i=-1;
+  	for(String obj : stringArgs){
+  		i++;
+  		obj = obj.trim();
+  		try{
+  			Integer num = Integer.valueOf(obj);
+  			args[i] = num;
+  			continue;
+  		} catch(NumberFormatException e){
+  			try{
+    			Double num = Double.valueOf(obj);
+    			args[i] = num;
+    			continue;
+    		} catch(NumberFormatException e2){
+    			try{
+      			String str = obj.replaceAll("'", "");
+      			str = str.replaceAll("\"", "");
+      			args[i] = str;
+      			continue;
+      		} catch(NumberFormatException e3){
+      			logger.error("Error parsing event call argument: "+obj, e3);
+      			continue;
+      		}
+    		}
+  		}
+  	}
+  	return args;
+  	
+  }
+  
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulWindow#invoke(java.lang.String, java.lang.Object[])
    */
@@ -122,11 +180,19 @@ public class SwingWindow extends SwingElement implements XulWindow {
         throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
       }
 
-      method = method.replace("()", "");
+      
       String[] pair = method.split("\\.");
-      String eventID = pair[0];
-      String methodName = pair[1];
-
+      String eventID = method.substring(0, method.indexOf("."));
+      String methodName = method.substring(method.indexOf(".")+1);
+      
+      Object[] arguments = getArgs(methodName);
+      if(arguments != null){
+      	invoke(method.substring(0,method.indexOf("("))+"()", arguments);
+      	return;
+      } else {
+      	methodName = methodName.substring(0,methodName.indexOf("("));
+      }
+      
       XulEventHandler evt = this.xulDomContainer.getEventHandler(eventID);
       if(args.length > 0){
         Class[] classes = new Class[args.length];
@@ -204,4 +270,24 @@ public class SwingWindow extends SwingElement implements XulWindow {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }
+
+  
+	public void copy() throws XulException{
+		TextAction act = new DefaultEditorKit.CopyAction();
+		act.actionPerformed(new ActionEvent(this.getManagedObject(), 999, "copy"));
+		
+	}
+
+
+	public void cut() {
+		TextAction act = new DefaultEditorKit.CutAction();
+		act.actionPerformed(new ActionEvent(this.getManagedObject(), 999, "cut"));
+	}
+
+
+	public void paste() {
+		TextAction act = new DefaultEditorKit.PasteAction();
+		act.actionPerformed(new ActionEvent(this.getManagedObject(), 999, "paste"));
+		
+	}
 }
