@@ -15,7 +15,7 @@ public class SwingTabpanels extends SwingElement implements XulTabpanels{
 	}
 	
 	public XulTabpanel getTabpanelByIndex(int index) {
-		return (XulTabpanel) this.children.get(index);
+		return (SwingTabpanel) this.children.get(index);
 	}
 	
 	@Override
