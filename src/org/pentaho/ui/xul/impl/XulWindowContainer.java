@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulComponent;
@@ -80,6 +81,11 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     }
   }
   
+  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException {
+    XulDomContainer container = this.xulLoader.loadXulFragment(xulLocation, res);
+    return container;  
+  }
+
   public static Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params, Class[] classes ) {
     Object handler = XulParser.handlers.get(widgetHandlerName.toUpperCase());
 

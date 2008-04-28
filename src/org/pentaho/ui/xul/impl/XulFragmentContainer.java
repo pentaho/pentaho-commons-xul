@@ -3,6 +3,9 @@
  */
 package org.pentaho.ui.xul.impl;
 
+import java.util.ResourceBundle;
+
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.components.XulMessageBox;
@@ -14,8 +17,6 @@ import org.pentaho.ui.xul.dom.Document;
  */
 public class XulFragmentContainer extends AbstractXulDomContainer {
   private Document fragment;
-  private XulLoader xulLoader;
-  
   
   public XulFragmentContainer(XulLoader xulLoader){
     super();
@@ -50,6 +51,11 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
   }
 
   public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
+    return null;
+  }
+
+  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException {
+    System.out.println("loadFragment not implemented in XulFragmentContainer");
     return null;
   }
     

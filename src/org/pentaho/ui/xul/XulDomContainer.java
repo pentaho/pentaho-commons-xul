@@ -3,6 +3,8 @@
  */
 package org.pentaho.ui.xul;
 
+import java.util.ResourceBundle;
+
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.XulEventHandler;
@@ -19,6 +21,8 @@ public interface XulDomContainer {
   
   public XulDomContainer loadFragment(String xulLocation) throws XulException;
   
+  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException;
+
   public void addEventHandler(String id, String eventClassName);
   
   public XulEventHandler getEventHandler(String key) throws XulException;
