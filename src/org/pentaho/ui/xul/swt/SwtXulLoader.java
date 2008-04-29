@@ -27,13 +27,7 @@ import org.pentaho.ui.xul.impl.XulParser;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
-
-import freemarker.cache.ClassTemplateLoader;
-import freemarker.ext.beans.BeansWrapper;
-import freemarker.ext.beans.ResourceBundleModel;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
+import org.pentaho.ui.xul.util.ResourceBundleTranslator;
 
 /**
  * @author NBaker
@@ -145,27 +139,20 @@ public class SwtXulLoader implements XulLoader {
   
   public XulDomContainer loadXul(String resource, ResourceBundle bundle) throws  XulException{
 
-      ResourceBundleModel bundleModel = new ResourceBundleModel(bundle, new BeansWrapper());
-      
-		
       try{
-	      Configuration cfg = new Configuration();
-	      cfg.setTemplateLoader( new ClassTemplateLoader(SwingXulRunner.class, "/") );
-	      Template temp = cfg.getTemplate(resource);
-	      
-	      StringWriter writer = new StringWriter();
-	      temp.process(bundleModel, writer);
-	      
+
+        InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
+        
+      	String localOutput = ResourceBundleTranslator.translate(in, bundle);
+      	
 	      SAXReader rdr = new SAXReader();
-	      final Document doc = rdr.read(new StringReader(writer.toString()));
+	      final Document doc = rdr.read(new StringReader(localOutput));
 	      
 	      return this.loadXul(doc);
       } catch(DocumentException e){
     	  throw new XulException("Error parsing Xul Document", e);
       } catch(IOException e){
     	  throw new XulException("Error loading Xul Document into Freemarker", e);
-      } catch(TemplateException e){
-    	  throw new XulException("Error processing Xul Document in Freemarker", e);
       }
   }
   
@@ -193,28 +180,21 @@ public class SwtXulLoader implements XulLoader {
   }
   
   public XulDomContainer loadXulFragment(String resource, ResourceBundle bundle) throws  XulException{
-
-      ResourceBundleModel bundleModel = new ResourceBundleModel(bundle, new BeansWrapper());
-      
 		
       try{
-	      Configuration cfg = new Configuration();
-	      cfg.setTemplateLoader( new ClassTemplateLoader(SwtXulRunner.class, "/") );
-	      Template temp = cfg.getTemplate(resource);
-	      
-	      StringWriter writer = new StringWriter();
-	      temp.process(bundleModel, writer);
-	      
+
+        InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
+        
+      	String localOutput = ResourceBundleTranslator.translate(in, bundle);
+      	
 	      SAXReader rdr = new SAXReader();
-	      final Document doc = rdr.read(new StringReader(writer.toString()));
+	      final Document doc = rdr.read(new StringReader(localOutput));
 	      
 	      return this.loadXulFragment(doc);
       } catch(DocumentException e){
     	  throw new XulException("Error parsing Xul Document", e);
       } catch(IOException e){
     	  throw new XulException("Error loading Xul Document into Freemarker", e);
-      } catch(TemplateException e){
-    	  throw new XulException("Error processing Xul Document in Freemarker", e);
       }
   }
   

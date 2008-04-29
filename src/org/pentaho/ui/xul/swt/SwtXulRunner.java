@@ -85,7 +85,7 @@ public class SwtXulRunner implements XulRunner {
   
 
       XulDomContainer container = new SwtXulLoader().loadXul(
-      		  "resource/documents/pooling_table.xul"
+      		  "resource/documents/internationalization.xul"
       );
       
       XulRunner runner = new SwtXulRunner();
