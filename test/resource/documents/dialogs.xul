@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml" width="300" height="200" title="Dialog Tester">
+	    
+	<script src="org.pentaho.ui.xul.samples.DialogHandler" id="handler"/>
+	
+	<dialog 
+   buttonlabelcancel="Cancel"
+   buttonlabelaccept="Save"
+   buttons="accept,cancel" 
+   ondialogaccept="return doOK();"
+   ondialogcancel="return doCancel();"
+   id="dialog"
+   width="300"
+   height="200"
+   buttonalign="end"
+   title="Test Dialog"
+   >
+    
+    <dialogheader title="Options" description="My preferences"/>
+    
+    <groupbox>
+      <caption label="Colour"/>
+     
+      <label value="Nickname"/>
+      <textbox />
+   </groupbox>
+   
+	</dialog>
+	<button label="Show" onclick="handler.showDialog()"/>
+	
+</window>
