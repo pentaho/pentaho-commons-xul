@@ -199,7 +199,7 @@ public class SwtXulLoader implements XulLoader {
 		
       try{
 	      Configuration cfg = new Configuration();
-	      cfg.setTemplateLoader( new ClassTemplateLoader(SwingXulRunner.class, "/") );
+	      cfg.setTemplateLoader( new ClassTemplateLoader(SwtXulRunner.class, "/") );
 	      Template temp = cfg.getTemplate(resource);
 	      
 	      StringWriter writer = new StringWriter();
