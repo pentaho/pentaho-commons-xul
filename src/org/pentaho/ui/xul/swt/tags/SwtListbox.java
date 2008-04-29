@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
@@ -8,13 +10,16 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtListbox extends SwtElement implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
+  private static final Log logger = LogFactory.getLog(SwtListbox.class);
 
   private List listBox;
   private boolean disabled = false;
@@ -103,7 +108,11 @@ public class SwtListbox extends SwtElement implements XulListbox{
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
         Element rootElement = getDocument().getRootElement();
         XulWindow window = (XulWindow) rootElement;
-        window.invoke(method, new Object[]{});
+        try{
+        	window.invoke(method, new Object[]{});
+        } catch(XulException e){
+        	logger.error("Error invoking onselect command",e);
+        }
       }
     });
   }

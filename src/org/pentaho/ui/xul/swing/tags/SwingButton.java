@@ -8,12 +8,16 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 /**
@@ -22,13 +26,18 @@ import org.pentaho.ui.xul.swing.SwingElement;
  */
 public class SwingButton extends SwingElement implements XulButton{
   private JButton button;
+  private static final Log logger = LogFactory.getLog(SwingButton.class);
+
   
   public SwingButton(XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("Button");
+    super("button");
     button = new JButton();
     this.managedObject = button;
   }
-
+  
+  public SwingButton() {
+    this(null,null,null);
+  }
   
   public void setLabel(String label){
     button.setText(label);
@@ -43,8 +52,11 @@ public class SwingButton extends SwingElement implements XulButton{
         Document doc = SwingButton.this.getDocument();
         Element rootElement = doc.getRootElement();
         XulWindow window = (XulWindow) rootElement;
-        window.invoke(method, new Object[]{});
-        
+        try{
+        	window.invoke(method, new Object[]{});
+        } catch (XulException e){
+        	logger.error("Error calling onClick command",e);
+        }
       }
     });
   }

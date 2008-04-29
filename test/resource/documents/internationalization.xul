@@ -4,7 +4,7 @@
 	title="${title}" orient="vertical" height="500" width="700"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	<hbox id="all-box" flex="1">
-		<label value="${welcome}"/>
+		<label value="${.vars['welcome.dot.foo']}"/>
 	</hbox>
 
 </window>

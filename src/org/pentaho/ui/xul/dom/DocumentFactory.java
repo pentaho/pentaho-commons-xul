@@ -5,6 +5,8 @@ package org.pentaho.ui.xul.dom;
 
 import java.lang.reflect.Constructor;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulException;
 
@@ -15,6 +17,7 @@ import org.pentaho.ui.xul.XulException;
 public class DocumentFactory {
   private static Class concreteClass;
   private static Class elementClass;
+  private static final Log logger = LogFactory.getLog(DocumentFactory.class);
   
   public static void registerDOMClass(Class clazz){
     DocumentFactory.concreteClass = clazz;
@@ -31,8 +34,7 @@ public class DocumentFactory {
       return (Document) concreteDOM;
       
     } catch(Exception e){
-      System.out.println("Error creating DOM document object: "+e.getMessage());
-      e.printStackTrace(System.out);
+      logger.error("Error creating DOM document object: "+e.getMessage(), e);
       throw new XulException(e);
     }
   }
@@ -46,8 +48,7 @@ public class DocumentFactory {
       
       
     } catch(Exception e){
-      System.out.println("Error creating DOM document object: "+e.getMessage());
-      e.printStackTrace(System.out);
+      logger.error("Error creating DOM document object: "+e.getMessage(), e);
       throw new XulException(e);
     }
   }
@@ -58,8 +59,7 @@ public class DocumentFactory {
       return (Element) element;
       
     } catch(Exception e){
-      System.out.println("Error creating DOM document object: "+e.getMessage());
-      e.printStackTrace(System.out);
+      logger.error("Error creating DOM document object: "+e.getMessage(), e);
       throw new XulException(e);
     }
   }

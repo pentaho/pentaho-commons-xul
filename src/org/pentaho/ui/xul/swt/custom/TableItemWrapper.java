@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import org.apache.commons.collections.IterableMap;
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.TableEditor;
@@ -24,6 +26,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -38,7 +41,8 @@ import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TextType;
 
 public class TableItemWrapper implements RowWidget {
-  
+	
+	private static final Log logger = LogFactory.getLog(TableItemWrapper.class);
   TableItem item = null;
   Table parentTable = null;
   XulTree parentTree = null;
@@ -148,73 +152,78 @@ public class TableItemWrapper implements RowWidget {
         // intentionally swallow exception
       }
     }
-
-    final XulTextbox textBox = (XulTextbox)XulWindowContainer.createInstance(parentTree, customClass, 
+    
+    try{
+    	final XulTextbox textBox = (XulTextbox)XulWindowContainer.createInstance(parentTree, customClass, 
         new Object[]{null, "textbox"}, new Class[]{XulDomContainer.class, String.class});
-
-    textBox.setValue(item.getText(index));
-    textBox.selectAll();
-    textBox.setFocus();
-    if (isPassword){
-      textBox.setType(TextType.PASSWORD.toString());
+ 
+    
+	    textBox.setValue(item.getText(index));
+	    textBox.selectAll();
+	    textBox.setFocus();
+	    if (isPassword){
+	      textBox.setType(TextType.PASSWORD.toString());
+	    }
+	    
+	    Text edit = (Text)textBox.getTextControl();
+	    edit.addKeyListener(new TextKeyAdapter());
+	    
+	    edit.addModifyListener(new ModifyListener(){
+	      public void modifyText(ModifyEvent event){
+	        item.setText(index, ((Text)event.widget).getText());
+	      }
+	    });
+	    
+	    Listener textListener = new Listener () {
+	      public void handleEvent (final Event e) {
+	        switch (e.type) {
+	          case SWT.FocusOut:
+	            item.setText (index, ((Text)e.widget).getText ());  
+	            
+	            // Some custom components may lose focus from the textbox to 
+	            // some other part of the component; in that case
+	            // we do not to dispose yet. This mechanism allows the 
+	            // custom component to alert the XUL layer NOT to dispose. 
+	            
+	            Object data = ((Text)e.widget).getData();
+	            if ((data == null) || ((data != null) && (!(Boolean) data))){
+	              ((Control)textBox.getManagedObject()).dispose();
+	            }
+	            break;
+	          case SWT.Traverse:
+	            switch (e.detail) {
+	              case SWT.TRAVERSE_RETURN:
+	                item.setText (index, ((Text)e.widget).getText ());
+	                //FALL THROUGH
+	                break;
+	              case SWT.TRAVERSE_ESCAPE:
+	               e.doit = false;
+	            }
+	
+	            break;
+	        }
+	      }
+	    };
+    
+	    edit.addListener (SWT.FocusOut, textListener);
+	    edit.addListener (SWT.Traverse, textListener);
+	    edit.addTraverseListener(new TraverseListener(){
+	
+	      public void keyTraversed(TraverseEvent e) {
+	        e.doit=false;
+	      }
+	      
+	    });
+	   
+	    textEditor.setEditor((Control)textBox.getManagedObject(), item, index);
+	    textEditor.grabHorizontal=true;
+	    textEditor.grabVertical=true;
+	
+	    parentTable.showItem(item);
+	    parentTable.setSelection(new TableItem[] { item });
+    } catch(XulException e){
+    	logger.error("Error creating custom textbox",e);
     }
-    
-    Text edit = (Text)textBox.getTextControl();
-    edit.addKeyListener(new TextKeyAdapter());
-    
-    edit.addModifyListener(new ModifyListener(){
-      public void modifyText(ModifyEvent event){
-        item.setText(index, ((Text)event.widget).getText());
-      }
-    });
-    
-    Listener textListener = new Listener () {
-      public void handleEvent (final Event e) {
-        switch (e.type) {
-          case SWT.FocusOut:
-            item.setText (index, ((Text)e.widget).getText ());  
-            
-            // Some custom components may lose focus from the textbox to 
-            // some other part of the component; in that case
-            // we do not to dispose yet. This mechanism allows the 
-            // custom component to alert the XUL layer NOT to dispose. 
-            
-            Object data = ((Text)e.widget).getData();
-            if ((data == null) || ((data != null) && (!(Boolean) data))){
-              ((Control)textBox.getManagedObject()).dispose();
-            }
-            break;
-          case SWT.Traverse:
-            switch (e.detail) {
-              case SWT.TRAVERSE_RETURN:
-                item.setText (index, ((Text)e.widget).getText ());
-                //FALL THROUGH
-                break;
-              case SWT.TRAVERSE_ESCAPE:
-               e.doit = false;
-            }
-
-            break;
-        }
-      }
-    };
-    
-    edit.addListener (SWT.FocusOut, textListener);
-    edit.addListener (SWT.Traverse, textListener);
-    edit.addTraverseListener(new TraverseListener(){
-
-      public void keyTraversed(TraverseEvent e) {
-        e.doit=false;
-      }
-      
-    });
-   
-    textEditor.setEditor((Control)textBox.getManagedObject(), item, index);
-    textEditor.grabHorizontal=true;
-    textEditor.grabVertical=true;
-
-    parentTable.showItem(item);
-    parentTable.setSelection(new TableItem[] { item });
   }
 
   private void createEditableText(final int index, boolean isPassword){
@@ -319,9 +328,12 @@ public class TableItemWrapper implements RowWidget {
         // send all selection events back through to the parent table with the selection index... 
         Element rootElement = parentTree.getDocument().getRootElement();
         XulWindow window = (XulWindow) rootElement;
-        window.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
-      
+        try{
+        	window.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
+        } catch (XulException ex){
+        	logger.error("Error invoking selection listener",ex);
         }
+      }
     });
     
     Listener textListener = new Listener () {

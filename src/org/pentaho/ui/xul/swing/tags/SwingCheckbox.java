@@ -7,8 +7,11 @@ import javax.swing.JCheckBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -22,6 +25,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingCheckbox extends SwingElement implements XulCheckbox{
   
   private JCheckBox checkBox;
+  private static final Log logger = LogFactory.getLog(SwingCheckbox.class);
   
   public SwingCheckbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("checkbox");
@@ -78,7 +82,12 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
         Document doc = getDocument();
         Element rootElement = doc.getRootElement();
         XulWindow window = (XulWindow) rootElement;
-        window.invoke(method, new Object[]{});
+        
+        try{
+        	window.invoke(method, new Object[]{});
+        } catch (XulException e){
+        	logger.error("Error calling oncommand event",e);
+        }
       }
     });
   }

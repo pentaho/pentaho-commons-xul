@@ -3,6 +3,7 @@
 <window id="general-datasource-window"
 	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
 	<tabbox id="myTabList" selectedIndex="2" flex="1">
 	  <tabs>
 	    <tab label="A First tab" disabled="true"/>
@@ -25,4 +26,5 @@
 			</tabpanel>
 	  </tabpanels>
 	</tabbox>
+	
 </window>

@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
@@ -47,7 +48,7 @@ public class SwingTabpanel extends SwingElement implements XulTabpanel{
   }
 
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }

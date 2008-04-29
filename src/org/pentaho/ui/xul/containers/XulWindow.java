@@ -61,7 +61,7 @@ public interface XulWindow extends XulContainer{
    * @param method The method to execute
    * @param args Any parameters needed for the method. 
    */
-  public void invoke(String method, Object[] args);
+  public void invoke(String method, Object[] args) throws XulException;
   
   /**
    * Sets the method name to invoke during the onload event 

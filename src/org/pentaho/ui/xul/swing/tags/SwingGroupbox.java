@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -23,7 +26,7 @@ import org.pentaho.ui.xul.util.Orient;
  *
  */
 public class SwingGroupbox  extends SwingElement implements XulGroupbox {
-
+	private static final Log logger = LogFactory.getLog(SwingGroupbox.class);
 
   public SwingGroupbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("groupbox");
@@ -94,7 +97,7 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
   }
   
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }

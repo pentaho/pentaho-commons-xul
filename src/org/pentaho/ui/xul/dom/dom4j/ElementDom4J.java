@@ -6,6 +6,8 @@ package org.pentaho.ui.xul.dom.dom4j;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
@@ -20,6 +22,7 @@ import org.pentaho.ui.xul.dom.Namespace;
 public class ElementDom4J implements Element{
   protected org.dom4j.Element element;
 
+  private static final Log logger = LogFactory.getLog(ElementDom4J.class);
   
   public ElementDom4J(){
   }
@@ -50,8 +53,7 @@ public class ElementDom4J implements Element{
     try{
       return DocumentFactory.createDocument(element.getDocument());
     } catch(Exception e){
-      System.out.println("Could not get document node : "+e.getMessage());
-      e.printStackTrace(System.out);
+    	logger.error("Could not get document node : "+e.getMessage(), e);
       return null;
     }
   }

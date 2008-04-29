@@ -7,7 +7,7 @@
 
 	<script src="org.pentaho.ui.xul.samples.TableEventHandler" id="handler"/>
 	
-	<tree flex="1" editable="true" seltype="multiple" enableColumnDrag="false" id="testTable">
+	<tree flex="1" editable="true" seltype="multiple" enableColumnDrag="true" id="testTable">
 
 		<treecols id="column_list">
 			<treecol id="select_col" label="Selected" type="checkbox" editable="true" />
@@ -16,7 +16,7 @@
 			<treecol id="value_col" label="Value" flex="1" editable="true" />
 			<treecol id="description_col" label="Description" flex="5" editable="false" />
 		</treecols>
-
+	<!--
 		<treechildren id="main_treechildren">
 			<treeitem id="defaultAutoCommit_item">
 				<treerow id="defaultAutoCommit_row">
@@ -45,8 +45,8 @@
 					<treecell label="The default TransactionIsolation state of connections created by this pool. One of the following: (see javadoc)\n\n  * NONE\n  * READ_COMMITTED\n  * READ_UNCOMMITTED\n  * REPEATABLE_READ  * SERIALIZABLE\n" />
 				</treerow>
 			</treeitem>
-			
 		</treechildren>
+			-->
 
 	</tree>
 	<hbox>

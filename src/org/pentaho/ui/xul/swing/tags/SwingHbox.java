@@ -10,8 +10,11 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -23,7 +26,7 @@ import org.pentaho.ui.xul.util.Orient;
  */
 public class SwingHbox extends SwingElement implements XulHbox{
  
-  
+	private static final Log logger = LogFactory.getLog(SwingHbox.class);
   public SwingHbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Hbox");
     
@@ -59,7 +62,7 @@ public class SwingHbox extends SwingElement implements XulHbox{
 
 
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }

@@ -6,6 +6,8 @@ package org.pentaho.ui.xul.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
@@ -19,6 +21,8 @@ import org.pentaho.ui.xul.dom.Document;
  */
 public abstract class AbstractXulDomContainer implements XulDomContainer {
 
+  private static final Log logger = LogFactory.getLog(AbstractXulDomContainer.class);
+  
   protected XulLoader xulLoader;
   protected Map<String, XulEventHandler> eventHandlers;
 
@@ -39,7 +43,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   	return xulLoader;
   }
   
-  public void addEventHandler(String id, String eventClassName){
+  public void addEventHandler(String id, String eventClassName) throws XulException{
    
     // Allow overrides of eventHandlers
     //if(eventHandlers.containsKey(id)){ //if already registered
@@ -53,11 +57,11 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
       eventHandlers.put(id, eventHandler);
       
     } catch(ClassNotFoundException e){
-      System.out.println("backing class not found");
-      e.printStackTrace(System.out);
+    	logger.error("Event Handler Class Not Found", e);
+    	throw new XulException(e);
     } catch(Exception e){
-      System.out.println("Error with Backing class creation");
-      e.printStackTrace(System.out);
+    	logger.error("Error with Backing class creation", e);
+    	throw new XulException(e);
     }
   }
   
@@ -71,10 +75,14 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   
   public void initialize(){
     XulWindow rootEle = (XulWindow) this.getDocumentRoot().getRootElement();
-    System.out.println("onload: "+ rootEle.getOnload());
+    logger.info("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
-      rootEle.invoke(rootEle.getOnload(), new Object[]{});
+    	try{
+    		rootEle.invoke(rootEle.getOnload(), new Object[]{});
+    	} catch(XulException e){
+    		logger.error("Error calling onLoad event: "+onLoad,e);
+    	}
     }
   }
   

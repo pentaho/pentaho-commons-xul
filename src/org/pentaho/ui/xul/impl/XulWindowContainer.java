@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -16,7 +18,8 @@ import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swing.SwingXulRunner;
 
-public class XulWindowContainer extends AbstractXulDomContainer {
+public class XulWindowContainer extends AbstractXulDomContainer {  
+	private static final Log logger = LogFactory.getLog(XulWindowContainer.class);
   private List<Document> windows;
   
   public XulWindowContainer() throws XulException {
@@ -41,12 +44,26 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   public XulMessageBox createMessageBox(String message) {
 
     XulComponent rootElement = this.getDocumentRoot().getRootElement();
-    return (XulMessageBox)createInstance(rootElement, "MESSAGEBOX", new Object[]{message}, null);
+    XulMessageBox dialog = null;
+    try{
+    	dialog = (XulMessageBox) createInstance(rootElement, "MESSAGEBOX", new Object[]{message}, null);
+    } catch(XulException e){
+    	logger.error("Error creating MessageBox:",e);
+    }
+    return dialog;
   }
 
   public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
     XulComponent rootElement = this.getDocumentRoot().getRootElement();
-    return (XulMessageBox)createInstance(rootElement, "ERRORMESSAGEBOX", new Object[]{title, message, throwable}, null);
+    
+    XulMessageBox dialog = null;
+    try{
+    	dialog = (XulMessageBox)createInstance(rootElement, "ERRORMESSAGEBOX", new Object[]{title, message, throwable}, null);
+    } catch(XulException e){
+    	logger.error("Error creating MessageBox:",e);
+    }
+    return dialog;
+    
   }
 
   @Override
@@ -75,29 +92,28 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       XulDomContainer container = this.xulLoader.loadXulFragment(doc);
       return container;
     } catch(Exception e){
-      System.out.println(e.getMessage());
-      e.printStackTrace(System.out);
+    	logger.error("Error Loading Xul Fragment",e);
       throw new XulException(e);
     }
   }
   
+
   public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException {
     XulDomContainer container = this.xulLoader.loadXulFragment(xulLocation, res);
     return container;  
   }
 
-  public static Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params, Class[] classes ) {
+  public static Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params, Class[] classes ) throws XulException, IllegalArgumentException{
     Object handler = XulParser.handlers.get(widgetHandlerName.toUpperCase());
 
     if (handler == null) {
-      //TODO: add logging, discuss Exception handling
-      System.out.println("Dialog handler not found: ");
+      logger.error("Tag handler not found: ");
+      throw new XulException(String.format("Handler not found for input: %s", widgetHandlerName));
     }
     
     if (parent == null) {
-      //TODO: add logging, discuss Exception handling
-      System.out.println("Cannot pass null parent XulComponent... ");
-      return null;
+      logger.error("Cannot pass null parent XulComponent... ");
+      return new IllegalArgumentException("Parent is null");
     }
 
     Class <?> [] classArgs = null;
@@ -124,10 +140,8 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       
       return ele;
     } catch (Exception e) {
-      //TODO: add logging, discuss Exception handling
-      System.out.println(String.format("Error creating new instance: %s",e.getMessage()));
-      e.printStackTrace(System.out);
-      return null;
+      logger.error(String.format("Error creating new instance: %s",e.getMessage()), e);
+      throw new XulException(String.format("Error creating new instance: %s",e.getMessage()), e);
     }
   }
 

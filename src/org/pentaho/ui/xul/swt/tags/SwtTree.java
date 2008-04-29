@@ -1,11 +1,14 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
@@ -25,8 +28,10 @@ public class SwtTree extends SwtElement implements XulTree {
   // into an interface (TabularWidget) and set the component to two
   // separate member variables here so that I don't have to reference 
   // them separately.  
-
-  protected TabularWidget widget;
+	
+	private static final Log logger = LogFactory.getLog(SwtTree.class);
+  
+	protected TabularWidget widget;
 
   protected Composite tree;
 
@@ -157,7 +162,11 @@ public class SwtTree extends SwtElement implements XulTree {
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
         Element rootElement = getDocument().getRootElement();
         XulWindow window = (XulWindow) rootElement;
-        window.invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
+        try{
+        	window.invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
+        } catch(XulException ex){
+        	logger.error("Error invoking onSelect command",ex);
+        }
       }
     });
   }

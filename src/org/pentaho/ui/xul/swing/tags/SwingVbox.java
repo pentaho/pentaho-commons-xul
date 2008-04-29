@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -57,7 +58,7 @@ public class SwingVbox extends SwingElement implements XulVbox  {
   
 
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }

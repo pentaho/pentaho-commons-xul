@@ -10,8 +10,11 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -29,6 +32,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private int rowsToDisplay = 0;
   private String onselect;
   private JScrollPane scrollPane;
+  private static final Log logger = LogFactory.getLog(SwingListbox.class);
   
   public SwingListbox(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -107,7 +111,11 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     Document doc = SwingListbox.this.getDocument();
     Element rootElement = doc.getRootElement();
     XulWindow window = (XulWindow) rootElement;
-    window.invoke(onselect, new Object[]{});
+    try{
+    	window.invoke(onselect, new Object[]{});
+    } catch(XulException ex){
+    	logger.error("Error invoking valueChanged command",ex);
+    }
     
   }
 

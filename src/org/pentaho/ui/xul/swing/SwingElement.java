@@ -10,7 +10,10 @@ import javax.swing.Box;
 import javax.swing.JPanel;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
@@ -20,10 +23,12 @@ import org.pentaho.ui.xul.util.Orient;
  *
  */
 public class SwingElement extends AbstractXulComponent{
-
+  private static final Log logger = LogFactory.getLog(SwingElement.class);
+  
   protected JPanel container;
   protected Orient orientation;
   protected Orient orient = Orient.HORIZONTAL;
+  
   
   public SwingElement(String tagName, Object managedObject) {
     super(tagName, managedObject);
@@ -101,13 +106,14 @@ public class SwingElement extends AbstractXulComponent{
 
   
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     
     super.replaceChild(oldElement, newElement);
     
     int idx = this.children.indexOf(oldElement);
     if(idx == -1){
-      System.out.println(oldElement.getName()+" not found in children");
+    	logger.error(oldElement.getName()+" not found in children");
+    	throw new XulDomException(oldElement.getName()+" not found in children");
     } else{
       this.children.set(idx, newElement);
       

@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Attribute;
 import org.dom4j.Namespace;
 import org.dom4j.QName;
@@ -26,6 +28,7 @@ import org.pentaho.ui.xul.util.XulUtil;
  */
 public class XulParser {
   Document xulDocument;
+  private static final Log logger = LogFactory.getLog(XulParser.class);
 
   public static Map<String, Object> handlers = new HashMap<String, Object>();
 
@@ -132,9 +135,8 @@ public class XulParser {
     Object handler = handlers.get(handlerName);
 
     if (handler == null) {
-      System.out.println("handler not found: " + srcEle.getName().toUpperCase());
-      return null;
-      //throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
+    	logger.error("handler not found: " + srcEle.getName().toUpperCase());
+      throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
     }
 
     String tagName = srcEle.getName();
@@ -158,9 +160,8 @@ public class XulParser {
   	 Object handler = handlers.get(name.toUpperCase());
 
      if (handler == null) {
-       System.out.println("handler not found: " + name);
-       return null;
-       //throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
+       logger.error("tag handler not found: " + name);
+       throw new XulException(String.format("No handler available for input: %s", name));
      }
 
      Class<?> c;

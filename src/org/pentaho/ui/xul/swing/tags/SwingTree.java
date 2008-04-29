@@ -35,11 +35,15 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -68,6 +72,7 @@ public class SwingTree extends SwingElement implements XulTree{
 	private boolean disabled = false;
 	private boolean editable = false;
 	private String onselect;
+	private static final Log logger = LogFactory.getLog(SwingTree.class);
 
 	private boolean isHierarchical = false;
 	  
@@ -135,8 +140,6 @@ public class SwingTree extends SwingElement implements XulTree{
 		TableModel model = table.getModel();
 		Object[][] data = new Object[model.getRowCount()][model.getColumnCount()];
 		
-		System.out.println("row:"+model.getRowCount()+" col: "+model.getColumnCount());
-		
 		for(int row=0; row<model.getRowCount(); row++){
 			for(int col=0; col<model.getColumnCount(); col++){
 				data[row][col] = model.getValueAt(row,col);
@@ -198,14 +201,17 @@ public class SwingTree extends SwingElement implements XulTree{
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 
 			public void valueChanged(ListSelectionEvent arg0) {
-
-		        Document doc = SwingTree.this.getDocument();
-		        Element rootElement = doc.getRootElement();
-		        XulWindow window = (XulWindow) rootElement;
-
-		        window.invoke(select, new Object[] {new Integer(table.getSelectedRow())});
-		     
-				
+	
+	      Document doc = SwingTree.this.getDocument();
+	      Element rootElement = doc.getRootElement();
+	      XulWindow window = (XulWindow) rootElement;
+	    	try{
+	    		window.invoke(select, new Object[] {new Integer(table.getSelectedRow())});
+	    	} catch(XulException e){
+	    		logger.error("Error invoking onselect event",e);
+	    	}
+	   
+		
 			}
 			
 		});
@@ -267,7 +273,7 @@ public class SwingTree extends SwingElement implements XulTree{
 		
 		for(int i=0; i<cells.size(); i++){
 			XulTreeCell xcell = (XulTreeCell) cells.get(i);
-			//System.out.println(this.getColumns().getColumn(i).getType());
+
 			if(this.getColumns().getColumn(i).getType().equalsIgnoreCase("checkbox")){
 				newRow.add((Boolean) xcell.getValue());
 			} else {
@@ -414,7 +420,7 @@ public class SwingTree extends SwingElement implements XulTree{
 	}
 
 	@Override
-	public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+	public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
 		// TODO Auto-generated method stub
 		super.replaceChild(oldElement, newElement);
 	}

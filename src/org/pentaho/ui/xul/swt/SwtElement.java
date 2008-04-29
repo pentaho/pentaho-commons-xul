@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
@@ -172,7 +173,7 @@ public class SwtElement extends AbstractXulComponent {
    * Major SWT limitation. Replacement can only be used in 
    * a limited number of cases. 
    */
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     
     super.replaceChild(oldElement, newElement);
     Widget thisWidget = (Widget) oldElement.getManagedObject();

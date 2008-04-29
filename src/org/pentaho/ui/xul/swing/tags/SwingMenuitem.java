@@ -8,8 +8,11 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -17,7 +20,8 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingMenuitem extends SwingElement implements XulMenuitem{
-
+	
+	private static final Log logger = LogFactory.getLog(SwingMenuitem.class);
   private JMenuItem menuitem;
   private String image;
   private String onCommand;
@@ -91,7 +95,12 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
         Document doc = SwingMenuitem.this.getDocument();
         Element rootElement = doc.getRootElement();
         XulWindow window = (XulWindow) rootElement;
-        window.invoke(command, new Object[]{});
+        
+        try{
+        	window.invoke(command, new Object[]{});
+        } catch(XulException e){
+        	logger.error("Error invoking command event",e);
+        }
         
       }
     }); 

@@ -89,6 +89,8 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("TAB", "org.pentaho.ui.xul.swing.tags.SwingTab");
     parser.registerHandler("TABPANELS", "org.pentaho.ui.xul.swing.tags.SwingTabpanels");
     parser.registerHandler("TABPANEL", "org.pentaho.ui.xul.swing.tags.SwingTabpanel");
+    parser.registerHandler("DIALOG", "org.pentaho.ui.xul.swing.tags.SwingDialog");
+    parser.registerHandler("DIALOGHEADER", "org.pentaho.ui.xul.swing.tags.SwingDialogheader");
     parser.registerHandler("PROGRESSMETER", "org.pentaho.ui.xul.swing.tags.SwingProgressmeter");
   }
   

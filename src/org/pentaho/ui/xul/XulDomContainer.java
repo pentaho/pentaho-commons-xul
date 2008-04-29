@@ -21,9 +21,9 @@ public interface XulDomContainer {
   
   public XulDomContainer loadFragment(String xulLocation) throws XulException;
   
-  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException;
+  public void addEventHandler(String id, String eventClassName) throws XulException;
 
-  public void addEventHandler(String id, String eventClassName);
+  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException;
   
   public XulEventHandler getEventHandler(String key) throws XulException;
   

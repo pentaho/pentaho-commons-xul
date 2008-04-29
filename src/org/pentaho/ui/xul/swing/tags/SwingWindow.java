@@ -30,6 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
@@ -42,7 +43,8 @@ import org.pentaho.ui.xul.util.Orient;
  *
  */
 public class SwingWindow extends SwingElement implements XulWindow {
-
+  private static final Log logger = LogFactory.getLog(SwingElement.class);
+  
   JFrame frame;
 
   private int width;
@@ -57,8 +59,6 @@ public class SwingWindow extends SwingElement implements XulWindow {
   
   private Clipboard clipboard;
   
-  private static final Log logger = LogFactory.getLog(SwingWindow.class);
-
 
   public SwingWindow(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("window");
@@ -173,7 +173,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulWindow#invoke(java.lang.String, java.lang.Object[])
    */
-  public void invoke(String method, Object[] args) {
+  public void invoke(String method, Object[] args) throws XulException {
 
 	try {
       if (method.indexOf('.') == -1) {
@@ -208,8 +208,8 @@ public class SwingWindow extends SwingElement implements XulWindow {
         m.invoke(evt, args);
       }
     } catch (Exception e) {
-      System.out.println("Error invoking method: " + method);
-      e.printStackTrace(System.out);
+      logger.error("Error invoking method: " + method, e);
+      throw new XulException("Error invoking method: " + method, e);
     }
   }
 
@@ -247,7 +247,11 @@ public class SwingWindow extends SwingElement implements XulWindow {
     for (XulComponent comp : children) {
       if (comp instanceof SwingScript) {
         SwingScript script = (SwingScript) comp;
-        this.xulDomContainer.addEventHandler(script.getId(), script.getSrc());
+        try{
+        	this.xulDomContainer.addEventHandler(script.getId(), script.getSrc());
+        } catch(XulException e){
+        	logger.error("Error adding Event Handler to Window: "+script.getSrc(), e);
+        }
       } 
     }
   }
@@ -266,7 +270,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
 
 
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) {
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }

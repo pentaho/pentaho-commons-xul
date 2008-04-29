@@ -132,8 +132,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
         m.invoke(evt, args);
       }
     } catch (Exception e) {
-      System.out.println("Error invoking method: " + method);
-      e.printStackTrace(System.out);
+      logger.error("Error invoking method: " + method, e);
     }
   }
 

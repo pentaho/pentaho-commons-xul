@@ -7,7 +7,10 @@ import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
@@ -21,6 +24,8 @@ import org.pentaho.ui.xul.dom.Namespace;
  */
 public abstract class AbstractXulComponent implements XulComponent {
   private static final long serialVersionUID = -3629792827245143824L;
+
+  private static final Log logger = LogFactory.getLog(AbstractXulComponent.class);
 
   protected Object managedObject;
 
@@ -48,8 +53,8 @@ public abstract class AbstractXulComponent implements XulComponent {
       this.element = DocumentFactory.createElement(name, this);
       children = new ArrayList<XulComponent>();
     } catch (XulException e) {
-      //TODO: add logging and perhaps throw illegalArgumentException or rethrow XulEx.
-      System.out.println(String.format("error creating XulElement (%s)", name));
+      logger.error(String.format("error creating XulElement (%s)", name), e);
+      throw new IllegalArgumentException(String.format("error creating XulElement (%s)", name), e);
     }
   }
 
@@ -59,8 +64,8 @@ public abstract class AbstractXulComponent implements XulComponent {
       this.managedObject = managedObject;
       children = new ArrayList<XulComponent>();
     } catch (XulException e) {
-      //TODO: add logging and perhaps throw illegalArgumentException or rethrow XulEx.
-      System.out.println(String.format("error creating XulElement (%s)", tagName));
+      logger.error(String.format("error creating XulElement (%s)", tagName), e);
+      throw new IllegalArgumentException(String.format("error creating XulElement (%s)", tagName), e);
     }
   }
 
@@ -178,7 +183,7 @@ public abstract class AbstractXulComponent implements XulComponent {
     return this;
   }
 
-  public void replaceChild(XulComponent oldElement, XulComponent newElement){
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     this.element.replaceChild(oldElement, newElement);
   }
   
