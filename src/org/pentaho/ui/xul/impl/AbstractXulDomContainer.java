@@ -3,17 +3,23 @@
  */
 package org.pentaho.ui.xul.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.components.XulMessageBox;
+import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.swing.tags.SwingScript;
 
 /**
  * @author OEM
@@ -26,7 +32,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   protected XulLoader xulLoader;
   protected Map<String, XulEventHandler> eventHandlers;
 
-  public AbstractXulDomContainer() {
+	public AbstractXulDomContainer() {
     eventHandlers = new HashMap<String, XulEventHandler>();
   }
   
@@ -85,6 +91,43 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     	}
     }
   }
+  
+  public Map<String, XulEventHandler> getEventHandlers(){
+  	if(this.eventHandlers.size() > 0){
+  		return this.eventHandlers;
+  	} else {
+      XulComponent rootEle = (XulComponent) this.getDocumentRoot().getRootElement();
+  		
+      if(this instanceof XulFragmentContainer){
+      	//skip first element as it's a wrapper
+      	rootEle = rootEle.getFirstChild();
+      }
+      
+      for (XulComponent comp : rootEle.getChildNodes()) {
+        if (comp instanceof XulScript) {
+        	XulScript script = (XulScript) comp;
+          try{
+          	this.addEventHandler(script.getId(), script.getSrc());
+          } catch(XulException e){
+          	logger.error("Error adding Event Handler to Window: "+script.getSrc(), e);
+          }
+        } 
+      }
+  		return this.eventHandlers;
+  		
+  	}
+  }
+
+  public void mergeContainer(XulDomContainer container) {
+  	Map<String, XulEventHandler> incomingHandlers = container.getEventHandlers();
+  	for(Map.Entry<String, XulEventHandler> entry : incomingHandlers.entrySet()){
+  		if(! this.eventHandlers.containsKey(entry.getKey())){
+  			this.eventHandlers.put(entry.getKey(), entry.getValue());
+  			entry.getValue().setXulDomContainer(this);
+  		}
+  	}
+  	//this.eventHandlers.putAll(incomingHandlers);
+	}
   
   public abstract Document getDocumentRoot();
 

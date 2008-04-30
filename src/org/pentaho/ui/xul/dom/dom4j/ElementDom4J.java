@@ -171,7 +171,14 @@ public class ElementDom4J implements Element{
    * @see org.pentaho.ui.xul.dom.Element#addChild(org.pentaho.ui.xul.dom.Element)
    */
   public void addChild(Element ele) {
-    this.element.add((org.dom4j.Element) ele.getElementObject());
+  	org.dom4j.Element dElement = (org.dom4j.Element) ele.getElementObject();
+  	
+  	org.dom4j.Element dElementparent = dElement.getParent();
+  	if(dElementparent != null){
+  		dElementparent.remove(dElement);
+  	}
+  	
+    this.element.add(dElement);
     
   }
   

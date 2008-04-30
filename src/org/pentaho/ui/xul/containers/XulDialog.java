@@ -44,5 +44,8 @@ public interface XulDialog extends XulContainer{
 	public void hide();
 	public void setVisible(boolean visible);
 	
+	public void setOnload(String onload);
+	public String getOnload();
+	
 	
 }

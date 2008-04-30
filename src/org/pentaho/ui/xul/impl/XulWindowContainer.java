@@ -144,5 +144,4 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       throw new XulException(String.format("Error creating new instance: %s",e.getMessage()), e);
     }
   }
-
 }

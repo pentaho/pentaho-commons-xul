@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -37,10 +39,11 @@ public class SwingDialog extends SwingElement implements XulDialog{
 	private String buttonlabelaccept;
 
 	private String buttonlabelcancel;
-	private Map<SwingDialog.BUTTONS, XulButton> buttons = new HashMap<SwingDialog.BUTTONS, XulButton>();
+	private TreeMap<SwingDialog.BUTTONS, XulButton> buttons = new TreeMap<SwingDialog.BUTTONS, XulButton>();
 	private String ondialogaccept;
 	private String ondialogcancel;
 	private String title = "Dialog";
+	private String onload;
 	
 	private XulDialogheader header;
 	
@@ -155,27 +158,30 @@ public class SwingDialog extends SwingElement implements XulDialog{
     dialog.add(mainPanel, BorderLayout.CENTER);
     mainPanel.add(container, BorderLayout.CENTER);
     
-    JPanel headerPanel = new JPanel(new BorderLayout());
-    headerPanel.setBackground(Color.decode("#888888"));
-		JPanel headerPanelInner = new JPanel(new BorderLayout());
-		headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		headerPanelInner.setOpaque(false);
-		
-		headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#AAAAAA"), Color.decode("#666666")));
-		
-		JLabel title = new JLabel(this.header.getTitle());
-		
-		title.setForeground(Color.white);
-		headerPanelInner.add(title, BorderLayout.WEST);
-		
-		JLabel desc = new JLabel(this.header.getDescription());
-		desc.setForeground(Color.white);
-		headerPanelInner.add(desc, BorderLayout.EAST);
-
-		headerPanel.add(headerPanelInner, BorderLayout.CENTER);
-		
-		mainPanel.add(headerPanel, BorderLayout.NORTH);
-		
+    if(this.header != null){
+	    
+	    JPanel headerPanel = new JPanel(new BorderLayout());
+	    headerPanel.setBackground(Color.decode("#888888"));
+			JPanel headerPanelInner = new JPanel(new BorderLayout());
+			headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+			headerPanelInner.setOpaque(false);
+			
+			headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#AAAAAA"), Color.decode("#666666")));
+			
+			JLabel title = new JLabel(this.header.getTitle());
+			
+			title.setForeground(Color.white);
+			headerPanelInner.add(title, BorderLayout.WEST);
+			
+			JLabel desc = new JLabel(this.header.getDescription());
+			desc.setForeground(Color.white);
+			headerPanelInner.add(desc, BorderLayout.EAST);
+	
+			headerPanel.add(headerPanelInner, BorderLayout.CENTER);
+			
+			mainPanel.add(headerPanel, BorderLayout.NORTH);
+    }
+    
 		Box buttonPanel = Box.createHorizontalBox();
 		
 		if(	this.buttonAlignment == BUTTON_ALIGN.RIGHT || 
@@ -186,9 +192,11 @@ public class SwingDialog extends SwingElement implements XulDialog{
 			buttonPanel.add(Box.createHorizontalGlue());
 		}
 		
-		for(XulButton btn : this.buttons.values()){
+		Set<SwingDialog.BUTTONS> keys = this.buttons.descendingKeySet();
+		
+		for(SwingDialog.BUTTONS btn : keys){
 			buttonPanel.add(Box.createHorizontalStrut(5));
-			buttonPanel.add((JButton) btn.getManagedObject());
+			buttonPanel.add((JButton) this.buttons.get(btn).getManagedObject());
 		}
 		buttonPanel.add(Box.createHorizontalStrut(5));
 		
@@ -275,6 +283,16 @@ public class SwingDialog extends SwingElement implements XulDialog{
 	public void setButtonalign(String align) {
 		this.buttonAlignment = SwingDialog.BUTTON_ALIGN.valueOf(align.toUpperCase());
 		
+	}
+
+
+	public String getOnload() {
+		return onload;
+	}
+
+
+	public void setOnload(String onload) {
+		this.onload = onload;
 	}
 	
 }

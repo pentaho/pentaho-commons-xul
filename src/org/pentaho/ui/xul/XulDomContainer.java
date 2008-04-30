@@ -3,6 +3,8 @@
  */
 package org.pentaho.ui.xul;
 
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.pentaho.ui.xul.components.XulMessageBox;
@@ -38,4 +40,9 @@ public interface XulDomContainer {
   public boolean isClosed();
   
   public XulLoader getXulLoader();
+  
+  public void mergeContainer(XulDomContainer container);
+  
+  public Map<String, XulEventHandler> getEventHandlers();
+  
 }
