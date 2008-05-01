@@ -7,10 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
@@ -192,9 +188,10 @@ public class SwingDialog extends SwingElement implements XulDialog{
 			buttonPanel.add(Box.createHorizontalGlue());
 		}
 		
-		for(int i=this.buttons.size(); i>=0; i--){
+		ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
+		for(int i=buttonKeyList.size(); i>=0; i--){
 		  buttonPanel.add(Box.createHorizontalStrut(5));
-		  buttonPanel.add((JButton) this.buttons.get(i).getManagedObject());
+		  buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
 		}
 		
 		buttonPanel.add(Box.createHorizontalStrut(5));
