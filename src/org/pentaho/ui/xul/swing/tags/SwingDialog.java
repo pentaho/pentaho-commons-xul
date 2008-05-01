@@ -192,12 +192,11 @@ public class SwingDialog extends SwingElement implements XulDialog{
 			buttonPanel.add(Box.createHorizontalGlue());
 		}
 		
-		Set<SwingDialog.BUTTONS> keys = this.buttons.descendingKeySet();
-		
-		for(SwingDialog.BUTTONS btn : keys){
-			buttonPanel.add(Box.createHorizontalStrut(5));
-			buttonPanel.add((JButton) this.buttons.get(btn).getManagedObject());
+		for(int i=this.buttons.size(); i>=0; i--){
+		  buttonPanel.add(Box.createHorizontalStrut(5));
+		  buttonPanel.add((JButton) this.buttons.get(i).getManagedObject());
 		}
+		
 		buttonPanel.add(Box.createHorizontalStrut(5));
 		
 		if(	this.buttonAlignment == BUTTON_ALIGN.START || 
