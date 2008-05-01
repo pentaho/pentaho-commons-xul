@@ -21,6 +21,8 @@ public interface XulDomContainer {
   
   public Document getDocumentRoot();
   
+  public Document getDocument(int idx);
+  
   public XulDomContainer loadFragment(String xulLocation) throws XulException;
   
   public void addEventHandler(String id, String eventClassName) throws XulException;

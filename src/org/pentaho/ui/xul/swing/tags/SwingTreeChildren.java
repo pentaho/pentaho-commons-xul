@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -13,35 +16,34 @@ import org.pentaho.ui.xul.swt.tags.SwtTreeRow;
 public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 	
 	XulTree tree;
+	List<XulTreeItem> items;
 	public SwingTreeChildren(XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treechildren");
 		
 		tree = (XulTree) parent;
-		
+		items = new ArrayList<XulTreeItem>();
 		managedObject = "empty";
 		
 	}
 
 	public void addItem(XulTreeItem item) {
-		// TODO Auto-generated method stub
-		
+		items.add(item);
 	}
 
 	public XulTreeRow addNewRow() {
 
     SwingTreeItem item = new SwingTreeItem(this);
     item.setRow(new SwingTreeRow(item));
+    items.add(item);
     return item.getRow();
 	}
 
 	public XulTreeItem getItem(int rowIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		return items.get(rowIndex);
 	}
 
 	public XulTree getTree() {
-		// TODO Auto-generated method stub
-		return null;
+		return tree;
 	}
 
 	public boolean isAlternatingbackground() {
@@ -55,13 +57,12 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 	}
 
 	public void removeItem(XulTreeItem item) {
-		// TODO Auto-generated method stub
-		
+
+		items.remove(item);
 	}
 
 	public void removeItem(int rowIndex) {
-		// TODO Auto-generated method stub
-		
+		items.remove(rowIndex);
 	}
 
 	public void setAlternatingbackground(boolean alt) {
@@ -72,6 +73,11 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 	@Override
 	public void layout() {
 		tree.setRootChildren(this);
-		
+	}
+
+	@Override
+	public void addComponent(XulComponent c) {
+		super.addComponent(c);
+		items.add((XulTreeItem) c);
 	}
 }

@@ -42,6 +42,10 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   protected List<XulComponent> children;
 
+  protected int width;
+  
+  protected int height;
+  
   public AbstractXulComponent(Element element) {
     this.element = element;
     children = new ArrayList<XulComponent>();
@@ -185,6 +189,22 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
     this.element.replaceChild(oldElement, newElement);
+  }
+  
+  public void setHeight(int height){
+  	this.height = height;
+  }
+  
+  public int getHeight(){
+  	return this.height;
+  }
+  
+  public void setWidth(int width){
+  	this.width = width;
+  }
+  
+  public int getWidth(){
+  	return this.width;
   }
   
 }

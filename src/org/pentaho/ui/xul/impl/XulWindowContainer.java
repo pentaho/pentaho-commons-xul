@@ -21,6 +21,7 @@ import org.pentaho.ui.xul.swing.SwingXulRunner;
 public class XulWindowContainer extends AbstractXulDomContainer {  
 	private static final Log logger = LogFactory.getLog(XulWindowContainer.class);
   private List<Document> windows;
+  private boolean closed = false;
   
   public XulWindowContainer() throws XulException {
     super();
@@ -68,11 +69,14 @@ public class XulWindowContainer extends AbstractXulDomContainer {
 
   @Override
   public void close() {
-    ((XulWindow) this.windows.get(0).getRootElement()).close();
+  	for(Document wind : this.windows){
+  		((XulWindow) wind.getRootElement()).close();
+  	}
+  	closed = true;
   }
 
   public boolean isClosed() {
-    return ((XulWindow) this.windows.get(0).getRootElement()).isClosed();
+    return closed;
   }
 
   @Override
@@ -149,4 +153,9 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       throw new XulException(String.format("Error creating new instance: %s",e.getMessage()), e);
     }
   }
+
+	public Document getDocument(int idx) {
+		return this.windows.get(idx);
+	}
+	
 }

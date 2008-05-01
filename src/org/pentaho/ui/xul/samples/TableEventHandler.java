@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.samples;
 
+import java.util.Vector;
+
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -73,7 +75,11 @@ public class TableEventHandler extends XulEventHandler{
 			newRow.addCell(newCell);
 
 			newCell = (XulTreeCell) document.createElement("treecell");
-			newCell.setLabel("testing 3");
+			Vector vec = new Vector();
+			vec.add("foo");
+			vec.add("bar");
+			vec.add("baz");
+			newCell.setValue(vec);
 			newRow.addCell(newCell);
 
 			newCell = (XulTreeCell) document.createElement("treecell");

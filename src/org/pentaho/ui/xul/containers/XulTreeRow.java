@@ -12,5 +12,7 @@ public interface XulTreeRow extends XulContainer {
     public void makeCellEditable(int index);
     
     public void remove();
+    
+    public XulTreeCell getCell(int index);
 
 }

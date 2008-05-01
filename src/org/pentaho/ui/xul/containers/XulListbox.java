@@ -149,5 +149,6 @@ public interface XulListbox extends XulContainer {
    */
   public int[] getSelectedIndices();
 
+  
 
 }

@@ -75,4 +75,8 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
     widget.remove();
     rowParent.setRow(null);
   }
+
+	public XulTreeCell getCell(int index) {
+		return this.cells.get(index);
+	}
 }

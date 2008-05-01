@@ -2,6 +2,8 @@ package org.pentaho.ui.xul.swing.tags;
 
 import javax.swing.JLabel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
@@ -10,7 +12,9 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingTreeCell extends SwingElement implements XulTreeCell {
 	
 	private JLabel label;
-	private boolean value;
+	private Object value;
+	private int index = 0;
+	private static final Log logger = LogFactory.getLog(SwingTreeCell.class);
 	
 	public SwingTreeCell(XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecell");
@@ -22,6 +26,14 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
 		super("treecell");
 		label = new JLabel();
 		managedObject = label;
+	}
+	
+	public void setSelectedIndex(int index){
+		this.index = index;
+	}
+	
+	public int getSelectedIndex(){
+		return index;
 	}
 	
 	public String getLabel() {
@@ -57,12 +69,14 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
 	}
 
 	public void setValue(Object value) {
+		logger.info("Setting cell val: "+value);
 		if(value instanceof String){
 			this.value = Boolean.parseBoolean(((String) value));
 		} else if(value instanceof Boolean){
 			this.value = (Boolean) value;
-			
-		} 
+		} else {
+			this.value = value;
+		}
 	}
 
 }

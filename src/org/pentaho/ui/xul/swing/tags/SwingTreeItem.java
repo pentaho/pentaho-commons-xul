@@ -19,6 +19,7 @@ public class SwingTreeItem extends SwingElement implements XulTreeItem{
 	public SwingTreeItem(XulTreeRow row) {
 		super("treeitem");
 		this.children.add(row);
+		this.row = row;
 		managedObject = "empty";
 	}
 	

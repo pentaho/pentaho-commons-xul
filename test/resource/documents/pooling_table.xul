@@ -13,40 +13,13 @@
 			<treecol id="select_col" label="Selected" type="checkbox" editable="true" />
 			<treecol id="parameter_col" label="Name" flex="2" editable="false" />
 			<treecol id="default_col" label="Default Value" flex="1" editable="false" />
-			<treecol id="value_col" label="Value" flex="1" editable="true" />
-			<treecol id="description_col" label="Description" flex="5" editable="false" />
+			<treecol id="value_col" label="Value" flex="1" editable="true" type="combobox" />
+			<treecol id="description_col" label="Description" flex="5" editable="true" />
 		</treecols>
-	<!--
+
 		<treechildren id="main_treechildren">
-			<treeitem id="defaultAutoCommit_item">
-				<treerow id="defaultAutoCommit_row">
-					<treecell id="selected_1" value="true"/>
-					<treecell id="name_1" label="defaultAutoCommit" />
-					<treecell id="default_1" label="true" />
-					<treecell id="value_1"/>
-					<treecell id="label_1" label="The default auto-commit state of connections created by this pool." />
-				</treerow>
-			</treeitem>
-			<treeitem>
-				<treerow>
-					<treecell />
-					<treecell label="defaultReadOnly" />
-					<treecell label="" />
-					<treecell />
-					<treecell label="The default read-only state of connections created by this pool. If not set then the setReadOnly method will not be called. (Some drivers don't support read only mode, ex: Informix)" />
-				</treerow>
-			</treeitem>
-			<treeitem>
-				<treerow>
-					<treecell />
-					<treecell label="defaultTransactionIsolation" />
-					<treecell label="" />
-					<treecell />
-					<treecell label="The default TransactionIsolation state of connections created by this pool. One of the following: (see javadoc)\n\n  * NONE\n  * READ_COMMITTED\n  * READ_UNCOMMITTED\n  * REPEATABLE_READ  * SERIALIZABLE\n" />
-				</treerow>
-			</treeitem>
+			
 		</treechildren>
-			-->
 
 	</tree>
 	<hbox>

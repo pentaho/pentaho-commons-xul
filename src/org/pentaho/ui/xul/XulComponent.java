@@ -64,4 +64,29 @@ public interface XulComponent extends Element {
    */
   public void setFlex(int flex);
   
+  /**
+   * Set the width of this control
+   * 
+   */
+  public void setWidth(int width);
+  
+  /**
+   * Returns the width of the component
+   * @return the component's width
+   */
+  public int getWidth();
+  
+  /**
+   * Set the height of the component
+   * 
+   */
+  public void setHeight(int height);
+  
+
+  /**
+   * Returns the height of the component
+   * @return the component's height
+   */
+  public int getHeight();
+  
 }

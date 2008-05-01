@@ -4,6 +4,7 @@
 package org.pentaho.ui.xul.swing;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
 import javax.swing.Box;

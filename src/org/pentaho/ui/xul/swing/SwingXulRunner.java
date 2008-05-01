@@ -98,7 +98,7 @@ public class SwingXulRunner implements XulRunner {
 //      );
 
     	XulDomContainer container = new SwingXulLoader().loadXul(
-      		  "resource/documents/internationalization.xul"
+      		  "resource/documents/pooling_table.xul"
         );
     	
       XulRunner runner = new SwingXulRunner();

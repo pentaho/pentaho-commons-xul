@@ -60,5 +60,13 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
     System.out.println("loadFragment not implemented in XulFragmentContainer");
     return null;
   }
+
+	public Document getDocument(int idx) {
+		if (idx > 0){
+			return null;
+		} else {
+			return fragment;
+		}
+	}
     
 }

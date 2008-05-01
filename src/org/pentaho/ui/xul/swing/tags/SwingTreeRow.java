@@ -22,8 +22,8 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
 	
 
 	public void addCell(XulTreeCell cell) {
-		this.addChild(cell);
-		
+		this.children.add(cell);
+		super.addChild(cell);
 	}
 
 
@@ -36,6 +36,7 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
     }else{
       cell = new SwingTreeCell(this);
       cell.setLabel(text);
+      this.addCell(cell);
     }
     layout();
     ((SwingTree)this.getParent().getParent().getParent()).getTable().updateUI();
@@ -53,6 +54,10 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
 
 	@Override
 	public void layout() {
+	}
+
+	public XulTreeCell getCell(int index) {
+		return (SwingTreeCell) this.children.get(index);
 	}
 
 }

@@ -3,9 +3,14 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.text.JTextComponent;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -18,12 +23,15 @@ import org.pentaho.ui.xul.swing.SwingElement;
  */
 public class SwingTextbox extends SwingElement implements XulTextbox  {
   private JTextField textField;
+  private boolean multiline = false;
+  private JTextArea textArea;
+  boolean disabled = false;
+  String value = "";
+  JScrollPane scrollPane;
   
   public SwingTextbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
-    textField = new JTextField();
-    textField.setPreferredSize(new Dimension(150,18));
-    managedObject = textField;
+    managedObject = null;
   }
 
   public String getValue(){
@@ -31,7 +39,10 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public void setValue(String text){
-    textField.setText(text);
+  	if(managedObject != null){
+  		((JTextComponent) managedObject).setText(text);
+  	}
+  	this.value = text;
   }
   
   public void layout(){
@@ -42,22 +53,25 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public boolean isDisabled() {
-    return !textField.isEnabled();
+    return this.disabled;
   }
 
   public void setDisabled(boolean dis) {
-    textField.setEnabled(!dis);
+  	this.disabled = dis;
+  	if(managedObject != null){
+  		((Component) managedObject).setEnabled(!dis);
+  	}
   }
 
   public void setMaxlength(int length) {
   }
 
   public boolean isMultiline() {
-    return false;
+    return multiline;
   }
 
   public void setMultiline(boolean multi) {
-    
+    this.multiline = multi;
   }
 
   public boolean isReadonly() {
@@ -77,7 +91,8 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public void selectAll() {
-    textField.selectAll();
+
+		((JTextComponent) managedObject).selectAll();
     
   }
 
@@ -86,7 +101,25 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public Object getTextControl() {
-    return textField;
+    return managedObject;
   }
+
+	@Override
+	public Object getManagedObject() {
+		if(managedObject == null){
+			if(this.multiline){
+				textArea = new JTextArea();
+				managedObject = textArea;
+				scrollPane = new JScrollPane(textArea);
+				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
+		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			} else {
+				textField = new JTextField();
+				managedObject = textField;
+			}
+		}
+		return (this.multiline)? scrollPane : textField;
+    
+	}
 
 }

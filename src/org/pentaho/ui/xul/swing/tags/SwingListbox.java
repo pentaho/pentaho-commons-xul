@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -74,14 +75,6 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     
   }
 
-  public void setWidth(int width) {
-	  Dimension dim = new Dimension(width, listBox.getHeight());
-	scrollPane.setPreferredSize(dim);
-	scrollPane.setSize(dim);
-	scrollPane.setMaximumSize(dim);
-  }
-
-
   public Orient getOrientation() {
     return null;
   }
@@ -94,6 +87,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
         this.model.addElement(comp);
       }
     }
+    this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
   }
 
   public String getOnselect() {
