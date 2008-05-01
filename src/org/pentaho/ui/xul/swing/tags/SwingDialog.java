@@ -189,7 +189,7 @@ public class SwingDialog extends SwingElement implements XulDialog{
 		}
 		
 		ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
-		for(int i=buttonKeyList.size(); i>=0; i--){
+		for(int i=buttonKeyList.size()-1; i>=0; i--){
 		  buttonPanel.add(Box.createHorizontalStrut(5));
 		  buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
 		}
