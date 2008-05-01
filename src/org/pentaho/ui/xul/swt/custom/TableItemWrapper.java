@@ -107,7 +107,8 @@ public class TableItemWrapper implements RowWidget {
       case PASSWORD:
         boolean isPassword = column.getColumnType().equals(ColumnType.PASSWORD);
         Text edit = null;
-        if (column.getCustomeditor() != null){
+        if ((column.getCustomeditor() != null) && 
+            (XulWindowContainer.isRegistered(column.getCustomeditor()))){
           createCustomText(index, column.getCustomeditor(), isPassword);
         }else{
           createEditableText(index, isPassword);

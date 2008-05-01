@@ -1,11 +1,9 @@
 package org.pentaho.ui.xul.util;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -13,7 +11,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.ui.xul.impl.XulWindowContainer;
 
 
 
@@ -44,7 +41,7 @@ public class ResourceBundleTranslator {
 	}
 	
 	private static String getTranslatedValue(	String key, ResourceBundle bundle){
-		System.out.println(key);
+		//System.out.println(key);
 
 		try{
 			return bundle.getString(key);

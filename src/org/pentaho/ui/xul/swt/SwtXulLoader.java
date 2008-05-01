@@ -118,7 +118,7 @@ public class SwtXulLoader implements XulLoader {
       InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
 
       if(in == null){
-        throw new IllegalArgumentException("File not found");
+        throw new IllegalArgumentException("XUL definition file not found: " + resource);
       }
       
       ResourceBundle res;

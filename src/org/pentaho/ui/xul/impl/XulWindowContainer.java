@@ -102,6 +102,11 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     XulDomContainer container = this.xulLoader.loadXulFragment(xulLocation, res);
     return container;  
   }
+  
+  public static boolean isRegistered(String widgetHandlerName){
+    Object handler = XulParser.handlers.get(widgetHandlerName.toUpperCase());
+    return (handler != null);
+  }
 
   public static Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params, Class[] classes ) throws XulException, IllegalArgumentException{
     Object handler = XulParser.handlers.get(widgetHandlerName.toUpperCase());
