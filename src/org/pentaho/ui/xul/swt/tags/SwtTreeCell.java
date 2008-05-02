@@ -56,4 +56,14 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
     this.value=value;
   }
 
+  public int getSelectedIndex() {
+    return 0;
+  }
+
+  public void setSelectedIndex(int index) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
 }

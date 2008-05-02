@@ -56,6 +56,7 @@ import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
+import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -108,7 +109,6 @@ public class SwingTree extends SwingElement implements XulTree{
 		scrollpane = new JScrollPane(table);
 		
 		this.managedObject = scrollpane.getViewport();
-		logger.info("Set Managed Object to ViewPort");
 	}
 	
 	public JTable getTable(){
@@ -149,11 +149,36 @@ public class SwingTree extends SwingElement implements XulTree{
 		TableModel model = table.getModel();
 		Object[][] data = new Object[model.getRowCount()][model.getColumnCount()];
 		
-		for(int row=0; row<model.getRowCount(); row++){
-			for(int col=0; col<model.getColumnCount(); col++){
-				data[row][col] = model.getValueAt(row,col);
-			}
+		int y=0;
+		for(XulComponent item : this.rootChildren.getChildNodes()){
+		  int x=0;
+		  for(XulComponent tempCell : ((XulTreeItem) item).getRow().getChildNodes()){
+		    SwingTreeCell cell = (SwingTreeCell) tempCell;
+		    switch(columns.getColumn(x).getColumnType()){
+          case CHECKBOX:
+            data[y][x] = cell.getValue();
+            break;
+          case COMBOBOX:
+            Vector values = (Vector)cell.getValue();
+            int idx = cell.getSelectedIndex();
+            data[y][x] = values.get(idx);
+            break;
+          default: //label
+            data[y][x] = cell.getLabel();
+            break;
+        }
+        x++;
+		    
+		  }
+
+      y++;
 		}
+		
+//		for(int row=0; row<this.rootChildren.getRowCount(); row++){
+//			for(int col=0; col<model.getColumnCount(); col++){
+//				data[row][col] = model.getValueAt(row,col);
+//			}
+//		}
 		return data;
 	}
 
@@ -250,30 +275,29 @@ public class SwingTree extends SwingElement implements XulTree{
 			@Override
 			public void setValueAt(Object val, int row, int col) {
 
-				super.setValueAt(val, row, col);
-				
-				logger.info("set value at ("+row+", "+col+")");
-				
 		    XulTreeCell cell = rootChildren.getItem(row).getRow().getCell(col);
 		    switch(columns.getColumn(col).getColumnType()){
 			    case CHECKBOX:
 						cell.setValue(val);
+		        super.setValueAt(val, row, col);
+		        tableData.get(row).set(col, val);
 						break;
 					case COMBOBOX:
-						cell.setValue(val);
 						((SwingTreeCell) cell).setSelectedIndex(((Vector)cell.getValue()).indexOf(val));
+		        super.setValueAt((Vector)cell.getValue(), row, col);
+		        tableData.get(row).set(col, (Vector)cell.getValue());
 						break;
 					default: //label
 						cell.setLabel((String) val);
+	          super.setValueAt(val, row, col);
+	          tableData.get(row).set(col, val);
 						break;
 		    }
-				tableData.get(row).set(col, val);
 				fireTableCellUpdated(row, col);
 		        
 			}
 			
 			public Class getColumnClass(int c) {
-				logger.info("Class: "+getValueAt(0, c).getClass());
 	        return getValueAt(0, c).getClass();
 	    }
 
@@ -365,10 +389,25 @@ public class SwingTree extends SwingElement implements XulTree{
 						}
 						return checkbox;
 					case COMBOBOX:
-						JComboBox comboBox= new JComboBox((Vector) value);
 
-				    SwingTreeCell cell = (SwingTreeCell) rootChildren.getItem(row).getRow().getCell(column);
-						comboBox.setSelectedIndex(cell.getSelectedIndex());
+				    SwingTreeCell cell = (SwingTreeCell) rootChildren.getItem(row).getRow().getCell(SwingTree.this.columns.getChildNodes().indexOf(col));
+
+				    JComboBox comboBox = null;
+				    Vector data = (Vector) cell.getValue();
+				    if(data == null){
+				      logger.debug("SwingTreeCell combobox data is null, passed in value: "+value);
+				      if(value instanceof Vector){
+				        data = (Vector) value;
+				      }
+				    }
+				    if(data != null){
+				      comboBox = new JComboBox(data);
+	            comboBox.setSelectedIndex(cell.getSelectedIndex());
+				    } else {
+				      comboBox = new JComboBox();
+				    }
+				    
+				    
 						return comboBox;
 					default:
 						JLabel label = new JLabel((String) value);
@@ -410,7 +449,7 @@ public class SwingTree extends SwingElement implements XulTree{
 						comboBox.addActionListener(new ActionListener() {
 			        public void actionPerformed(ActionEvent event) {
 			        	
-			        	SwingTree.logger.info("Setting ComboBox value from editor: "+comboBox.getSelectedItem()+", "+row+", "+column);
+			        	SwingTree.logger.debug("Setting ComboBox value from editor: "+comboBox.getSelectedItem()+", "+row+", "+column);
 			        	
 			        	SwingTree.this.table.setValueAt(comboBox.getSelectedItem(), row, column);
 			        } 

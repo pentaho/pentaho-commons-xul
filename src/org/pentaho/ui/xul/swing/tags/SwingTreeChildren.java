@@ -28,6 +28,7 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 
 	public void addItem(XulTreeItem item) {
 		items.add(item);
+		this.addChild(item);
 	}
 
 	public XulTreeRow addNewRow() {
@@ -35,6 +36,8 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
     SwingTreeItem item = new SwingTreeItem(this);
     item.setRow(new SwingTreeRow(item));
     items.add(item);
+    this.addChild(item);
+    
     return item.getRow();
 	}
 

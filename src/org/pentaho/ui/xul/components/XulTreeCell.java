@@ -16,4 +16,6 @@ public interface XulTreeCell extends XulComponent {
   public void setValue(Object value);
   public Object getValue();
   
+  public void setSelectedIndex(int index);
+  public int getSelectedIndex();
 }
