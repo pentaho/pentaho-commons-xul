@@ -116,13 +116,14 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	public Object getManagedObject() {
 		if(managedObject == null){
 			if(this.multiline){
-				textArea = new JTextArea();
+				textArea = new JTextArea((value != null) ? value : "");
 				managedObject = textArea;
 				scrollPane = new JScrollPane(textArea);
 				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
 		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			} else {
-				textField = new JTextField();
+				textField = new JTextField((value != null) ? value : "");
+				textField.setPreferredSize(new Dimension(200,20));
 				managedObject = textField;
 			}
 		}

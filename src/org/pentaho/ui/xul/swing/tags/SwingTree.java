@@ -106,6 +106,7 @@ public class SwingTree extends SwingElement implements XulTree{
 		ToolTipManager.sharedInstance().unregisterComponent(table);
 		ToolTipManager.sharedInstance().unregisterComponent(table.getTableHeader());
 		
+		table.setRowHeight(18);
 		scrollpane = new JScrollPane(table);
 		
 		this.managedObject = scrollpane.getViewport();
@@ -156,7 +157,11 @@ public class SwingTree extends SwingElement implements XulTree{
 		    SwingTreeCell cell = (SwingTreeCell) tempCell;
 		    switch(columns.getColumn(x).getColumnType()){
           case CHECKBOX:
-            data[y][x] = cell.getValue();
+          	Boolean flag = (Boolean) cell.getValue();
+          	if(flag == null){
+          		flag = Boolean.FALSE;
+          	}
+            data[y][x] = flag;
             break;
           case COMBOBOX:
             Vector values = (Vector)cell.getValue();
