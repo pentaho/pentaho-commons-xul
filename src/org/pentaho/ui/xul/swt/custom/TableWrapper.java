@@ -18,6 +18,7 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.TabularWidget;
+import org.pentaho.ui.xul.util.ColumnType;
 
 public class TableWrapper implements TabularWidget {
 
@@ -59,7 +60,7 @@ public class TableWrapper implements TabularWidget {
   }
   
   public Object[][] getValues(){
-    String [][] values = null;
+    Object [][] values = null;
 
     int columnCount = table.getColumnCount();
     int rowCount = table.getItemCount();
@@ -68,11 +69,18 @@ public class TableWrapper implements TabularWidget {
       return new String[0][0];
     }
     
-    values = new String[rowCount][columnCount];
+    values = new Object[rowCount][columnCount];
     
     for (int i = 0; i < rowCount; i++) {
       for (int j = 0; j < columnCount; j++) {
-        values[i][j] = table.getItem(i).getText(j);
+      	switch(this.owner.getColumns().getColumn(j).getColumnType()){
+      		case CHECKBOX:
+      			values[i][j] = Boolean.valueOf(table.getItem(i).getText(j));
+      			break;
+      		default:
+      			values[i][j] = table.getItem(i).getText(j);
+      			break;
+      	}
       }
     }
     
