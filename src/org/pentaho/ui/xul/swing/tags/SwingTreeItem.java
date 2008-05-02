@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -9,6 +11,7 @@ import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingTreeItem extends SwingElement implements XulTreeItem{
+	private static final Log logger = LogFactory.getLog(SwingTreeItem.class);
 	private XulTreeRow row;
 	
 	public SwingTreeItem(XulComponent parent, XulDomContainer domContainer, String tagName) {
@@ -73,5 +76,12 @@ public class SwingTreeItem extends SwingElement implements XulTreeItem{
 	
 	@Override
 	public void layout() {
+		for(XulComponent comp : this.children){ //should be the only one in there
+			if(comp instanceof XulTreeRow){ //more of an assert, should be true;
+				this.row = (SwingTreeRow) comp;
+			} else {
+				logger.error("SwingTreeItem's child is not a XulTreeRow");
+			}
+		}
 	}
 }

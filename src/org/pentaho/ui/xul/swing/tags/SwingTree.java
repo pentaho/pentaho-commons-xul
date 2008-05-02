@@ -147,7 +147,7 @@ public class SwingTree extends SwingElement implements XulTree{
 	public Object[][] getValues() {
 		
 		TableModel model = table.getModel();
-		Object[][] data = new Object[model.getRowCount()][model.getColumnCount()];
+		Object[][] data = new Object[this.rootChildren.getChildNodes().size()][model.getColumnCount()];
 		
 		int y=0;
 		for(XulComponent item : this.rootChildren.getChildNodes()){
@@ -384,8 +384,10 @@ public class SwingTree extends SwingElement implements XulTree{
 						JCheckBox checkbox = new JCheckBox();
 						if(value instanceof String){
 							checkbox.setSelected(((String) value).equalsIgnoreCase("true"));
-						} else {
+						} else if(value instanceof Boolean){
 							checkbox.setSelected((Boolean) value);
+						} else if(value == null){
+							checkbox.setSelected(false);
 						}
 						return checkbox;
 					case COMBOBOX:
@@ -438,8 +440,10 @@ public class SwingTree extends SwingElement implements XulTree{
 						control = checkbox;
 						if(value instanceof String){
 							checkbox.setSelected(((String) value).equalsIgnoreCase("true"));
-						} else {
+						} else if(value instanceof Boolean){
 							checkbox.setSelected((Boolean) value);
+						} else if(value == null){
+							checkbox.setSelected(false);
 						}
 						return checkbox;
 					case COMBOBOX:

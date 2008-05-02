@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
@@ -28,6 +30,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   boolean disabled = false;
   String value = "";
   JScrollPane scrollPane;
+	private static final Log logger = LogFactory.getLog(SwingTextbox.class);
   
   public SwingTextbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -35,7 +38,12 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public String getValue(){
-    return textField.getText();
+  	if(managedObject != null){
+  		return ((JTextComponent) managedObject).getText();
+  	} else {
+  		logger.error("Attempt to get Textbox's value before it's instantiated");
+  		return null;
+  	}
   }
 
   public void setValue(String text){
