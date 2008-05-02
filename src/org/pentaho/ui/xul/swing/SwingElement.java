@@ -4,18 +4,15 @@
 package org.pentaho.ui.xul.swing;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
 
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -29,6 +26,7 @@ public class SwingElement extends AbstractXulComponent{
   protected JPanel container;
   protected Orient orientation;
   protected Orient orient = Orient.HORIZONTAL;
+  protected GridBagConstraints gc = new GridBagConstraints();
   
   
   public SwingElement(String tagName, Object managedObject) {

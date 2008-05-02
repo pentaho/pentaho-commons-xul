@@ -37,9 +37,6 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   protected boolean flexLayout = false;
 
-  // TODO: This should be moved out to a Swing specific subclass of xulelement
-  protected GridBagConstraints gc;
-
   protected List<XulComponent> children;
 
   protected int width;
