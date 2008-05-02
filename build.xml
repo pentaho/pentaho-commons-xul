@@ -26,13 +26,11 @@
 	</path>
 
 	<target name="init">
-		<!--
-        <propertyfile file="src/build-res/version.properties"  comment="Version Property File">
-          <entry  key="release.build.date" type="string" value="${compile.timestamp}"/>
-          <entry  key="release.build.number" type="int" default="0" operation="+"/>
-        </propertyfile>
-        -->
-	</target>
+    <propertyfile file="src/build-res/version.properties"  comment="Version Property File">
+      <entry  key="release.build.date" type="string" value="${compile.timestamp}"/>
+      <entry  key="release.build.number" type="int" default="0" operation="+"/>
+    </propertyfile>
+  </target>
 
 	<target name="clean">
 		<!-- remove build directory -->
