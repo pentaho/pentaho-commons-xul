@@ -69,7 +69,6 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
 	}
 
 	public void setValue(Object value) {
-		logger.info("Setting cell val: "+value);
 		if(value instanceof String){
 			this.value = Boolean.parseBoolean(((String) value));
 		} else if(value instanceof Boolean){
