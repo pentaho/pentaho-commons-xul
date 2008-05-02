@@ -3,9 +3,9 @@
 	<description>Pentaho XUL Framework</description>
 	<property file="src/build-res/version.properties" />
 	<property file="build.properties" />
-    <tstamp>
-       <format property="compile.timestamp" pattern="yyyy-MM-dd HH.mm.ss" />
-    </tstamp>
+	<tstamp>
+		<format property="compile.timestamp" pattern="yyyy-MM-dd HH.mm.ss" />
+	</tstamp>
 	<path id="classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -25,12 +25,28 @@
 		</fileset>
 	</path>
 
+	<path id= "svnant.classpath"  >
+		<fileset dir= "/opt/svnant/lib" >
+			<include name= "*.jar" />
+		</fileset>
+	</path>
+
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
+
+	<target name="testSVNAnt">
+		<svn>
+			<wcVersion path= "." />
+		</svn>
+
+		<echo message= "Subversion repository url: ${repository.url}" />
+	</target>
+
 	<target name="init">
-    <propertyfile file="src/build-res/version.properties"  comment="Version Property File">
-      <entry  key="release.build.date" type="string" value="${compile.timestamp}"/>
-      <entry  key="release.build.number" type="int" default="0" operation="+"/>
-    </propertyfile>
-  </target>
+		<propertyfile file="src/build-res/version.properties" comment="Version Property File">
+			<entry key="release.build.date" type="string" value="${compile.timestamp}" />
+			<entry key="release.build.number" type="int" default="0" operation="+" />
+		</propertyfile>
+	</target>
 
 	<target name="clean">
 		<!-- remove build directory -->
@@ -68,9 +84,9 @@
 	<target name="compile-tests" depends="compile">
 		<mkdir dir="${test-bin.dir}" />
 		<javac destdir="${test-bin.dir}" debug="yes" source="1.5" target="1.5" fork="true">
-			
+
 			<src path="./test" />
-			
+
 			<classpath>
 				<path refid="classpath" />
 			</classpath>
@@ -80,10 +96,18 @@
 			<fileset dir="./test" excludes="**/*.java"/>
 		</copy>
 	</target>
-	
-	<target name="dist" depends="clean, compile" description="Creates a JAR of the XUL Framework.">
+
+	<target name="svn-revision">
+		<svn>
+			<status path="." revisionProperty="repository.revision" />
+		</svn>
+		<echo message="Subversion repository revision: ${repository.revision}" />
+	</target>
+
+	<target name="dist" depends="clean, compile, svn-revision" description="Creates a JAR of the XUL Framework.">
+
 		<mkdir dir="dist" />
-		<jar destfile="dist/pentaho-xul-framework-${release.major.number}.${release.minor.number}.${release.milestone.number}.jar">
+		<jar destfile="dist/pentaho-xul-framework-${release.major.number}.${release.minor.number}.${release.milestone.number}-${repository.revision}.jar">
 			<manifest>
 				<attribute name="Implementation-Title" value="${impl.title}" />
 				<attribute name="Implementation-Version" value="${impl.version}" />
@@ -98,21 +122,21 @@
 
 	<target name="junit" depends="compile-tests">
 		<junit printsummary="yes" haltonfailure="no" fork="true">
-		  	<classpath>
+			<classpath>
 				<path refid="classpath" />
 			</classpath>
-			
+
 			<classpath location="${bin.dir}" />
-			
+
 			<classpath location="${test-bin.dir}" />
-		  <formatter type="xml"/>
-		
-		  <batchtest todir="${src.tests}">
-			
-		    <fileset dir="${src.tests}">
-		      <include name="**/*Test*.java"/>
-		    </fileset>
-		  </batchtest>
+			<formatter type="xml"/>
+
+			<batchtest todir="${src.tests}">
+
+				<fileset dir="${src.tests}">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
 		</junit>
 	</target>
 
@@ -123,20 +147,22 @@
            version="true"
            use="true"
            windowtitle="Pentaho XUL Framework API">
-		<classpath>
-			<path refid="classpath" />
-		</classpath>
-	    <fileset dir="src" defaultexcludes="yes">
-		      <exclude name="**/*.xul"/>
-		      <exclude name="**/*.xml"/>
-		      <exclude name="**/*.properties"/>
-	    </fileset>
-	
-	    <doctitle><![CDATA[<h1>Pentaho XUL Framework API</h1>]]></doctitle>
-	    <bottom><![CDATA[<i>Copyright &#169; 2008 Pentaho Corporation</i>]]></bottom>
-	    <tag name="todo" scope="all" description="To do:"/>
-	    <!--<link href="http://..."/>-->
-	  </javadoc>
-	</target>
-	
+			<classpath>
+				<path refid="classpath" />
+			</classpath>
+			<fileset dir="src" defaultexcludes="yes">
+				<exclude name="**/*.xul"/>
+				<exclude name="**/*.xml"/>
+				<exclude name="**/*.properties"/>
+			</fileset>
+
+			<doctitle>
+				<![CDATA[<h1>Pentaho XUL Framework API</h1>]]></doctitle>
+		<bottom>
+			<![CDATA[<i>Copyright &#169; 2008 Pentaho Corporation</i>]]></bottom>
+	<tag name="todo" scope="all" description="To do:"/>
+	<!--<link href="http://..."/>-->
+</javadoc>
+</target>
+
 </project>
