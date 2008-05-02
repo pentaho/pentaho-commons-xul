@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 
@@ -21,6 +22,7 @@ public class SwingMenubar extends SwingElement implements XulMenubar{
     children = new ArrayList<XulComponent>();
     
     menuBar = new JMenuBar();
+    menuBar.setMinimumSize(new Dimension(20,20));
     managedObject = menuBar;
     
   }
