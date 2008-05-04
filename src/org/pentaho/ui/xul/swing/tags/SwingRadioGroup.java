@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.components.XulRadioGroup;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -21,7 +21,7 @@ import org.pentaho.ui.xul.util.Orient;
  * @author aphillips
  *
  */
-public class SwingRadioGroup extends SwingElement implements XulContainer {
+public class SwingRadioGroup extends SwingElement implements XulRadioGroup {
 	private static final Log logger = LogFactory.getLog(SwingRadioGroup.class);
 	private ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -36,11 +36,18 @@ public class SwingRadioGroup extends SwingElement implements XulContainer {
 
   @Override
   public void addComponent(XulComponent c) {
+    addComponentToButtonGroup(c);
+
+    super.addComponent(c);
+  }
+  
+  protected void addComponentToButtonGroup(XulComponent c) {
+    for(XulComponent child : c.getChildNodes()) {
+      addComponentToButtonGroup(child);
+    }
     if(AbstractButton.class.isAssignableFrom(c.getManagedObject().getClass())) {
       this.buttonGroup.add((AbstractButton)c.getManagedObject());
     }
-
-    super.addComponent(c);
   }
   
   @Override
