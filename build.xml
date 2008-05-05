@@ -12,36 +12,58 @@
 			<include name="*.zip" />
 		</fileset>
 		<fileset dir="${lib-ext.dir}">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="lib-swt/win32">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="lib-swt">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 		<fileset dir="lib-test">
-			<include name="**/*.jar"/>
+			<include name="**/*.jar" />
 		</fileset>
 	</path>
 
-	<path id= "svnant.classpath"  >
-		<fileset dir= "${svnant.home}/lib" >
-			<include name= "*.jar" />
-		</fileset>
-	</path>
 
-	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.classpath" />
+	<!--
+		This section is for auto installation of the subversion ant tasks (svnant project).  
+		See http://subclipse.tigris.org/svnant.html
+	-->
+	<target name="download-svnant">
+		<property name="svnant.jar.dir" value="${basedir}/svnant" />
+		<mkdir dir="${svnant.jar.dir}" />
+		<echo message="installing svnant..." />
+		<get src="http://subclipse.tigris.org/files/documents/906/35081/svnant-1.1.0-RC2.zip" dest="${svnant.jar.dir}/svnant.zip" usetimestamp="true" />
 
-	<target name="testSVNAnt">
-		<svn>
-			<wcVersion path= "." />
-		</svn>
-
-		<echo message= "Subversion repository url: ${repository.url}" />
+		<unzip src="${svnant.jar.dir}/svnant.zip" dest="${svnant.jar.dir}">
+			<patternset>
+				<include name="**/*.jar" />
+			</patternset>
+		</unzip>
 	</target>
 
-	<target name="init">
+	<target name="install-svnant" depends="download-svnant">
+		<path id="svnant.lib.path">
+			<fileset dir="${svnant.jar.dir}" includes="**/*.jar" />
+		</path>
+
+		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svnant.lib.path" />
+	</target>
+
+
+	<target name="test-svnant" depends="install-svnant">
+		<svn>
+			<wcVersion path="." />
+		</svn>
+
+		<echo message="Subversion repository url: ${repository.url}" />
+	</target>
+	<!--
+		/end svnant install
+	-->
+
+	<target name="init" depends="install-svnant">
 		<propertyfile file="src/build-res/version.properties" comment="Version Property File">
 			<entry key="release.build.date" type="string" value="${compile.timestamp}" />
 			<entry key="release.build.number" type="int" default="0" operation="+" />
@@ -55,12 +77,12 @@
 	</target>
 
 	<target name="clean-dist">
-		<delete dir="dist"/>
+		<delete dir="dist" />
 	</target>
 
 	<target name="compile" depends="init">
 		<!-- Compile all java classes -->
-		<mkdir dir="${bin.dir}"/>
+		<mkdir dir="${bin.dir}" />
 		<javac destdir="${bin.dir}" debug="true" optimize="true" deprecation="true" fork="true" source="1.5" target="1.5">
 			<classpath>
 				<path refid="classpath" />
@@ -68,7 +90,7 @@
 			<src path="${src.dir}" />
 		</javac>
 		<copy todir="${bin.dir}" flatten="false">
-			<fileset dir="${src.dir}" excludes="**/*.java"/>
+			<fileset dir="${src.dir}" excludes="**/*.java" />
 		</copy>
 		<copy todir="${bin.dir}/lib" flatten="false">
 			<path refid="classpath" />
@@ -93,7 +115,7 @@
 			<classpath location="${bin.dir}" />
 		</javac>
 		<copy todir="${test-bin.dir}">
-			<fileset dir="./test" excludes="**/*.java"/>
+			<fileset dir="./test" excludes="**/*.java" />
 		</copy>
 	</target>
 
@@ -129,38 +151,33 @@
 			<classpath location="${bin.dir}" />
 
 			<classpath location="${test-bin.dir}" />
-			<formatter type="xml"/>
+			<formatter type="xml" />
 
 			<batchtest todir="${src.tests}">
 
 				<fileset dir="${src.tests}">
-					<include name="**/*Test*.java"/>
+					<include name="**/*Test*.java" />
 				</fileset>
 			</batchtest>
 		</junit>
 	</target>
 
 	<target name="javadoc">
-		<javadoc
-           destdir="docs/api"
-           author="true"
-           version="true"
-           use="true"
-           windowtitle="Pentaho XUL Framework API">
+		<javadoc destdir="docs/api" author="true" version="true" use="true" windowtitle="Pentaho XUL Framework API">
 			<classpath>
 				<path refid="classpath" />
 			</classpath>
 			<fileset dir="src" defaultexcludes="yes">
-				<exclude name="**/*.xul"/>
-				<exclude name="**/*.xml"/>
-				<exclude name="**/*.properties"/>
+				<exclude name="**/*.xul" />
+				<exclude name="**/*.xml" />
+				<exclude name="**/*.properties" />
 			</fileset>
 
 			<doctitle>
 				<![CDATA[<h1>Pentaho XUL Framework API</h1>]]></doctitle>
 		<bottom>
 			<![CDATA[<i>Copyright &#169; 2008 Pentaho Corporation</i>]]></bottom>
-	<tag name="todo" scope="all" description="To do:"/>
+	<tag name="todo" scope="all" description="To do:" />
 	<!--<link href="http://..."/>-->
 </javadoc>
 </target>
