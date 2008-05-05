@@ -5,10 +5,7 @@ package org.pentaho.ui.xul.swing;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 

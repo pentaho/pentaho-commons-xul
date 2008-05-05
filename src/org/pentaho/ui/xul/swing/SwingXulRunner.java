@@ -3,22 +3,18 @@
  */
 package org.pentaho.ui.xul.swing;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 
 import org.dom4j.Document;
-import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.impl.XulServiceCall;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
-import org.pentaho.ui.xul.util.XulUtil;
 
 /**
  * @author OEM
