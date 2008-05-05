@@ -8,7 +8,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.dom4j.Attribute;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
 
 
 public final class XulUtil {
