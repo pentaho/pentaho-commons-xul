@@ -66,6 +66,7 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("MENU", "org.pentaho.ui.xul.swing.tags.SwingMenu");
     parser.registerHandler("MENUPOPUP", "org.pentaho.ui.xul.swing.tags.SwingMenupopup");
     parser.registerHandler("MENUITEM", "org.pentaho.ui.xul.swing.tags.SwingMenuitem");
+    parser.registerHandler("MENULIST", "org.pentaho.ui.xul.swing.tags.SwingMenuList");
     parser.registerHandler("MENUSEPARATOR", "org.pentaho.ui.xul.swing.tags.SwingMenuseparator");
     parser.registerHandler("TREE", "org.pentaho.ui.xul.swing.tags.SwingTree");
     parser.registerHandler("TREECOLS", "org.pentaho.ui.xul.swing.tags.SwingTreeCols");
