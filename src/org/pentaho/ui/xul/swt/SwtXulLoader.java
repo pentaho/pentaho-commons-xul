@@ -6,7 +6,6 @@ package org.pentaho.ui.xul.swt;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 

@@ -1,11 +1,9 @@
 package org.pentaho.ui.xul.swt;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Document;
-import org.dom4j.io.SAXReader;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
@@ -13,7 +11,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.impl.XulServiceCall;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 
