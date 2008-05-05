@@ -3,7 +3,6 @@ package org.pentaho.ui.xul.swing.tags;
 import java.util.ArrayList;
 
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
