@@ -1,15 +1,6 @@
 package org.pentaho.ui.xul.containers;
 
-import java.awt.BorderLayout;
-import java.util.List;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-
 import org.pentaho.ui.xul.XulContainer;
-import org.pentaho.ui.xul.components.XulButton;
-import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.dom.Element;
 
 public interface XulDialog extends XulContainer{
 

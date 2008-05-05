@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul.impl;
 
-import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,9 +1,6 @@
 package org.pentaho.ui.xul.containers;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.XulContainer;
-import org.pentaho.ui.xul.components.XulTab;
 import org.pentaho.ui.xul.components.XulTabpanel;
 
 public interface XulTabbox extends XulContainer{
