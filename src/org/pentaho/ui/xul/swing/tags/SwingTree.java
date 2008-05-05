@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -394,6 +395,9 @@ public class SwingTree extends SwingElement implements XulTree{
 						} else if(value == null){
 							checkbox.setSelected(false);
 						}
+						if(isSelected){
+							checkbox.setBackground(Color.LIGHT_GRAY);
+						}
 						return checkbox;
 					case COMBOBOX:
 
@@ -414,10 +418,18 @@ public class SwingTree extends SwingElement implements XulTree{
 				      comboBox = new JComboBox();
 				    }
 				    
-				    
+
+						if(isSelected){
+							comboBox.setBackground(Color.LIGHT_GRAY);
+						}
 						return comboBox;
 					default:
 						JLabel label = new JLabel((String) value);
+	
+						if(isSelected){
+							label.setOpaque(true);
+							label.setBackground(Color.LIGHT_GRAY);
+						}
 						return label;
 				}
 				
@@ -450,6 +462,9 @@ public class SwingTree extends SwingElement implements XulTree{
 						} else if(value == null){
 							checkbox.setSelected(false);
 						}
+						if(isSelected){
+							checkbox.setBackground(Color.LIGHT_GRAY);
+						}
 						return checkbox;
 					case COMBOBOX:
 						final JComboBox comboBox= new JComboBox((Vector) value);
@@ -463,6 +478,9 @@ public class SwingTree extends SwingElement implements XulTree{
 			        	SwingTree.this.table.setValueAt(comboBox.getSelectedItem(), row, column);
 			        } 
 			      });
+						if(isSelected){
+							comboBox.setBackground(Color.LIGHT_GRAY);
+						}
 						
 						control = comboBox;
 						return comboBox;
@@ -484,6 +502,10 @@ public class SwingTree extends SwingElement implements XulTree{
 							}
 							
 						});
+						if(isSelected){
+							label.setOpaque(true);
+							label.setBackground(Color.LIGHT_GRAY);
+						}
 					
 						control = label;
 						return label;
