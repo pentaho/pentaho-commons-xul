@@ -34,6 +34,7 @@ import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.RowWidget;
@@ -327,13 +328,17 @@ public class TableItemWrapper implements RowWidget {
         item.setText(index, String.valueOf(((Button)e.widget).getSelection()));
 
         // send all selection events back through to the parent table with the selection index... 
-        Element rootElement = parentTree.getDocument().getRootElement();
-        XulWindow window = (XulWindow) rootElement;
+        Document doc = parentTree.getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        
         try{
-        	window.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
+          container.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
         } catch (XulException ex){
-        	logger.error("Error invoking selection listener",ex);
+          logger.error("Error calling oncommand event",ex);
         }
+        
+        
       }
     });
     

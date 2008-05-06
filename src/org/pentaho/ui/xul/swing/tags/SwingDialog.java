@@ -31,7 +31,7 @@ import org.pentaho.ui.xul.util.Orient;
 
 public class SwingDialog extends SwingElement implements XulDialog{
 	
-	private JDialog dialog;
+	private JDialog dialog = null;
 	private String buttonlabelaccept;
 
 	private String buttonlabelcancel;
@@ -137,100 +137,13 @@ public class SwingDialog extends SwingElement implements XulDialog{
 		this.title = title;
 	}
 	
-	public void show(){
-		Document doc = getDocument();
-    Element rootElement = doc.getRootElement();
-    XulWindow window = (XulWindow) rootElement;
-    
-
-		dialog = new JDialog((JFrame)window.getManagedObject());
-    dialog.setLayout(new BorderLayout());
-		
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    
-    dialog.setTitle(title);
-    dialog.setModal(true);
-    dialog.add(mainPanel, BorderLayout.CENTER);
-    mainPanel.add(container, BorderLayout.CENTER);
-    
-    if(this.header != null){
-	    
-	    JPanel headerPanel = new JPanel(new BorderLayout());
-	    headerPanel.setBackground(Color.decode("#888888"));
-			JPanel headerPanelInner = new JPanel(new BorderLayout());
-			headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-			headerPanelInner.setOpaque(false);
-			
-			headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#AAAAAA"), Color.decode("#666666")));
-			
-			JLabel title = new JLabel(this.header.getTitle());
-			
-			title.setForeground(Color.white);
-			headerPanelInner.add(title, BorderLayout.WEST);
-			
-			JLabel desc = new JLabel(this.header.getDescription());
-			desc.setForeground(Color.white);
-			headerPanelInner.add(desc, BorderLayout.EAST);
 	
-			headerPanel.add(headerPanelInner, BorderLayout.CENTER);
-			
-			mainPanel.add(headerPanel, BorderLayout.NORTH);
-    }
-    
-		Box buttonPanel = Box.createHorizontalBox();
+	public void show(){
 		
-		if(	this.buttonAlignment == BUTTON_ALIGN.RIGHT || 
-				this.buttonAlignment == BUTTON_ALIGN.END ||
-				this.buttonAlignment == BUTTON_ALIGN.MIDDLE ||
-				this.buttonAlignment == BUTTON_ALIGN.CENTER)
-		{
-			buttonPanel.add(Box.createHorizontalGlue());
-		}
-		
-		ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
-		for(int i=buttonKeyList.size()-1; i>=0; i--){
-		  buttonPanel.add(Box.createHorizontalStrut(5));
-		  buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
-		  this.addChild(this.buttons.get(buttonKeyList.get(i)));
-		}
-		
-		if(this.buttons.containsKey(BUTTONS.CANCEL)){
-		  this.buttons.get(BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
-		 
-		}
-		
-		buttonPanel.add(Box.createHorizontalStrut(5));
-		
-		if(	this.buttonAlignment == BUTTON_ALIGN.START || 
-				this.buttonAlignment == BUTTON_ALIGN.LEFT ||
-				this.buttonAlignment == BUTTON_ALIGN.MIDDLE ||
-				this.buttonAlignment == BUTTON_ALIGN.CENTER)
-		{
-			buttonPanel.add(Box.createHorizontalGlue());
-		}
-		
-		
-		
-		
-		mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-		dialog.setSize(new Dimension(getWidth(), getHeight()));
-		dialog.setPreferredSize(new Dimension(getWidth(), getHeight()));
-		dialog.setMinimumSize(new Dimension(getWidth(), getHeight()));
-		
-
-		if(buttons.containsKey(SwingDialog.BUTTONS.ACCEPT)){
-			this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setLabel(this.getButtonlabelaccept());
-			this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setOnclick(this.getOndialogaccept());
-		}
-		if(buttons.containsKey(SwingDialog.BUTTONS.CANCEL)){
-			this.buttons.get(SwingDialog.BUTTONS.CANCEL).setLabel(this.getButtonlabelcancel());
-			this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
-		}
-		
-		
-    
-    
+	  // we delay instantiation in order to setup a modal relationship.
+	  if(dialog == null){
+	    createDialog();
+	  }
     dialog.setVisible(true);
 	}
 	
@@ -298,5 +211,97 @@ public class SwingDialog extends SwingElement implements XulDialog{
 	public void setOnload(String onload) {
 		this.onload = onload;
 	}
+	
+	
+	
+	 private void createDialog(){
+	    Document doc = getDocument();
+	    Element rootElement = doc.getRootElement();
+	    XulWindow window = (XulWindow) rootElement;
+	    
+
+	    JFrame frame = (JFrame)window.getManagedObject();
+	    dialog = new JDialog(frame);
+	    dialog.setLocationRelativeTo(frame);
+	    
+	    dialog.setLayout(new BorderLayout());
+	    
+	    JPanel mainPanel = new JPanel(new BorderLayout());
+	    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+	    
+	    dialog.setTitle(title);
+	    dialog.setModal(true);
+	    dialog.add(mainPanel, BorderLayout.CENTER);
+	    mainPanel.add(container, BorderLayout.CENTER);
+	    
+	    if(this.header != null){
+	      
+	      JPanel headerPanel = new JPanel(new BorderLayout());
+	      headerPanel.setBackground(Color.decode("#888888"));
+	      JPanel headerPanelInner = new JPanel(new BorderLayout());
+	      headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+	      headerPanelInner.setOpaque(false);
+	      
+	      headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#AAAAAA"), Color.decode("#666666")));
+	      
+	      JLabel title = new JLabel(this.header.getTitle());
+	      
+	      title.setForeground(Color.white);
+	      headerPanelInner.add(title, BorderLayout.WEST);
+	      
+	      JLabel desc = new JLabel(this.header.getDescription());
+	      desc.setForeground(Color.white);
+	      headerPanelInner.add(desc, BorderLayout.EAST);
+	  
+	      headerPanel.add(headerPanelInner, BorderLayout.CENTER);
+	      
+	      mainPanel.add(headerPanel, BorderLayout.NORTH);
+	    }
+	    
+	    Box buttonPanel = Box.createHorizontalBox();
+	    
+	    if( this.buttonAlignment == BUTTON_ALIGN.RIGHT || 
+	        this.buttonAlignment == BUTTON_ALIGN.END ||
+	        this.buttonAlignment == BUTTON_ALIGN.MIDDLE ||
+	        this.buttonAlignment == BUTTON_ALIGN.CENTER)
+	    {
+	      buttonPanel.add(Box.createHorizontalGlue());
+	    }
+	    
+	    ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
+	    for(int i=buttonKeyList.size()-1; i>=0; i--){
+	      buttonPanel.add(Box.createHorizontalStrut(5));
+	      buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
+	      this.addChild(this.buttons.get(buttonKeyList.get(i)));
+	    }
+	    
+	    buttonPanel.add(Box.createHorizontalStrut(5));
+	    
+	    if( this.buttonAlignment == BUTTON_ALIGN.START || 
+	        this.buttonAlignment == BUTTON_ALIGN.LEFT ||
+	        this.buttonAlignment == BUTTON_ALIGN.MIDDLE ||
+	        this.buttonAlignment == BUTTON_ALIGN.CENTER)
+	    {
+	      buttonPanel.add(Box.createHorizontalGlue());
+	    }
+	    
+	    
+	    
+	    
+	    mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+	    dialog.setSize(new Dimension(getWidth(), getHeight()));
+	    dialog.setPreferredSize(new Dimension(getWidth(), getHeight()));
+	    dialog.setMinimumSize(new Dimension(getWidth(), getHeight()));
+	    
+
+	    if(buttons.containsKey(SwingDialog.BUTTONS.ACCEPT)){
+	      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setLabel(this.getButtonlabelaccept());
+	      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setOnclick(this.getOndialogaccept());
+	    }
+	    if(buttons.containsKey(SwingDialog.BUTTONS.CANCEL)){
+	      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setLabel(this.getButtonlabelcancel());
+	      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
+	    }
+	  }
 	
 }

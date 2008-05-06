@@ -241,16 +241,16 @@ public class SwingTree extends SwingElement implements XulTree{
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 
 			public void valueChanged(ListSelectionEvent arg0) {
-	
-	      Document doc = SwingTree.this.getDocument();
-	      Element rootElement = doc.getRootElement();
-	      XulWindow window = (XulWindow) rootElement;
-	    	try{
-	    		window.invoke(select, new Object[] {new Integer(table.getSelectedRow())});
-	    	} catch(XulException e){
-	    		logger.error("Error invoking onselect event",e);
-	    	}
-	   
+
+        Document doc = getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        
+        try{
+          container.invoke(select, new Object[] {new Integer(table.getSelectedRow())});
+        } catch (XulException e){
+          logger.error("Error calling oncommand event",e);
+        }
 		
 			}
 			

@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
@@ -106,12 +107,14 @@ public class SwtListbox extends SwtElement implements XulListbox{
     onSelect = method;
     listBox.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        Element rootElement = getDocument().getRootElement();
-        XulWindow window = (XulWindow) rootElement;
+        Document doc = getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        
         try{
-        	window.invoke(method, new Object[]{});
-        } catch(XulException e){
-        	logger.error("Error invoking onselect command",e);
+          container.invoke(method, new Object[]{});
+        } catch (XulException e){
+          logger.error("Error calling oncommand event",e);
         }
       }
     });

@@ -91,14 +91,15 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     this.onCommand = command;
     menuitem.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt){
-        Document doc = SwingMenuitem.this.getDocument();
-        Element rootElement = doc.getRootElement();
-        XulWindow window = (XulWindow) rootElement;
+
+        Document doc = getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
         
         try{
-        	window.invoke(command, new Object[]{});
-        } catch(XulException e){
-        	logger.error("Error invoking command event",e);
+          container.invoke(command, new Object[]{});
+        } catch (XulException e){
+          logger.error("Error calling oncommand event",e);
         }
         
       }

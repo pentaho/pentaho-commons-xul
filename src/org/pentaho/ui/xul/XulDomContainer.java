@@ -48,4 +48,15 @@ public interface XulDomContainer {
   
   public Map<String, XulEventHandler> getEventHandlers();
   
+
+  /**
+   * Execute the method passed, with any args
+   * as parameters. This invokation is used for 
+   * plumbing event handlers to the event methods. 
+   * 
+   * @param method The method to execute
+   * @param args Any parameters needed for the method. 
+   */
+  public void invoke(String method, Object[] args) throws XulException;
+  
 }

@@ -102,13 +102,15 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     if(e.getValueIsAdjusting() == true){
       return;
     }
-    Document doc = SwingListbox.this.getDocument();
-    Element rootElement = doc.getRootElement();
-    XulWindow window = (XulWindow) rootElement;
+
+    Document doc = getDocument();
+    XulWindow window = (XulWindow) doc.getRootElement();
+    XulDomContainer container = window.getXulDomContainer();
+    
     try{
-    	window.invoke(onselect, new Object[]{});
-    } catch(XulException ex){
-    	logger.error("Error invoking valueChanged command",ex);
+      container.invoke(onselect, new Object[]{});
+    } catch (XulException ex){
+      logger.error("Error calling oncommand event",ex);
     }
     
   }

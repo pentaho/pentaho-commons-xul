@@ -49,13 +49,15 @@ public class SwingButton extends SwingElement implements XulButton{
   public void setOnclick( final String method) {
     button.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt){
-        Document doc = SwingButton.this.getDocument();
-        Element rootElement = doc.getRootElement();
-        XulWindow window = (XulWindow) rootElement;
+
+        Document doc = getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        
         try{
-        	window.invoke(method, new Object[]{});
+          container.invoke(method, new Object[]{});
         } catch (XulException e){
-        	logger.error("Error calling onClick command",e);
+          logger.error("Error calling oncommand event",e);
         }
       }
     });

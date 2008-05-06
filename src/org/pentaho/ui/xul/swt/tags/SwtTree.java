@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.TableSelection;
@@ -160,12 +161,15 @@ public class SwtTree extends SwtElement implements XulTree {
 
     widget.addSelectionListener(new SelectionAdapter() {
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-        Element rootElement = getDocument().getRootElement();
-        XulWindow window = (XulWindow) rootElement;
+     
+        Document doc = getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        
         try{
-        	window.invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
-        } catch(XulException ex){
-        	logger.error("Error invoking onSelect command",ex);
+          container.invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
+        } catch (XulException ex){
+          logger.error("Error calling oncommand event",ex);
         }
       }
     });

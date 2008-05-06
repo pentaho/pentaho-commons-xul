@@ -80,11 +80,11 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
     checkBox.addChangeListener(new ChangeListener(){
       public void stateChanged(ChangeEvent evt){
         Document doc = getDocument();
-        Element rootElement = doc.getRootElement();
-        XulWindow window = (XulWindow) rootElement;
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
         
         try{
-        	window.invoke(method, new Object[]{});
+        	container.invoke(method, new Object[]{});
         } catch (XulException e){
         	logger.error("Error calling oncommand event",e);
         }

@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -51,12 +52,14 @@ public class SwtButton extends SwtElement implements XulButton {
   public void setOnclick(final String method) {
     button.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        Element rootElement = getDocument().getRootElement();
-        XulWindow window = (XulWindow) rootElement;
+        Document doc = getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        
         try{
-        	window.invoke(method, new Object[]{});
-        } catch(XulException e){
-        	logger.error("error invoking onclick command",e);
+          container.invoke(method, new Object[]{});
+        } catch (XulException e){
+          logger.error("Error calling oncommand event",e);
         }
       }
     });

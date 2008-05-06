@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul.impl;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +82,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
     	try{
-    		rootEle.invoke(rootEle.getOnload(), new Object[]{});
+    		invoke(rootEle.getOnload(), new Object[]{});
     	} catch(XulException e){
     		logger.error("Error calling onLoad event: "+onLoad,e);
     	}
@@ -141,5 +142,86 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     }
     handler.setXulDomContainer(this);
     eventHandlers.put(key, handler);  
+  }
+  
+
+  private Object[] getArgs(String methodCall){
+    if(methodCall.indexOf("()") > -1){
+      return null;
+    }
+    String argsList = methodCall.substring(methodCall.indexOf("(")+1, methodCall.indexOf(")"));
+    String[] stringArgs = argsList.split(",");
+    Object[] args = new Object[ stringArgs.length ];
+    int i=-1;
+    for(String obj : stringArgs){
+      i++;
+      obj = obj.trim();
+      try{
+        Integer num = Integer.valueOf(obj);
+        args[i] = num;
+        continue;
+      } catch(NumberFormatException e){
+        try{
+          Double num = Double.valueOf(obj);
+          args[i] = num;
+          continue;
+        } catch(NumberFormatException e2){
+          try{
+            String str = obj.replaceAll("'", "");
+            str = str.replaceAll("\"", "");
+            args[i] = str;
+            continue;
+          } catch(NumberFormatException e3){
+            logger.error("Error parsing event call argument: "+obj, e3);
+            continue;
+          }
+        }
+      }
+    }
+    return args;
+    
+  }
+  
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulWindow#invoke(java.lang.String, java.lang.Object[])
+   */
+  public void invoke(String method, Object[] args) throws XulException {
+
+  try {
+      if (method.indexOf('.') == -1) {
+        throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
+      }
+
+      
+      String[] pair = method.split("\\.");
+      String eventID = method.substring(0, method.indexOf("."));
+      String methodName = method.substring(method.indexOf(".")+1);
+      
+      Object[] arguments = getArgs(methodName);
+      if(arguments != null){
+        invoke(method.substring(0,method.indexOf("("))+"()", arguments);
+        return;
+      } else {
+        methodName = methodName.substring(0,methodName.indexOf("("));
+      }
+      
+      XulEventHandler evt = getEventHandler(eventID);
+      if(args.length > 0){
+        Class[] classes = new Class[args.length];
+        
+        for(int i=0; i<args.length; i++){
+          classes[i] = args[i].getClass();
+        }
+        
+        Method m = evt.getClass().getMethod(methodName, classes);
+        m.invoke(evt, args);
+      } else {
+        Method m = evt.getClass().getMethod(methodName, new Class[0]);
+        m.invoke(evt, args);
+      }
+    } catch (Exception e) {
+      logger.error("Error invoking method: " + method, e);
+      throw new XulException("Error invoking method: " + method, e);
+    }
   }
 }
