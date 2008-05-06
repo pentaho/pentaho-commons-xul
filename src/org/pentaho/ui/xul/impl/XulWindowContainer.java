@@ -157,5 +157,4 @@ public class XulWindowContainer extends AbstractXulDomContainer {
 	public Document getDocument(int idx) {
 		return this.windows.get(idx);
 	}
-	
 }

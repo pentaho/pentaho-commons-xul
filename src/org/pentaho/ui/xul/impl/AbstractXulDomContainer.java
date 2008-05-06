@@ -27,7 +27,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   private static final Log logger = LogFactory.getLog(AbstractXulDomContainer.class);
   
   protected XulLoader xulLoader;
-  protected Map<String, XulEventHandler> eventHandlers;
+  protected HashMap<String, XulEventHandler> eventHandlers;
 
 	public AbstractXulDomContainer() {
     eventHandlers = new HashMap<String, XulEventHandler>();
@@ -55,7 +55,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     
     try{
       Class cls = Class.forName(eventClassName);
-      XulEventHandler eventHandler = (XulEventHandler) cls.newInstance();
+      AbstractXulEventHandler eventHandler = (AbstractXulEventHandler) cls.newInstance();
       eventHandler.setXulDomContainer(this);
       eventHandlers.put(id, eventHandler);
       

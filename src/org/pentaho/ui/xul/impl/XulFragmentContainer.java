@@ -69,5 +69,11 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
 			return fragment;
 		}
 	}
+
+  public void setEventHandler(String key, XulEventHandler handler) {
+    // TODO Auto-generated method stub
+    throw new RuntimeException("implement me");
+    
+  }
     
 }

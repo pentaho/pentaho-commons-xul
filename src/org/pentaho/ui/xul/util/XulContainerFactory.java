@@ -5,6 +5,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 
 public class XulContainerFactory {
 
@@ -16,10 +17,14 @@ public class XulContainerFactory {
     this.document = document;
   }
   
-  public XulDialog buildDialog(String xulLocation) throws XulException {
+  public XulDialog buildDialog(String xulLocation, XulEventHandler... handlers) throws XulException {
     XulDomContainer fragmentContainer = null;
     fragmentContainer = this.container.loadFragment(xulLocation);
-
+    
+    for(XulEventHandler handler : handlers){
+      fragmentContainer.setEventHandler(handler.getName(), handler);
+    }
+    
     XulDialog dialog = (XulDialog) fragmentContainer.getDocumentRoot().getRootElement().getFirstChild();
 
     ((AbstractXulComponent) dialog).layout();
