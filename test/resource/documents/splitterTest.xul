@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+<window id="label-test" title="Testing labels and layout for SWT, Swing"
+	orient="vertical"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	 xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
+	<vbox flex="1">
+		<groupbox flex="1"><button label="button!"/></groupbox>
+		<splitter/>
+		<hbox>
+			<button label="button!"/>
+			<splitter/>
+			<button label="button!"/>
+		</hbox>
+	</vbox>
+</window>

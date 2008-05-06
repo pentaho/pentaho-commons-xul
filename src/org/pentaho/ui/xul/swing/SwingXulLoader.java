@@ -75,6 +75,7 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("TREEITEM", "org.pentaho.ui.xul.swing.tags.SwingTreeItem");
     parser.registerHandler("TREEROW", "org.pentaho.ui.xul.swing.tags.SwingTreeRow");
     parser.registerHandler("TREECELL", "org.pentaho.ui.xul.swing.tags.SwingTreeCell");
+    parser.registerHandler("SPLITTER", "org.pentaho.ui.xul.swing.tags.SwingSplitter");
     
 
     parser.registerHandler("TABBOX", "org.pentaho.ui.xul.swing.tags.SwingTabbox");

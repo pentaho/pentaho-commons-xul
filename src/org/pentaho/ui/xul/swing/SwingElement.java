@@ -5,14 +5,17 @@ package org.pentaho.ui.xul.swing;
 
 import java.awt.Component;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.components.XulSplitter;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -58,6 +61,27 @@ public class SwingElement extends AbstractXulComponent{
 
     for(int i=0; i<children.size(); i++){
       XulComponent comp = children.get(i);
+      
+      if(comp instanceof XulSplitter){
+        JPanel prevContainer = container;
+        container = new JPanel(new GridBagLayout());
+        JSplitPane splitter = new JSplitPane(
+            (this.getOrientation() == Orient.VERTICAL)? 
+                JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT,
+            prevContainer,
+            container
+        );
+        
+        if(this.getOrientation() == Orient.VERTICAL){ //VBox and such
+          gc.weighty = 1.0;
+        } else {
+          gc.weightx = 1.0;
+        }
+        
+        prevContainer.add(Box.createGlue(), gc);
+        
+        managedObject = splitter;
+      }
     
       Object maybeComponent = comp.getManagedObject();
       if(maybeComponent == null || !(maybeComponent instanceof Component)){
