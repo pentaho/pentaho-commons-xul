@@ -8,13 +8,13 @@ import org.pentaho.ui.xul.components.XulListitem;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.containers.XulListbox;
-import org.pentaho.ui.xul.impl.XulEventHandler;
+import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
 /**
  * @author OEM
  *
  */
-public class DatasourceHandler extends XulEventHandler{
+public class DatasourceHandler extends AbstractXulEventHandler{
  
   XulTextbox connectionTextbox;
   XulListbox connectionType;

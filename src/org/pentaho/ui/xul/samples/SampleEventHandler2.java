@@ -6,13 +6,13 @@ package org.pentaho.ui.xul.samples;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
-import org.pentaho.ui.xul.impl.XulEventHandler;
+import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
 /**
  * @author OEM
  *
  */
-public class SampleEventHandler2 extends XulEventHandler{
+public class SampleEventHandler2 extends AbstractXulEventHandler{
  
 
   public void sayHello(){

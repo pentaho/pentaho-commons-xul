@@ -1,9 +1,9 @@
 package org.pentaho.ui.xul.swing;
 
 import org.pentaho.ui.xul.components.XulProgressmeter;
-import org.pentaho.ui.xul.impl.XulEventHandler;
+import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
-public class ProgressHandler extends XulEventHandler {
+public class ProgressHandler extends AbstractXulEventHandler {
 
   public void addProgress() {
     XulProgressmeter progressMeter = (XulProgressmeter) document.getElementById("my-progressmeter");

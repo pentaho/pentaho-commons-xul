@@ -2,10 +2,10 @@ package org.pentaho.ui.xul.samples;
 
 import javax.swing.JOptionPane;
 
-import org.pentaho.ui.xul.impl.XulEventHandler;
+import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 
-public class SampleMenuHandler extends XulEventHandler{
+public class SampleMenuHandler extends AbstractXulEventHandler{
 
   public void open(){
     this.getXulDomContainer().createMessageBox("testing...").open();

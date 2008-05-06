@@ -1,9 +1,9 @@
 package org.pentaho.ui.xul.samples;
 
 import org.pentaho.ui.xul.containers.XulDialog;
-import org.pentaho.ui.xul.impl.XulEventHandler;
+import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
-public class DialogHandler extends XulEventHandler{
+public class DialogHandler extends AbstractXulEventHandler{
 
 	
 	public void showDialog(){
