@@ -134,4 +134,12 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   public abstract XulDomContainer loadFragment(String xulLocation) throws XulException;
   
   public abstract void close();
+
+  public void setEventHandler(String key, XulEventHandler handler) {
+    if(eventHandlers.containsKey(key)){
+      throw new IllegalArgumentException("Event handler for key: "+key+" already exists");
+    }
+    handler.setXulDomContainer(this);
+    eventHandlers.put(key, handler);  
+  }
 }

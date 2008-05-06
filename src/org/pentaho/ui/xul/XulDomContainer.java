@@ -30,6 +30,8 @@ public interface XulDomContainer {
   
   public XulEventHandler getEventHandler(String key) throws XulException;
   
+  public void setEventHandler(String key, XulEventHandler handler);
+  
   public XulMessageBox createMessageBox(String message);
 
   public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable);
