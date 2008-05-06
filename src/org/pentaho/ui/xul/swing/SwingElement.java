@@ -6,6 +6,8 @@ package org.pentaho.ui.xul.swing;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
@@ -59,27 +61,46 @@ public class SwingElement extends AbstractXulComponent{
     if(flexLayout)
       gc.fill = GridBagConstraints.BOTH;
 
+    double currentFlexTotal = 0.0;
     for(int i=0; i<children.size(); i++){
       XulComponent comp = children.get(i);
       
       if(comp instanceof XulSplitter){
         JPanel prevContainer = container;
         container = new JPanel(new GridBagLayout());
-        JSplitPane splitter = new JSplitPane(
+        final JSplitPane splitter = new JSplitPane(
             (this.getOrientation() == Orient.VERTICAL)? 
                 JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT,
             prevContainer,
             container
         );
-        
-        if(this.getOrientation() == Orient.VERTICAL){ //VBox and such
-          gc.weighty = 1.0;
-        } else {
-          gc.weightx = 1.0;
+        splitter.setContinuousLayout(true);
+
+        final double  splitterSize = currentFlexTotal / totalFlex;
+        splitter.setResizeWeight(splitterSize);
+        if(totalFlex > 0){
+          splitter.addComponentListener(new ComponentListener(){
+            public void componentHidden(ComponentEvent arg0) {}
+            public void componentMoved(ComponentEvent arg0) {}
+            public void componentShown(ComponentEvent arg0) {}
+            public void componentResized(ComponentEvent arg0) {
+              splitter.setDividerLocation(splitterSize);
+              splitter.removeComponentListener(this);
+            }
+
+          });
+          
         }
         
-        prevContainer.add(Box.createGlue(), gc);
-        
+        if(!flexLayout){
+          if(this.getOrientation() == Orient.VERTICAL){ //VBox and such
+            gc.weighty = 1.0;
+          } else {
+            gc.weightx = 1.0;
+          }
+          
+          prevContainer.add(Box.createGlue(), gc);
+        }
         managedObject = splitter;
       }
     
@@ -96,6 +117,8 @@ public class SwingElement extends AbstractXulComponent{
         gc.gridheight = GridBagConstraints.REMAINDER;
         gc.weightx = (totalFlex == 0)? 0 : (comp.getFlex()/totalFlex);
       }
+      
+      currentFlexTotal += comp.getFlex();
       
       Component component = (Component) maybeComponent;
       container.add(component, gc);
