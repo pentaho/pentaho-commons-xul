@@ -10,7 +10,5 @@
 	<classpathentry kind="lib" path="lib-ext/commons-beanutils-1.8.0-BETA.jar"/>
 	<classpathentry kind="lib" path="lib-ext/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib-swt/linux/x86/swt.jar"/>
-	<classpathentry kind="lib" path="lib-ext/svnant.jar"/>
-	<classpathentry kind="lib" path="lib-ext/svnClientAdapter.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
