@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -44,7 +45,7 @@ public class ResourceBundleTranslator {
 		//System.out.println(key);
 
 		try{
-			return bundle.getString(key);
+			return StringEscapeUtils.escapeXml(bundle.getString(key));
 		} catch(MissingResourceException e){
 			logger.info(String.format("Translation Error: Missing key from ResourceBundle (%s)", key));
 			return key;
