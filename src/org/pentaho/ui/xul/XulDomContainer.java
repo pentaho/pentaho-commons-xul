@@ -38,7 +38,8 @@ public interface XulDomContainer {
   /**
    * Registers an event handler with elements of this container.  Attributes of command-type elements
    * within a xul file can refer to an event handler by name.  See {@link XulEventHandler#getName()}.
-   * You cannot register two event handlers by the name name.
+   * Adding an event handler by a name that is already registered will completely mask out and replace
+   * the original event handler.
    * @param handler - a XulEventHandler
    */
   public void addEventHandler(XulEventHandler handler);

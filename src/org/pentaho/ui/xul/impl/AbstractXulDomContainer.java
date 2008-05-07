@@ -138,9 +138,6 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   public abstract void close();
 
   public void addEventHandler(XulEventHandler handler) {
-    if(eventHandlers.containsKey(handler.getName())){
-      throw new IllegalArgumentException("Event handler by name: "+handler.getName()+" already exists");
-    }
     handler.setXulDomContainer(this);
     eventHandlers.put(handler.getName(), handler);
   }
