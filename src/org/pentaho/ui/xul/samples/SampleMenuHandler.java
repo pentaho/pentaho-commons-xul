@@ -11,13 +11,11 @@ public class SampleMenuHandler extends AbstractXulEventHandler{
     this.getXulDomContainer().createMessageBox("testing...").open();
   }
   
-  @Override
   public Object getData() {
     // TODO Auto-generated method stub
     return null;
   }
 
-  @Override
   public void setData(Object data) {
     // TODO Auto-generated method stub
     

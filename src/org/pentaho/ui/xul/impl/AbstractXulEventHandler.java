@@ -1,17 +1,12 @@
-/**
- * 
- */
 package org.pentaho.ui.xul.impl;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.dom.Document;
 
 /**
- * Try to use a concrete implementation of {@link XulEventHandler} instead of this.
  * @author OEM
  *
  */
-@Deprecated
 public abstract class AbstractXulEventHandler implements XulEventHandler {
   protected XulDomContainer xulDomContainer;
   protected Document document;
@@ -45,15 +40,4 @@ public abstract class AbstractXulEventHandler implements XulEventHandler {
   public XulDomContainer getXulDomContainer(){
     return this.xulDomContainer;
   }
-  
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.impl.XulEventHandler#getData()
-   */
-  public abstract Object getData();
-
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.impl.XulEventHandler#setData(java.lang.Object)
-   */
-  public abstract void  setData(Object data);
-
 }

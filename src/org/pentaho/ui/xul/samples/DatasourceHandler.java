@@ -66,17 +66,13 @@ public class DatasourceHandler extends AbstractXulEventHandler{
   }
 
 
-  @Override
   public Object getData() {
     return null;
   }
 
-
-  @Override
   public void setData(Object data) {
     
   }
- 
   
   
 }

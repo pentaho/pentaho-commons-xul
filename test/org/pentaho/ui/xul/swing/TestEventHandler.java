@@ -9,13 +9,10 @@ public class TestEventHandler extends AbstractXulEventHandler{
     this.xulDomContainer.close();
   }
   
-  
-  @Override
   public Object getData() {
     return null;
   }
   
-  @Override
   public void setData(Object data) {
   }
 

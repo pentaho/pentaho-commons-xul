@@ -93,13 +93,11 @@ public class TableEventHandler extends AbstractXulEventHandler{
 		}
 	}
 	
-	@Override
 	public Object getData() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	@Override
 	public void setData(Object data) {
 		// TODO Auto-generated method stub
 		
