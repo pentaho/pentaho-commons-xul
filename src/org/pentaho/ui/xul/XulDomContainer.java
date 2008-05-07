@@ -24,21 +24,24 @@ public interface XulDomContainer {
   
   public XulDomContainer loadFragment(String xulLocation) throws XulException;
   
+  /**
+   * @deprecated
+   * We are getting away from using xul-instantiated event handlers.  It is prefered that the 
+   * application set the event handler via {@link XulDomContainer#addEventHandler(XulEventHandler)}
+   */
   public void addEventHandler(String id, String eventClassName) throws XulException;
 
   public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException;
   
   public XulEventHandler getEventHandler(String key) throws XulException;
   
-  @Deprecated
-  public void setEventHandler(String key, XulEventHandler handler);
-  
   /**
    * Registers an event handler with elements of this container.  Attributes of command-type elements
-   * can refer to an event handler by name.  See {@link XulEventHandler#getName()}
+   * within a xul file can refer to an event handler by name.  See {@link XulEventHandler#getName()}.
+   * You cannot register two event handlers by the name name.
    * @param handler - a XulEventHandler
    */
-  public void setEventHandler(XulEventHandler handler);
+  public void addEventHandler(XulEventHandler handler);
   
   public XulMessageBox createMessageBox(String message);
 

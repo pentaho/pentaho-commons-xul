@@ -46,6 +46,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   	return xulLoader;
   }
   
+  @Deprecated
   public void addEventHandler(String id, String eventClassName) throws XulException{
    
     // Allow overrides of eventHandlers
@@ -136,7 +137,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   
   public abstract void close();
 
-  public void setEventHandler(XulEventHandler handler) {
+  public void addEventHandler(XulEventHandler handler) {
     if(eventHandlers.containsKey(handler.getName())){
       throw new IllegalArgumentException("Event handler by name: "+handler.getName()+" already exists");
     }
@@ -144,12 +145,6 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     eventHandlers.put(handler.getName(), handler);
   }
   
-  @Deprecated
-  public void setEventHandler(String key, XulEventHandler handler) {
-    handler.setName(key);
-    setEventHandler(handler);
-  }
-
   private Object[] getArgs(String methodCall){
     if(methodCall.indexOf("()") > -1){
       return null;

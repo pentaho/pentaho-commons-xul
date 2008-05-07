@@ -22,7 +22,7 @@ public class XulContainerFactory {
     fragmentContainer = this.container.loadFragment(xulLocation);
     
     for(XulEventHandler handler : handlers){
-      fragmentContainer.setEventHandler(handler.getName(), handler);
+      fragmentContainer.addEventHandler(handler);
     }
     
     XulDialog dialog = (XulDialog) fragmentContainer.getDocumentRoot().getRootElement().getFirstChild();
