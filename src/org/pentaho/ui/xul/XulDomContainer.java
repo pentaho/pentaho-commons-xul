@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 
 /**
@@ -31,7 +30,15 @@ public interface XulDomContainer {
   
   public XulEventHandler getEventHandler(String key) throws XulException;
   
+  @Deprecated
   public void setEventHandler(String key, XulEventHandler handler);
+  
+  /**
+   * Registers an event handler with elements of this container.  Attributes of command-type elements
+   * can refer to an event handler by name.  See {@link XulEventHandler#getName()}
+   * @param handler - a XulEventHandler
+   */
+  public void setEventHandler(XulEventHandler handler);
   
   public XulMessageBox createMessageBox(String message);
 

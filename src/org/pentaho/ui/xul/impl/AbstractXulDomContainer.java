@@ -136,14 +136,19 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   
   public abstract void close();
 
-  public void setEventHandler(String key, XulEventHandler handler) {
-    if(eventHandlers.containsKey(key)){
-      throw new IllegalArgumentException("Event handler for key: "+key+" already exists");
+  public void setEventHandler(XulEventHandler handler) {
+    if(eventHandlers.containsKey(handler.getName())){
+      throw new IllegalArgumentException("Event handler by name: "+handler.getName()+" already exists");
     }
     handler.setXulDomContainer(this);
-    eventHandlers.put(key, handler);  
+    eventHandlers.put(handler.getName(), handler);
   }
   
+  @Deprecated
+  public void setEventHandler(String key, XulEventHandler handler) {
+    handler.setName(key);
+    setEventHandler(handler);
+  }
 
   private Object[] getArgs(String methodCall){
     if(methodCall.indexOf("()") > -1){
