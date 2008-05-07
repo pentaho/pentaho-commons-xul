@@ -33,6 +33,7 @@ public interface XulDialog extends XulContainer{
 
 	public void show();
 	public void hide();
+	public boolean isHidden();
 	public void setVisible(boolean visible);
 	
 	public void setOnload(String onload);

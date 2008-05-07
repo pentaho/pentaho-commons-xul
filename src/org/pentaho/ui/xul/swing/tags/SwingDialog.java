@@ -303,5 +303,10 @@ public class SwingDialog extends SwingElement implements XulDialog{
 	      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
 	    }
 	  }
+
+
+  public boolean isHidden() {
+    return dialog.isVisible();
+  }
 	
 }
