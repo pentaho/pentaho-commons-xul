@@ -12,8 +12,10 @@ public interface XulTreeChildren extends XulContainer {
   
   public XulTreeRow addNewRow();
   
+  public void removeAll();
   public XulTreeItem getItem(int rowIndex);
   public void removeItem(int rowIndex);
+  public int getItemCount();
 
   public boolean isHierarchical();
   public XulTree getTree();

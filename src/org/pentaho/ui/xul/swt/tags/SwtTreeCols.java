@@ -66,7 +66,7 @@ public class SwtTreeCols extends SwtElement implements XulTreeCols {
   @Override
   public void layout() {
     super.layout();
-    
+
     int totalFlex = 0;
     
     for (XulTreeCol col : columns) {
@@ -93,8 +93,8 @@ public class SwtTreeCols extends SwtElement implements XulTreeCols {
       
       for (XulTreeCol col : columns) {
         if (col.getFlex() > 0){
-          float width = ((float)col.getFlex()/(float)totalFlex);
-          col.setWidth((int)(width * treeWidth - 3));
+          float relativeWidth = ((float)col.getFlex()/(float)totalFlex);
+          col.setWidth((int)(relativeWidth * treeWidth - 7));
         }else {
           col.autoSize();
         }

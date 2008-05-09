@@ -127,17 +127,18 @@ public class TableItemWrapper implements RowWidget {
   }
 
   public void setText(int index, String text) {
+    text = (text == null) ? "" : text; //$NON-NLS-1$
     item.setText(index, text);
 
     Control control = textEditor.getEditor();
     
-    if ((control != null) && (control instanceof Text)){
+    if ((control != null) && (!control.isDisposed()) && (control instanceof Text)){
       ((Text)control).setText(item.getText(index));
     }
     
     if(checkedEditors.containsKey(new Integer(index))){
       control = ((TableEditor)checkedEditors.get(new Integer(index))).getEditor();
-      if ((control != null) && (control instanceof Button)){
+      if ((control != null) && (!control.isDisposed()) && (control instanceof Button)){
         boolean checked = item.getText(index).equalsIgnoreCase("true");
         ((Button)control).setSelection(checked);
       }

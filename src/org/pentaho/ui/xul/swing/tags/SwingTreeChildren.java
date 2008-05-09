@@ -10,8 +10,6 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swing.SwingElement;
-import org.pentaho.ui.xul.swt.tags.SwtTreeItem;
-import org.pentaho.ui.xul.swt.tags.SwtTreeRow;
 
 public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 	
@@ -58,6 +56,19 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+  public int getItemCount(){
+    if (items == null){
+      return 0;
+    }
+    return items.size();
+  }
+
+  public void removeAll(){
+    for (XulTreeItem itemToRemove : items){
+      removeItem(itemToRemove);
+    }
+  }
 
 	public void removeItem(XulTreeItem item) {
 

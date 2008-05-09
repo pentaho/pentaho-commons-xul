@@ -83,7 +83,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   }
 
   public void setFixed(boolean fixed) {
-    widget.setResizable(fixed);
+    widget.setResizable(!fixed);
   }
 
   public void setHidden(boolean hide) {
