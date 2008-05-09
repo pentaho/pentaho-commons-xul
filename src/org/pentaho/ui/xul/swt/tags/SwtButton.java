@@ -10,10 +10,12 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
+import org.pentaho.ui.xul.components.XulButton.Type;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.util.Direction;
 
 public class SwtButton extends SwtElement implements XulButton {
   private static final long serialVersionUID = -7218075117194366698L;
@@ -22,6 +24,12 @@ public class SwtButton extends SwtElement implements XulButton {
   protected org.eclipse.swt.widgets.Button button;
   private String label;
   private boolean disabled;
+  private String image;
+  private Direction dir;
+  private Type type;
+  private String group;
+  private String onclick;
+  
 
   public SwtButton(XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -50,6 +58,7 @@ public class SwtButton extends SwtElement implements XulButton {
   }
 
   public void setOnclick(final String method) {
+    this.onclick = method;
     button.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
         Document doc = getDocument();
@@ -75,4 +84,41 @@ public class SwtButton extends SwtElement implements XulButton {
     button.setText(label);
   }
 
+  public String getImage() {
+    return this.image;
+      
+  }
+
+  public void setImage(String src) {
+   this.image = src;   
+  }
+
+  public String getDir() {
+    return dir.toString().toLowerCase();
+  }
+
+  public void setDir(String dir) {
+    this.dir = Direction.valueOf(dir.toUpperCase());
+  }
+
+  public String getGroup() {
+    return this.group;
+  }
+
+  public String getType() {
+    return this.type.toString();
+  }
+
+  public void setGroup(String group) {
+    this.group = group;
+  }
+
+  public void setType(String type) {
+    this.type = Type.valueOf(type.toString().toUpperCase());
+    
+  }
+
+  public String getOnclick() {
+    return this.onclick;
+  }
 }

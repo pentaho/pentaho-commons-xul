@@ -94,7 +94,7 @@ public class SwingXulRunner implements XulRunner {
 //      );
 
     	XulDomContainer container = new SwingXulLoader().loadXul(
-      		  "resource/documents/splitterTest.xul"
+      		  "resource/documents/imageButton.xul"
         );
     	
       XulRunner runner = new SwingXulRunner();

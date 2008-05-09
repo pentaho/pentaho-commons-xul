@@ -31,6 +31,7 @@ import org.pentaho.ui.xul.util.ResourceBundleTranslator;
 public class SwingXulLoader implements XulLoader {
 
   private XulParser parser;
+  private String rootDir = "/";
   public SwingXulLoader() throws XulException{
 
     DocumentFactory.registerDOMClass(DocumentDom4J.class);
@@ -123,6 +124,10 @@ public class SwingXulLoader implements XulLoader {
       if(in == null){
         throw new IllegalArgumentException("File not found");
       }
+
+      if(resource.lastIndexOf("/") > 0){ //exists and not first char
+        rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
+      }
       
       ResourceBundle res;
       try{
@@ -136,6 +141,7 @@ public class SwingXulLoader implements XulLoader {
         	  throw new XulException("Error parsing Xul Document", ex);
     	  }
       }
+      
       return loadXul(resource, res);
       
   }
@@ -150,6 +156,11 @@ public class SwingXulLoader implements XulLoader {
       	
 	      SAXReader rdr = new SAXReader();
 	      final Document doc = rdr.read(new StringReader(localOutput));
+	     
+
+	      if(resource.lastIndexOf("/") > 0){ //exists and not first char
+          rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
+	      }
 	      
 	      return this.loadXul(doc);
       } catch(DocumentException e){
@@ -165,6 +176,10 @@ public class SwingXulLoader implements XulLoader {
 
       if(in == null){
         throw new IllegalArgumentException("File not found");
+      }
+      
+      if(resource.lastIndexOf("/") > 0){ //exists and not first char
+        rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
       }
       
       ResourceBundle res;
@@ -193,6 +208,10 @@ public class SwingXulLoader implements XulLoader {
 	      SAXReader rdr = new SAXReader();
 	      final Document doc = rdr.read(new StringReader(localOutput));
 	      
+	      if(resource.lastIndexOf("/") > 0){ //exists and not first char
+          rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
+        }
+        
 	      return this.loadXulFragment(doc);
       } catch(DocumentException e){
     	  throw new XulException("Error parsing Xul Document", e);
@@ -203,6 +222,10 @@ public class SwingXulLoader implements XulLoader {
 
   public void register(String tagName, String className) {
     parser.registerHandler(tagName, className);
+  }
+
+  public String getRootDir() {
+    return this.rootDir;
   }
   
 }

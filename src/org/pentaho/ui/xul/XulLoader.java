@@ -109,4 +109,6 @@ public interface XulLoader {
 
   
   public void register(String tagName, String className);
+  
+  public String getRootDir();
 }

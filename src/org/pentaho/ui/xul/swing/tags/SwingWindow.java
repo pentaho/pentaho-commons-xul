@@ -17,9 +17,12 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.text.DefaultEditorKit;
@@ -59,6 +62,11 @@ public class SwingWindow extends SwingElement implements XulWindow {
   
   private Clipboard clipboard;
   
+  /**
+   * Xul Buttons can belong to radio button groups without a "radiogroup" element in the DOM
+   * This collection facilitates this behavior.
+   */
+  private Map<String, ButtonGroup> anonymousButtonGroups = new HashMap<String, ButtonGroup>();
 
   public SwingWindow(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("window");
@@ -213,6 +221,16 @@ public class SwingWindow extends SwingElement implements XulWindow {
 	public void paste() {
 		TextAction act = new DefaultEditorKit.PasteAction();
 		act.actionPerformed(new ActionEvent(this.getManagedObject(), 999, "paste"));
-		
 	}
+	
+	public ButtonGroup getButtonGroup(String group){
+	  if(anonymousButtonGroups.containsKey(group)){
+	    return anonymousButtonGroups.get(group);
+	  } else {
+	    ButtonGroup grp = new ButtonGroup();
+	    anonymousButtonGroups.put(group, grp);
+	    return grp;
+	  }
+	}
+	
 }
