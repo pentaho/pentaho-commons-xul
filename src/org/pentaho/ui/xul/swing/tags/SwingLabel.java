@@ -5,6 +5,7 @@ package org.pentaho.ui.xul.swing.tags;
 
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.text.JTextComponent;
 
 import org.pentaho.ui.xul.XulComponent;
@@ -17,12 +18,14 @@ import org.pentaho.ui.xul.swing.SwingElement;
  *
  */
 public class SwingLabel extends SwingElement implements XulLabel{
-  private JTextArea label;
+  private JTextPane label;
   
   public SwingLabel(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("label");
-    label = new JTextArea();
-    label.setLineWrap(true);
+    label = new JTextPane();
+    label.setEditable(false);
+    label.setFocusable(false);
+    //label.setLineWrap(true);
     label.setOpaque(false);
     managedObject = label;
   }
