@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -31,8 +32,8 @@ public class SwingHbox extends SwingElement implements XulHbox{
     super("Hbox");
     
     children = new ArrayList<XulComponent>();
-    
-    container = new JPanel(new GridBagLayout());
+
+    container = new ScrollablePanel(new GridBagLayout());
     //container.setBorder(BorderFactory.createLineBorder(Color.green));
     managedObject = container;
     

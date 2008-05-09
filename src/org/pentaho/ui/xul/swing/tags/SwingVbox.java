@@ -15,6 +15,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -28,8 +29,8 @@ public class SwingVbox extends SwingElement implements XulVbox  {
   public SwingVbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Vbox");
     this.orientation = Orient.VERTICAL;
-    
-    container = new JPanel(new GridBagLayout());
+
+    container = new ScrollablePanel(new GridBagLayout());
 
     managedObject = container;
     

@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulGroupbox;
+import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -32,8 +33,8 @@ public class SwingGroupbox  extends SwingElement implements XulGroupbox {
     this.orientation = Orient.VERTICAL;
     
     children = new ArrayList<XulComponent>();
-    
-    container = new JPanel(new GridBagLayout());
+
+    container = new ScrollablePanel(new GridBagLayout());
     container.setBorder(BorderFactory.createTitledBorder(""));
     managedObject = container;
     

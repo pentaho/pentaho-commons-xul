@@ -11,6 +11,7 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 
 import org.apache.commons.logging.Log;
@@ -48,6 +49,7 @@ public class SwingElement extends AbstractXulComponent{
   
   public void layout(){
     double totalFlex = 0.0;
+    
     for(XulComponent comp : children){
       if(comp.getManagedObject() == null){
         continue;
@@ -67,11 +69,16 @@ public class SwingElement extends AbstractXulComponent{
       
       if(comp instanceof XulSplitter){
         JPanel prevContainer = container;
-        container = new JPanel(new GridBagLayout());
+        container = new ScrollablePanel(new GridBagLayout());
+        
+        JScrollPane leftScroll = new JScrollPane(prevContainer);
+        leftScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        leftScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        
         final JSplitPane splitter = new JSplitPane(
             (this.getOrientation() == Orient.VERTICAL)? 
                 JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT,
-            prevContainer,
+            leftScroll,
             container
         );
         splitter.setContinuousLayout(true);
