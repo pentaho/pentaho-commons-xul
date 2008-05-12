@@ -1,6 +1,8 @@
 /*jadclipse*/// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
 package org.pentaho.ui.xul.swing;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
@@ -11,6 +13,10 @@ public class ScrollablePanel extends JPanel {
   public ScrollablePanel() {
   }
 
+  public ScrollablePanel(Component c){
+    super(new BorderLayout());
+    add(c, BorderLayout.CENTER);
+  }
   public ScrollablePanel(boolean isDoubleBuffered) {
     super(isDoubleBuffered);
   }

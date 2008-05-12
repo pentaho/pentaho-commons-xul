@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul.swing;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -71,14 +72,10 @@ public class SwingElement extends AbstractXulComponent{
         JPanel prevContainer = container;
         container = new ScrollablePanel(new GridBagLayout());
         
-        JScrollPane leftScroll = new JScrollPane(prevContainer);
-        leftScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-        leftScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        
         final JSplitPane splitter = new JSplitPane(
             (this.getOrientation() == Orient.VERTICAL)? 
                 JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT,
-            leftScroll,
+            prevContainer,
             container
         );
         splitter.setContinuousLayout(true);
