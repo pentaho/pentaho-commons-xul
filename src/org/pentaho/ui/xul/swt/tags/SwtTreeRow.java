@@ -31,7 +31,7 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
     rowParent = (XulTreeItem)parent;
     
     widget =  (rowParent.isHierarchical()) ? new TreeItemWrapper(rowParent.getTree()) 
-                                        : new TableItemWrapper(rowParent.getTree());
+                                        : new TableItemWrapper(rowParent.getTree(), this);
     item = widget.getItem();
     managedObject = item;
     
@@ -79,4 +79,11 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
 	public XulTreeCell getCell(int index) {
 		return this.cells.get(index);
 	}
+
+  public int getSelectedColumnIndex() {
+    if (rowParent.getTree() == null){
+      return -1;
+    }
+    return rowParent.getTree().getActiveCellCoordinates()[1];
+  }
 }

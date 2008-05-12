@@ -35,7 +35,6 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.RowWidget;
 import org.pentaho.ui.xul.util.ColumnType;
@@ -47,6 +46,7 @@ public class TableItemWrapper implements RowWidget {
   TableItem item = null;
   Table parentTable = null;
   XulTree parentTree = null;
+  XulTreeRow treeRow = null;
   
   TableEditor textEditor = null;
   IterableMap checkedEditors = new HashedMap();
@@ -54,8 +54,10 @@ public class TableItemWrapper implements RowWidget {
   int firstEditableColumn = -1;
   
   
-  public TableItemWrapper(XulTree parent){
+  public TableItemWrapper(XulTree parent, XulTreeRow treeRow){
 
+    this.treeRow = treeRow;
+    
     parentTable = (Table)parent.getManagedObject();
     
     item = new TableItem(parentTable, SWT.NONE);
@@ -128,21 +130,29 @@ public class TableItemWrapper implements RowWidget {
 
   public void setText(int index, String text) {
     text = (text == null) ? "" : text; //$NON-NLS-1$
-    item.setText(index, text);
+    syncText(index, text);
 
-    Control control = textEditor.getEditor();
-    
-    if ((control != null) && (!control.isDisposed()) && (control instanceof Text)){
-      ((Text)control).setText(item.getText(index));
-    }
-    
+    Control control; 
     if(checkedEditors.containsKey(new Integer(index))){
       control = ((TableEditor)checkedEditors.get(new Integer(index))).getEditor();
       if ((control != null) && (!control.isDisposed()) && (control instanceof Button)){
         boolean checked = item.getText(index).equalsIgnoreCase("true");
         ((Button)control).setSelection(checked);
+        return;
       }
     }
+    
+    control = textEditor.getEditor();
+    if ((control != null) && (!control.isDisposed()) && (control instanceof Text)){
+      // if the index is the currently selected column, also 
+      // update the Text control
+      if (index == parentTree.getActiveCellCoordinates()[1]){
+        ((Text)control).setText(item.getText(index));
+        ((Text)control).selectAll();
+        control.setFocus();
+      }
+    }
+
   }
   
   private void createCustomText(final int index, String customClass, boolean isPassword){
@@ -173,7 +183,7 @@ public class TableItemWrapper implements RowWidget {
 	    
 	    edit.addModifyListener(new ModifyListener(){
 	      public void modifyText(ModifyEvent event){
-	        item.setText(index, ((Text)event.widget).getText());
+	        syncText(index, ((Text)event.widget).getText());
 	      }
 	    });
 	    
@@ -181,8 +191,7 @@ public class TableItemWrapper implements RowWidget {
 	      public void handleEvent (final Event e) {
 	        switch (e.type) {
 	          case SWT.FocusOut:
-	            item.setText (index, ((Text)e.widget).getText ());  
-	            
+	            syncText(index, ((Text)e.widget).getText());
 	            // Some custom components may lose focus from the textbox to 
 	            // some other part of the component; in that case
 	            // we do not to dispose yet. This mechanism allows the 
@@ -196,7 +205,7 @@ public class TableItemWrapper implements RowWidget {
 	          case SWT.Traverse:
 	            switch (e.detail) {
 	              case SWT.TRAVERSE_RETURN:
-	                item.setText (index, ((Text)e.widget).getText ());
+	                syncText(index, ((Text)e.widget).getText());
 	                //FALL THROUGH
 	                break;
 	              case SWT.TRAVERSE_ESCAPE:
@@ -244,7 +253,7 @@ public class TableItemWrapper implements RowWidget {
     edit.setText(item.getText(index));
     edit.selectAll();
     edit.setFocus();
-    
+
     if (isPassword){
       edit.setEchoChar('*');
     }
@@ -256,6 +265,7 @@ public class TableItemWrapper implements RowWidget {
 
     parentTable.showItem(item);
     parentTable.setSelection(new TableItem[] { item });
+
   }
 
   private void addTextListeners(Text edit, final int index){
@@ -264,7 +274,7 @@ public class TableItemWrapper implements RowWidget {
     
     edit.addModifyListener(new ModifyListener(){
       public void modifyText(ModifyEvent event){
-        item.setText(index, ((Text)event.widget).getText());
+        syncText(index, ((Text)event.widget).getText());
       }
     });
     
@@ -272,13 +282,13 @@ public class TableItemWrapper implements RowWidget {
       public void handleEvent (final Event e) {
         switch (e.type) {
           case SWT.FocusOut:
-            item.setText (index, ((Text)e.widget).getText ());
+            syncText(index, ((Text)e.widget).getText());
             ((Control)e.widget).dispose ();
             break;
           case SWT.Traverse:
             switch (e.detail) {
               case SWT.TRAVERSE_RETURN:
-                item.setText (index, ((Text)e.widget).getText ());
+                syncText(index, ((Text)e.widget).getText());
                 //FALL THROUGH
               case SWT.TRAVERSE_ESCAPE:
                e.doit = false;
@@ -333,6 +343,7 @@ public class TableItemWrapper implements RowWidget {
         XulWindow window = (XulWindow) doc.getRootElement();
         XulDomContainer container = window.getXulDomContainer();
         
+        parentTree.setActiveCellCoordinates(parentTree.getActiveCellCoordinates()[0], index);
         try{
           container.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
         } catch (XulException ex){
@@ -347,12 +358,12 @@ public class TableItemWrapper implements RowWidget {
       public void handleEvent ( Event e) {
         switch (e.type) {
           case SWT.FocusOut:
-            item.setText(index, String.valueOf(((Button)e.widget).getSelection()));
+            syncText(index, String.valueOf(((Button)e.widget).getSelection()));
             break;
           case SWT.Traverse:
             switch (e.detail) {
               case SWT.TRAVERSE_RETURN:
-                item.setText(index, String.valueOf(((Button)e.widget).getSelection()));
+                syncText(index, String.valueOf(((Button)e.widget).getSelection()));
                 //FALL THROUGH
               case SWT.TRAVERSE_ESCAPE:
                 e.doit = false;
@@ -384,9 +395,9 @@ public class TableItemWrapper implements RowWidget {
       }
     }
 
-    Iterator mapIt = checkedEditors.mapIterator();
+    Iterator <Button> mapIt = checkedEditors.mapIterator();
     while (mapIt.hasNext()) {
-      Button check = (Button)mapIt.next();
+      Button check = mapIt.next();
       if (check != null && !check.isDisposed()) {
         try {
           check.dispose();
@@ -402,6 +413,11 @@ public class TableItemWrapper implements RowWidget {
       parentTable.layout();
     }
     
+  }
+  
+  private void syncText(int index, String text){
+    item.setText (index, text);
+    treeRow.getCell(index).setLabel(text);
   }
   
   /* =================================================================================== */
@@ -482,11 +498,13 @@ public class TableItemWrapper implements RowWidget {
             }
           }
         }
+        parentTable.notifyListeners(SWT.Selection, new Event());
 
       } else if (e.keyCode == SWT.ESC) {
         //text.dispose();
       }
       parentTree.setActiveCellCoordinates(activeRow, activeCol);
+
     }
   }
 

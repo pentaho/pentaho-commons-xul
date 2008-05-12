@@ -9,9 +9,9 @@ import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingTreeRow extends SwingElement implements XulTreeRow{
-	XulTreeItem treeItem;
+  XulTreeItem treeItem;
 	private XulTree tree;
-	
+
 	public SwingTreeRow(XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treerow");
 		managedObject = "empty";
@@ -59,13 +59,8 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
 
 	public void makeCellEditable(int index) {
 		// TODO Auto-generated method stub
+		}
 		
-	}
-
-	public void remove() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void layout() {
@@ -79,5 +74,14 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
 	  }
 	  
 	}
+
+  public int getSelectedColumnIndex() {
+    return 0;
+  }
+
+  public void remove() {
+    // TODO Auto-generated method stub
+    
+  }
 
 }

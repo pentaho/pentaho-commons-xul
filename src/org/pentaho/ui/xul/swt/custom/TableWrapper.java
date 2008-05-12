@@ -18,7 +18,6 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.TabularWidget;
-import org.pentaho.ui.xul.util.ColumnType;
 
 public class TableWrapper implements TabularWidget {
 

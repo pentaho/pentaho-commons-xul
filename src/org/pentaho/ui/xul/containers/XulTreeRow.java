@@ -14,5 +14,7 @@ public interface XulTreeRow extends XulContainer {
     public void remove();
     
     public XulTreeCell getCell(int index);
+    
+    public int getSelectedColumnIndex();
 
 }
