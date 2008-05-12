@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,13 +73,18 @@ public class SwingButton extends SwingElement implements XulButton{
 
         Document doc = getDocument();
         XulWindow window = (XulWindow) doc.getRootElement();
-        XulDomContainer container = window.getXulDomContainer();
+        final XulDomContainer container = window.getXulDomContainer();
         
-        try{
-          container.invoke(method, new Object[]{});
-        } catch (XulException e){
-          logger.error("Error calling oncommand event",e);
-        }
+        SwingUtilities.invokeLater(new Runnable(){
+          public void run() {
+            try{
+              container.invoke(method, new Object[]{});
+            } catch (XulException e){
+              logger.error("Error calling oncommand event",e);
+            }
+          }
+        });
+        
       }
     });
   }
