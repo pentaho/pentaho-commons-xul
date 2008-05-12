@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import java.util.Vector;
+
 import javax.swing.JLabel;
 
 import org.apache.commons.logging.Log;
@@ -12,7 +14,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingTreeCell extends SwingElement implements XulTreeCell {
 	
 	private JLabel label;
-	private Object value;
+	private Object value = null;
 	private int index = 0;
 	private static final Log logger = LogFactory.getLog(SwingTreeCell.class);
 	
@@ -69,9 +71,19 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
 	}
 
 	public void setValue(Object value) {
-		if(value instanceof String){
+		if(value instanceof String && ((String) value).indexOf(",") == -1){
+		  //String and not a comma separated list
 			this.value = Boolean.parseBoolean(((String) value));
-		} else if(value instanceof Boolean){
+		} else if(value instanceof String && ((String) value).indexOf(",") > -1){
+      //String and a comma separated list
+      String[] list = ((String) value).split(",");
+      Vector<String> vec = new Vector<String>();
+      for(String item : list){
+        vec.add(item);
+      }
+      this.value = vec;
+      
+    } else if(value instanceof Boolean){
 			this.value = (Boolean) value;
 		} else {
 			this.value = value;

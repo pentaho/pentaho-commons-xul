@@ -3,12 +3,14 @@ package org.pentaho.ui.xul.swing.tags;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
+import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingTreeRow extends SwingElement implements XulTreeRow{
 	XulTreeItem treeItem;
+	private XulTree tree;
 	
 	public SwingTreeRow(XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treerow");
@@ -26,20 +28,33 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
 		super.addChild(cell);
 	}
 
+	private XulTree getTree(){
+	  if(tree == null){
+	    tree = (SwingTree)this.getParent().getParent().getParent();
+	  }
+	  return tree;
+	}
 
   public void addCellText(int index, String text) {
     
     SwingTreeCell cell  = null;
     if(index < children.size()){
       cell = (SwingTreeCell)children.get(index);
-      cell.setLabel(text);
     }else{
       cell = new SwingTreeCell(this);
-      cell.setLabel(text);
       this.addCell(cell);
     }
+    
+    switch(getTree().getColumns().getColumn(index).getColumnType()){
+      case CHECKBOX:
+      case COMBOBOX:
+        cell.setValue(text);
+        break;
+      default:
+        cell.setLabel(text);
+    }
     layout();
-    ((SwingTree)this.getParent().getParent().getParent()).getTable().updateUI();
+    //((SwingTree)this.getParent().getParent().getParent()).getTable().getModel().
   }
 
 	public void makeCellEditable(int index) {
@@ -57,7 +72,12 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
 	}
 
 	public XulTreeCell getCell(int index) {
-		return (SwingTreeCell) this.children.get(index);
+	  if(index < this.children.size()){
+	    return (SwingTreeCell) this.children.get(index);
+	  } else {
+	    return null;
+	  }
+	  
 	}
 
 }

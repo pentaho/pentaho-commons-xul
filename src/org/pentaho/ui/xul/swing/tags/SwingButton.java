@@ -45,6 +45,7 @@ public class SwingButton extends SwingElement implements XulButton{
   private ButtonGroup buttonGroup;
   private XulDomContainer domContainer;
   private String onclick;
+  private boolean selected;
   
   public SwingButton(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("button");
@@ -142,6 +143,7 @@ public class SwingButton extends SwingElement implements XulButton{
       button.setText(oldButton.getText());
       button.setIcon(oldButton.getIcon());
       button.setEnabled(oldButton.isEnabled());
+      button.setSelected(this.selected);
       this.setOnclick(this.getOnclick());
       managedObject = button;
       
@@ -204,6 +206,20 @@ public class SwingButton extends SwingElement implements XulButton{
   public void setType(String type) {
     this.type = Type.valueOf(type.toString().toUpperCase());
     
+  }
+
+  public void setSelected(String selected) {
+    this.selected = Boolean.parseBoolean(selected);  
+    button.setSelected(this.selected);
+  }
+
+  public boolean isSelected() {
+    return selected;  
+  }
+
+  public void setSelected(boolean selected) {
+    this.selected = selected;  
+    button.setSelected(this.selected);
   }
   
 }

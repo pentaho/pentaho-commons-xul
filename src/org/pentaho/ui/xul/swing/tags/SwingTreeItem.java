@@ -22,6 +22,7 @@ public class SwingTreeItem extends SwingElement implements XulTreeItem{
 	public SwingTreeItem(XulTreeRow row) {
 		super("treeitem");
 		this.children.add(row);
+		super.addChild(row);
 		this.row = row;
 		managedObject = "empty";
 	}
@@ -72,6 +73,7 @@ public class SwingTreeItem extends SwingElement implements XulTreeItem{
 
 	public void setRow(XulTreeRow row) {
 		this.row = row;
+		super.addChild(row);
 	}
 	
 	@Override

@@ -34,8 +34,8 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
     SwingTreeItem item = new SwingTreeItem(this);
     item.setRow(new SwingTreeRow(item));
     items.add(item);
-    this.addChild(item);
-    
+    addChild(item);
+
     return item.getRow();
 	}
 
@@ -73,9 +73,11 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 	public void removeItem(XulTreeItem item) {
 
 		items.remove(item);
+		this.removeChild(item);
 	}
 
 	public void removeItem(int rowIndex) {
+    this.removeChild(items.get(rowIndex));
 		items.remove(rowIndex);
 	}
 

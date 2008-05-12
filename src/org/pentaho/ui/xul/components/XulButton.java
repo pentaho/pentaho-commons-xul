@@ -118,4 +118,25 @@ public interface XulButton extends XulComponent {
    * @param group
    */
   public String getGroup();
+  
+  /**
+   * Sets the selected state of the button. If this button is a member of a button group, 
+   * the other buttons will be de-selected.
+   * @param selected
+   */
+  public void setSelected(String selected);
+  
+  /**
+   * Sets the selected state of the button. If this button is a member of a button group, 
+   * the other buttons will be de-selected.
+   * @param selected
+   */
+  public void setSelected(boolean selected);
+  
+  /**
+   * Returns the selected state of the button.
+   * @return
+   */
+  public boolean isSelected();
+  
 }

@@ -106,7 +106,6 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void addChild(Element ele) {
     this.element.addChild(ele);
-
   }
 
   public void removeChild(Element ele) {

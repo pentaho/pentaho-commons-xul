@@ -42,8 +42,7 @@ public class SwingTreeCols extends SwingElement implements XulTreeCols{
 	}
 
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.children.size();
 	}
 
 	public XulTree getTree() {

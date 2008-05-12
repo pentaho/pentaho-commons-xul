@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -82,6 +83,8 @@ public class SwingTree extends SwingElement implements XulTree{
 	private boolean editable = false;
 	private String onselect;
 	private static final Log logger = LogFactory.getLog(SwingTree.class);
+  private Vector<String> columnNames = new Vector<String>();
+  
 
 	private boolean isHierarchical = false;
 	  
@@ -139,7 +142,7 @@ public class SwingTree extends SwingElement implements XulTree{
 	}
 
 	public int getRows() {
-		return this.tableData.size();
+		return this.rootChildren.getItemCount();
 	}
 
 	public String getSeltype() {
@@ -263,9 +266,6 @@ public class SwingTree extends SwingElement implements XulTree{
 		this.columns = columns;
 	}
 
-	private Vector<Vector> tableData = new Vector<Vector>();
-	private Vector<String> columnNames = new Vector<String>();
-	
 	public void setRootChildren(final XulTreeChildren rootChildren) {
 		this.rootChildren = rootChildren;
 		
@@ -275,80 +275,21 @@ public class SwingTree extends SwingElement implements XulTree{
 			addTreeRow(xrow);
 			
 		}
-		createColumnModel();
 		
-		tableModel = new DefaultTableModel(tableData,columnNames){
-			@Override
-			public void setValueAt(Object val, int row, int col) {
-
-		    XulTreeCell cell = rootChildren.getItem(row).getRow().getCell(col);
-		    switch(columns.getColumn(col).getColumnType()){
-			    case CHECKBOX:
-						cell.setValue(val);
-		        super.setValueAt(val, row, col);
-		        tableData.get(row).set(col, val);
-						break;
-					case COMBOBOX:
-						((SwingTreeCell) cell).setSelectedIndex(((Vector)cell.getValue()).indexOf(val));
-		        super.setValueAt((Vector)cell.getValue(), row, col);
-		        tableData.get(row).set(col, (Vector)cell.getValue());
-						break;
-					default: //label
-						cell.setLabel((String) val);
-	          super.setValueAt(val, row, col);
-	          tableData.get(row).set(col, val);
-						break;
-		    }
-				fireTableCellUpdated(row, col);
-		        
-			}
-			
-			public Class getColumnClass(int c) {
-	        return getValueAt(0, c).getClass();
-	    }
-
-			public boolean isCellEditable(int row, int column)
-		    {
-		        return SwingTree.this.getColumns().getColumn(column).isEditable();
-		    }
-		};
-		
-	}
-
-	private void createColumnModel(){
-		for(XulComponent col : this.columns.getChildNodes()){
-			columnNames.add(((XulTreeCol) col).getLabel());
-		}
 	}
 	
 	public void addTreeRow(XulTreeRow row){
-
-		Vector<Object> newRow = new Vector<Object>();
-		
-		List<XulComponent> cells = row.getChildNodes();
-		
-		for(int i=0; i<cells.size(); i++){
-			XulTreeCell xcell = (XulTreeCell) cells.get(i);
-
-			if(this.getColumns().getColumn(i).getType().equalsIgnoreCase("checkbox")){
-				newRow.add((Boolean) xcell.getValue());
-			} else if (this.getColumns().getColumn(i).getType().equalsIgnoreCase("combobox")){
-				newRow.add(xcell.getValue());
-			} else {
-				newRow.add(xcell.getLabel());
-			}
-		}
 		
 		this.rootChildren.addItem(new SwingTreeItem(row));
 		
-		tableData.add(newRow);
 		table.updateUI();
 	}
-
+	
 	public void removeTreeRows(int[] rows){
 		for(int i=0; i<rows.length; i++){
-			this.tableData.remove(rows[i]);
-				
+		  if (i < rootChildren.getItemCount()){
+		    this.rootChildren.removeItem(rows[i]);
+		  }
 		}
 		table.updateUI();
 	}
@@ -380,163 +321,14 @@ public class SwingTree extends SwingElement implements XulTree{
 	}
 	
 	
-	private TableCellRenderer getCellRenderer(final SwingTreeCol col){
-		
-		return new DefaultTableCellRenderer() {
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-				
-				switch(col.getColumnType()){
-					case CHECKBOX:
-						JCheckBox checkbox = new JCheckBox();
-						if(value instanceof String){
-							checkbox.setSelected(((String) value).equalsIgnoreCase("true"));
-						} else if(value instanceof Boolean){
-							checkbox.setSelected((Boolean) value);
-						} else if(value == null){
-							checkbox.setSelected(false);
-						}
-						if(isSelected){
-							checkbox.setBackground(Color.LIGHT_GRAY);
-						}
-						return checkbox;
-					case COMBOBOX:
-
-				    SwingTreeCell cell = (SwingTreeCell) rootChildren.getItem(row).getRow().getCell(SwingTree.this.columns.getChildNodes().indexOf(col));
-
-				    JComboBox comboBox = null;
-				    Vector data = (Vector) cell.getValue();
-				    if(data == null){
-				      logger.debug("SwingTreeCell combobox data is null, passed in value: "+value);
-				      if(value instanceof Vector){
-				        data = (Vector) value;
-				      }
-				    }
-				    if(data != null){
-				      comboBox = new JComboBox(data);
-	            comboBox.setSelectedIndex(cell.getSelectedIndex());
-				    } else {
-				      comboBox = new JComboBox();
-				    }
-				    
-
-						if(isSelected){
-							comboBox.setBackground(Color.LIGHT_GRAY);
-						}
-						return comboBox;
-					default:
-						JLabel label = new JLabel((String) value);
-	
-						if(isSelected){
-							label.setOpaque(true);
-							label.setBackground(Color.LIGHT_GRAY);
-						}
-						return label;
-				}
-				
-			}
-		};
-
-	}
-	
-	private TableCellEditor getCellEditor(final SwingTreeCol col){
-		return new DefaultCellEditor(new JComboBox()){
-
-			JComponent control;
-			@Override
-			public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
-				switch(col.getColumnType()){
-					case CHECKBOX:
-						final JCheckBox checkbox = new JCheckBox();
-						
-						checkbox.addActionListener(new ActionListener() {
-			        public void actionPerformed(ActionEvent event) {
-			        	SwingTree.this.table.setValueAt(checkbox.isSelected(), row, column);
-			        } 
-			      });
-						
-						control = checkbox;
-						if(value instanceof String){
-							checkbox.setSelected(((String) value).equalsIgnoreCase("true"));
-						} else if(value instanceof Boolean){
-							checkbox.setSelected((Boolean) value);
-						} else if(value == null){
-							checkbox.setSelected(false);
-						}
-						if(isSelected){
-							checkbox.setBackground(Color.LIGHT_GRAY);
-						}
-						return checkbox;
-					case COMBOBOX:
-						final JComboBox comboBox= new JComboBox((Vector) value);
-						
-
-						comboBox.addActionListener(new ActionListener() {
-			        public void actionPerformed(ActionEvent event) {
-			        	
-			        	SwingTree.logger.debug("Setting ComboBox value from editor: "+comboBox.getSelectedItem()+", "+row+", "+column);
-			        	
-			        	SwingTree.this.table.setValueAt(comboBox.getSelectedItem(), row, column);
-			        } 
-			      });
-						if(isSelected){
-							comboBox.setBackground(Color.LIGHT_GRAY);
-						}
-						
-						control = comboBox;
-						return comboBox;
-					default:
-						final JTextField label = new JTextField((String) value);
-			
-						label.getDocument().addDocumentListener(new DocumentListener(){
-
-							public void changedUpdate(DocumentEvent arg0) {
-								SwingTree.this.table.setValueAt(label.getText(), row, column);
-							}
-
-							public void insertUpdate(DocumentEvent arg0) {
-								SwingTree.this.table.setValueAt(label.getText(), row, column);
-							}
-
-							public void removeUpdate(DocumentEvent arg0) {
-								SwingTree.this.table.setValueAt(label.getText(), row, column);
-							}
-							
-						});
-						if(isSelected){
-							label.setOpaque(true);
-							label.setBackground(Color.LIGHT_GRAY);
-						}
-					
-						control = label;
-						return label;
-				}
-			}
-
-			@Override
-			public Object getCellEditorValue() {
-				if(control instanceof JCheckBox){
-					return ((JCheckBox) control).isSelected();
-				} else if(control instanceof JComboBox){
-					return ((JComboBox) control).getSelectedItem();
-				} else {
-					return ((JTextField) control).getText();
-				}
-			}
-			
-		};
-
-	}
-	
-
-
 	private int totalFlex = 0;
 	@Override
 	public void layout() {
 		//generate table object based on TableModel and TableColumnModel
 			
-		if(tableModel == null){
-			tableModel = new DefaultTableModel();
-		}
+//		if(tableModel == null){
+			tableModel = new XulTableModel(this);
+//		}
 		table.setModel(this.tableModel);
 		
 		TableColumnModel columnModel = table.getColumnModel();
@@ -614,8 +406,27 @@ public class SwingTree extends SwingElement implements XulTree{
 	}
 
 	public int[] getSelectedRows() {
-		//TODO: add tree selection code
-		return (this.isHierarchical)? null : table.getSelectedRows();
+	  //FIXME: A selection followed by removals with no new UI interaction returns the previous
+	  //selection even if the row count is now less.
+	  
+	  int[] tempSelection = table.getSelectedRows();
+	  List<Integer> clensedSelection = new ArrayList<Integer>();
+	  for(int row : tempSelection){
+	    if(row < table.getModel().getRowCount()){
+	      clensedSelection.add(row);
+	    }
+	  }
+	  
+	  //no automatic unboxing :(
+	  int[] returnArray = new int[clensedSelection.size()];
+	  
+	  int idx = 0;
+	  for(int row : clensedSelection){
+	    returnArray[idx] = row;
+	    idx++;
+	  }
+	  
+		return returnArray;
 		
 	}
 
@@ -627,13 +438,282 @@ public class SwingTree extends SwingElement implements XulTree{
 	}
 
   public Object getData() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public void setData(Object data) {
-    // TODO Auto-generated method stub
     
   }
+  
+  
+  
 
+  private TableCellRenderer getCellRenderer(final SwingTreeCol col){
+    
+    return new DefaultTableCellRenderer() {
+      
+      public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        
+        switch(col.getColumnType()){
+          case CHECKBOX:
+            JCheckBox checkbox = new JCheckBox();
+            if(value instanceof String){
+              checkbox.setSelected(((String) value).equalsIgnoreCase("true"));
+            } else if(value instanceof Boolean){
+              checkbox.setSelected((Boolean) value);
+            } else if(value == null){
+              checkbox.setSelected(false);
+            }
+            if(isSelected){
+              checkbox.setBackground(Color.LIGHT_GRAY);
+            }
+            return checkbox;
+          case COMBOBOX:
+            SwingTreeCell cell = (SwingTreeCell) rootChildren.getItem(row).getRow().getCell(SwingTree.this.columns.getChildNodes().indexOf(col));
+            
+            Vector data;
+            
+            JComboBox comboBox;
+            if(cell == null){
+              comboBox = new JComboBox();
+            } else {
+               comboBox = null;
+              
+               data = (cell.getValue() != null)? (Vector) cell.getValue() : new Vector();
+              
+              if(data == null){
+                logger.debug("SwingTreeCell combobox data is null, passed in value: "+value);
+                if(value instanceof Vector){
+                  data = (Vector) value;
+                }
+              }
+              if(data != null){
+                comboBox = new JComboBox(data);
+                comboBox.setSelectedIndex(cell.getSelectedIndex());
+              } else {
+                comboBox = new JComboBox();
+              }
+            }
+
+            if(isSelected){
+              comboBox.setBackground(Color.LIGHT_GRAY);
+            }
+            return comboBox;
+          default:
+            JLabel label = new JLabel((String) value);
+  
+            if(isSelected){
+              label.setOpaque(true);
+              label.setBackground(Color.LIGHT_GRAY);
+            }
+            return label;
+        }
+        
+      }
+    };
+
+  }
+  
+  private TableCellEditor getCellEditor(final SwingTreeCol col){
+    return new DefaultCellEditor(new JComboBox()){
+
+      JComponent control;
+      @Override
+      public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
+        switch(col.getColumnType()){
+          case CHECKBOX:
+            final JCheckBox checkbox = new JCheckBox();
+            
+            checkbox.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent event) {
+                SwingTree.this.table.setValueAt(checkbox.isSelected(), row, column);
+              } 
+            });
+            
+            control = checkbox;
+            if(value instanceof String){
+              checkbox.setSelected(((String) value).equalsIgnoreCase("true"));
+            } else if(value instanceof Boolean){
+              checkbox.setSelected((Boolean) value);
+            } else if(value == null){
+              checkbox.setSelected(false);
+            }
+            if(isSelected){
+              checkbox.setBackground(Color.LIGHT_GRAY);
+            }
+            return checkbox;
+          case COMBOBOX:
+            Vector val = (value != null)? (Vector) value : new Vector();
+            final JComboBox comboBox= new JComboBox(val);
+            
+
+            comboBox.addActionListener(new ActionListener() {
+              public void actionPerformed(ActionEvent event) {
+                
+                SwingTree.logger.debug("Setting ComboBox value from editor: "+comboBox.getSelectedItem()+", "+row+", "+column);
+                
+                SwingTree.this.table.setValueAt(comboBox.getSelectedIndex(), row, column);
+              } 
+            });
+            if(isSelected){
+              comboBox.setBackground(Color.LIGHT_GRAY);
+            }
+            
+            control = comboBox;
+            return comboBox;
+          default:
+            final JTextField label = new JTextField((String) value);
+      
+            label.getDocument().addDocumentListener(new DocumentListener(){
+
+              public void changedUpdate(DocumentEvent arg0) {
+                SwingTree.this.table.setValueAt(label.getText(), row, column);
+              }
+
+              public void insertUpdate(DocumentEvent arg0) {
+                SwingTree.this.table.setValueAt(label.getText(), row, column);
+              }
+
+              public void removeUpdate(DocumentEvent arg0) {
+                SwingTree.this.table.setValueAt(label.getText(), row, column);
+              }
+              
+            });
+            if(isSelected){
+              label.setOpaque(true);
+              label.setBackground(Color.LIGHT_GRAY);
+            }
+          
+            control = label;
+            return label;
+        }
+      }
+
+      @Override
+      public Object getCellEditorValue() {
+        if(control instanceof JCheckBox){
+          return ((JCheckBox) control).isSelected();
+        } else if(control instanceof JComboBox){
+          return ((JComboBox) control).getSelectedIndex();
+        } else {
+          return ((JTextField) control).getText();
+        }
+      }
+      
+    };
+
+  }
+
+  
+  private class XulTableModel extends AbstractTableModel{
+    
+    SwingTree tree = null;
+    
+    public XulTableModel(SwingTree tree){
+      this.tree = tree;
+      Vector<String> columnNames = new Vector<String>();
+      for(XulComponent col : tree.getColumns().getChildNodes()){
+        columnNames.add(((XulTreeCol) col).getLabel());
+      }
+     
+      
+    }
+
+    public int getColumnCount() {
+      return this.tree.getColumns().getColumnCount();
+    }
+
+    public int getRowCount() {
+      if(this.tree != null){
+        return this.tree.getRootChildren().getItemCount();
+      } else {
+        return 0;
+      }
+    }
+
+    public Object getValueAt(int rowIndex, int columnIndex) {
+      
+      XulTreeCol col = tree.getColumns().getColumn(columnIndex);
+      XulTreeCell cell = this.tree.getRootChildren().getItem(rowIndex).getRow().getCell(columnIndex);
+      if(cell == null){
+        return null;
+      }
+      try{
+        switch(col.getColumnType()){
+          case CHECKBOX:
+            if(cell.getValue() != null){
+              return cell.getValue(); 
+            }
+          case COMBOBOX:
+            if(cell.getValue() != null){
+              return cell.getValue();
+            }
+          default:
+            return cell.getLabel();
+        }
+      } catch (Exception e){
+        logger.error("Error getting value of cell at row:"+rowIndex+" column:"+columnIndex, e);
+        
+      }
+      return null;
+    }
+    
+
+    @Override
+    public int findColumn(String columnName) {
+      for(int i=0; i< tree.getColumns().getColumnCount(); i++){
+        if(tree.getColumns().getColumn(i).getName().toUpperCase().equals(columnName.toUpperCase())){
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+      switch(tree.getColumns().getColumn(columnIndex).getColumnType()){
+        case CHECKBOX:
+          return Boolean.class;
+        case COMBOBOX:
+          return Vector.class;
+        default:
+          return String.class;
+          
+      }
+    }
+
+    @Override
+    public String getColumnName(int column) {
+      return tree.getColumns().getColumn(column).getLabel();  
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+      return tree.getColumns().getColumn(columnIndex).isEditable();
+    }
+
+    @Override
+    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+      logger.error("Didn't plan on setData being called in this model");
+      XulTreeCell cell = this.tree.getRootChildren().getItem(rowIndex).getRow().getCell(columnIndex);
+      
+      switch(tree.getColumns().getColumn(columnIndex).getColumnType()){
+        case CHECKBOX:
+          cell.setValue(cell);
+          break;
+        case COMBOBOX:
+          if(value instanceof String){
+            logger.error("Combobox being set to String! ("+value+")");
+          } else {
+            cell.setSelectedIndex((Integer) value);
+          }
+          break;
+        default:
+          cell.setLabel((String) value);
+          
+      }
+    }
+
+    
+  }
 }

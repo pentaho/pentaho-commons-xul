@@ -60,6 +60,15 @@ public class TableEventHandler extends AbstractXulEventHandler{
 	
 	public void newRow(){
 		try{
+		  
+
+      XulTreeRow row = tree.getRootChildren().addNewRow();
+      row.addCellText(0, "false");
+      row.addCellText(1, "test");
+      row.addCellText(2, "fool");
+      row.addCellText(3, "foo, bar, baz");
+      row.addCellText(4, "fool");
+		  
 			XulTreeRow newRow = (XulTreeRow) document.createElement("treerow");
 
 			XulTreeCell newCell = (XulTreeCell) document.createElement("treecell");

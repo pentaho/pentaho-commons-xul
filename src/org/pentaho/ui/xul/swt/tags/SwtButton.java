@@ -29,6 +29,7 @@ public class SwtButton extends SwtElement implements XulButton {
   private Type type;
   private String group;
   private String onclick;
+  private boolean selected;
   
 
   public SwtButton(XulComponent parent, XulDomContainer container, String tagName) {
@@ -120,5 +121,19 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public String getOnclick() {
     return this.onclick;
+  }
+
+  public void setSelected(String selected) {
+    this.selected = Boolean.parseBoolean(selected);  
+    button.setSelection(this.selected);
+  }
+
+  public boolean isSelected() {
+    return selected;  
+  }
+
+  public void setSelected(boolean selected) {
+    this.selected = selected;  
+    button.setSelection(this.selected);
   }
 }
