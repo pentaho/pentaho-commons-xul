@@ -184,7 +184,6 @@ public class SwingElement extends AbstractXulComponent{
     getJComponent().addFocusListener(new FocusListener() {
     
       public void focusLost(FocusEvent e) {
-        System.err.println("focus was lost");
         Document doc = getDocument();
         XulWindow window = (XulWindow) doc.getRootElement();
         XulDomContainer container = window.getXulDomContainer();
