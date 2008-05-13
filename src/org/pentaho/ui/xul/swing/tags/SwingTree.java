@@ -694,8 +694,12 @@ public class SwingTree extends SwingElement implements XulTree{
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
-      logger.error("Didn't plan on setData being called in this model");
-      XulTreeCell cell = this.tree.getRootChildren().getItem(rowIndex).getRow().getCell(columnIndex);
+      XulTreeItem row = this.tree.getRootChildren().getItem(rowIndex);
+      if(row == null){
+        logger.info("Row removed, setVal returning");
+        return;
+      }
+      XulTreeCell cell = row.getRow().getCell(columnIndex);
       
       switch(tree.getColumns().getColumn(columnIndex).getColumnType()){
         case CHECKBOX:

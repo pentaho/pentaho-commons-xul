@@ -40,7 +40,7 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 	}
 
 	public XulTreeItem getItem(int rowIndex) {
-		return items.get(rowIndex);
+		return (items.size() > rowIndex) ? items.get(rowIndex) : null;
 	}
 
 	public XulTree getTree() {
