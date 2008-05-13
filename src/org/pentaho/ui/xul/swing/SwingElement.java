@@ -34,121 +34,126 @@ import org.pentaho.ui.xul.util.Orient;
  * @author OEM
  *
  */
-public class SwingElement extends AbstractXulComponent{
+public class SwingElement extends AbstractXulComponent {
   private static final Log logger = LogFactory.getLog(SwingElement.class);
-  
+
   protected JPanel container;
+
   protected Orient orientation;
+
   protected Orient orient = Orient.HORIZONTAL;
+
   protected GridBagConstraints gc = new GridBagConstraints();
-  
+
   public SwingElement(String tagName) {
     super(tagName);
   }
-  
-  public void resetContainer(){
-    
+
+  public void resetContainer() {
+
   }
-  
-  public void layout(){
+
+  public void layout() {
     double totalFlex = 0.0;
-    
-    for(XulComponent comp : children){
-      if(comp.getManagedObject() == null){
+
+    for (XulComponent comp : children) {
+      if (comp.getManagedObject() == null) {
         continue;
       }
-      if(comp.getFlex() > 0){
+      if (comp.getFlex() > 0) {
         flexLayout = true;
         totalFlex += comp.getFlex();
       }
     }
-    
-    if(flexLayout)
+
+    if (flexLayout)
       gc.fill = GridBagConstraints.BOTH;
 
     double currentFlexTotal = 0.0;
-    for(int i=0; i<children.size(); i++){
+    for (int i = 0; i < children.size(); i++) {
       XulComponent comp = children.get(i);
-      
-      if(comp instanceof XulSplitter){
+
+      if (comp instanceof XulSplitter) {
         JPanel prevContainer = container;
         container = new ScrollablePanel(new GridBagLayout());
-        
+
         final JSplitPane splitter = new JSplitPane(
-            (this.getOrientation() == Orient.VERTICAL)? 
-                JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT,
-            prevContainer,
-            container
-        );
+            (this.getOrientation() == Orient.VERTICAL) ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT,
+            prevContainer, container);
         splitter.setContinuousLayout(true);
 
-        final double  splitterSize = currentFlexTotal / totalFlex;
+        final double splitterSize = currentFlexTotal / totalFlex;
         splitter.setResizeWeight(splitterSize);
-        if(totalFlex > 0){
-          splitter.addComponentListener(new ComponentListener(){
-            public void componentHidden(ComponentEvent arg0) {}
-            public void componentMoved(ComponentEvent arg0) {}
-            public void componentShown(ComponentEvent arg0) {}
+        if (totalFlex > 0) {
+          splitter.addComponentListener(new ComponentListener() {
+            public void componentHidden(ComponentEvent arg0) {
+            }
+
+            public void componentMoved(ComponentEvent arg0) {
+            }
+
+            public void componentShown(ComponentEvent arg0) {
+            }
+
             public void componentResized(ComponentEvent arg0) {
               splitter.setDividerLocation(splitterSize);
               splitter.removeComponentListener(this);
             }
 
           });
-          
+
         }
-        
-        if(!flexLayout){
-          if(this.getOrientation() == Orient.VERTICAL){ //VBox and such
+
+        if (!flexLayout) {
+          if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
             gc.weighty = 1.0;
           } else {
             gc.weightx = 1.0;
           }
-          
+
           prevContainer.add(Box.createGlue(), gc);
         }
         managedObject = splitter;
       }
-    
+
       Object maybeComponent = comp.getManagedObject();
-      if(maybeComponent == null || !(maybeComponent instanceof Component)){
+      if (maybeComponent == null || !(maybeComponent instanceof Component)) {
         continue;
       }
-      if(this.getOrientation() == Orient.VERTICAL){ //VBox and such
-        gc.gridheight = comp.getFlex()+1;
+      if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
+        gc.gridheight = comp.getFlex() + 1;
         gc.gridwidth = GridBagConstraints.REMAINDER;
-        gc.weighty = (totalFlex == 0)? 0 : (comp.getFlex()/totalFlex);
+        gc.weighty = (totalFlex == 0) ? 0 : (comp.getFlex() / totalFlex);
       } else {
-        gc.gridwidth = comp.getFlex()+1;
+        gc.gridwidth = comp.getFlex() + 1;
         gc.gridheight = GridBagConstraints.REMAINDER;
-        gc.weightx = (totalFlex == 0)? 0 : (comp.getFlex()/totalFlex);
+        gc.weightx = (totalFlex == 0) ? 0 : (comp.getFlex() / totalFlex);
       }
-      
+
       currentFlexTotal += comp.getFlex();
-      
+
       Component component = (Component) maybeComponent;
       container.add(component, gc);
 
-      if(i+1 == children.size() && !flexLayout){
+      if (i + 1 == children.size() && !flexLayout) {
 
-        if(this.getOrientation() == Orient.VERTICAL){ //VBox and such
+        if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
           gc.weighty = 1.0;
         } else {
           gc.weightx = 1.0;
         }
-        
+
         container.add(Box.createGlue(), gc);
       }
     }
-   
+
   }
 
-  
-  public void setOrient(String orientation){
-	  this.orientation = Orient.valueOf(orientation.toUpperCase());
+  public void setOrient(String orientation) {
+    this.orientation = Orient.valueOf(orientation.toUpperCase());
   }
-  
-  public String getOrient(){
+
+  public String getOrient() {
     return orientation.toString();
   }
 
@@ -156,51 +161,50 @@ public class SwingElement extends AbstractXulComponent{
     return orientation;
   }
 
-  
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
-    
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
+
     super.replaceChild(oldElement, newElement);
-    
+
     int idx = this.children.indexOf(oldElement);
-    if(idx == -1){
-    	logger.error(oldElement.getName()+" not found in children");
-    	throw new XulDomException(oldElement.getName()+" not found in children");
-    } else{
+    if (idx == -1) {
+      logger.error(oldElement.getName() + " not found in children");
+      throw new XulDomException(oldElement.getName() + " not found in children");
+    } else {
       this.children.set(idx, newElement);
-      
+
       container.removeAll();
-  
+
       layout();
       this.container.revalidate();
     }
   }
-  
+
   public JComponent getJComponent() {
-    return (JComponent)getManagedObject();
+    return (JComponent) getManagedObject();
   }
 
   public void setOnblur(final String method) {
-    getJComponent().addFocusListener(new FocusListener() {
-    
-      public void focusLost(FocusEvent e) {
-        Document doc = getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
-        XulDomContainer container = window.getXulDomContainer();
-        
-        try{
-          container.invoke(method, new Object[]{});
-        } catch (XulException xe){
-          logger.error("Error calling onblur event",xe);
+    if (getJComponent() != null) {
+      getJComponent().addFocusListener(new FocusListener() {
+
+        public void focusLost(FocusEvent e) {
+          Document doc = getDocument();
+          XulWindow window = (XulWindow) doc.getRootElement();
+          XulDomContainer container = window.getXulDomContainer();
+
+          try {
+            container.invoke(method, new Object[] {});
+          } catch (XulException xe) {
+            logger.error("Error calling onblur event", xe);
+          }
+
         }
-    
-      }
-    
-      public void focusGained(FocusEvent e) {
-      }
-    
+
+        public void focusGained(FocusEvent e) {
+        }
+
+      });
     }
-    );
-    
   }
 }
