@@ -54,7 +54,6 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow{
         cell.setLabel(text);
     }
     layout();
-    //((SwingTree)this.getParent().getParent().getParent()).getTable().getModel().
   }
 
 	public void makeCellEditable(int index) {

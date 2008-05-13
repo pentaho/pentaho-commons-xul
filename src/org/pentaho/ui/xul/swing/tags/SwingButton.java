@@ -15,7 +15,6 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.logging.Log;
@@ -26,8 +25,6 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Direction;
 import org.pentaho.ui.xul.util.Orient;

@@ -65,6 +65,13 @@ public interface XulComponent extends Element {
   public void setFlex(int flex);
   
   /**
+   * Sets the method that will be invoked when this component
+   * loses focus. Also hooks up any listeners for this event. 
+   * @param method the method to execute when the focus is lost. 
+   */
+  public void setOnblur(String method);
+  
+  /**
    * Set the width of this control
    * 
    */

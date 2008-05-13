@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -184,6 +185,10 @@ public class SwtElement extends AbstractXulComponent {
     ((Control) newElement.getManagedObject()).setParent((Composite) this.getManagedObject());
 
     layout();
+  }
+
+  public void setOnblur(String method) {
+    throw new NotImplementedException();
   }
 
 }

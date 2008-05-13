@@ -9,8 +9,11 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -18,8 +21,12 @@ import javax.swing.JSplitPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulSplitter;
+import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -35,11 +42,6 @@ public class SwingElement extends AbstractXulComponent{
   protected Orient orient = Orient.HORIZONTAL;
   protected GridBagConstraints gc = new GridBagConstraints();
   
-  
-  public SwingElement(String tagName, Object managedObject) {
-    super(tagName, managedObject);
-  }
-
   public SwingElement(String tagName) {
     super(tagName);
   }
@@ -172,5 +174,34 @@ public class SwingElement extends AbstractXulComponent{
       layout();
       this.container.revalidate();
     }
+  }
+  
+  public JComponent getJComponent() {
+    return (JComponent)getManagedObject();
+  }
+
+  public void setOnblur(final String method) {
+    getJComponent().addFocusListener(new FocusListener() {
+    
+      public void focusLost(FocusEvent e) {
+        System.err.println("focus was lost");
+        Document doc = getDocument();
+        XulWindow window = (XulWindow) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        
+        try{
+          container.invoke(method, new Object[]{});
+        } catch (XulException xe){
+          logger.error("Error calling onblur event",xe);
+        }
+    
+      }
+    
+      public void focusGained(FocusEvent e) {
+      }
+    
+    }
+    );
+    
   }
 }
