@@ -1,7 +1,5 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.lang.reflect.Method;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -14,8 +12,6 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.impl.XulEventHandler;
-import org.pentaho.ui.xul.swing.tags.SwingWindow;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtWindow extends SwtElement implements XulWindow {
@@ -117,18 +113,19 @@ public class SwtWindow extends SwtElement implements XulWindow {
   }
 
 	public void copy() throws XulException {
-		// TODO Auto-generated method stub
-		
+	  throw new UnsupportedOperationException();
 	}
 
 	public void cut() throws XulException {
-		// TODO Auto-generated method stub
-		
+	  throw new UnsupportedOperationException();
 	}
 
 	public void paste() throws XulException {
-		// TODO Auto-generated method stub
-		
+	  throw new UnsupportedOperationException();		
 	}
+
+  public void copy(String content) throws XulException {
+    throw new UnsupportedOperationException();
+  }
 
 }

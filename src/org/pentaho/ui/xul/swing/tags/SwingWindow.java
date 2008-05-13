@@ -10,18 +10,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
-import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -36,8 +30,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -232,5 +224,13 @@ public class SwingWindow extends SwingElement implements XulWindow {
 	    return grp;
 	  }
 	}
+
+
+  public void copy(String content) throws XulException {
+    StringSelection data = new StringSelection(content);
+    Clipboard clipboard = 
+         Toolkit.getDefaultToolkit().getSystemClipboard();
+    clipboard.setContents(data, data);
+  }
 	
 }

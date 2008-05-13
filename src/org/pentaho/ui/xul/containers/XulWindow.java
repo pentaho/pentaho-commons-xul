@@ -83,6 +83,9 @@ public interface XulWindow extends XulContainer{
   
   public void paste() throws XulException;
   public void copy() throws XulException;
+  
+  public void copy(String content) throws XulException;
+  
   public void cut() throws XulException;
   
 }
