@@ -35,9 +35,14 @@ public class SwingDialog extends SwingElement implements XulDialog{
 	private String buttonlabelaccept;
 
 	private String buttonlabelcancel;
+	
+	 private String buttonlabelextra1;
+	  private String buttonlabelextra2;
 	private TreeMap<SwingDialog.BUTTONS, XulButton> buttons = new TreeMap<SwingDialog.BUTTONS, XulButton>();
 	private String ondialogaccept;
 	private String ondialogcancel;
+	 private String ondialogextra1;
+	  private String ondialogextra2;
 	private String title = "Dialog";
 	private String onload;
 	
@@ -47,7 +52,7 @@ public class SwingDialog extends SwingElement implements XulDialog{
 	private int width = 450;
 	private BUTTON_ALIGN buttonAlignment;
 	
-	private enum BUTTONS{ ACCEPT, CANCEL, HELP };
+	private enum BUTTONS{ ACCEPT, CANCEL, HELP, EXTRA1, EXTRA2 };
 
 	private enum BUTTON_ALIGN{ START, CENTER, END, LEFT, RIGHT, MIDDLE };
 	
@@ -302,11 +307,61 @@ public class SwingDialog extends SwingElement implements XulDialog{
 	      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setLabel(this.getButtonlabelcancel());
 	      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
 	    }
+	    
+	    // FIXME
+	    if(buttons.containsKey(SwingDialog.BUTTONS.EXTRA1)){
+        this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setLabel(this.getButtonlabelextra1());
+        this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setOnclick(this.getOndialogextra1());
+      }
+	    if(buttons.containsKey(SwingDialog.BUTTONS.EXTRA2)){
+	      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setLabel(this.getButtonlabelextra2());
+	      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setOnclick(this.getOndialogextra2());
+	    }
 	  }
 
 
   public boolean isHidden() {
     return dialog.isVisible();
+  }
+
+
+  public String getButtonlabelextra1() {
+    return buttonlabelextra1;
+  }
+
+
+  public void setButtonlabelextra1(String buttonlabelextra1) {
+    this.buttonlabelextra1 = buttonlabelextra1;
+  }
+
+
+  public String getButtonlabelextra2() {
+    return buttonlabelextra2;
+  }
+
+
+  public void setButtonlabelextra2(String buttonlabelextra2) {
+    this.buttonlabelextra2 = buttonlabelextra2;
+  }
+
+
+  public String getOndialogextra1() {
+    return ondialogextra1;
+  }
+
+
+  public void setOndialogextra1(String ondialogextra1) {
+    this.ondialogextra1 = ondialogextra1;
+  }
+
+
+  public String getOndialogextra2() {
+    return ondialogextra2;
+  }
+
+
+  public void setOndialogextra2(String ondialogextra2) {
+    this.ondialogextra2 = ondialogextra2;
   }
 	
 }
