@@ -71,4 +71,9 @@ public class SwingMenuList extends SwingElement implements XulMenuList {
 
     layout();
   }
+
+  public String getSelectedItem() {
+    return (String)this.combobox.getModel().getSelectedItem();
+  }
+  
 }

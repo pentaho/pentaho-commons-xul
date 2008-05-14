@@ -15,5 +15,6 @@ import org.pentaho.ui.xul.XulDomException;
 public interface XulMenuList extends XulContainer {
   
   public void replaceAllItems(List<String> objects) throws XulDomException;
-    
+  
+  public String getSelectedItem();
 }
