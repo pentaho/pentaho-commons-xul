@@ -707,7 +707,7 @@ public class SwingTree extends SwingElement implements XulTree{
       
       switch(tree.getColumns().getColumn(columnIndex).getColumnType()){
         case CHECKBOX:
-          cell.setValue(cell);
+          cell.setValue((Boolean) value);
           break;
         case COMBOBOX:
           if(value instanceof String){
