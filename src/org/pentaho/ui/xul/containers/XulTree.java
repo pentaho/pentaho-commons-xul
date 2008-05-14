@@ -46,5 +46,7 @@ public interface XulTree extends XulContainer {
   public void setData(Object data);
 
   public void update();
+  
+  public void clearSelection();
 
 }

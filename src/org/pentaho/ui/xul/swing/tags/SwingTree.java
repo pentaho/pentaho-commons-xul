@@ -724,4 +724,8 @@ public class SwingTree extends SwingElement implements XulTree{
 
     
   }
+
+  public void clearSelection() {
+    table.getSelectionModel().clearSelection();
+  }
 }

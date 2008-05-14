@@ -268,6 +268,10 @@ public class SwtTree extends SwtElement implements XulTree {
       
   }
 
+  public void clearSelection() {
+    //TODO implement clearSelection
+  }
+
   /* =================================================================================== */
 
 }
