@@ -6,7 +6,10 @@
 	<groupbox id="test-group-box" orient="horizontal">
 		<caption id="test-group-box" label="Testing Group Boxes" />  
 		<label id="label1" value="Label for text box" />
-		<textbox id="textbox1" value="default" maxlength="10" />
+		<vbox>
+		<textbox id="textbox1" value="default" maxlength="10" readonly="true"/>
+		<textbox id="textbox1" value="default" maxlength="10" readonly="false"/>
+		</vbox>
 	</groupbox>
 
 </window>

@@ -136,4 +136,8 @@ public class SwtButton extends SwtElement implements XulButton {
     this.selected = selected;  
     button.setSelection(this.selected);
   }
+
+  public void doClick() {
+    button.setSelection(true);
+  }
 }

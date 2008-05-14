@@ -243,9 +243,11 @@ public class SwingTree extends SwingElement implements XulTree{
 	public void setOnselect(final String select) {
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 
-			public void valueChanged(ListSelectionEvent arg0) {
-
-        Document doc = getDocument();
+			public void valueChanged(ListSelectionEvent event) {
+			  if(event.getValueIsAdjusting() == true){
+			    return;
+			  }
+			  Document doc = getDocument();
         XulWindow window = (XulWindow) doc.getRootElement();
         XulDomContainer container = window.getXulDomContainer();
         
@@ -254,11 +256,8 @@ public class SwingTree extends SwingElement implements XulTree{
         } catch (XulException e){
           logger.error("Error calling oncommand event",e);
         }
-		
 			}
-			
 		});
-		
 	}
 
 	private XulTreeCols columns;
@@ -355,6 +354,7 @@ public class SwingTree extends SwingElement implements XulTree{
 //			}
 			
 		}
+
 		
 		table.addComponentListener(new ComponentListener(){
 			boolean loaded = false;
@@ -443,6 +443,10 @@ public class SwingTree extends SwingElement implements XulTree{
 
   public void setData(Object data) {
     
+  }
+  
+  public void update(){
+    table.updateUI();
   }
   
   

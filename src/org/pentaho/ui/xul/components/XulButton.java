@@ -139,4 +139,8 @@ public interface XulButton extends XulComponent {
    */
   public boolean isSelected();
   
+  /**
+   * Fire onclick event
+   */
+  public void doClick();
 }

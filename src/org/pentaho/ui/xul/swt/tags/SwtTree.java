@@ -259,6 +259,15 @@ public class SwtTree extends SwtElement implements XulTree {
 		
 	}
 
+  public void update() {
+    if(!this.isHierarchical){
+      ((Table) widget).update();
+    } else {
+      //TODO implement update for tree
+    }
+      
+  }
+
   /* =================================================================================== */
 
 }

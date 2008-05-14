@@ -65,14 +65,13 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
   }
 
   public void removeAll(){
-    for (XulTreeItem itemToRemove : items){
-      removeItem(itemToRemove);
+    while(items.size() > 0){
+      removeItem(0);
     }
   }
 
 	public void removeItem(XulTreeItem item) {
-
-		items.remove(item);
+	  items.remove(item);
 		this.removeChild(item);
 	}
 

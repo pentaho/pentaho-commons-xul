@@ -224,5 +224,9 @@ public class SwingButton extends SwingElement implements XulButton{
     this.selected = selected;  
     button.setSelected(this.selected);
   }
+
+  public void doClick() {
+    button.doClick();
+  }
   
 }
