@@ -3,7 +3,10 @@
  */
 package org.pentaho.ui.xul.components;
 
+import java.util.List;
+
 import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.XulDomException;
 
 /**
  * @author aphillips
@@ -11,5 +14,6 @@ import org.pentaho.ui.xul.XulContainer;
  */
 public interface XulMenuList extends XulContainer {
   
-
+  public void replaceAllItems(List<String> objects) throws XulDomException;
+    
 }
