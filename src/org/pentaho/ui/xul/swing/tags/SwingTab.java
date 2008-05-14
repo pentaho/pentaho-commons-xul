@@ -44,9 +44,11 @@ public class SwingTab extends SwingElement implements XulTab{
 	
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
-		
 		getTabbox();
-		tabbox.setTabDisabledAt(disabled, getParent().getChildNodes().indexOf(this));
+		if(tabbox != null){
+		  tabbox.setTabDisabledAt(disabled, getParent().getChildNodes().indexOf(this));
+		}
+		
 	}
 
 	public void setLabel(String label) {

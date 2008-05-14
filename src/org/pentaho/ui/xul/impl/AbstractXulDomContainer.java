@@ -164,13 +164,19 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
           continue;
         } catch(NumberFormatException e2){
           try{
-            String str = obj.replaceAll("'", "");
-            str = str.replaceAll("\"", "");
-            args[i] = str;
+            Boolean flag = Boolean.parseBoolean(obj);
+            args[i] = flag;
             continue;
           } catch(NumberFormatException e3){
-            logger.error("Error parsing event call argument: "+obj, e3);
-            continue;
+            try{
+              String str = obj.replaceAll("'", "");
+              str = str.replaceAll("\"", "");
+              args[i] = str;
+              continue;
+            } catch(NumberFormatException e4){
+              logger.error("Error parsing event call argument: "+obj, e3);
+              continue;
+            }
           }
         }
       }

@@ -27,9 +27,9 @@
 			</tabpanel>
 	  </tabpanels>
 	</tabbox>
-	<button label="disable 1" onclick="handler.disable(0)"/>
-	<button label="disable 2" onclick="handler.disable(1)"/>
-	<button label="disable 3" onclick="handler.disable(2)"/>
-	<button label="disable 4" onclick="handler.disable(3)"/>
+	<button label="disable 1" onclick="handler.setDisabled(false, 0)"/>
+	<button label="disable 2" onclick="handler.setDisabled(true, 1)"/>
+	<button label="disable 3" onclick="handler.setDisabled(true, 2)"/>
+	<button label="disable 4" onclick="handler.setDisabled(true, 3)"/>
 	
 </window>
