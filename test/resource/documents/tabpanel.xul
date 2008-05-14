@@ -4,12 +4,13 @@
 	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
+	<script src="org.pentaho.ui.xul.samples.TabboxEventHandler" id="handler"/>
 	<tabbox id="myTabList" selectedIndex="2" flex="1">
 	  <tabs>
-	    <tab label="A First tab" disabled="true"/>
-	    <tab label="Second tab"/>
-	    <tab label="Another tab"/>
-	    <tab label="Last tab"/>
+	    <tab label="A First tab" disabled="true" id="tab1"/>
+	    <tab label="Second tab" id="tab2"/>
+	    <tab label="Another tab" id="tab3"/>
+	    <tab label="Last tab" id="tab4"/>
 	  </tabs>
 	  <tabpanels>
 	    <tabpanel>
@@ -26,5 +27,9 @@
 			</tabpanel>
 	  </tabpanels>
 	</tabbox>
+	<button label="disable 1" onclick="handler.disable(0)"/>
+	<button label="disable 2" onclick="handler.disable(1)"/>
+	<button label="disable 3" onclick="handler.disable(2)"/>
+	<button label="disable 4" onclick="handler.disable(3)"/>
 	
 </window>

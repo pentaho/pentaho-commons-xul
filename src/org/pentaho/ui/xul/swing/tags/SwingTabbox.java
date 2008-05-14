@@ -76,4 +76,8 @@ public class SwingTabbox extends SwingElement implements XulTabbox{
 		tabpane.setSelectedIndex(selectedIndex);
 	}
 
+  public void setTabDisabledAt(boolean flag, int pos) {
+    tabpane.setEnabledAt(pos, ! flag);
+  }
+
 }
