@@ -31,6 +31,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   String value = "";
   JScrollPane scrollPane;
 	private static final Log logger = LogFactory.getLog(SwingTextbox.class);
+  private boolean readonly = false;
   
   public SwingTextbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -83,11 +84,11 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public boolean isReadonly() {
-    return false;
+    return readonly;
   }
 
   public void setReadonly(boolean readOnly) {
-    
+    this.readonly = readOnly;
   }
 
   public String getType() {
@@ -119,11 +120,13 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 				textArea = new JTextArea((value != null) ? value : "");
 				managedObject = textArea;
 				scrollPane = new JScrollPane(textArea);
+				textArea.setEditable(!readonly);
 				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
 		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 			} else {
 				textField = new JTextField((value != null) ? value : "");
 				textField.setPreferredSize(new Dimension(200,20));
+				textField.setEditable(!readonly);
 				managedObject = textField;
 			}
 		}
