@@ -3,7 +3,6 @@ package org.pentaho.ui.xul.swing.tags;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -24,7 +23,7 @@ public class SwingMenuList extends SwingElement implements XulMenuList {
   public SwingMenuList(XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menulist");
 
-    this.xulDomContainer = xulDomContainer;
+    this.xulDomContainer = domContainer;
 
     children = new ArrayList<XulComponent>();
 
@@ -38,10 +37,8 @@ public class SwingMenuList extends SwingElement implements XulMenuList {
     DefaultComboBoxModel model = (DefaultComboBoxModel) this.combobox.getModel();
     model.removeAllElements();
     
-    System.err.println(popup.getChildNodes());
     for (XulComponent item : popup.getChildNodes()) {
       JMenuItem jmenuItem = (JMenuItem) ((SwingMenuitem) item).getManagedObject();
-      System.err.println("adding to combobox: " + jmenuItem.getText());
       model.addElement(jmenuItem.getText());
     }
   }
