@@ -94,7 +94,7 @@ public class SwingXulRunner implements XulRunner {
 //      );
 
     	XulDomContainer container = new SwingXulLoader().loadXul(
-      		  "resource/documents/tabpanel.xul"
+      		  "resource/documents/menulist.xul"
         );
     	
       XulRunner runner = new SwingXulRunner();

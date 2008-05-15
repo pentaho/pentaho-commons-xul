@@ -17,4 +17,6 @@ public interface XulMenuList extends XulContainer {
   public void replaceAllItems(List<String> objects) throws XulDomException;
   
   public String getSelectedItem();
+  
+  public void setOncommand(String command);
 }
