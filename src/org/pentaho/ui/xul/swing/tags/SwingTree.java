@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.pentaho.ui.xul.dom.Element;
 import javax.swing.AbstractCellEditor;
 import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
@@ -93,12 +94,12 @@ public class SwingTree extends SwingElement implements XulTree{
 	};
 	private SELECTION_MODE selType = SELECTION_MODE.SINGLE;
 	
-	public SwingTree(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTree(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("tree");
 		
 
-	    XulComponent primaryColumn = getElementByXPath("//treecol[@primary='true']");
-	    XulComponent isaContainer = getElementByXPath("//treeitem[@container='true']");
+	    XulComponent primaryColumn = self.getElementByXPath("//treecol[@primary='true']");
+	    XulComponent isaContainer = self.getElementByXPath("//treeitem[@container='true']");
 
 	    isHierarchical = (primaryColumn != null) && (isaContainer != null);
 

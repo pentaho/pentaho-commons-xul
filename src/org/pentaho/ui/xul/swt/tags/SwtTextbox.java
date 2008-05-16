@@ -8,6 +8,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.TextType;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTextbox extends SwtElement implements XulTextbox {
 
@@ -22,7 +23,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private String text;
   private TextType type = null;
 
-  public SwtTextbox(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtTextbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     parentComposite = (Composite)parent.getManagedObject();
     textBox = createNewText();

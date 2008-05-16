@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulSpacer;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author nbaker
@@ -19,7 +20,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingSpacer extends SwingElement implements XulSpacer{
   private Component strut;
   
-  public SwingSpacer(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingSpacer(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("spacer");
 
   }

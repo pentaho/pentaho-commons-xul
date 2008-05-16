@@ -25,6 +25,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Direction;
 import org.pentaho.ui.xul.util.Orient;
@@ -45,7 +46,7 @@ public class SwingButton extends SwingElement implements XulButton{
   private String onclick;
   private boolean selected;
   
-  public SwingButton(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingButton(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("button");
     button = new JButton();
     this.managedObject = button;
@@ -53,7 +54,7 @@ public class SwingButton extends SwingElement implements XulButton{
   }
   
   public SwingButton() {
-    this(null,null,null);
+    this(null,null,null,null);
   }
   
   public void setLabel(String label){

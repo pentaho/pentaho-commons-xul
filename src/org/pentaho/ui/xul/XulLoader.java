@@ -110,5 +110,17 @@ public interface XulLoader {
   
   public void register(String tagName, String className);
   
+  /**
+   * Returns the location of the root Xul file.
+   * @return Directory location as String
+   */
   public String getRootDir();
+  
+  
+  /**
+   * Provides a running application the ability to get a new XulLoader instance of their runtime flavor
+   * 
+   * @return XulLoader instance
+   */
+  public XulLoader getNewInstance() throws XulException;
 }

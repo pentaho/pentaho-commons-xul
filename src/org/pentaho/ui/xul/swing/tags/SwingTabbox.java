@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTabbox extends SwingElement implements XulTabbox{
 
@@ -26,7 +27,7 @@ public class SwingTabbox extends SwingElement implements XulTabbox{
 	private int selectedIndex;
 	
 	
-	public SwingTabbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTabbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("tabbox");
 		tabpane = new JTabbedPane();
 		this.managedObject = tabpane;

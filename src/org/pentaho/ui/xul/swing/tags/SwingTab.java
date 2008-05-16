@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.components.XulTab;
 import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTab extends SwingElement implements XulTab{
 	
@@ -17,7 +18,7 @@ public class SwingTab extends SwingElement implements XulTab{
 	private boolean disabled = false;
 	private String onclick;
 	private XulTabbox tabbox;
-	public SwingTab(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTab(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("tab");
 		managedObject = "empty";
 	}

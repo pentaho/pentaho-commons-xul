@@ -4,7 +4,9 @@
 package org.pentaho.ui.xul.impl;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -20,6 +22,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.util.XulUtil;
 
 /**
@@ -77,8 +80,8 @@ public class XulParser {
     try {
       c = Class.forName((String) handler);
       Constructor<?> constructor = c
-          .getConstructor(new Class[] { XulComponent.class, XulDomContainer.class, String.class });
-      XulWindow ele = (XulWindow) constructor.newInstance(null, xulDomContainer, "window");
+          .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
+      XulWindow ele = (XulWindow) constructor.newInstance(null, null, xulDomContainer, "window");
       return ele;
     } catch (Exception e) {
       throw new XulException(e);
@@ -144,12 +147,21 @@ public class XulParser {
     try {
       c = Class.forName((String) handler);
       Constructor<?> constructor = c
-          .getConstructor(new Class[] { XulComponent.class, XulDomContainer.class, String.class });
-      XulComponent ele = (XulComponent) constructor.newInstance(parent, xulDomContainer, tagName);
-
+        .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
+   
+      //create a generic element representation of the current Dom4J node
+      Element domEle = DocumentFactory.createElement(srcEle.getName().toLowerCase());
+      List<Attribute> attrs = srcEle.attributes();
+      for(Attribute attr : attrs){
+        domEle.setAttribute(attr.getName(), attr.getValue());
+      }
+      
+      XulComponent ele = (XulComponent) constructor.newInstance(domEle, parent, xulDomContainer, tagName);
+      
       Map<String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
       BeanUtils.populate(ele, attributesMap);
       return ele;
+    
     } catch (Exception e) {
       throw new XulException(e);
     }
@@ -168,9 +180,9 @@ public class XulParser {
      try {
        c = Class.forName((String) handler);
        Constructor<?> constructor = c
-           .getConstructor(new Class[] { XulComponent.class, XulDomContainer.class, String.class });
-       XulComponent ele = (XulComponent) constructor.newInstance(null, xulDomContainer, name);
-
+           .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
+      
+       XulComponent ele = (XulComponent) constructor.newInstance(null, null, xulDomContainer, name);
        return ele;
      } catch (Exception e) {
        throw new XulException(e);

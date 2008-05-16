@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeItem extends SwtElement implements XulTreeItem {
 
@@ -21,10 +22,10 @@ public class SwtTreeItem extends SwtElement implements XulTreeItem {
   private boolean empty = false;
   
   public SwtTreeItem(XulComponent parent){
-    this(parent, null, "treeitem");
+    this(null, parent, null, "treeitem");
   }
   
-  public SwtTreeItem(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtTreeItem(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     parentTreeChildren = (XulTreeChildren)parent;
     parentTreeChildren.addItem(this);

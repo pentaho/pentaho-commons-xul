@@ -5,6 +5,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulListitem;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtListitem extends SwtElement implements XulListitem {
 
@@ -15,7 +16,7 @@ public class SwtListitem extends SwtElement implements XulListitem {
   XulComponent parent;
   boolean isSelected = false; 
   
-  public SwtListitem(XulComponent parent, XulDomContainer container, String tagName){
+  public SwtListitem(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     this.parent = parent;
   }

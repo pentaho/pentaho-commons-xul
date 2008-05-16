@@ -16,6 +16,7 @@ import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Direction;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtButton extends SwtElement implements XulButton {
   private static final long serialVersionUID = -7218075117194366698L;
@@ -32,7 +33,7 @@ public class SwtButton extends SwtElement implements XulButton {
   private boolean selected;
   
 
-  public SwtButton(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtButton(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     button = createNewButton((Composite)parent.getManagedObject());
     managedObject = button;

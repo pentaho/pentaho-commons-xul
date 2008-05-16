@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTreeCols extends SwingElement implements XulTreeCols{
 
@@ -21,7 +22,7 @@ public class SwingTreeCols extends SwingElement implements XulTreeCols{
 	XulTree table;
 	
 	
-	public SwingTreeCols(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTreeCols(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecols");
 		table = (XulTree) parent;
 		

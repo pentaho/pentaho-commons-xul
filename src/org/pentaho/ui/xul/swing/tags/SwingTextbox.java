@@ -18,6 +18,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author nbaker
@@ -33,7 +34,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	private static final Log logger = LogFactory.getLog(SwingTextbox.class);
   private boolean readonly = false;
   
-  public SwingTextbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
     managedObject = null;
   }

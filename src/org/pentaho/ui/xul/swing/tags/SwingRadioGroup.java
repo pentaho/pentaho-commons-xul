@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulRadioGroup;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author aphillips
@@ -26,7 +27,7 @@ public class SwingRadioGroup extends SwingElement implements XulRadioGroup {
 
 	private ButtonGroup buttonGroup = new ButtonGroup();
 
-	public SwingRadioGroup(XulComponent parent, XulDomContainer domContainer,
+	public SwingRadioGroup(Element self, XulComponent parent, XulDomContainer domContainer,
 			String tagName) {
 		super("radiogroup");
 

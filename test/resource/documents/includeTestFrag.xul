@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="fragment"	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
+
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="dataHandler.loadConnectionData()">
+
+		<groupbox id="options-box" orient="vertical" flex="1">
+			<label id="label-one" value="General" />
+			<label id="label-two" value="Advanced" />
+			<label id="label-three" value="Options" />
+			<label id="label-one" value="Pooling" />
+			<label id="label-two" value="Explore" />
+			<label id="label-three" value="Feature List" />
+		</groupbox>
+</window>

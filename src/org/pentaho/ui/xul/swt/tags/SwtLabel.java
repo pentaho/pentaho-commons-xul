@@ -6,6 +6,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtLabel extends SwtElement implements XulLabel {
   private static final long serialVersionUID = 5202737172518086153L;
@@ -13,7 +14,7 @@ public class SwtLabel extends SwtElement implements XulLabel {
   private boolean disabled;
   org.eclipse.swt.widgets.Label label;
   
-  public SwtLabel(XulComponent parent, XulDomContainer container, String tagName){
+  public SwtLabel(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     label = new org.eclipse.swt.widgets.Label((Composite)parent.getManagedObject(), SWT.WRAP);
     managedObject = label;

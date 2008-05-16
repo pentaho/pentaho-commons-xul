@@ -12,6 +12,7 @@ import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.custom.TableColumnWrapper;
 import org.pentaho.ui.xul.swt.custom.TreeColumnWrapper;
 import org.pentaho.ui.xul.util.ColumnType;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeCol extends SwtElement implements XulTreeCol {
 
@@ -24,7 +25,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   private boolean editable = false;
   private String customClass = null;
 
-  public SwtTreeCol(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtTreeCol(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     columnParent = (XulTreeCols)parent;
     

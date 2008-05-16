@@ -18,8 +18,8 @@ public class SwtCheckbox extends SwtButton implements XulCheckbox {
 	
 	private static final Log logger = LogFactory.getLog(SwtCheckbox.class);
 	
-  public SwtCheckbox(XulComponent parent, XulDomContainer container, String tagName) {
-    super(parent, container, tagName);
+  public SwtCheckbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
+    super(null, parent, container, tagName);
   }
 
   @Override

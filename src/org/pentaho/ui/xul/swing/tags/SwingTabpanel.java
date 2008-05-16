@@ -13,11 +13,12 @@ import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTabpanel extends SwingElement implements XulTabpanel{
 	
 	
-	public SwingTabpanel(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTabpanel(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("tabpanel");
 
 

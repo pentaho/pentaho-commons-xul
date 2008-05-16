@@ -22,8 +22,15 @@ public class XulElementDom4J extends org.dom4j.tree.BaseElement{
     this.xulElement = element;
   }
   
+  public XulElementDom4J(String name){
+    super(name);
+  }
+  
   public XulComponent getXulElement(){
     return xulElement;
   }
   
+  public void setXulElement(XulComponent c){
+    this.xulElement = c;
+  }
 }

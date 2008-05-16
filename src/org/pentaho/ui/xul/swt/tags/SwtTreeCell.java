@@ -5,6 +5,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeCell extends SwtElement implements XulTreeCell {
 
@@ -15,10 +16,10 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
   boolean isEditable=false;
   
   public SwtTreeCell(XulComponent parent){
-    this(parent,null,"treecell");
+    this(null, parent,null,"treecell");
   }
 
-  public SwtTreeCell(XulComponent parent, XulDomContainer container, String tagName){
+  public SwtTreeCell(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     parentRow = (XulTreeRow)parent;
     parentRow.addCell(this);

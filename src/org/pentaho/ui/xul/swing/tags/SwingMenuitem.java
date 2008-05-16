@@ -16,6 +16,7 @@ import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingMenuitem extends SwingElement implements XulMenuitem{
 	
@@ -24,7 +25,7 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
   private String image;
   private String onCommand;
   
-  public SwingMenuitem(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menuitem");
     
     children = new ArrayList<XulComponent>();

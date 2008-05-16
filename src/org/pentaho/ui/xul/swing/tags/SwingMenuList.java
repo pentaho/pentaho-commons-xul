@@ -21,6 +21,7 @@ import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingMenuList extends SwingElement implements XulMenuList {
 
@@ -30,7 +31,7 @@ public class SwingMenuList extends SwingElement implements XulMenuList {
   private static final Log logger = LogFactory.getLog(SwingMenuList.class);
   private boolean loaded = false;
 
-  public SwingMenuList(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menulist");
 
     this.xulDomContainer = domContainer;
@@ -75,7 +76,7 @@ public class SwingMenuList extends SwingElement implements XulMenuList {
     }
 
     for(String s : objects) {
-      SwingMenuitem item = new SwingMenuitem(popup, this.xulDomContainer, null);
+      SwingMenuitem item = new SwingMenuitem(null, popup, this.xulDomContainer, null);
       item.setLabel(s);
       popup.addChild(item);
     }

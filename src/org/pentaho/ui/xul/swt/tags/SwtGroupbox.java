@@ -7,12 +7,13 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.dom.Element;
 
 
 public class SwtGroupbox extends SwtBox implements XulGroupbox {
   private static final long serialVersionUID = 7414282626289178745L;
 
-  public SwtGroupbox(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtGroupbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     // XUL groupbox defaults to VERTICAL orientation
     super(parent, tagName, Orient.VERTICAL);
   }

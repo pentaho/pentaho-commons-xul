@@ -64,5 +64,16 @@ public class DocumentFactory {
     }
   }
   
+  public static Element createElement(String name) throws XulException{
+    try{
+      Object element = elementClass.getConstructor(new Class[]{String.class}).newInstance(new Object[]{name});
+      return (Element) element;
+      
+    } catch(Exception e){
+      logger.error("Error creating DOM document object: "+e.getMessage(), e);
+      throw new XulException(e);
+    }
+  }
+  
   
 }

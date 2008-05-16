@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeChildren extends SwtElement implements XulTreeChildren {
 
@@ -20,10 +21,10 @@ public class SwtTreeChildren extends SwtElement implements XulTreeChildren {
   private boolean alternateBackgroundColors = false;
   
   public SwtTreeChildren(XulComponent parent){
-    this(parent, null, "treechildren");
+    this(null, parent, null, "treechildren");
   }
   
-  public SwtTreeChildren(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtTreeChildren(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     
     parentTree = (XulTree)parent;

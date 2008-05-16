@@ -22,7 +22,7 @@ public class SwingDeck extends SwingElement implements XulDeck {
   private int numChildren = 0;
   private List<XulComponent> children = new ArrayList<XulComponent>();
 
-  public SwingDeck(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwingDeck(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     this(parent, tagName, Orient.HORIZONTAL);
   }
 

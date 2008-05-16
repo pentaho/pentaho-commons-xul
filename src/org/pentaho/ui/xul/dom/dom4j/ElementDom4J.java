@@ -34,6 +34,11 @@ public class ElementDom4J implements Element{
 
   }
   
+  public ElementDom4J(String name){
+    this.element = new XulElementDom4J(name.toLowerCase());
+
+  }
+  
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.dom.Element#getChildNodes()
    */
@@ -247,6 +252,10 @@ public class ElementDom4J implements Element{
     int index = contentOfParent.indexOf((org.dom4j.Element) oldElement.getElementObject());
     contentOfParent.set(index, (org.dom4j.Element) newElement.getElementObject());
     
+  }
+
+  public void setComponent(XulComponent c) {
+    ((XulElementDom4J)this.element).setXulElement(c);
   }
 
 }

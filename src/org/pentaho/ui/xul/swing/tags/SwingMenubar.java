@@ -12,11 +12,12 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulMenubar;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingMenubar extends SwingElement implements XulMenubar{
 
   private JMenuBar menuBar;
-  public SwingMenubar(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingMenubar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menubar");
     
     children = new ArrayList<XulComponent>();

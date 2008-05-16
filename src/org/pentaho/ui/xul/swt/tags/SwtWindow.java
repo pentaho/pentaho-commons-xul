@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtWindow extends SwtElement implements XulWindow {
   private static final long serialVersionUID = 6711745093238802441L;
@@ -29,7 +30,7 @@ public class SwtWindow extends SwtElement implements XulWindow {
   
   private static final Log logger = LogFactory.getLog(SwtWindow.class);
 
-  public SwtWindow(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtWindow(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.DIALOG_TRIM) : new Shell(SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());

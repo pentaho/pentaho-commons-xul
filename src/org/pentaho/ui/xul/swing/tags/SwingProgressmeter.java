@@ -6,6 +6,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulProgressmeter;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author mlowery
@@ -14,7 +15,7 @@ public class SwingProgressmeter extends SwingElement implements XulProgressmeter
 
   private JProgressBar progressmeter;
 
-  public SwingProgressmeter(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingProgressmeter(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("progressmeter"); //$NON-NLS-1$
     progressmeter = new JProgressBar();
     this.managedObject = progressmeter;

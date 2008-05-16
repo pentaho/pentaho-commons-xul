@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtScript extends SwtElement implements XulScript {
   private static final long serialVersionUID = 3919768754393704152L;
@@ -15,7 +16,7 @@ public class SwtScript extends SwtElement implements XulScript {
   XulDomContainer windowContainer = null;
   String className = null;
   
-  public SwtScript(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtScript(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     windowContainer = container;
   }

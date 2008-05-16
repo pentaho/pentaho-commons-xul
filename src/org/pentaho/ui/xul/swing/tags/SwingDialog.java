@@ -56,7 +56,7 @@ public class SwingDialog extends SwingElement implements XulDialog{
 
 	private enum BUTTON_ALIGN{ START, CENTER, END, LEFT, RIGHT, MIDDLE };
 	
-	public SwingDialog(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("dialog");
     
     this.orientation = Orient.VERTICAL;

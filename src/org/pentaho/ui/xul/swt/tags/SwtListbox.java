@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtListbox extends SwtElement implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
@@ -28,7 +29,7 @@ public class SwtListbox extends SwtElement implements XulListbox{
   private int rowsToDisplay = 0;
   String onSelect = null;
   
-  public SwtListbox(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     listBox = new List((Composite)parent.getManagedObject(), SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
     managedObject = listBox;

@@ -5,13 +5,14 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtCaption extends SwtElement implements XulCaption {
   
   String label;
   XulComponent parent;
   
-  public SwtCaption(XulComponent parent, XulDomContainer container, String tagName){
+  public SwtCaption(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     this.parent = parent;
   }

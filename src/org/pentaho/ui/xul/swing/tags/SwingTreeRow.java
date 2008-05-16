@@ -7,12 +7,13 @@ import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTreeRow extends SwingElement implements XulTreeRow{
   XulTreeItem treeItem;
 	private XulTree tree;
 
-	public SwingTreeRow(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTreeRow(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treerow");
 		managedObject = "empty";
 	}

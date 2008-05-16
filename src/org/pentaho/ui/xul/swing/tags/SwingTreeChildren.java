@@ -10,12 +10,13 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTreeChildren extends SwingElement implements XulTreeChildren{
 	
 	XulTree tree;
 	List<XulTreeItem> items;
-	public SwingTreeChildren(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTreeChildren(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treechildren");
 		
 		tree = (XulTree) parent;

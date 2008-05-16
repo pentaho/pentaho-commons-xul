@@ -28,7 +28,7 @@ import org.pentaho.ui.xul.util.Orient;
 public class SwingHbox extends SwingElement implements XulHbox{
  
 	private static final Log logger = LogFactory.getLog(SwingHbox.class);
-  public SwingHbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingHbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Hbox");
     
     children = new ArrayList<XulComponent>();

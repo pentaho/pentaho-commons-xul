@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTreeCell extends SwingElement implements XulTreeCell {
 	
@@ -18,7 +19,7 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
 	private int index = 0;
 	private static final Log logger = LogFactory.getLog(SwingTreeCell.class);
 	
-	public SwingTreeCell(XulComponent parent, XulDomContainer domContainer, String tagName) {
+	public SwingTreeCell(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecell");
 		label = new JLabel();
 		managedObject = label;

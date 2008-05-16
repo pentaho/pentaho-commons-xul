@@ -20,6 +20,7 @@ import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author OEM
@@ -28,7 +29,7 @@ import org.pentaho.ui.xul.util.Orient;
 public class SwingGroupbox  extends SwingElement implements XulGroupbox {
 	private static final Log logger = LogFactory.getLog(SwingGroupbox.class);
 
-  public SwingGroupbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingGroupbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("groupbox");
     this.orientation = Orient.VERTICAL;
     

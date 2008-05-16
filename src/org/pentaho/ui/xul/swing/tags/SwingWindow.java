@@ -32,6 +32,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author OEM
@@ -60,7 +61,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
    */
   private Map<String, ButtonGroup> anonymousButtonGroups = new HashMap<String, ButtonGroup>();
 
-  public SwingWindow(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingWindow(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("window");
     frame = new JFrame();
     this.xulDomContainer = domContainer;

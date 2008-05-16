@@ -202,4 +202,7 @@ public abstract class AbstractXulComponent implements XulComponent {
   	return this.width;
   }
   
+  public void setOnblur(String method) {
+  }
+  
 }

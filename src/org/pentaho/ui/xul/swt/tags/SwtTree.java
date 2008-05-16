@@ -21,6 +21,7 @@ import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.TabularWidget;
 import org.pentaho.ui.xul.swt.custom.TableWrapper;
 import org.pentaho.ui.xul.swt.custom.TreeWrapper;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTree extends SwtElement implements XulTree {
 
@@ -62,7 +63,7 @@ public class SwtTree extends SwtElement implements XulTree {
   private int activeColumn = -1;
   
 
-  public SwtTree(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.parentComponent = parent;
     

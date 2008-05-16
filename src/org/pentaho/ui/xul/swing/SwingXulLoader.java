@@ -19,6 +19,7 @@ import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
+import org.pentaho.ui.xul.impl.AbstractXulLoader;
 import org.pentaho.ui.xul.impl.XulFragmentContainer;
 import org.pentaho.ui.xul.impl.XulParser;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
@@ -28,22 +29,12 @@ import org.pentaho.ui.xul.util.ResourceBundleTranslator;
  * @author nbaker
  *
  */
-public class SwingXulLoader implements XulLoader {
+public class SwingXulLoader extends AbstractXulLoader implements XulLoader{
 
-  private XulParser parser;
-  private String rootDir = "/";
-  public SwingXulLoader() throws XulException{
-
-    DocumentFactory.registerDOMClass(DocumentDom4J.class);
-    DocumentFactory.registerElementClass(ElementDom4J.class);
   
-    
-    try{
-      parser = new XulParser();
-    } catch(Exception e){
-      throw new XulException("Error getting XulParser Instance, probably a DOM Factory problem: "+e.getMessage(), e);
-    }
-     
+  
+  public SwingXulLoader() throws XulException{
+    super();
 
     //attach Renderers
     parser.registerHandler("WINDOW", "org.pentaho.ui.xul.swing.tags.SwingWindow");
@@ -87,145 +78,11 @@ public class SwingXulLoader implements XulLoader {
     parser.registerHandler("DIALOG", "org.pentaho.ui.xul.swing.tags.SwingDialog");
     parser.registerHandler("DIALOGHEADER", "org.pentaho.ui.xul.swing.tags.SwingDialogheader");
     parser.registerHandler("PROGRESSMETER", "org.pentaho.ui.xul.swing.tags.SwingProgressmeter");
-  }
-  
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
-   */
-  public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
-
-    XulDomContainer container = new XulWindowContainer(this);
-    parser.setContainer(container);
-    parser.parseDocument(xulDocument.getRootElement());
-   
-    return container;
-  }
-  
-  /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
-   */
-  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
-    XulDomContainer container = new XulFragmentContainer(this);
-    parser.reset();
-    parser.setContainer(container);
-    parser.parseDocument(xulDocument.getRootElement());
     
-    return container;
-  }
-  
-  public XulComponent createElement(String elementName) throws XulException{
-  	return parser.getElement(elementName);
-  }
-  
-  public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException{
 
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
-
-      if(in == null){
-        throw new IllegalArgumentException("File not found");
-      }
-
-      if(resource.lastIndexOf("/") > 0){ //exists and not first char
-        rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-      }
-      
-      ResourceBundle res;
-      try{
-    	  res = ResourceBundle.getBundle(resource.replace(".xul", ""));
-      } catch(MissingResourceException e){
-    	  try{
-	          SAXReader rdr = new SAXReader();
-	          final Document doc = rdr.read(in);
-	          return loadXul(doc);
-    	  } catch(DocumentException ex){
-        	  throw new XulException("Error parsing Xul Document", ex);
-    	  }
-      }
-      
-      return loadXul(resource, res);
-      
-  }
-  
-  public XulDomContainer loadXul(String resource, ResourceBundle bundle) throws  XulException{
-		
-      try{
-
-        InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
-        
-      	String localOutput = ResourceBundleTranslator.translate(in, bundle);
-      	
-	      SAXReader rdr = new SAXReader();
-	      final Document doc = rdr.read(new StringReader(localOutput));
-	     
-
-	      if(resource.lastIndexOf("/") > 0){ //exists and not first char
-          rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-	      }
-	      
-	      return this.loadXul(doc);
-      } catch(DocumentException e){
-    	  throw new XulException("Error parsing Xul Document", e);
-      } catch(IOException e){
-    	  throw new XulException("Error loading Xul Document into Freemarker", e);
-      } 
-  }
-  
-  public XulDomContainer loadXulFragment(String resource) throws IllegalArgumentException, XulException{
-
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
-
-      if(in == null){
-        throw new IllegalArgumentException("File not found");
-      }
-      
-      if(resource.lastIndexOf("/") > 0){ //exists and not first char
-        rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-      }
-      
-      ResourceBundle res;
-      try{
-    	  res = ResourceBundle.getBundle(resource.replace(".xul", ""));
-      } catch(MissingResourceException e){
-    	  try{
-	          SAXReader rdr = new SAXReader();
-	          final Document doc = rdr.read(in);
-	          return loadXulFragment(doc);
-    	  } catch(DocumentException ex){
-        	  throw new XulException("Error parsing Xul Document", ex);
-    	  }
-      }
-      return loadXulFragment(resource, res);
-  }
-  
-  public XulDomContainer loadXulFragment(String resource, ResourceBundle bundle) throws  XulException{
-
-      try{
-
-        InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
-        
-      	String localOutput = ResourceBundleTranslator.translate(in, bundle);
-      	
-	      SAXReader rdr = new SAXReader();
-	      final Document doc = rdr.read(new StringReader(localOutput));
-	      
-	      if(resource.lastIndexOf("/") > 0){ //exists and not first char
-          rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-        }
-        
-	      return this.loadXulFragment(doc);
-      } catch(DocumentException e){
-    	  throw new XulException("Error parsing Xul Document", e);
-      } catch(IOException e){
-    	  throw new XulException("Error loading Xul Document into Freemarker", e);
-      }
   }
 
-  public void register(String tagName, String className) {
-    parser.registerHandler(tagName, className);
+  public XulLoader getNewInstance() throws XulException{
+    return new SwingXulLoader();
   }
-
-  public String getRootDir() {
-    return this.rootDir;
-  }
-  
 }

@@ -48,7 +48,7 @@ public class SwingElement extends AbstractXulComponent {
   public SwingElement(String tagName) {
     super(tagName);
   }
-
+  
   public void resetContainer() {
 
   }

@@ -35,7 +35,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private JScrollPane scrollPane;
   private static final Log logger = LogFactory.getLog(SwingListbox.class);
   
-  public SwingListbox(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwingListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     model = new DefaultListModel();
     listBox = new JList(model);

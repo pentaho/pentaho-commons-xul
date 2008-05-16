@@ -11,12 +11,13 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuseparator;
 import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwingMenu extends SwingElement implements XulMenu{
 
   
   private JMenu menu;
-  public SwingMenu(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingMenu(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menu");
     
     children = new ArrayList<XulComponent>();

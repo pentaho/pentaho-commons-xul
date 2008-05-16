@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulProgressmeter;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
 
@@ -31,7 +32,7 @@ public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
    */
   private int initialMinimum;
 
-  public SwtProgressmeter(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtProgressmeter(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.parent = parent;
     // SWT progress bar not created until mode is known (in layout method)

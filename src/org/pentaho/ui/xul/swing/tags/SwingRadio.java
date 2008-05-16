@@ -27,7 +27,7 @@ public class SwingRadio extends SwingElement implements XulRadio{
   private JRadioButton radioButton;
   private static final Log logger = LogFactory.getLog(SwingRadio.class);
   
-  public SwingRadio(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingRadio(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("radio");
     radioButton = new JRadioButton();
     managedObject = radioButton;

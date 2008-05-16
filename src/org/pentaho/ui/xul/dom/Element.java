@@ -38,7 +38,7 @@ public interface Element {
   public void setAttribute(Attribute attribute);
   public void setAttribute(String name, String value);
   public String getAttributeValue(String attributeName);
-
+  
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException;
   
 }

@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.swt.RowWidget;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.custom.TableItemWrapper;
 import org.pentaho.ui.xul.swt.custom.TreeItemWrapper;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeRow extends SwtElement implements XulTreeRow {
   
@@ -23,10 +24,10 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
   private List <XulTreeCell> cells = null;
   
   public SwtTreeRow(XulComponent parent){
-    this(parent, null, "treerow");
+    this(null, parent, null, "treerow");
   }
   
-  public SwtTreeRow(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtTreeRow(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     rowParent = (XulTreeItem)parent;
     

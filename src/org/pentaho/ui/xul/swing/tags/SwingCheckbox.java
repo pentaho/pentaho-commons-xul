@@ -27,7 +27,7 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
   private JCheckBox checkBox;
   private static final Log logger = LogFactory.getLog(SwingCheckbox.class);
   
-  public SwingCheckbox(XulComponent parent, XulDomContainer domContainer, String tagName) {
+  public SwingCheckbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("checkbox");
     checkBox = new JCheckBox();
     managedObject = checkBox;

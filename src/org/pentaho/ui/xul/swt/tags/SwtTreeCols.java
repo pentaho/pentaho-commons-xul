@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeCols extends SwtElement implements XulTreeCols {
   
@@ -20,7 +21,7 @@ public class SwtTreeCols extends SwtElement implements XulTreeCols {
   
   protected List <XulTreeCol> columns;
   
-  public SwtTreeCols(XulComponent parent, XulDomContainer container, String tagName) {
+  public SwtTreeCols(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.parentTree = (XulTree)parent;
     columns = new ArrayList <XulTreeCol>();
