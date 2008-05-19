@@ -202,7 +202,7 @@ public abstract class AbstractXulLoader implements XulLoader{
 
     
     for(Element ele : eles){
-      String src = this.getRootDir()+"/"+ele.attributeValue("src");
+      String src = this.getRootDir()+ele.attributeValue("src");
       try{
           SAXReader rdr = new SAXReader();
           InputStream in = getClass().getClassLoader().getResourceAsStream(src);
