@@ -166,16 +166,6 @@ public class SwingWindow extends SwingElement implements XulWindow {
   @Override
   public void layout() {
     super.layout();
-    for (XulComponent comp : children) {
-      if (comp instanceof SwingScript) {
-        SwingScript script = (SwingScript) comp;
-        try{
-        	this.xulDomContainer.addEventHandler(script.getId(), script.getSrc());
-        } catch(XulException e){
-        	logger.error("Error adding Event Handler to Window: "+script.getSrc(), e);
-        }
-      } 
-    }
   }
 
   public void close() {

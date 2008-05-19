@@ -82,7 +82,7 @@ public class SwtXulRunner implements XulRunner {
   
 
       XulDomContainer container = new SwtXulLoader().loadXul(
-      		  "resource/documents/internationalization.xul"
+      		  "resource/documents/tabpanel.xul"
       );
       
       XulRunner runner = new SwtXulRunner();

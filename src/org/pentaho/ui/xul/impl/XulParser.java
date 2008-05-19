@@ -139,7 +139,8 @@ public class XulParser {
 
     if (handler == null) {
     	logger.error("handler not found: " + handlerName);
-      throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
+      return null;
+    	//throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
     }
 
     String tagName = srcEle.getName();

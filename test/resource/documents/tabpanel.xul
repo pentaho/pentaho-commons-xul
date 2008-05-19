@@ -14,7 +14,10 @@
 	  </tabs>
 	  <tabpanels>
 	    <tabpanel>
-				<label value="Tab 1"/>
+	      <groupbox>
+	        <caption label="testing"/>
+  				<label value="Tab 1"/>
+  		  </groupbox>
 			</tabpanel>
 	    <tabpanel>
 				<label value="Tab 2"/>

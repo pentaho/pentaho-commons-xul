@@ -40,4 +40,10 @@ public abstract class AbstractXulEventHandler implements XulEventHandler {
   public XulDomContainer getXulDomContainer(){
     return this.xulDomContainer;
   }
+
+  public Object getData() {
+    return null;
+  }
+
+  public void setData(Object data) {}
 }
