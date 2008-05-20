@@ -7,7 +7,6 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -17,7 +16,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
-import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -102,17 +101,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     if(e.getValueIsAdjusting() == true){
       return;
     }
-
-    Document doc = getDocument();
-    XulWindow window = (XulWindow) doc.getRootElement();
-    XulDomContainer container = window.getXulDomContainer();
-    
-    try{
-      container.invoke(onselect, new Object[]{});
-    } catch (XulException ex){
-      logger.error("Error calling oncommand event",ex);
-    }
-    
+    invoke(onselect);
   }
 
   public Object getSelectedItem() {

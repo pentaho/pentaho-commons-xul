@@ -33,7 +33,7 @@ public class TestSwtXulParser extends TestCase{
     DocumentFactory.registerElementClass(ElementDom4J.class);
     InputStream in = getClass().getResourceAsStream("/resource/documents/allTags.xul");
     SAXReader rdr = new SAXReader();
-    final org.dom4j.Document doc = rdr.read(in);
+    testDoc = rdr.read(in);
     
     
     try{
@@ -56,6 +56,8 @@ public class TestSwtXulParser extends TestCase{
     parser.registerHandler("LISTBOX", "org.pentaho.ui.xul.swt.tags.SwtListbox");
     parser.registerHandler("SCRIPT", "org.pentaho.ui.xul.swt.tags.SwtScript");
     parser.registerHandler("CHECKBOX", "org.pentaho.ui.xul.swt.tags.SwtCheckbox");
+    parser.registerHandler("LISTITEM", "org.pentaho.ui.xul.swt.tags.SwtListitem");
+
 
 
     container = new XulWindowContainer();
@@ -85,7 +87,6 @@ public class TestSwtXulParser extends TestCase{
         root.getElementByXPath("/window/hbox/label") != null &&
         root.getElementByXPath("/window/textbox") != null &&
         root.getElementByXPath("/window/script") != null &&
-        root.getElementByXPath("/window/spacer") != null &&
         root.getElementByXPath("/window/checkbox") != null &&
         root.getElementByXPath("/window/groupbox") != null &&
         root.getElementByXPath("/window/groupbox/checkbox") != null &&

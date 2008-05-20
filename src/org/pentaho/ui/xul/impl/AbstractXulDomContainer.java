@@ -18,11 +18,11 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.components.XulScript;
-import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 
 /**
- * @author OEM
+ * @author nbaker
  *
  */
 public abstract class AbstractXulDomContainer implements XulDomContainer {
@@ -108,7 +108,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   }
   
   public void initialize(){
-    XulWindow rootEle = (XulWindow) this.getDocumentRoot().getRootElement();
+    XulRoot rootEle = (XulRoot) this.getDocumentRoot().getRootElement();
     logger.info("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
@@ -124,7 +124,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   	if(this.eventHandlers.size() > 0){
   		return this.eventHandlers;
   	} else {
-      XulComponent rootEle = (XulComponent) this.getDocumentRoot().getRootElement();
+      XulComponent rootEle = getDocumentRoot().getRootElement();
   		
       if(this instanceof XulFragmentContainer){
       	//skip first element as it's a wrapper
@@ -225,8 +225,6 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
         throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
       }
 
-      
-      String[] pair = method.split("\\.");
       String eventID = method.substring(0, method.indexOf("."));
       String methodName = method.substring(method.indexOf(".")+1);
       

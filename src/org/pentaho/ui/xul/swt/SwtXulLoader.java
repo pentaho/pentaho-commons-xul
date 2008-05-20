@@ -3,31 +3,14 @@
  */
 package org.pentaho.ui.xul.swt;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.DocumentFactory;
-import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
-import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 import org.pentaho.ui.xul.impl.AbstractXulLoader;
-import org.pentaho.ui.xul.impl.XulFragmentContainer;
-import org.pentaho.ui.xul.impl.XulParser;
-import org.pentaho.ui.xul.impl.XulWindowContainer;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
-import org.pentaho.ui.xul.util.ResourceBundleTranslator;
 
 /**
  * @author NBaker
@@ -76,6 +59,22 @@ public class SwtXulLoader extends AbstractXulLoader{
   public XulLoader getNewInstance() throws XulException {
     return new SwtXulLoader();
   }
-  
+
+  @Override
+  public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException {
+    XulDomContainer domC = super.loadXul(xulDocument);
+    
+    // SWT has no notion of an "onload" event, so we must simulate it...
+    
+    XulComponent maybeWindow = domC.getDocumentRoot().getRootElement();
+    if ( maybeWindow instanceof SwtWindow){
+      SwtWindow window = (SwtWindow) maybeWindow;
+      window.notifyListeners(XulWindow.EVENT_ON_LOAD);
+    }
+    
+    return domC;
+
+  }
+
 
 }

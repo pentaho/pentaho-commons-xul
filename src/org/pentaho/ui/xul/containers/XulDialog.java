@@ -1,8 +1,7 @@
 package org.pentaho.ui.xul.containers;
 
-import org.pentaho.ui.xul.XulContainer;
 
-public interface XulDialog extends XulContainer {
+public interface XulDialog extends XulRoot {
 
   public void setButtons(String buttons);
 
@@ -40,18 +39,6 @@ public interface XulDialog extends XulContainer {
 
   public String getOndialogextra2();
 
-  public void setTitle(String title);
-
-  public String getTitle();
-
-  public void setHeight(int height);
-
-  public void setWidth(int width);
-
-  public int getHeight();
-
-  public int getWidth();
-
   public void setButtonalign(String align);
 
   public String getButtonalign();
@@ -63,9 +50,5 @@ public interface XulDialog extends XulContainer {
   public boolean isHidden();
 
   public void setVisible(boolean visible);
-
-  public void setOnload(String onload);
-
-  public String getOnload();
 
 }

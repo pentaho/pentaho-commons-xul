@@ -4,7 +4,6 @@
 package org.pentaho.ui.xul.impl;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +18,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
@@ -60,11 +60,11 @@ public class XulParser {
     XulComponent root = parse(rootSrc, parent);
 
     //give root reference to runner for service calls and attach root to document
-    if(root instanceof XulWindow){
-      ((XulWindow)root).setXulDomContainer(this.xulDomContainer);
+    if(root instanceof XulRoot){
+      ((XulRoot)root).setXulDomContainer(this.xulDomContainer);
       xulDocument.addChild(root);
     } else { //fragment parsing, wire up dummy
-      ((XulWindow)parent).setXulDomContainer(this.xulDomContainer);
+      ((XulRoot)parent).setXulDomContainer(this.xulDomContainer);
       parent.addChild(root);
       xulDocument.addChild(parent);
     }

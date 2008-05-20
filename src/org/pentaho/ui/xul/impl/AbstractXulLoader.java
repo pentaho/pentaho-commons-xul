@@ -184,11 +184,7 @@ public abstract class AbstractXulLoader implements XulLoader{
     return this.rootDir;
   }
   
-  
-
-  
   public Document preProcess(Document srcDoc) throws XulException{
-    
     
     XPath xpath = new DefaultXPath("//pen:include");
     
@@ -200,7 +196,6 @@ public abstract class AbstractXulLoader implements XulLoader{
     
     List<Element> eles = xpath.selectNodes(srcDoc);
 
-    
     for(Element ele : eles){
       String src = this.getRootDir()+ele.attributeValue("src");
       try{

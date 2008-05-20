@@ -11,12 +11,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulMenuitem;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingMenuitem extends SwingElement implements XulMenuitem{
 	
@@ -91,17 +88,7 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     this.onCommand = command;
     menuitem.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt){
-
-        Document doc = getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
-        XulDomContainer container = window.getXulDomContainer();
-        
-        try{
-          container.invoke(command, new Object[]{});
-        } catch (XulException e){
-          logger.error("Error calling oncommand event",e);
-        }
-        
+        invoke(command);
       }
     }); 
   }

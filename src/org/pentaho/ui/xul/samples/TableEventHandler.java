@@ -6,7 +6,6 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeRow;
-import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
 public class TableEventHandler extends AbstractXulEventHandler{

@@ -29,339 +29,331 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwingDialog extends SwingElement implements XulDialog{
-	
-	private JDialog dialog = null;
-	private String buttonlabelaccept;
+public class SwingDialog extends SwingElement implements XulDialog {
+  
+  XulDomContainer domContainer = null;
 
-	private String buttonlabelcancel;
-	
-	 private String buttonlabelextra1;
-	  private String buttonlabelextra2;
-	private TreeMap<SwingDialog.BUTTONS, XulButton> buttons = new TreeMap<SwingDialog.BUTTONS, XulButton>();
-	private String ondialogaccept;
-	private String ondialogcancel;
-	 private String ondialogextra1;
-	  private String ondialogextra2;
-	private String title = "Dialog";
-	private String onload;
-	
-	private XulDialogheader header;
-	
-	private int height = 300;
-	private int width = 450;
-	private BUTTON_ALIGN buttonAlignment;
-	
-	private enum BUTTONS{ ACCEPT, CANCEL, HELP, EXTRA1, EXTRA2 };
+  private JDialog dialog = null;
 
-	private enum BUTTON_ALIGN{ START, CENTER, END, LEFT, RIGHT, MIDDLE };
-	
-	public SwingDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
+  private String buttonlabelaccept;
+
+  private String buttonlabelcancel;
+
+  private String buttonlabelextra1;
+
+  private String buttonlabelextra2;
+
+  private TreeMap<SwingDialog.BUTTONS, XulButton> buttons = new TreeMap<SwingDialog.BUTTONS, XulButton>();
+
+  private String ondialogaccept;
+
+  private String ondialogcancel;
+
+  private String ondialogextra1;
+
+  private String ondialogextra2;
+
+  private String title = "Dialog";
+
+  private String onload;
+
+  private XulDialogheader header;
+
+  private int height = 300;
+
+  private int width = 450;
+
+  private BUTTON_ALIGN buttonAlignment;
+
+  private enum BUTTONS {
+    ACCEPT, CANCEL, HELP, EXTRA1, EXTRA2
+  };
+
+  private enum BUTTON_ALIGN {
+    START, CENTER, END, LEFT, RIGHT, MIDDLE
+  };
+
+  public SwingDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("dialog");
+
+    this.domContainer = domContainer;
     
     this.orientation = Orient.VERTICAL;
-    
+
     container = new JPanel(new GridBagLayout());
-    
+
     managedObject = "empty"; // enclosing containers should not try to attach this as a child
-    
+
     resetContainer();
   }
-	
 
-  public void resetContainer(){
-    
+  public void resetContainer() {
+
     container.removeAll();
-    
+
     gc = new GridBagConstraints();
     gc.gridy = GridBagConstraints.RELATIVE;
     gc.gridx = 0;
     gc.gridheight = 1;
     gc.gridwidth = GridBagConstraints.REMAINDER;
-    gc.insets = new Insets(2,2,2,2);
+    gc.insets = new Insets(2, 2, 2, 2);
     gc.fill = GridBagConstraints.HORIZONTAL;
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;
-    
+
   }
 
-	public String getButtonlabelaccept() {
-		return buttonlabelaccept;
-	}
+  public String getButtonlabelaccept() {
+    return buttonlabelaccept;
+  }
 
-	public String getButtonlabelcancel() {
-		return buttonlabelcancel;
-	}
+  public String getButtonlabelcancel() {
+    return buttonlabelcancel;
+  }
 
-	public String getButtons() {
-		return null; //new ArrayList<XulButton>(this.buttons.values());
-	}
+  public String getButtons() {
+    return null; //new ArrayList<XulButton>(this.buttons.values());
+  }
 
-	public String getOndialogaccept() {
-		return ondialogaccept;
-	}
+  public String getOndialogaccept() {
+    return ondialogaccept;
+  }
 
-	public String getOndialogcancel() {
-		return ondialogcancel;
-	}
+  public String getOndialogcancel() {
+    return ondialogcancel;
+  }
 
-	public String getTitle() {
-		return title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-	public void setButtonlabelaccept(String label) {
-		this.buttonlabelaccept = label;
-	}
+  public void setButtonlabelaccept(String label) {
+    this.buttonlabelaccept = label;
+  }
 
-	public void setButtonlabelcancel(String label) {
-		this.buttonlabelcancel = label;
-	}
+  public void setButtonlabelcancel(String label) {
+    this.buttonlabelcancel = label;
+  }
 
-	public void setButtons(String buttons) {
-		String[] tempButtons = buttons.split(",");
+  public void setButtons(String buttons) {
+    String[] tempButtons = buttons.split(",");
 
-		for(int i=0; i< tempButtons.length; i++){
-			this.buttons.put(
-					SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()),
-					new SwingButton()
-			);
-		}
-	}
+    for (int i = 0; i < tempButtons.length; i++) {
+      this.buttons.put(SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()), new SwingButton());
+    }
+  }
 
-	public void setOndialogaccept(String command) {
-		this.ondialogaccept = command;
-		
-	}
+  public void setOndialogaccept(String command) {
+    this.ondialogaccept = command;
 
-	public void setOndialogcancel(String command) {
-		this.ondialogcancel = command;
-		
-	}
+  }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-	
-	public void show(){
-		
-	  // we delay instantiation in order to setup a modal relationship.
-	  if(dialog == null){
-	    createDialog();
-	  }
+  public void setOndialogcancel(String command) {
+    this.ondialogcancel = command;
+
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public void show() {
+
+    // we delay instantiation in order to setup a modal relationship.
+    if (dialog == null) {
+      createDialog();
+    }
     dialog.setVisible(true);
-	}
-	
-	public void hide(){
-		dialog.setVisible(false);
-	}
-	
-	public void setVisible(boolean visible){
-		if(visible){
-			show();
-		} else {
-			hide();
-		}
-	}
-	
+  }
 
-	@Override
-	public void layout() {
-		super.layout();
-		
-		for(XulComponent comp : this.children){
-			if(comp instanceof XulDialogheader){
-				header = (XulDialogheader) comp;
-			}
-		}
-	}
+  public void hide() {
+    dialog.setVisible(false);
+  }
 
+  public void setVisible(boolean visible) {
+    if (visible) {
+      show();
+    } else {
+      hide();
+    }
+  }
 
-	public int getHeight() {
-		return this.height;
-	}
+  @Override
+  public void layout() {
+    super.layout();
 
-
-	public int getWidth() {
-		return this.width;
-	}
-
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-
-	public String getButtonalign() {
-		return this.buttonAlignment.toString().toLowerCase();
-	}
-
-
-	public void setButtonalign(String align) {
-		this.buttonAlignment = SwingDialog.BUTTON_ALIGN.valueOf(align.toUpperCase());
-		
-	}
-
-
-	public String getOnload() {
-		return onload;
-	}
-
-
-	public void setOnload(String onload) {
-		this.onload = onload;
-	}
-	
-	
-	
-	 private void createDialog(){
-	    Document doc = getDocument();
-	    Element rootElement = doc.getRootElement();
-	    XulWindow window = (XulWindow) rootElement;
-	    
-
-	    JFrame frame = (JFrame)window.getManagedObject();
-	    dialog = new JDialog(frame);
-	    dialog.setLocationRelativeTo(frame);
-	    
-	    dialog.setLayout(new BorderLayout());
-	    
-	    JPanel mainPanel = new JPanel(new BorderLayout());
-	    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-	    
-	    dialog.setTitle(title);
-	    dialog.setModal(true);
-	    dialog.add(mainPanel, BorderLayout.CENTER);
-	    mainPanel.add(container, BorderLayout.CENTER);
-	    
-	    if(this.header != null){
-	      
-	      JPanel headerPanel = new JPanel(new BorderLayout());
-	      headerPanel.setBackground(Color.decode("#888888"));
-	      JPanel headerPanelInner = new JPanel(new BorderLayout());
-	      headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-	      headerPanelInner.setOpaque(false);
-	      
-	      headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#AAAAAA"), Color.decode("#666666")));
-	      
-	      JLabel title = new JLabel(this.header.getTitle());
-	      
-	      title.setForeground(Color.white);
-	      headerPanelInner.add(title, BorderLayout.WEST);
-	      
-	      JLabel desc = new JLabel(this.header.getDescription());
-	      desc.setForeground(Color.white);
-	      headerPanelInner.add(desc, BorderLayout.EAST);
-	  
-	      headerPanel.add(headerPanelInner, BorderLayout.CENTER);
-	      
-	      mainPanel.add(headerPanel, BorderLayout.NORTH);
-	    }
-	    
-	    Box buttonPanel = Box.createHorizontalBox();
-	    
-	    if( this.buttonAlignment == BUTTON_ALIGN.RIGHT || 
-	        this.buttonAlignment == BUTTON_ALIGN.END ||
-	        this.buttonAlignment == BUTTON_ALIGN.MIDDLE ||
-	        this.buttonAlignment == BUTTON_ALIGN.CENTER)
-	    {
-	      buttonPanel.add(Box.createHorizontalGlue());
-	    }
-	    
-	    ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
-	    for(int i=buttonKeyList.size()-1; i>=0; i--){
-	      buttonPanel.add(Box.createHorizontalStrut(5));
-	      buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
-	      this.addChild(this.buttons.get(buttonKeyList.get(i)));
-	    }
-	    
-	    buttonPanel.add(Box.createHorizontalStrut(5));
-	    
-	    if( this.buttonAlignment == BUTTON_ALIGN.START || 
-	        this.buttonAlignment == BUTTON_ALIGN.LEFT ||
-	        this.buttonAlignment == BUTTON_ALIGN.MIDDLE ||
-	        this.buttonAlignment == BUTTON_ALIGN.CENTER)
-	    {
-	      buttonPanel.add(Box.createHorizontalGlue());
-	    }
-	    
-	    
-	    
-	    
-	    mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-	    dialog.setSize(new Dimension(getWidth(), getHeight()));
-	    dialog.setPreferredSize(new Dimension(getWidth(), getHeight()));
-	    dialog.setMinimumSize(new Dimension(getWidth(), getHeight()));
-	    
-
-	    if(buttons.containsKey(SwingDialog.BUTTONS.ACCEPT)){
-	      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setLabel(this.getButtonlabelaccept());
-	      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setOnclick(this.getOndialogaccept());
-	    }
-	    if(buttons.containsKey(SwingDialog.BUTTONS.CANCEL)){
-	      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setLabel(this.getButtonlabelcancel());
-	      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
-	    }
-	    
-	    // FIXME
-	    if(buttons.containsKey(SwingDialog.BUTTONS.EXTRA1)){
-        this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setLabel(this.getButtonlabelextra1());
-        this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setOnclick(this.getOndialogextra1());
+    for (XulComponent comp : this.children) {
+      if (comp instanceof XulDialogheader) {
+        header = (XulDialogheader) comp;
       }
-	    if(buttons.containsKey(SwingDialog.BUTTONS.EXTRA2)){
-	      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setLabel(this.getButtonlabelextra2());
-	      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setOnclick(this.getOndialogextra2());
-	    }
-	  }
+    }
+  }
 
+  public int getHeight() {
+    return this.height;
+  }
+
+  public int getWidth() {
+    return this.width;
+  }
+
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  public void setWidth(int width) {
+    this.width = width;
+  }
+
+  public String getButtonalign() {
+    return this.buttonAlignment.toString().toLowerCase();
+  }
+
+  public void setButtonalign(String align) {
+    this.buttonAlignment = SwingDialog.BUTTON_ALIGN.valueOf(align.toUpperCase());
+
+  }
+
+  public String getOnload() {
+    return onload;
+  }
+
+  public void setOnload(String onload) {
+    this.onload = onload;
+  }
+
+  private void createDialog() {
+    Document doc = getDocument();
+    Element rootElement = doc.getRootElement();
+    XulWindow window = (XulWindow) rootElement;
+
+    JFrame frame = (JFrame) window.getManagedObject();
+    dialog = new JDialog(frame);
+    dialog.setLocationRelativeTo(frame);
+
+    dialog.setLayout(new BorderLayout());
+
+    JPanel mainPanel = new JPanel(new BorderLayout());
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+    dialog.setTitle(title);
+    dialog.setModal(true);
+    dialog.add(mainPanel, BorderLayout.CENTER);
+    mainPanel.add(container, BorderLayout.CENTER);
+
+    if (this.header != null) {
+
+      JPanel headerPanel = new JPanel(new BorderLayout());
+      headerPanel.setBackground(Color.decode("#888888"));
+      JPanel headerPanelInner = new JPanel(new BorderLayout());
+      headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+      headerPanelInner.setOpaque(false);
+
+      headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#AAAAAA"), Color
+          .decode("#666666")));
+
+      JLabel title = new JLabel(this.header.getTitle());
+
+      title.setForeground(Color.white);
+      headerPanelInner.add(title, BorderLayout.WEST);
+
+      JLabel desc = new JLabel(this.header.getDescription());
+      desc.setForeground(Color.white);
+      headerPanelInner.add(desc, BorderLayout.EAST);
+
+      headerPanel.add(headerPanelInner, BorderLayout.CENTER);
+
+      mainPanel.add(headerPanel, BorderLayout.NORTH);
+    }
+
+    Box buttonPanel = Box.createHorizontalBox();
+
+    if (this.buttonAlignment == BUTTON_ALIGN.RIGHT || this.buttonAlignment == BUTTON_ALIGN.END
+        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER) {
+      buttonPanel.add(Box.createHorizontalGlue());
+    }
+
+    ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
+    for (int i = buttonKeyList.size() - 1; i >= 0; i--) {
+      buttonPanel.add(Box.createHorizontalStrut(5));
+      buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
+      this.addChild(this.buttons.get(buttonKeyList.get(i)));
+    }
+
+    buttonPanel.add(Box.createHorizontalStrut(5));
+
+    if (this.buttonAlignment == BUTTON_ALIGN.START || this.buttonAlignment == BUTTON_ALIGN.LEFT
+        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER) {
+      buttonPanel.add(Box.createHorizontalGlue());
+    }
+
+    mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+    dialog.setSize(new Dimension(getWidth(), getHeight()));
+    dialog.setPreferredSize(new Dimension(getWidth(), getHeight()));
+    dialog.setMinimumSize(new Dimension(getWidth(), getHeight()));
+
+    if (buttons.containsKey(SwingDialog.BUTTONS.ACCEPT)) {
+      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setLabel(this.getButtonlabelaccept());
+      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setOnclick(this.getOndialogaccept());
+    }
+    if (buttons.containsKey(SwingDialog.BUTTONS.CANCEL)) {
+      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setLabel(this.getButtonlabelcancel());
+      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
+    }
+
+    // FIXME
+    if (buttons.containsKey(SwingDialog.BUTTONS.EXTRA1)) {
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setLabel(this.getButtonlabelextra1());
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setOnclick(this.getOndialogextra1());
+    }
+    if (buttons.containsKey(SwingDialog.BUTTONS.EXTRA2)) {
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setLabel(this.getButtonlabelextra2());
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setOnclick(this.getOndialogextra2());
+    }
+  }
 
   public boolean isHidden() {
     return dialog.isVisible();
   }
 
-
   public String getButtonlabelextra1() {
     return buttonlabelextra1;
   }
-
 
   public void setButtonlabelextra1(String buttonlabelextra1) {
     this.buttonlabelextra1 = buttonlabelextra1;
   }
 
-
   public String getButtonlabelextra2() {
     return buttonlabelextra2;
   }
-
 
   public void setButtonlabelextra2(String buttonlabelextra2) {
     this.buttonlabelextra2 = buttonlabelextra2;
   }
 
-
   public String getOndialogextra1() {
     return ondialogextra1;
   }
-
 
   public void setOndialogextra1(String ondialogextra1) {
     this.ondialogextra1 = ondialogextra1;
   }
 
-
   public String getOndialogextra2() {
     return ondialogextra2;
   }
 
-
   public void setOndialogextra2(String ondialogextra2) {
     this.ondialogextra2 = ondialogextra2;
   }
-	
+
+  public XulDomContainer getXulDomContainer() {
+    return this.domContainer;
+  }
+
+  public void setXulDomContainer(XulDomContainer xulDomContainer) {
+   this.domContainer = xulDomContainer;
+  }
+
 }

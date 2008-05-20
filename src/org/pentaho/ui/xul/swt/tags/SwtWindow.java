@@ -11,9 +11,10 @@ import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtWindow extends SwtElement implements XulWindow {
   private static final long serialVersionUID = 6711745093238802441L;
@@ -27,6 +28,8 @@ public class SwtWindow extends SwtElement implements XulWindow {
   private String onload;
 
   private XulDomContainer xulDomContainer;
+  
+  private String title; 
   
   private static final Log logger = LogFactory.getLog(SwtWindow.class);
 
@@ -58,9 +61,15 @@ public class SwtWindow extends SwtElement implements XulWindow {
   }
 
   public void setTitle(String title) {
+    this.title = title;
     Display.setAppName(title);
     shell.setText(title);
 
+  }
+
+  public String getTitle() {
+    // TODO Auto-generated method stub
+    return title;
   }
 
   public void setXulDomContainer(XulDomContainer xulDomContainer) {
@@ -77,13 +86,9 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   public void setOnload(final String method) {
     this.onload = method;
-    shell.addListener(EVENT_ON_LOAD, new Listener() {
+    shell.addListener(XulRoot.EVENT_ON_LOAD, new Listener() {
       public void handleEvent(Event e) {
-        try{
-          SwtWindow.this.getXulDomContainer().invoke(method, new Object[] {});
-        } catch(XulException ex){
-          logger.error("error with onload command",ex);
-        }
+        invoke(method);
       }
     });
 

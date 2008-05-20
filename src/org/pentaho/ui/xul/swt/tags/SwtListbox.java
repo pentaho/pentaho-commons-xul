@@ -10,14 +10,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
-import org.pentaho.ui.xul.dom.Element;
 
 public class SwtListbox extends SwtElement implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
@@ -51,12 +46,12 @@ public class SwtListbox extends SwtElement implements XulListbox{
   public void setRows(int rowsToDisplay) {
     this.rowsToDisplay = rowsToDisplay;
     if ((!listBox.isDisposed()) && (rowsToDisplay > 0)){
-      int height = rowsToDisplay * listBox.getItemHeight();
+      int ht = rowsToDisplay * listBox.getItemHeight();
 
       //listBox.setSize(listBox.getSize().x,height);
       if (listBox.getLayoutData() != null){
-        ((GridData)listBox.getLayoutData()).heightHint = height;
-        ((GridData)listBox.getLayoutData()).minimumHeight = height;
+        ((GridData)listBox.getLayoutData()).heightHint = ht;
+        ((GridData)listBox.getLayoutData()).minimumHeight = ht;
       }
     }
   }
@@ -108,15 +103,7 @@ public class SwtListbox extends SwtElement implements XulListbox{
     onSelect = method;
     listBox.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        Document doc = getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
-        XulDomContainer container = window.getXulDomContainer();
-        
-        try{
-          container.invoke(method, new Object[]{});
-        } catch (XulException e){
-          logger.error("Error calling oncommand event",e);
-        }
+        invoke(method);
       }
     });
   }

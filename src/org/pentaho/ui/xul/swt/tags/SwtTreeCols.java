@@ -9,11 +9,11 @@ import org.eclipse.swt.widgets.Listener;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCol;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtTreeCols extends SwtElement implements XulTreeCols {
   
@@ -28,7 +28,7 @@ public class SwtTreeCols extends SwtElement implements XulTreeCols {
     
     Composite tree = (Composite)this.parentTree.getManagedObject();
 
-    tree.getShell().addListener(XulWindow.EVENT_ON_LOAD, new Listener() {
+    tree.getShell().addListener(XulRoot.EVENT_ON_LOAD, new Listener() {
       public void handleEvent(Event e) {
         // In order to get the proper size of the table for 
         // relative column sizing, we need this listener... this is the earliest 

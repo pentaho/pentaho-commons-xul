@@ -23,7 +23,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
-import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -70,13 +70,13 @@ public class SwingButton extends SwingElement implements XulButton{
       public void actionPerformed(ActionEvent evt){
 
         Document doc = getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
-        final XulDomContainer container = window.getXulDomContainer();
+        XulRoot window = (XulRoot) doc.getRootElement();
+        final XulDomContainer con = window.getXulDomContainer();
         
         SwingUtilities.invokeLater(new Runnable(){
           public void run() {
             try{
-              container.invoke(method, new Object[]{});
+              con.invoke(method, new Object[]{});
             } catch (XulException e){
               logger.error("Error calling oncommand event",e);
             }

@@ -78,6 +78,9 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
   }
 
 	public XulTreeCell getCell(int index) {
+	  if (cells.size()<=index){
+	    return null;
+	  }
 		return this.cells.get(index);
 	}
 

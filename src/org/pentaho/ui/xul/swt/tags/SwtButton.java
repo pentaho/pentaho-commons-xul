@@ -8,15 +8,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
-import org.pentaho.ui.xul.components.XulButton.Type;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Direction;
-import org.pentaho.ui.xul.dom.Element;
 
 public class SwtButton extends SwtElement implements XulButton {
   private static final long serialVersionUID = -7218075117194366698L;
@@ -63,15 +58,7 @@ public class SwtButton extends SwtElement implements XulButton {
     this.onclick = method;
     button.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        Document doc = getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
-        XulDomContainer container = window.getXulDomContainer();
-        
-        try{
-          container.invoke(method, new Object[]{});
-        } catch (XulException e){
-          logger.error("Error calling oncommand event",e);
-        }
+        invoke(method);
       }
     });
 

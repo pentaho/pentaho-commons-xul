@@ -8,20 +8,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeRow;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.TabularWidget;
 import org.pentaho.ui.xul.swt.custom.TableWrapper;
 import org.pentaho.ui.xul.swt.custom.TreeWrapper;
-import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTree extends SwtElement implements XulTree {
 
@@ -104,11 +100,11 @@ public class SwtTree extends SwtElement implements XulTree {
   public void setRows(int rowsToDisplay) {
     this.rowsToDisplay = rowsToDisplay;
     if ((!tree.isDisposed()) && (rowsToDisplay > 0)) {
-      int height = rowsToDisplay * widget.getItemHeight();
+      int ht = rowsToDisplay * widget.getItemHeight();
       if (tree.getLayoutData() != null) {
         tree.setSize(tree.getSize().x,height);
-        ((GridData) tree.getLayoutData()).heightHint = height;
-        ((GridData) tree.getLayoutData()).minimumHeight = height;
+        ((GridData) tree.getLayoutData()).heightHint = ht;
+        ((GridData) tree.getLayoutData()).minimumHeight = ht;
         tree.getParent().layout(true);
       }
     }
@@ -162,16 +158,7 @@ public class SwtTree extends SwtElement implements XulTree {
 
     widget.addSelectionListener(new SelectionAdapter() {
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-     
-        Document doc = getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
-        XulDomContainer container = window.getXulDomContainer();
-        
-        try{
-          container.invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
-        } catch (XulException ex){
-          logger.error("Error calling oncommand event",ex);
-        }
+        invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
       }
     });
   }

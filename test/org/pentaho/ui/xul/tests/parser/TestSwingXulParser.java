@@ -33,7 +33,7 @@ public class TestSwingXulParser extends TestCase{
     DocumentFactory.registerElementClass(ElementDom4J.class);
     InputStream in = getClass().getResourceAsStream("/resource/documents/allTags.xul");
     SAXReader rdr = new SAXReader();
-    final org.dom4j.Document doc = rdr.read(in);
+    testDoc = rdr.read(in);
     
     
     try{

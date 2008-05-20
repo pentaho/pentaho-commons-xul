@@ -29,11 +29,11 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.components.XulTreeCol;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
-import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.RowWidget;
@@ -109,7 +109,6 @@ public class TableItemWrapper implements RowWidget {
       case TEXT:
       case PASSWORD:
         boolean isPassword = column.getColumnType().equals(ColumnType.PASSWORD);
-        Text edit = null;
         if ((column.getCustomeditor() != null) && 
             (XulWindowContainer.isRegistered(column.getCustomeditor()))){
           createCustomText(index, column.getCustomeditor(), isPassword);
@@ -279,6 +278,7 @@ public class TableItemWrapper implements RowWidget {
     });
     
     Listener textListener = new Listener () {
+      @SuppressWarnings("fallthrough")
       public void handleEvent (final Event e) {
         switch (e.type) {
           case SWT.FocusOut:
@@ -337,13 +337,13 @@ public class TableItemWrapper implements RowWidget {
     check.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(SelectionEvent e){
         item.setText(index, String.valueOf(((Button)e.widget).getSelection()));
+        parentTree.setActiveCellCoordinates(parentTree.getActiveCellCoordinates()[0], index);
 
         // send all selection events back through to the parent table with the selection index... 
         Document doc = parentTree.getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
+        XulRoot window = (XulRoot) doc.getRootElement();
         XulDomContainer container = window.getXulDomContainer();
         
-        parentTree.setActiveCellCoordinates(parentTree.getActiveCellCoordinates()[0], index);
         try{
           container.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
         } catch (XulException ex){
@@ -355,6 +355,7 @@ public class TableItemWrapper implements RowWidget {
     });
     
     Listener textListener = new Listener () {
+      @SuppressWarnings("fallthrough")
       public void handleEvent ( Event e) {
         switch (e.type) {
           case SWT.FocusOut:
@@ -417,7 +418,9 @@ public class TableItemWrapper implements RowWidget {
   
   private void syncText(int index, String text){
     item.setText (index, text);
-    treeRow.getCell(index).setLabel(text);
+    if (treeRow.getCell(index) != null){
+      treeRow.getCell(index).setLabel(text);
+    }
   }
   
   /* =================================================================================== */
@@ -481,7 +484,7 @@ public class TableItemWrapper implements RowWidget {
         // Tab beyond last line: add a line to table!
         if (activeRow >= maxrows) {
           if (parentTree.isEditable()){
-            XulTreeRow row = parentTree.getRootChildren().addNewRow();
+            parentTree.getRootChildren().addNewRow();
           }
         }
 
@@ -491,9 +494,9 @@ public class TableItemWrapper implements RowWidget {
         } else {
           if (e.keyCode == SWT.ARROW_DOWN && activeRow == maxrows - 1) {
             if (parentTree.isEditable()){
-              XulTreeRow treeRow = parentTree.getRootChildren().addNewRow();
+              XulTreeRow tRow = parentTree.getRootChildren().addNewRow();
               //XulTreeItem rowItem = parentTree.getRootChildren().getItem(activeRow);
-              treeRow.makeCellEditable(-1);
+              tRow.makeCellEditable(-1);
               activeRow++;
             }
           }

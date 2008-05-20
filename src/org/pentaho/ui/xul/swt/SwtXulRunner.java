@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.impl.XulServiceCall;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
@@ -36,6 +37,9 @@ public class SwtXulRunner implements XulRunner {
     // TODO Should initialize return a status? Reply: Just let them catch the Exception
 
     XulComponent rootEle = containers.get(0).getDocumentRoot().getRootElement();
+    
+    //call the onLoads
+    containers.get(0).initialize();
 
     if (rootEle instanceof SwtWindow) {
       rootFrame = (Composite) rootEle.getManagedObject();

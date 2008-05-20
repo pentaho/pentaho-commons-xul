@@ -25,7 +25,7 @@ public class TestDomFactory extends TestCase{
     DocumentFactory.registerElementClass(ElementDom4J.class);
     InputStream in = getClass().getResourceAsStream("/resource/documents/samplexul.xul");
     SAXReader rdr = new SAXReader();
-    final org.dom4j.Document doc = rdr.read(in);
+    testDoc = rdr.read(in);
   }
 
   public void testCreateDocument(){

@@ -1,9 +1,6 @@
 package org.pentaho.ui.xul.samples;
 
-import javax.swing.JOptionPane;
-
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
-import org.pentaho.ui.xul.impl.XulWindowContainer;
 
 public class SampleMenuHandler extends AbstractXulEventHandler{
 

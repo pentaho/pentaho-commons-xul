@@ -3,27 +3,9 @@
  */
 package org.pentaho.ui.xul.swing;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.io.SAXReader;
-import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
-import org.pentaho.ui.xul.dom.DocumentFactory;
-import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
-import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 import org.pentaho.ui.xul.impl.AbstractXulLoader;
-import org.pentaho.ui.xul.impl.XulFragmentContainer;
-import org.pentaho.ui.xul.impl.XulParser;
-import org.pentaho.ui.xul.impl.XulWindowContainer;
-import org.pentaho.ui.xul.util.ResourceBundleTranslator;
 
 /**
  * @author nbaker

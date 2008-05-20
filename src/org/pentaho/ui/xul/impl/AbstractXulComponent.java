@@ -9,8 +9,10 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
@@ -96,6 +98,25 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void layout() {
 
+  }
+  
+  protected void invoke(String method){
+    invoke(method, null);
+  }
+  
+  protected void invoke(String method, Object[] args){
+    Document doc = getDocument();
+    XulRoot window = (XulRoot) doc.getRootElement();
+    XulDomContainer con = window.getXulDomContainer();
+    
+    try{
+      if (args == null){
+        args = new Object[]{};
+      }
+      con.invoke(method, args);
+    } catch (XulException e){
+      logger.error("Error calling oncommand event",e);
+    }
   }
 
   //passthrough DOM methods below

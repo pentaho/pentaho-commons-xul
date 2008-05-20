@@ -47,10 +47,11 @@ public class SwingWindow extends SwingElement implements XulWindow {
 
   private int height;
 
-  private Document rootDocument;
-
   private XulDomContainer xulDomContainer;
 
+ 
+  private String title = null;
+  
   private String onload;
   
   private Clipboard clipboard;
@@ -105,8 +106,14 @@ public class SwingWindow extends SwingElement implements XulWindow {
    * @see org.pentaho.ui.xul.containers.XulPage#setTitle(java.lang.String)
    */
   public void setTitle(String title) {
+    this.title = title;
     frame.setTitle(title);
   }
+
+  public String getTitle() {
+    return title;
+  }
+
 
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulPage#getHeight()
@@ -132,11 +139,6 @@ public class SwingWindow extends SwingElement implements XulWindow {
   public void setWidth(int width) {
     this.width = width;
     frame.setSize(new Dimension(this.width, this.height));
-  }
-
-
-  public void setRootDocument(Document document) {
-    this.rootDocument = document;
   }
 
   public void setXulDomContainer(XulDomContainer xulDomContainer) {

@@ -13,7 +13,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulCheckbox;
-import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
@@ -79,15 +79,7 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
   public void setCommand(final String method) {
     checkBox.addChangeListener(new ChangeListener(){
       public void stateChanged(ChangeEvent evt){
-        Document doc = getDocument();
-        XulWindow window = (XulWindow) doc.getRootElement();
-        XulDomContainer container = window.getXulDomContainer();
-        
-        try{
-        	container.invoke(method, new Object[]{});
-        } catch (XulException e){
-        	logger.error("Error calling oncommand event",e);
-        }
+        invoke(method);
       }
     });
   }
