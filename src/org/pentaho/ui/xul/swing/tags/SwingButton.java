@@ -148,32 +148,6 @@ public class SwingButton extends SwingElement implements XulButton{
 
       
       button = new JToggleButton();
-      button.setOpaque(false);
-      button.setBorderPainted(false);
-      button.setBackground(Color.white);
-      
-      button.addMouseListener(new MouseListener(){
-
-          public void mouseEntered(MouseEvent me){
-            button.setBorderPainted(true);
-            button.setOpaque(true);
-          }
-
-          public void mouseExited(MouseEvent me){
-            button.setBorderPainted(false);
-            button.setOpaque(false);
-          }
-
-          public void mouseClicked(MouseEvent e) {
-          }
-
-          public void mousePressed(MouseEvent e) {
-          }
-
-          public void mouseReleased(MouseEvent e) {
-          }
-      });
-      
       button.setText(oldButton.getText());
       button.setIcon(oldButton.getIcon());
       button.setEnabled(oldButton.isEnabled());
