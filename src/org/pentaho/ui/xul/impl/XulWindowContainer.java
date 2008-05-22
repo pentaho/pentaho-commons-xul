@@ -42,17 +42,6 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     document.setXulDomContainer(this);
   }
 
-  public XulMessageBox createMessageBox(String message) {
-
-    XulComponent rootElement = this.getDocumentRoot().getRootElement();
-    XulMessageBox dialog = null;
-    try{
-    	dialog = (XulMessageBox) createInstance(rootElement, "MESSAGEBOX", new Object[]{message}, null);
-    } catch(XulException e){
-    	logger.error("Error creating MessageBox:",e);
-    }
-    return dialog;
-  }
 
   public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
     XulComponent rootElement = this.getDocumentRoot().getRootElement();

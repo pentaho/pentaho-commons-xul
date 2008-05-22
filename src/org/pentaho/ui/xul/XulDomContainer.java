@@ -44,8 +44,6 @@ public interface XulDomContainer {
    */
   public void addEventHandler(XulEventHandler handler);
   
-  public XulMessageBox createMessageBox(String message);
-
   public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable);
 
   public void initialize();

@@ -6,9 +6,12 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMessageBox;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingMessageBox implements XulMessageBox {
+public class SwingMessageBox extends SwingElement implements XulMessageBox {
   
   // valid button values...
   private static final String OK = "OK";
@@ -18,33 +21,18 @@ public class SwingMessageBox implements XulMessageBox {
   private static final String CLOSE = "Close";
   
 
-  private String message;
-  private String title;
+  private String message = "Default Message";
+  private String title = "Message Box";
   private Object[] defaultButtons = new Object[]{OK};
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(JOptionPane.INFORMATION_MESSAGE);
-  private XulComponent parent;
 
-  public SwingMessageBox(XulComponent parent, String message) {
-    this(parent, message, null);
+  public SwingMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
+    super("messagebox");
+    parent = domContainer.getDocumentRoot().getRootElement();
+    parent.addChild(this);
   }
-
-  public SwingMessageBox(XulComponent parent, String message, String title) {
-    this(parent, message, title, null);
-  }
-
-  public SwingMessageBox(XulComponent parent, String message, String title, Object[] buttons) {
-    this(parent, message, title, buttons, JOptionPane.INFORMATION_MESSAGE);
-  }
-
-  public SwingMessageBox(XulComponent parent, String message, String title, Object[] buttons, Object icon) {
-    this.parent = parent;
-    setMessage(message);
-    setTitle(title);
-    setIcon(icon);
-    setButtons(buttons);
-  }
-
+  
   public Object[] getButtons() {
     return buttons;
   }
@@ -55,14 +43,10 @@ public class SwingMessageBox implements XulMessageBox {
   }
 
   public String getMessage() {
-    if (message == null)
-      return "";
     return message;
   }
 
   public String getTitle() {
-    if (title == null)
-      return "";
     return title;
   }
 
@@ -87,7 +71,7 @@ public class SwingMessageBox implements XulMessageBox {
     int messageType = (icon instanceof Integer) ? ((Integer)icon).intValue() : JOptionPane.INFORMATION_MESSAGE;
     Icon imageIcon = (icon instanceof Icon) ? (Icon)icon : null;
     
-    return JOptionPane.showOptionDialog((Component) parent.getManagedObject(), message, title, 
+    return JOptionPane.showOptionDialog((Component) getParent().getManagedObject(), message, title, 
         JOptionPane.DEFAULT_OPTION, messageType, imageIcon, buttons, buttons[0]);
   }
 

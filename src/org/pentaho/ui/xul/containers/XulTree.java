@@ -18,6 +18,9 @@ public interface XulTree extends XulContainer {
   public void setOnselect(String select);
   public String getOnselect();
   
+  public void setOnedit(String onedit);
+  public String getOnedit();
+  
   public void setRows(int rows);
   public int getRows();
   
@@ -38,6 +41,8 @@ public interface XulTree extends XulContainer {
   public Object[][] getValues();
  
   public int[] getSelectedRows();
+  
+  public void setSelectedRows(int[] rows);
   
   public void addTreeRow(XulTreeRow row);
   public void removeTreeRows(int[] rows);

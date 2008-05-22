@@ -161,8 +161,6 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
 
   public abstract void addDocument(Document document);
   
-  public abstract XulMessageBox createMessageBox(String message);
-  
   public abstract XulDomContainer loadFragment(String xulLocation) throws XulException;
   
   public abstract void close();

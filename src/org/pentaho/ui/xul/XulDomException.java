@@ -1,6 +1,6 @@
 package org.pentaho.ui.xul;
 
-public class XulDomException extends Exception{
+public class XulDomException extends XulException{
 
 	/**
 	 * 

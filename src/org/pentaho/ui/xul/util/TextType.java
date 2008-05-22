@@ -2,6 +2,6 @@ package org.pentaho.ui.xul.util;
 
 public enum TextType {
   
-  PASSWORD, AUTOCOMPLETE, NUMBER, TIMED;
+  NORMAL, PASSWORD, AUTOCOMPLETE, NUMBER, TIMED;
 
 }

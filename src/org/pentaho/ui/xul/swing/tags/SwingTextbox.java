@@ -6,6 +6,7 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.Component;
 import java.awt.Dimension;
 
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -18,6 +19,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.util.TextType;
 import org.pentaho.ui.xul.dom.Element;
 
 /**
@@ -33,6 +35,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   JScrollPane scrollPane;
 	private static final Log logger = LogFactory.getLog(SwingTextbox.class);
   private boolean readonly = false;
+  private TextType type = TextType.NORMAL;
   
   public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -93,11 +96,22 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public String getType() {
-    return null;
+    if (type == null){
+      return null;
+    }
+    
+    return type.toString();
   }
 
   public void setType(String type) {
-    
+    if (type == null){
+      return;
+    }
+    setType(TextType.valueOf(type.toUpperCase()));
+  }
+  
+  public void setType(TextType type) {
+    this.type = type;
   }
 
   public void selectAll() {
@@ -117,22 +131,33 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	@Override
 	public Object getManagedObject() {
 		if(managedObject == null){
-			if(this.multiline){
-				textArea = new JTextArea((value != null) ? value : "");
-				managedObject = textArea;
-				scrollPane = new JScrollPane(textArea);
-				textArea.setEditable(!readonly);
-				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
-		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			} else {
-				textField = new JTextField((value != null) ? value : "");
-				textField.setPreferredSize(new Dimension(200,20));
-				textField.setEditable(!readonly);
-				managedObject = textField;
-			}
-		}
-		return (this.multiline)? scrollPane : textField;
-    
+	    switch(this.type){
+	      case PASSWORD:
+	        JPasswordField pass = new JPasswordField((value != null) ? value : "");
+	        pass.setPreferredSize(new Dimension(200,20));
+	        pass.setEditable(!readonly);
+	        managedObject = pass;
+	        return pass;
+	      default: //regular text
+    			if(this.multiline){
+    				textArea = new JTextArea((value != null) ? value : "");
+    				managedObject = textArea;
+    				scrollPane = new JScrollPane(textArea);
+    				textArea.setEditable(!readonly);
+    				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
+    		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    		    return scrollPane;
+    			} else {
+    				textField = new JTextField((value != null) ? value : "");
+    				textField.setPreferredSize(new Dimension(200,20));
+    				textField.setEditable(!readonly);
+    				managedObject = textField;
+    				return textField;
+    			}
+  		}
+	  } else {
+	    return managedObject;
+	  }
 	}
 
 }

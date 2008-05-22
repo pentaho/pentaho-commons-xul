@@ -46,6 +46,8 @@ public class SwtTree extends SwtElement implements XulTree {
   private boolean enableColumnDrag = false;
 
   private boolean editable = false;
+  
+  private String onedit;
 
   private String onSelect = null;
 
@@ -260,6 +262,19 @@ public class SwtTree extends SwtElement implements XulTree {
     //TODO implement clearSelection
   }
 
-  /* =================================================================================== */
+  public void setSelectedRows(int[] rows) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+
+  public String getOnedit() {
+    return onedit;
+  }
+
+  public void setOnedit(String onedit) {
+    this.onedit = onedit;  
+  }
 
 }

@@ -1,11 +1,20 @@
 package org.pentaho.ui.xul.samples;
 
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
 public class SampleMenuHandler extends AbstractXulEventHandler{
 
   public void open(){
-    this.getXulDomContainer().createMessageBox("testing...").open();
+    try{
+      XulMessageBox box = (XulMessageBox) document.createElement("messagebox");
+      
+      box.setMessage("testing...");
+      box.open();
+    } catch(XulException e){
+      System.out.println("Error creating messagebox "+e.getMessage());
+    }
   }
   
   public Object getData() {

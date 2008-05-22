@@ -3,13 +3,17 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -144,6 +148,32 @@ public class SwingButton extends SwingElement implements XulButton{
 
       
       button = new JToggleButton();
+      button.setOpaque(false);
+      button.setBorderPainted(false);
+      button.setBackground(Color.white);
+      
+      button.addMouseListener(new MouseListener(){
+
+          public void mouseEntered(MouseEvent me){
+            button.setBorderPainted(true);
+            button.setOpaque(true);
+          }
+
+          public void mouseExited(MouseEvent me){
+            button.setBorderPainted(false);
+            button.setOpaque(false);
+          }
+
+          public void mouseClicked(MouseEvent e) {
+          }
+
+          public void mousePressed(MouseEvent e) {
+          }
+
+          public void mouseReleased(MouseEvent e) {
+          }
+      });
+      
       button.setText(oldButton.getText());
       button.setIcon(oldButton.getIcon());
       button.setEnabled(oldButton.isEnabled());
@@ -157,6 +187,8 @@ public class SwingButton extends SwingElement implements XulButton{
          * durring creation there's no way of accessing the root level element (window) where the collection
          * is stored.
          */
+
+        
         button.addComponentListener(new ComponentListener(){
           public void componentHidden(ComponentEvent arg0) {}
           public void componentMoved(ComponentEvent arg0) {}

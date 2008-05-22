@@ -22,6 +22,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -63,6 +64,7 @@ public class SwingTree extends SwingElement implements XulTree{
 	private boolean disabled = false;
 	private boolean editable = false;
 	private String onselect;
+	private String onedit = null;
 	private static final Log logger = LogFactory.getLog(SwingTree.class);
   private Vector<String> columnNames = new Vector<String>();
   
@@ -302,7 +304,7 @@ public class SwingTree extends SwingElement implements XulTree{
 			tableModel = new XulTableModel(this);
 //		}
 		table.setModel(this.tableModel);
-		
+				
 		TableColumnModel columnModel = table.getColumnModel();
 
 		for(int i=0; i<columns.getChildNodes().size(); i++){
@@ -671,6 +673,13 @@ public class SwingTree extends SwingElement implements XulTree{
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
+      if(onedit != null){
+        SwingUtilities.invokeLater(new Runnable(){
+          public void run() {
+            invoke(onedit, new Object[] {new Integer(table.getSelectedRow())});
+          }
+        });
+      }
       XulTreeItem row = this.tree.getRootChildren().getItem(rowIndex);
       if(row == null){
         logger.info("Row removed, setVal returning");
@@ -701,4 +710,20 @@ public class SwingTree extends SwingElement implements XulTree{
   public void clearSelection() {
     table.getSelectionModel().clearSelection();
   }
+
+  public void setSelectedRows(int[] rows) {
+    for(int row : rows){
+      table.changeSelection(row, -1, false, true);
+    }
+      
+  }
+
+  public String getOnedit() {
+    return onedit;
+  }
+
+  public void setOnedit(String onedit) {
+    this.onedit = onedit;  
+  }
+  
 }

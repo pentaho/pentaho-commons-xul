@@ -22,7 +22,6 @@ public class SwingSpacer extends SwingElement implements XulSpacer{
   
   public SwingSpacer(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("spacer");
-
   }
   public void setWidth(int size){
     strut = Box.createHorizontalStrut(size);
@@ -32,7 +31,13 @@ public class SwingSpacer extends SwingElement implements XulSpacer{
     strut = Box.createVerticalStrut(size);
     managedObject = strut;
   }
+  
 
+  @Override
+  public void setFlex(int flex) {
+    super.setFlex(flex);
+    managedObject = Box.createGlue();
+  }
   public void layout(){
   }
 }

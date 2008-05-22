@@ -35,11 +35,6 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
   }
 
   @Override
-  public XulMessageBox createMessageBox(String message) {
-  	return null;
-  }
-
-  @Override
   public void close() {
   }
 
