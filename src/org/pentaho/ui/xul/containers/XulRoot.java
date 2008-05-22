@@ -24,30 +24,6 @@ public interface XulRoot extends XulContainer{
   public String getTitle();
 
   /**
-   *  
-   * @return The width of this root object. 
-   */
-  public int getWidth();
-
-  /**
-   * 
-   * @param width The width of this root object.
-   */
-  public void setWidth(int width);
-
-  /**
-   * 
-   * @return The height of this root object. 
-   */
-  public int getHeight();
-  
-  /**
-   * 
-   * @param The height of this root object.
-   */
-  public void setHeight(int height);
-
-  /**
    * Creates a reference to the DOM container that will be managing this window and its events.
    * @param xulDomContainer the container holding this document. 
    */
