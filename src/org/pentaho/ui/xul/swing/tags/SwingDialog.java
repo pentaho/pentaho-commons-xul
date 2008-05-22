@@ -244,13 +244,14 @@ public class SwingDialog extends SwingElement implements XulDialog {
     if (this.header != null) {
 
       JPanel headerPanel = new JPanel(new BorderLayout());
-      headerPanel.setBackground(Color.decode("#888888"));
+      headerPanel.setBackground(Color.decode("#5F86C0"));
+      headerPanel.setOpaque(true);
       JPanel headerPanelInner = new JPanel(new BorderLayout());
       headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
       headerPanelInner.setOpaque(false);
 
-      headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#AAAAAA"), Color
-          .decode("#666666")));
+      headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#8FB1E5"), Color
+          .decode("#446CA9")));
 
       JLabel title = new JLabel(this.header.getTitle());
 
