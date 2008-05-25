@@ -176,7 +176,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   public void setOninput(final String method) {
     ((JTextComponent) getManagedObject()).addKeyListener(new KeyAdapter() {
 
-      public void keyTyped(KeyEvent e) {
+      public void keyReleased(KeyEvent e) {
         invoke(method);
       }
     });
