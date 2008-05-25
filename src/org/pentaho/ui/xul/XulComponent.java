@@ -96,4 +96,20 @@ public interface XulComponent extends Element {
    */
   public int getHeight();
   
+  /**
+   * Sets the enablement state of the component
+   * @param disabled sets this components enabled state
+   * 
+   */
+  public void setDisabled(boolean disabled);
+  
+  /**
+   * XUL's attribute is "disabled", thus this acts
+   * exactly the opposite of SWT/Swing/AWT. If the property is not 
+   * available, then the control is enabled. 
+   *
+   * @return boolean true if the control is disabled.
+   */
+  public boolean isDisabled();
+  
 }

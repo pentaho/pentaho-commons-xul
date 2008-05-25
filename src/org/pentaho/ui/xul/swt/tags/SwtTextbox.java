@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -172,5 +173,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     return getManagedObject();
   }
 
-
+  public void setOninput(String method) {
+    throw new NotImplementedException();
+  }
 }

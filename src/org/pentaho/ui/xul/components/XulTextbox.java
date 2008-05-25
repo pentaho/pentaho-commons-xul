@@ -88,7 +88,11 @@ public interface XulTextbox extends XulComponent {
    * managedObject, but does not have to be. (This is added as a bit of a hack for PDI variable support.) 
    */
   public Object getTextControl();
-
   
-
+  /**
+   * Sets the method that will be invoked when the text in this
+   * component changes. Also hooks up any listeners for this event. 
+   * @param method the method to execute when the input is changed.
+   */
+  public void setOninput(String method);
 }

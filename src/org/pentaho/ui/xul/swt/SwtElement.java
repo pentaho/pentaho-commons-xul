@@ -191,4 +191,12 @@ public class SwtElement extends AbstractXulComponent {
     throw new NotImplementedException();
   }
 
+  public boolean isDisabled() {
+    throw new NotImplementedException();
+  }
+
+  public void setDisabled(boolean disabled) {
+    throw new NotImplementedException();
+  }
+
 }

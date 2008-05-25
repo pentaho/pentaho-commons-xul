@@ -196,4 +196,17 @@ public class SwingElement extends AbstractXulComponent {
       });
     }
   }
+  
+  public void setDisabled(boolean disabled) {
+    if (getJComponent() != null) {
+      getJComponent().setEnabled(!disabled);
+    }
+  }
+  
+  public boolean isDisabled() {
+    if (getJComponent() != null) {
+      return !getJComponent().isEnabled();
+    }
+    return false;
+  }
 }
