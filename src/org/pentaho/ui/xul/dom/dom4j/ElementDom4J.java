@@ -60,7 +60,7 @@ public class ElementDom4J implements Element{
     try{
       org.dom4j.Document doc = element.getDocument();
       if(doc == null){
-        throw new XulDomException("Element Document is null, getDocument most likely called durring parse time");
+        throw new XulDomException("Element Document is null, getDocument most likely called during parse time");
       }
       return DocumentFactory.createDocument(doc);
     } catch(Exception e){
