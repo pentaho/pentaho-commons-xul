@@ -41,7 +41,7 @@ public class FormModel extends XulDataForm {
   }
 
   public void setDisabled(Boolean disabled) {
-    boolean previous = disabled;
+    boolean previous = this.disabled;
     this.disabled = disabled;
     firePropertyChange("disabled", previous, disabled);
   }

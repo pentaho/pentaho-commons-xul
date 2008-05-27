@@ -23,7 +23,6 @@ public class BindingEventHandler extends AbstractXulEventHandler {
   
   public void toggleBoolean(){
     model.setDisabled(!model.isDisabled());
-    System.out.println("in toggleButton");
   }
   
   public void onLoad(){

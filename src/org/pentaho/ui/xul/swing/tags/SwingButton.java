@@ -103,7 +103,9 @@ public class SwingButton extends SwingElement implements XulButton{
 
 
   public void setDisabled(boolean dis) {
+    boolean previous = !button.isEnabled();
     button.setEnabled(!dis);
+    this.changeSupport.firePropertyChange("disabled", previous, !dis);
   }
 
   public String getImage() {

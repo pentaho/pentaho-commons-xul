@@ -67,27 +67,28 @@ public class Binding {
   private void setupLeftToRight(){
 
     Method method = null;
+    String attrName = (String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
     try{
     
       //Get value from one in order to determine type of the attribute
-      String methodName = "get"+(String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
+      String methodName = "get"+attrName;
       Expression state = new Expression(target, methodName, null);
       Object val = state.getValue();
       Class clazz = val.getClass();
       
-      String setMethodName = "set"+(String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
+      String setMethodName = "set"+attrName;
       
       method = target.getClass().getMethod(setMethodName, new Class[]{clazz});
       
     } catch(NoSuchMethodException e){
       try{
         //Get value from one in order to determine type of the attribute
-        String methodName = "is"+(String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
+        String methodName = "is"+attrName;
         Expression state = new Expression(target, methodName, null);
         Object val = state.getValue();
         Class clazz = val.getClass();
         
-        String setMethodName = "set"+(String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
+        String setMethodName = "set"+attrName;
         
         Class[] args = new Class[]{clazz};
         if(clazz == Boolean.class){
@@ -124,27 +125,28 @@ public class Binding {
   
   private void setupRightToLeft(){
 
+    String attrName = (String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
     Method method = null;
     try{
     
       //Get value from one in order to determine type of the attribute
-      String methodName = "get"+(String.valueOf(sourceAttr.charAt(0)).toUpperCase())+sourceAttr.substring(1);
+      String methodName = "get"+attrName;
       Expression state = new Expression(source, methodName, null);
       Object val = state.getValue();
       Class clazz = val.getClass();
       
-      String setMethodName = "set"+(String.valueOf(sourceAttr.charAt(0)).toUpperCase())+sourceAttr.substring(1);
+      String setMethodName = "set"+attrName;
       method = source.getClass().getMethod(setMethodName, new Class[]{clazz});
       
      } catch(NoSuchMethodException e){
       try{
          //Get value from one in order to determine type of the attribute
-        String methodName = "is"+(String.valueOf(sourceAttr.charAt(0)).toUpperCase())+sourceAttr.substring(1);
+        String methodName = "is"+attrName;
         Expression state = new Expression(source, methodName, null);
         Object val = state.getValue();
         Class clazz = val.getClass();
         
-        String setMethodName = "set"+(String.valueOf(sourceAttr.charAt(0)).toUpperCase())+sourceAttr.substring(1);
+        String setMethodName = "set"+attrName;
         
         Class[] args = new Class[]{clazz};
         if(clazz == Boolean.class){
