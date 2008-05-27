@@ -6,6 +6,7 @@ package org.pentaho.ui.xul;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.XulEventHandler;
@@ -44,6 +45,8 @@ public interface XulDomContainer {
    */
   public void addEventHandler(XulEventHandler handler);
   
+  public void addBinding(Binding binding);
+  
   public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable);
 
   public void initialize();
@@ -69,4 +72,8 @@ public interface XulDomContainer {
    */
   public void invoke(String method, Object[] args) throws XulException;
   
+  public void registerBinding(XulComponent comp, String expr);
+  
+  public void createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr);
+  public void createBinding(String source, String sourceAttr, String targetId, String targetAttr);
 }

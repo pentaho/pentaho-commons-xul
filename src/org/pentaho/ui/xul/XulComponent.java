@@ -3,6 +3,8 @@
  */
 package org.pentaho.ui.xul;
 
+import java.beans.PropertyChangeListener;
+
 import org.pentaho.ui.xul.dom.Element;
 
 /**
@@ -11,7 +13,7 @@ import org.pentaho.ui.xul.dom.Element;
  * @author nbaker
  *
  */
-public interface XulComponent extends Element {
+public interface XulComponent extends Element, XulEventSource {
   
   /**
    * The manageObject is the rendering control or container that 
@@ -95,6 +97,10 @@ public interface XulComponent extends Element {
    * @return the component's height
    */
   public int getHeight();
+  
+
+  public void addPropertyChangeListener(PropertyChangeListener listener);
+  public void removePropertyChangeListener(PropertyChangeListener listener);
   
   /**
    * Sets the enablement state of the component

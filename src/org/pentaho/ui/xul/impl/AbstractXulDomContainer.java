@@ -13,9 +13,13 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDataModel;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
+import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.containers.XulRoot;
@@ -31,6 +35,9 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   
   protected XulLoader xulLoader;
   protected HashMap<String, XulEventHandler> eventHandlers;
+  protected HashMap<String, XulDataModel> models;
+  
+  protected BindingContext bindings;
 
 	public AbstractXulDomContainer() {
     eventHandlers = new HashMap<String, XulEventHandler>();
@@ -252,5 +259,23 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
       logger.error("Error invoking method: " + method, e);
       throw new XulException("Error invoking method: " + method, e);
     }
+  }
+  
+  
+  
+  public void addBinding(Binding binding){
+    bindings.add(binding);
+  }
+  
+  public void registerBinding(XulComponent comp, String expr){
+    bindings.add(comp, expr);
+  }
+
+  public void createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr){
+    new Binding(this, source, sourceAttr, targetId, targetAttr);
+  }
+
+  public void createBinding(String source, String sourceAttr, String targetId, String targetAttr){
+    new Binding(this, source, sourceAttr, targetId, targetAttr);
   }
 }

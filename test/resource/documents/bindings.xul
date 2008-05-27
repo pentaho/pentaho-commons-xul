@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+<window id="label-test" title="Testing labels and layout for SWT, Swing"
+  orient="vertical"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" 
+	xmlns:pen="http://www.pentaho.org/2008/xul"
+	height="450" width="650" onload="handler.onLoad()">
+
+  <script src="org.pentaho.ui.xul.samples.BindingEventHandler" id="handler"/>
+  
+	<groupbox>
+		<caption value="Components with Backing Model"/>
+	  <hbox flex="1">
+	  	<vbox flex="1">
+			 	<hbox>
+					<label value="First Name:"/>
+					<label value="" id="firstName"/>
+				</hbox>
+				<hbox>
+					<label value="Last Name:"/>
+					<label value="" id="lastName"/>
+				</hbox>
+				<button label="populate" onclick="handler.test()"/>
+			</vbox>
+			<vbox flex="1">
+				<hbox>
+					<label value="First Name:"/>
+					<textbox value="" id="firstNameInput"/>
+				</hbox>
+				<hbox>
+					<label value="Last Name:"/>
+					<textbox value="" id="lastNameInput"/>
+				</hbox>
+				<button label="test Programatic" onclick="handler.test2()"/>
+			</vbox>
+		</hbox>
+	</groupbox>
+	<groupbox>
+		<caption label="Xul Component to Component"/>
+		<textbox id="echoTextbox" pen:bind="value = handler.value"/>
+		<hbox>
+			<label value="Echoed: "/>
+			<label id="echoLabel"/>
+		</hbox>
+	</groupbox>
+	<groupbox>
+		<caption label="Boolean bind"/>
+		<hbox>
+			<label value="Toggle Enabled in the other button:"/>
+			<button label="toggle" onclick="handler.toggleBoolean()"/>
+		</hbox>
+		<button id="disabledButton" disabled="true" label="Help me!"/>
+	</groupbox>
+</window>

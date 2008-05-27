@@ -10,6 +10,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import javax.swing.Box;
 import javax.swing.JComponent;
@@ -42,6 +44,8 @@ public class SwingElement extends AbstractXulComponent {
   protected Orient orient = Orient.HORIZONTAL;
 
   protected GridBagConstraints gc = new GridBagConstraints();
+  
+  protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
   public SwingElement(String tagName) {
     super(tagName);
@@ -195,6 +199,14 @@ public class SwingElement extends AbstractXulComponent {
 
       });
     }
+  }
+
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    changeSupport.addPropertyChangeListener(listener);
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    changeSupport.removePropertyChangeListener(listener);  
   }
   
   public void setDisabled(boolean disabled) {

@@ -13,6 +13,8 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
+import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -26,6 +28,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   public XulWindowContainer() throws XulException {
     super();
     windows = new ArrayList<Document>();
+    bindings = new BindingContext(this);
   }
   
   public XulWindowContainer(XulLoader xulLoader) throws XulException{

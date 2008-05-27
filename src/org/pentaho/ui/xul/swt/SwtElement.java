@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.swt;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -20,6 +23,8 @@ public class SwtElement extends AbstractXulComponent {
   private Align align = Align.STRETCH;
   protected Orient orient = Orient.HORIZONTAL;
   private int flex=0;
+  protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+
   
   public SwtElement(String tagName, Object managedObject) {
     super(tagName, managedObject);
@@ -191,6 +196,13 @@ public class SwtElement extends AbstractXulComponent {
     throw new NotImplementedException();
   }
 
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    changeSupport.addPropertyChangeListener(listener);
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    changeSupport.removePropertyChangeListener(listener);  
+  }
   public boolean isDisabled() {
     throw new NotImplementedException();
   }
