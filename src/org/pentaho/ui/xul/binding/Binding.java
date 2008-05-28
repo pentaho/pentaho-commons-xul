@@ -1,13 +1,5 @@
 package org.pentaho.ui.xul.binding;
 
-import java.beans.BeanInfo;
-import java.beans.Expression;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.Statement;
-import java.lang.reflect.Method;
-
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 
