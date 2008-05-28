@@ -100,12 +100,12 @@ public class BindingContext {
         method = target.getClass().getMethod(setMethodName, new Class[]{Boolean.TYPE} );
 
       } catch (Exception ex) {
-        throw new IllegalArgumentException("Cannot find setter method by name of [" + setMethodName
+        throw new BindingException("Cannot find setter method by name of [" + setMethodName
             + "] for property: [" + targetAttr + "] in bean [" + target.getClass().getName() + "]");
       }
 
     } catch (Exception e) {
-      throw new IllegalArgumentException("Unknown error finding binding method: ", e);
+      throw new BindingException("Unknown error finding binding method: ", e);
     }
 
     //setup prop change listener to handle binding
@@ -118,7 +118,7 @@ public class BindingContext {
           try {
             finalMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()) );
           } catch (Exception e) {
-            throw new RuntimeException("Error invoking binding method [" + finalMethod + "]: " + e);
+            throw new BindingException("Error invoking binding method [" + finalMethod + "]: " + e);
           }
         }
       }
