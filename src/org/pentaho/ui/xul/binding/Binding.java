@@ -26,8 +26,6 @@ public class Binding {
     this.target = container.getDocumentRoot().getElementById(targetId);
     this.targetAttr = targetAttr;
 
-    setupLeftToRight();
-    setupRightToLeft();
     container.addBinding(this);
   }
   
@@ -37,8 +35,6 @@ public class Binding {
     this.target = container.getDocumentRoot().getElementById(targetId);;
     this.targetAttr = targetAttr;
 
-    setupLeftToRight();
-    setupRightToLeft();
     container.addBinding(this);
   }
   
@@ -48,8 +44,6 @@ public class Binding {
     this.target = target;
     this.targetAttr = targetAttr;
 
-    setupLeftToRight();
-    setupRightToLeft();
     container.addBinding(this);
   }
   
@@ -59,130 +53,9 @@ public class Binding {
     this.sourceAttr = sourceAttr;
     this.target = target;
     this.targetAttr = targetAttr;
-
-    setupLeftToRight();
-    setupRightToLeft();
   }
-  
-  private void setupLeftToRight(){
 
-    Method method = null;
-    String attrName = (String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
-    try{
-    
-      //Get value from one in order to determine type of the attribute
-      String methodName = "get"+attrName;
-      Expression state = new Expression(target, methodName, null);
-      Object val = state.getValue();
-      Class clazz = val.getClass();
-      
-      String setMethodName = "set"+attrName;
-      
-      method = target.getClass().getMethod(setMethodName, new Class[]{clazz});
-      
-    } catch(NoSuchMethodException e){
-      try{
-        //Get value from one in order to determine type of the attribute
-        String methodName = "is"+attrName;
-        Expression state = new Expression(target, methodName, null);
-        Object val = state.getValue();
-        Class clazz = val.getClass();
-        
-        String setMethodName = "set"+attrName;
-        
-        Class[] args = new Class[]{clazz};
-        if(clazz == Boolean.class){
-          args = new Class[]{Boolean.TYPE};
-        } 
-        
-        method = target.getClass().getMethod(setMethodName, args );
-      } catch(Exception ex){
-        System.out.println("No such method: "+ex.getMessage());
-        ex.printStackTrace(System.out);
-      }
-      
-    } catch(Exception e){
-      System.out.println("No such method: "+e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    final Method finalMethod = method;
-    PropertyChangeListener listener = new PropertyChangeListener(){
-      public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("In PropChange Listener");
-        if(evt.getPropertyName().equalsIgnoreCase(sourceAttr)){
-          System.out.println("Capturing Value");
-          try{
-            finalMethod.invoke(target, evt.getNewValue());
-          } catch(Exception e){
-            System.out.println("Error setting value");
-          }
-        }
-      }
-    };
-    
-    source.addPropertyChangeListener(listener);
-  }
-  
-  private void setupRightToLeft(){
 
-    String attrName = (String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
-    Method method = null;
-    try{
-    
-      //Get value from one in order to determine type of the attribute
-      String methodName = "get"+attrName;
-      Expression state = new Expression(source, methodName, null);
-      Object val = state.getValue();
-      Class clazz = val.getClass();
-      
-      String setMethodName = "set"+attrName;
-      method = source.getClass().getMethod(setMethodName, new Class[]{clazz});
-      
-     } catch(NoSuchMethodException e){
-      try{
-         //Get value from one in order to determine type of the attribute
-        String methodName = "is"+attrName;
-        Expression state = new Expression(source, methodName, null);
-        Object val = state.getValue();
-        Class clazz = val.getClass();
-        
-        String setMethodName = "set"+attrName;
-        
-        Class[] args = new Class[]{clazz};
-        if(clazz == Boolean.class){
-          args = new Class[]{Boolean.TYPE};
-        } 
-        
-        method = target.getClass().getMethod(setMethodName, args );
-      } catch(Exception ex){
-        System.out.println("No such method: "+ex.getMessage());
-        ex.printStackTrace(System.out);
-      }
-      
-    } catch(Exception e){
-      System.out.println("No such method: "+e.getMessage());
-      e.printStackTrace(System.out);
-    }
-    final Method finalMethod = method;
-    PropertyChangeListener listener = new PropertyChangeListener(){
-      public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("In PropChange Listener");
-        if(evt.getPropertyName().equalsIgnoreCase(targetAttr)){
-          System.out.println("Capturing Value");
-          try{
-            finalMethod.invoke(source, evt.getNewValue());
-          } catch(Exception e){
-            System.out.println("Error setting value: "+e.getMessage());
-            e.printStackTrace(System.out);
-          }
-        }
-      }
-    };
-    
-    target.addPropertyChangeListener(listener);
-  }
-  
-  
   public XulEventSource getSource() {
     return source;
   }
