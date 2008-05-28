@@ -3,8 +3,6 @@ package org.pentaho.ui.xul.binding;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.pentaho.ui.xul.XulComponent;
-
 public class BindingExpression {
   private static final String regEx = "([^=]*)=([^\\.]*)\\.(.*)";
   
