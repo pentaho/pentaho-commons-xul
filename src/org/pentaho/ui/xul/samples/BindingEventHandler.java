@@ -8,6 +8,7 @@ import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 public class BindingEventHandler extends AbstractXulEventHandler {
 
   FormModel model;
+  ProductModel productModel;
   
   //Button click action
   public void test(){
@@ -25,8 +26,15 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     model.setDisabled(!model.isDisabled());
   }
   
+  public void addProduct(){
+    String name = ((XulTextbox)document.getElementById("productName")).getValue();
+    String descr = ((XulTextbox)document.getElementById("productDescr")).getValue();
+    productModel.addProduct(new Product(name, descr));
+  }
+  
   public void onLoad(){
     model = new FormModel();
+    productModel = new ProductModel();
     
     //Approach 1: Bind Labels
     XulLabel firstNameLbl = (XulLabel) document.getElementById("firstName");
@@ -51,6 +59,11 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     
     //Boolean bind
     getXulDomContainer().createBinding(model, "disabled", "disabledButton", "disabled");
+    
+
+    //Tree bind
+    getXulDomContainer().createBinding(productModel, "products", "productTable", "elements");
+    
   }
 }
 

@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.util.Collection;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -275,6 +277,16 @@ public class SwtTree extends SwtElement implements XulTree {
 
   public void setOnedit(String onedit) {
     this.onedit = onedit;  
+  }
+
+  public void setElements(Collection<?> elements) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public Collection<?> getElements() {
+    return null;
   }
 
 }

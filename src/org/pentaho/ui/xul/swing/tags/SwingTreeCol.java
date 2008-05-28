@@ -17,6 +17,7 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
 	private boolean editable = false;
 	private SwingTree tree;
 	private TableColumnModel model;
+	private String binding;
 	
 	public SwingTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecol");
@@ -149,5 +150,14 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   public void setCustomeditor(String customClass) {
     // TODO Auto-generated method stub
     
+  }
+
+  public String getBinding() {
+    return binding;
+  }
+
+  public void setBinding(String binding) {
+    System.out.println("Column Binding set");
+    this.binding = binding;  
   }
 }

@@ -5,7 +5,7 @@ import java.beans.PropertyChangeSupport;
 
 import org.pentaho.ui.xul.XulEventSource;
 
-public class XulDataForm implements XulEventSource{
+public class ViewModel implements XulEventSource{
 
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
   

@@ -8,7 +8,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.beans.Expression;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
@@ -41,6 +43,7 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -67,7 +70,6 @@ public class SwingTree extends SwingElement implements XulTree{
 	private String onedit = null;
 	private static final Log logger = LogFactory.getLog(SwingTree.class);
   private Vector<String> columnNames = new Vector<String>();
-  
 
 	private boolean isHierarchical = false;
 	  
@@ -724,6 +726,33 @@ public class SwingTree extends SwingElement implements XulTree{
 
   public void setOnedit(String onedit) {
     this.onedit = onedit;  
+  }
+
+  public void setElements(Collection<?> elements) {
+    this.getRootChildren().removeAll();
+    try{
+      for(Object o : elements){
+        XulTreeRow row = this.getRootChildren().addNewRow();
+        
+        for(XulComponent col : this.getColumns().getChildNodes()){
+          XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+          String attribute = ((XulTreeCol) col).getBinding();
+          String getter = "get"+(String.valueOf(attribute.charAt(0)).toUpperCase())+attribute.substring(1);
+          cell.setLabel(new Expression(o, getter, null).getValue().toString());
+          row.addCell(cell);
+        }
+        
+      }
+      table.updateUI();
+    } catch(XulException e){
+      logger.error("error adding elements",e);
+    } catch(Exception e){
+      logger.error("error adding elements",e);
+    }
+  }
+
+  public Collection<?> getElements() {
+    return null;
   }
   
 }

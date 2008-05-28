@@ -40,5 +40,8 @@ public interface XulTreeCol extends XulComponent {
   
   public String getCustomeditor();
   public void setCustomeditor(String customClass);
+  
+  public void setBinding(String binding);
+  public String getBinding();
 
 }

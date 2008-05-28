@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
@@ -58,11 +59,13 @@ public class ElementDom4J implements Element{
    */
   public Document getDocument() {
     try{
-      org.dom4j.Document doc = element.getDocument();
-      if(doc == null){
-        throw new XulDomException("Element Document is null, getDocument most likely called during parse time");
-      }
-      return DocumentFactory.createDocument(doc);
+      //org.dom4j.Document doc = element.getDocument();
+      XulElementDom4J o = (XulElementDom4J) element.getDocument().getRootElement();
+      return ((XulRoot) o.getXulElement()).getXulDomContainer().getDocumentRoot();
+      //if(doc == null){
+      //  throw new XulDomException("Element Document is null, getDocument most likely called during parse time");
+      //}
+      //return DocumentFactory.createDocument(doc);
     } catch(Exception e){
     	logger.warn("Could not get document node : "+e.getMessage(), e);
       return null;

@@ -24,6 +24,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   private ColumnType type = ColumnType.TEXT;
   private boolean editable = false;
   private String customClass = null;
+  private String binding;
 
   public SwtTreeCol(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -141,4 +142,11 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     this.customClass = customClass;
   }
 
+  public String getBinding() {
+    return binding;
+  }
+
+  public void setBinding(String binding) {
+    this.binding = binding;  
+  }
 }

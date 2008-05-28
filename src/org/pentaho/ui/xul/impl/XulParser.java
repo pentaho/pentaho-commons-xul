@@ -48,6 +48,7 @@ public class XulParser {
 
   public void setContainer(XulDomContainer xulDomContainer) {
     this.xulDomContainer = xulDomContainer;
+    xulDocument.setXulDomContainer(xulDomContainer);
     xulDomContainer.addDocument(xulDocument);
   }
 
