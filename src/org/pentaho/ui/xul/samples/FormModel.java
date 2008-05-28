@@ -15,6 +15,7 @@ public class FormModel extends ViewModel {
   private String firstName = "";
   private String lastName = "";
   private boolean disabled = true;
+  private boolean enabled = true;
 
   public String getFirstName() {
     return firstName;
@@ -44,6 +45,17 @@ public class FormModel extends ViewModel {
     boolean previous = this.disabled;
     this.disabled = disabled;
     firePropertyChange("disabled", previous, disabled);
+  }
+  
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    boolean previous = this.enabled;
+    this.enabled = enabled;
+    firePropertyChange("enabled", previous, enabled);
   }
 
 }

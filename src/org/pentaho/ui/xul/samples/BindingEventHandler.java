@@ -61,6 +61,10 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     getXulDomContainer().createBinding(model, "disabled", "disabledButton", "disabled");
     
 
+    //Inverse Boolean bind
+    getXulDomContainer().createBinding("checkbox", "!checked", "inversedDisabledButton", "disabled");
+    
+
     //Tree bind
     getXulDomContainer().createBinding(productModel, "products", "productTable", "elements");
     

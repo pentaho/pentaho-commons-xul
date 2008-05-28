@@ -30,6 +30,14 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
   public SwingCheckbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("checkbox");
     checkBox = new JCheckBox();
+    
+    checkBox.addChangeListener(new ChangeListener(){
+      public void stateChanged(ChangeEvent e) {
+        System.out.println("checkbox change");
+        SwingCheckbox.this.changeSupport.firePropertyChange("checked", null, ((JCheckBox) e.getSource()).isSelected());
+      }
+    });
+    
     managedObject = checkBox;
   }
   

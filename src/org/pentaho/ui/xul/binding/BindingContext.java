@@ -32,14 +32,14 @@ public class BindingContext {
   public void add(Binding bind){
     bindings.add(bind); 
     //forward binding
-    setupBinding(bind.getSource(), bind.getSourceAttr(), bind.getTarget(), bind.getTargetAttr());
+    setupBinding(bind, bind.getSource(), bind.getSourceAttr(), bind.getTarget(), bind.getTargetAttr());
     
     //reverse binding
-    setupBinding(bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr());
+    setupBinding(bind, bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr());
   }
   
 
-  private void setupBinding(final XulEventSource source, final String sourceAttr, final XulEventSource target, final String targetAttr){
+  private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr, final XulEventSource target, final String targetAttr){
 
     Method method = null;
     String setMethodName = "set"+(String.valueOf(targetAttr.charAt(0)).toUpperCase())+targetAttr.substring(1);
@@ -52,15 +52,14 @@ public class BindingContext {
       //Expression state = new Expression(target, methodName, null);
       
       Method getMethod = target.getClass().getMethod(methodName);
-      //Type retType = getMethod.getGenericReturnType();
+      Type retType = getMethod.getGenericReturnType();
+      Class retClazz = getMethod.getReturnType();
       
-      
-      Class clazz = getMethod.getReturnType();
       Class[] methodArgs = null;
       //if(retType != null){
       //  methodArgs = new Class[]{retType};
       //} else {
-        methodArgs = new Class[]{clazz};
+        methodArgs = new Class[]{retClazz};
       //}
       
       try{
@@ -74,13 +73,13 @@ public class BindingContext {
         //Method not found. Most likely a Wrapped Primative type argument
 
         Class[] args = null;
-        if(clazz == Boolean.class){
+        if(retClazz == Boolean.class){
           args = new Class[]{Boolean.TYPE};
-        } else if(clazz == Integer.class){
+        } else if(retClazz == Integer.class){
           args = new Class[]{Integer.TYPE};
-        } else if(clazz == Float.class){
+        } else if(retClazz == Float.class){
           args = new Class[]{Float.TYPE};
-        } else if(clazz == Double.class){
+        } else if(retClazz == Double.class){
           args = new Class[]{Double.TYPE};
         }
         method = target.getClass().getMethod(setMethodName, new Class[]{});
@@ -109,6 +108,7 @@ public class BindingContext {
       e.printStackTrace(System.out);
     }
     
+    
     //setup prop change listener to handle binding
     final Method finalMethod = method;
     PropertyChangeListener listener = new PropertyChangeListener(){
@@ -116,7 +116,7 @@ public class BindingContext {
         System.out.println("In PropChange Listener");
         if(evt.getPropertyName().equalsIgnoreCase(sourceAttr)){
           try{
-            finalMethod.invoke(target, evt.getNewValue());
+            finalMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()) );
           } catch(Exception e){
             System.out.println("Error invoking binding method: "+e.getMessage());
             e.printStackTrace(System.out);

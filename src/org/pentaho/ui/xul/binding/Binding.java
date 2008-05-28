@@ -17,32 +17,32 @@ public class Binding {
   private XulEventSource target;
   private String sourceAttr;
   private String targetAttr;
-
+  private boolean negateBooleanAssignment = false;
   
 
   public Binding(XulDomContainer container, String sourceId, String sourceAttr, String targetId, String targetAttr){
     this.source = container.getDocumentRoot().getElementById(sourceId);
-    this.sourceAttr = sourceAttr;
+    setSourceAttr(sourceAttr);
     this.target = container.getDocumentRoot().getElementById(targetId);
-    this.targetAttr = targetAttr;
+    setTargetAttr(targetAttr);
 
     container.addBinding(this);
   }
   
   public Binding(XulDomContainer container, XulEventSource source, String sourceAttr, String targetId, String targetAttr){
     this.source = source;
-    this.sourceAttr = sourceAttr;
+    setSourceAttr(sourceAttr);
     this.target = container.getDocumentRoot().getElementById(targetId);;
-    this.targetAttr = targetAttr;
+    setTargetAttr(targetAttr);
 
     container.addBinding(this);
   }
   
   public Binding(XulDomContainer container, String sourceId, String sourceAttr, XulEventSource target, String targetAttr){
     this.source = container.getDocumentRoot().getElementById(sourceId);
-    this.sourceAttr = sourceAttr;
+    setSourceAttr(sourceAttr);
     this.target = target;
-    this.targetAttr = targetAttr;
+    setTargetAttr(targetAttr);
 
     container.addBinding(this);
   }
@@ -50,9 +50,9 @@ public class Binding {
 
   public Binding(XulEventSource source, String sourceAttr, XulEventSource target, String targetAttr){
     this.source = source;
-    this.sourceAttr = sourceAttr;
+    setSourceAttr(sourceAttr);
     this.target = target;
-    this.targetAttr = targetAttr;
+    setTargetAttr(targetAttr);
   }
 
 
@@ -82,7 +82,14 @@ public class Binding {
 
   public void setSourceAttr(String sourceAttr) {
   
+    
+    if(sourceAttr.charAt(0) == '!'){
+      //Negation of Boolean
+      negateBooleanAssignment = !negateBooleanAssignment; //two negations will cancel
+      sourceAttr = sourceAttr.substring(1);
+    }
     this.sourceAttr = sourceAttr;
+    
   }
 
   public String getTargetAttr() {
@@ -91,8 +98,20 @@ public class Binding {
   }
 
   public void setTargetAttr(String targetAttr) {
-  
+
+    if(targetAttr.charAt(0) == '!'){
+      //Negation of Boolean
+      negateBooleanAssignment = !negateBooleanAssignment; //two negations will cancel
+      targetAttr = targetAttr.substring(1);
+    }
     this.targetAttr = targetAttr;
+  }
+  
+  public Object evaluateExpressions(Object val){
+    if(negateBooleanAssignment && val instanceof Boolean){
+      return !((Boolean) val);
+    }
+    return val;
   }
   
   

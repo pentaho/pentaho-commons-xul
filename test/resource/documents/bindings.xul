@@ -49,8 +49,12 @@
 		<hbox>
 			<label value="Toggle Enabled in the other button:"/>
 			<button label="toggle" onclick="handler.toggleBoolean()"/>
+			<checkbox label="toggle" id="checkbox"/>
 		</hbox>
-		<button id="disabledButton" disabled="true" label="Help me!"/>
+		<hbox>
+			<button id="disabledButton" disabled="true" label="Help me!"/>
+			<button id="inversedDisabledButton" disabled="true" label="Help me!"/>
+		</hbox>
 	</groupbox>
 	
 	
