@@ -28,6 +28,13 @@ public class SwingRadio extends SwingElement implements XulRadio{
     super("radio");
     radioButton = new JRadioButton();
     managedObject = radioButton;
+    
+    radioButton.addChangeListener(new ChangeListener(){
+      public void stateChanged(ChangeEvent evt){
+        logger.debug("firing selected property change: isSelected="+SwingRadio.this.isSelected());
+        SwingRadio.this.changeSupport.firePropertyChange("selected", null, SwingRadio.this.isSelected());
+      }
+    });
   }
   
   /*
