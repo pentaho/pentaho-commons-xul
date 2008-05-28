@@ -42,7 +42,8 @@ public class BindingContext {
     setupBinding(bind, bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr());
   }
 
-  private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr, final XulEventSource target, final String targetAttr){
+  private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr,
+      final XulEventSource target, final String targetAttr) {
 
     Method method = null;
     String setMethodName = "set" + (String.valueOf(targetAttr.charAt(0)).toUpperCase()) + targetAttr.substring(1);
@@ -68,7 +69,7 @@ public class BindingContext {
       try {
         //FIXME: cannot resolve method signature so I hacked it.
         if (setMethodName.equals("setElements")) {
-          method = target.getClass().getMethod(setMethodName, new Class[]{Collection.class});
+          method = target.getClass().getMethod(setMethodName, new Class[] { Collection.class });
         } else {
           method = target.getClass().getMethod(setMethodName, methodArgs);
         }
@@ -85,7 +86,7 @@ public class BindingContext {
         } else if (retClazz == Double.class) {
           args = new Class[] { Double.TYPE };
         }
-        method = target.getClass().getMethod(setMethodName, new Class[]{});
+        method = target.getClass().getMethod(setMethodName, new Class[] {});
 
       }
     } catch (NoSuchMethodException e) {
@@ -97,11 +98,11 @@ public class BindingContext {
         //if you made it here you were correct that it IS a boolean
 
         //change args to primimtive boolean type instead of Boolean Class
-        method = target.getClass().getMethod(setMethodName, new Class[]{Boolean.TYPE} );
+        method = target.getClass().getMethod(setMethodName, new Class[] { Boolean.TYPE });
 
       } catch (Exception ex) {
-        throw new BindingException("Cannot find setter method by name of [" + setMethodName
-            + "] for property: [" + targetAttr + "] in bean [" + target.getClass().getName() + "]");
+        throw new BindingException("Cannot find setter method by name of [" + setMethodName + "] for property: ["
+            + targetAttr + "] in bean [" + target.getClass().getName() + "]");
       }
 
     } catch (Exception e) {
@@ -116,7 +117,7 @@ public class BindingContext {
             + target.getClass().getName() + "." + finalMethod);
         if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
           try {
-            finalMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()) );
+            finalMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
           } catch (Exception e) {
             throw new BindingException("Error invoking binding method [" + finalMethod + "]: " + e);
           }
