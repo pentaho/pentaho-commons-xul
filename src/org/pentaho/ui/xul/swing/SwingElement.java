@@ -21,12 +21,8 @@ import javax.swing.JSplitPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulSplitter;
-import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
