@@ -56,7 +56,7 @@ public class BindingContext {
         Method getMethod = o.getClass().getMethod(isMethodName);
         return getMethod;
       } catch(NoSuchMethodException ex){
-        throw new BindingException("Could not resolve get method for object", ex);
+        throw new BindingException("Could not resolve getter method for property ["+property+"] on object ["+o.getClass().getName()+"]", ex);
       }
     }
   }
@@ -85,8 +85,8 @@ public class BindingContext {
       //setup prop change listener to handle binding
       PropertyChangeListener listener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
-          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
-              + target.getClass().getName() + "." + targetSetMethod);
+//          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
+//              + target.getClass().getName() + "." + targetSetMethod);
           if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
             try {
               targetSetMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
