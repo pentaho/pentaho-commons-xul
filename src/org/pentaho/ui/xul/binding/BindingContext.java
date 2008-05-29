@@ -2,11 +2,8 @@ package org.pentaho.ui.xul.binding;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -90,13 +87,15 @@ public class BindingContext {
           try {
             targetSetMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
           } catch (Exception e) {
-            throw new BindingException("Error invoking binding method [" + targetSetMethod + "]: " + e);
+            throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "]", e);
           }
         }
       }
     };
 
     source.addPropertyChangeListener(listener);
+    logger.info("Binding established: " + source.getClass().getName() + "." + sourceAttr + " <==> "
+        + target.getClass().getName() + "." + targetAttr);
   }
 
 }
