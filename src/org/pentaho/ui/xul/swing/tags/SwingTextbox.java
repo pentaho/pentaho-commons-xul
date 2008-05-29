@@ -62,7 +62,6 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   	}
     String oldVal = getText();
     this.value = text;
-    changeSupport.firePropertyChange("value", oldVal, text);
   }
   
   public void layout(){
@@ -178,13 +177,13 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	      public void keyTyped(KeyEvent e) {}
 	      
 	    });
-	    
-	     textComp.addKeyListener(new KeyAdapter() {
-	       
-	       public void keyReleased(KeyEvent e) {
-	         invoke(onInput);
-	       }
-	     });
+//	    Why do we need this here if we setup oninput in the setOninput
+//	     textComp.addKeyListener(new KeyAdapter() {
+//	       
+//	       public void keyReleased(KeyEvent e) {
+//	         invoke(onInput);
+//	       }
+//	     });
 	  }
 		
 		return managedObject;
