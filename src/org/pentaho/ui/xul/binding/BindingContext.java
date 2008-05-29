@@ -40,53 +40,54 @@ public class BindingContext {
     setupBinding(bind, bind.getSource(), bind.getSourceAttr(), bind.getTarget(), bind.getTargetAttr());
 
     //reverse binding
-    if(bind.getBindingType() == Binding.Type.BI_DIRECTIONAL){
+    if (bind.getBindingType() == Binding.Type.BI_DIRECTIONAL) {
       setupBinding(bind, bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr());
     }
   }
-  
-  private Method findGetMethod(Object o, String property){
-    try{
+
+  private Method findGetMethod(Object o, String property) {
+    try {
       String methodName = "get" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
       Method getMethod = o.getClass().getMethod(methodName);
       return getMethod;
     } catch (NoSuchMethodException e) {
-      try{
+      try {
         String isMethodName = "is" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
         Method getMethod = o.getClass().getMethod(isMethodName);
         return getMethod;
-      } catch(NoSuchMethodException ex){
-        throw new BindingException("Could not resolve getter method for property ["+property+"] on object ["+o.getClass().getName()+"]", ex);
+      } catch (NoSuchMethodException ex) {
+        throw new BindingException("Could not resolve getter method for property [" + property + "] on object ["
+            + o.getClass().getName() + "]", ex);
       }
     }
   }
-  
-  private Method findSetMethod(Object o, String property, Class clazz){
+
+  private Method findSetMethod(Object o, String property) {
     String methodName = "set" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
-   
-    for(Method m : o.getClass().getMethods()){
+
+    for (Method m : o.getClass().getMethods()) {
       //just match on name
-      if(m.getName().equals(methodName)){
+      if (m.getName().equals(methodName)) {
         return m;
       }
     }
-    throw new BindingException("Could not resolve set method for object ("+property+")");
-  
+    throw new BindingException("Could not resolve setter method for property [" + property + "] on object ["
+        + o.getClass().getName() + "]");
+
   }
 
   private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr,
       final XulEventSource target, final String targetAttr) {
-    try{
-      
+    try {
+
       Method sourceGetMethod = findGetMethod(source, sourceAttr);
-      Class sourceClazz = sourceGetMethod.getReturnType();
-      final Method targetSetMethod = findSetMethod(target, targetAttr, sourceClazz);
-      
+      final Method targetSetMethod = findSetMethod(target, targetAttr);
+
       //setup prop change listener to handle binding
       PropertyChangeListener listener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
-//          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
-//              + target.getClass().getName() + "." + targetSetMethod);
+          //          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
+          //              + target.getClass().getName() + "." + targetSetMethod);
           if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
             try {
               targetSetMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
@@ -97,12 +98,12 @@ public class BindingContext {
         }
       };
 
-      source.addPropertyChangeListener(listener);  
+      source.addPropertyChangeListener(listener);
 
-    } catch(BindingException e){
-      System.out.println("Error creating binding: "+e.getMessage());
+    } catch (BindingException e) {
+      System.out.println("Error creating binding: " + e.getMessage());
       e.printStackTrace(System.out);
-    } 
+    }
   }
-  
+
 }
