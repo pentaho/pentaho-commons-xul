@@ -157,7 +157,6 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   }
 
   public void setBinding(String binding) {
-    System.out.println("Column Binding set");
     this.binding = binding;  
   }
 }
