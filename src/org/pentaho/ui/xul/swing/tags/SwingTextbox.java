@@ -34,11 +34,13 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   private boolean multiline = false;
   private JTextArea textArea;
   boolean disabled = false;
-  String value = "";
-  JScrollPane scrollPane;
+  private String value = "";
+  private JScrollPane scrollPane;
 	private static final Log logger = LogFactory.getLog(SwingTextbox.class);
   private boolean readonly = false;
   private TextType type = TextType.NORMAL;
+  private JTextComponent textComp = null;
+  private String onInput;
   
   public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -47,7 +49,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 
   public String getValue(){
   	if(managedObject != null){
-  		return ((JTextComponent) managedObject).getText();
+  		return textComp.getText();
   	} else {
   		logger.error("Attempt to get Textbox's value before it's instantiated");
   		return null;
@@ -56,7 +58,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 
   public void setValue(String text){
   	if(managedObject != null){
-  		((JTextComponent) managedObject).setText(text);
+  	  textComp.setText(text);
   	}
     String oldVal = getText();
     this.value = text;
@@ -77,7 +79,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   public void setDisabled(boolean dis) {
   	this.disabled = dis;
   	if(managedObject != null){
-  		((Component) managedObject).setEnabled(!dis);
+  	  textComp.setEnabled(!dis);
   	}
   }
 
@@ -121,7 +123,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 
   public void selectAll() {
 
-		((JTextComponent) managedObject).selectAll();
+    textComp.selectAll();
     
   }
 
@@ -141,13 +143,15 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	        JPasswordField pass = new JPasswordField((value != null) ? value : "");
 	        pass.setPreferredSize(new Dimension(200,20));
 	        pass.setEditable(!readonly);
+	        textComp = pass;
 	        managedObject = pass;
 	        break;
 	      default: //regular text
     			if(this.multiline){
     				textArea = new JTextArea((value != null) ? value : "");
-    				managedObject = textArea;
     				scrollPane = new JScrollPane(textArea);
+    				textComp = textArea;
+    				managedObject = scrollPane;
     				textArea.setEditable(!readonly);
     				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
     		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -157,32 +161,46 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     				textField.setPreferredSize(new Dimension(200,20));
     				textField.setEditable(!readonly);
     				managedObject = textField;
+    				textComp = textField;
     				break;
     			}
   		}
+
+	    textComp.addKeyListener(new KeyListener(){
+
+	      public void keyPressed(KeyEvent e) {}
+	      public void keyReleased(KeyEvent e) {
+	        String newVal = SwingTextbox.this.getValue();
+	        
+	        SwingTextbox.this.changeSupport.firePropertyChange("value", "", SwingTextbox.this.getValue());
+	      }
+
+	      public void keyTyped(KeyEvent e) {}
+	      
+	    });
+	    
+	     textComp.addKeyListener(new KeyAdapter() {
+	       
+	       public void keyReleased(KeyEvent e) {
+	         invoke(onInput);
+	       }
+	     });
 	  }
-		((JTextComponent)managedObject).addKeyListener(new KeyListener(){
-
-      public void keyPressed(KeyEvent e) {}
-      public void keyReleased(KeyEvent e) {
-        String newVal = SwingTextbox.this.getValue();
-        
-        SwingTextbox.this.changeSupport.firePropertyChange("value", "", SwingTextbox.this.getValue());
-      }
-
-      public void keyTyped(KeyEvent e) {}
-		  
-		});
+		
 		return managedObject;
 	  
 	}
 	
 	public void setOninput(final String method) {
-    ((JTextComponent) getManagedObject()).addKeyListener(new KeyAdapter() {
-
-      public void keyReleased(KeyEvent e) {
-        invoke(method);
-      }
-    });
+	  if(textComp != null){
+  	  textComp.addKeyListener(new KeyAdapter() {
+  
+        public void keyReleased(KeyEvent e) {
+          invoke(method);
+        }
+      });
+	  } else { //Not instantiated, save for later
+	    onInput = method;
+	  }
   }
 }
