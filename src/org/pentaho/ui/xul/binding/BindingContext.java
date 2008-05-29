@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.binding;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,92 +40,69 @@ public class BindingContext {
     setupBinding(bind, bind.getSource(), bind.getSourceAttr(), bind.getTarget(), bind.getTargetAttr());
 
     //reverse binding
-    setupBinding(bind, bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr());
+    if(bind.getBindingType() == Binding.Type.BI_DIRECTIONAL){
+      setupBinding(bind, bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr());
+    }
+  }
+  
+  private Method findGetMethod(Object o, String property){
+    try{
+      String methodName = "get" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
+      Method getMethod = o.getClass().getMethod(methodName);
+      return getMethod;
+    } catch (NoSuchMethodException e) {
+      try{
+        String isMethodName = "is" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
+        Method getMethod = o.getClass().getMethod(isMethodName);
+        return getMethod;
+      } catch(NoSuchMethodException ex){
+        throw new BindingException("Could not resolve get method for object", ex);
+      }
+    }
+  }
+  
+  private Method findSetMethod(Object o, String property, Class clazz){
+    String methodName = "set" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
+   
+    for(Method m : o.getClass().getMethods()){
+      //just match on name
+      if(m.getName().equals(methodName)){
+        return m;
+      }
+    }
+    throw new BindingException("Could not resolve set method for object ("+property+")");
+  
   }
 
   private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr,
       final XulEventSource target, final String targetAttr) {
-
-    Method method = null;
-    String setMethodName = "set" + (String.valueOf(targetAttr.charAt(0)).toUpperCase()) + targetAttr.substring(1);
-
-    String sourceGetMethodName = "get" + (String.valueOf(sourceAttr.charAt(0)).toUpperCase()) + sourceAttr.substring(1);
-    try {
-
-      //Get value from one in order to determine type of the attribute
-      String methodName = "get" + (String.valueOf(targetAttr.charAt(0)).toUpperCase()) + targetAttr.substring(1);
-      //Expression state = new Expression(target, methodName, null);
-
-      Method getMethod = target.getClass().getMethod(methodName);
-      Type retType = getMethod.getGenericReturnType();
-      Class retClazz = getMethod.getReturnType();
-
-      Class[] methodArgs = null;
-      //if(retType != null){
-      //  methodArgs = new Class[]{retType};
-      //} else {
-      methodArgs = new Class[] { retClazz };
-      //}
-
-      try {
-        //FIXME: cannot resolve method signature so I hacked it.
-        if (setMethodName.equals("setElements")) {
-          method = target.getClass().getMethod(setMethodName, new Class[] { Collection.class });
-        } else {
-          method = target.getClass().getMethod(setMethodName, methodArgs);
-        }
-      } catch (NoSuchMethodException e) {
-        //Method not found. Most likely a Wrapped Primitive type argument
-
-        Class[] args = null;
-        if (retClazz == Boolean.class) {
-          args = new Class[] { Boolean.TYPE };
-        } else if (retClazz == Integer.class) {
-          args = new Class[] { Integer.TYPE };
-        } else if (retClazz == Float.class) {
-          args = new Class[] { Float.TYPE };
-        } else if (retClazz == Double.class) {
-          args = new Class[] { Double.TYPE };
-        }
-        method = target.getClass().getMethod(setMethodName, new Class[] {});
-
-      }
-    } catch (NoSuchMethodException e) {
-      logger
-          .info("Method not found: " + e.getMessage() + ", checking to see if using boolean convention, e.g. isFoo()");
-      try {
-        //Hum. method not found. Check is[fieldName] boolean convention
-        String methodName = "is" + (String.valueOf(targetAttr.charAt(0)).toUpperCase()) + targetAttr.substring(1);
-        //if you made it here you were correct that it IS a boolean
-
-        //change args to primimtive boolean type instead of Boolean Class
-        method = target.getClass().getMethod(setMethodName, new Class[] { Boolean.TYPE });
-
-      } catch (Exception ex) {
-        throw new BindingException("Cannot find setter method by name of [" + setMethodName + "] for property: ["
-            + targetAttr + "] in bean [" + target.getClass().getName() + "]");
-      }
-
-    } catch (Exception e) {
-      throw new BindingException("Unknown error finding binding method: ", e);
-    }
-
-    //setup prop change listener to handle binding
-    final Method finalMethod = method;
-    PropertyChangeListener listener = new PropertyChangeListener() {
-      public void propertyChange(PropertyChangeEvent evt) {
-        logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
-            + target.getClass().getName() + "." + finalMethod);
-        if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
-          try {
-            finalMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
-          } catch (Exception e) {
-            throw new BindingException("Error invoking binding method [" + finalMethod + "]: " + e);
+    try{
+      
+      Method sourceGetMethod = findGetMethod(source, sourceAttr);
+      Class sourceClazz = sourceGetMethod.getReturnType();
+      final Method targetSetMethod = findSetMethod(target, targetAttr, sourceClazz);
+      
+      //setup prop change listener to handle binding
+      PropertyChangeListener listener = new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent evt) {
+          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
+              + target.getClass().getName() + "." + targetSetMethod);
+          if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
+            try {
+              targetSetMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
+            } catch (Exception e) {
+              throw new BindingException("Error invoking binding method [" + targetSetMethod + "]: " + e);
+            }
           }
         }
-      }
-    };
+      };
 
-    source.addPropertyChangeListener(listener);
+      source.addPropertyChangeListener(listener);  
+
+    } catch(BindingException e){
+      System.out.println("Error creating binding: "+e.getMessage());
+      e.printStackTrace(System.out);
+    } 
   }
+  
 }

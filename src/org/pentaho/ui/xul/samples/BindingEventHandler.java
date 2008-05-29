@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.samples;
 
 import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
@@ -29,6 +30,7 @@ public class BindingEventHandler extends AbstractXulEventHandler {
   public void addProduct(){
     String name = ((XulTextbox)document.getElementById("productName")).getValue();
     String descr = ((XulTextbox)document.getElementById("productDescr")).getValue();
+    
     productModel.addProduct(new Product(name, descr));
   }
   

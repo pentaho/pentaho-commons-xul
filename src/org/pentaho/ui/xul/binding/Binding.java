@@ -10,6 +10,8 @@ public class Binding {
   private String sourceAttr;
   private String targetAttr;
   private boolean negateBooleanAssignment = false;
+  public enum Type{ONE_WAY, BI_DIRECTIONAL};
+  private Type bindingStrategy = Type.BI_DIRECTIONAL;
   
 
   public Binding(XulDomContainer container, String sourceId, String sourceAttr, String targetId, String targetAttr){
@@ -46,7 +48,14 @@ public class Binding {
     this.target = target;
     setTargetAttr(targetAttr);
   }
+  
+  public void setBindingType(Type t){
+    this.bindingStrategy = t;
+  }
 
+  public Type getBindingType(){
+    return bindingStrategy;
+  }
 
   public XulEventSource getSource() {
     return source;
