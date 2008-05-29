@@ -78,32 +78,25 @@ public class BindingContext {
 
   private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr,
       final XulEventSource target, final String targetAttr) {
-    try {
+    Method sourceGetMethod = findGetMethod(source, sourceAttr);
+    final Method targetSetMethod = findSetMethod(target, targetAttr);
 
-      Method sourceGetMethod = findGetMethod(source, sourceAttr);
-      final Method targetSetMethod = findSetMethod(target, targetAttr);
-
-      //setup prop change listener to handle binding
-      PropertyChangeListener listener = new PropertyChangeListener() {
-        public void propertyChange(PropertyChangeEvent evt) {
-          //          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
-          //              + target.getClass().getName() + "." + targetSetMethod);
-          if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
-            try {
-              targetSetMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
-            } catch (Exception e) {
-              throw new BindingException("Error invoking binding method [" + targetSetMethod + "]: " + e);
-            }
+    //setup prop change listener to handle binding
+    PropertyChangeListener listener = new PropertyChangeListener() {
+      public void propertyChange(PropertyChangeEvent evt) {
+        //          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
+        //              + target.getClass().getName() + "." + targetSetMethod);
+        if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
+          try {
+            targetSetMethod.invoke(target, bind.evaluateExpressions(evt.getNewValue()));
+          } catch (Exception e) {
+            throw new BindingException("Error invoking binding method [" + targetSetMethod + "]: " + e);
           }
         }
-      };
+      }
+    };
 
-      source.addPropertyChangeListener(listener);
-
-    } catch (BindingException e) {
-      System.out.println("Error creating binding: " + e.getMessage());
-      e.printStackTrace(System.out);
-    }
+    source.addPropertyChangeListener(listener);
   }
 
 }
