@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.binding;
 
+import groovyjarjarasm.asm.tree.MethodNode;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
@@ -43,11 +45,14 @@ public class BindingContext {
   }
 
   private Method findGetMethod(Object o, String property) {
+    String methodName = null;
     try {
-      String methodName = "get" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
+      methodName = "get" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
       Method getMethod = o.getClass().getMethod(methodName);
       return getMethod;
     } catch (NoSuchMethodException e) {
+      logger.debug("could not resolve getter method ["+methodName+"] for property [" + property + "] on object ["
+            + o.getClass().getName() + "].  Trying to resolve as boolean style getter...");
       try {
         String isMethodName = "is" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
         Method getMethod = o.getClass().getMethod(isMethodName);
