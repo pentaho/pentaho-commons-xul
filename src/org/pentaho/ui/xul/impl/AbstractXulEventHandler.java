@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.impl;
 
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.dom.Document;
 
 /**
@@ -46,4 +47,14 @@ public abstract class AbstractXulEventHandler implements XulEventHandler {
   }
 
   public void setData(Object data) {}
+  
+  /*
+   * Convenience methods for data binding
+   */
+  public void bind(XulEventSource model, String modelPropertyName, String xulComponentElementId, String xulComponentPropertyName){
+    getXulDomContainer().createBinding(model, modelPropertyName, xulComponentElementId, xulComponentPropertyName);
+  }
+  public void bind(String srcXulComponentElementId, String srcXulComponentPropertyName, String destXulComponentElementId, String destXulComponentPropertyName){
+    getXulDomContainer().createBinding(srcXulComponentElementId, srcXulComponentPropertyName, destXulComponentElementId, destXulComponentPropertyName);
+  }
 }
