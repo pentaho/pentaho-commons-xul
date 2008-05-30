@@ -2,8 +2,9 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.beans.Expression;
-import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -12,7 +13,6 @@ import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +38,8 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
 
   private String binding;
 
+  private T previousSelectedItem = null;
+
   public SwingMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menulist");
 
@@ -47,6 +49,18 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
 
     combobox = new JComboBox(new DefaultComboBoxModel());
     managedObject = combobox;
+
+    combobox.addItemListener(new ItemListener() {
+
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, combobox
+              .getSelectedItem());
+          previousSelectedItem = (T) combobox.getSelectedItem();
+        }
+      }
+
+    });
 
   }
 
@@ -76,16 +90,17 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
    * (non-Javadoc)
    * @see org.pentaho.ui.xul.components.XulMenuList#replaceAll(java.util.List)
    */
+  @Deprecated
   public void replaceAllItems(Collection<T> tees) {
     setElements(tees);
   }
 
-  public String getSelectedItem() {
-    return (String) this.combobox.getModel().getSelectedItem();
+  public T getSelectedItem() {
+    return (T) this.combobox.getModel().getSelectedItem();
   }
 
-  public String setSelectedItem(T t) {
-    return (String) this.combobox.getModel().getSelectedItem();
+  public void setSelectedItem(T t) {
+    this.combobox.setSelectedItem(t);
   }
 
   public void setOncommand(final String command) {
