@@ -33,7 +33,7 @@ public class XulParser {
   Document xulDocument;
   private static final Log logger = LogFactory.getLog(XulParser.class);
 
-  public static Map<String, Object> handlers = new HashMap<String, Object>();
+  public Map<String, Object> handlers = new HashMap<String, Object>();
 
   private XulDomContainer xulDomContainer;
 
@@ -184,7 +184,9 @@ public class XulParser {
        Constructor<?> constructor = c
            .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
       
-       XulComponent ele = (XulComponent) constructor.newInstance(null, null, xulDomContainer, name);
+       //pass in root element as parent (SWT don't do jack without a parent son)
+       XulComponent rootEle = this.xulDocument.getRootElement();
+       XulComponent ele = (XulComponent) constructor.newInstance(null, rootEle, xulDomContainer, name);
        return ele;
      } catch (Exception e) {
        throw new XulException(e);
@@ -193,7 +195,7 @@ public class XulParser {
 
   public void registerHandler(String type, String handler) {
 
-    XulParser.handlers.put(type.toUpperCase(), handler);
+    handlers.put(type.toUpperCase(), handler);
 
   }
 

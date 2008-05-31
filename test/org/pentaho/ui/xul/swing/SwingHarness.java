@@ -1,4 +1,4 @@
-package org.pentaho.ui.xul.swt;
+package org.pentaho.ui.xul.swing;
 
 import java.io.InputStream;
 
@@ -7,12 +7,12 @@ import org.dom4j.io.SAXReader;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulRunner;
 
-public class SwtTester {
+public class SwingHarness {
 
   public static void main(String[] args){
     try{
       
-      InputStream in = SwtXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/buttonTester.xul");
+      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/buttonTester.xul");
 
       if(in == null){
         System.out.println("Input is null");
@@ -22,9 +22,9 @@ public class SwtTester {
       SAXReader rdr = new SAXReader();
       final Document doc = rdr.read(in);
       
-      XulDomContainer container = new SwtXulLoader().loadXul(doc);
+      XulDomContainer container = new SwingXulLoader().loadXul(doc);
 
-      XulRunner runner = new SwtXulRunner();
+      XulRunner runner = new SwingXulRunner();
       runner.addContainer(container);
       
       runner.initialize();

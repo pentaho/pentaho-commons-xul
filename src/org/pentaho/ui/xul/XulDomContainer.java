@@ -46,8 +46,6 @@ public interface XulDomContainer {
   public void addEventHandler(XulEventHandler handler);
   
   public void addBinding(Binding binding);
-  
-  public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable);
 
   public void initialize();
   

@@ -51,5 +51,9 @@ public class DocumentDom4J extends ElementDom4J implements Document {
 		this.container = container;
 		
 	}
+
+	public boolean isRegistered(String elementName) {
+		return this.container.getXulLoader().isRegistered(elementName);
+	}
   
 }

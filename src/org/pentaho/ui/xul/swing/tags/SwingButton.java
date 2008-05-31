@@ -65,7 +65,7 @@ public class SwingButton extends SwingElement implements XulButton{
    * @see org.pentaho.ui.xul.components.XulButton#setOnClick(java.lang.String)
    */
   public void setOnclick( final String method) {
-    this.onclick = method;
+    System.out.println("Setting onclick: "+method);
     button.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt){
 
@@ -78,7 +78,7 @@ public class SwingButton extends SwingElement implements XulButton{
             try{
               con.invoke(method, new Object[]{});
             } catch (XulException e){
-              logger.error("Error calling oncommand event",e);
+              logger.error("Error calling oncommand event: "+method,e);
             }
           }
         });
@@ -150,7 +150,9 @@ public class SwingButton extends SwingElement implements XulButton{
       button.setIcon(oldButton.getIcon());
       button.setEnabled(oldButton.isEnabled());
       button.setSelected(this.selected);
-      this.setOnclick(this.getOnclick());
+      if(this.getOnclick() != null){
+      	this.setOnclick(this.getOnclick());
+      }
       managedObject = button;
       
       if(this.group != null){
@@ -222,7 +224,7 @@ public class SwingButton extends SwingElement implements XulButton{
   }
 
   public boolean isSelected() {
-    return selected;  
+    return button.isSelected();  
   }
 
   public void setSelected(boolean selected) {

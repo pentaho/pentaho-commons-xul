@@ -110,7 +110,7 @@ public class TableItemWrapper implements RowWidget {
       case PASSWORD:
         boolean isPassword = column.getColumnType().equals(ColumnType.PASSWORD);
         if ((column.getCustomeditor() != null) && 
-            (XulWindowContainer.isRegistered(column.getCustomeditor()))){
+            (this.parentTree.getDocument().isRegistered(column.getCustomeditor()))){
           createCustomText(index, column.getCustomeditor(), isPassword);
         }else{
           createEditableText(index, isPassword);
@@ -166,9 +166,11 @@ public class TableItemWrapper implements RowWidget {
     }
     
     try{
-    	final XulTextbox textBox = (XulTextbox)XulWindowContainer.createInstance(parentTree, customClass, 
-        new Object[]{null, "textbox"}, new Class[]{XulDomContainer.class, String.class});
+    	//final XulTextbox textBox = (XulTextbox)XulWindowContainer.createInstance(parentTree, customClass, 
+        //new Object[]{null, "textbox"}, new Class[]{XulDomContainer.class, String.class});
  
+    	final XulTextbox textBox = (XulTextbox) this.parentTree.getDocument().createElement("textbox");
+    	
     
 	    textBox.setValue(item.getText(index));
 	    textBox.selectAll();

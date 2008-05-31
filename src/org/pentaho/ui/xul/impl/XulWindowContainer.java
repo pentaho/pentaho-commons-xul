@@ -45,20 +45,6 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     document.setXulDomContainer(this);
   }
 
-
-  public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
-    XulComponent rootElement = this.getDocumentRoot().getRootElement();
-    
-    XulMessageBox dialog = null;
-    try{
-    	dialog = (XulMessageBox)createInstance(rootElement, "ERRORMESSAGEBOX", new Object[]{title, message, throwable}, null);
-    } catch(XulException e){
-    	logger.error("Error creating MessageBox:",e);
-    }
-    return dialog;
-    
-  }
-
   @Override
   public void close() {
   	for(Document wind : this.windows){
@@ -97,53 +83,6 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException {
     XulDomContainer container = this.xulLoader.loadXulFragment(xulLocation, res);
     return container;  
-  }
-  
-  public static boolean isRegistered(String widgetHandlerName){
-    Object handler = XulParser.handlers.get(widgetHandlerName.toUpperCase());
-    return (handler != null);
-  }
-
-  public static Object createInstance(XulComponent parent, String widgetHandlerName, Object[] params, Class[] classes ) throws XulException, IllegalArgumentException{
-    Object handler = XulParser.handlers.get(widgetHandlerName.toUpperCase());
-
-    if (handler == null) {
-      logger.error("Tag handler not found: ");
-      throw new XulException(String.format("Handler not found for input: %s", widgetHandlerName));
-    }
-    
-    if (parent == null) {
-      logger.error("Cannot pass null parent XulComponent... ");
-      return new IllegalArgumentException("Parent is null");
-    }
-
-    Class <?> [] classArgs = null;
-    Object[] constructorArgs = null;
-    if (params != null){
-      int inc = 1;
-      classArgs = new Class[params.length+1];
-      constructorArgs = new Object[params.length+1];
-      classArgs[0] = XulComponent.class;
-      constructorArgs[0] = parent;
-      for (Object param : params) {
-        if ((classes == null) && (param == null))
-          continue;
-        classArgs[inc] = classes == null ? param.getClass() : classes[inc-1] ;
-        constructorArgs[inc++]=param;
-      }
-    }
-
-    Class <?> c;
-    try {
-      c = Class.forName((String) handler);
-      Constructor <?> constructor = c.getConstructor(classArgs);
-      Object ele = constructor.newInstance(constructorArgs);
-      
-      return ele;
-    } catch (Exception e) {
-      logger.error(String.format("Error creating new instance: %s",e.getMessage()), e);
-      throw new XulException(String.format("Error creating new instance: %s",e.getMessage()), e);
-    }
   }
 
 	public Document getDocument(int idx) {

@@ -47,9 +47,7 @@ public class SwingElement extends AbstractXulComponent {
     super(tagName);
   }
   
-  public void resetContainer() {
-
-  }
+  public void resetContainer() {}
 
   public void layout() {
     double totalFlex = 0.0;
@@ -84,14 +82,11 @@ public class SwingElement extends AbstractXulComponent {
         splitter.setResizeWeight(splitterSize);
         if (totalFlex > 0) {
           splitter.addComponentListener(new ComponentListener() {
-            public void componentHidden(ComponentEvent arg0) {
-            }
+            public void componentHidden(ComponentEvent arg0) {}
 
-            public void componentMoved(ComponentEvent arg0) {
-            }
+            public void componentMoved(ComponentEvent arg0) {}
 
-            public void componentShown(ComponentEvent arg0) {
-            }
+            public void componentShown(ComponentEvent arg0) {}
 
             public void componentResized(ComponentEvent arg0) {
               splitter.setDividerLocation(splitterSize);
@@ -162,13 +157,13 @@ public class SwingElement extends AbstractXulComponent {
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
 
-    super.replaceChild(oldElement, newElement);
 
     int idx = this.children.indexOf(oldElement);
     if (idx == -1) {
       logger.error(oldElement.getName() + " not found in children");
       throw new XulDomException(oldElement.getName() + " not found in children");
     } else {
+      super.replaceChild(oldElement, newElement);
       this.children.set(idx, newElement);
 
       container.removeAll();

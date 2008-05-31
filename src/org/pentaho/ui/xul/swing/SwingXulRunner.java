@@ -13,7 +13,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.impl.XulServiceCall;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
 
 /**
@@ -48,14 +47,6 @@ public class SwingXulRunner implements XulRunner {
   }
 
   /* (non-Javadoc)
-   * @see org.pentaho.ui.xul.XulRunner#remoteCall(org.pentaho.ui.xul.XulServiceCall)
-   */
-  public Document remoteCall(XulServiceCall serviceUrl) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulRunner#start()
    */
   public void start() {
@@ -82,31 +73,6 @@ public class SwingXulRunner implements XulRunner {
 
   public List<XulDomContainer> getXulDomContainers() {
     return containers;
-  }
-
-  public static void main(String[] args) {
-    try{
-      
- 
-//      XulDomContainer container = new SwingXulLoader().loadXul(
-//    		  "resource/documents/internationalization.xul", 
-//    		  ResourceBundle.getBundle("resource/documents/internationalization2")
-//      );
-
-    	XulDomContainer container = new SwingXulLoader().loadXul(
-      		  "resource/documents/bindings.xul"
-        );
-    	
-      XulRunner runner = new SwingXulRunner();
-      runner.addContainer(container);
-      
-      runner.initialize();
-      runner.start();
-      
-    } catch(Exception e){
-      System.out.println(e.getMessage());
-      e.printStackTrace(System.out);
-    }
   }
 
 }

@@ -48,9 +48,6 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     this.xulLoader = xulLoader;
   }
   
-  public Document remoteCall(XulServiceCall serviceUrl){
-    return null;
-  }
   
   public XulLoader getXulLoader(){
   	return xulLoader;
@@ -226,8 +223,8 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   public void invoke(String method, Object[] args) throws XulException {
 
   try {
-      if (method.indexOf('.') == -1) {
-        throw new IllegalArgumentException("method call does not follow the pattern [EventHandlerID].methodName()");
+      if (method == null || method.indexOf('.') == -1) {
+        throw new XulException("method call does not follow the pattern [EventHandlerID].methodName()");
       }
 
       String eventID = method.substring(0, method.indexOf("."));
@@ -278,5 +275,11 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
 
   public void createBinding(String source, String sourceAttr, String targetId, String targetAttr){
     bindings.add(new Binding(this, source, sourceAttr, targetId, targetAttr));
+  }
+  
+
+  public boolean isRegistered(String widgetHandlerName){
+    Object handler = this.getXulLoader().isRegistered(widgetHandlerName);
+    return (handler != null);
   }
 }

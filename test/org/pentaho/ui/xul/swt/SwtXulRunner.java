@@ -11,7 +11,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.impl.XulServiceCall;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 
@@ -49,11 +48,6 @@ public class SwtXulRunner implements XulRunner {
 
   }
 
-  public Document remoteCall(XulServiceCall serviceUrl) {
-    return null;
-  }
-
-
   public void start() throws XulException {
     ((Shell)rootFrame).open(); 
     while(!rootFrame.isDisposed()) {
@@ -80,29 +74,5 @@ public class SwtXulRunner implements XulRunner {
     return containers;
   }
 
-  public static void main(String[] args) {
-
-    try {
-  
-
-      XulDomContainer container = new SwtXulLoader().loadXul(
-      		  "resource/documents/tabpanel.xul"
-      );
-      
-      XulRunner runner = new SwtXulRunner();
-      runner.addContainer(container);
-      
-      runner.initialize();
-
-
-      runner.start();
-
-
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
-      e.printStackTrace(System.out);
-    }
-
-  }
 
 }

@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<window id="textbox-test" title="Testing buttons for SWT, Swing"
-	orient="vertical"
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<button id="button1" label="OK" command="command_do_something" />
-	<button id="button2" label="Cancel" command="command_do_something_else"  />
-</window>

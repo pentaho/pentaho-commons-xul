@@ -107,6 +107,14 @@ public interface XulLoader {
    */
   public XulComponent createElement(String elementName) throws XulException;
 
+  /**
+   * 
+   * Support method for determining if an element has been registered for creation.
+   * 
+   * @param elementName name of element to check
+   * @return boolean value indicating element has been registered
+   */
+  public boolean isRegistered(String elementName);
   
   public void register(String tagName, String className);
   

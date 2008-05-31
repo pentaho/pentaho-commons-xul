@@ -59,7 +59,6 @@ public class TestSwtXulParser extends TestCase{
     parser.registerHandler("LISTITEM", "org.pentaho.ui.xul.swt.tags.SwtListitem");
 
 
-
     container = new XulWindowContainer();
     parser.setContainer(container);
     parser.parseDocument(testDoc.getRootElement());

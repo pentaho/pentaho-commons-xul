@@ -15,6 +15,7 @@ import org.pentaho.ui.xul.XulException;
 public interface Document extends Element{
   public XulComponent getRootElement();
   public XulComponent createElement(String elementName) throws XulException;
+  public boolean isRegistered(String elementName);
   public void setXulDomContainer(XulDomContainer container);
   
 }

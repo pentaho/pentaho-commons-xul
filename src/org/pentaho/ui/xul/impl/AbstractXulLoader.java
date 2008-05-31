@@ -57,6 +57,12 @@ public abstract class AbstractXulLoader implements XulLoader{
     return container;
   }
   
+  private void setRootDir(String loc){
+  	if(loc.lastIndexOf("/") > 0){ //exists and not first char
+      rootDir = loc.substring(0,loc.lastIndexOf("/")+1);
+    }
+  }
+  
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
@@ -81,9 +87,7 @@ public abstract class AbstractXulLoader implements XulLoader{
         throw new IllegalArgumentException("File not found");
       }
 
-      if(resource.lastIndexOf("/") > 0){ //exists and not first char
-        rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-      }
+      setRootDir(resource);
       
       ResourceBundle res;
       try{
@@ -114,9 +118,7 @@ public abstract class AbstractXulLoader implements XulLoader{
         final Document doc = rdr.read(new StringReader(localOutput));
        
 
-        if(resource.lastIndexOf("/") > 0){ //exists and not first char
-          rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-        }
+        setRootDir(resource);
         
         return this.loadXul(doc);
       } catch(DocumentException e){
@@ -134,9 +136,7 @@ public abstract class AbstractXulLoader implements XulLoader{
         throw new IllegalArgumentException("File not found");
       }
       
-      if(resource.lastIndexOf("/") > 0){ //exists and not first char
-        rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-      }
+      setRootDir(resource);
       
       ResourceBundle res;
       try{
@@ -164,9 +164,7 @@ public abstract class AbstractXulLoader implements XulLoader{
         SAXReader rdr = new SAXReader();
         final Document doc = rdr.read(new StringReader(localOutput));
         
-        if(resource.lastIndexOf("/") > 0){ //exists and not first char
-          rootDir = resource.substring(0,resource.lastIndexOf("/")+1);
-        }
+        setRootDir(resource);
         
         return this.loadXulFragment(doc);
       } catch(DocumentException e){
@@ -227,6 +225,12 @@ public abstract class AbstractXulLoader implements XulLoader{
     System.out.println(srcDoc.asXML());
     return srcDoc;
   }
+
+	public boolean isRegistered(String elementName) {
+		return this.parser.handlers.containsKey(elementName);
+	}
+  
+  
 }
 
   

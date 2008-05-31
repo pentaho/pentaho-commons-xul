@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.pentaho.ui.xul.tests.dom;
 
 import java.io.InputStream;
@@ -15,7 +12,7 @@ import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 
 /**
- * @author OEM
+ * @author NBaker
  *
  */
 public class TestDomFactory extends TestCase{

@@ -8,6 +8,8 @@ import java.io.InputStream;
 import junit.framework.TestCase;
 
 import org.dom4j.io.SAXReader;
+import org.junit.Before;
+import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
@@ -18,16 +20,20 @@ import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 import org.pentaho.ui.xul.impl.XulParser;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 
+import static org.junit.Assert.*;
+
 /**
  * @author OEM
  *
  */
-public class TestSwingXulParser extends TestCase{
+public class TestSwingXulParser{
   org.dom4j.Document testDoc;
 
   XulDomContainer container;
   
   private XulParser parser;
+  
+  @Before
   public void setUp() throws Exception{
     DocumentFactory.registerDOMClass(DocumentDom4J.class);
     DocumentFactory.registerElementClass(ElementDom4J.class);
@@ -64,16 +70,19 @@ public class TestSwingXulParser extends TestCase{
     parser.parseDocument(testDoc.getRootElement());
   }
 
+  @Test
   public void testRootElement() throws Exception{
     Document root = container.getDocumentRoot();
     assertNotNull(root);
   }
   
+  @Test
   public void testRootIsWindow() throws Exception{
     Document root = container.getDocumentRoot();
     assertTrue(root.getRootElement() instanceof XulWindow);
   }
   
+  @Test
   public void testElementsByXPath() throws Exception{
     Document root = container.getDocumentRoot();
     assertTrue(
