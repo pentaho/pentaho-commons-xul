@@ -14,7 +14,7 @@
 		<fileset dir="${lib-ext.dir}">
 			<include name="**/*.jar" />
 		</fileset>
-		<fileset dir="lib-swt/win32">
+		<fileset dir="lib-swt/linux/x86">
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="lib-swt">
