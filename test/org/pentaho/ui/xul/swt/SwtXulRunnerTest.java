@@ -68,25 +68,25 @@ public class SwtXulRunnerTest {
   }
 
   @Test
-  public final void testStart() {
-    try{
-      runner.initialize();
-      runner.start();
-      runner.stop();
-    } catch(XulException e){
-      fail("XulException: "+e.getMessage());
-    }
-  }
-
-  public final void testStop() {
-    try{
-      runner.initialize();
-      runner.start();
-      runner.stop();
-    } catch(XulException e){
-      fail("XulException: "+e.getMessage());
-    }
-  }
+//  public final void testStart() {
+//    try{
+//      runner.initialize();
+//      runner.start();
+//      runner.stop();
+//    } catch(XulException e){
+//      fail("XulException: "+e.getMessage());
+//    }
+//  }
+//
+//  public final void testStop() {
+//    try{
+//      runner.initialize();
+//      runner.start();
+//      runner.stop();
+//    } catch(XulException e){
+//      fail("XulException: "+e.getMessage());
+//    }
+//  }
 
   public final void testNewLoaderInstance() {
     try{
