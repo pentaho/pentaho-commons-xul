@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.samples;
 
 import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
@@ -43,13 +44,14 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     XulLabel lastNameLbl = (XulLabel) document.getElementById("lastName");
     
     Binding binding = new Binding(model, "firstName", firstNameLbl, "value");
-    this.getXulDomContainer().addBinding(binding);
+    getXulDomContainer().addBinding(binding);
 
     binding = new Binding(model, "lastName", lastNameLbl, "value");
-    this.getXulDomContainer().addBinding(binding);
+    getXulDomContainer().addBinding(binding);
     
     //Approach 2: First Name Textbox
-    new Binding(getXulDomContainer(), model, "firstName", "firstNameInput", "value");
+    binding = new Binding(getXulDomContainer(), model, "firstName", "firstNameInput", "value");
+    getXulDomContainer().addBinding(binding);
     
     //Approach 3: Last Name Textbox
     getXulDomContainer().createBinding(model, "lastName", "lastNameInput", "value");
@@ -69,6 +71,41 @@ public class BindingEventHandler extends AbstractXulEventHandler {
 
     //Tree bind
     getXulDomContainer().createBinding(productModel, "products", "productTable", "elements");
+    
+    
+    
+    //Conversions
+    binding = new Binding(getXulDomContainer(), "degreesField", "value", "radiansField", "value");
+    binding.setBindingType(Binding.Type.ONE_WAY);
+    binding.setConversion(new BindingConvertor<String, String>(){
+      @Override
+      public String sourceToTarget(String value) {
+        float degrees = Float.parseFloat(value);
+        return String.format("%.2f", degrees * (Math.PI / 180)); 
+      }
+
+      @Override
+      public String targetToSource(String value) {
+        float radians = Float.parseFloat(value);
+        return String.format("%.2f", radians * (180/Math.PI));
+      }
+    });
+    getXulDomContainer().addBinding(binding);
+    
+    
+    //Conversion text to selectedIndex
+    binding = getXulDomContainer().createBinding("nthItem", "value", "itemsList", "selectedIndex");
+    binding.setConversion(new BindingConvertor<String, Integer>(){
+      @Override
+      public Integer sourceToTarget(String value) {
+        return Integer.parseInt(value);
+      }
+
+      @Override
+      public String targetToSource(Integer value) {
+        return value.toString();
+      }
+    });
     
   }
 }

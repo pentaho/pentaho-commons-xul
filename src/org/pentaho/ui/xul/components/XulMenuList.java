@@ -20,6 +20,10 @@ public interface XulMenuList<T> extends XulContainer {
   
   public void setSelectedItem(T t);
 
+  public void setSelectedIndex(int idx);
+
+  public int getSelectedIndex();
+  
   public void setOncommand(String command);
 
   public void setElements(Collection<T> elements);
@@ -29,4 +33,5 @@ public interface XulMenuList<T> extends XulContainer {
   public void setBinding(String binding);
 
   public String getBinding();
+  
 }

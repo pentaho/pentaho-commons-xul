@@ -2,6 +2,8 @@
 <window   id="label-test" title="Testing Nick's Sample"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
+  <checkbox id="checkbox" label="test" onClick="foo.test()" checked="true"/>
+  
 	<button/>
 	<vbox>
 		<button/>

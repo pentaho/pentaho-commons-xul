@@ -3,6 +3,9 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.JCheckBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -31,9 +34,8 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
     super("checkbox");
     checkBox = new JCheckBox();
     
-    checkBox.addChangeListener(new ChangeListener(){
-      public void stateChanged(ChangeEvent e) {
-        System.out.println("checkbox change");
+    checkBox.addItemListener(new ItemListener(){
+      public void itemStateChanged(ItemEvent e) {
         SwingCheckbox.this.changeSupport.firePropertyChange("checked", null, ((JCheckBox) e.getSource()).isSelected());
       }
     });

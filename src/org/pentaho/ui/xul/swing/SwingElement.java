@@ -62,8 +62,7 @@ public class SwingElement extends AbstractXulComponent {
       }
     }
 
-    if (flexLayout)
-      gc.fill = GridBagConstraints.BOTH;
+    gc.fill = GridBagConstraints.BOTH;
 
     double currentFlexTotal = 0.0;
     for (int i = 0; i < children.size(); i++) {

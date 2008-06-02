@@ -57,11 +57,12 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public void setValue(String text){
+	String oldVal = this.value;
   	if(managedObject != null){
   	  textComp.setText(text);
   	}
-    String oldVal = getText();
     this.value = text;
+    this.changeSupport.firePropertyChange("value", oldVal, text);
   }
   
   public void layout(){
@@ -140,7 +141,8 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	    switch(this.type){
 	      case PASSWORD:
 	        JPasswordField pass = new JPasswordField((value != null) ? value : "");
-	        pass.setPreferredSize(new Dimension(200,20));
+	        pass.setPreferredSize(new Dimension(150,20));
+          textField.setMinimumSize(new Dimension(textField.getPreferredSize().width,textField.getPreferredSize().height));
 	        pass.setEditable(!readonly);
 	        textComp = pass;
 	        managedObject = pass;
@@ -157,7 +159,8 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     		    break;
     			} else {
     				textField = new JTextField((value != null) ? value : "");
-    				textField.setPreferredSize(new Dimension(200,20));
+    				textField.setPreferredSize(new Dimension(150,textField.getPreferredSize().height));
+            textField.setMinimumSize(new Dimension(textField.getPreferredSize().width,textField.getPreferredSize().height));
     				textField.setEditable(!readonly);
     				managedObject = textField;
     				textComp = textField;

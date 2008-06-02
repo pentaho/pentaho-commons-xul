@@ -72,6 +72,6 @@ public interface XulDomContainer {
   
   public void registerBinding(XulComponent comp, String expr);
   
-  public void createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr);
-  public void createBinding(String source, String sourceAttr, String targetId, String targetAttr);
+  public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr);
+  public Binding createBinding(String source, String sourceAttr, String targetId, String targetAttr);
 }

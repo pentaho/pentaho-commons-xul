@@ -12,17 +12,7 @@ public class SwingHarness {
   public static void main(String[] args){
     try{
       
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/buttonTester.xul");
-
-      if(in == null){
-        System.out.println("Input is null");
-        System.exit(123);
-      }
-
-      SAXReader rdr = new SAXReader();
-      final Document doc = rdr.read(in);
-      
-      XulDomContainer container = new SwingXulLoader().loadXul(doc);
+      XulDomContainer container = new SwingXulLoader().loadXul("resource/documents/bindings.xul");
 
       XulRunner runner = new SwingXulRunner();
       runner.addContainer(container);

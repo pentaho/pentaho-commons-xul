@@ -10,7 +10,6 @@ import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
-
 /**
  * @author NBaker
  *
@@ -20,7 +19,7 @@ public class TestDomFactory extends TestCase{
   public void setUp() throws Exception{
     DocumentFactory.registerDOMClass(DocumentDom4J.class);
     DocumentFactory.registerElementClass(ElementDom4J.class);
-    InputStream in = getClass().getResourceAsStream("/resource/documents/samplexul.xul");
+    InputStream in = getClass().getResourceAsStream("/resource/documents/samplexul2.xul");
     SAXReader rdr = new SAXReader();
     testDoc = rdr.read(in);
   }

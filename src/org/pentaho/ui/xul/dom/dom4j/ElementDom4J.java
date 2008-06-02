@@ -95,22 +95,22 @@ public class ElementDom4J implements Element{
   }
 
 
-  @SuppressWarnings("unused")
-  private void printTree(org.dom4j.Element ele, int indent){
-    System.out.println(getIndent(indent)+ele.getName());
-    ++indent;
-    for(Object childEle : ele.elements()){
-      printTree((org.dom4j.Element) childEle, indent);
-    }
-  }
-  
-  private String getIndent(int indent){
-    StringBuilder sb = new StringBuilder(10);
-    for(int i=0; i< indent; i++){
-      sb.append("  ");
-    }
-    return sb.toString();
-  }
+//  @SuppressWarnings("unused")
+//  private void printTree(org.dom4j.Element ele, int indent){
+//    System.out.println(getIndent(indent)+ele.getName());
+//    ++indent;
+//    for(Object childEle : ele.elements()){
+//      printTree((org.dom4j.Element) childEle, indent);
+//    }
+//  }
+//  
+//  private String getIndent(int indent){
+//    StringBuilder sb = new StringBuilder(10);
+//    for(int i=0; i< indent; i++){
+//      sb.append("  ");
+//    }
+//    return sb.toString();
+//  }
   
 
   /* (non-Javadoc)

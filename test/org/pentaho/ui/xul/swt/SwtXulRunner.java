@@ -55,7 +55,7 @@ public class SwtXulRunner implements XulRunner {
       if(!rootFrame.getDisplay().readAndDispatch()) {
         rootFrame.getDisplay().sleep();
       }
-   }
+    }
   }
 
   public void stop() throws XulException {
