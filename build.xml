@@ -15,7 +15,7 @@
 			<include name="**/*.jar" />
 		</fileset>
 		<fileset dir="lib-swt/linux/x86">
-			<include name="**/*.jar" />
+			<include name="*.jar" />
 		</fileset>
 		<fileset dir="lib-swt">
 			<include name="*.jar" />
