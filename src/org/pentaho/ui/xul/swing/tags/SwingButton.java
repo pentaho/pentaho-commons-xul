@@ -65,7 +65,7 @@ public class SwingButton extends SwingElement implements XulButton{
    * @see org.pentaho.ui.xul.components.XulButton#setOnClick(java.lang.String)
    */
   public void setOnclick( final String method) {
-    System.out.println("Setting onclick: "+method);
+    onclick = method;
     button.addActionListener(new ActionListener(){
       public void actionPerformed(ActionEvent evt){
 
