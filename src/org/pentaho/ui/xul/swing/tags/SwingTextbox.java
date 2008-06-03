@@ -142,7 +142,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	      case PASSWORD:
 	        JPasswordField pass = new JPasswordField((value != null) ? value : "");
 	        pass.setPreferredSize(new Dimension(150,20));
-          textField.setMinimumSize(new Dimension(textField.getPreferredSize().width,textField.getPreferredSize().height));
+	        pass.setMinimumSize(new Dimension(pass.getPreferredSize().width,pass.getPreferredSize().height));
 	        pass.setEditable(!readonly);
 	        textComp = pass;
 	        managedObject = pass;
