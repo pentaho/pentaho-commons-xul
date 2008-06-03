@@ -35,7 +35,21 @@ public class SwtWindow extends SwtElement implements XulWindow {
 
   public SwtWindow(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
-    shell = (parent != null) ? new Shell((Shell) parent.getManagedObject(), SWT.DIALOG_TRIM) : new Shell(SWT.SHELL_TRIM);
+    
+    Shell possibleParent = null;
+    
+    // First, check to see if an outer context was passed before parser started...  
+    if (container.getOuterContext() != null){
+      possibleParent = (Shell) container.getOuterContext();
+    }
+    
+    // If not, then try to use the API's parent parameter...
+    if ((possibleParent == null) && (parent != null)){
+      possibleParent = (Shell) parent.getManagedObject();
+    }
+    
+    // Otherwise, you're on your own...
+    shell = (possibleParent != null) ? new Shell(possibleParent, SWT.SHELL_TRIM) : new Shell(SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());
     managedObject = shell;
     xulDomContainer = container;

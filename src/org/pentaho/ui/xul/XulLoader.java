@@ -131,4 +131,11 @@ public interface XulLoader {
    * @return XulLoader instance
    */
   public XulLoader getNewInstance() throws XulException;
+  
+  /**
+   * Accommodates those objects that require a parenting on construction. Set the root parent before parsing. 
+   * @param context root context
+   */
+  public void setOuterContext(Object context);
+  
 }

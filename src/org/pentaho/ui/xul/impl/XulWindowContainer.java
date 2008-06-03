@@ -18,7 +18,7 @@ import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
+
 
 public class XulWindowContainer extends AbstractXulDomContainer {  
 	private static final Log logger = LogFactory.getLog(XulWindowContainer.class);
@@ -61,7 +61,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   public XulDomContainer loadFragment(String xulLocation) throws XulException {
     try{
           
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(xulLocation);
+      InputStream in = getClass().getClassLoader().getResourceAsStream(xulLocation);
       
       if(in == null){
         throw new XulException("loadFragment: input document is null");

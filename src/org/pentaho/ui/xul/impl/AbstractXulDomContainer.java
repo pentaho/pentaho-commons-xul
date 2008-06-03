@@ -38,6 +38,9 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   protected HashMap<String, XulDataModel> models;
   
   protected BindingContext bindings;
+  
+  
+  private Object parentContext;
 
 	public AbstractXulDomContainer() {
     eventHandlers = new HashMap<String, XulEventHandler>();
@@ -258,9 +261,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     }
   }
   
-  
-  
-  public void addBinding(Binding binding){
+    public void addBinding(Binding binding){
     bindings.add(binding);
   }
   
@@ -286,4 +287,12 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     Object handler = this.getXulLoader().isRegistered(widgetHandlerName);
     return (handler != null);
   }
+  public Object getOuterContext() {
+    return parentContext;
+  }
+
+  public void setOuterContext(Object context) {
+    parentContext = context;
+  }
+  
 }

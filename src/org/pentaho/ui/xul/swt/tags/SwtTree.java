@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -106,9 +107,10 @@ public class SwtTree extends SwtElement implements XulTree {
     if ((!tree.isDisposed()) && (rowsToDisplay > 0)) {
       int ht = rowsToDisplay * widget.getItemHeight();
       if (tree.getLayoutData() != null) {
-        tree.setSize(tree.getSize().x,height);
+       // tree.setSize(tree.getSize().x,height);
         ((GridData) tree.getLayoutData()).heightHint = ht;
         ((GridData) tree.getLayoutData()).minimumHeight = ht;
+        
         tree.getParent().layout(true);
       }
     }
@@ -265,9 +267,6 @@ public class SwtTree extends SwtElement implements XulTree {
   }
 
   public void setSelectedRows(int[] rows) {
-    
-        // TODO Auto-generated method stub 
-      
   }
 
 

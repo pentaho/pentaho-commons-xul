@@ -30,6 +30,7 @@ public abstract class AbstractXulLoader implements XulLoader{
 
   protected XulParser parser;
   protected String rootDir = "/";
+  protected Object outerContext = null;
   
   public AbstractXulLoader() throws XulException{
 
@@ -51,6 +52,7 @@ public abstract class AbstractXulLoader implements XulLoader{
     preProcess(xulDocument);
     
     XulDomContainer container = new XulWindowContainer(this);
+    container.setOuterContext(outerContext);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
    
@@ -68,6 +70,8 @@ public abstract class AbstractXulLoader implements XulLoader{
    */
   public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
     XulDomContainer container = new XulFragmentContainer(this);
+    container.setOuterContext(outerContext);
+    
     parser.reset();
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getRootElement());
@@ -81,7 +85,7 @@ public abstract class AbstractXulLoader implements XulLoader{
   
   public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException{
 
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
+      InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
 
       if(in == null){
         throw new IllegalArgumentException("File not found");
@@ -110,7 +114,7 @@ public abstract class AbstractXulLoader implements XulLoader{
     
       try{
 
-        InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
+        InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
         
         String localOutput = ResourceBundleTranslator.translate(in, bundle);
         
@@ -130,7 +134,7 @@ public abstract class AbstractXulLoader implements XulLoader{
   
   public XulDomContainer loadXulFragment(String resource) throws IllegalArgumentException, XulException{
 
-      InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
+      InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
 
       if(in == null){
         throw new IllegalArgumentException("File not found");
@@ -157,7 +161,7 @@ public abstract class AbstractXulLoader implements XulLoader{
 
       try{
 
-        InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream(resource);
+        InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
         
         String localOutput = ResourceBundleTranslator.translate(in, bundle);
         
@@ -225,6 +229,11 @@ public abstract class AbstractXulLoader implements XulLoader{
     System.out.println(srcDoc.asXML());
     return srcDoc;
   }
+  
+  public void setOuterContext(Object context) {
+    outerContext = context;
+  }
+
 
 	public boolean isRegistered(String elementName) {
 		return this.parser.handlers.containsKey(elementName);

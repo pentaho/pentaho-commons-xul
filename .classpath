@@ -13,5 +13,9 @@
 	<classpathentry kind="lib" path="lib-ext/groovy-all-1.5.6.jar"/>
 	<classpathentry kind="lib" path="lib-swt/win32/swt.jar"/>
 	<classpathentry exported="true" kind="con" path="GROOVY_SUPPORT"/>
+	<classpathentry kind="lib" path="lib-swt/jface.jar" />
+	<classpathentry kind="lib" path="lib-swt/commands.jar"/>
+	<classpathentry kind="lib" path="lib-swt/common.jar"/>
+	<classpathentry kind="lib" path="lib-swt/runtime.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

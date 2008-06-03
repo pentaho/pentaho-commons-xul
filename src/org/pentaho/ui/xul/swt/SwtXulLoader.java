@@ -8,8 +8,9 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
-import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.impl.AbstractXulLoader;
+import org.pentaho.ui.xul.swt.tags.SwtDialog;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 /**
@@ -17,12 +18,15 @@ import org.pentaho.ui.xul.swt.tags.SwtWindow;
  *
  */
 public class SwtXulLoader extends AbstractXulLoader{
+  
+  XulComponent defaultParent = null;
 
   public SwtXulLoader() throws XulException{
     super();
     
     //attach Renderers
     parser.registerHandler("WINDOW", "org.pentaho.ui.xul.swt.tags.SwtWindow");
+    parser.registerHandler("DIALOG", "org.pentaho.ui.xul.swt.tags.SwtDialog");
     parser.registerHandler("BUTTON", "org.pentaho.ui.xul.swt.tags.SwtButton");
     parser.registerHandler("BOX", "org.pentaho.ui.xul.swt.tags.SwtBox");
     parser.registerHandler("VBOX", "org.pentaho.ui.xul.swt.tags.SwtVbox");
@@ -62,6 +66,12 @@ public class SwtXulLoader extends AbstractXulLoader{
 
   @Override
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException {
+    return loadXul(xulDocument, outerContext);
+  }
+
+  public XulDomContainer loadXul(Document xulDocument, Object context) throws IllegalArgumentException, XulException {
+    
+    setOuterContext(context);
     XulDomContainer domC = super.loadXul(xulDocument);
     
     // SWT has no notion of an "onload" event, so we must simulate it...
@@ -69,12 +79,27 @@ public class SwtXulLoader extends AbstractXulLoader{
     XulComponent maybeWindow = domC.getDocumentRoot().getRootElement();
     if ( maybeWindow instanceof SwtWindow){
       SwtWindow window = (SwtWindow) maybeWindow;
-      window.notifyListeners(XulWindow.EVENT_ON_LOAD);
+      window.notifyListeners(XulRoot.EVENT_ON_LOAD);
+      defaultParent = window;
     }
     
+    XulComponent maybeDialog = domC.getDocumentRoot().getRootElement();
+    if ( maybeWindow instanceof SwtDialog){
+      SwtDialog dialog = (SwtDialog) maybeDialog;
+      dialog.notifyListeners(XulRoot.EVENT_ON_LOAD);
+      defaultParent = dialog;
+    }
+
     return domC;
 
   }
+  
+  @Override
+  public XulComponent createElement(String elementName) throws XulException{
+    return parser.getElement(elementName, defaultParent);
+  }
+
+
 
 
 }

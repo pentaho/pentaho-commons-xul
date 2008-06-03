@@ -55,7 +55,8 @@ public class XulParser {
   public Document parseDocument(org.dom4j.Element rootSrc) throws XulException {
     
     XulContainer parent = null;
-    if(!rootSrc.getName().equalsIgnoreCase("window")){
+    if(!rootSrc.getName().equalsIgnoreCase("window") &&
+        (!rootSrc.getName().equalsIgnoreCase("dialog"))){
       parent = getPlaceHolderRoot();
     }
     XulComponent root = parse(rootSrc, parent);
@@ -171,6 +172,10 @@ public class XulParser {
   }
   
   public XulComponent getElement(String name) throws XulException{
+    return getElement(name, null);
+  }
+
+  public XulComponent getElement(String name, XulComponent defaultParent) throws XulException{
   	 Object handler = handlers.get(name.toUpperCase());
 
      if (handler == null) {
@@ -184,9 +189,7 @@ public class XulParser {
        Constructor<?> constructor = c
            .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
       
-       //pass in root element as parent (SWT don't do jack without a parent son)
-       XulComponent rootEle = this.xulDocument.getRootElement();
-       XulComponent ele = (XulComponent) constructor.newInstance(null, rootEle, xulDomContainer, name);
+       XulComponent ele = (XulComponent) constructor.newInstance(null, defaultParent, xulDomContainer, name);
        return ele;
      } catch (Exception e) {
        throw new XulException(e);

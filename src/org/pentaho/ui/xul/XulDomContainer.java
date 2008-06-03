@@ -70,8 +70,18 @@ public interface XulDomContainer {
    */
   public void invoke(String method, Object[] args) throws XulException;
   
-  public void registerBinding(XulComponent comp, String expr);
+  /**
+   * Accommodates those objects that require a parenting on construction. Set the root parent before parsing. 
+   * @param context root context
+   */
+  public void setOuterContext(Object context);
+  
+  public Object getOuterContext();
+  
+    public void registerBinding(XulComponent comp, String expr);
   
   public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr);
   public Binding createBinding(String source, String sourceAttr, String targetId, String targetAttr);
+
+  
 }

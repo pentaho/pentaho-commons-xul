@@ -28,6 +28,12 @@ public class SwtButton extends SwtElement implements XulButton {
   private boolean selected;
   
 
+  public SwtButton(Button button) {
+    super("button");
+    this.button = button;
+    managedObject = button;
+  }
+
   public SwtButton(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     button = createNewButton((Composite)parent.getManagedObject());

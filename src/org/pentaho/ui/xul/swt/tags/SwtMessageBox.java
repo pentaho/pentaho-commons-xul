@@ -21,8 +21,8 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
 
   public SwtMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("messagebox");
-    parent = domContainer.getDocumentRoot().getRootElement();
-    parent.addChild(this);
+    this.parent = parent;
+    this.parent.addChild(this);
   }
   
   public SwtMessageBox(XulComponent parent, String message) {
@@ -65,8 +65,13 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
    * We do this so we can pick up new buttons or icons if they choose to reuse their SWTMessageBox
    */
   private void createNewMessageBox(){
-    
-    messageBox = new MessageBox((Shell) getParent().getManagedObject(), getBitwiseStyle());
+    Shell shell = null;
+    if (getParent() instanceof SwtDialog){
+      shell = ((SwtDialog)getParent()).getShell();
+    }else{
+      shell = (Shell) getParent().getManagedObject();
+    }
+    messageBox = new MessageBox(shell, getBitwiseStyle());
     messageBox.setMessage(getMessage());
     messageBox.setText(getTitle());
   }

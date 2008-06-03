@@ -66,6 +66,7 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
 		}
 	}
 
+
   public void addBinding(Binding binding) {
     
         // TODO Auto-generated method stub 

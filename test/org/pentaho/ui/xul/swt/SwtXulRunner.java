@@ -3,14 +3,13 @@ package org.pentaho.ui.xul.swt;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.Document;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.containers.XulRoot;
+import org.pentaho.ui.xul.swt.tags.SwtDialog;
 import org.pentaho.ui.xul.swt.tags.SwtWindow;
 
 
@@ -42,6 +41,8 @@ public class SwtXulRunner implements XulRunner {
 
     if (rootEle instanceof SwtWindow) {
       rootFrame = (Composite) rootEle.getManagedObject();
+    } else if (rootEle instanceof SwtDialog){
+      rootFrame = ((SwtDialog) rootEle).getShell();
     } else {
       throw new XulException("Unexpected root element: " + rootEle.getManagedObject().toString());
     }

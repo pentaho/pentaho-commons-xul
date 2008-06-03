@@ -3,6 +3,8 @@
  */
 package org.pentaho.ui.xul.swing;
 
+import org.dom4j.Document;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.impl.AbstractXulLoader;
@@ -68,4 +70,17 @@ public class SwingXulLoader extends AbstractXulLoader implements XulLoader{
   public XulLoader getNewInstance() throws XulException{
     return new SwingXulLoader();
   }
+  
+  @Override
+  public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException {
+    return loadXul(xulDocument, null);
+  }
+
+  public XulDomContainer loadXul(Document xulDocument, Object outerContext) throws IllegalArgumentException, XulException {
+    
+    setOuterContext(outerContext);
+    XulDomContainer domC = super.loadXul(xulDocument);
+    return domC;
+  }
+  
 }
