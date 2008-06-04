@@ -74,6 +74,7 @@
 		<!-- remove build directory -->
 		<delete dir="${bin.dir}" />
 		<delete dir="${dist.dir}" />
+	  <delete dir="${test-bin.dir}" />
 	</target>
 
 	<target name="clean-dist">
