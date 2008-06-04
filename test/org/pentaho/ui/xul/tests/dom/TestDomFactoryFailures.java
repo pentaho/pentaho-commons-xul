@@ -21,7 +21,7 @@ public class TestDomFactoryFailures extends TestCase{
   public void setUp() throws Exception{
     DocumentFactory.registerDOMClass(Object.class);
     DocumentFactory.registerElementClass(Object.class);
-    InputStream in = getClass().getResourceAsStream("/resource/documents/samplexul.xul");
+    InputStream in = getClass().getResourceAsStream("/resource/documents/sampleXul.xul");
     SAXReader rdr = new SAXReader();
     testDoc = rdr.read(in);
   }
