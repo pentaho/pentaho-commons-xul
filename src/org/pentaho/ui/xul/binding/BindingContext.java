@@ -1,7 +1,5 @@
 package org.pentaho.ui.xul.binding;
 
-import groovyjarjarasm.asm.tree.MethodNode;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
@@ -36,16 +34,23 @@ public class BindingContext {
   }
 
   public void add(Binding bind) {
-    bindings.add(bind);
-    //forward binding
-    setupBinding(bind, bind.getSource(), bind.getSourceAttr(), bind.getTarget(), bind.getTargetAttr(), Direction.FORWARD);
+    try {
+      bindings.add(bind);
+      //forward binding
+      setupBinding(bind, bind.getSource(), bind.getSourceAttr(), bind.getTarget(), bind.getTargetAttr(),
+          Direction.FORWARD);
 
-    //reverse binding
-    if (bind.getBindingType() == Binding.Type.BI_DIRECTIONAL) {
-      logger.info("Bi-directional");
-      setupBinding(bind, bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr(), Direction.BACK);
-    } else {
-      logger.info("Uni-directional");
+      //reverse binding
+      if (bind.getBindingType() == Binding.Type.BI_DIRECTIONAL) {
+        logger.info("Bi-directional");
+        setupBinding(bind, bind.getTarget(), bind.getTargetAttr(), bind.getSource(), bind.getSourceAttr(),
+            Direction.BACK);
+      } else {
+        logger.info("Uni-directional");
+      }
+    } catch (Throwable t) {
+      throw new BindingException("Binding failed: " + bind.getSource() + "." + bind.getSourceAttr() + " <==> "
+          + bind.getTarget() + "." + bind.getTargetAttr(), t);
     }
   }
 
@@ -112,6 +117,12 @@ public class BindingContext {
 
   private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr,
       final XulEventSource target, final String targetAttr, final Direction dir) {
+    if (source == null || sourceAttr == null) {
+      throw new BindingException("source bean or property is null");
+    }
+    if (target == null || targetAttr == null) {
+      throw new BindingException("target bean or property is null");
+    }
     Method sourceGetMethod = findGetMethod(source, sourceAttr);
 
     //get class of object returned by getter
@@ -138,8 +149,6 @@ public class BindingContext {
     //setup prop change listener to handle binding
     PropertyChangeListener listener = new PropertyChangeListener() {
       public void propertyChange(PropertyChangeEvent evt) {
-        //          logger.debug("binding received property change from source: " + evt + "  Calling dest bean: "
-        //              + target.getClass().getName() + "." + targetSetMethod);
         if (evt.getPropertyName().equalsIgnoreCase(sourceAttr)) {
           try {
             Object value = bind.evaluateExpressions(evt.getNewValue());
@@ -153,8 +162,7 @@ public class BindingContext {
     };
 
     source.addPropertyChangeListener(listener);
-    logger.info("Binding established: " + source.getClass().getName() + "." + sourceAttr + " <==> "
-        + target.getClass().getName() + "." + targetAttr);
+    logger.info("Binding established: " + source + "." + sourceAttr + " ==> " + target + "." + targetAttr);
   }
 
 }
