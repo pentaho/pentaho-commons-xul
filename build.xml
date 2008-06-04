@@ -74,7 +74,7 @@
 		<!-- remove build directory -->
 		<delete dir="${bin.dir}" />
 		<delete dir="${dist.dir}" />
-	  <delete dir="${test-bin.dir}" />
+	  	<delete dir="${test-bin.dir}" />
 	</target>
 
 	<target name="clean-dist">
@@ -154,7 +154,7 @@
 			<classpath location="${test-bin.dir}" />
 			<formatter type="xml" />
 
-			<batchtest todir="${src.tests}">
+			<batchtest todir="${test-bin.dir}">
 
 				<fileset dir="${src.tests}">
 					<include name="**/*Test*.java" />
