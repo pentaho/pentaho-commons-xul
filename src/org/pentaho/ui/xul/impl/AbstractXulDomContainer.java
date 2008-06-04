@@ -126,7 +126,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
           try{
         		invoke(load, new Object[]{});
         	} catch(XulException e){
-        		logger.error("Error calling onLoad event: "+onLoad,e);
+        		logger.error("Error calling onLoad event: "+load,e);
         	}
         }
       } else { //single onLoad event
@@ -211,16 +211,16 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
           continue;
         } catch(NumberFormatException e2){
           try{
-            Boolean flag = Boolean.parseBoolean(obj);
-            args[i] = flag;
+            String str = obj.replaceAll("'", "");
+            str = str.replaceAll("\"", "");
+            args[i] = str;
             continue;
-          } catch(NumberFormatException e3){
+          } catch(NumberFormatException e4){
             try{
-              String str = obj.replaceAll("'", "");
-              str = str.replaceAll("\"", "");
-              args[i] = str;
+              Boolean flag = Boolean.parseBoolean(obj);
+              args[i] = flag;
               continue;
-            } catch(NumberFormatException e4){
+            } catch(NumberFormatException e3){
               logger.error("Error parsing event call argument: "+obj, e3);
               continue;
             }

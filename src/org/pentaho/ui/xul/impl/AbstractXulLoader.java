@@ -191,12 +191,29 @@ public abstract class AbstractXulLoader implements XulLoader{
   }
   
   private List<String> includedSources = new ArrayList<String>();
-
+  private List<String> resourceBundles = new ArrayList<String>();
+  
   public String performIncludeTranslations(String input) throws XulException{
     String output = input;
     for(String includeSrc : includedSources){
       try{
         ResourceBundle res = ResourceBundle.getBundle(includeSrc.replace(".xul", ""));
+        output = ResourceBundleTranslator.translate(output, res);
+      } catch(MissingResourceException e){
+        continue;
+      } catch(IOException e){
+      
+        throw new XulException(e);
+      }
+    }
+    for(String resource : resourceBundles){
+      try{
+        System.out.println("trying to load bundle: "+resource);
+        ResourceBundle res = ResourceBundle.getBundle(resource);
+        if(res == null){
+          System.out.println("could not load bundle: "+resource);
+          continue;
+        }
         output = ResourceBundleTranslator.translate(output, res);
       } catch(MissingResourceException e){
         continue;
@@ -229,11 +246,28 @@ public abstract class AbstractXulLoader implements XulLoader{
     List<Element> eles = xpath.selectNodes(srcDoc);
 
     for(Element ele : eles){
-      String src = this.getRootDir()+ele.attributeValue("src");
+      String src = "";
       try{
           SAXReader rdr = new SAXReader();
+          
+          src = this.getRootDir()+ele.attributeValue("src");
+          
+          String resourceBundle = ele.attributeValue("resource");
+          if(resourceBundle != null){
+            resourceBundles.add(resourceBundle);
+          }
+          
           InputStream in = getClass().getClassLoader().getResourceAsStream(src);
-          includedSources.add(src);
+          if(in != null){
+            includedSources.add(src);
+          } else { //try fully qualified name
+            src = ele.attributeValue("src");
+            in = getClass().getClassLoader().getResourceAsStream(src);
+            if(in == null){
+              System.out.println("Error loading doc: "+src);
+            }
+            includedSources.add(src);
+          }
           
           final Document doc = rdr.read(in);
           

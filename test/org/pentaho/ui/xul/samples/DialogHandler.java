@@ -20,8 +20,8 @@ public class DialogHandler extends AbstractXulEventHandler{
     response.setValue("Hello there "+name.getValue());
 	}
 	
-	public void printLoadMessage(){
-	  System.out.println("outter handler called");
+	public void printLoadMessage(String msg){
+	  System.out.println("outter handler called: "+msg);
 	}
 	
 	public void showIncludedDialog(){

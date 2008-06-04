@@ -23,6 +23,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
@@ -75,9 +76,11 @@ public class SwingDialog extends SwingElement implements XulDialog {
     START, CENTER, END, LEFT, RIGHT, MIDDLE
   };
 
+  private XulComponent parent = null;
   public SwingDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("dialog");
 
+    this.parent = parent;
     this.domContainer = domContainer;
     
     this.orientation = Orient.VERTICAL;
@@ -172,6 +175,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
     // we delay instantiation in order to setup a modal relationship.
     if (dialog == null) {
       createDialog();
+      dialog.pack();
     }
     dialog.setVisible(true);
   }
@@ -230,15 +234,14 @@ public class SwingDialog extends SwingElement implements XulDialog {
 
   public void setOnload(String onload) {
     //check to see if this is a child of a window
-    Document doc = getDocument();
-    Element rootElement = doc.getRootElement();
-    XulWindow window = null;
-    if(rootElement != this){ //dialog is root, no JFrame Parent
+    
+    if(parent == null && !(parent instanceof XulRoot)){//dialog is root, no JFrame Parent
       this.onload = onload;
     } else {
       //add onLoad event to the XulWindow parent.
-      String prevOnload = window.getOnload();
-      window.setOnload(prevOnload+","+onload);
+      XulRoot root = ((XulRoot) parent);
+      String prevOnload = root.getOnload();
+      root.setOnload(prevOnload+","+onload);
     }
     
     
