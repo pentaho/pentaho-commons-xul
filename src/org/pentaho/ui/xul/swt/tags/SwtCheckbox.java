@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.dom.Element;
 public class SwtCheckbox extends SwtButton implements XulCheckbox {
 	
 	private static final Log logger = LogFactory.getLog(SwtCheckbox.class);
+	private String command;
 	
   public SwtCheckbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(null, parent, container, tagName);
@@ -32,6 +33,7 @@ public class SwtCheckbox extends SwtButton implements XulCheckbox {
   }
   
   public void setCommand(final String method) {
+    command = method;
     button.addSelectionListener(new SelectionAdapter(){
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
         invoke(method);
@@ -39,8 +41,8 @@ public class SwtCheckbox extends SwtButton implements XulCheckbox {
     });
   }
   
-  public void setOnclick(final String method) {
-    // TODO Log unsupported attribute message... 
+  public String getCommand() {
+    return command;  
   }
 
 

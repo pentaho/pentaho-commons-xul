@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+    
+<dialog 
+  buttonlabelcancel="Cancel"
+  buttonlabelaccept="Save"
+  buttonlabelextra1="extra1"
+  buttonlabelextra2="extra2"
+  buttons="accept,cancel" 
+  ondialogaccept="onAccept"
+  ondialogcancel="onCancel"
+  ondialogextra1="onExtra1"
+  ondialogextra2="onExtra2"
+  
+  id="dialog"
+  width="300"
+  height="250"
+  buttonalign="end"
+  title="Test Dialog"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:html="http://www.w3.org/1999/xhtml">
+  
+  <script src="org.pentaho.ui.xul.samples.DialogHandler" id="handler"/>
+  <dialogheader id="header" title="Options" description="My preferences"/>
+
+  <groupbox>
+    <caption label="${groupbox.header}"/>
+   
+    <label value="Nickname"/>
+    <textbox id="nickname"/>
+    <hbox><spacer flex="1"/><button label="Say Hi" onclick="handler.sayHello()"/><spacer flex="1"/></hbox>
+    <label id="helloMsg"/>
+ </groupbox>
+ 
+</dialog>

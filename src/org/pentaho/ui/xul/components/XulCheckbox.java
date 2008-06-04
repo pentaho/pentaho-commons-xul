@@ -67,5 +67,10 @@ public interface XulCheckbox extends XulComponent {
    * @param method The method to execute when the checkbox is checked or unchecked. 
    */
   public void setCommand(final String method);
+
+  /**
+   * @return method The method to execute when the checkbox is checked or unchecked
+   */
+  public String getCommand();
   
 }

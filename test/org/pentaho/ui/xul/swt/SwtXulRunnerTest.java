@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.swt;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.InputStream;
@@ -67,21 +68,41 @@ public class SwtXulRunnerTest {
     }
   }
 
-  @Test
-//  public final void testStart() {
+//  @Test
+//  public final void testStart() throws Exception {
 //    try{
 //      runner.initialize();
-//      runner.start();
+//      new Thread(){
+//        public void run() {
+//          try{
+//            runner.start();
+//          } catch(Exception e){
+//            System.out.println(e.getMessage());
+//            e.printStackTrace(System.out);
+//            fail("XulException: "+e.getMessage());
+//          }
+//        }
+//      }.start();
+//      Thread.sleep(500);
 //      runner.stop();
 //    } catch(XulException e){
 //      fail("XulException: "+e.getMessage());
 //    }
 //  }
 //
-//  public final void testStop() {
+//  public final void testStop() throws Exception{
 //    try{
 //      runner.initialize();
-//      runner.start();
+//      new Thread(){
+//        public void run() {
+//          try{
+//            runner.start();
+//          } catch(Exception e){
+//            fail("XulException: "+e.getMessage());
+//          }
+//        }
+//      }.start();
+//      Thread.sleep(500);
 //      runner.stop();
 //    } catch(XulException e){
 //      fail("XulException: "+e.getMessage());

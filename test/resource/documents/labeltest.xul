@@ -3,10 +3,10 @@
 	orient="horizontal"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
-	<box id="label-box" orient="horizontal">
+	<hbox id="label-box" orient="horizontal">
 		<label id="label-one" value="First Label" />
 		<label id="label-two" value="Second Label" />
 		<label id="label-three" value="Third Label" />
-	</box>
+	</hbox>
 
 </window>

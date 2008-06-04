@@ -8,9 +8,14 @@
 	<dialog 
    buttonlabelcancel="Cancel"
    buttonlabelaccept="Save"
-   buttons="accept,cancel" 
-   ondialogaccept="return doOK();"
-   ondialogcancel="return doCancel();"
+   buttonlabelextra1="extra1"
+   buttonlabelextra2="extra2"
+   buttons="accept,cancel,extra1,extra2" 
+   ondialogaccept="onAccept"
+   ondialogcancel="onCancel"
+   ondialogextra1="onExtra1"
+   ondialogextra2="onExtra2"
+
    id="dialog"
    width="300"
    height="200"
@@ -18,7 +23,7 @@
    title="Test Dialog"
    >
     
-    <dialogheader title="Options" description="My preferences"/>
+    <dialogheader id="header" title="Options" description="My preferences"/>
     
     <groupbox>
       <caption label="Colour"/>

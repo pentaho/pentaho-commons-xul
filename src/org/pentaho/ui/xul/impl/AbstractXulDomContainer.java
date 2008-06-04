@@ -119,11 +119,23 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     logger.info("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
-    	try{
-    		invoke(rootEle.getOnload(), new Object[]{});
-    	} catch(XulException e){
-    		logger.error("Error calling onLoad event: "+onLoad,e);
-    	}
+      if(onLoad.indexOf(',') > 0){ //comma separated list of onload calls
+        String[] loadCalls = onLoad.split(",");
+        for(String load : loadCalls){
+        	load = load.trim();
+          try{
+        		invoke(load, new Object[]{});
+        	} catch(XulException e){
+        		logger.error("Error calling onLoad event: "+onLoad,e);
+        	}
+        }
+      } else { //single onLoad event
+        try{
+          invoke(rootEle.getOnload(), new Object[]{});
+        } catch(XulException e){
+          logger.error("Error calling onLoad event: "+onLoad,e);
+        }
+      }
     }
   }
   

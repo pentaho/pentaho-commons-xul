@@ -29,6 +29,10 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
   
   private JCheckBox checkBox;
   private static final Log logger = LogFactory.getLog(SwingCheckbox.class);
+  private String oncommand;
+  
+  //setSelected firing off event durring BeanUtils copying. Suppress with this variable
+  private boolean initialized = false; 
   
   public SwingCheckbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("checkbox");
@@ -57,8 +61,9 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
     checkBox.setSelected(selected);
   }
   
-
+  
   public void layout(){
+    initialized = true;
   }
   
   public void setLabel(String label){
@@ -87,12 +92,18 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
   }
 
   public void setCommand(final String method) {
+    oncommand = method;
     checkBox.addChangeListener(new ChangeListener(){
       public void stateChanged(ChangeEvent evt){
-        invoke(method);
+        if(SwingCheckbox.this.initialized){
+          invoke(method);
+        }
       }
     });
   }
-  
+
+  public String getCommand() {
+    return oncommand;  
+  }
   
 }

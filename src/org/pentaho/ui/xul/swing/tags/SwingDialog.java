@@ -62,6 +62,8 @@ public class SwingDialog extends SwingElement implements XulDialog {
   private int height = 300;
 
   private int width = 450;
+  
+  private String btns;
 
   private BUTTON_ALIGN buttonAlignment;
 
@@ -102,6 +104,13 @@ public class SwingDialog extends SwingElement implements XulDialog {
     gc.weightx = 1;
 
   }
+  
+  public JDialog getDialog(){
+    if (dialog == null) {
+      createDialog();
+    }
+    return dialog;
+  }
 
   public String getButtonlabelaccept() {
     return buttonlabelaccept;
@@ -112,7 +121,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
   }
 
   public String getButtons() {
-    return null; //new ArrayList<XulButton>(this.buttons.values());
+    return btns;
   }
 
   public String getOndialogaccept() {
@@ -136,6 +145,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
   }
 
   public void setButtons(String buttons) {
+    btns = buttons;
     String[] tempButtons = buttons.split(",");
 
     for (int i = 0; i < tempButtons.length; i++) {
@@ -219,17 +229,38 @@ public class SwingDialog extends SwingElement implements XulDialog {
   }
 
   public void setOnload(String onload) {
+    //check to see if this is a child of a window
+    Document doc = getDocument();
+    Element rootElement = doc.getRootElement();
+    XulWindow window = null;
+    if(rootElement != this){ //dialog is root, no JFrame Parent
+      this.onload = onload;
+    } else {
+      //add onLoad event to the XulWindow parent.
+      String prevOnload = window.getOnload();
+      window.setOnload(prevOnload+","+onload);
+    }
+    
+    
     this.onload = onload;
   }
 
   private void createDialog() {
     Document doc = getDocument();
     Element rootElement = doc.getRootElement();
-    XulWindow window = (XulWindow) rootElement;
+    XulWindow window = null;
+    if(rootElement != this){ //dialog is root, no JFrame Parent
+      window = (XulWindow) rootElement;
+    }
 
-    JFrame frame = (JFrame) window.getManagedObject();
-    dialog = new JDialog(frame);
-    dialog.setLocationRelativeTo(frame);
+    if(window != null){
+      JFrame frame = (JFrame) window.getManagedObject();
+      dialog = new JDialog(frame);
+      dialog.setLocationRelativeTo(frame);
+    } else {
+      dialog = new JDialog();
+      dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    }
 
     dialog.setLayout(new BorderLayout());
 
@@ -314,7 +345,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
   }
 
   public boolean isHidden() {
-    return dialog.isVisible();
+    return dialog == null || !dialog.isVisible();
   }
 
   public String getButtonlabelextra1() {

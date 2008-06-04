@@ -49,6 +49,7 @@ public class SwingDeck extends SwingElement implements XulDeck {
   }
 
   public void setSelectedIndex(int index) {
+    selectedChildIndex = index;
     cardLayout.show(container, ""+index);
   }
 

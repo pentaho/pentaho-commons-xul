@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.pentaho.ui.xul.swing.tags;
+package org.pentaho.ui.xul.swt;
 
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;

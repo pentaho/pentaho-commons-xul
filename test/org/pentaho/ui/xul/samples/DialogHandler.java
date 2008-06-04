@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.samples;
 
+import org.pentaho.ui.xul.components.XulLabel;
+import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 
@@ -11,14 +13,19 @@ public class DialogHandler extends AbstractXulEventHandler{
 		dialog.show();
 	}
 	
-	public Object getData() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void setData(Object data) {
-		// TODO Auto-generated method stub
-		
+	public void sayHello(){
+	  XulTextbox name = (XulTextbox) document.getElementById("nickname");
+    XulLabel response = (XulLabel) document.getElementById("helloMsg");
+    
+    response.setValue("Hello there "+name.getValue());
 	}
 	
+	public void printLoadMessage(){
+	  System.out.println("outter handler called");
+	}
+	
+	public void showIncludedDialog(){
+	  XulDialog dialog = (XulDialog) document.getElementById("dialog");
+	  dialog.show();
+	}
 }

@@ -3,8 +3,12 @@
 <window id="general-datasource-window"
 	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-	xmlns:pen="http://www.pentaho.org/2008/xul">
-	
+	xmlns:pen="http://www.pentaho.org/2008/xul" onLoad="outterHandler.printLoadMessage()">
+	<script id="outterHandler" src="org.pentaho.ui.xul.samples.DialogHandler"/>
+  
+  <pen:include src="includeDialog.xul"/>
+  
+  <hbox><button label="Show Included Dialog" onclick="outterHandler.showIncludedDialog()"/></hbox>
 	<hbox id="all-box" flex="1">
 	
 		<pen:include src="includeTestFrag.xul" ignoreroot="true"/>

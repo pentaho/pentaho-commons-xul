@@ -66,6 +66,8 @@ public class SwtDialog extends SwtElement implements XulDialog {
   private String ondialogextra1;
 
   private String ondialogextra2;
+  
+  private String btns;
 
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
 
@@ -103,7 +105,7 @@ public class SwtDialog extends SwtElement implements XulDialog {
   }
 
   public String getButtons() {
-    return null; //new ArrayList<XulButton>(this.buttons.values());
+    return btns;
   }
 
   public String getOndialogaccept() {
@@ -127,6 +129,7 @@ public class SwtDialog extends SwtElement implements XulDialog {
   }
 
   public void setButtons(String buttonList) {
+    btns = buttonList;
     buttons = buttonList.split(",");
   }
 

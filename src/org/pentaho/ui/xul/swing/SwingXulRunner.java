@@ -3,9 +3,11 @@
  */
 package org.pentaho.ui.xul.swing;
 
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import org.dom4j.Document;
@@ -13,6 +15,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.containers.XulRoot;
+import org.pentaho.ui.xul.swing.tags.SwingDialog;
 import org.pentaho.ui.xul.swing.tags.SwingWindow;
 
 /**
@@ -21,7 +24,7 @@ import org.pentaho.ui.xul.swing.tags.SwingWindow;
  */
 public class SwingXulRunner implements XulRunner {
 
-  private JFrame rootFrame;
+  private Window rootFrame;
   private List<XulDomContainer> containers; 
   
   public SwingXulRunner(){
@@ -41,6 +44,8 @@ public class SwingXulRunner implements XulRunner {
     
     if(rootEle instanceof SwingWindow){
       rootFrame = (JFrame) ((SwingWindow)rootEle).getManagedObject();
+    } else if(rootEle instanceof SwingDialog){
+      rootFrame = ((SwingDialog)rootEle).getDialog();
     } else {
       throw new XulException("Root element not a Frame");
     }

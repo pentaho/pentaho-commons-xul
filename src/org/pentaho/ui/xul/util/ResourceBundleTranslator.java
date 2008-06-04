@@ -40,7 +40,22 @@ public class ResourceBundleTranslator {
 		 
 		return sb.toString();
 	}
-	
+	 public static String translate(String input, ResourceBundle bundle) throws IOException{
+	   
+	    String template = input;
+	    
+	    Pattern pattern = Pattern.compile("\\$\\{([^\\}]*)\\}");
+	    
+	     Matcher m = pattern.matcher(template);
+	     StringBuffer sb = new StringBuffer();
+	     while (m.find()) {
+	         m.appendReplacement(sb, ResourceBundleTranslator.getTranslatedValue(m.group(1), bundle));
+	     }
+	     m.appendTail(sb);
+	     
+	    return sb.toString();
+	  }
+	  
 	private static String getTranslatedValue(	String key, ResourceBundle bundle){
 		//System.out.println(key);
 

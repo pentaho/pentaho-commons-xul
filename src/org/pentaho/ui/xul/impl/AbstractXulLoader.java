@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.MissingResourceException;
@@ -50,13 +51,22 @@ public abstract class AbstractXulLoader implements XulLoader{
    */
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
     preProcess(xulDocument);
+
+    try{
+    String processedDoc = performIncludeTranslations(xulDocument.asXML());
+    SAXReader rdr = new SAXReader();
+    final Document doc = rdr.read(new StringReader(processedDoc));
     
     XulDomContainer container = new XulWindowContainer(this);
     container.setOuterContext(outerContext);
     parser.setContainer(container);
-    parser.parseDocument(xulDocument.getRootElement());
+    parser.parseDocument(doc.getRootElement());
    
     return container;
+    
+    } catch(Exception e){
+      throw new XulException(e);
+    }
   }
   
   private void setRootDir(String loc){
@@ -117,6 +127,7 @@ public abstract class AbstractXulLoader implements XulLoader{
         InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
         
         String localOutput = ResourceBundleTranslator.translate(in, bundle);
+        localOutput = performIncludeTranslations(localOutput);
         
         SAXReader rdr = new SAXReader();
         final Document doc = rdr.read(new StringReader(localOutput));
@@ -165,6 +176,7 @@ public abstract class AbstractXulLoader implements XulLoader{
         
         String localOutput = ResourceBundleTranslator.translate(in, bundle);
         
+        
         SAXReader rdr = new SAXReader();
         final Document doc = rdr.read(new StringReader(localOutput));
         
@@ -177,7 +189,25 @@ public abstract class AbstractXulLoader implements XulLoader{
         throw new XulException("Error loading Xul Document into Freemarker", e);
       }
   }
+  
+  private List<String> includedSources = new ArrayList<String>();
 
+  public String performIncludeTranslations(String input) throws XulException{
+    String output = input;
+    for(String includeSrc : includedSources){
+      try{
+        ResourceBundle res = ResourceBundle.getBundle(includeSrc.replace(".xul", ""));
+        output = ResourceBundleTranslator.translate(output, res);
+      } catch(MissingResourceException e){
+        continue;
+      } catch(IOException e){
+      
+        throw new XulException(e);
+      }
+    }
+    return output;
+  }
+  
   public void register(String tagName, String className) {
     parser.registerHandler(tagName, className);
   }
@@ -203,6 +233,8 @@ public abstract class AbstractXulLoader implements XulLoader{
       try{
           SAXReader rdr = new SAXReader();
           InputStream in = getClass().getClassLoader().getResourceAsStream(src);
+          includedSources.add(src);
+          
           final Document doc = rdr.read(in);
           
           Element root = doc.getRootElement();
