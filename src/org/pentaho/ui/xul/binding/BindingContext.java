@@ -78,23 +78,26 @@ public class BindingContext {
     String methodName = "set" + (String.valueOf(property.charAt(0)).toUpperCase()) + property.substring(1);
 
     try {
-      //try to resolve by name and the Type of object returned by the getter
-      Method setMethod = o.getClass().getMethod(methodName, paramClass);
-      logger.debug("Found set method by name and type");
-      return setMethod;
-    } catch (NoSuchMethodException e) {
-      logger.debug("could not find set method by name and type, trying name alone");
-      //last resort, just return the set method regardless of paramater type (generics workaround)
-      for (Method m : o.getClass().getMethods()) {
-        //just match on name
-        if (m.getName().equals(methodName)) {
-          return m;
+      if (paramClass != null) {
+        //try to resolve by name and the Type of object returned by the getter
+        Method setMethod = o.getClass().getMethod(methodName, paramClass);
+        logger.debug("Found set method by name and type");
+        return setMethod;
+      } else {
+        //      logger.warn("could not find set method by name "+methodName+" and type "+paramClass+", trying name alone");
+        //last resort, just return the set method regardless of paramater type (generics workaround)
+        for (Method m : o.getClass().getMethods()) {
+          //just match on name
+          if (m.getName().equals(methodName)) {
+            return m;
+          }
         }
       }
+    } catch (Exception e) {
+      throw new BindingException("Could not resolve setter method for property [" + property + "] on object ["
+          + o.getClass().getName() + "]", e);
     }
-    throw new BindingException("Could not resolve setter method for property [" + property + "] on object ["
-        + o.getClass().getName() + "]");
-
+    return null;
   }
 
   private Class getObjectClassOrType(Object o) {
@@ -132,9 +135,9 @@ public class BindingContext {
       getRetVal = sourceGetMethod.invoke(source);
       logger.debug("Found get Return Value: " + getRetVal);
     } catch (IllegalAccessException e) {
-      /*consume*/
+      throw new BindingException("Error invoking getter method [" + sourceGetMethod.getName() + "]", e);
     } catch (InvocationTargetException e) {
-      /*consume*/
+      throw new BindingException("Error invoking getter method [" + sourceGetMethod.getName() + "]", e);
     }
     if (getRetVal != null) {
       logger.debug("Get Return was not null, checking it's type");
