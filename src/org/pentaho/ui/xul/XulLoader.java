@@ -6,6 +6,7 @@ package org.pentaho.ui.xul;
 import java.util.ResourceBundle;
 
 import org.dom4j.Document;
+import org.dom4j.Element;
 
 /**
  * The XulLoader will build the DOM model and corresponding managed UI implementation
@@ -137,5 +138,10 @@ public interface XulLoader {
    * @param context root context
    */
   public void setOuterContext(Object context);
+  
+  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)throws XulException;
+  
+  public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)throws XulException;
+  
   
 }

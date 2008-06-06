@@ -6,4 +6,5 @@ import org.pentaho.ui.xul.swing.tags.SwingTab;
 
 public interface XulTabs extends XulContainer {
 	public XulTab getTabByIndex(int index);
+	public int getTabCount();
 }

@@ -9,22 +9,22 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.Namespace;
-import org.dom4j.QName;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 import org.dom4j.xpath.DefaultXPath;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.util.ResourceBundleTranslator;
 
 public abstract class AbstractXulLoader implements XulLoader{
@@ -32,6 +32,9 @@ public abstract class AbstractXulLoader implements XulLoader{
   protected XulParser parser;
   protected String rootDir = "/";
   protected Object outerContext = null;
+  private static final Log logger = LogFactory.getLog(AbstractXulLoader.class);
+  
+  private ResourceBundle mainBundle = null;
   
   public AbstractXulLoader() throws XulException{
 
@@ -50,19 +53,21 @@ public abstract class AbstractXulLoader implements XulLoader{
    * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
    */
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
-    preProcess(xulDocument);
-
-    try{
-    String processedDoc = performIncludeTranslations(xulDocument.asXML());
-    SAXReader rdr = new SAXReader();
-    final Document doc = rdr.read(new StringReader(processedDoc));
     
-    XulDomContainer container = new XulWindowContainer(this);
-    container.setOuterContext(outerContext);
-    parser.setContainer(container);
-    parser.parseDocument(doc.getRootElement());
-   
-    return container;
+    try{
+      xulDocument = preProcess(xulDocument);
+  
+      String processedDoc = performIncludeTranslations(xulDocument.asXML());
+      String localOutput = ResourceBundleTranslator.translate(processedDoc, mainBundle);
+      SAXReader rdr = new SAXReader();
+      final Document doc = rdr.read(new StringReader(localOutput));
+      
+      XulDomContainer container = new XulWindowContainer(this);
+      container.setOuterContext(outerContext);
+      parser.setContainer(container);
+      parser.parseDocument(doc.getRootElement());
+     
+      return container;
     
     } catch(Exception e){
       throw new XulException(e);
@@ -70,7 +75,7 @@ public abstract class AbstractXulLoader implements XulLoader{
   }
   
   private void setRootDir(String loc){
-  	if(loc.lastIndexOf("/") > 0){ //exists and not first char
+    if(loc.lastIndexOf("/") > 0){ //exists and not first char
       rootDir = loc.substring(0,loc.lastIndexOf("/")+1);
     }
   }
@@ -126,21 +131,16 @@ public abstract class AbstractXulLoader implements XulLoader{
 
         InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
         
-        String localOutput = ResourceBundleTranslator.translate(in, bundle);
-        localOutput = performIncludeTranslations(localOutput);
-        
         SAXReader rdr = new SAXReader();
-        final Document doc = rdr.read(new StringReader(localOutput));
+        final Document doc = rdr.read(in);
        
 
         setRootDir(resource);
-        
+        mainBundle = bundle;
         return this.loadXul(doc);
       } catch(DocumentException e){
         throw new XulException("Error parsing Xul Document", e);
-      } catch(IOException e){
-        throw new XulException("Error loading Xul Document into Freemarker", e);
-      } 
+      }
   }
   
   public XulDomContainer loadXulFragment(String resource) throws IllegalArgumentException, XulException{
@@ -207,11 +207,10 @@ public abstract class AbstractXulLoader implements XulLoader{
       }
     }
     for(String resource : resourceBundles){
+      logger.info("Processing Resource Bundle: "+resource);
       try{
-        System.out.println("trying to load bundle: "+resource);
         ResourceBundle res = ResourceBundle.getBundle(resource);
         if(res == null){
-          System.out.println("could not load bundle: "+resource);
           continue;
         }
         output = ResourceBundleTranslator.translate(output, res);
@@ -235,6 +234,14 @@ public abstract class AbstractXulLoader implements XulLoader{
   
   public Document preProcess(Document srcDoc) throws XulException{
     
+    SAXReader rdr = new SAXReader();
+    try{
+      String upperedIdDoc = this.upperCaseIDAttrs(srcDoc.asXML());
+      srcDoc = rdr.read(new StringReader(upperedIdDoc));
+    } catch(Exception e){
+      throw new XulException(e);
+    }
+    
     XPath xpath = new DefaultXPath("//pen:include");
     
     HashMap uris = new HashMap();
@@ -248,7 +255,6 @@ public abstract class AbstractXulLoader implements XulLoader{
     for(Element ele : eles){
       String src = "";
       try{
-          SAXReader rdr = new SAXReader();
           
           src = this.getRootDir()+ele.attributeValue("src");
           
@@ -259,26 +265,34 @@ public abstract class AbstractXulLoader implements XulLoader{
           
           InputStream in = getClass().getClassLoader().getResourceAsStream(src);
           if(in != null){
+            logger.info("Adding include src: "+src);
             includedSources.add(src);
           } else { //try fully qualified name
             src = ele.attributeValue("src");
             in = getClass().getClassLoader().getResourceAsStream(src);
-            if(in == null){
-              System.out.println("Error loading doc: "+src);
+            if(in != null){
+              includedSources.add(src);
+              logger.info("Adding include src: "+src);
+            } else {
+              logger.error("Could not resolve include: "+src);
             }
-            includedSources.add(src);
+            
           }
           
           final Document doc = rdr.read(in);
           
           Element root = doc.getRootElement();
           String ignoreRoot = ele.attributeValue("ignoreroot");
-          if(ignoreRoot == null || ignoreRoot.equalsIgnoreCase("false")){
+          if(root.getName().equals("overlay")){
+            processOverlay(root, ele.getDocument().getRootElement());
+          } else if(ignoreRoot == null || ignoreRoot.equalsIgnoreCase("false")){
+            logger.info("Including entire file: "+src);
             List contentOfParent = ele.getParent().content();
             int index = contentOfParent.indexOf(ele);
             contentOfParent.set(index, root);
             
           } else {
+            logger.info("Including children: "+src);
             List contentOfParent = ele.getParent().content();
             int index = contentOfParent.indexOf(ele);
             contentOfParent.remove(index);
@@ -288,22 +302,141 @@ public abstract class AbstractXulLoader implements XulLoader{
             }
           }
           
+          
       } catch(DocumentException ex){
           throw new XulException("Error parsing Xul Document: "+src, ex);
       }
     }
-    System.out.println(srcDoc.asXML());
+
+    //upper-case all nodes again
+    try{
+      String upperedIdDoc = this.upperCaseIDAttrs(srcDoc.asXML());
+      srcDoc = rdr.read(new StringReader(upperedIdDoc));
+    } catch(Exception e){
+      throw new XulException(e);
+    }
+    
     return srcDoc;
   }
   
+  private void processOverlay(Element overlayEle, Element srcEle){
+    for(Object child : overlayEle.elements()){
+      Element overlay = (Element) child;
+      String overlayId = overlay.attributeValue("id");
+      logger.info("Processing overlay\nID: "+overlayId);
+      Element sourceElement = srcEle.getDocument().elementByID(overlayId);
+      if(sourceElement == null){
+        continue;
+      }
+      logger.info("Found match in source doc:");
+      
+      String removeElement = overlay.attributeValue("removeelement");
+      if(removeElement != null && removeElement.equalsIgnoreCase("true")){
+        sourceElement.getParent().remove(sourceElement);
+      } else {
+        
+        //lets start out by just including everything
+        for(Object overlayChild : overlay.elements()){
+          Element pluckedElement = (Element) overlay.content().remove(overlay.content().indexOf(overlayChild));
+          sourceElement.add(pluckedElement);
+          logger.info("processed overlay child: "+((Element)overlayChild).getName()+" : "+pluckedElement.getName());
+        }
+      }
+    }
+  }
+  
+  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container) throws XulException{
+    try{
+
+      InputStream in = getClass().getClassLoader().getResourceAsStream(overlaySrc);
+      
+      //String localOutput = ResourceBundleTranslator.translate(in, bundle);
+      
+      SAXReader rdr = new SAXReader();
+      //final Document doc = rdr.read(new StringReader(localOutput));
+      final Document doc = rdr.read(in);
+     
+      Element overlayRoot = doc.getRootElement();
+      
+      for(Object child : overlayRoot.elements()){
+        Element overlay = (Element) child;
+        String overlayId = overlay.attributeValue("id");
+
+        org.pentaho.ui.xul.dom.Element sourceElement = targetDocument.getElementById(overlayId);
+        if(sourceElement == null){
+          logger.info("Source Element from target document is null: "+overlayId);
+          continue;
+        }
+        
+        for(Object childToParse : overlay.elements()){
+          logger.info("Processing overlay\nID: "+overlayId);
+          parser.reset();
+          parser.setContainer(container);
+          XulComponent c = parser.parse((Element) childToParse, (XulContainer) sourceElement);
+          sourceElement.addChild(c);
+          ((XulContainer) sourceElement).addComponent(c);
+          ((XulContainer) sourceElement).addChild(c);
+        }
+        
+      }
+      
+    } catch(DocumentException e){
+      throw new XulException(e);
+    }
+  }
+  
+  public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container) throws XulException{
+    try{
+
+      InputStream in = getClass().getClassLoader().getResourceAsStream(overlaySrc);
+      
+      //String localOutput = ResourceBundleTranslator.translate(in, bundle);
+      
+      SAXReader rdr = new SAXReader();
+      //final Document doc = rdr.read(new StringReader(localOutput));
+      final Document doc = rdr.read(in);
+     
+      Element overlayRoot = doc.getRootElement();
+      
+      for(Object child : overlayRoot.elements()){
+        Element overlay = (Element) child;
+        
+        for(Object childToParse : overlay.elements()){
+          String childId = ((Element) childToParse).attributeValue("id");
+          
+          org.pentaho.ui.xul.dom.Element prevOverlayedEle = targetDocument.getElementById(childId);
+          if(prevOverlayedEle == null){
+            logger.info("Source Element from target document is null: "+childId);
+            continue;
+          }
+          
+          prevOverlayedEle.getParent().removeChild(prevOverlayedEle);
+          
+          
+        }
+        
+      }
+      
+    } catch(DocumentException e){
+      throw new XulException(e);
+    }
+  }
+  
+
+  private String upperCaseIDAttrs(String src){
+
+    String result = src.replace(" id=", " ID=");
+    return result;
+    
+  }
   public void setOuterContext(Object context) {
     outerContext = context;
   }
 
 
-	public boolean isRegistered(String elementName) {
-		return this.parser.handlers.containsKey(elementName);
-	}
+  public boolean isRegistered(String elementName) {
+    return this.parser.handlers.containsKey(elementName);
+  }
   
   
 }

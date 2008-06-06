@@ -68,8 +68,15 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
 
 
   public void addBinding(Binding binding) {
-    
-        // TODO Auto-generated method stub 
-      
+    //no implementation needed
   }
+
+  public void loadOverlay(String src) throws XulException {
+    //no implementation needed
+  }
+
+  public void removeOverlay(String src) throws XulException {
+    //no implementation needed
+  }
+
 }

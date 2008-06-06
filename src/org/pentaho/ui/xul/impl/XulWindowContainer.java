@@ -88,4 +88,13 @@ public class XulWindowContainer extends AbstractXulDomContainer {
 	public Document getDocument(int idx) {
 		return this.windows.get(idx);
 	}
+
+  public void loadOverlay(String src) throws XulException{
+//    XulDomContainer container = this.xulLoader.loadXulFragment(src);
+    this.xulLoader.processOverlay(src, this.getDocumentRoot(), this);
+  }
+
+  public void removeOverlay(String src) throws XulException {
+    this.xulLoader.removeOverlay(src, this.getDocumentRoot(), this);
+  }
 }

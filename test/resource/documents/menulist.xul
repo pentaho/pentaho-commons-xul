@@ -12,7 +12,8 @@
 			<menupopup>
 				<menuitem label="Sales"
 					selected="true" />
-				<menuitem label="Etc" />
+				<menuitem label="Regions" />
+        <menuitem label="Customers" />
 			</menupopup>
 		</menulist>
 	</hbox>

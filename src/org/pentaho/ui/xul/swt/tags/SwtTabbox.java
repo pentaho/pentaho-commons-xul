@@ -95,6 +95,20 @@ public class SwtTabbox extends SwtElement implements XulTabbox{
     tabFolder.getItem(pos).getControl().setEnabled(!flag);
   }
 
+
+  public void removeTab(int idx) {
+    if(tabFolder.getItemCount() >= idx){
+      tabFolder.getItem(idx).dispose();
+    }
+  }
+
+
+  public void removeTabpanel(int idx) {
+    if(tabFolder.getItemCount() >= idx){
+      tabFolder.getItem(idx).dispose();
+    }
+  }
+
 }
 
   

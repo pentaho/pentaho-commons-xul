@@ -70,8 +70,14 @@ public class SwingTabbox extends SwingElement implements XulTabbox{
 
 	@Override
 	public void layout() {
+	  tabpane.removeAll();
 		for(int i=0; i<tabs.getChildNodes().size(); i++){
-			tabpane.add((Component) this.panels.getTabpanelByIndex(i).getManagedObject(), tabs.getTabByIndex(i).getLabel());
+		  XulTabpanel panel = this.panels.getTabpanelByIndex(i);
+		  if(panel == null){
+		    //no panel for tab
+		    continue;
+		  }
+			tabpane.add((Component) panel.getManagedObject(), tabs.getTabByIndex(i).getLabel());
 			tabpane.setEnabledAt(i, ! tabs.getTabByIndex(i).isDisabled());
 		}
 		tabpane.setSelectedIndex(selectedIndex);
@@ -81,4 +87,15 @@ public class SwingTabbox extends SwingElement implements XulTabbox{
     tabpane.setEnabledAt(pos, ! flag);
   }
 
+  public void removeTab(int idx) {
+    if(tabpane.getTabCount() > idx){
+      tabpane.remove(idx);
+    }
+  }
+
+  public void removeTabpanel(int idx) {
+    if(tabpane.getTabCount() > idx){
+      tabpane.remove(idx);
+    }
+  }
 }

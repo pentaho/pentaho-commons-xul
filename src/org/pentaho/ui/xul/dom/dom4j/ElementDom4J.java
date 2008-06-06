@@ -234,7 +234,7 @@ public class ElementDom4J implements Element{
    */
   public void setAttribute(String name, String value) {
     //ID attribute must be upper-case
-    if(name.equals("id")){
+    if(name.equals("id") || name.equals("ID")){
       element.addAttribute("ID", value);
     } else {
       element.addAttribute(name, value);

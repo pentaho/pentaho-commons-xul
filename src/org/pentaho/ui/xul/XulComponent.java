@@ -31,7 +31,19 @@ public interface XulComponent extends Element, XulEventSource {
   public String getName();
   
   /**
-   * Every element in XUL must have a unique id
+   * Every element in XUL can have a unique id
+   * @param id sets the component's id
+   */
+  public void setID(String id);
+  
+  /**
+   * 
+   * @return the id for this component. 
+   */
+  public String getID();
+  
+  /**
+   * Every element in XUL can have a unique id
    * @param id sets the component's id
    */
   public void setId(String id);

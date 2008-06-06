@@ -41,7 +41,7 @@ public class SwtScript extends SwtElement implements XulScript {
    *  Can't be guaranteed the order that these attributes 
    *  will be set, so register in both cases
    */
-  public void setId(String id) {
+  public void setID(String id) {
     super.setId(id);
     if (this.getId() != null && className != null){
     	try{
@@ -50,6 +50,11 @@ public class SwtScript extends SwtElement implements XulScript {
     		logger.error("Error adding event handler",e);
     	}
     }
+  }
+  
+  @Deprecated
+  public void setId(String id) {
+    this.setID(id);
   }
 
 }

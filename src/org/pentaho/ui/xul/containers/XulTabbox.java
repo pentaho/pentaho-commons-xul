@@ -10,4 +10,6 @@ public interface XulTabbox extends XulContainer{
 	public XulTabs getTabs();
 	public XulTabpanels getTabpanels();
 	public void setTabDisabledAt(boolean flag, int pos);
+	public void removeTab(int idx);
+	public void removeTabpanel(int idx);
 }

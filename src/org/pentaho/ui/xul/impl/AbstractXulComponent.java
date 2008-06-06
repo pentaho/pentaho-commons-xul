@@ -83,6 +83,15 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.setAttribute("ID", id);
     this.id = id;
   }
+  
+  public String getID() {
+    return id;
+  }
+
+  public void setID(String id) {
+    this.setAttribute("ID", id);
+    this.id = id;
+  }
 
   public int getFlex() {
     return flex;
