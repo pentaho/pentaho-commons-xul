@@ -53,6 +53,7 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
     panel = new JPanel();
     
     panel.setBorder(BorderFactory.createLineBorder(Color.gray.brighter()));
+    panel.setOpaque(false);
     label = new JLabel();
     //label.setPreferredSize(new Dimension(50,15));
     label.setFont(new Font("Dialog", Font.PLAIN, 11));

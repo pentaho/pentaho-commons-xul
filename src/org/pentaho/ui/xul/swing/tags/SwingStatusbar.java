@@ -29,6 +29,7 @@ public class SwingStatusbar extends SwingElement implements XulStatusbar{
     children = new ArrayList<XulComponent>();
 
     container = new ScrollablePanel(new GridBagLayout());
+    container.setBackground(Color.decode("#EFEFEF"));
     container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.gray));
    
     managedObject = container;
@@ -47,8 +48,8 @@ public class SwingStatusbar extends SwingElement implements XulStatusbar{
     gc.gridheight = GridBagConstraints.REMAINDER;
     gc.gridwidth = 1;
     gc.insets = new Insets(0,0,0,0);
-    gc.fill = GridBagConstraints.HORIZONTAL;
-    gc.anchor = GridBagConstraints.NORTHWEST;
+    gc.fill = GridBagConstraints.BOTH;
+    gc.anchor = GridBagConstraints.CENTER;
     gc.weighty = 1;
     
   }
@@ -61,6 +62,7 @@ public class SwingStatusbar extends SwingElement implements XulStatusbar{
 
   @Override
   public void layout() {
+    resetContainer();
     super.layout();
     
   }
