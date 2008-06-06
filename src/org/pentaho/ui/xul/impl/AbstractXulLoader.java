@@ -58,7 +58,9 @@ public abstract class AbstractXulLoader implements XulLoader{
       xulDocument = preProcess(xulDocument);
   
       String processedDoc = performIncludeTranslations(xulDocument.asXML());
-      String localOutput = ResourceBundleTranslator.translate(processedDoc, mainBundle);
+      String localOutput = (mainBundle != null)
+        ? ResourceBundleTranslator.translate(processedDoc, mainBundle)
+        : processedDoc;
       SAXReader rdr = new SAXReader();
       final Document doc = rdr.read(new StringReader(localOutput));
       
