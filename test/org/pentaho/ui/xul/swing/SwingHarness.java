@@ -12,7 +12,7 @@ public class SwingHarness {
   public static void main(String[] args){
     try{
       
-      XulDomContainer container = new SwingXulLoader().loadXul("resource/documents/overlayTest.xul");
+      XulDomContainer container = new SwingXulLoader().loadXul("resource/documents/statusbar.xul");
 
       XulRunner runner = new SwingXulRunner();
       runner.addContainer(container);

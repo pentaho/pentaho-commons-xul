@@ -95,7 +95,7 @@ public class SwingWindow extends SwingElement implements XulWindow {
     gc.gridx = 0;
     gc.gridheight = 1;
     gc.gridwidth = GridBagConstraints.REMAINDER;
-    gc.insets = new Insets(2, 2, 2, 2);
+    gc.insets = new Insets(0, 0, 0, 0);
     gc.fill = GridBagConstraints.HORIZONTAL;
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;

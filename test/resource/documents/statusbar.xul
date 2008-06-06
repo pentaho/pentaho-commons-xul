@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+    
+<window 
+  width="600"
+  height="400"
+  title="Statusbar test"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:html="http://www.w3.org/1999/xhtml">
+  
+  <groupbox flex="1">
+    <caption label="${groupbox.header}"/>
+   
+    <label value="Nickname"/>
+    <textbox id="nickname"/>
+    <hbox><spacer flex="1"/><button label="Say Hi" onclick="handler.sayHello()"/><spacer flex="1"/></hbox>
+    <label id="helloMsg"/>
+    <button id="removeMeButton" label="Remove Me!"/>
+  </groupbox>
+  
+  <statusbar>
+    <statusbarpanel label="Left panel"/>
+    <spacer flex="1"/>
+    <progressmeter mode="determined" value="82"/>
+    <statusbarpanel label="Right panel"/>
+  </statusbar>
+</window>
