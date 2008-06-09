@@ -5,7 +5,7 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   xmlns:pen="http://www.pentaho.org/2008/xul"
   >
-  <pen:include src="overlay.xul"/>
+  <pen:include src="removingOverlay.xul"/>
   <groupbox id="firstGroupbox">
     <caption label="Experience the magic"/>
     <label value="overlays rock"/>
