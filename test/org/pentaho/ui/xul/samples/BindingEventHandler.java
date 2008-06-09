@@ -35,6 +35,12 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     productModel.addProduct(new Product(name, descr));
   }
   
+  private Binding removeMeBinding;
+  public void removeBinding(){
+    getXulDomContainer().removeBinding(removeMeBinding);
+  }
+  
+  
   public void onLoad(){
     model = new FormModel();
     productModel = new ProductModel();
@@ -45,6 +51,7 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     
     Binding binding = new Binding(model, "firstName", firstNameLbl, "value");
     getXulDomContainer().addBinding(binding);
+    removeMeBinding = binding;
 
     binding = new Binding(model, "lastName", lastNameLbl, "value");
     getXulDomContainer().addBinding(binding);

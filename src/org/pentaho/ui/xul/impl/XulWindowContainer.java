@@ -97,4 +97,34 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   public void removeOverlay(String src) throws XulException {
     this.xulLoader.removeOverlay(src, this.getDocumentRoot(), this);
   }
+
+  public void removeBinding(Binding binding) {
+    this.bindings.remove(binding);
+  }
+
+  public void loadFragment(String id, String src) throws XulException {
+    XulComponent c = this.getDocumentRoot().getElementById("id");
+    if(c == null){
+      throw new IllegalArgumentException("target element does not exist");
+    }
+    try{
+      
+      InputStream in = getClass().getClassLoader().getResourceAsStream(src);
+      
+      if(in == null){
+        throw new XulException("loadFragment: input document is null");
+      }
+      
+      SAXReader rdr = new SAXReader();
+      final org.dom4j.Document  doc = rdr.read(in);
+      
+      XulDomContainer container = this.xulLoader.loadXulFragment(doc);
+      
+      c.addChild(container.getDocumentRoot().getRootElement());
+      
+    } catch(Exception e){
+      logger.error("Error Loading Xul Fragment",e);
+      throw new XulException(e);
+    }
+  }
 }

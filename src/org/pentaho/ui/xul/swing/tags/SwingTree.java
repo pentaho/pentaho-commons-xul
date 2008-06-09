@@ -55,7 +55,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 
-public class SwingTree extends SwingElement implements XulTree{
+public class SwingTree<T> extends SwingElement implements XulTree<T>{
 
 	private JTable table;
 	private JTree tree;
@@ -728,10 +728,10 @@ public class SwingTree extends SwingElement implements XulTree{
     this.onedit = onedit;  
   }
 
-  public void setElements(Collection<?> elements) {
+  public void setElements(Collection<T> elements) {
     this.getRootChildren().removeAll();
     try{
-      for(Object o : elements){
+      for(T o : elements){
         XulTreeRow row = this.getRootChildren().addNewRow();
         
         for(XulComponent col : this.getColumns().getChildNodes()){
@@ -751,7 +751,7 @@ public class SwingTree extends SwingElement implements XulTree{
     }
   }
 
-  public Collection<?> getElements() {
+  public Collection<T> getElements() {
     return null;
   }
   

@@ -5,7 +5,9 @@ import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,6 +23,10 @@ public class BindingContext {
   private List<Binding> bindings = new ArrayList<Binding>();
 
   private static final Log logger = LogFactory.getLog(BindingContext.class);
+  
+  //internal map of Binding to PropChangeListeners, used to cleanup upon removal
+  private Map< Binding, List<PropertyChangeListener> > bindingListeners 
+      = new HashMap< Binding, List<PropertyChangeListener> >();
 
   public BindingContext(XulDomContainer container) {
     this.container = container;
@@ -31,6 +37,20 @@ public class BindingContext {
     XulComponent target = container.getDocumentRoot().getElementById(expression.target);
     Binding newBinding = new Binding(source, expression.sourceAttr, target, expression.targetAttr);
     add(newBinding);
+  }
+  
+  public void remove(Binding bind){
+    if(!bindingListeners.containsKey(bind) && !bindings.contains(bind)){
+      return;
+    }
+    
+    for(PropertyChangeListener propListener : bindingListeners.get(bind)){
+      bind.getSource().removePropertyChangeListener(propListener);
+      bind.getTarget().removePropertyChangeListener(propListener);
+    }
+    bindingListeners.remove(bind);
+    bindings.remove(bind);
+    
   }
 
   public void add(Binding bind) {
@@ -84,20 +104,26 @@ public class BindingContext {
         logger.debug("Found set method by name and type");
         return setMethod;
       } else {
-        //      logger.warn("could not find set method by name "+methodName+" and type "+paramClass+", trying name alone");
-        //last resort, just return the set method regardless of paramater type (generics workaround)
-        for (Method m : o.getClass().getMethods()) {
-          //just match on name
-          if (m.getName().equals(methodName)) {
-            return m;
-          }
-        }
+        return getMethodNameByNameOnly(o, methodName);
       }
     } catch (Exception e) {
-      throw new BindingException("Could not resolve setter method for property [" + property + "] on object ["
-          + o.getClass().getName() + "]", e);
+      try{
+        return getMethodNameByNameOnly(o, methodName);
+      } catch (BindingException ex){
+        throw new BindingException("Could not resolve setter method for property [" + property + "] on object ["
+            + o.getClass().getName() + "] with paramClass: "+paramClass, e);
+      }
     }
-    return null;
+  }
+  
+  private Method getMethodNameByNameOnly(Object o, String methodName) throws BindingException{
+    for (Method m : o.getClass().getMethods()) {
+      //just match on name
+      if (m.getName().equals(methodName)) {
+        return m;
+      }
+    }
+    throw new BindingException("Could not resolve method by name either. You're really hosed, check property name");
   }
 
   private Class getObjectClassOrType(Object o) {
@@ -144,7 +170,7 @@ public class BindingContext {
       //checks for Boxed primatives
       getClazz = getObjectClassOrType(getRetVal);
       logger.debug("Get Return type is: " + getClazz);
-    }
+    } 
 
     //find set method
     final Method targetSetMethod = findSetMethod(target, targetAttr, getClazz);
@@ -165,6 +191,14 @@ public class BindingContext {
     };
 
     source.addPropertyChangeListener(listener);
+    
+    //add listener to map so we can remove it later when asked.
+    if(! bindingListeners.containsKey(bind)){
+      bindingListeners.put(bind, new ArrayList<PropertyChangeListener>());
+    }
+    
+    bindingListeners.get(bind).add(listener);
+    
     logger.info("Binding established: " + source + "." + sourceAttr + " ==> " + target + "." + targetAttr);
   }
 

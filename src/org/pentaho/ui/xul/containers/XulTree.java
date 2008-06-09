@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.pentaho.ui.xul.XulContainer;
 
-public interface XulTree extends XulContainer {
+public interface XulTree<T> extends XulContainer {
   
   public boolean isHierarchical();
 
@@ -55,8 +55,8 @@ public interface XulTree extends XulContainer {
   public void update();
   
   public void clearSelection();
-  
-  public void setElements(Collection<?> elements);
-  public Collection<?> getElements();
+
+  public void setElements(Collection<T> elements);
+  public Collection<T> getElements();
 
 }

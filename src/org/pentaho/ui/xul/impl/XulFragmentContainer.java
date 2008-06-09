@@ -79,4 +79,13 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
     //no implementation needed
   }
 
+  public void removeBinding(Binding binding) {
+    //no implementation needed
+      
+  }
+
+  public void loadFragment(String id, String src) throws XulException {
+    //no implementation needed
+  }
+
 }

@@ -19,5 +19,6 @@ public interface Document extends Element{
   public void setXulDomContainer(XulDomContainer container);
   public void addOverlay(String src) throws XulException;
   public void removeOverlay(String src) throws XulException;
+  public void loadFragment(String id, String src) throws XulException;
   
 }

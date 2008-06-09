@@ -33,6 +33,8 @@ public interface XulDomContainer {
   public void addEventHandler(String id, String eventClassName) throws XulException;
 
   public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException;
+  
+  public void loadFragment(String id, String src) throws XulException;
 
   public XulEventHandler getEventHandler(String key) throws XulException;
 
@@ -46,6 +48,8 @@ public interface XulDomContainer {
   public void addEventHandler(XulEventHandler handler);
 
   public void addBinding(Binding binding);
+  
+  public void removeBinding(Binding binding);
 
   public void initialize();
 

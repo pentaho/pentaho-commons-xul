@@ -63,5 +63,9 @@ public class DocumentDom4J extends ElementDom4J implements Document {
   public void removeOverlay(String src) throws XulException{
     container.removeOverlay(src);
   }
+
+  public void loadFragment(String id, String src) throws XulException {
+    container.loadFragment(id, src);
+  }
   
 }

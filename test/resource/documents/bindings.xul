@@ -36,6 +36,11 @@
 			</vbox>
 		</hbox>
 	</groupbox>
+  <hbox>
+    <spacer flex="1"/>
+    <button label="Remove First Name Binding" onclick="handler.removeBinding()"/>
+    <spacer flex="1"/>
+  </hbox>
   <spacer height="20" width="1"/>
 	<groupbox>
 		<caption label="Xul Component to Component"/>
