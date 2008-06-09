@@ -17,5 +17,7 @@ public interface Document extends Element{
   public XulComponent createElement(String elementName) throws XulException;
   public boolean isRegistered(String elementName);
   public void setXulDomContainer(XulDomContainer container);
+  public void addOverlay(String src) throws XulException;
+  public void removeOverlay(String src) throws XulException;
   
 }

@@ -55,5 +55,13 @@ public class DocumentDom4J extends ElementDom4J implements Document {
 	public boolean isRegistered(String elementName) {
 		return this.container.getXulLoader().isRegistered(elementName);
 	}
+
+  public void addOverlay(String src) throws XulException{
+    container.loadOverlay(src);
+  }
+
+  public void removeOverlay(String src) throws XulException{
+    container.removeOverlay(src);
+  }
   
 }
