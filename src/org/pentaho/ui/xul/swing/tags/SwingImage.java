@@ -84,6 +84,9 @@ public class SwingImage extends SwingElement implements XulImage{
     }
     
   }
+  public void refresh() {
+    this.panel.updateUI();
+  }
   
   
 }
