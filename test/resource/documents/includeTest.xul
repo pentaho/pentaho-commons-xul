@@ -11,7 +11,9 @@
   <hbox><button label="Show Included Dialog" onclick="outterHandler.showIncludedDialog()"/></hbox>
 	<hbox id="all-box" flex="1">
 	
-		<pen:include src="includeTestFrag.xul" ignoreroot="true"/>
+		<pen:include src="includeTestFrag.xul" ignoreroot="true">
+      <overlay src="removingOverlay.xul"/>
+    </pen:include>
 	
 		<groupbox id="general-settings-box" orient="vertical" flex="8">
 			<label id="connection-name-label" value="${connection_name}" />
