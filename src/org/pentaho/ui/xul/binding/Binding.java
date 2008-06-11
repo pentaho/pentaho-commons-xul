@@ -43,15 +43,6 @@ public class Binding {
     container.addBinding(this);
   }
 
-  public Binding(XulDomContainer container, String sourceId, String sourceAttr, XulEventSource target, String targetAttr) {
-    this.source = container.getDocumentRoot().getElementById(sourceId);
-    setSourceAttr(sourceAttr);
-    this.target = target;
-    setTargetAttr(targetAttr);
-
-    container.addBinding(this);
-  }
-
   public Binding(XulEventSource source, String sourceAttr, XulEventSource target, String targetAttr) {
     this.source = source;
     setSourceAttr(sourceAttr);

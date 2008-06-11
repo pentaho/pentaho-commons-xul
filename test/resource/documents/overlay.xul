@@ -3,7 +3,7 @@
 <overlay 
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <groupbox id="firstGroupbox">
-    <label value="label 1"/>
+    <label id="newLabel" value="label 1"/>
     <label value="label 2"/>
   </groupbox>
 </overlay>

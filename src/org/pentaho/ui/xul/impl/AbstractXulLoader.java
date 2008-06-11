@@ -81,9 +81,14 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
-  private void setRootDir(String loc) {
-    if (loc.lastIndexOf("/") > 0) { //exists and not first char
+  public void setRootDir(String loc) {
+    if (loc.lastIndexOf("/") > 0 && loc.indexOf(".xul") > -1) { //exists and not first char
       rootDir = loc.substring(0, loc.lastIndexOf("/") + 1);
+    } else {
+      rootDir = loc;
+      if(!(loc.lastIndexOf('/') == loc.length())){ //no trailing slash, add it
+        rootDir = rootDir +"/";
+      }
     }
   }
 
@@ -212,6 +217,7 @@ public abstract class AbstractXulLoader implements XulLoader {
   public String getRootDir() {
     return this.rootDir;
   }
+  
 
   public Document preProcess(Document srcDoc) throws XulException {
 
@@ -390,6 +396,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         sourceElement.addChild(c);
         ((XulContainer) sourceElement).addComponent(c);
         ((XulContainer) sourceElement).addChild(c);
+        logger.info("added child: "+c);
       }
 
     }

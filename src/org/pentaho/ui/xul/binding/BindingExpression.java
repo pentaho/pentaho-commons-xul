@@ -27,14 +27,9 @@ public class BindingExpression {
     expr.target = m.group(2).trim();
     expr.targetAttr = m.group(3).trim();
     
-    System.out.println(String.format("SourceAttr %s \nTarget: %s \nTargetAttr: %s",expr.sourceAttr, expr.target, expr.targetAttr));
-       
     return expr;
   }
   
-  public static void main(String[] args){
-    BindingExpression.parse("foo = bar.enabled");
-  }
 }
 
   

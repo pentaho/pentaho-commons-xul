@@ -124,7 +124,12 @@ public interface XulLoader {
    * @return Directory location as String
    */
   public String getRootDir();
-  
+
+  /**
+   * Sets the root directory from which the loader will attempt to locate includes / overlays.
+   * @param str root classpath directory
+   */
+  public void setRootDir(String str);
   
   /**
    * Provides a running application the ability to get a new XulLoader instance of their runtime flavor
@@ -142,6 +147,7 @@ public interface XulLoader {
   public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)throws XulException;
   
   public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)throws XulException;
+  
   
   
 }

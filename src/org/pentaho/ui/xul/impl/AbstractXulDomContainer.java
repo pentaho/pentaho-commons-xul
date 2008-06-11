@@ -140,29 +140,33 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   }
   
   public Map<String, XulEventHandler> getEventHandlers(){
-  	if(this.eventHandlers.size() > 0){
+  	//if(this.eventHandlers.size() > 0){
   		return this.eventHandlers;
-  	} else {
-      XulComponent rootEle = getDocumentRoot().getRootElement();
-  		
-      if(this instanceof XulFragmentContainer){
-      	//skip first element as it's a wrapper
-      	rootEle = rootEle.getFirstChild();
-      }
-      
-      for (XulComponent comp : rootEle.getChildNodes()) {
-        if (comp instanceof XulScript) {
-        	XulScript script = (XulScript) comp;
-          try{
-          	this.addEventHandler(script.getId(), script.getSrc());
-          } catch(XulException e){
-          	logger.error("Error adding Event Handler to Window: "+script.getSrc(), e);
-          }
-        } 
-      }
-  		return this.eventHandlers;
-  		
-  	}
+  	//} else {
+  	  //called when someone merges a fragment container into another container
+  	  
+  	  /*================= Pretty sure this is never called ==================*/
+  	  
+//      XulComponent rootEle = getDocumentRoot().getRootElement();
+//  		
+//      if(this instanceof XulFragmentContainer){
+//      	//skip first element as it's a wrapper
+//      	rootEle = rootEle.getFirstChild();
+//      }
+//      
+//      for (XulComponent comp : rootEle.getChildNodes()) {
+//        if (comp instanceof XulScript) {
+//        	XulScript script = (XulScript) comp;
+//          try{
+//          	this.addEventHandler(script.getId(), script.getSrc());
+//          } catch(XulException e){
+//          	logger.error("Error adding Event Handler to Window: "+script.getSrc(), e);
+//          }
+//        } 
+//      }
+//  		return this.eventHandlers;
+//  		
+//  	}
   }
 
   public void mergeContainer(XulDomContainer container) {
@@ -211,11 +215,14 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
           continue;
         } catch(NumberFormatException e2){
           try{
+            if(obj.indexOf('\'') == -1 && obj.indexOf('\"') == -1){
+              throw new IllegalArgumentException("Not a string");
+            }
             String str = obj.replaceAll("'", "");
             str = str.replaceAll("\"", "");
             args[i] = str;
             continue;
-          } catch(NumberFormatException e4){
+          } catch(IllegalArgumentException e4){
             try{
               Boolean flag = Boolean.parseBoolean(obj);
               args[i] = flag;
@@ -230,6 +237,24 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     }
     return args;
     
+  }
+  
+  private Class unBoxPrimative(Class clazz){
+    if (clazz == Boolean.class) {
+      return Boolean.TYPE;
+    } else if (clazz == Integer.class) {
+      return Integer.TYPE;
+    } else if (clazz == Float.class) {
+      return Float.TYPE;
+    } else if (clazz == Double.class) {
+      return Double.TYPE;
+    } else if (clazz == Short.class) {
+      return Short.TYPE;
+    } else if (clazz == Long.class) {
+      return Long.TYPE;
+    } else {
+      return clazz;
+    }
   }
   
   /* (non-Javadoc)
@@ -258,7 +283,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
         Class[] classes = new Class[args.length];
         
         for(int i=0; i<args.length; i++){
-          classes[i] = args[i].getClass();
+          classes[i] = unBoxPrimative(args[i].getClass());
         }
         
         Method m = evt.getClass().getMethod(methodName, classes);

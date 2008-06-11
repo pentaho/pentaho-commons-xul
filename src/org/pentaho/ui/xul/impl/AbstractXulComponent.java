@@ -60,17 +60,6 @@ public abstract class AbstractXulComponent implements XulComponent {
     }
   }
 
-  public AbstractXulComponent(String tagName, Object managedObject) {
-    try {
-      this.element = DocumentFactory.createElement(tagName, this);
-      this.managedObject = managedObject;
-      children = new ArrayList<XulComponent>();
-    } catch (XulException e) {
-      logger.error(String.format("error creating XulElement (%s)", tagName), e);
-      throw new IllegalArgumentException(String.format("error creating XulElement (%s)", tagName), e);
-    }
-  }
-
   public Object getManagedObject() {
     return managedObject;
   }

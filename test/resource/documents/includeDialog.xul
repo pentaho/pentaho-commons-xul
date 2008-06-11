@@ -21,13 +21,13 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   xmlns:html="http://www.w3.org/1999/xhtml"  onload="innerHandler.printLoadMessage('child')">
   
-  <script src="org.pentaho.ui.xul.samples.DialogHandler" id="innerHandler"/>
+  <script src="org.pentaho.ui.xul.test.samples.DialogHandler" id="innerHandler"/>
   <dialogheader id="header" title="Options" description="My preferences"/>
 
   <groupbox>
     <caption label="${groupbox.header}"/>
    
-    <label value="Nickname"/>
+    <label value="${nickname}" id="nicknameLabel" />
     <textbox id="nickname"/>
     <hbox><spacer flex="1"/><button label="Say Hi" onclick="handler.sayHello()"/><spacer flex="1"/></hbox>
     <label id="helloMsg"/>

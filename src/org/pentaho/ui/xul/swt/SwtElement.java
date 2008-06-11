@@ -25,11 +25,6 @@ public class SwtElement extends AbstractXulComponent {
   private int flex=0;
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
-  
-  public SwtElement(String tagName, Object managedObject) {
-    super(tagName, managedObject);
-  }
-
   public SwtElement(String tagName) {
     super(tagName);
   }

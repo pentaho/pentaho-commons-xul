@@ -4,7 +4,7 @@
 	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 	
-	<script src="org.pentaho.ui.xul.samples.TabboxEventHandler" id="handler"/>
+	<script src="org.pentaho.ui.xul.test.samples.TabboxEventHandler" id="handler"/>
 	<tabbox id="myTabList" selectedIndex="2" flex="1">
 	  <tabs>
 	    <tab label="A First tab" disabled="true" id="tab1"/>
