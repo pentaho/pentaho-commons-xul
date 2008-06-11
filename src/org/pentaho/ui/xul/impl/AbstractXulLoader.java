@@ -384,12 +384,12 @@ public abstract class AbstractXulLoader implements XulLoader {
 
       org.pentaho.ui.xul.dom.Element sourceElement = targetDocument.getElementById(overlayId);
       if (sourceElement == null) {
-        logger.info("Source Element from target document is null: " + overlayId);
+        logger.warn("Cannot overlay element with id ["+overlayId+"] as it does not exist in the target document.");
         continue;
       }
 
       for (Object childToParse : overlay.elements()) {
-        logger.info("Processing overlay\nID: " + overlayId);
+        logger.info("Processing overlay id: " + overlayId);
         parser.reset();
         parser.setContainer(container);
         XulComponent c = parser.parse((Element) childToParse, (XulContainer) sourceElement);
