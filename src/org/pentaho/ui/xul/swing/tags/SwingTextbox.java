@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -14,8 +13,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.PlainDocument;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -41,6 +44,8 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   private TextType type = TextType.NORMAL;
   private JTextComponent textComp = null;
   private String onInput;
+  private int min = -1;
+  private int max = -1;
   
   public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -147,6 +152,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	        textComp = pass;
 	        managedObject = pass;
 	        break;
+	      case NUMERIC:
 	      default: //regular text
     			if(this.multiline){
     				textArea = new JTextArea((value != null) ? value : "");
@@ -156,7 +162,6 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     				textArea.setEditable(!readonly);
     				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
     		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    		    break;
     			} else {
     				textField = new JTextField((value != null) ? value : "");
     				textField.setPreferredSize(new Dimension(150,textField.getPreferredSize().height));
@@ -164,8 +169,13 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     				textField.setEditable(!readonly);
     				managedObject = textField;
     				textComp = textField;
-    				break;
     			}
+	      
+	        //constrin Numeric only here
+	        if(this.type == TextType.NUMERIC){
+	          textComp.setDocument(new NumericDocument(min, max));
+	        }
+	        break;
   		}
 
 	    textComp.addKeyListener(new KeyListener(){
@@ -205,4 +215,67 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 	    onInput = method;
 	  }
   }
+
+  public String getMin() {
+    return ""+min;
+  }
+
+  public void setMin(String min) {
+    this.min = Integer.parseInt(min);  
+  }
+
+  public String getMax() {
+    return ""+max;
+  }
+
+  public void setMax(String max) {
+    this.max = Integer.parseInt(max);  
+  }
+  
+  @SuppressWarnings("serial")
+  private class NumericDocument extends PlainDocument{
+    private int min;
+    private int max;
+    
+    public NumericDocument(int min, int max){
+      super();
+      this.min = min;
+      this.max = max;
+    }
+
+    @Override
+    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+      if(str == null){
+        return;
+      }
+      if(!validString(str)){
+        logger.error("Textbox input not a valid number: "+str);
+        return;
+      }
+      
+      //if not special chars, evaluate number for range
+      if(str.charAt(str.length()-1) != '.' && str.charAt(str.length()-1) != '-'){  
+
+        if(max > -1 && Double.parseDouble(super.getText(0, super.getLength()) + str) > max){
+          logger.error(
+              String.format("Textbox Greater [%f]less than max: %d",
+                  Float.parseFloat(super.getText(0, super.getLength()) + str),
+                  max
+              )
+          );return;
+        }
+        
+      }
+      
+      //everything checks out insert string
+      super.insertString(offs, str, a); 
+    
+    }
+    
+    private boolean validString(String str){
+      return StringUtils.isNumeric(str.replace(".","").replace("-","")) || str.equals("-") || str.equals(".");
+    }
+  }
+  
+  
 }

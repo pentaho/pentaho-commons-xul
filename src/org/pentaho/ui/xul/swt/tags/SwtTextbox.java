@@ -23,6 +23,8 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private int maxLength;
   private String text;
   private TextType type = null;
+  private int max;
+  private int min;
 
   public SwtTextbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -175,5 +177,20 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
 
   public void setOninput(String method) {
     throw new NotImplementedException();
+  }
+  public String getMin() {
+    return ""+min;
+  }
+
+  public void setMin(String min) {
+    this.min = Integer.parseInt(min);  
+  }
+
+  public String getMax() {
+    return ""+max;
+  }
+
+  public void setMax(String max) {
+    this.max = Integer.parseInt(max);  
   }
 }

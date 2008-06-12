@@ -14,6 +14,34 @@ import org.pentaho.ui.xul.XulComponent;
 public interface XulTextbox extends XulComponent {
 
   /**
+   * The maximum value that the number box may be set to. The default value is Infinity.
+   * 
+   * @param max
+   */
+  public void setMax(String max);
+  
+  /**
+   * The maximum value that the number box may be set to. The default value is Infinity.
+   * 
+   * @return max
+   */
+  public String getMax();
+  
+  /**
+   * The minimum value that the number box may be set to. The default value is 0.
+   * 
+   * @param min
+   */
+  public void setMin(String min);
+  
+  /**
+   * The minimum value that the number box may be set to. The default value is 0.
+   * 
+   * @return min
+   */
+  public String getMin();
+  
+  /**
    * Sets the value that will display as default in the textbox. 
    * @param str The textbox's default value. 
    */
