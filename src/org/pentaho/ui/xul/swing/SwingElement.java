@@ -134,7 +134,6 @@ public class SwingElement extends AbstractXulComponent {
       currentFlexTotal += comp.getFlex();
 
       Component component = (Component) maybeComponent;
-      logger.debug("Maybe component is " + maybeComponent);
       container.add(component, gc);
 
       if (i + 1 == children.size() && !flexLayout) {
