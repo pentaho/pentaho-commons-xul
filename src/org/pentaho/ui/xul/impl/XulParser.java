@@ -161,6 +161,11 @@ public class XulParser {
       
       XulComponent ele = (XulComponent) constructor.newInstance(domEle, parent, xulDomContainer, tagName);
       
+      //preserve atributes in new Generic Dom node
+      for(Attribute attr : attrs){
+        ele.setAttribute(attr.getName(), attr.getValue());
+      }
+      
       Map<String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
       BeanUtils.populate(ele, attributesMap);
       return ele;
