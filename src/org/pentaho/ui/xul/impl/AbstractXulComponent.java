@@ -41,9 +41,11 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected List<XulComponent> children;
 
   protected int width;
-  
+
   protected int height;
-  
+
+  protected boolean initialized = false;
+
   public AbstractXulComponent(Element element) {
     this.element = element;
     children = new ArrayList<XulComponent>();
@@ -72,7 +74,7 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.setAttribute("ID", id);
     this.id = id;
   }
-  
+
   public String getID() {
     return id;
   }
@@ -95,25 +97,25 @@ public abstract class AbstractXulComponent implements XulComponent {
   }
 
   public void layout() {
-
+    initialized = true;
   }
-  
-  protected void invoke(String method){
+
+  protected void invoke(String method) {
     invoke(method, null);
   }
-  
-  protected void invoke(String method, Object[] args){
+
+  protected void invoke(String method, Object[] args) {
     Document doc = getDocument();
     XulRoot window = (XulRoot) doc.getRootElement();
     XulDomContainer con = window.getXulDomContainer();
-    
-    try{
-      if (args == null){
-        args = new Object[]{};
+
+    try {
+      if (args == null) {
+        args = new Object[] {};
       }
       con.invoke(method, args);
-    } catch (XulException e){
-      logger.error("Error calling oncommand event",e);
+    } catch (XulException e) {
+      logger.error("Error calling oncommand event", e);
     }
   }
 
@@ -201,27 +203,27 @@ public abstract class AbstractXulComponent implements XulComponent {
     return this;
   }
 
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
     this.element.replaceChild(oldElement, newElement);
   }
-  
-  public void setHeight(int height){
-  	this.height = height;
+
+  public void setHeight(int height) {
+    this.height = height;
   }
-  
-  public int getHeight(){
-  	return this.height;
+
+  public int getHeight() {
+    return this.height;
   }
-  
-  public void setWidth(int width){
-  	this.width = width;
+
+  public void setWidth(int width) {
+    this.width = width;
   }
-  
-  public int getWidth(){
-  	return this.width;
+
+  public int getWidth() {
+    return this.width;
   }
-  
+
   public void setOnblur(String method) {
   }
-  
+
 }

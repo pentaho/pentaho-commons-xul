@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Document;
@@ -86,8 +85,8 @@ public abstract class AbstractXulLoader implements XulLoader {
       rootDir = loc.substring(0, loc.lastIndexOf("/") + 1);
     } else {
       rootDir = loc;
-      if(!(loc.lastIndexOf('/') == loc.length())){ //no trailing slash, add it
-        rootDir = rootDir +"/";
+      if (!(loc.lastIndexOf('/') == loc.length())) { //no trailing slash, add it
+        rootDir = rootDir + "/";
       }
     }
   }
@@ -217,7 +216,6 @@ public abstract class AbstractXulLoader implements XulLoader {
   public String getRootDir() {
     return this.rootDir;
   }
-  
 
   public Document preProcess(Document srcDoc) throws XulException {
 
@@ -384,19 +382,19 @@ public abstract class AbstractXulLoader implements XulLoader {
 
       org.pentaho.ui.xul.dom.Element sourceElement = targetDocument.getElementById(overlayId);
       if (sourceElement == null) {
-        logger.warn("Cannot overlay element with id ["+overlayId+"] as it does not exist in the target document.");
+        logger.warn("Cannot overlay element with id [" + overlayId + "] as it does not exist in the target document.");
         continue;
       }
 
       for (Object childToParse : overlay.elements()) {
-        logger.info("Processing overlay id: " + overlayId);
+        logger.info("Processing overlay on element with id: " + overlayId);
         parser.reset();
         parser.setContainer(container);
         XulComponent c = parser.parse((Element) childToParse, (XulContainer) sourceElement);
         sourceElement.addChild(c);
         ((XulContainer) sourceElement).addComponent(c);
         ((XulContainer) sourceElement).addChild(c);
-        logger.info("added child: "+c);
+        logger.info("added child: " + c);
       }
 
     }

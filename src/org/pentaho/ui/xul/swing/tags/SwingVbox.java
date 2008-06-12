@@ -6,9 +6,6 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-
-import javax.swing.JPanel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -18,14 +15,12 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
-import org.pentaho.ui.xul.dom.Element;
 
 /**
  * @author nbaker
  *
  */
-public class SwingVbox extends SwingElement implements XulVbox  {
-
+public class SwingVbox extends SwingElement implements XulVbox {
 
   public SwingVbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Vbox");
@@ -34,33 +29,39 @@ public class SwingVbox extends SwingElement implements XulVbox  {
     container = new ScrollablePanel(new GridBagLayout());
 
     managedObject = container;
-    
-    resetContainer();
-    
-  }
-  
-  
 
-  public void resetContainer(){
-    
+    resetContainer();
+
+  }
+
+  public void resetContainer() {
+
     container.removeAll();
-    
+
     gc = new GridBagConstraints();
     gc.gridy = GridBagConstraints.RELATIVE;
     gc.gridx = 0;
     gc.gridheight = 1;
     gc.gridwidth = GridBagConstraints.REMAINDER;
-    gc.insets = new Insets(2,2,2,2);
+    gc.insets = new Insets(2, 2, 2, 2);
     gc.fill = GridBagConstraints.HORIZONTAL;
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;
-    
+
   }
-  
-  
 
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
+  public void addComponent(XulComponent component) {
+    super.addComponent(component);
+    if (initialized) {
+      System.err.println("ADDED COMPONENT TO VBOX: RESETTING CONTAINER");
+      resetContainer();
+      layout();
+    }
+  }
+
+  @Override
+  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }

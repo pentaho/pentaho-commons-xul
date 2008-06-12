@@ -56,8 +56,7 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
         if (e.getStateChange() == ItemEvent.SELECTED) {
           SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, combobox
               .getSelectedItem());
-          SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null
-              , combobox.getSelectedIndex());
+          SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
           previousSelectedItem = (T) combobox.getSelectedItem();
         }
       }
@@ -76,6 +75,16 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
       model.addElement(jmenuItem.getText());
     }
     loaded = true;
+    initialized = true;
+  }
+
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
   }
 
   public SwingMenupopup getPopupElement() {
@@ -178,11 +187,12 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
 
     layout();
   }
+
   public int getSelectedIndex() {
     return this.combobox.getSelectedIndex();
   }
 
   public void setSelectedIndex(int idx) {
-    this.combobox.setSelectedIndex(idx);  
+    this.combobox.setSelectedIndex(idx);
   }
 }

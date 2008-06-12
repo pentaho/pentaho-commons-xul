@@ -41,21 +41,23 @@ public class SwingElement extends AbstractXulComponent {
   protected Orient orient = Orient.HORIZONTAL;
 
   protected GridBagConstraints gc = new GridBagConstraints();
-  
+
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
   public SwingElement(String tagName) {
     super(tagName);
   }
-  
-  public void resetContainer() {}
+
+  public void resetContainer() {
+  }
 
   public void layout() {
+    super.layout();
     double totalFlex = 0.0;
 
     for (XulComponent comp : children) {
       //if (comp.getManagedObject() == null) {
-        //continue;
+      //continue;
       //}
       if (comp.getFlex() > 0) {
         flexLayout = true;
@@ -83,11 +85,16 @@ public class SwingElement extends AbstractXulComponent {
         if (totalFlex > 0) {
           splitter.addComponentListener(new ComponentListener() {
             @Ignore
-            public void componentHidden(ComponentEvent arg0) {}
+            public void componentHidden(ComponentEvent arg0) {
+            }
+
             @Ignore
-            public void componentMoved(ComponentEvent arg0) {}
+            public void componentMoved(ComponentEvent arg0) {
+            }
+
             @Ignore
-            public void componentShown(ComponentEvent arg0) {}
+            public void componentShown(ComponentEvent arg0) {
+            }
 
             public void componentResized(ComponentEvent arg0) {
               splitter.setDividerLocation(splitterSize);
@@ -127,6 +134,7 @@ public class SwingElement extends AbstractXulComponent {
       currentFlexTotal += comp.getFlex();
 
       Component component = (Component) maybeComponent;
+      logger.debug("Maybe component is " + maybeComponent);
       container.add(component, gc);
 
       if (i + 1 == children.size() && !flexLayout) {
@@ -157,7 +165,6 @@ public class SwingElement extends AbstractXulComponent {
 
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
-
 
     int idx = this.children.indexOf(oldElement);
     if (idx == -1) {
@@ -198,15 +205,15 @@ public class SwingElement extends AbstractXulComponent {
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    changeSupport.removePropertyChangeListener(listener);  
+    changeSupport.removePropertyChangeListener(listener);
   }
-  
+
   public void setDisabled(boolean disabled) {
     if (getJComponent() != null) {
       getJComponent().setEnabled(!disabled);
     }
   }
-  
+
   public boolean isDisabled() {
     if (getJComponent() != null) {
       return !getJComponent().isEnabled();

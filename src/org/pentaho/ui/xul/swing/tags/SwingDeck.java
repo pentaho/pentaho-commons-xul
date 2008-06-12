@@ -17,9 +17,13 @@ import org.pentaho.ui.xul.util.Orient;
 public class SwingDeck extends SwingElement implements XulDeck {
 
   protected JPanel container;
+
   private CardLayout cardLayout;
-  private int selectedChildIndex = 0; 
+
+  private int selectedChildIndex = 0;
+
   private int numChildren = 0;
+
   private List<XulComponent> children = new ArrayList<XulComponent>();
 
   public SwingDeck(Element self, XulComponent parent, XulDomContainer container, String tagName) {
@@ -33,15 +37,22 @@ public class SwingDeck extends SwingElement implements XulDeck {
     setSelectedIndex(0);
     managedObject = container;
   }
-  
-  
-  
+
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+
   @Override
   public void addChild(Element ele) {
-     super.addChild(ele);
-     this.container.add((Component) ((XulComponent)ele).getManagedObject(), ""+numChildren); 
-     numChildren++;
- 
+    super.addChild(ele);
+    this.container.add((Component) ((XulComponent) ele).getManagedObject(), "" + numChildren);
+    numChildren++;
+
   }
 
   public int getSelectedIndex() {
@@ -50,11 +61,11 @@ public class SwingDeck extends SwingElement implements XulDeck {
 
   public void setSelectedIndex(int index) {
     selectedChildIndex = index;
-    cardLayout.show(container, ""+index);
+    cardLayout.show(container, "" + index);
   }
 
   public void layout() {
-      
+    initialized = true;
   }
 
 }

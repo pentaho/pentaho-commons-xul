@@ -10,30 +10,29 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuseparator;
 import org.pentaho.ui.xul.containers.XulMenu;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingMenu extends SwingElement implements XulMenu{
+public class SwingMenu extends SwingElement implements XulMenu {
 
-  
   private JMenu menu;
+
   public SwingMenu(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menu");
-    
+
     children = new ArrayList<XulComponent>();
-    
+
     menu = new JMenu();
     managedObject = menu;
-    
+
   }
-  
 
-  public void layout(){
-    for(XulComponent comp : children){
-      if(comp instanceof SwingMenupopup){
+  public void layout() {
+    for (XulComponent comp : children) {
+      if (comp instanceof SwingMenupopup) {
 
-        for(XulComponent compInner : ((SwingMenupopup) comp).getChildNodes()){
-          if(compInner instanceof XulMenuseparator){
+        for (XulComponent compInner : ((SwingMenupopup) comp).getChildNodes()) {
+          if (compInner instanceof XulMenuseparator) {
             this.menu.addSeparator();
           } else {
             this.menu.add((JMenuItem) ((SwingMenuitem) compInner).getManagedObject());
@@ -41,10 +40,18 @@ public class SwingMenu extends SwingElement implements XulMenu{
         }
       }
     }
+    initialized = true;
   }
-  
-  
-  
+
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+
   public String getAcceltext() {
     return String.valueOf(menu.getAccelerator().getKeyChar());
   }
@@ -76,7 +83,5 @@ public class SwingMenu extends SwingElement implements XulMenu{
   public void setLabel(String label) {
     menu.setText(label);
   }
-  
-}
 
-  
+}

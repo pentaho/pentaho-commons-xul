@@ -2,62 +2,52 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.util.ArrayList;
 
-import javax.swing.JTable;
-import javax.swing.JTree;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTreeCols extends SwingElement implements XulTreeCols{
+public class SwingTreeCols extends SwingElement implements XulTreeCols {
 
+  XulTree table;
 
-	XulTree table;
-	
-	
-	public SwingTreeCols(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-		super("treecols");
-		table = (XulTree) parent;
-		
-		
-		
-		children = new ArrayList<XulComponent>();
-		managedObject = "empty";
-	}
-	
-	
-	public void addColumn(XulTreeCol column) {
-		// TODO Auto-generated method stub
-		
-	}
+  public SwingTreeCols(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
+    super("treecols");
+    table = (XulTree) parent;
 
-	public XulTreeCol getColumn(int index) {
-		return (XulTreeCol) this.children.get(index);
-	}
+    children = new ArrayList<XulComponent>();
+    managedObject = "empty";
+  }
 
-	public int getColumnCount() {
-		return this.children.size();
-	}
+  public void addColumn(XulTreeCol column) {
+    // TODO Auto-generated method stub
 
-	public XulTree getTree() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  }
 
-	public boolean isHierarchical() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+  public XulTreeCol getColumn(int index) {
+    return (XulTreeCol) this.children.get(index);
+  }
 
-	@Override
-	public void layout() {
-		table.setColumns(this);
-	}
+  public int getColumnCount() {
+    return this.children.size();
+  }
+
+  public XulTree getTree() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public boolean isHierarchical() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  @Override
+  public void layout() {
+    table.setColumns(this);
+    initialized = true;
+  }
 }

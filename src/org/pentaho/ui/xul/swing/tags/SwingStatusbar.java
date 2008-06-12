@@ -7,7 +7,6 @@ import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
-import javax.swing.border.BevelBorder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,51 +19,57 @@ import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwingStatusbar extends SwingElement implements XulStatusbar{
+public class SwingStatusbar extends SwingElement implements XulStatusbar {
   private static final Log logger = LogFactory.getLog(SwingStatusbar.class);
-  
+
   public SwingStatusbar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("statusbar");
-    
+
     children = new ArrayList<XulComponent>();
 
     container = new ScrollablePanel(new GridBagLayout());
     container.setBackground(Color.decode("#EFEFEF"));
     container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.gray));
-   
+
     managedObject = container;
-    
+
     resetContainer();
-    
+
   }
-  
-  public void resetContainer(){
-    
+
+  public void resetContainer() {
+
     container.removeAll();
-    
+
     gc = new GridBagConstraints();
     gc.gridx = GridBagConstraints.RELATIVE;
     gc.gridy = 0;
     gc.gridheight = GridBagConstraints.REMAINDER;
     gc.gridwidth = 1;
-    gc.insets = new Insets(0,0,0,0);
+    gc.insets = new Insets(0, 0, 0, 0);
     gc.fill = GridBagConstraints.BOTH;
     gc.anchor = GridBagConstraints.CENTER;
     gc.weighty = 1;
-    
+
   }
-  
+
   public Orient getOrientation() {
     return Orient.HORIZONTAL;
   }
 
-  
-
   @Override
   public void layout() {
     resetContainer();
-    super.layout();
-    
+    initialized = true;
+  }
+
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
   }
 
   @Override
@@ -74,5 +79,3 @@ public class SwingStatusbar extends SwingElement implements XulStatusbar{
   }
 
 }
-
-  
