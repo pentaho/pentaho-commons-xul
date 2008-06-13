@@ -4,8 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -27,8 +27,6 @@ public class SwtDialog extends SwtElement implements XulDialog {
 
   private BasicDialog dialog = null;
   
-  private Composite mainComposite = null;
-
   private String title = null;
 
   private String onload;
@@ -66,8 +64,6 @@ public class SwtDialog extends SwtElement implements XulDialog {
   private String ondialogextra1;
 
   private String ondialogextra2;
-  
-  private String btns;
 
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
 
@@ -105,7 +101,7 @@ public class SwtDialog extends SwtElement implements XulDialog {
   }
 
   public String getButtons() {
-    return btns;
+    return null; //new ArrayList<XulButton>(this.buttons.values());
   }
 
   public String getOndialogaccept() {
@@ -129,7 +125,6 @@ public class SwtDialog extends SwtElement implements XulDialog {
   }
 
   public void setButtons(String buttonList) {
-    btns = buttonList;
     buttons = buttonList.split(",");
   }
 
@@ -162,10 +157,16 @@ public class SwtDialog extends SwtElement implements XulDialog {
     // Because the dialog is built after the create() method is called, we 
     // need to ask the shell to try to re-determine an appropriate size for this dialog..
     if ((height > 0) && (width > 0)){
-      dialog.setHeight(height);
-      dialog.setWidth(width);
+      
+      // Don't allow the user to size the dialog smaller than is reasonable to 
+      // layout the child components
+      Point pt = dialog.getPreferredSize();
+      dialog.setHeight( (pt.y < height) ? height : pt.y);
+      dialog.setWidth((pt.x < width) ? width : pt.x);
     }
     dialog.resizeBounds();
+    
+    // Timing is everything - fire the onLoad evetns so tht anyone who is trying to
     notifyListeners(XulRoot.EVENT_ON_LOAD);
     returnCode = dialog.open();
   }
