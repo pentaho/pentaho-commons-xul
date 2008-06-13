@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
 <window id="textbox-test" title="Testing textboxes for SWT, Swing"
 	orient="horizontal"
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" width="300" height="300">
 	
 	<groupbox id="test-group-box" orient="horizontal">
 		<caption id="test-group-box" label="Testing Group Boxes" />  
 		<label id="label1" value="Label for text box" />
 		<vbox>
-		<textbox id="textbox1" value="default" maxlength="10" readonly="true"/>
-		<textbox id="textbox1" value="default" maxlength="10" readonly="false"/>
+		<textbox id="textbox1" value="default" maxlength="10" readonly="true" multiline="true"/>
+		<textbox id="textbox2" value="default2" maxlength="10" readonly="false" disabled="true" oninput="foo.bar" />
 		</vbox>
 	</groupbox>
+    <label value="Numeric only:"/>
+    <textbox id="textbox3" type="numeric" min="4" max="500"/>
 
 </window>

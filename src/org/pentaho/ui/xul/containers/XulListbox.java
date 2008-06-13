@@ -11,6 +11,8 @@ import org.pentaho.ui.xul.XulContainer;
  */
 public interface XulListbox extends XulContainer {
   
+  public enum SEL_TYPE{SINGLE, MULTIPLE};
+  
   /**
    * Adds a list item object to the list. Note
    * that specific implementations may limit the 
@@ -31,6 +33,13 @@ public interface XulListbox extends XulContainer {
    * attribute should be removed. 
    */
   public void setDisabled(boolean dis);
+
+  /**
+   * 
+   * @param dis If true, disable this button. Otherwise,
+   * attribute should be removed. 
+   */
+  public void setDisabled(String dis);
   
   /**
    * XUL's attribute is "disabled", thus this acts
@@ -98,7 +107,13 @@ public interface XulListbox extends XulContainer {
    * @param item Set the given item as selected in the listbox. 
    */
   public void setSelectedItem(Object item);
-  
+
+  /**
+   * 
+   * @param index Set the given index as selected in the listbox. 
+   */
+  public void setSelectedindex(String index);
+
   /**
    * 
    * @param index Set the given index as selected in the listbox. 

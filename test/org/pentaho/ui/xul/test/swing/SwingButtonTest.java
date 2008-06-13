@@ -53,4 +53,39 @@ public class SwingButtonTest {
   	
   	assertTrue(button2.isSelected());
   }
+  
+  @Test
+  public void testSetSelected(){
+    XulButton button1 = (XulButton) container.getDocumentRoot().getElementById("firstButton");
+    
+    button1.setSelected("true");
+    assertTrue(button1.isSelected());
+    button1.setSelected("false");
+    assertTrue(!button1.isSelected());
+    
+    button1.setSelected(true);
+    assertTrue(button1.isSelected());
+    button1.setSelected(false);
+    assertTrue(!button1.isSelected());
+    
+  }
+  
+  @Test
+  public void testGetImage(){
+    XulButton button1 = (XulButton) container.getDocumentRoot().getElementById("firstButton");
+    assertEquals("testImage.png", button1.getImage());
+  }
+  
+
+  @Test
+  public void testGetLabel(){
+    XulButton button1 = (XulButton) container.getDocumentRoot().getElementById("firstButton");
+    assertEquals("TOP", button1.getLabel());
+  }
+  
+  @Test
+  public void testGetDir(){
+    XulButton button1 = (XulButton) container.getDocumentRoot().getElementById("firstButton");
+    assertEquals("reverse", button1.getDir());
+  }
 }

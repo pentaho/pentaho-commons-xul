@@ -3,8 +3,8 @@
 <window id="general-datasource-window"
 	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="dataHandler.loadConnectionData()">
-	<script id="fragmentHandler" src="org.pentaho.ui.database.swt.event.FragmentHandler" />
-	<script id="dataHandler" src="org.pentaho.ui.database.swt.event.DataHandler" />
+<!-- 	<script id="fragmentHandler" src="org.pentaho.ui.database.swt.event.FragmentHandler" />
+	<script id="dataHandler" src="org.pentaho.ui.database.swt.event.DataHandler" /> -->
 	<hbox id="all-box" flex="1">
 		<groupbox id="options-box" orient="vertical" flex="1">
 			<label id="label-one" value="General" />
@@ -55,11 +55,11 @@
 	
 	
 	</hbox>
-	<hbox id="button-box">
+	<groupbox id="horizontal-button-box" orient="horizontal">
 		<!--  flexing all three controls allows me to control the size of the OK, Cancel buttons -->
 		<label id="spacer-label" flex="10" />
 		<button id="ok-button" label="OK" flex="1" />
 		<button id="cancel-button" label="Cancel" flex="1" />
-	</hbox>
+	</groupbox>
 
 </window>

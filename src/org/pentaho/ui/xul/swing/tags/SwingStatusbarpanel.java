@@ -51,6 +51,7 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
   public SwingStatusbarpanel(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("statusbarpanel");
     panel = new JPanel();
+    this.domContainer = domContainer;
     
     panel.setBorder(BorderFactory.createLineBorder(Color.gray.brighter()));
     panel.setOpaque(false);
@@ -76,10 +77,10 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
     return this.image;
       
   }
-
+  
   public void setImage(String src) {
     this.image = src;
-    URL url = SwingButton.class.getClassLoader().getResource(this.domContainer.getXulLoader().getRootDir()+src);
+    URL url = getClass().getClassLoader().getResource(this.domContainer.getXulLoader().getRootDir()+src);
     
     if(url == null){
       logger.error("Could not find resource");
@@ -90,6 +91,7 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
     if(ico == null){
       logger.error("Image could not be found: "+ico);
     } else {
+      this.panel.removeAll();
       this.panel.add(new JLabel(ico));
     }
   }

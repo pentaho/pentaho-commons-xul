@@ -39,7 +39,6 @@ public class SwingImage extends SwingElement implements XulImage{
     return src;  
   }
   public void setSrc(String src) {
-    this.src = src;
 
     URL url = SwingButton.class.getClassLoader().getResource(this.container.getXulLoader().getRootDir()+src);
     
@@ -51,6 +50,7 @@ public class SwingImage extends SwingElement implements XulImage{
     if(ico == null){
       logger.error("Image could not be found: "+ico);
     }
+    this.src = src;
     
   }
   public void setSrc(Image img) {

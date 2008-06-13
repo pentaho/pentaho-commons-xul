@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -101,7 +102,7 @@ public class SwtDialog extends SwtElement implements XulDialog {
   }
 
   public String getButtons() {
-    return null; //new ArrayList<XulButton>(this.buttons.values());
+    return StringUtils.join(buttons, ",");
   }
 
   public String getOndialogaccept() {

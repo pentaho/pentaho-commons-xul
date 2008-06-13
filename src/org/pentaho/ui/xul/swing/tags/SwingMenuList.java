@@ -70,10 +70,21 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
     DefaultComboBoxModel model = (DefaultComboBoxModel) this.combobox.getModel();
     model.removeAllElements();
 
+    SwingMenuitem selecetdItem = null;
+    
     for (XulComponent item : popup.getChildNodes()) {
       JMenuItem jmenuItem = (JMenuItem) ((SwingMenuitem) item).getManagedObject();
-      model.addElement(jmenuItem.getText());
+      SwingMenuitem tempItem = (SwingMenuitem) item;
+      model.addElement(tempItem);
+      if(tempItem.isSelected()){
+        selecetdItem = tempItem;
+      }
     }
+    
+    if(selecetdItem != null){
+      model.setSelectedItem(selecetdItem);
+    }
+    
     loaded = true;
     initialized = true;
   }
@@ -143,7 +154,7 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
   }
 
   public Collection<T> getElements() {
-    return null;
+    return (Collection) this.getPopupElement().getChildNodes();
   }
 
   public String getBinding() {

@@ -44,8 +44,8 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     );
   }
 
-  public boolean getDisabled() {
-    return menuitem.isEnabled();
+  public boolean isDisabled() {
+    return !menuitem.isEnabled();
   }
 
   public String getLabel() {
@@ -64,6 +64,10 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     menuitem.setEnabled(!disabled);
   }
 
+  public void setDisabled(String disabled) {
+    menuitem.setEnabled(!Boolean.parseBoolean(disabled));
+  }
+
   public void setLabel(String label) {
     menuitem.setText(label);
   }
@@ -76,6 +80,14 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     return menuitem.isSelected();
   }
 
+  public void setSelected(String selected) {
+    menuitem.setSelected(Boolean.parseBoolean(selected));
+  }
+
+  public void setSelected(boolean selected) {
+    menuitem.setSelected(selected);
+  }
+  
   public void setImage(String image) {
     this.image = image;
   }
@@ -93,6 +105,11 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     }); 
   }
   
+  @Override
+  public String toString(){
+    return getLabel();
+  }
+
 }
 
   

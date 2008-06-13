@@ -22,7 +22,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private boolean readOnly = false;
   private int maxLength;
   private String text;
-  private TextType type = null;
+  private TextType type = TextType.NORMAL;
   private int max;
   private int min;
 
@@ -80,21 +80,19 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   }
 
   public boolean isMultiline() {
-    if (!textBox.isDisposed()){
-      multiLine = textBox.getLineCount() > 1;
-    }
+
     return multiLine;
   }
 
   public void setMultiline(boolean multi) {
-    
+
     if (multi == multiLine){
         return; // nothing has changed...
     }
     multiLine = multi;
     textBox.dispose();
   }
-  
+
   
 
   @Override
@@ -176,7 +174,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   }
 
   public void setOninput(String method) {
-    throw new NotImplementedException();
+    //throw new NotImplementedException();
   }
   public String getMin() {
     return ""+min;

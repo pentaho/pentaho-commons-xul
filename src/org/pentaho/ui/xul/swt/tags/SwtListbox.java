@@ -38,6 +38,10 @@ public class SwtListbox extends SwtElement implements XulListbox{
     this.disabled = disabled;
     if (!listBox.isDisposed()) listBox.setEnabled( !disabled );
   }
+  public void setDisabled(String dis) {
+    this.disabled = Boolean.parseBoolean(dis);
+    if (!listBox.isDisposed()) listBox.setEnabled( !disabled );
+  }
 
   public int getRows() {
     return rowsToDisplay;
@@ -157,5 +161,13 @@ public class SwtListbox extends SwtElement implements XulListbox{
     }
     listBox.setSelection(index);
   }
+  
+  public void setSelectedindex(String index) {
+    if (listBox.isDisposed()){
+      // TODO log error .. 
+    }
+    listBox.setSelection(Integer.parseInt(index));
+  }
+
 
 }

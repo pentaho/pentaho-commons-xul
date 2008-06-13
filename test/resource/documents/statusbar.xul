@@ -20,7 +20,7 @@
   </groupbox>
   
   <statusbar>
-    <statusbarpanel label="Left panel"/>
+    <statusbarpanel image="testImage.png"/>
     <spacer flex="1"/>
     <progressmeter mode="determined" value="82"/>
     <statusbarpanel label="Right panel"/>

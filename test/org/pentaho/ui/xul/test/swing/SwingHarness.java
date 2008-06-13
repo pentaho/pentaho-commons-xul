@@ -14,7 +14,7 @@ public class SwingHarness {
   public static void main(String[] args){
     try{
       
-      XulDomContainer container = new SwingXulLoader().loadXul("resource/documents/bindings.xul");
+      XulDomContainer container = new SwingXulLoader().loadXul("resource/documents/tabpanel.xul");
 
       XulRunner runner = new SwingXulRunner();
       runner.addContainer(container);

@@ -4,11 +4,11 @@
   orient="vertical"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
    xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
+  <script id="handler" src="org.pentaho.ui.xul.test.samples.ListBoxHandler"/>
 
-  <script id="handler" src="org.pentaho.ui.xul.test.samples.ImageHandler"/>
-  
-  <image src="testImage.png" id="img" />
-
-  <image src="testImage.png" width="200" height="200" id="img_dimed"/>
-  <button label="Test Image" onclick="handler.switchSrc()"/>
+    <listbox id="listbox" rows="5" onselect="handler.consume()" disabled="false" seltype="single" selectedindex="1">
+      <listitem label="Native(JDBC)" />
+      <listitem label="ODBC" id="listItem1" />
+      <listitem label="JNDI" id="listItem2"/>
+    </listbox>
 </window>

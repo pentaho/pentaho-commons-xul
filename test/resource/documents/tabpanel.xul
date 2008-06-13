@@ -6,13 +6,13 @@
 	
 	<script src="org.pentaho.ui.xul.test.samples.TabboxEventHandler" id="handler"/>
 	<tabbox id="myTabList" selectedIndex="2" flex="1">
-	  <tabs>
+	  <tabs id="tabs">
 	    <tab label="A First tab" disabled="true" id="tab1"/>
 	    <tab label="Second tab" id="tab2"/>
 	    <tab label="Another tab" id="tab3"/>
 	    <tab label="Last tab" id="tab4"/>
 	  </tabs>
-	  <tabpanels>
+	  <tabpanels id="tabpanels">
 	    <tabpanel>
 	      <groupbox>
 	        <caption label="testing"/>
@@ -22,7 +22,7 @@
 	    <tabpanel>
 				<label value="Tab 2"/>
 			</tabpanel>
-	    <tabpanel>
+	    <tabpanel id="panel3">
 				<label value="Tab 3"/>
 			</tabpanel>
 	    <tabpanel>

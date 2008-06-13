@@ -66,6 +66,10 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     this.disabled = disabled;
   }
 
+  public void setDisabled(String disabled) {
+    this.disabled = Boolean.parseBoolean(disabled);
+  }
+  
   public void setLabel(String label) {
     this.label = label;
   }
@@ -76,6 +80,10 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
 
   public boolean isSelected() {
     return selected;
+  }
+  
+  public void setSelected(String selected){
+    this.selected = Boolean.parseBoolean(selected);
   }
   
   public void setSelected(boolean val){

@@ -46,6 +46,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   private String onInput;
   private int min = -1;
   private int max = -1;
+  private int maxlength = -1;
   
   public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -74,7 +75,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public int getMaxlength() {
-    return 0;
+    return maxlength;
   }
 
   public boolean isDisabled() {
@@ -89,6 +90,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public void setMaxlength(int length) {
+    maxlength = length;
   }
 
   public boolean isMultiline() {
@@ -127,9 +129,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   }
 
   public void selectAll() {
-
     textComp.selectAll();
-    
   }
 
   public void setFocus() {

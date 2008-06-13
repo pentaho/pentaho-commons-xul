@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -33,6 +34,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private String onselect;
   private JScrollPane scrollPane;
   private static final Log logger = LogFactory.getLog(SwingListbox.class);
+  private boolean initialized = false;
   
   public SwingListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -49,11 +51,14 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   }
 
   public boolean isDisabled() {
-    return disabled;
+    return !this.listBox.isEnabled();
   }
 
   public void setDisabled(boolean disabled) {
     this.listBox.setEnabled(!disabled);
+  }
+  public void setDisabled(String disabled) {
+    this.listBox.setEnabled(!Boolean.parseBoolean(disabled));
   }
 
   public int getRows() {
@@ -71,6 +76,12 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
 
   public void setSeltype(String selType) {
     this.selType = selType;
+    SEL_TYPE sel = SEL_TYPE.valueOf(selType.toUpperCase());
+    if(sel == SEL_TYPE.SINGLE){
+      this.listBox.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    } else {
+      this.listBox.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    }
     
   }
 
@@ -87,6 +98,10 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
       }
     }
     this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
+    if(this.selectedIndex > -1){
+      this.listBox.setSelectedIndex(selectedIndex);
+    }
+    initialized = true;
   }
 
   public String getOnselect() {
@@ -101,7 +116,9 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     if(e.getValueIsAdjusting() == true){
       return;
     }
-    invoke(onselect);
+    if(initialized){
+      invoke(onselect);
+    }
   }
 
   public Object getSelectedItem() {
@@ -147,7 +164,14 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     return listBox.getSelectedIndices();
   }
 
+  private int selectedIndex = -1;
+  public void setSelectedindex(String idx) {
+    selectedIndex = Integer.parseInt(idx);
+    listBox.setSelectedIndex(Integer.parseInt(idx));
+  }
+  
   public void setSelectedIndex(int index) {
+    selectedIndex = index;
     listBox.setSelectedIndex(index);
   }
 }

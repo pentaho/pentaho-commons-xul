@@ -206,7 +206,7 @@ public class SwingElementTest {
     assertEquals("bang", element.getAttributeValue("baz"));
     
     List<Attribute> outAttrs = element.getAttributes();
-    assertEquals(3, outAttrs.size());
+    assertEquals(4, outAttrs.size());
     
   }
   

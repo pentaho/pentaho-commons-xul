@@ -19,7 +19,7 @@ public interface XulMenu extends XulContainer{
   public String getAccesskey();
   public void setAccesskey(String accessKey);
 
-  public boolean getDisabled();
+  public boolean isDisabled();
   public void setDisabled(boolean disabled);
   
   

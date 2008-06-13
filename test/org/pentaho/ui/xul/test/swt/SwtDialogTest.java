@@ -125,78 +125,78 @@ public class SwtDialogTest {
     assertEquals("start", dialog.getButtonalign());
   }
   
-//  @Test
-//  public void testIsHidden() throws Exception{
-//    new Thread(){
-//      public void run() {
-//        dialog.show();
-//      }
-//    }.start();
-//    while(dialog.isHidden() == true){
-//      Thread.sleep(300);
-//    }
-//    dialog.hide();
-//    System.out.println("dialog.isHidden()");
-//    assertTrue(dialog.isHidden());
-//  }
-//
-//  @Test
-//  public void testShow() throws Exception{
-//    new Thread(){
-//      public void run() {
-//        dialog.show();
-//      }
-//    }.start();
-//    int tries = 10;
-//    while(dialog.isHidden() == true){
-//      tries--;
-//      if(tries == 0){
-//        break;
-//      }
-//      Thread.sleep(300);
-//    }
-//    assertTrue(!dialog.isHidden());
-//  }
-//
-//  @Test
-//  public void testHide() throws Exception{
-//    new Thread(){
-//      public void run() {
-//        dialog.show();
-//      }
-//    }.start();
-//    int tries = 10;
-//    while(dialog.isHidden() == true){
-//      tries--;
-//      if(tries == 0){
-//        break;
-//      }
-//      Thread.sleep(300);
-//    }
-//    assertTrue(!dialog.isHidden());
-//    dialog.hide();
-//    assertTrue(dialog.isHidden());
-//  }
-//  
-//  @Test
-//  public void testSetVisibility() throws Exception{
-//    new Thread(){
-//      public void run() {
-//        dialog.setVisible(true);
-//      }
-//    }.start();
-//    int tries = 10;
-//    while(dialog.isHidden() == true){
-//      tries--;
-//      if(tries == 0){
-//        break;
-//      }
-//      Thread.sleep(300);
-//    }
-//    assertTrue(!dialog.isHidden());
-//    dialog.setVisible(false);
-//    assertTrue(dialog.isHidden());
-//  }
+  @Test
+  public void testIsHidden() throws Exception{
+    new Thread(){
+      public void run() {
+        dialog.show();
+      }
+    }.start();
+    while(dialog.isHidden() == true){
+      Thread.sleep(300);
+    }
+    dialog.hide();
+    System.out.println("dialog.isHidden()");
+    assertTrue(dialog.isHidden());
+  }
+
+  @Test
+  public void testShow() throws Exception{
+    new Thread(){
+      public void run() {
+        dialog.show();
+      }
+    }.start();
+    int tries = 10;
+    while(dialog.isHidden() == true){
+      tries--;
+      if(tries == 0){
+        break;
+      }
+      Thread.sleep(300);
+    }
+    assertTrue(!dialog.isHidden());
+  }
+
+  @Test
+  public void testHide() throws Exception{
+    new Thread(){
+      public void run() {
+        dialog.show();
+      }
+    }.start();
+    int tries = 10;
+    while(dialog.isHidden() == true){
+      tries--;
+      if(tries == 0){
+        break;
+      }
+      Thread.sleep(300);
+    }
+    assertTrue(!dialog.isHidden());
+    dialog.hide();
+    assertTrue(dialog.isHidden());
+  }
+  
+  @Test
+  public void testSetVisibility() throws Exception{
+    new Thread(){
+      public void run() {
+        dialog.setVisible(true);
+      }
+    }.start();
+    int tries = 10;
+    while(dialog.isHidden() == true){
+      tries--;
+      if(tries == 0){
+        break;
+      }
+      Thread.sleep(300);
+    }
+    assertTrue(!dialog.isHidden());
+    dialog.setVisible(false);
+    assertTrue(dialog.isHidden());
+  }
   
   @Ignore
   @Test
