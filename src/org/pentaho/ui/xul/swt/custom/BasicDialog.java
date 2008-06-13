@@ -83,6 +83,18 @@ public class BasicDialog extends TitleAreaDialog {
     }
     return super.getInitialSize();
   }
+  
+  /**
+   * This is silly, but we need this method to try to 
+   * preempt a user from setting a size too small 
+   * to render the child components well. 
+   * 
+   * @return the height and width that the dialog deems reasonable,
+   * without taking into account the user specified height and width.
+   */
+  public Point getPreferredSize(){
+    return super.getInitialSize();
+  }
 
   public void setHeight(int height) {
     this.height = height;
