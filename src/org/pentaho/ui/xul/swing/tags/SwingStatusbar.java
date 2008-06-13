@@ -61,6 +61,7 @@ public class SwingStatusbar extends SwingElement implements XulStatusbar {
   public void layout() {
     resetContainer();
     initialized = true;
+    super.layout();
   }
 
   @Override
