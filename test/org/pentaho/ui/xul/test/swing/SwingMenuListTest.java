@@ -34,15 +34,15 @@ public class SwingMenuListTest {
   @Test
   public void testGetSelectedItem() throws Exception{
     XulMenuitem item = (XulMenuitem) doc.getElementById("regions");
-    
-    assertEquals(list.getSelectedItem(), item);
+
+    assertEquals(list.getSelectedItem().toString(), item.getLabel());
   }
 
   @Test
   public void testSetSelectedItem() throws Exception{
     XulMenuitem item = (XulMenuitem) doc.getElementById("sales");
     list.setSelectedItem(item);
-    assertEquals(list.getSelectedItem(), item);
+    assertEquals(list.getSelectedItem().toString(), item.getLabel());
   }
 
   @Test
@@ -77,7 +77,7 @@ public class SwingMenuListTest {
   public void testSetSelecetdIndex() throws Exception{
     XulMenuitem item = (XulMenuitem) doc.getElementById("sales");
     list.setSelectedIndex(0);
-    assertEquals(list.getSelectedItem(), item);
+    assertEquals(list.getSelectedItem().toString(), item.getLabel());
   }
   
   
