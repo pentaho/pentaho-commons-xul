@@ -255,12 +255,12 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
   public void setRootChildren(final XulTreeChildren rootChildren) {
     this.rootChildren = rootChildren;
 
-    for (XulComponent row : rootChildren.getChildNodes()) {
-
-      XulTreeRow xrow = (XulTreeRow) row.getChildNodes().get(0);
-      addTreeRow(xrow);
-
-    }
+//    for (XulComponent row : rootChildren.getChildNodes()) {
+//
+//      XulTreeRow xrow = (XulTreeRow) row.getChildNodes().get(0);
+//      addTreeRow(xrow);
+//
+//    }
 
   }
 

@@ -81,6 +81,9 @@ public abstract class AbstractXulLoader implements XulLoader {
   }
 
   public void setRootDir(String loc) {
+    if(!rootDir.equals("/")){      //lets only set this once
+      return;
+    }
     if (loc.lastIndexOf("/") > 0 && loc.indexOf(".xul") > -1) { //exists and not first char
       rootDir = loc.substring(0, loc.lastIndexOf("/") + 1);
     } else {

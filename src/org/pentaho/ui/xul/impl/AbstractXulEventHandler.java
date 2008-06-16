@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.impl;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.dom.Document;
@@ -12,6 +15,7 @@ public abstract class AbstractXulEventHandler implements XulEventHandler {
   protected XulDomContainer xulDomContainer;
   protected Document document;
   protected String name;
+  protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
   
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.impl.XulEventHandler#getName()
@@ -56,5 +60,18 @@ public abstract class AbstractXulEventHandler implements XulEventHandler {
   }
   public void bind(String srcXulComponentElementId, String srcXulComponentPropertyName, String destXulComponentElementId, String destXulComponentPropertyName){
     getXulDomContainer().createBinding(srcXulComponentElementId, srcXulComponentPropertyName, destXulComponentElementId, destXulComponentPropertyName);
+  }
+  
+  
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    changeSupport.addPropertyChangeListener(listener);
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    changeSupport.removePropertyChangeListener(listener);
+  }
+  
+  protected void firePropertyChange(String attr, Object previousVal, Object newVal){
+    changeSupport.firePropertyChange(attr, previousVal, newVal);
   }
 }

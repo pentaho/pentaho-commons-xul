@@ -1,8 +1,9 @@
 package org.pentaho.ui.xul.impl;
 
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
 
-public interface XulEventHandler {
+public interface XulEventHandler extends XulEventSource {
 
   /**
    * The name of this event handler instance; maps to event handler literals in the xul document.

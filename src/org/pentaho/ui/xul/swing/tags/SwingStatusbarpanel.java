@@ -62,9 +62,10 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
   }
   
   public void setLabel(String label){
-    this.label.setText(label);
+//    this.label.setText(label);
     panel.removeAll();
-    panel.add(this.label);
+    panel.add(new JLabel(label));
+    panel.repaint();
   }
   
   
@@ -91,8 +92,11 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
     if(ico == null){
       logger.error("Image could not be found: "+ico);
     } else {
-      this.panel.removeAll();
-      this.panel.add(new JLabel(ico));
+      panel.removeAll();
+      panel.add(new JLabel(ico));
+      this.panel.revalidate();
+      this.panel.repaint();
+      logger.info("Set new image :"+src);
     }
   }
 
