@@ -1,14 +1,13 @@
 package org.pentaho.ui.xul.binding;
 
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
 
 public class Binding {
 
-  private XulEventSource source;
+  private Object source;
 
-  private XulEventSource target;
+  private Object target;
 
   private String sourceAttr;
 
@@ -33,7 +32,7 @@ public class Binding {
     setTargetAttr(targetAttr);
   }
 
-  public Binding(XulDomContainer container, XulEventSource source, String sourceAttr, String targetId, String targetAttr) {
+  public Binding(XulDomContainer container, Object source, String sourceAttr, String targetId, String targetAttr) {
     this.source = source;
     setSourceAttr(sourceAttr);
     this.target = container.getDocumentRoot().getElementById(targetId);
@@ -43,7 +42,7 @@ public class Binding {
     container.addBinding(this);
   }
 
-  public Binding(XulEventSource source, String sourceAttr, XulEventSource target, String targetAttr) {
+  public Binding(Object source, String sourceAttr, Object target, String targetAttr) {
     this.source = source;
     setSourceAttr(sourceAttr);
     this.target = target;
@@ -58,21 +57,21 @@ public class Binding {
     return bindingStrategy;
   }
 
-  public XulEventSource getSource() {
+  public Object getSource() {
     return source;
   }
 
-  public void setSource(XulEventSource source) {
+  public void setSource(Object source) {
 
     this.source = source;
   }
 
-  public XulEventSource getTarget() {
+  public Object getTarget() {
 
     return target;
   }
 
-  public void setTarget(XulEventSource target) {
+  public void setTarget(Object target) {
 
     this.target = target;
   }

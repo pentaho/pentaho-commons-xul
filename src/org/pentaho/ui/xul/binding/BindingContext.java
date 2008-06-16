@@ -45,8 +45,13 @@ public class BindingContext {
     }
     
     for(PropertyChangeListener propListener : bindingListeners.get(bind)){
-      bind.getSource().removePropertyChangeListener(propListener);
-      bind.getTarget().removePropertyChangeListener(propListener);
+      if(bind.getSource() instanceof XulEventSource){
+        ((XulEventSource) bind.getSource()).removePropertyChangeListener(propListener);
+      }
+      
+      if(bind.getTarget() instanceof XulEventSource){
+        ((XulEventSource) bind.getTarget()).removePropertyChangeListener(propListener);
+      }
     }
     bindingListeners.remove(bind);
     bindings.remove(bind);
@@ -144,8 +149,15 @@ public class BindingContext {
     }
   }
 
-  private void setupBinding(final Binding bind, final XulEventSource source, final String sourceAttr,
-      final XulEventSource target, final String targetAttr, final Direction dir) {
+  private void setupBinding(final Binding bind, final Object source, final String sourceAttr,
+      final Object target, final String targetAttr, final Direction dir) {
+    
+
+    if(!(source instanceof XulEventSource)){
+      logger.error("Binding error, source object not a XulEventSource instance");
+      return;
+    }
+    
     if (source == null || sourceAttr == null) {
       throw new BindingException("source bean or property is null");
     }
@@ -175,6 +187,8 @@ public class BindingContext {
     //find set method
     final Method targetSetMethod = findSetMethod(target, targetAttr, getClazz);
 
+    
+    
     //setup prop change listener to handle binding
     PropertyChangeListener listener = new PropertyChangeListener() {
       public void propertyChange(PropertyChangeEvent evt) {
@@ -190,16 +204,18 @@ public class BindingContext {
       }
     };
 
-    source.addPropertyChangeListener(listener);
-    
+    ((XulEventSource) source).addPropertyChangeListener(listener);
+
     //add listener to map so we can remove it later when asked.
     if(! bindingListeners.containsKey(bind)){
       bindingListeners.put(bind, new ArrayList<PropertyChangeListener>());
     }
     
     bindingListeners.get(bind).add(listener);
-    
+
     logger.info("Binding established: " + source + "." + sourceAttr + " ==> " + target + "." + targetAttr);
+  
+  
   }
 
 }

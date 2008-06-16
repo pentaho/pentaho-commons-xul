@@ -11,7 +11,7 @@ import org.pentaho.ui.xul.dom.Document;
  * @author OEM
  *
  */
-public abstract class AbstractXulEventHandler implements XulEventHandler {
+public abstract class AbstractXulEventHandler implements XulEventHandler, XulEventSource {
   protected XulDomContainer xulDomContainer;
   protected Document document;
   protected String name;
