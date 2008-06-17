@@ -161,7 +161,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
     				managedObject = scrollPane;
     				textArea.setEditable(!readonly);
     				this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
-    		    this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    		    //this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     			} else {
     				textField = new JTextField((value != null) ? value : "");
     				textField.setPreferredSize(new Dimension(150,textField.getPreferredSize().height));
