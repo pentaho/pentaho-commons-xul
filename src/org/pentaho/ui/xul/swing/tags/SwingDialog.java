@@ -75,6 +75,8 @@ public class SwingDialog extends SwingElement implements XulDialog {
   private enum BUTTON_ALIGN {
     START, CENTER, END, LEFT, RIGHT, MIDDLE
   };
+  
+  private JFrame frame;
 
   private XulComponent parent = null;
   public SwingDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
@@ -177,6 +179,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
       createDialog();
       dialog.pack();
     }
+    dialog.setLocationRelativeTo(frame);
     dialog.setVisible(true);
   }
 
@@ -257,9 +260,9 @@ public class SwingDialog extends SwingElement implements XulDialog {
     }
 
     if(window != null){
-      JFrame frame = (JFrame) window.getManagedObject();
+      frame = (JFrame) window.getManagedObject();
       dialog = new JDialog(frame);
-      dialog.setLocationRelativeTo(frame);
+      dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     } else {
       dialog = new JDialog();
       dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
