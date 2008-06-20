@@ -4,59 +4,72 @@ import java.util.Collection;
 
 import org.pentaho.ui.xul.XulContainer;
 
-public interface XulTree<T> extends XulContainer {
-  
-  public boolean isHierarchical();
+public interface XulTree extends XulContainer {
 
-  public void setDisabled(boolean dis);
-  public boolean isDisabled();
-  
-  public void setEditable(boolean edit);
-  public boolean isEditable();
-  
-  public void setEnableColumnDrag(boolean drag);
-  public boolean isEnableColumnDrag();
-  
-  public void setOnselect(String select);
-  public String getOnselect();
-  
-  public void setOnedit(String onedit);
-  public String getOnedit();
-  
-  public void setRows(int rows);
-  public int getRows();
-  
-  public void setSeltype(String type);
-  public String getSeltype();
-  
-  public int getWidth();
-  
-  public void setColumns(XulTreeCols columns);
-  public XulTreeCols getColumns();
+  boolean isHierarchical();
 
-  public XulTreeChildren getRootChildren() ;
-  public void setRootChildren(XulTreeChildren rootChildren) ;
-  
-  public void setActiveCellCoordinates(int row, int column);
-  public int[] getActiveCellCoordinates();
-  
-  public Object[][] getValues();
- 
-  public int[] getSelectedRows();
-  
-  public void setSelectedRows(int[] rows);
-  
-  public void addTreeRow(XulTreeRow row);
-  public void removeTreeRows(int[] rows);
-  
-  public Object getData();
-  public void setData(Object data);
+  void setDisabled(boolean dis);
 
-  public void update();
-  
-  public void clearSelection();
+  boolean isDisabled();
 
-  public void setElements(Collection<T> elements);
-  public Collection<T> getElements();
+  void setEditable(boolean edit);
+
+  boolean isEditable();
+
+  void setEnableColumnDrag(boolean drag);
+
+  boolean isEnableColumnDrag();
+
+  void setOnselect(String select);
+
+  String getOnselect();
+
+  void setOnedit(String onedit);
+
+  String getOnedit();
+
+  void setRows(int rows);
+
+  int getRows();
+
+  void setSeltype(String type);
+
+  String getSeltype();
+
+  int getWidth();
+
+  void setColumns(XulTreeCols columns);
+
+  XulTreeCols getColumns();
+
+  XulTreeChildren getRootChildren();
+
+  void setRootChildren(XulTreeChildren rootChildren);
+
+  void setActiveCellCoordinates(int row, int column);
+
+  int[] getActiveCellCoordinates();
+
+  Object[][] getValues();
+
+  int[] getSelectedRows();
+
+  void setSelectedRows(int[] rows);
+
+  void addTreeRow(XulTreeRow row);
+
+  void removeTreeRows(int[] rows);
+
+  Object getData();
+
+  void setData(Object data);
+
+  void update();
+
+  void clearSelection();
+
+  <T> void setElements(Collection<T> elements);
+
+  <T> Collection<T> getElements();
 
 }
