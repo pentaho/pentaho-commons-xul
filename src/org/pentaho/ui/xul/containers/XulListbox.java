@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.containers;
 
+import java.util.Collection;
+
 import org.pentaho.ui.xul.XulContainer;
 
 /**
@@ -163,6 +165,12 @@ public interface XulListbox extends XulContainer {
    * @return The selected items' indices as an array of native int values.
    */
   public int[] getSelectedIndices();
+  
+
+  <T> void setElements(Collection<T> elements);
+
+  <T> Collection<T> getElements();
+
 
   
 

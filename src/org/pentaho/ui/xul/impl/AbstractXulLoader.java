@@ -371,12 +371,76 @@ public abstract class AbstractXulLoader implements XulLoader {
       }
     }
   }
+  
+  private InputStream getInputStreamForSrc(String src){
+    InputStream in = getClass().getClassLoader().getResourceAsStream(this.getRootDir() + src);
+    if (in == null){
+      //try fully qualified name
+      in = getClass().getClassLoader().getResourceAsStream(src);
+      if (in == null) {
+        logger.error("Cant find overlay source");
+      }
+    }
+    return in;
+  }
 
   public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
       XulDomContainer container) throws XulException {
 
-    final Document doc = getDocFromClasspath(overlaySrc);
-
+    InputStream in = getInputStreamForSrc(overlaySrc);
+    Document doc = null;
+    ResourceBundle res = null;
+    try {
+      res = ResourceBundle.getBundle(overlaySrc.replace(".xul", ""));
+      if(res == null){
+        res = ResourceBundle.getBundle((this.getRootDir() + overlaySrc).replace(".xul", ""));
+        if(res == null){
+          logger.error("could not find resource bundle, defaulting to main");
+          res = mainBundle;
+        }
+      }
+    } catch (MissingResourceException e) {
+      logger.debug("no default resource bundle available: "+overlaySrc);
+    }
+    
+    String runningTranslatedOutput = getDocFromInputStream(in).asXML();     //TODO IOUtils this
+    if(res != null){
+      try{
+        runningTranslatedOutput = ResourceBundleTranslator.translate(runningTranslatedOutput, res);
+  
+       } catch(IOException e){
+        logger.error("Error loading resource bundle for overlay: "+overlaySrc, e);
+      }
+    }
+      
+    //check for top-level message bundle and apply it
+    if(this.mainBundle != null){
+      try{
+          
+        runningTranslatedOutput = ResourceBundleTranslator.translate(runningTranslatedOutput, this.mainBundle);
+        try{
+          SAXReader rdr = new SAXReader();
+          String upperedIdDoc = this.upperCaseIDAttrs(runningTranslatedOutput.toString());
+          doc = rdr.read(new StringReader(upperedIdDoc)); 
+        } catch(DocumentException e){
+          logger.error("Error loading XML while applying top level message bundle to overlay file:", e);
+        }
+      } catch(IOException e){
+        logger.error("Error loading Resource Bundle File to apply to overlay: ",e);
+      }
+    } else {
+      try{
+        SAXReader rdr = new SAXReader();
+        String upperedIdDoc = this.upperCaseIDAttrs(runningTranslatedOutput.toString());
+        doc = rdr.read(new StringReader(upperedIdDoc)); 
+      } catch(DocumentException e){
+        logger.error("Error loading XML while applying top level message bundle to overlay file:", e);
+      }
+    } 
+    
+  
+    
+    
     Element overlayRoot = doc.getRootElement();
 
     for (Object child : overlayRoot.elements()) {

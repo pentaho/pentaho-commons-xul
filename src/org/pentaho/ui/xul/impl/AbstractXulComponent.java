@@ -96,6 +96,9 @@ public abstract class AbstractXulComponent implements XulComponent {
     children.add(c);
   }
 
+  public void addComponentAt(XulComponent c, int idx) {
+    children.add(idx, c);
+  }
   public void layout() {
     initialized = true;
   }
@@ -127,6 +130,12 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void addChild(Element ele) {
     this.element.addChild(ele);
+  }
+
+  
+  
+  public void addChildAt(Element element, int idx) {
+    this.element.addChildAt(element, idx);
   }
 
   public void removeChild(Element ele) {

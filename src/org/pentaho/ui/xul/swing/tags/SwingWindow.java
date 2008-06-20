@@ -225,5 +225,22 @@ public class SwingWindow extends SwingElement implements XulWindow {
          Toolkit.getDefaultToolkit().getSystemClipboard();
     clipboard.setContents(data, data);
   }
+
+
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    resetContainer();
+    layout();
+  }
+
+  @Override
+  public void addComponentAt(XulComponent c, int idx) {
+    super.addComponentAt(c, idx);
+    super.resetContainer();
+    super.layout();
+  }
+  
+  
 	
 }

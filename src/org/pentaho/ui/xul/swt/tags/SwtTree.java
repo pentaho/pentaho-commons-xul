@@ -22,7 +22,7 @@ import org.pentaho.ui.xul.swt.TabularWidget;
 import org.pentaho.ui.xul.swt.custom.TableWrapper;
 import org.pentaho.ui.xul.swt.custom.TreeWrapper;
 
-public class SwtTree<T> extends SwtElement implements XulTree<T> {
+public class SwtTree extends SwtElement implements XulTree {
 
   // Tables and trees 
   // share so much of the same API, I wrapped their common methods 
@@ -278,13 +278,12 @@ public class SwtTree<T> extends SwtElement implements XulTree<T> {
     this.onedit = onedit;  
   }
 
-  public void setElements(Collection<T> elements) {
-    
-        // TODO Auto-generated method stub 
-      
+  public <T> void setElements(Collection<T> elements) {
+    // TODO implement setElements  
   }
 
-  public Collection<T> getElements() {
+  public <T> Collection<T> getElements() {
+    //TODO: implement getElements
     return null;
   }
 

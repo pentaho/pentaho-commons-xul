@@ -76,7 +76,7 @@ public class ElementDom4J implements Element{
    * @see org.pentaho.ui.xul.dom.Element#getElementById(java.lang.String)
    */
   public XulComponent getElementById(String id) {
-    XulElementDom4J ele = (XulElementDom4J) element.elementByID(id);
+    XulElementDom4J ele = (XulElementDom4J) element.getDocument().elementByID(id);
     if (ele == null){
       return null;
     }
@@ -196,6 +196,18 @@ public class ElementDom4J implements Element{
     
   }
   
+  public void addChildAt(Element element, int idx) {
+    org.dom4j.Element dElement = (org.dom4j.Element) element.getElementObject();
+    
+    org.dom4j.Element dElementparent = dElement.getParent();
+    if(dElementparent != null){
+      dElementparent.remove(dElement);
+    }
+    
+    this.element.elements().add(idx, dElement);
+    
+  }
+
   public Object getElementObject(){
     return this.element;
   }

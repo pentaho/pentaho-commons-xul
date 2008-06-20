@@ -20,6 +20,13 @@ public interface XulContainer extends XulComponent {
   public void addComponent(XulComponent component);
   
   /**
+   * The method used to add child controls\widgets to a container at the specified index
+   * @param component the child component to add to this container.
+   * @param index to add the component at (zero-based)
+   */
+  public void addComponentAt(XulComponent component, int idx);
+  
+  /**
    * @see org.pentaho.ui.xul.util.Orient
    * @return the orientation for this container. Valid values are found in the Orient enum. 
    */

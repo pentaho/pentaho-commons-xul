@@ -28,6 +28,7 @@ public interface Element {
   public List<XulComponent> getElementsByTagName(String tagName);
   
   public void addChild(Element element);
+  public void addChildAt(Element element, int idx);
   public void removeChild(Element element);
   
   public Object getElementObject();

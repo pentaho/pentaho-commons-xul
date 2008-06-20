@@ -29,6 +29,7 @@ public class SwingScript extends SwingElement implements XulScript{
         return;
       }
       domContainer.addEventHandler(self.getAttributeValue("ID"), self.getAttributeValue("src"));
+      logger.info("Added new event handler: "+self.getAttributeValue("ID"));
     } catch(XulException e){
       logger.error("Error adding Event Handler to Window: "+self.getAttributeValue("ID")+" : "+self.getAttributeValue("src"), e);
     }

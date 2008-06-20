@@ -2,6 +2,8 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.beans.Expression;
+import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -11,6 +13,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -35,6 +38,9 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private JScrollPane scrollPane;
   private static final Log logger = LogFactory.getLog(SwingListbox.class);
   private boolean initialized = false;
+  private XulDomContainer xulDomContainer;
+
+  private String binding;
   
   public SwingListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -44,6 +50,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     listBox.setBorder(BorderFactory.createLineBorder(Color.gray));
     listBox.addListSelectionListener(this);
     managedObject = scrollPane;
+    this.xulDomContainer = container;
   }
   
   public Object getManagedObject(){
@@ -90,11 +97,11 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   }
   
   public void layout(){
-    super.layout();
-    
+   
     for(XulComponent comp : children){
       if(comp instanceof SwingListitem){
         this.model.addElement(comp);
+        logger.info("added swingListitem to model");
       }
     }
     this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
@@ -116,7 +123,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     if(e.getValueIsAdjusting() == true){
       return;
     }
-    if(initialized){
+    if(onselect != null && initialized){
       invoke(onselect);
     }
   }
@@ -150,6 +157,10 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   
   public void removeItems(){
     this.model.removeAllElements();
+    this.children.clear();
+    for(XulComponent c : this.getChildNodes()){
+      this.removeChild(c);
+    }
   }
 
   public int getRowCount() {
@@ -174,4 +185,57 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     selectedIndex = index;
     listBox.setSelectedIndex(index);
   }
+
+  
+  private Collection boundElements;
+  public <T> Collection<T> getElements() {
+    return (Collection<T>) boundElements;
+  }
+
+  public <T> void setElements(Collection<T> elements) {
+    boundElements = elements;
+    
+    logger.info("SetElements on listbox called: collection has "+elements.size()+" rows");
+    
+    this.model.removeAllElements();
+    this.removeItems();
+    for (T t : elements) {
+      SwingListitem item = new SwingListitem(null, this, this.xulDomContainer, null);
+
+      String attribute = getBinding();
+      if (StringUtils.isEmpty(attribute)) {
+        item.setLabel(extractLabel(t));
+      }
+
+      this.addChild(item);
+      this.addComponent(item);
+    }
+
+    layout();
+    
+  }
+  
+
+  public String getBinding() {
+    return binding;
+  }
+
+  public void setBinding(String binding) {
+    this.binding = binding;
+  }
+
+  private <T> String extractLabel(T t) {
+    String attribute = getBinding();
+    if (StringUtils.isEmpty(attribute)) {
+      return t.toString();
+    } else {
+      String getter = "get" + (String.valueOf(attribute.charAt(0)).toUpperCase()) + attribute.substring(1);
+      try {
+        return new Expression(t, getter, null).getValue().toString();
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
 }

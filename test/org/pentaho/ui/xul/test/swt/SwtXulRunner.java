@@ -75,5 +75,11 @@ public class SwtXulRunner implements XulRunner {
     return containers;
   }
 
+  public void debug() throws XulException {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
 
 }

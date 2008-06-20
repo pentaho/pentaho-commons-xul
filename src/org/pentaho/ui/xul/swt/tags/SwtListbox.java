@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.util.Collection;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -167,6 +169,18 @@ public class SwtListbox extends SwtElement implements XulListbox{
       // TODO log error .. 
     }
     listBox.setSelection(Integer.parseInt(index));
+  }
+
+  public <T> Collection<T> getElements() {
+    return null;
+        // TODO Auto-generated method stub return null;
+      
+  }
+
+  public <T> void setElements(Collection<T> elements) {
+    
+        // TODO Auto-generated method stub 
+      
   }
 
 
