@@ -8,12 +8,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.FocusEvent;
 import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -37,6 +39,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import java.awt.event.FocusAdapter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -54,7 +57,7 @@ import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTree<T> extends SwingElement implements XulTree<T> {
+public class SwingTree extends SwingElement implements XulTree {
 
   private JTable table;
 
@@ -382,8 +385,9 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
       }
 
     });
-
+    
   }
+  int numOfListeners = 0;
 
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
@@ -516,6 +520,7 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
       @Override
       public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row,
           final int column) {
+        Component comp;
         switch (col.getColumnType()) {
           case CHECKBOX:
             final JCheckBox checkbox = new JCheckBox();
@@ -537,7 +542,8 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
             if (isSelected) {
               checkbox.setBackground(Color.LIGHT_GRAY);
             }
-            return checkbox;
+            comp = checkbox;
+            break;
           case COMBOBOX:
             Vector val = (value != null) ? (Vector) value : new Vector();
             final JComboBox comboBox = new JComboBox(val);
@@ -556,7 +562,8 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
             }
 
             control = comboBox;
-            return comboBox;
+            comp = comboBox;
+            break;
           default:
             final JTextField label = new JTextField((String) value);
 
@@ -581,8 +588,11 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
             }
 
             control = label;
-            return label;
+            comp = label;
+            break;
         }
+        
+        return comp;
       }
 
       @Override
@@ -722,6 +732,10 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
 
   public void clearSelection() {
     table.getSelectionModel().clearSelection();
+    CellEditor ce = table.getCellEditor();
+    if(ce != null){
+      ce.stopCellEditing();
+    }
   }
 
   public void setSelectedRows(int[] rows) {
@@ -739,8 +753,9 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
     this.onedit = onedit;
   }
 
-  public void setElements(Collection<T> elements) {
+  public <T> void setElements(Collection<T> elements) {
     this.getRootChildren().removeAll();
+    logger.debug("setting elements collection size: "+elements.size());
     try {
       for (T o : elements) {
         XulTreeRow row = this.getRootChildren().addNewRow();
@@ -749,7 +764,10 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
           XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
           String attribute = ((XulTreeCol) col).getBinding();
           String getter = "get" + (String.valueOf(attribute.charAt(0)).toUpperCase()) + attribute.substring(1);
-          cell.setLabel(new Expression(o, getter, null).getValue().toString());
+          Object val = new Expression(o, getter, null).getValue();
+          if(val != null){
+            cell.setLabel(val.toString());
+          }
           row.addCell(cell);
         }
 
@@ -762,7 +780,7 @@ public class SwingTree<T> extends SwingElement implements XulTree<T> {
     }
   }
 
-  public Collection<T> getElements() {
+  public <T> Collection<T> getElements() {
     return null;
   }
 
