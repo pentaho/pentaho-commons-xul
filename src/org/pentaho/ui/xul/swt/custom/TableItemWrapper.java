@@ -347,7 +347,7 @@ public class TableItemWrapper implements RowWidget {
         XulDomContainer container = window.getXulDomContainer();
         
         try{
-          container.invoke(parentTree.getOnselect(), new Object[] {new Integer(parentTable.indexOf(item))});
+          container.invoke(parentTree.getOnselect(), new Object[] {parentTable.indexOf(item)});
         } catch (XulException ex){
           logger.error("Error calling oncommand event",ex);
         }
