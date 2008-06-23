@@ -81,5 +81,18 @@ public interface XulMessageBox {
    * @return the return value for the dialog. 
    */
   public int open();
+  
+  /**
+   * Sets whether or not to display the message as a simple label or in a scrollable container.
+   * 
+   * @param scroll boolean flag
+   */
+  public void setScrollable(boolean scroll);
+  
+  public int getHeight();
+  public void setHeight(int height);
+  
+  public int getWidth();
+  public void setWidth(int width);
 
 }

@@ -114,4 +114,10 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
     return messageBox.open();
   }
 
+  public void setScrollable(boolean scroll) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
 }

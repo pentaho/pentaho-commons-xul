@@ -1,9 +1,12 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -26,6 +29,7 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
   private Object[] defaultButtons = new Object[]{OK};
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(JOptionPane.INFORMATION_MESSAGE);
+  private boolean scrollable = false;
 
   public SwingMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("messagebox");
@@ -71,8 +75,24 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
     int messageType = (icon instanceof Integer) ? ((Integer)icon).intValue() : JOptionPane.INFORMATION_MESSAGE;
     Icon imageIcon = (icon instanceof Icon) ? (Icon)icon : null;
     
-    return JOptionPane.showOptionDialog((Component) getParent().getManagedObject(), message, title, 
+    Object msgObject = null;
+    
+    if(scrollable){
+      JScrollPane sp = new JScrollPane(new JTextArea(message));
+      sp.setPreferredSize(new Dimension(this.getWidth(),this.getHeight()));
+      msgObject = sp;
+      
+    } else {
+      msgObject = message;
+    }
+     
+    
+    return JOptionPane.showOptionDialog((Component) getParent().getManagedObject(), msgObject, title, 
         JOptionPane.DEFAULT_OPTION, messageType, imageIcon, buttons, buttons[0]);
+  }
+
+  public void setScrollable(boolean scroll) {
+    this.scrollable = scroll;
   }
 
 
