@@ -1,6 +1,9 @@
 package org.pentaho.ui.xul.components;
 
+import java.util.List;
+
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.util.ColumnType;
 
 public interface XulTreeCol extends XulComponent {
@@ -43,5 +46,6 @@ public interface XulTreeCol extends XulComponent {
   
   public void setBinding(String binding);
   public String getBinding();
+  public List<InlineBindingExpression> getBindingExpressions();
 
 }
