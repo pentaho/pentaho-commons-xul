@@ -5,12 +5,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingExpression;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
+import org.pentaho.ui.xul.test.samples.BindingBean;
 import org.pentaho.ui.xul.test.samples.BindingEventHandler;
 
 public class BindingsTest {
@@ -44,9 +46,9 @@ public class BindingsTest {
     handler.addProduct();
     XulTree table = (XulTree) container.getDocumentRoot().getElementById("productTable");
     
-    assertTrue(table.getRows() == 1);
+    assertEquals(1, table.getRows());
     handler.addProduct();
-    assertTrue(table.getRows() == 2);
+    assertEquals(2, table.getRows());
   }
   
   @Test
@@ -85,8 +87,5 @@ public class BindingsTest {
     container.removeBinding(handler.removeMeBinding);
     handler.model.setFirstName("John");
     assertEquals("Ted", firstName.getValue());
-
-    
   }
-  
 }
