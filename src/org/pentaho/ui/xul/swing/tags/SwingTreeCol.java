@@ -1,14 +1,18 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.table.TableColumnModel;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.binding.BindingUtil;
+import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCol;
-import org.pentaho.ui.xul.containers.XulTree;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.ColumnType;
-import org.pentaho.ui.xul.dom.Element;
 
 public class SwingTreeCol extends SwingElement implements XulTreeCol {
 
@@ -152,11 +156,16 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
     
   }
 
+  public List<InlineBindingExpression> getBindingExpressions() {
+    return BindingUtil.getBindingExpressions(binding);
+  }
+
+  public void setBinding(String binding) {
+    this.binding = binding;
+  }
+  
   public String getBinding() {
     return binding;
   }
 
-  public void setBinding(String binding) {
-    this.binding = binding;  
-  }
 }
