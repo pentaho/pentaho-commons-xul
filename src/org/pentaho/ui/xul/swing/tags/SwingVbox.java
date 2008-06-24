@@ -54,7 +54,6 @@ public class SwingVbox extends SwingElement implements XulVbox {
   public void addComponent(XulComponent component) {
     super.addComponent(component);
     if (initialized) {
-      System.err.println("ADDED COMPONENT TO VBOX: RESETTING CONTAINER");
       resetContainer();
       layout();
     }
