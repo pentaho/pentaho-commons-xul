@@ -8,8 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.beans.Expression;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -39,7 +40,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import java.awt.event.FocusAdapter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,6 +47,8 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -93,8 +95,12 @@ public class SwingTree extends SwingElement implements XulTree {
 
   private SELECTION_MODE selType = SELECTION_MODE.SINGLE;
 
+  private XulDomContainer domContainer;
+
   public SwingTree(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tree");
+
+    this.domContainer = domContainer;
 
     XulComponent primaryColumn = self.getElementByXPath("//treecol[@primary='true']");
     XulComponent isaContainer = self.getElementByXPath("//treeitem[@container='true']");
@@ -258,12 +264,12 @@ public class SwingTree extends SwingElement implements XulTree {
   public void setRootChildren(final XulTreeChildren rootChildren) {
     this.rootChildren = rootChildren;
 
-//    for (XulComponent row : rootChildren.getChildNodes()) {
-//
-//      XulTreeRow xrow = (XulTreeRow) row.getChildNodes().get(0);
-//      addTreeRow(xrow);
-//
-//    }
+    //    for (XulComponent row : rootChildren.getChildNodes()) {
+    //
+    //      XulTreeRow xrow = (XulTreeRow) row.getChildNodes().get(0);
+    //      addTreeRow(xrow);
+    //
+    //    }
 
   }
 
@@ -385,8 +391,9 @@ public class SwingTree extends SwingElement implements XulTree {
       }
 
     });
-    
+
   }
+
   int numOfListeners = 0;
 
   @Override
@@ -466,17 +473,20 @@ public class SwingTree extends SwingElement implements XulTree {
             }
             return checkbox;
           case COMBOBOX:
-            SwingTreeCell cell = (SwingTreeCell) rootChildren.getItem(row).getRow().getCell(
+            final SwingTreeCell cell = (SwingTreeCell) rootChildren.getItem(row).getRow().getCell(
                 SwingTree.this.columns.getChildNodes().indexOf(col));
 
             Vector data;
 
-            JComboBox comboBox;
+            final JComboBox comboBox = new JComboBox();
             if (cell == null) {
-              comboBox = new JComboBox();
-            } else {
-              comboBox = null;
+              comboBox.addItemListener(new ItemListener() {
 
+                public void itemStateChanged(ItemEvent e) {
+                  cell.setSelectedIndex(comboBox.getSelectedIndex());
+                }
+              });
+            } else {
               data = (cell.getValue() != null) ? (Vector) cell.getValue() : new Vector();
 
               if (data == null) {
@@ -486,10 +496,8 @@ public class SwingTree extends SwingElement implements XulTree {
                 }
               }
               if (data != null) {
-                comboBox = new JComboBox(data);
+                comboBox.setModel(new DefaultComboBoxModel(data));
                 comboBox.setSelectedIndex(cell.getSelectedIndex());
-              } else {
-                comboBox = new JComboBox();
               }
             }
 
@@ -591,7 +599,7 @@ public class SwingTree extends SwingElement implements XulTree {
             comp = label;
             break;
         }
-        
+
         return comp;
       }
 
@@ -733,7 +741,7 @@ public class SwingTree extends SwingElement implements XulTree {
   public void clearSelection() {
     table.getSelectionModel().clearSelection();
     CellEditor ce = table.getCellEditor();
-    if(ce != null){
+    if (ce != null) {
       ce.stopCellEditing();
     }
   }
@@ -755,19 +763,22 @@ public class SwingTree extends SwingElement implements XulTree {
 
   public <T> void setElements(Collection<T> elements) {
     this.getRootChildren().removeAll();
-    logger.debug("setting elements collection size: "+elements.size());
     try {
       for (T o : elements) {
+        logger.debug("row type is " + o.getClass().getName());
         XulTreeRow row = this.getRootChildren().addNewRow();
 
         for (XulComponent col : this.getColumns().getChildNodes()) {
           XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
-          String attribute = ((XulTreeCol) col).getBinding();
-          String getter = "get" + (String.valueOf(attribute.charAt(0)).toUpperCase()) + attribute.substring(1);
-          Object val = new Expression(o, getter, null).getValue();
-          if(val != null){
-            cell.setLabel(val.toString());
+          for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
+            logger.debug("applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + o
+                + "]");
+
+            Binding binding = new Binding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+            domContainer.addBinding(binding);
+            binding.fireSourceChanged();
           }
+
           row.addCell(cell);
         }
 
