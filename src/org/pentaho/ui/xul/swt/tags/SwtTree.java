@@ -164,7 +164,7 @@ public class SwtTree extends SwtElement implements XulTree {
 
     widget.addSelectionListener(new SelectionAdapter() {
       public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-        invoke(method, new Object[] {new Integer(widget.getSelectionIndex())});
+        invoke(method, new Object[] {widget.getSelectionIndex()});
       }
     });
   }
