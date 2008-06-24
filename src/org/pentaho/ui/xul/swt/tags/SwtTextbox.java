@@ -68,9 +68,6 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
    * @return int The maximum number of characters that the textbox allows to be entered.
    */
   public int getMaxlength(){
-    if (!textBox.isDisposed()){
-      maxLength = textBox.getTextLimit();
-    }
     return maxLength;
   }
 
