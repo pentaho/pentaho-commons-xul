@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -360,6 +361,14 @@ public abstract class AbstractXulLoader implements XulLoader {
       if (removeElement != null && removeElement.equalsIgnoreCase("true")) {
         sourceElement.getParent().remove(sourceElement);
       } else {
+        
+        List attribs = overlay.attributes();
+        
+        //merge in attributes
+        for(Object o : attribs){
+          Attribute atr = (Attribute) o;
+          sourceElement.addAttribute(atr.getName(), atr.getValue());
+        }
 
         //lets start out by just including everything
         for (Object overlayChild : overlay.elements()) {
