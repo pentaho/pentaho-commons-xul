@@ -179,6 +179,12 @@ public class BindingContext {
     }
     if (getRetVal != null) {
       logger.debug("Get Return was not null, checking it's type");
+      
+      if(bind.getConversion() != null){
+        logger.debug("Conversion Object found, converting 'get' return value before looking for set");
+        getRetVal = bind.doConversions(getRetVal, dir);
+      }
+      
       //checks for Boxed primatives
       getClazz = getObjectClassOrType(getRetVal);
       logger.debug("Get Return type is: " + getClazz);
