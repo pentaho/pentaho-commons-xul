@@ -1,10 +1,15 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.binding.BindingUtil;
+import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.swt.ColumnWidget;
@@ -142,11 +147,15 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     this.customClass = customClass;
   }
 
+  public List<InlineBindingExpression> getBindingExpressions() {
+    return BindingUtil.getBindingExpressions(binding);
+  }
+
   public String getBinding() {
     return binding;
   }
 
   public void setBinding(String binding) {
-    this.binding = binding;  
+    this.binding = binding;
   }
 }
