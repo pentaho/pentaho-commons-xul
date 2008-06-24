@@ -1,6 +1,8 @@
 package org.pentaho.ui.xul.test.samples;
 
-public class Product {
+import org.pentaho.ui.xul.util.ViewModel;
+
+public class Product extends ViewModel {
   private String name;
   private String description;
   
@@ -15,8 +17,8 @@ public class Product {
   }
 
   public void setName(String name) {
-  
     this.name = name;
+    firePropertyChange("name", null, name);
   }
 
   public String getDescription() {
