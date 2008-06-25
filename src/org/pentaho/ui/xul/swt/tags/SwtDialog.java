@@ -5,6 +5,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Event;
@@ -136,7 +138,15 @@ public class SwtDialog extends SwtElement implements XulDialog {
 
   public void setOndialogcancel(String command) {
     this.ondialogcancel = command;
-
+    if (ondialogcancel != null){
+     
+      dialog.addShellListener(new ShellAdapter(){
+        public void shellClosed(ShellEvent e){
+            invoke(ondialogcancel);
+        }
+      });
+            
+    }
   }
 
   public void setTitle(String title) {

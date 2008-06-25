@@ -1,6 +1,8 @@
 package org.pentaho.ui.xul.swt.custom;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -21,6 +23,11 @@ public class BasicDialog extends TitleAreaDialog {
     super(shell);
     create();
   }
+  
+  public void addShellListener(ShellAdapter adapter){
+    getShell().addShellListener(adapter);
+  }
+
 
   /**
    * For test purposes only
