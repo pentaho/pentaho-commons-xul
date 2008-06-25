@@ -2,7 +2,6 @@ package org.pentaho.ui.xul.test.samples;
 
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
-import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
