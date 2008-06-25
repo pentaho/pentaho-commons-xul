@@ -480,12 +480,6 @@ public class SwingTree extends SwingElement implements XulTree {
 
             final JComboBox comboBox = new JComboBox();
             if (cell == null) {
-              comboBox.addItemListener(new ItemListener() {
-
-                public void itemStateChanged(ItemEvent e) {
-                  cell.setSelectedIndex(comboBox.getSelectedIndex());
-                }
-              });
             } else {
               data = (cell.getValue() != null) ? (Vector) cell.getValue() : new Vector();
 

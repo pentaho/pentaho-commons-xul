@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.dom.Element;
@@ -35,7 +36,9 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
 
   public void setSelectedIndex(int index) {
     logger.debug("swingTreeCell.setSelectedIndex("+index+")");
+    Object oldValue = this.index;
     this.index = index;
+    this.changeSupport.firePropertyChange("selectedIndex", oldValue, index);
   }
 
   public int getSelectedIndex() {
@@ -75,6 +78,7 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
   }
 
   public void setValue(Object value) {
+    Object oldValue = this.value;
     if (value instanceof String && ((String) value).indexOf(",") == -1) {
       //String and not a comma separated list
       this.value = Boolean.parseBoolean(((String) value));
@@ -92,5 +96,8 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
     } else {
       this.value = value;
     }
+    
+    this.index = index;
+    this.changeSupport.firePropertyChange("value", oldValue, value);
   }
 }
