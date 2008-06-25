@@ -1,13 +1,5 @@
 package org.pentaho.ui.xul.test.samples;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
-import org.pentaho.ui.xul.XulEventSource;
-import org.pentaho.ui.xul.binding.Binding;
-import org.pentaho.ui.xul.components.XulLabel;
-import org.pentaho.ui.xul.components.XulTextbox;
-import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 import org.pentaho.ui.xul.util.ViewModel;
 
 public class FormModel extends ViewModel {
