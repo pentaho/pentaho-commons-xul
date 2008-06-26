@@ -201,7 +201,7 @@ public class Binding {
             value = doConversions(value, dir);
             targetSetMethod.invoke(b, value);
           } catch (Exception e) {
-            throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "]", e);
+            throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
           }
         }
       }

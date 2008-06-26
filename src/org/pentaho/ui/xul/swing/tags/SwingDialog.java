@@ -118,6 +118,15 @@ public class SwingDialog extends SwingElement implements XulDialog {
     }
     return dialog;
   }
+  
+  @Override
+  public void addComponent(XulComponent component) {
+    super.addComponent(component);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
 
   public String getButtonlabelaccept() {
     return buttonlabelaccept;

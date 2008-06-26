@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -193,11 +194,19 @@ public class SwingButton extends SwingElement implements XulButton{
     } else {
       this.button.setVerticalTextPosition(JButton.CENTER);
       if(this.dir == Direction.FORWARD){
-        this.button.setHorizontalTextPosition(JButton.LEFT);
-      } else {
         this.button.setHorizontalTextPosition(JButton.RIGHT);
+      } else {
+        this.button.setHorizontalTextPosition(JButton.LEFT);
       }
     }
+    
+    //Square button patch. if no label and icon is square, set min/max to square up button
+    if(button.getText().equals("") && button.getIcon().getIconHeight() == button.getIcon().getIconWidth()){
+      Dimension dim = button.getPreferredSize();
+      button.setMinimumSize(new Dimension(dim.height, dim.height));
+      button.setPreferredSize(new Dimension(dim.height, dim.height));
+    }
+    
     super.layout();
   }
 

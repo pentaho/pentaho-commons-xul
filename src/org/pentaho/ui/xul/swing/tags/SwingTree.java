@@ -768,6 +768,10 @@ public class SwingTree extends SwingElement implements XulTree {
 
   public <T> void setElements(Collection<T> elements) {
     this.getRootChildren().removeAll();
+    if(elements == null){
+      table.updateUI();
+      return;
+    }
     try {
       for (T o : elements) {
         logger.debug("row type is " + o.getClass().getName());
