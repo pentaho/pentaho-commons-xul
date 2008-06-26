@@ -56,7 +56,7 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     getXulDomContainer().addBinding(binding);
     
     //Approach 2: First Name Textbox
-    binding = new Binding(getXulDomContainer(), model, "firstName", "firstNameInput", "value");
+    binding = new Binding(document, model, "firstName", "firstNameInput", "value");
     getXulDomContainer().addBinding(binding);
     
     //Approach 3: Last Name Textbox
@@ -81,7 +81,7 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     
     
     //Conversions
-    binding = new Binding(getXulDomContainer(), "degreesField", "value", "radiansField", "value");
+    binding = new Binding(document, "degreesField", "value", "radiansField", "value");
     binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
     binding.setConversion(new BindingConvertor<String, String>(){
       @Override

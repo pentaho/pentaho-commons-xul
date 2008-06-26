@@ -307,14 +307,14 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   }
 
   public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr){
-    Binding bind = new Binding(this, source, sourceAttr, targetId, targetAttr);
+    Binding bind = new Binding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
     bindings.add(bind);
     return bind;
     
   }
 
   public Binding createBinding(String source, String sourceAttr, String targetId, String targetAttr){
-    Binding bind = new Binding(this, source, sourceAttr, targetId, targetAttr);
+    Binding bind = new Binding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
     bindings.add(bind);
     return bind;
   }

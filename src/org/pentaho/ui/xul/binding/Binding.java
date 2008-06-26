@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
+import org.pentaho.ui.xul.dom.Document;
 
 public class Binding {
 
@@ -42,21 +43,19 @@ public class Binding {
 
   private Type bindingStrategy = Type.BI_DIRECTIONAL;
 
-  public Binding(XulDomContainer container, String sourceId, String sourceAttr, String targetId, String targetAttr) {
-    this.source = container.getDocumentRoot().getElementById(sourceId);
+  public Binding(Document document, String sourceId, String sourceAttr, String targetId, String targetAttr) {
+    this.source = document.getElementById(sourceId);
     setSourceAttr(sourceAttr);
-    this.target = container.getDocumentRoot().getElementById(targetId);
+    this.target = document.getElementById(targetId);
     setTargetAttr(targetAttr);
   }
 
-  public Binding(XulDomContainer container, Object source, String sourceAttr, String targetId, String targetAttr) {
+  public Binding(Document document, Object source, String sourceAttr, String targetId, String targetAttr) {
     this.source = source;
     setSourceAttr(sourceAttr);
-    this.target = container.getDocumentRoot().getElementById(targetId);
+    this.target = document.getElementById(targetId);
     ;
     setTargetAttr(targetAttr);
-
-    container.addBinding(this);
   }
 
   public Binding(Object source, String sourceAttr, Object target, String targetAttr) {

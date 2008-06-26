@@ -6,6 +6,7 @@ package org.pentaho.ui.xul.dom;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.Binding;
 
 
 /**
@@ -20,5 +21,6 @@ public interface Document extends Element{
   public void addOverlay(String src) throws XulException;
   public void removeOverlay(String src) throws XulException;
   public void loadFragment(String id, String src) throws XulException;
+  public void addBinding(Binding bind);
   
 }

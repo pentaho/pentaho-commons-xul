@@ -6,6 +6,7 @@ package org.pentaho.ui.xul.dom.dom4j;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 /**
@@ -67,5 +68,8 @@ public class DocumentDom4J extends ElementDom4J implements Document {
   public void loadFragment(String id, String src) throws XulException {
     container.loadFragment(id, src);
   }
-  
+
+  public void addBinding(Binding bind){
+    container.addBinding(bind);
+  }
 }
