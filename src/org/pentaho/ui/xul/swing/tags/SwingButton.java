@@ -201,7 +201,10 @@ public class SwingButton extends SwingElement implements XulButton{
     }
     
     //Square button patch. if no label and icon is square, set min/max to square up button
-    if(button.getText().equals("") && button.getIcon().getIconHeight() == button.getIcon().getIconWidth()){
+    if(button.getText().equals("") 
+        && button.getIcon() != null 
+        && button.getIcon().getIconHeight() == button.getIcon().getIconWidth()
+      ){
       Dimension dim = button.getPreferredSize();
       button.setMinimumSize(new Dimension(dim.height, dim.height));
       button.setPreferredSize(new Dimension(dim.height, dim.height));
