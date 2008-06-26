@@ -11,11 +11,17 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.InlineBindingExpression;
+import org.pentaho.ui.xul.components.XulTreeCell;
+import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.tags.SwingTree;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.TabularWidget;
@@ -62,7 +68,7 @@ public class SwtTree extends SwtElement implements XulTree {
   
   private int activeRow = -1;
   private int activeColumn = -1;
-  
+  private XulDomContainer domContainer;
 
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -82,6 +88,17 @@ public class SwtTree extends SwtElement implements XulTree {
     tree = widget.getComposite();
 
     managedObject = tree;
+    
+    domContainer = container;
+
+    //hook up default selection listener for change support
+
+    widget.addSelectionListener(new SelectionAdapter() {
+      public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+        SwtTree.this.changeSupport.firePropertyChange("selectedRows", null, SwtTree.this.getSelectedRows());
+      }
+    });
+  
   }
 
   public boolean isHierarchical() {
@@ -240,7 +257,7 @@ public class SwtTree extends SwtElement implements XulTree {
 	
 	public int[] getSelectedRows() {
 		//TODO: implement Tree Selection
-		return (this.isHierarchical)? null : ((Table) widget).getSelectionIndices();
+		return (this.isHierarchical)? null : ((Table) ((TableWrapper) widget).getComposite()).getSelectionIndices();
 	}
 
 	public void addTreeRow(XulTreeRow row) {
@@ -279,12 +296,36 @@ public class SwtTree extends SwtElement implements XulTree {
   }
 
   public <T> void setElements(Collection<T> elements) {
-    // TODO implement setElements  
+    this.getRootChildren().removeAll();
+    try {
+      for (T o : elements) {
+        logger.info("row type is " + o.getClass().getName());
+        SwtTreeRow row = (SwtTreeRow) this.getRootChildren().addNewRow();
+
+        for (XulComponent col : this.getColumns().getChildNodes()) {
+          XulTreeCell cell = new SwtTreeCell(null, row, this.domContainer, "treecell");
+          for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
+            logger.info("applying binding expression [" + exp.getModelAttr() + "] to xul tree cell and model [" + o
+                + "]");
+
+            Binding binding = new Binding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+            domContainer.addBinding(binding);
+            binding.fireSourceChanged();
+          }
+        }
+        row.layout();
+        
+
+      }
+      
+      //treat as a selection change
+      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
+    } catch (Exception e) {
+      logger.error("error adding elements", e);
+    }
   }
 
   public <T> Collection<T> getElements() {
-    //TODO: implement getElements
     return null;
   }
-
 }

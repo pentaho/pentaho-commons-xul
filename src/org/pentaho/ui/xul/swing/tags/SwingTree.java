@@ -391,6 +391,17 @@ public class SwingTree extends SwingElement implements XulTree {
       }
 
     });
+    
+    //Property change on selections
+    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
+      public void valueChanged(ListSelectionEvent event) {
+        if (event.getValueIsAdjusting() == true) {
+          return;
+        }
+        SwingTree.this.changeSupport.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
+      }
+    });
 
   }
 
@@ -778,6 +789,9 @@ public class SwingTree extends SwingElement implements XulTree {
 
       }
       table.updateUI();
+      
+      //treat as a selection change
+      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
     } catch (XulException e) {
       logger.error("error adding elements", e);
     } catch (Exception e) {

@@ -12,7 +12,7 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
   String label="";
   String srcUrl=null;
   Object value=null;
-  XulTreeRow parentRow;
+  SwtTreeRow parentRow;
   boolean isEditable=false;
   
   public SwtTreeCell(XulComponent parent){
@@ -21,7 +21,7 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
 
   public SwtTreeCell(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
-    parentRow = (XulTreeRow)parent;
+    parentRow = (SwtTreeRow) parent;
     parentRow.addCell(this);
   }
   
@@ -55,6 +55,7 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
 
   public void setValue(Object value) {
     this.value=value;
+    parentRow.layout();
   }
 
   public int getSelectedIndex() {

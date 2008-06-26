@@ -182,8 +182,6 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 
 	      public void keyPressed(KeyEvent e) {}
 	      public void keyReleased(KeyEvent e) {
-	        String newVal = SwingTextbox.this.getValue();
-	        
 	        SwingTextbox.this.changeSupport.firePropertyChange("value", "", SwingTextbox.this.getValue());
 	      }
 

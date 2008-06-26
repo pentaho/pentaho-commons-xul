@@ -2,11 +2,14 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
+import org.pentaho.ui.xul.swing.tags.SwingTextbox;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.TextType;
 import org.pentaho.ui.xul.dom.Element;
@@ -30,6 +33,14 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     super(tagName);
     parentComposite = (Composite)parent.getManagedObject();
     textBox = createNewText();
+    textBox.addKeyListener(new KeyListener(){
+
+      public void keyPressed(KeyEvent arg0) {}
+      public void keyReleased(KeyEvent arg0) {
+        SwtTextbox.this.changeSupport.firePropertyChange("value", "", SwtTextbox.this.getValue());
+      }
+      
+    });
     managedObject = textBox;
   }
   

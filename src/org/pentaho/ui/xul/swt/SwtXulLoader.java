@@ -50,6 +50,7 @@ public class SwtXulLoader extends AbstractXulLoader{
     parser.registerHandler("TREEROW", "org.pentaho.ui.xul.swt.tags.SwtTreeRow");
     parser.registerHandler("TREECELL", "org.pentaho.ui.xul.swt.tags.SwtTreeCell");
     parser.registerHandler("PROGRESSMETER", "org.pentaho.ui.xul.swt.tags.SwtProgressmeter");
+    parser.registerHandler("SPACER", "org.pentaho.ui.xul.swt.tags.SwtSpacer");
     
 
     parser.registerHandler("TABBOX", "org.pentaho.ui.xul.swt.tags.SwtTabbox");
