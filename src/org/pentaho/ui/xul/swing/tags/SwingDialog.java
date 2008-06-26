@@ -78,10 +78,12 @@ public class SwingDialog extends SwingElement implements XulDialog {
   
   private JFrame frame;
 
+  private String ID;
   private XulComponent parent = null;
   public SwingDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("dialog");
-
+    ID = self.getAttributeValue("ID");
+    
     this.parent = parent;
     this.domContainer = domContainer;
     
@@ -153,8 +155,11 @@ public class SwingDialog extends SwingElement implements XulDialog {
     btns = buttons;
     String[] tempButtons = buttons.split(",");
 
-    for (int i = 0; i < tempButtons.length; i++) {
-      this.buttons.put(SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()), new SwingButton());
+    for (int i = 0; i < tempButtons.length;  i++) {
+      SwingButton btn = new SwingButton(null, this, this.domContainer, "button");
+      addChild(btn);
+      this.buttons.put(SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()), btn);
+      btn.setId(ID+"_" + SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()).toString().toLowerCase());
     }
   }
 
