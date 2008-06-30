@@ -539,10 +539,11 @@ public class SwingTree extends SwingElement implements XulTree {
         switch (col.getColumnType()) {
           case CHECKBOX:
             final JCheckBox checkbox = new JCheckBox();
-
+            final JTable tbl = table;
             checkbox.addActionListener(new ActionListener() {
               public void actionPerformed(ActionEvent event) {
                 SwingTree.this.table.setValueAt(checkbox.isSelected(), row, column);
+                tbl.getCellEditor().stopCellEditing();
               }
             });
 
