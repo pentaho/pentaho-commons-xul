@@ -287,6 +287,8 @@ public class SwingTree extends SwingElement implements XulTree {
       }
     }
     table.updateUI();
+    //treat as selection change.
+    changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
   }
 
   private int rows = -1;
@@ -381,7 +383,7 @@ public class SwingTree extends SwingElement implements XulTree {
           int newColWidth = (int) (newWidth * ((double) flex / totalFlex));
 
           int headerWidth = table.getColumnModel().getColumn(i).getPreferredWidth();
-          int setWidth = (headerWidth > newColWidth) ? headerWidth : newColWidth;
+          int setWidth = newColWidth; //(headerWidth > newColWidth) ? headerWidth : newColWidth;
 
           table.getColumnModel().getColumn(i).setWidth(setWidth);
           table.getColumnModel().getColumn(i).setPreferredWidth(setWidth);
@@ -770,6 +772,7 @@ public class SwingTree extends SwingElement implements XulTree {
     this.getRootChildren().removeAll();
     if(elements == null){
       table.updateUI();
+      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
       return;
     }
     try {
