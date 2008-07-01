@@ -47,6 +47,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
   private int min = -1;
   private int max = -1;
   private int maxlength = -1;
+  private String oldValue;
   
   public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -180,9 +181,14 @@ public class SwingTextbox extends SwingElement implements XulTextbox  {
 
 	    textComp.addKeyListener(new KeyListener(){
 
-	      public void keyPressed(KeyEvent e) {}
+	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
 	      public void keyReleased(KeyEvent e) {
-	        SwingTextbox.this.changeSupport.firePropertyChange("value", "", SwingTextbox.this.getValue());
+	        if(!oldValue.equals(textComp.getText())){
+	          SwingTextbox.this.changeSupport.firePropertyChange("value", "", SwingTextbox.this.getValue());
+	          oldValue = textComp.getText();
+	        } else {
+	          logger.debug("Special key pressed, ignoring");
+	        }
 	      }
 
 	      public void keyTyped(KeyEvent e) {}
