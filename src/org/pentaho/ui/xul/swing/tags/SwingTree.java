@@ -771,6 +771,13 @@ public class SwingTree extends SwingElement implements XulTree {
 
   public <T> void setElements(Collection<T> elements) {
     this.getRootChildren().removeAll();
+    
+    //active editor needs updating, but won't if still active
+    CellEditor ce = table.getCellEditor();
+    if (ce != null) {
+      ce.stopCellEditing();
+    }
+    
     if(elements == null){
       table.updateUI();
       changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
