@@ -713,7 +713,7 @@ public class SwingTree extends SwingElement implements XulTree {
 
     @Override
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
-      if (onedit != null) {
+      if (onedit != null && !suppressEvents) {
         SwingUtilities.invokeLater(new Runnable() {
           public void run() {
             invoke(onedit, new Object[] { new Integer(table.getSelectedRow()) });
@@ -769,7 +769,9 @@ public class SwingTree extends SwingElement implements XulTree {
     this.onedit = onedit;
   }
 
+  private boolean suppressEvents = false;
   public <T> void setElements(Collection<T> elements) {
+    suppressEvents = true;
     this.getRootChildren().removeAll();
     
     //active editor needs updating, but won't if still active
@@ -804,6 +806,7 @@ public class SwingTree extends SwingElement implements XulTree {
 
       }
       table.updateUI();
+      suppressEvents = false;
       
       //treat as a selection change
       changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
