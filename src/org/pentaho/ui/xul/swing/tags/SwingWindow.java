@@ -240,6 +240,11 @@ public class SwingWindow extends SwingElement implements XulWindow {
     super.resetContainer();
     super.layout();
   }
+
+
+  public Object getRootObject() {
+    return frame;
+  }
   
   
 	

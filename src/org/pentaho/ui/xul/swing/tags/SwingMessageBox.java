@@ -23,7 +23,7 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
   private static final String NO = "No";
   private static final String CLOSE = "Close";
   
-
+  private Component parentObject = null;
   private String message = "Default Message";
   private String title = "Message Box";
   private Object[] defaultButtons = new Object[]{OK};
@@ -87,12 +87,24 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
     }
      
     
-    return JOptionPane.showOptionDialog((Component) getParent().getManagedObject(), msgObject, title, 
+    return JOptionPane.showOptionDialog(getParentObject(), msgObject, title, 
         JOptionPane.DEFAULT_OPTION, messageType, imageIcon, buttons, buttons[0]);
   }
 
   public void setScrollable(boolean scroll) {
     this.scrollable = scroll;
+  }
+
+  public void setModalParent(Object parent) {
+    parentObject = (Component) parent;
+  }
+  
+  private Component getParentObject(){
+    if(parentObject != null){
+      return parentObject;
+    } else {
+      return (Component) getParent().getManagedObject();
+    }
   }
 
 

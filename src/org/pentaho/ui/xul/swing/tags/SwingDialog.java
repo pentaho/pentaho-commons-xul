@@ -91,8 +91,6 @@ public class SwingDialog extends SwingElement implements XulDialog {
 
     container = new JPanel(new GridBagLayout());
 
-    managedObject = "empty"; // enclosing containers should not try to attach this as a child
-
     resetContainer();
   }
 
@@ -283,6 +281,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
     }
 
     dialog.setLayout(new BorderLayout());
+    managedObject = dialog;
 
     JPanel mainPanel = new JPanel(new BorderLayout());
     mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -407,6 +406,10 @@ public class SwingDialog extends SwingElement implements XulDialog {
 
   public void setXulDomContainer(XulDomContainer xulDomContainer) {
    this.domContainer = xulDomContainer;
+  }
+
+  public Object getRootObject() {
+    return managedObject;
   }
 
 }

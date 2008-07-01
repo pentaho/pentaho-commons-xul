@@ -50,4 +50,5 @@ public interface XulRoot extends XulContainer{
   public String getOnload();
 
 
+  public Object getRootObject();
 }

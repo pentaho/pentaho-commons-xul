@@ -18,6 +18,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(SWT.ICON_INFORMATION);
   private XulComponent parent;
+  private Shell parentObject = null;
 
   public SwtMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("messagebox");
@@ -65,12 +66,8 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
    * We do this so we can pick up new buttons or icons if they choose to reuse their SWTMessageBox
    */
   private void createNewMessageBox(){
-    Shell shell = null;
-    if (getParent() instanceof SwtDialog){
-      shell = ((SwtDialog)getParent()).getShell();
-    }else{
-      shell = (Shell) getParent().getManagedObject();
-    }
+    Shell shell = getParentObject();
+    
     messageBox = new MessageBox(shell, getBitwiseStyle());
     messageBox.setMessage(getMessage());
     messageBox.setText(getTitle());
@@ -116,8 +113,20 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
 
   public void setScrollable(boolean scroll) {
     
-        // TODO Auto-generated method stub 
-      
+  }
+
+  public void setModalParent(Object parent) {
+    parentObject = (Shell) parent;
+  }
+  
+  private Shell getParentObject(){
+    if(parentObject != null){
+      return parentObject;
+    } else if (getParent() instanceof SwtDialog){
+      return ((SwtDialog)getParent()).getShell();
+    }else{
+      return (Shell) getParent().getManagedObject();
+    }
   }
 
 }

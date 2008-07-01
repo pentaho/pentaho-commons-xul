@@ -348,4 +348,8 @@ public class SwtDialog extends SwtElement implements XulDialog {
     return returnCode;
   }
 
+  public Object getRootObject() {
+    return dialog.getShell();
+  }
+
 }

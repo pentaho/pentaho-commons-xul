@@ -94,5 +94,7 @@ public interface XulMessageBox {
   
   public int getWidth();
   public void setWidth(int width);
+  
+  public void setModalParent(Object parent);
 
 }

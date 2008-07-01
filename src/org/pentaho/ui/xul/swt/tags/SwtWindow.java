@@ -148,4 +148,8 @@ public class SwtWindow extends SwtElement implements XulWindow {
     throw new UnsupportedOperationException();
   }
 
+  public Object getRootObject() {
+    return shell;
+  }
+
 }
