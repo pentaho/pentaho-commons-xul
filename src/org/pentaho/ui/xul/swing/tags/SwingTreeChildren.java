@@ -69,18 +69,28 @@ public class SwingTreeChildren extends SwingElement implements XulTreeChildren {
 
   public void removeAll() {
     while (items.size() > 0) {
-      removeItem(0);
+      removeItem(0, false);
     }
+    tree.update();
   }
 
   public void removeItem(XulTreeItem item) {
     items.remove(item);
     this.removeChild(item);
+    tree.update();
   }
 
-  public void removeItem(int rowIndex) {
+  public void removeItem(int rowIndex, boolean refresh) {
     this.removeChild(items.get(rowIndex));
     items.remove(rowIndex);
+    if (refresh) {
+    	tree.update();
+    }
+    
+  }
+  
+  public void removeItem(int rowIndex) {
+  	removeItem(rowIndex, true);
   }
 
   public void setAlternatingbackground(boolean alt) {
