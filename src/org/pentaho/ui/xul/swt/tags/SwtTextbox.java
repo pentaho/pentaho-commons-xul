@@ -28,16 +28,19 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private TextType type = TextType.NORMAL;
   private int max;
   private int min;
-
+  private String oldValue = "";
+  
   public SwtTextbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     parentComposite = (Composite)parent.getManagedObject();
     textBox = createNewText();
     textBox.addKeyListener(new KeyListener(){
 
-      public void keyPressed(KeyEvent arg0) {}
+      public void keyPressed(KeyEvent arg0) { oldValue = textBox.getText();}
       public void keyReleased(KeyEvent arg0) {
-        SwtTextbox.this.changeSupport.firePropertyChange("value", "", SwtTextbox.this.getValue());
+        if(!oldValue.equals(textBox.getText())){
+          SwtTextbox.this.changeSupport.firePropertyChange("value", "", SwtTextbox.this.getValue());
+        }
       }
       
     });
