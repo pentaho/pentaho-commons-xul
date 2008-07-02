@@ -166,6 +166,8 @@ public interface XulListbox extends XulContainer {
    */
   public int[] getSelectedIndices();
   
+  public void setSelectedIndices(int[] indices);
+  
 
   <T> void setElements(Collection<T> elements);
 

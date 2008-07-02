@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.beans.Expression;
+import java.util.Arrays;
 import java.util.Collection;
 
 import javax.swing.BorderFactory;
@@ -13,15 +14,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
-import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
@@ -41,6 +40,8 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   private XulDomContainer xulDomContainer;
 
   private String binding;
+
+  private int[] curSelectedIndices = new int[0];
   
   public SwingListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -126,6 +127,8 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     if(onselect != null && initialized){
       invoke(onselect);
     }
+    //FIXME: not sure if this is where we should bind selection models
+    setSelectedIndices(listBox.getSelectedIndices());
   }
 
   public Object getSelectedItem() {
@@ -148,9 +151,16 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
     for (Object object : items) {
       indices[++index] = model.indexOf(object); 
     }
-    listBox.setSelectedIndices(indices);
+//    setSelectedIndices(indices);
   }
-
+  
+  public void setSelectedIndices(int[] indices) {
+    if(!Arrays.equals(curSelectedIndices, indices)) {
+      this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
+      curSelectedIndices = indices;
+    }
+  }
+  
   public void addItem(Object item) {
     this.model.addElement(item);
   }

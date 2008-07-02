@@ -183,5 +183,10 @@ public class SwtListbox extends SwtElement implements XulListbox{
       
   }
 
+  public void setSelectedIndices(int[] indices) {
+    // TODO Auto-generated method stub
+    
+  }
+
 
 }
