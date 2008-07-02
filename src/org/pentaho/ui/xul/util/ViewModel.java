@@ -18,6 +18,9 @@ public class ViewModel implements XulEventSource{
   }
   
   protected void firePropertyChange(String attr, Object previousVal, Object newVal){
+    if(previousVal == null && newVal == null){
+      return;
+    }
     changeSupport.firePropertyChange(attr, previousVal, newVal);
   }
 }

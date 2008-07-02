@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
+import org.pentaho.ui.xul.swt.SwtXulRunner;
 
 public class SwtDialogTest {
 

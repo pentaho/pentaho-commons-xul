@@ -12,6 +12,7 @@ import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
+import org.pentaho.ui.xul.swt.SwtXulRunner;
 
 public class SwtHboxTest {
 

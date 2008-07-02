@@ -1,4 +1,4 @@
-package org.pentaho.ui.xul.test.swt;
+package org.pentaho.ui.xul.swt;
 
 import java.util.ArrayList;
 import java.util.List;

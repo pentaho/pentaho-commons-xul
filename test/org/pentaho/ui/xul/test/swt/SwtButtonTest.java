@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
+import org.pentaho.ui.xul.swt.SwtXulRunner;
 
 public class SwtButtonTest {
 

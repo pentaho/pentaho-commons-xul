@@ -26,6 +26,7 @@ import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
+import org.pentaho.ui.xul.swt.SwtXulRunner;
 import org.pentaho.ui.xul.util.Orient;
 
 import static org.junit.Assert.*;
