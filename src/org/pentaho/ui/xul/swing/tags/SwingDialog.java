@@ -92,6 +92,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
     this.orientation = Orient.VERTICAL;
 
     container = new JPanel(new GridBagLayout());
+    managedObject = "empty";
 
     resetContainer();
   }
@@ -283,8 +284,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
     }
 
     dialog.setLayout(new BorderLayout());
-    managedObject = dialog;
-
+    
     JPanel mainPanel = new JPanel(new BorderLayout());
     mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -411,7 +411,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
   }
 
   public Object getRootObject() {
-    return managedObject;
+    return dialog;
   }
 
 	public String getOnclose() {
