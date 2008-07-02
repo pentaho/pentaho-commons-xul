@@ -12,6 +12,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -281,11 +282,22 @@ public class SwingTree extends SwingElement implements XulTree {
   }
 
   public void removeTreeRows(int[] rows) {
-    for (int i = 0; i < rows.length; i++) {
-      if (i < rootChildren.getItemCount()) {
-        this.rootChildren.removeItem(rows[i]);
-      }
-    }
+
+  	// sort the rows high to low
+  	ArrayList<Integer> rowArray = new ArrayList<Integer>();
+  	for (int i = 0; i < rows.length; i++) {
+  		rowArray.add(rows[i]);
+  	}  	
+  	Collections.sort(rowArray, Collections.reverseOrder());
+  	
+  	// remove the items in that order
+  	for (int i = 0; i < rowArray.size(); i++) {
+  		int item = rowArray.get(i);
+  		if (item >= 0 && item < rootChildren.getItemCount()) {
+  			this.rootChildren.removeItem(item);
+  		}
+  	}
+
     table.updateUI();
     //treat as selection change.
     changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
