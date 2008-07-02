@@ -260,7 +260,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.containers.XulWindow#invoke(java.lang.String, java.lang.Object[])
    */
-  public void invoke(String method, Object[] args) throws XulException {
+  public Object invoke(String method, Object[] args) throws XulException {
 
   try {
       if (method == null || method.indexOf('.') == -1) {
@@ -272,8 +272,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
       
       Object[] arguments = getArgs(methodName);
       if(arguments != null){
-        invoke(method.substring(0,method.indexOf("("))+"()", arguments);
-        return;
+        return invoke(method.substring(0,method.indexOf("("))+"()", arguments);
       } else {
         methodName = methodName.substring(0,methodName.indexOf("("));
       }
@@ -287,10 +286,10 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
         }
         
         Method m = evt.getClass().getMethod(methodName, classes);
-        m.invoke(evt, args);
+        return m.invoke(evt, args);
       } else {
         Method m = evt.getClass().getMethod(methodName, new Class[0]);
-        m.invoke(evt, args);
+        return m.invoke(evt, args);
       }
     } catch (Exception e) {
       logger.error("Error invoking method: " + method, e);

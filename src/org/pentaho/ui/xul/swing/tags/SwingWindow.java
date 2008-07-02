@@ -12,6 +12,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,6 +55,8 @@ public class SwingWindow extends SwingElement implements XulWindow {
   private String title = null;
   
   private String onload;
+  private String onclose;
+  private String onunload;
   
   private Clipboard clipboard;
   
@@ -81,7 +85,14 @@ public class SwingWindow extends SwingElement implements XulWindow {
 
     frame.getContentPane().setLayout(new BorderLayout());
     frame.getContentPane().add(container, BorderLayout.CENTER);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    frame.addWindowListener(new WindowAdapter() {
+    	public void windowClosing(WindowEvent e) {
+    		xulDomContainer.close();
+    	}
+    });
+    
+    
     managedObject = frame;
   }
 
@@ -164,6 +175,22 @@ public class SwingWindow extends SwingElement implements XulWindow {
     this.onload = onload;
 
   }
+  
+  public String getOnclose() {
+  	return onclose;
+  }
+
+  public String getOnunload() {
+  	return onunload;
+  }
+
+  public void setOnclose(String onclose) {
+  	this.onclose = onclose;
+  }
+
+  public void setOnunload(String onunload) {
+  	this.onunload = onunload;
+  }
 
   @Override
   public void layout() {
@@ -245,7 +272,5 @@ public class SwingWindow extends SwingElement implements XulWindow {
   public Object getRootObject() {
     return frame;
   }
-  
-  
 	
 }

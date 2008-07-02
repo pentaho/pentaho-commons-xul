@@ -57,6 +57,8 @@ public class SwingDialog extends SwingElement implements XulDialog {
   private String title = "Dialog";
 
   private String onload;
+  private String onclose;
+  private String onunload;
 
   private XulDialogheader header;
 
@@ -411,5 +413,21 @@ public class SwingDialog extends SwingElement implements XulDialog {
   public Object getRootObject() {
     return managedObject;
   }
+
+	public String getOnclose() {
+		return onclose;
+	}
+
+	public String getOnunload() {
+		return onunload;
+	}
+
+	public void setOnclose(String onclose) {
+		this.onclose = onclose;
+	}
+
+	public void setOnunload(String onunload) {
+		this.onunload = onunload;
+	}
 
 }

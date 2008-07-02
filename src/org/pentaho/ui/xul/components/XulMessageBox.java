@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.components;
 
+import org.pentaho.ui.xul.XulComponent;
+
 /**
  * A Xul messagebox wrapper. This widget is not rendered from XUL XML, but instead 
  * allows us to code in keeping with the agnostic nature of the framework regarding
@@ -12,7 +14,7 @@ package org.pentaho.ui.xul.components;
  * @author gmoran
  *
  */
-public interface XulMessageBox {
+public interface XulMessageBox extends XulComponent {
   
   /**
    * Sets the title of the messagebox dialog. 

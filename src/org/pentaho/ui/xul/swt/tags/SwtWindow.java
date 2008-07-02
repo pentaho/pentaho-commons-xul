@@ -26,6 +26,8 @@ public class SwtWindow extends SwtElement implements XulWindow {
   private int height;
 
   private String onload;
+  private String onclose;
+  private String onunload;
 
   private XulDomContainer xulDomContainer;
   
@@ -151,5 +153,21 @@ public class SwtWindow extends SwtElement implements XulWindow {
   public Object getRootObject() {
     return shell;
   }
+  
+	public String getOnclose() {
+		return onclose;
+	}
+
+	public String getOnunload() {
+		return onunload;
+	}
+
+	public void setOnclose(String onclose) {
+		this.onclose = onclose;
+	}
+
+	public void setOnunload(String onunload) {
+		this.onunload = onunload;
+	}
 
 }

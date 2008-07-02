@@ -33,8 +33,11 @@ public class DocumentDom4J extends ElementDom4J implements Document {
    * @see org.pentaho.ui.xul.dom.Document#getRootElement()
    */
   public XulComponent getRootElement() {
-    // TODO Auto-generated method stub
-    return ((XulElementDom4J) document.getRootElement()).getXulElement();
+  	if (document.getRootElement() != null) {
+  		return ((XulElementDom4J) document.getRootElement()).getXulElement();
+  	} else {
+  		return null;
+  	}
   }
 
   @Override

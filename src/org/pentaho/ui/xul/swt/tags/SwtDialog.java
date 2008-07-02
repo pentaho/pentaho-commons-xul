@@ -33,6 +33,8 @@ public class SwtDialog extends SwtElement implements XulDialog {
   private String title = null;
 
   private String onload;
+  private String onclose;
+  private String onunload;
 
   private XulDialogheader header;
 
@@ -351,5 +353,21 @@ public class SwtDialog extends SwtElement implements XulDialog {
   public Object getRootObject() {
     return dialog.getShell();
   }
+  
+	public String getOnclose() {
+		return onclose;
+	}
+
+	public String getOnunload() {
+		return onunload;
+	}
+
+	public void setOnclose(String onclose) {
+		this.onclose = onclose;
+	}
+
+	public void setOnunload(String onunload) {
+		this.onunload = onunload;
+	}
 
 }

@@ -49,6 +49,34 @@ public interface XulRoot extends XulContainer{
    */
   public String getOnload();
 
+  /**
+   * Sets the method name to invoke during the onclose event 
+   * for this window.
+   *  
+   * @param onclose The method name, in the form of [handlerId.medthodName()].
+   */
+  public void setOnclose(String onclose);
+  
+  /**
+   * 
+   * @return The method string used for the onclose event. 
+   */
+  public String getOnclose();
+
+  /**
+   * Sets the method name to invoke during the onunload event 
+   * for this window.
+   *  
+   * @param onunload The method name, in the form of [handlerId.medthodName()].
+   */
+  public void setOnunload(String onunload);
+  
+  /**
+   * 
+   * @return The method string used for the onunload event. 
+   */
+  public String getOnunload();
+  
 
   public Object getRootObject();
 }

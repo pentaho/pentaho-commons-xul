@@ -1,7 +1,6 @@
 package org.pentaho.ui.xul.impl;
 
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -15,7 +14,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingContext;
-import org.pentaho.ui.xul.components.XulMessageBox;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 
@@ -47,10 +46,72 @@ public class XulWindowContainer extends AbstractXulDomContainer {
 
   @Override
   public void close() {
-  	for(Document wind : this.windows){
-  		((XulWindow) wind.getRootElement()).close();
+	  
+    //
+    // make onclose event calls
+    //
+	  
+    XulRoot rootEle = (XulRoot) this.getDocumentRoot().getRootElement();
+    
+    logger.info("onclose: "+ rootEle.getOnclose());
+    String onclose = rootEle.getOnclose();
+    if(onclose != null){
+	    String[] oncloseCalls = onclose.split(",");
+	    for(String close : oncloseCalls){
+	    	close = close.trim();
+	      try{
+	    		Object result = invoke(close, new Object[]{});
+	    		if (result != null && 
+	    		    result instanceof Boolean && 
+	    		    !((Boolean)result).booleanValue()) {
+	    			logger.info("onclose " + close + " returned false, exiting close procedure");
+	    			return;
+	    		}
+	    	} catch(XulException e){
+	    		logger.error("Error calling onclose event: "+close, e);
+	    	}
+	    }
+    }
+	
+    //
+    // close the document windows
+	  //
+    
+    for(Document wind : this.windows) {
+    	XulWindow window = (XulWindow)wind.getRootElement();
+    	if (window != null) {
+    		window.close();
+    	}
   	}
   	closed = true;
+  	
+  	//
+  	// make onunload event calls
+  	//
+  	
+    logger.info("onunload: "+ rootEle.getOnload());
+    String onunload = rootEle.getOnunload();
+    if(onunload != null){
+      String[] unloadCalls = onunload.split(",");
+      for(String unload : unloadCalls){
+      	unload = unload.trim();
+        try{
+      		invoke(unload, new Object[]{});
+      	} catch(XulException e){
+      		logger.error("Error calling onunload event: "+unload, e);
+      	}
+      }
+    }
+    
+    //
+    // exit the system
+    //
+    
+    // TODO: This should be refactored into the individual windows themselves,
+    // and only the root window should exit the system when closed.
+    
+    System.exit(0);
+  	
   }
 
   public boolean isClosed() {

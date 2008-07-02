@@ -2,7 +2,9 @@ package org.pentaho.ui.xul.components;
 
 import java.io.File;
 
-public interface XulFileDialog {
+import org.pentaho.ui.xul.XulComponent;
+
+public interface XulFileDialog extends XulComponent {
   public enum RETURN_CODE{OK, CANCEL, ERROR}
   public enum SEL_TYPE{SINGLE, MULTIPLE}
   public enum VIEW_TYPE{FILES_DIRECTORIES, DIRECTORIES}

@@ -69,9 +69,11 @@ public interface XulDomContainer {
    * plumbing event handlers to the event methods. 
    * 
    * @param method The method to execute
-   * @param args Any parameters needed for the method. 
+   * @param args Any parameters needed for the method.
+   * 
+   * @return the invoked method's return object
    */
-  public void invoke(String method, Object[] args) throws XulException;
+  public Object invoke(String method, Object[] args) throws XulException;
 
   /**
    * Accommodates those objects that require a parenting on construction. Set the root parent before parsing. 
