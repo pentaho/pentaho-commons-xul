@@ -213,7 +213,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
       SwingListitem item = new SwingListitem(null, this, this.xulDomContainer, null);
 
       String attribute = getBinding();
-      if (StringUtils.isEmpty(attribute)) {
+      if (!StringUtils.isEmpty(attribute)) {
         item.setLabel(extractLabel(t));
       }
 
