@@ -1,7 +1,6 @@
 package org.pentaho.ui.xul.impl;
 
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulEventSource;
 
 public interface XulEventHandler {
 
