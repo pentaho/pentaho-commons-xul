@@ -9,7 +9,7 @@
     <caption label="Experience the magic"/>
     <label value="overlays rock"/>
   </groupbox>
-  <pen:line/>
+  <separator/>
     <groupbox id="secondGroupbox">
       <caption label="Do that again!"/>
       <label value="here's another one"/>
@@ -17,7 +17,7 @@
     
     <hbox>
       <button label="test1"/>
-      <pen:line/>
+      <separator/>
       <button label="test2"/>
     </hbox>
 </window>
