@@ -122,7 +122,13 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
   }
 
   public void setSelectedItem(T t) {
-    this.combobox.setSelectedItem(t);
+  	SwingMenupopup popup = getPopupElement();
+  	for (XulComponent item : popup.getChildNodes()) {
+      SwingMenuitem tempItem = (SwingMenuitem) item;
+      if (tempItem.getLabel().equals(extractLabel(t))) {
+      	this.combobox.setSelectedItem(tempItem);
+      }
+  	}
   }
 
   public void setOncommand(final String command) {
