@@ -7,7 +7,7 @@
   <script id="handler" src="org.pentaho.ui.xul.test.samples.ListBoxHandler"/>
 
     <listbox id="listbox" rows="5" onselect="handler.consume()" disabled="false" seltype="single" selectedindex="1">
-      <listitem label="Native(JDBC)" />
+      <listitem label="Native(JDBC)" id="listItem0" />
       <listitem label="ODBC" id="listItem1" />
       <listitem label="JNDI" id="listItem2"/>
     </listbox>

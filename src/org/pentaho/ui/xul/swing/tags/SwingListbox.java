@@ -128,7 +128,7 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
       invoke(onselect);
     }
     //FIXME: not sure if this is where we should bind selection models
-    setSelectedIndices(listBox.getSelectedIndices());
+//    setSelectedIndices(listBox.getSelectedIndices());
   }
 
   public Object getSelectedItem() {
@@ -144,17 +144,16 @@ public class SwingListbox extends SwingElement implements XulListbox, ListSelect
   }
 
   public void setSelectedItems(Object[] items) {
-    
-    // TODO check this logic, untested...
     int[] indices = new int[items.length];
     int index = -1;
     for (Object object : items) {
       indices[++index] = model.indexOf(object); 
     }
-//    setSelectedIndices(indices);
+    setSelectedIndices(indices);
   }
   
   public void setSelectedIndices(int[] indices) {
+    listBox.setSelectedIndices(indices);
     if(!Arrays.equals(curSelectedIndices, indices)) {
       this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
       curSelectedIndices = indices;
