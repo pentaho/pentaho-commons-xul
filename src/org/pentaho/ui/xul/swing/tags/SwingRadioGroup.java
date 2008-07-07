@@ -43,8 +43,9 @@ public class SwingRadioGroup extends SwingElement implements XulRadioGroup {
 	@Override
 	public void addComponent(XulComponent c) {
 		addComponentToButtonGroup(c);
-
-		super.addComponent(c);
+    super.addComponent(c);
+		resetContainer();
+		super.layout();
 		
     if (initialized) {
       resetContainer();
