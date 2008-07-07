@@ -12,6 +12,10 @@ public class ViewModel implements XulEventSource{
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     changeSupport.addPropertyChangeListener(listener);
   }
+  
+  public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    changeSupport.addPropertyChangeListener(propertyName, listener);
+  }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     changeSupport.removePropertyChangeListener(listener);
