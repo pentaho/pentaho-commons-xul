@@ -192,6 +192,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
           if (this.type == TextType.NUMERIC) {
             textComp.setDocument(new NumericDocument(min, max));
           }
+          textComp.setEnabled(!disabled);
           break;
       }
 
