@@ -78,6 +78,9 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
 
   public void setValue(String text) {
     String oldVal = this.value;
+    if(textComp != null && textComp.getText().equals(text)){
+      return;
+    }
     if (managedObject != null) {
       textComp.setText(text);
     }
