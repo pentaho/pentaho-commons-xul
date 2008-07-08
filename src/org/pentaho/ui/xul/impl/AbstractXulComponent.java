@@ -45,6 +45,8 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected int height;
 
   protected boolean initialized = false;
+  
+  protected String tooltip;
 
   public AbstractXulComponent(Element element) {
     this.element = element;
@@ -235,4 +237,13 @@ public abstract class AbstractXulComponent implements XulComponent {
   public void setOnblur(String method) {
   }
 
+  public String getTooltiptext() {
+    return this.tooltip;  
+  }
+
+  public void setTooltiptext(String tooltip) {
+    this.tooltip = tooltip;  
+  }
+
+  
 }

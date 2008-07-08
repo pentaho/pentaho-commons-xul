@@ -210,6 +210,8 @@ public class SwingButton extends SwingElement implements XulButton{
       button.setPreferredSize(new Dimension(dim.height, dim.height));
     }
     
+    button.setToolTipText(this.getTooltiptext());
+    
     super.layout();
   }
 

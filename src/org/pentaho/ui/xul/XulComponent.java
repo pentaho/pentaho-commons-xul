@@ -130,4 +130,7 @@ public interface XulComponent extends Element, XulEventSource {
    */
   public boolean isDisabled();
   
+  public void setTooltiptext(String tooltip);
+  public String getTooltiptext();
+  
 }
