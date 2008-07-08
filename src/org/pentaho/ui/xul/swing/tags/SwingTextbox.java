@@ -211,6 +211,9 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
         }
 
       });
+      
+      textComp.setToolTipText(this.getTooltiptext());
+      
       //	    Why do we need this here if we setup oninput in the setOninput
       //	     textComp.addKeyListener(new KeyAdapter() {
       //	       
