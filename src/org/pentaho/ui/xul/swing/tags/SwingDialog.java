@@ -283,6 +283,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
       dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     }
 
+    dialog.setResizable(false);
     dialog.setLayout(new BorderLayout());
     
     JPanel mainPanel = new JPanel(new BorderLayout());
