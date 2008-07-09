@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -33,7 +34,7 @@ public class SwingHbox extends SwingElement implements XulHbox {
     children = new ArrayList<XulComponent>();
 
     container = new ScrollablePanel(new GridBagLayout());
-    //container.setBorder(BorderFactory.createLineBorder(Color.green));
+    container.setOpaque(false);
     managedObject = container;
 
     resetContainer();
@@ -74,4 +75,15 @@ public class SwingHbox extends SwingElement implements XulHbox {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);
   }
+
+  @Override
+  public void layout() {
+    if(getBgcolor() != null){
+      container.setOpaque(true);
+      container.setBackground(Color.decode(getBgcolor()));
+    }
+    super.layout();
+  }
+  
+  
 }

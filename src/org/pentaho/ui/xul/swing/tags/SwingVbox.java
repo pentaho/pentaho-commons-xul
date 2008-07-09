@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -27,7 +28,7 @@ public class SwingVbox extends SwingElement implements XulVbox {
     this.orientation = Orient.VERTICAL;
 
     container = new ScrollablePanel(new GridBagLayout());
-
+    container.setOpaque(false);
     managedObject = container;
 
     resetContainer();
@@ -65,4 +66,12 @@ public class SwingVbox extends SwingElement implements XulVbox {
     super.replaceChild(oldElement, newElement);
   }
 
+  @Override
+  public void layout() {
+    if(getBgcolor() != null){
+      container.setOpaque(true);
+      container.setBackground(Color.decode(getBgcolor()));
+    }
+    super.layout();
+  }
 }
