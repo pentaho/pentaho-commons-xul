@@ -1,8 +1,8 @@
 package org.pentaho.ui.xul.test.samples;
 
-import org.pentaho.ui.xul.util.ViewModel;
+import org.pentaho.ui.xul.util.XulEventSourceAdapter;
 
-public class Product extends ViewModel {
+public class Product extends XulEventSourceAdapter {
   private String name;
   private String description;
   

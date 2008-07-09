@@ -3,9 +3,9 @@ package org.pentaho.ui.xul.test.samples;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pentaho.ui.xul.util.ViewModel;
+import org.pentaho.ui.xul.util.XulEventSourceAdapter;
 
-public class ProductModel extends ViewModel{
+public class ProductModel extends XulEventSourceAdapter{
   private List<Product> products = new ArrayList<Product>();
   
   public void addProduct(Product p){

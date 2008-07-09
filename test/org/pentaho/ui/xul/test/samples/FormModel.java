@@ -1,8 +1,8 @@
 package org.pentaho.ui.xul.test.samples;
 
-import org.pentaho.ui.xul.util.ViewModel;
+import org.pentaho.ui.xul.util.XulEventSourceAdapter;
 
-public class FormModel extends ViewModel {
+public class FormModel extends XulEventSourceAdapter {
 
   private String firstName = "";
   private String lastName = "";
