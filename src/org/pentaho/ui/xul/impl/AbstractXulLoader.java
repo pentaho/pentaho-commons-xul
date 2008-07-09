@@ -411,7 +411,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         }
       }
     } catch (MissingResourceException e) {
-      logger.debug("no default resource bundle available: "+overlaySrc);
+      logger.warn("no default resource bundle available: "+overlaySrc);
     }
     
     String runningTranslatedOutput = getDocFromInputStream(in).asXML();     //TODO IOUtils this
