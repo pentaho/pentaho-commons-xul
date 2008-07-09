@@ -231,10 +231,16 @@ public class SwingDialog extends SwingElement implements XulDialog {
 
   public void setHeight(int height) {
     this.height = height;
+    if(dialog != null){
+      dialog.setSize(dialog.getSize().width, height);
+    }
   }
 
   public void setWidth(int width) {
     this.width = width;
+    if(dialog != null){
+      dialog.setSize(width, dialog.getSize().height);
+    }
   }
 
   public String getButtonalign() {
@@ -287,12 +293,15 @@ public class SwingDialog extends SwingElement implements XulDialog {
     dialog.setLayout(new BorderLayout());
     
     JPanel mainPanel = new JPanel(new BorderLayout());
-    mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    mainPanel.setOpaque(true);
+    int pad = (this.getPadding() > -1)? getPadding() : 3; 
+    mainPanel.setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, pad));
 
     dialog.setTitle(title);
     dialog.setModal(true);
     dialog.add(mainPanel, BorderLayout.CENTER);
     mainPanel.add(container, BorderLayout.CENTER);
+    container.setOpaque(false);
 
     if (this.header != null) {
 
@@ -300,7 +309,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
       headerPanel.setBackground(Color.decode("#5F86C0"));
       headerPanel.setOpaque(true);
       JPanel headerPanelInner = new JPanel(new BorderLayout());
-      headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+      headerPanelInner.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
       headerPanelInner.setOpaque(false);
 
       headerPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.decode("#8FB1E5"), Color
@@ -365,6 +374,11 @@ public class SwingDialog extends SwingElement implements XulDialog {
       this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setLabel(this.getButtonlabelextra2());
       this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setOnclick(this.getOndialogextra2());
     }
+    
+    if(this.getBgcolor() != null){
+      mainPanel.setBackground(Color.decode(this.getBgcolor()));
+    }
+    
   }
 
   public boolean isHidden() {

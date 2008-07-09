@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.Attribute;
@@ -471,6 +473,20 @@ public abstract class AbstractXulLoader implements XulLoader {
         ((XulContainer) sourceElement).addComponent(c);
         ((XulContainer) sourceElement).addChild(c);
         logger.info("added child: " + c);
+      }
+      
+      List attribs = overlay.attributes();
+      
+      //merge in attributes
+      for(Object o : attribs){
+        Attribute atr = (Attribute) o;
+        try{
+          BeanUtils.setProperty(sourceElement, atr.getName(), atr.getValue());
+        } catch(InvocationTargetException e){
+          logger.error(e);
+        } catch(IllegalAccessException e){
+          logger.error(e);
+        }
       }
 
     }

@@ -47,6 +47,10 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected boolean initialized = false;
   
   protected String tooltip;
+  
+  protected String bgcolor = null;
+  
+  protected int padding = -1;
 
   public AbstractXulComponent(Element element) {
     this.element = element;
@@ -245,5 +249,20 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.tooltip = tooltip;  
   }
 
+  public void setBgcolor(String bgcolor) {
+    this.bgcolor = bgcolor;
+  }
+
+  public String getBgcolor(){
+    return bgcolor;
+  }
+
+  public int getPadding() {
+    return padding;
+  }
+
+  public void setPadding(int padding) {
+    this.padding = padding;   
+  }
   
 }

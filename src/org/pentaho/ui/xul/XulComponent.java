@@ -133,4 +133,10 @@ public interface XulComponent extends Element, XulEventSource {
   public void setTooltiptext(String tooltip);
   public String getTooltiptext();
   
+  public void setBgcolor(String bgcolor);
+  public String getBgcolor();
+  
+  public void setPadding(int padding);
+  public int getPadding();
+  
 }
