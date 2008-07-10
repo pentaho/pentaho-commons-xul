@@ -222,7 +222,7 @@
       <classpath refid="cobertura.classpath" />
 
       <classpath location="${test-bin.dir}" />
-      <formatter type="plain" usefile="false"/>
+      <formatter type="xml" usefile="true"/>
 
       <batchtest todir="${test-bin.dir}">
 
