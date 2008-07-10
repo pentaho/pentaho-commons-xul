@@ -61,6 +61,16 @@ public class SwingVbox extends SwingElement implements XulVbox {
   }
 
   @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    children.remove(ele);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+  
+  @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);

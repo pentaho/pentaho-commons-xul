@@ -103,6 +103,16 @@ public class SwingGroupbox extends SwingElement implements XulGroupbox {
   }
 
   @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    children.remove(ele);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+
+  @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
     this.resetContainer();
     super.replaceChild(oldElement, newElement);

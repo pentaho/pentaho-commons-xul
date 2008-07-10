@@ -263,6 +263,16 @@ public class SwingWindow extends SwingElement implements XulWindow {
   }
 
   @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    children.remove(ele);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+
+  @Override
   public void addComponentAt(XulComponent c, int idx) {
     super.addComponentAt(c, idx);
     super.resetContainer();

@@ -134,6 +134,16 @@ public class SwingDialog extends SwingElement implements XulDialog {
     }
   }
 
+  @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    children.remove(ele);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+
   public String getButtonlabelaccept() {
     return buttonlabelaccept;
   }

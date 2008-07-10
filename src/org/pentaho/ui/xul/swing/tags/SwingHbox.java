@@ -50,6 +50,16 @@ public class SwingHbox extends SwingElement implements XulHbox {
     }
   }
 
+  @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    children.remove(ele);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+
   public void resetContainer() {
 
     container.removeAll();
