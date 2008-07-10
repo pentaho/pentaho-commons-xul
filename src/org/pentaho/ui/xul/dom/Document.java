@@ -22,5 +22,6 @@ public interface Document extends Element{
   public void removeOverlay(String src) throws XulException;
   public void loadFragment(String id, String src) throws XulException;
   public void addBinding(Binding bind);
+  public void invokeLater(Runnable runnable);
   
 }

@@ -5,6 +5,7 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -271,6 +272,10 @@ public class SwingWindow extends SwingElement implements XulWindow {
 
   public Object getRootObject() {
     return frame;
+  }
+
+  public void invokeLater(Runnable runnable) {
+    EventQueue.invokeLater(runnable);
   }
 	
 }

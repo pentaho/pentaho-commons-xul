@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.awt.EventQueue;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -369,5 +371,9 @@ public class SwtDialog extends SwtElement implements XulDialog {
 	public void setOnunload(String onunload) {
 		this.onunload = onunload;
 	}
+
+  public void invokeLater(Runnable runnable) {
+    dialog.getShell().getDisplay().asyncExec(runnable);
+  }
 
 }

@@ -79,4 +79,6 @@ public interface XulRoot extends XulContainer{
   
 
   public Object getRootObject();
+
+  public void invokeLater(Runnable runnable);
 }

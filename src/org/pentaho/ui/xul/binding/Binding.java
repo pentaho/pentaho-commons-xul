@@ -1,22 +1,26 @@
 package org.pentaho.ui.xul.binding;
 
+import java.awt.EventQueue;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Stack;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
 import org.pentaho.ui.xul.dom.Document;
 
 public class Binding {
 
-  private Object source;
+  private Reference source;
 
-  private Object target;
+  private Reference target;
 
   private String sourceAttr;
 
@@ -43,24 +47,23 @@ public class Binding {
   private Type bindingStrategy = Type.BI_DIRECTIONAL;
 
   public Binding(Document document, String sourceId, String sourceAttr, String targetId, String targetAttr) {
-    this.source = document.getElementById(sourceId);
+    this.source = new WeakReference(document.getElementById(sourceId));
     setSourceAttr(sourceAttr);
-    this.target = document.getElementById(targetId);
+    this.target = new WeakReference(document.getElementById(targetId));
     setTargetAttr(targetAttr);
   }
 
   public Binding(Document document, Object source, String sourceAttr, String targetId, String targetAttr) {
-    this.source = source;
+    this.source = new WeakReference(source);
     setSourceAttr(sourceAttr);
-    this.target = document.getElementById(targetId);
-    ;
+    this.target = new WeakReference(document.getElementById(targetId));
     setTargetAttr(targetAttr);
   }
 
   public Binding(Object source, String sourceAttr, Object target, String targetAttr) {
-    this.source = source;
+    this.source = new WeakReference(source);
     setSourceAttr(sourceAttr);
-    this.target = target;
+    this.target = new WeakReference(target);
     setTargetAttr(targetAttr);
   }
 
@@ -72,23 +75,23 @@ public class Binding {
     return bindingStrategy;
   }
 
-  public Object getSource() {
+  public Reference getSource() {
     return source;
   }
 
   public void setSource(Object source) {
 
-    this.source = source;
+    this.source = new WeakReference(source);
   }
 
-  public Object getTarget() {
+  public Reference getTarget() {
 
     return target;
   }
 
   public void setTarget(Object target) {
 
-    this.target = target;
+    this.target = new WeakReference(target);
   }
 
   public String getSourceAttr() {
@@ -155,7 +158,7 @@ public class Binding {
   }
 
   public void fireSourceChanged() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-    Object getRetVal = sourceGetterMethod.invoke(source);
+    Object getRetVal = sourceGetterMethod.invoke(getSource().get());
     forwardListener.propertyChange(new PropertyChangeEvent(getSource(), getSourceAttr(), null, getRetVal));
   }
 
@@ -171,44 +174,87 @@ public class Binding {
     logger.info("Reverse binding established: " + source + "." + sourceAttr + " <== " + target + "." + targetAttr);
   }
 
-  private PropertyChangeListener setupBinding(final Object a, final String va, final Object b, final String vb,
+  private PropertyChangeListener setupBinding(final Reference a, final String va, final Reference b, final String vb,
       final Direction dir) {
-    if (!(a instanceof XulEventSource)) {
-      throw new BindingException("Binding error, source object not a XulEventSource instance");
-    }
-    if (a == null || va == null) {
+    if (a.get() == null || va == null) {
       throw new BindingException("source bean or property is null");
     }
-    if (b == null || vb == null) {
+    if (!(a.get() instanceof XulEventSource)) {
+      throw new BindingException("Binding error, source object not a XulEventSource instance");
+    }
+    if (b.get() == null || vb == null) {
       throw new BindingException("target bean or property is null");
     }
-    Method sourceGetMethod = BindingUtil.findGetMethod(a, va);
+    Method sourceGetMethod = BindingUtil.findGetMethod(a.get(), va);
 
-    Class getterClazz = BindingUtil.getMethodReturnType(sourceGetMethod, a);
+    Class getterClazz = BindingUtil.getMethodReturnType(sourceGetMethod, a.get());
     getterMethods.push(sourceGetMethod);
 
     //find set method
-    final Method targetSetMethod = BindingUtil.findSetMethod(b, vb, getterClazz);
+    final Method targetSetMethod = BindingUtil.findSetMethod(b.get(), vb, getterClazz);
 
     //setup prop change listener to handle binding
     PropertyChangeListener listener = new PropertyChangeListener() {
-      public void propertyChange(PropertyChangeEvent evt) {
+      public void propertyChange(final PropertyChangeEvent evt) {
+        final PropertyChangeListener cThis = this;
         if (evt.getPropertyName().equalsIgnoreCase(va)) {
           try {
             Object value = evaluateExpressions(evt.getNewValue());
-            value = doConversions(value, dir);
-            targetSetMethod.invoke(b, value);
+            final Object finalVal = doConversions(value, dir);
+            if(!EventQueue.isDispatchThread() && b instanceof XulComponent){
+              logger.debug("Binding to XulComponenet outside of event thread");
+              EventQueue.invokeLater(new Runnable(){
+                public void run() {
+                  try{
+                    Object targetObject = b.get();
+                    if(targetObject == null){
+                      logger.error("Binding target was Garbage Collected, removing propListener");
+                      Binding.this.destroyBindings();                      
+                      return;
+                    }
+                    targetSetMethod.invoke(targetObject, finalVal);
+                  } catch(InvocationTargetException e){
+                    throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
+                  } catch(IllegalAccessException e){
+                    throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
+                  }
+                }
+              });
+            } else {
+              Object targetObject = b.get();
+              if(targetObject == null){
+                logger.error("Binding target was Garbage Collected, removing propListener");
+                Binding.this.destroyBindings();                      
+                return;
+              }
+              targetSetMethod.invoke(targetObject, finalVal);
+            }
           } catch (Exception e) {
             throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
           }
         }
       }
     };
-    ((XulEventSource) a).addPropertyChangeListener(listener);
+    ((XulEventSource) a.get()).addPropertyChangeListener(listener);
 
     return listener;
   }
 
+  private void destroyBindings(){
+    Object sourceObj = getSource().get();
+    Object targetObj = getTarget().get();
+    
+    if(forwardListener != null && sourceObj != null){
+      ((XulEventSource) sourceObj).removePropertyChangeListener(forwardListener);
+      logger.debug("Removing forward binding on "+sourceObj);
+    } 
+    
+    if(reverseListener != null && targetObj != null && targetObj instanceof XulEventSource){
+      ((XulEventSource) targetObj).removePropertyChangeListener(reverseListener);
+      logger.debug("Removing reverse binding on "+targetObj);
+    } 
+  }
+  
   public PropertyChangeListener getForwardListener() {
     return forwardListener;
   }

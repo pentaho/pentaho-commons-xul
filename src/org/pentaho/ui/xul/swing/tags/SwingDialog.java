@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -444,5 +445,9 @@ public class SwingDialog extends SwingElement implements XulDialog {
 	public void setOnunload(String onunload) {
 		this.onunload = onunload;
 	}
+
+  public void invokeLater(Runnable runnable) {
+    EventQueue.invokeLater(runnable);
+  }
 
 }

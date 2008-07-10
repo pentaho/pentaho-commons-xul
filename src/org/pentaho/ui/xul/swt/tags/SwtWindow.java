@@ -169,5 +169,10 @@ public class SwtWindow extends SwtElement implements XulWindow {
 	public void setOnunload(String onunload) {
 		this.onunload = onunload;
 	}
+	
+  public void invokeLater(Runnable runnable) {
+    shell.getDisplay().asyncExec(runnable);
+  }
+
 
 }

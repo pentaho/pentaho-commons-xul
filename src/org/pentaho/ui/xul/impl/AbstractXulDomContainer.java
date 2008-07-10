@@ -5,6 +5,7 @@ package org.pentaho.ui.xul.impl;
 
 import groovy.lang.GroovyClassLoader;
 
+import java.awt.EventQueue;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -297,7 +298,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     }
   }
   
-    public void addBinding(Binding binding){
+  public void addBinding(Binding binding){
     bindings.add(binding);
   }
   
@@ -329,6 +330,12 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
 
   public void setOuterContext(Object context) {
     parentContext = context;
+  }
+
+  public void invokeLater(Runnable runnable) {
+    XulRoot rootEle = (XulRoot) this.getDocumentRoot().getRootElement();
+    rootEle.invokeLater(runnable);
+    
   }
   
 }

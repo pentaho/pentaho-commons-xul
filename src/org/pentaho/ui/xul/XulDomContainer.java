@@ -92,4 +92,6 @@ public interface XulDomContainer {
   public void loadOverlay(String src) throws XulException;
   
   public void removeOverlay(String src) throws XulException;
+
+  public void invokeLater(Runnable runnable);
 }

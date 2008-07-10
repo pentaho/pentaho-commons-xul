@@ -3,7 +3,9 @@
  */
 package org.pentaho.ui.xul.swing;
 
+import java.awt.EventQueue;
 import java.awt.Window;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +41,20 @@ public class SwingXulRunner implements XulRunner {
     //get first Element, should be a JFrame and show it.
     XulRoot rootEle = (XulRoot) containers.get(0).getDocumentRoot().getRootElement();
     
-    //call the onLoads
-    containers.get(0).initialize();
+    try{
+      //call the onLoads
+      EventQueue.invokeAndWait(new Runnable(){
+  
+        public void run() {
+          containers.get(0).initialize();
+        }
+  
+      });
+    } catch(InvocationTargetException e){
+      throw new XulException("Error initializing application",e);
+    } catch(InterruptedException e){
+      throw new XulException("Error initializing application, initialization interrupted",e);
+    }
     
     if(rootEle instanceof SwingWindow){
       rootFrame = (JFrame) ((SwingWindow)rootEle).getManagedObject();

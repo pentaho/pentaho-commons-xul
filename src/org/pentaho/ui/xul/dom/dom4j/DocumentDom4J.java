@@ -75,4 +75,9 @@ public class DocumentDom4J extends ElementDom4J implements Document {
   public void addBinding(Binding bind){
     container.addBinding(bind);
   }
+
+  public void invokeLater(Runnable runnable) {
+    container.invokeLater(runnable);
+  }
+  
 }
