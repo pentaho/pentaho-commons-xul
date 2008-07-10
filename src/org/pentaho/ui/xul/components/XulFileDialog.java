@@ -23,6 +23,8 @@ public interface XulFileDialog extends XulComponent {
   
   public void setViewType(VIEW_TYPE type);
   public VIEW_TYPE getViewType();
+
+  public void setModalParent(Object parent);
 }
 
   

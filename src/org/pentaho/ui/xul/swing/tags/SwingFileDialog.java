@@ -25,6 +25,7 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   private VIEW_TYPE viewType = VIEW_TYPE.FILES_DIRECTORIES;
   private File selectedFile;
   private File[] selectedFiles;
+  private Component parentObject = null;
   
   public SwingFileDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("filedialog");
@@ -76,27 +77,8 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     return showSave();
   }
   
-  private Component getParentComp(){
-    Component comp = null;
-    if(getParent() instanceof XulRoot){
-      comp = (Component) getParent().getManagedObject();
-    } else {
-    
-      Document doc = getDocument();
-      Element rootElement = doc.getRootElement();
-      XulWindow window = null;
-      if(rootElement != this){ //dialog is root, no JFrame Parent
-        window = (XulWindow) rootElement;
-      }
-      if(window != null){
-        comp = (JFrame) window.getManagedObject();
-      }
-    }
-    return comp;
-  }
-  
   private RETURN_CODE showOpen(){
-    int retVal = fc.showOpenDialog(getParentComp());
+    int retVal = fc.showOpenDialog(getParentObject());
     switch(retVal){
       case JFileChooser.APPROVE_OPTION:
         if(this.selectionType == SEL_TYPE.SINGLE){
@@ -112,7 +94,7 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   }
   
   private RETURN_CODE showSave(){
-    int retVal = fc.showSaveDialog(getParentComp());
+    int retVal = fc.showSaveDialog(getParentObject());
     switch(retVal){
       case JFileChooser.APPROVE_OPTION:
         selectedFile = fc.getSelectedFile();
@@ -122,7 +104,18 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
         return RETURN_CODE.CANCEL;
     }
   }
+
+  public void setModalParent(Object parent) {
+    parentObject = (Component) parent;
+  }
   
+  private Component getParentObject(){
+    if(parentObject != null){
+      return parentObject;
+    } else {
+      return (Component) getParent().getManagedObject();
+    }
+  }
 }
 
   
