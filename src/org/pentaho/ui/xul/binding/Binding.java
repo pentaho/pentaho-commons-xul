@@ -261,11 +261,11 @@ public class Binding {
       ((XulEventSource) targetObj).removePropertyChangeListener(reverseListener);
       logger.debug("Removing reverse binding on "+targetObj);
     } 
-    
+
+    setDestroyed(true);
     if(context != null){
       context.remove(this);
     }
-    setDestroyed(true);
   }
   
   private void setDestroyed(boolean flag){
