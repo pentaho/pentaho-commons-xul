@@ -38,16 +38,7 @@ public class BindingContext {
     if (!bindingListeners.containsKey(bind) && !bindings.contains(bind)) {
       return;
     }
-
-    for (PropertyChangeListener propListener : bindingListeners.get(bind)) {
-      if (bind.getSource() instanceof XulEventSource) {
-        ((XulEventSource) bind.getSource()).removePropertyChangeListener(propListener);
-      }
-
-      if (bind.getTarget() instanceof XulEventSource) {
-        ((XulEventSource) bind.getTarget()).removePropertyChangeListener(propListener);
-      }
-    }
+    bind.destroyBindings();
     bindingListeners.remove(bind);
     bindings.remove(bind);
 
@@ -67,6 +58,8 @@ public class BindingContext {
         bind.bindReverse();
         bindingListeners.get(bind).add(bind.getReverseListener());
       }
+      
+      bind.setContext(this);
     } catch (Throwable t) {
       throw new BindingException("Binding failed: " + bind.getSource() + "." + bind.getSourceAttr() + " <==> "
           + bind.getTarget() + "." + bind.getTargetAttr(), t);

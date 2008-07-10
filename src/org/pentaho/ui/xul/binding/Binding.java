@@ -37,8 +37,12 @@ public class Binding {
   private Stack<Method> getterMethods = new Stack<Method>();
 
   private Method sourceGetterMethod, targetGetterMethod;
-
+  
+  private BindingContext context;
+ 
   private static final Log logger = LogFactory.getLog(Binding.class);
+  
+  private boolean destroyed = false;
 
   public enum Type {
     ONE_WAY, BI_DIRECTIONAL
@@ -240,7 +244,11 @@ public class Binding {
     return listener;
   }
 
-  private void destroyBindings(){
+  public void destroyBindings(){
+    if(destroyed){
+      //circular catch from context.remove()
+      return;
+    }
     Object sourceObj = getSource().get();
     Object targetObj = getTarget().get();
     
@@ -253,6 +261,15 @@ public class Binding {
       ((XulEventSource) targetObj).removePropertyChangeListener(reverseListener);
       logger.debug("Removing reverse binding on "+targetObj);
     } 
+    
+    if(context != null){
+      context.remove(this);
+    }
+    setDestroyed(true);
+  }
+  
+  private void setDestroyed(boolean flag){
+    this.destroyed = flag;
   }
   
   public PropertyChangeListener getForwardListener() {
@@ -271,4 +288,13 @@ public class Binding {
     this.reverseListener = reverseListener;
   }
 
+  public BindingContext getContext() {
+    return context;
+  }
+
+  public void setContext(BindingContext context) {
+    this.context = context;
+  }
+
+  
 }
