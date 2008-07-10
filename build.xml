@@ -234,7 +234,7 @@
   </target>
   
   <target name="cobertura-report" depends="run-cobertura-tests">
-    <cobertura-report format="html" destdir="${coveragereport.dir}" >
+    <cobertura-report format="xml" destdir="${coveragereport.dir}" >
         <fileset dir="${src.dir}">
             <include name="**/*.java" />
         </fileset>
