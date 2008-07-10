@@ -206,33 +206,37 @@ public class Binding {
             Object value = evaluateExpressions(evt.getNewValue());
             final Object finalVal = doConversions(value, dir);
             if(!EventQueue.isDispatchThread() && b instanceof XulComponent){
-              logger.debug("Binding to XulComponenet outside of event thread");
-              EventQueue.invokeLater(new Runnable(){
-                public void run() {
-                  try{
-                    Object targetObject = b.get();
-                    if(targetObject == null){
-                      logger.error("Binding target was Garbage Collected, removing propListener");
-                      Binding.this.destroyBindings();                      
-                      return;
-                    }
-                    targetSetMethod.invoke(targetObject, finalVal);
-                  } catch(InvocationTargetException e){
-                    throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
-                  } catch(IllegalAccessException e){
-                    throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
-                  }
-                }
-              });
-            } else {
-              Object targetObject = b.get();
-              if(targetObject == null){
-                logger.error("Binding target was Garbage Collected, removing propListener");
-                Binding.this.destroyBindings();                      
-                return;
-              }
-              targetSetMethod.invoke(targetObject, finalVal);
+              logger.warn("Binding to XulComponenet outside of event thread");
+              
+                //Swing Specific code. break out once Binding is "flavored"
+//              EventQueue.invokeLater(new Runnable(){
+//                public void run() {
+//                  try{
+//                    Object targetObject = b.get();
+//                    if(targetObject == null){
+//                      logger.error("Binding target was Garbage Collected, removing propListener");
+//                      Binding.this.destroyBindings();                      
+//                      return;
+//                    }
+//                    targetSetMethod.invoke(targetObject, finalVal);
+//                  } catch(InvocationTargetException e){
+//                    throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
+//                  } catch(IllegalAccessException e){
+//                    throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
+//                  }
+//                }
+//              });
+            
             }
+          
+            Object targetObject = b.get();
+            if(targetObject == null){
+              logger.error("Binding target was Garbage Collected, removing propListener");
+              Binding.this.destroyBindings();                      
+              return;
+            }
+            targetSetMethod.invoke(targetObject, finalVal);
+          
           } catch (Exception e) {
             throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target, e);
           }
