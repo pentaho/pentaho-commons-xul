@@ -107,5 +107,4 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
     }
   }
 
-
 }

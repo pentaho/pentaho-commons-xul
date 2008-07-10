@@ -1,13 +1,20 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
 import java.io.File;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulFileDialog;
+import org.pentaho.ui.xul.containers.XulRoot;
+import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
@@ -69,8 +76,27 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     return showSave();
   }
   
+  private Component getParentComp(){
+    Component comp = null;
+    if(getParent() instanceof XulRoot){
+      comp = (Component) getParent().getManagedObject();
+    } else {
+    
+      Document doc = getDocument();
+      Element rootElement = doc.getRootElement();
+      XulWindow window = null;
+      if(rootElement != this){ //dialog is root, no JFrame Parent
+        window = (XulWindow) rootElement;
+      }
+      if(window != null){
+        comp = (JFrame) window.getManagedObject();
+      }
+    }
+    return comp;
+  }
+  
   private RETURN_CODE showOpen(){
-    int retVal = fc.showOpenDialog((Component)this.getDocument().getRootElement().getManagedObject());
+    int retVal = fc.showOpenDialog(getParentComp());
     switch(retVal){
       case JFileChooser.APPROVE_OPTION:
         if(this.selectionType == SEL_TYPE.SINGLE){
@@ -86,7 +112,7 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   }
   
   private RETURN_CODE showSave(){
-    int retVal = fc.showSaveDialog((Component)this.getDocument().getRootElement().getManagedObject());
+    int retVal = fc.showSaveDialog(getParentComp());
     switch(retVal){
       case JFileChooser.APPROVE_OPTION:
         selectedFile = fc.getSelectedFile();

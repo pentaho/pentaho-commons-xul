@@ -2,11 +2,15 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -195,7 +199,7 @@ public class SwingDialog extends SwingElement implements XulDialog {
       createDialog();
       dialog.pack();
     }
-    dialog.setLocationRelativeTo(frame);
+    dialog.setLocationRelativeTo(centerComp);
     dialog.setVisible(true);
   }
 
@@ -272,24 +276,38 @@ public class SwingDialog extends SwingElement implements XulDialog {
     
     this.onload = onload;
   }
+  
+  private Component centerComp;
 
   private void createDialog() {
-    Document doc = getDocument();
-    Element rootElement = doc.getRootElement();
-    XulWindow window = null;
-    if(rootElement != this){ //dialog is root, no JFrame Parent
-      window = (XulWindow) rootElement;
-    }
-
-    if(window != null){
-      frame = (JFrame) window.getManagedObject();
-      dialog = new JDialog(frame);
-      dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    
+    if(getParent() instanceof XulRoot){
+      Object parentObj = getParent().getManagedObject();
+      if(parentObj instanceof Dialog){
+        dialog = new JDialog((Dialog) parentObj);
+      } else {
+        dialog = new JDialog((Frame) parentObj);
+      }
+      centerComp = (Component) parentObj;
     } else {
-      dialog = new JDialog();
-      dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    
+      Document doc = getDocument();
+      Element rootElement = doc.getRootElement();
+      XulWindow window = null;
+      if(rootElement != this){ //dialog is root, no JFrame Parent
+        window = (XulWindow) rootElement;
+      }
+  
+      if(window != null){
+        frame = (JFrame) window.getManagedObject();
+        dialog = new JDialog(frame);
+        centerComp = frame;
+      } else {
+        dialog = new JDialog();
+      }
     }
 
+    dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
     dialog.setResizable(false);
     dialog.setLayout(new BorderLayout());
     
