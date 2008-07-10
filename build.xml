@@ -3,14 +3,12 @@
 	<description>Pentaho XUL Framework</description>
 	<property file="src/build-res/version.properties" />
 	<property file="build.properties" />
+
+  
 	<tstamp>
 		<format property="compile.timestamp" pattern="yyyy-MM-dd HH.mm.ss" />
 	</tstamp>
 	<path id="classpath">
-		<fileset dir="${lib.dir}">
-			<include name="*.jar" />
-			<include name="*.zip" />
-		</fileset>
 		<fileset dir="${lib-ext.dir}">
 			<include name="**/*.jar" />
 		</fileset>
@@ -73,6 +71,9 @@
 	<target name="clean">
 		<!-- remove build directory -->
 		<delete dir="${bin.dir}" />
+    <delete dir="${cobertura.dir}" />
+    <delete dir="${instrumented.dir}" />
+	  
 		<delete dir="${dist.dir}" />
 	  	<delete dir="${test-bin.dir}" />
 	</target>
@@ -175,12 +176,69 @@
 			</fileset>
 
 			<doctitle>
-				<![CDATA[<h1>Pentaho XUL Framework API</h1>]]></doctitle>
-		<bottom>
-			<![CDATA[<i>Copyright &#169; 2008 Pentaho Corporation</i>]]></bottom>
-	<tag name="todo" scope="all" description="To do:" />
-	<!--<link href="http://..."/>-->
-</javadoc>
-</target>
+				<![CDATA[<h1>Pentaho XUL Framework API</h1>]]>
+			</doctitle>
+		  <bottom>
+			 <![CDATA[<i>Copyright &#169; 2008 Pentaho Corporation</i>]]>
+		  </bottom>
+		  <tag name="todo" scope="all" description="To do:" />
+		  <!--<link href="http://..."/>-->
+	  </javadoc>
+  </target>
+  
+  <property name="cobertura.dir" value="cobertura" />
+  <property name="instrumented.dir" value="instrumented-classes"/>
+  <path id="cobertura.classpath">
+    <fileset dir="${lib-ext.dir}">
+        <include name="*.jar" />
+    </fileset>
+    <fileset dir="${lib-swt.dir}">
+        <include name="*.jar" />
+    </fileset>
+    <fileset dir="${swt.lib.dir}">
+        <include name="*.*" />
+      <!-- .jar, .so, .dll, etc. -->
+    </fileset>
+    <fileset dir="lib-test">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
 
+  <taskdef classpathref="cobertura.classpath" resource="tasks.properties" />
+
+  <target name="instrument" depends="compile">
+    <cobertura-instrument todir="${instrumented.dir}" >
+      <ignore regex="org.apache.log4j.*" />
+      <fileset dir="${bin.dir}">
+          <include name="**/*.class" />
+      </fileset>
+    </cobertura-instrument>
+  </target>
+  
+  <target name="run-cobertura-tests" depends="compile-tests, instrument">
+    <junit printsummary="withOutAndErr" haltonfailure="no" fork="true" showoutput="yes" >
+      <classpath location="${instrumented.dir}" />  
+      <classpath location="${bin.dir}" />  
+      <classpath refid="cobertura.classpath" />
+
+      <classpath location="${test-bin.dir}" />
+      <formatter type="plain" usefile="false"/>
+
+      <batchtest todir="${test-bin.dir}">
+
+        <fileset dir="${src.tests}">
+          <include name="**/*Test*.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+  
+  <target name="cobertura-report" depends="run-cobertura-tests">
+    <cobertura-report format="html" destdir="${coveragereport.dir}" >
+        <fileset dir="${src.dir}">
+            <include name="**/*.java" />
+        </fileset>
+    </cobertura-report>
+  </target>
+  
 </project>
