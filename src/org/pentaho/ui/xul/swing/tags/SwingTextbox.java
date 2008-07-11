@@ -203,7 +203,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
 	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
 	      public void keyReleased(KeyEvent e) {
 	        if(!oldValue.equals(textComp.getText())){
-	          SwingTextbox.this.changeSupport.firePropertyChange("value", "", SwingTextbox.this.getValue());
+	          SwingTextbox.this.changeSupport.firePropertyChange("value", oldValue, SwingTextbox.this.getValue());
 	          oldValue = textComp.getText();
 	        } else {
 	          logger.debug("Special key pressed, ignoring");
