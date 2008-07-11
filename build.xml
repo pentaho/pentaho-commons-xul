@@ -190,7 +190,7 @@
   <property name="instrumented.dir" value="instrumented-classes"/>
   <path id="cobertura.classpath">
     <fileset dir="${lib-ext.dir}">
-        <include name="*.jar" />
+        <include name="**/*.jar" />
     </fileset>
     <fileset dir="${lib-swt.dir}">
         <include name="*.jar" />
