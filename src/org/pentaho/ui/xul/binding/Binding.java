@@ -64,6 +64,13 @@ public class Binding {
     setTargetAttr(targetAttr);
   }
 
+  public Binding(Document document, String sourceId, String sourceAttr, Object target, String targetAttr) {
+    this.source = new WeakReference(document.getElementById(sourceId));
+    setSourceAttr(sourceAttr);
+    this.target = new WeakReference(target);
+    setTargetAttr(targetAttr);
+  }
+  
   public Binding(Object source, String sourceAttr, Object target, String targetAttr) {
     this.source = new WeakReference(source);
     setSourceAttr(sourceAttr);
