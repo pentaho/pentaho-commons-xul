@@ -131,7 +131,7 @@ public class SwingTree extends SwingElement implements XulTree {
   }
 
   public int[] getActiveCellCoordinates() {
-    return new int[] { table.getSelectedColumn(), table.getSelectedRow() };
+    return new int[] {  table.getSelectedRow(), table.getSelectedColumn() };
 
   }
 
@@ -198,7 +198,7 @@ public class SwingTree extends SwingElement implements XulTree {
   }
 
   public int getWidth() {
-    return table.getWidth();
+    return scrollpane.getWidth();
   }
 
   public void setWidth(int width) {
@@ -226,7 +226,7 @@ public class SwingTree extends SwingElement implements XulTree {
   }
 
   public void setActiveCellCoordinates(int row, int column) {
-
+    table.changeSelection(row, column, false, false);
   }
 
   public void setDisabled(boolean dis) {

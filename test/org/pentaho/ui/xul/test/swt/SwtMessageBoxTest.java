@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
+import org.pentaho.ui.xul.test.swing.SwingMessageBoxTest;
 
 public class SwtMessageBoxTest {
 
@@ -53,5 +54,5 @@ public class SwtMessageBoxTest {
     assertEquals(btns, msg.getButtons());
     
   }
-  
+
 }

@@ -52,5 +52,48 @@ public class SwingMessageBoxTest {
     assertEquals(btns, msg.getButtons());
     
   }
-  
+
+  @Test
+  public void testShow() throws Exception{
+
+    final XulMessageBox msg = (XulMessageBox) doc.createElement("messagebox");
+    msg.setTitle("Title");
+    msg.setMessage("Message");
+    
+    Thread msgThread = new Thread(){
+      public void run() {
+        msg.open();
+      }
+    };
+    msgThread.start();
+    Thread.sleep(1000);
+    assertTrue(msgThread.isAlive());
+    msgThread.interrupt();
+  }
+
+  private boolean err = false;
+  @Test
+  public void testSetScrollable() throws Exception{
+
+    final XulMessageBox msg = (XulMessageBox) doc.createElement("messagebox");
+    msg.setTitle("Title");
+    msg.setScrollable(true);
+    msg.setMessage("Message");
+    
+    Thread msgThread = new Thread(){
+      public void run() {
+        try{
+          msg.open();
+        } catch(Exception e){
+          SwingMessageBoxTest.this.err = true;
+        }
+      }
+    };
+    
+    msgThread.start();
+    Thread.sleep(1000);
+    assertTrue(msgThread.isAlive());
+    assertTrue(err == false);
+    msgThread.interrupt();
+  }
 }
