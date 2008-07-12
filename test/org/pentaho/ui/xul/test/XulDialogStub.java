@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.test;
 
+import org.pentaho.ui.xul.containers.XulDialogAdapter;
+
 public class XulDialogStub extends XulDialogAdapter {
   
   private Object lock = new Object();
