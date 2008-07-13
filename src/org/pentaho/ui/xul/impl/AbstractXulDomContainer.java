@@ -298,14 +298,20 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     }
   }
   
+  @Deprecated
   public void addBinding(Binding binding){
     bindings.add(binding);
+  }
+  
+  public void addInitializedBinding(Binding binding){
+    bindings.addInitializedBinding(binding);
   }
   
   public void registerBinding(XulComponent comp, String expr){
     //bindings.add(comp, expr);
   }
 
+  @Deprecated
   public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr){
     Binding bind = new Binding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
     bindings.add(bind);
@@ -313,6 +319,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     
   }
 
+  @Deprecated
   public Binding createBinding(String source, String sourceAttr, String targetId, String targetAttr){
     Binding bind = new Binding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
     bindings.add(bind);

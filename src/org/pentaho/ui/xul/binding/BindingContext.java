@@ -29,6 +29,8 @@ public class BindingContext {
   public void add(XulComponent source, String expr) {
     BindingExpression expression = BindingExpression.parse(expr);
     XulComponent target = container.getDocumentRoot().getElementById(expression.target);
+    
+    //TODO: bindingFactory.createBinding
     Binding newBinding = new Binding(source, expression.sourceAttr, target, expression.targetAttr);
     add(newBinding);
   }
@@ -43,6 +45,10 @@ public class BindingContext {
 
   }
 
+  /*
+   * 1. inits the binding defined by the bind object
+   * 2. registers binding listeners
+   */
   public void add(Binding bind) {
     try {
       bindings.add(bind);
@@ -62,6 +68,22 @@ public class BindingContext {
     } catch (Throwable t) {
       throw new BindingException("Binding failed: " + bind.getSource() + "." + bind.getSourceAttr() + " <==> "
           + bind.getTarget() + "." + bind.getTargetAttr(), t);
+    }
+  }
+  
+  public void addInitializedBinding(Binding binding) {
+    try {
+      bindings.add(binding);
+
+      if (!bindingListeners.containsKey(binding)) {
+        bindingListeners.put(binding, new ArrayList<PropertyChangeListener>());
+      }
+      bindingListeners.get(binding).addAll(binding.getListeneners());
+      
+      binding.setContext(this);
+    } catch (Throwable t) {
+      throw new BindingException("Binding failed: " + binding.getSource() + "." + binding.getSourceAttr() + " <==> "
+          + binding.getTarget() + "." + binding.getTargetAttr(), t);
     }
   }
 }

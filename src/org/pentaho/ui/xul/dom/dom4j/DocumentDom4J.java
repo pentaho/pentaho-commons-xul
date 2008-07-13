@@ -53,7 +53,6 @@ public class DocumentDom4J extends ElementDom4J implements Document {
 
 	public void setXulDomContainer(XulDomContainer container) {
 		this.container = container;
-		
 	}
 
 	public boolean isRegistered(String elementName) {
@@ -72,12 +71,18 @@ public class DocumentDom4J extends ElementDom4J implements Document {
     container.loadFragment(id, src);
   }
 
+  @Deprecated
   public void addBinding(Binding bind){
     container.addBinding(bind);
+  }
+
+  public void addInitializedBinding(Binding b) {
+    container.addInitializedBinding(b);
   }
 
   public void invokeLater(Runnable runnable) {
     container.invokeLater(runnable);
   }
+
   
 }

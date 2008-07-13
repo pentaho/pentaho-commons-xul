@@ -7,6 +7,8 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 import org.apache.commons.logging.Log;
@@ -50,6 +52,7 @@ public class Binding {
 
   private Type bindingStrategy = Type.BI_DIRECTIONAL;
 
+  @Deprecated
   public Binding(Document document, String sourceId, String sourceAttr, String targetId, String targetAttr) {
     this.source = new WeakReference(document.getElementById(sourceId));
     setSourceAttr(sourceAttr);
@@ -57,6 +60,7 @@ public class Binding {
     setTargetAttr(targetAttr);
   }
 
+  @Deprecated
   public Binding(Document document, Object source, String sourceAttr, String targetId, String targetAttr) {
     this.source = new WeakReference(source);
     setSourceAttr(sourceAttr);
@@ -64,6 +68,7 @@ public class Binding {
     setTargetAttr(targetAttr);
   }
 
+  @Deprecated
   public Binding(Document document, String sourceId, String sourceAttr, Object target, String targetAttr) {
     this.source = new WeakReference(document.getElementById(sourceId));
     setSourceAttr(sourceAttr);
@@ -84,6 +89,14 @@ public class Binding {
 
   public Type getBindingType() {
     return bindingStrategy;
+  }
+  
+  public void initialize() {
+    bindForward();
+
+    if (getBindingType() == Binding.Type.BI_DIRECTIONAL) {
+      bindReverse();
+    }
   }
 
   public Reference getSource() {
@@ -191,7 +204,7 @@ public class Binding {
       throw new BindingException("source bean or property is null");
     }
     if (!(a.get() instanceof XulEventSource)) {
-      throw new BindingException("Binding error, source object not a XulEventSource instance");
+      throw new BindingException("Binding error, source object "+a.get()+" not a XulEventSource instance");
     }
     if (b.get() == null || vb == null) {
       throw new BindingException("target bean or property is null");
@@ -266,7 +279,7 @@ public class Binding {
     if(forwardListener != null && sourceObj != null){
       ((XulEventSource) sourceObj).removePropertyChangeListener(forwardListener);
       logger.debug("Removing forward binding on "+sourceObj);
-    } 
+    }
     
     if(reverseListener != null && targetObj != null && targetObj instanceof XulEventSource){
       ((XulEventSource) targetObj).removePropertyChangeListener(reverseListener);
@@ -297,6 +310,17 @@ public class Binding {
 
   public void setReverseListener(PropertyChangeListener reverseListener) {
     this.reverseListener = reverseListener;
+  }
+  
+  public List<PropertyChangeListener> getListeneners() {
+    List<PropertyChangeListener> l = new ArrayList<PropertyChangeListener>();
+    if(forwardListener != null) {
+      l.add(forwardListener);
+    }
+    if(reverseListener != null) {
+      l.add(reverseListener);
+    }
+    return l;
   }
 
   public BindingContext getContext() {

@@ -67,7 +67,12 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
 	}
 
 
+  @Deprecated
   public void addBinding(Binding binding) {
+    //no implementation needed
+  }
+  
+  public void addInitializedBinding(Binding binding) {
     //no implementation needed
   }
 

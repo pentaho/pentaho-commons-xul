@@ -47,7 +47,10 @@ public interface XulDomContainer {
    */
   public void addEventHandler(XulEventHandler handler);
 
+  @Deprecated
   public void addBinding(Binding binding);
+
+  public void addInitializedBinding(Binding b);
   
   public void removeBinding(Binding binding);
 
@@ -85,8 +88,10 @@ public interface XulDomContainer {
 
   public void registerBinding(XulComponent comp, String expr);
 
+  @Deprecated
   public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr);
 
+  @Deprecated
   public Binding createBinding(String source, String sourceAttr, String targetId, String targetAttr);
   
   public void loadOverlay(String src) throws XulException;
@@ -94,4 +99,5 @@ public interface XulDomContainer {
   public void removeOverlay(String src) throws XulException;
 
   public void invokeLater(Runnable runnable);
+
 }
