@@ -26,17 +26,26 @@ public class DefaultBindingFactory implements BindingFactory {
     return b;
   }
   
+  private void constraintsCheck() {
+    if(document == null) {
+      throw new IllegalArgumentException("document is null.  Did you forget to set the document on the DefaultBindingFactory?");
+    }
+  }
+  
   public Binding createBinding(String sourceId, String sourceAttr, String targetId, String targetAttr, BindingConvertor... converters) {
+    constraintsCheck();
     Binding b = new Binding(document.getElementById(sourceId), sourceAttr, document.getElementById(targetId), targetAttr);
     return applyBinding(b);
   }
 
   public Binding createBinding(Object source, String sourceAttr, String targetId, String targetAttr, BindingConvertor... converters) {
+    constraintsCheck();
     Binding b = new Binding(source, sourceAttr, document.getElementById(targetId), targetAttr);
     return applyBinding(b);
   }
 
   public Binding createBinding(String sourceId, String sourceAttr, Object target, String targetAttr, BindingConvertor... converters) {
+    constraintsCheck();
     Binding b = new Binding(document.getElementById(sourceId), sourceAttr, target, targetAttr);
     return applyBinding(b);
   }
