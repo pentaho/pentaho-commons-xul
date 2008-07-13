@@ -1,9 +1,8 @@
-package org.pentaho.ui.xul.util;
+package org.pentaho.ui.xul;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import org.pentaho.ui.xul.XulEventSource;
 
 public class XulEventSourceAdapter implements XulEventSource{
 

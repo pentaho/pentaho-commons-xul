@@ -3,7 +3,7 @@ package org.pentaho.ui.xul.test.samples;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
-import org.pentaho.ui.xul.util.XulEventSourceAdapter;
+import org.pentaho.ui.xul.XulEventSourceAdapter;
 
 public class BindingBean extends XulEventSourceAdapter {
 

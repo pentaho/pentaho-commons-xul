@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSourceAdapter;
 import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
@@ -21,7 +22,6 @@ import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.swing.tags.SwingTree;
 import org.pentaho.ui.xul.test.samples.TreeHandler;
 import org.pentaho.ui.xul.util.ColumnType;
-import org.pentaho.ui.xul.util.XulEventSourceAdapter;
 
 public class SwingTreeTest {
 

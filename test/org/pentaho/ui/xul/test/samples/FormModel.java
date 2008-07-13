@@ -1,6 +1,6 @@
 package org.pentaho.ui.xul.test.samples;
 
-import org.pentaho.ui.xul.util.XulEventSourceAdapter;
+import org.pentaho.ui.xul.XulEventSourceAdapter;
 
 public class FormModel extends XulEventSourceAdapter {
 

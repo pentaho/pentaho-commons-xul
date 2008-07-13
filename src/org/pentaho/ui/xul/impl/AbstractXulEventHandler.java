@@ -4,8 +4,8 @@ import java.beans.PropertyChangeSupport;
 
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
+import org.pentaho.ui.xul.XulEventSourceAdapter;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.util.XulEventSourceAdapter;
 
 /**
  * @author OEM
