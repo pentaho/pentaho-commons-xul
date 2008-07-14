@@ -3,6 +3,9 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.JRadioButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -29,11 +32,22 @@ public class SwingRadio extends SwingElement implements XulRadio{
     radioButton = new JRadioButton();
     managedObject = radioButton;
     
-    radioButton.addChangeListener(new ChangeListener(){
-      public void stateChanged(ChangeEvent evt){
-        logger.debug("firing selected property change: isSelected="+SwingRadio.this.isSelected());
-        SwingRadio.this.changeSupport.firePropertyChange("selected", null, SwingRadio.this.isSelected());
+    //wrong type of event to listen to.. this one fires even on mouse over. use itemlistener
+//    radioButton.addChangeListener(new ChangeListener(){
+//      public void stateChanged(ChangeEvent evt){
+//        logger.debug("firing selected property change: isSelected="+SwingRadio.this.isSelected());
+//        SwingRadio.this.changeSupport.firePropertyChange("selected", null, SwingRadio.this.isSelected());
+//      }
+//    });
+    
+    radioButton.addItemListener(new ItemListener() {
+
+      public void itemStateChanged(ItemEvent e) {
+        boolean selected = (e.getStateChange()==ItemEvent.SELECTED);
+        logger.debug("firing selected property change: isSelected="+selected);
+        SwingRadio.this.changeSupport.firePropertyChange("selected", null, selected);
       }
+      
     });
   }
   
