@@ -80,7 +80,6 @@ public class XulDomContainerTest {
     XulLoader loader = new SwingXulLoader();
     XulDomContainer container = loader.loadXul("resource/documents/testEventHandlers.xul");
     assertTrue(container.isRegistered("BUTTON"));
-    assertFalse(container.isRegistered("BOGUSjhjhh"));
   }
   
   @Test
