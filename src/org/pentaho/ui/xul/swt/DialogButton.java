@@ -7,8 +7,8 @@ public enum DialogButton {
   CANCEL(IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL),
   HELP(IDialogConstants.HELP_ID, IDialogConstants.HELP_LABEL),
   DISCLOSURE(IDialogConstants.DETAILS_ID, IDialogConstants.SHOW_DETAILS_LABEL),
-  EXTRA1(IDialogConstants.CLIENT_ID + 1, null),
-  EXTRA2(IDialogConstants.CLIENT_ID + 2, null);
+  EXTRA1(IDialogConstants.CLIENT_ID + 1, "Extra1"),
+  EXTRA2(IDialogConstants.CLIENT_ID + 2, "Extra2");
 
   private int id;
   private String defaultLabel = null;
