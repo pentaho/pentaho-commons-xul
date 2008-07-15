@@ -48,14 +48,14 @@ public class SwtDialogTest {
   
   @Test
   public void testSetButtons() throws Exception{
-    dialog.setButtons("accept,cancel, extra1, extra2, help");
+    dialog.setButtons("accept, cancel, extra1, extra2");
     dialog.setOndialogextra1("foo.bar()");
     dialog.setOndialogextra2("foo.bar()");
     dialog.setButtonlabelextra1("extra1");
     dialog.setButtonlabelextra2("extra2");
     
     ((SwtDialog) dialog).setButtons();
-    assertEquals("accept,cancel, extra1, extra2, help", dialog.getButtons());
+    assertEquals("accept, cancel, extra1, extra2", dialog.getButtons());
   }
   
   @Test
