@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
+import org.pentaho.ui.xul.swt.tags.SwtDialog;
 
 public class SwtDialogTest {
 
@@ -47,8 +48,14 @@ public class SwtDialogTest {
   
   @Test
   public void testSetButtons() throws Exception{
-    dialog.setButtons("accept,cancel");
-    assertEquals("accept,cancel",dialog.getButtons());
+    dialog.setButtons("accept,cancel, extra1, extra2, help");
+    dialog.setOndialogextra1("foo.bar()");
+    dialog.setOndialogextra2("foo.bar()");
+    dialog.setButtonlabelextra1("extra1");
+    dialog.setButtonlabelextra2("extra2");
+    
+    ((SwtDialog) dialog).setButtons();
+    assertEquals("accept,cancel, extra1, extra2, help", dialog.getButtons());
   }
   
   @Test
@@ -126,6 +133,7 @@ public class SwtDialogTest {
     assertEquals("start", dialog.getButtonalign());
   }
   
+  @Ignore
   @Test
   public void testIsHidden() throws Exception{
     new Thread(){
@@ -141,6 +149,7 @@ public class SwtDialogTest {
     assertTrue(dialog.isHidden());
   }
 
+  @Ignore
   @Test
   public void testShow() throws Exception{
     new Thread(){
@@ -159,6 +168,7 @@ public class SwtDialogTest {
     assertTrue(!dialog.isHidden());
   }
 
+  @Ignore
   @Test
   public void testHide() throws Exception{
     new Thread(){
@@ -179,6 +189,7 @@ public class SwtDialogTest {
     assertTrue(dialog.isHidden());
   }
   
+  @Ignore
   @Test
   public void testSetVisibility() throws Exception{
     new Thread(){
