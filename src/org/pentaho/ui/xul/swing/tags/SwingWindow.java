@@ -15,11 +15,13 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.text.DefaultEditorKit;
@@ -61,6 +63,9 @@ public class SwingWindow extends SwingElement implements XulWindow {
   
   private Clipboard clipboard;
   
+  private String appicon = null;
+  private XulDomContainer xulContainer;
+  
   /**
    * Xul Buttons can belong to radio button groups without a "radiogroup" element in the DOM
    * This collection facilitates this behavior.
@@ -73,7 +78,8 @@ public class SwingWindow extends SwingElement implements XulWindow {
     this.xulDomContainer = domContainer;
 
     this.orientation = Orient.VERTICAL;
-
+    this.xulContainer = domContainer;
+    
     children = new ArrayList<XulComponent>();
 
     container = new JPanel(new GridBagLayout());
@@ -92,7 +98,6 @@ public class SwingWindow extends SwingElement implements XulWindow {
     		xulDomContainer.close();
     	}
     });
-    
     
     managedObject = frame;
   }
@@ -286,6 +291,21 @@ public class SwingWindow extends SwingElement implements XulWindow {
 
   public void invokeLater(Runnable runnable) {
     EventQueue.invokeLater(runnable);
+  }
+
+
+  public void setAppicon(String icon) {
+    try{
+      this.appicon = icon;
+      URL url = SwingButton.class.getClassLoader().getResource(this.xulContainer.getXulLoader().getRootDir()+icon);
+      
+      ImageIcon ico = new ImageIcon(url);
+      if(ico.getImage() != null){
+        frame.setIconImage(ico.getImage());
+      }
+    } catch(Exception e){
+      logger.error("Error loading application icon: "+icon, e);
+    }
   }
 	
 }

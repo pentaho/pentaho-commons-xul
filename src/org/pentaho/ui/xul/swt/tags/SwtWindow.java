@@ -174,5 +174,11 @@ public class SwtWindow extends SwtElement implements XulWindow {
     shell.getDisplay().asyncExec(runnable);
   }
 
+  public void setAppicon(String icon) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
 
 }
