@@ -1,4 +1,4 @@
-package org.pentaho.ui.xul.test.mock;
+package org.pentaho.ui.xul.mock;
 
 import java.util.List;
 
