@@ -110,14 +110,20 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     // TODO: This should be refactored into the individual windows themselves,
     // and only the root window should exit the system when closed.
     
-    System.exit(0);
-  	
+    if(!ignoreClose){
+      System.exit(0);
+    }
   }
 
   public boolean isClosed() {
     return closed;
   }
 
+  private boolean ignoreClose = false;
+  public void ignoreCloseOperation(boolean flag){
+    ignoreClose = flag;
+  }
+  
   @Override
   public XulDomContainer loadFragment(String xulLocation) throws XulException {
     try{
