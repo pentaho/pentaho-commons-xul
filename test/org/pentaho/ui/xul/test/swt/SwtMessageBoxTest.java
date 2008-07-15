@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
+import org.pentaho.ui.xul.swt.tags.SwtMessageBox;
 import org.pentaho.ui.xul.test.swing.SwingMessageBoxTest;
 
 public class SwtMessageBoxTest {
@@ -55,4 +56,19 @@ public class SwtMessageBoxTest {
     
   }
 
+  boolean fail = false;
+  @Test
+  public void testGetParent() throws Exception{
+
+    final XulMessageBox msg = (XulMessageBox) doc.createElement("messagebox");
+    new Thread(){
+      public void run(){
+        msg.setMessage("Bang");
+        msg.open();
+        fail = true;
+      }
+    }.start();
+    assertFalse(fail);
+
+  }
 }

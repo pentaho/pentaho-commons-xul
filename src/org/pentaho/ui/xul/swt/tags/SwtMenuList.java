@@ -7,6 +7,7 @@ import java.awt.event.ItemListener;
 import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -155,7 +156,7 @@ public class SwtMenuList<T> extends SwtElement implements XulMenuList<T> {
   }
 
   public Collection<T> getElements() {
-    return null;
+    return (Collection) popup.getChildNodes();
   }
 
   public String getBinding() {

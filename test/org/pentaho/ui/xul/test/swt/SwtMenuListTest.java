@@ -45,30 +45,30 @@ public class SwtMenuListTest {
     list.setSelectedItem(item);
     assertEquals(list.getSelectedItem().toString(), item.getLabel());
   }
-//
-//  @Test
-//  public void testGetElements() throws Exception{
-//    assertEquals(3, list.getElements().size());
-//  }
+
+  @Test
+  public void testGetElements() throws Exception{
+    assertEquals(3, list.getElements().size());
+  }
 
   @Test
   public void testGetBinding() throws Exception{
     assertEquals("label", list.getBinding());
   }
   
-//  @Test
-//  public void testBindings() throws Exception{
-//    List<TestClass> items = new ArrayList<TestClass>();
-//    XulMenuList list2 = (XulMenuList) doc.getElementById("list2");
-//    
-//    items.add(new TestClass("foo"));
-//    items.add(new TestClass("bar"));
-//    items.add(new TestClass("baz"));
-//    items.add(new TestClass("bang"));
-//    list2.setElements(items);
-//    
-//    assertEquals(4, list2.getElements().size());
-//  }
+  @Test
+  public void testBindings() throws Exception{
+    List<TestClass> items = new ArrayList<TestClass>();
+    XulMenuList list2 = (XulMenuList) doc.getElementById("list2");
+    
+    items.add(new TestClass("foo"));
+    items.add(new TestClass("bar"));
+    items.add(new TestClass("baz"));
+    items.add(new TestClass("bang"));
+    list2.setElements(items);
+    
+    assertEquals(4, list2.getElements().size());
+  }
   
   @Test
   public void testGetSelecetdIndex() throws Exception{

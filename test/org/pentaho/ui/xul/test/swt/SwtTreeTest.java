@@ -162,43 +162,42 @@ public class SwtTreeTest {
 //    assertEquals(0, ((TreeHandler)container.getEventHandler("handler")).selectedRow);
 //    
 //  }
-//  
-//  @Test
-//  public void testSetElements(){
-//    List<Person> peeps = new ArrayList<Person>();
-//    Person perp = new Person();
-//    perp.enabled = true;
-//    perp.name = "Wil";
-//    perp.city = "Narcossee";
-//    perp.titles = new Vector();
-//    perp.titles.addAll(Arrays.asList(new String[]{"Blogger", "Actor", "Static coder"}));
-//    perp.disposition = "Feeling it";
-//    peeps.add(perp);
-//    
-//    perp = new Person();
-//    perp.enabled = false;
-//    perp.name = "Mike";
-//    perp.city = "St Cloud";
-//    perp.titles = new Vector();
-//    perp.titles.addAll(Arrays.asList(new String[]{"Add clicker", "Prettiest man in OSS", "GWT ninja"}));
-//    perp.disposition = "Weary";
-//    peeps.add(perp);
-//    tree3.setElements(peeps);
-//
-//
-//    Object[][] sampleData = new Object[2][5];
-//    sampleData[0] = new Object[]{Boolean.TRUE,"Wil","Narcossee","Blogger","Feeling it"};
-//    sampleData[1] = new Object[]{Boolean.FALSE,"Mike","St Cloud","Add clicker","Weary"};
-//    
-//    Object[][] vals = tree3.getValues();
-//    for(int i=0; i < sampleData.length; i++){
-//      for(int y=0; y<sampleData[i].length; y++){
-//        assertTrue(sampleData[i][y].equals(vals[i][y]));
-//      }
-//    }
-//    
-//  }
-//  
+  
+  @Test
+  public void testSetElements(){
+    List<Person> peeps = new ArrayList<Person>();
+    Person perp = new Person();
+    perp.enabled = true;
+    perp.name = "Wil";
+    perp.city = "Narcossee";
+    perp.titles = new Vector();
+    perp.titles.addAll(Arrays.asList(new String[]{"Blogger", "Actor", "Static coder"}));
+    perp.disposition = "Feeling it";
+    peeps.add(perp);
+    
+    perp = new Person();
+    perp.enabled = false;
+    perp.name = "Mike";
+    perp.city = "St Cloud";
+    perp.titles = new Vector();
+    perp.titles.addAll(Arrays.asList(new String[]{"Add clicker", "Prettiest man in OSS", "GWT ninja"}));
+    perp.disposition = "Weary";
+    peeps.add(perp);
+    tree3.setElements(peeps);
+
+    Object[][] sampleData = new Object[2][5];
+    sampleData[0] = new Object[]{Boolean.FALSE,"Wil","Narcossee","","Feeling it"};
+    sampleData[1] = new Object[]{Boolean.FALSE,"Mike","St Cloud","","Weary"};
+    
+    Object[][] vals = tree3.getValues();
+    for(int i=0; i < sampleData.length; i++){
+      for(int y=0; y<sampleData[i].length; y++){
+        assertEquals(sampleData[i][y],vals[i][y]);
+      }
+    }
+    
+  }
+  
 //  @Test
 //  public void testRemoveTreeRows() throws Exception{
 //    tree.removeTreeRows(new int[]{0});
