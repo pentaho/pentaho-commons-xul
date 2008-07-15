@@ -257,7 +257,11 @@ public class SwtTree extends SwtElement implements XulTree {
 	
 	public int[] getSelectedRows() {
 		//TODO: implement Tree Selection
-		return (this.isHierarchical)? null : ((Table) ((TableWrapper) widget).getComposite()).getSelectionIndices();
+		int[] rows = (this.isHierarchical)? null : ((Table) ((TableWrapper) widget).getComposite()).getSelectionIndices();
+		if(rows == null){
+		  rows = new int[]{};
+		}
+		return rows;
 	}
 
 	public void addTreeRow(XulTreeRow row) {
@@ -284,6 +288,8 @@ public class SwtTree extends SwtElement implements XulTree {
   }
 
   public void setSelectedRows(int[] rows) {
+    //TODO: impl tree version
+    ((Table) ((TableWrapper) widget).getComposite()).setSelection(rows);
   }
 
 

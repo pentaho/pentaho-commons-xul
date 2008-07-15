@@ -164,7 +164,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   }
 
   public void loadFragment(String id, String src) throws XulException {
-    XulComponent c = this.getDocumentRoot().getElementById("id");
+    XulComponent c = this.getDocumentRoot().getElementById(id);
     if(c == null){
       throw new IllegalArgumentException("target element does not exist");
     }

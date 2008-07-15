@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.Point;
 import java.io.File;
 
 import javax.swing.JDialog;
@@ -26,9 +27,11 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   private File selectedFile;
   private File[] selectedFiles;
   private Component parentObject = null;
+  private XulComponent parent;
   
   public SwingFileDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("filedialog");
+    this.parent = domContainer.getDocumentRoot().getRootElement();
     domContainer.getDocumentRoot().getRootElement().addChild(this);
   }
 
@@ -78,7 +81,10 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   }
   
   private RETURN_CODE showOpen(){
+    Point loc = getParentObject().getLocation();
+    fc.setLocation(loc);
     int retVal = fc.showOpenDialog(getParentObject());
+    
     switch(retVal){
       case JFileChooser.APPROVE_OPTION:
         if(this.selectionType == SEL_TYPE.SINGLE){
@@ -94,6 +100,7 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   }
   
   private RETURN_CODE showSave(){
+    fc.setLocation(getParentObject().getLocation());
     int retVal = fc.showSaveDialog(getParentObject());
     switch(retVal){
       case JFileChooser.APPROVE_OPTION:
@@ -113,7 +120,7 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     if(parentObject != null){
       return parentObject;
     } else {
-      return (Component) getParent().getManagedObject();
+      return (Component) this.parent.getManagedObject();
     }
   }
 }

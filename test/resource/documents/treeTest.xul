@@ -4,7 +4,7 @@
   orient="vertical"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   xmlns:pen="http://www.pentaho.org/2008/xul"
-   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650" onload="handler.setup()">
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
   <script id="handler" src="org.pentaho.ui.xul.test.samples.TreeHandler"/>
   <tree flex="1" editable="true" seltype="multiple" enableColumnDrag="true" id="testTable" width="400">
 
@@ -20,7 +20,7 @@
       <treeitem>
         <treerow>
           <treecell value="true"/>
-          <treecell label="Nick"/>
+          <treecell label="Nick" id="cell"/>
           <treecell label="bazz"/>
           <treecell value="foo, bar, baz"/>
           <treecell label="Testing"/>

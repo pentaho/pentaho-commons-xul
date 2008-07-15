@@ -8,6 +8,7 @@ public class TreeHandler extends AbstractXulEventHandler{
   public void onSelect(int idx){
     this.selectedRow = idx;
   }
+  
 
 }
 

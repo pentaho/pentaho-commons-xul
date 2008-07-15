@@ -1,20 +1,20 @@
 package org.pentaho.ui.xul.test.swing;
 
-import java.util.Arrays;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.AfterClass;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulListitem;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
-
-import static org.junit.Assert.*;
 
 public class SwingListboxTest {
   Document doc = null;
@@ -167,4 +167,41 @@ public class SwingListboxTest {
     item1.setValue("bar");
     assertEquals("bar", item1.getValue());
   }
+  
+  @Test
+  public void testSetElements() throws Exception {
+    XulListbox box = (XulListbox) doc.getElementById("listbox2");
+    List<Person> peeps = new ArrayList<Person>();
+    peeps.add(new Person("Nick"));
+    peeps.add(new Person("Barb"));
+    peeps.add(new Person("Kenneth"));
+    
+    box.setElements(peeps);
+    
+    assertEquals(3, box.getRowCount());
+    
+    List<XulComponent> items = box.getChildNodes();
+    assertEquals("Nick",((XulListitem) items.get(0)).getLabel());
+    assertEquals("Barb",((XulListitem) items.get(1)).getLabel());
+    assertEquals("Kenneth",((XulListitem) items.get(2)).getLabel());
+    
+  }
+  
+  public class Person{
+    private String firstName;
+    public Person(String firstName){
+      this.firstName = firstName;
+    }
+    public String getFirstName() {
+    
+      return firstName;
+    }
+    public void setFirstName(String firstName) {
+    
+      this.firstName = firstName;
+    }
+    
+    
+  }
+  
 }

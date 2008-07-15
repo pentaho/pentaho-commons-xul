@@ -1,4 +1,4 @@
-package org.pentaho.ui.xul.containers;
+package org.pentaho.ui.xul.test.mock;
 
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;

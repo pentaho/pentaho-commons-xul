@@ -46,7 +46,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     return accesskey;
   }
 
-  public boolean getDisabled() {
+  public boolean isDisabled() {
     return disabled;
   }
 

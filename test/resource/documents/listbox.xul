@@ -3,6 +3,7 @@
 <window id="label-test" title="Testing labels and layout for SWT, Swing"
   orient="vertical"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:pen="http://www.pentaho.org/2008/xul"
    xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
   <script id="handler" src="org.pentaho.ui.xul.test.samples.ListBoxHandler"/>
 
@@ -10,5 +11,10 @@
       <listitem label="Native(JDBC)" id="listItem0" />
       <listitem label="ODBC" id="listItem1" />
       <listitem label="JNDI" id="listItem2"/>
+    </listbox>
+    
+    
+    <listbox id="listbox2" rows="5" pen:binding="firstName">
+
     </listbox>
 </window>

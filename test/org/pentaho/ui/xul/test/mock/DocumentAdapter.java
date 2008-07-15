@@ -1,4 +1,4 @@
-package org.pentaho.ui.xul.dom;
+package org.pentaho.ui.xul.test.mock;
 
 import java.util.List;
 
@@ -7,6 +7,10 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.dom.Attribute;
+import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.dom.Namespace;
 
 public abstract class DocumentAdapter implements Document {
 

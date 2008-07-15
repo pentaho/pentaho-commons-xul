@@ -52,6 +52,8 @@ public abstract class AbstractXulComponent implements XulComponent {
   
   protected int padding = -1;
 
+  protected String onblur;
+  
   public AbstractXulComponent(Element element) {
     this.element = element;
     children = new ArrayList<XulComponent>();
@@ -239,6 +241,11 @@ public abstract class AbstractXulComponent implements XulComponent {
   }
 
   public void setOnblur(String method) {
+    onblur = method;
+  }
+
+  public String getOnblur() {
+    return onblur;
   }
 
   public String getTooltiptext() {

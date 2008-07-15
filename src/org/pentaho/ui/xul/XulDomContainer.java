@@ -86,8 +86,6 @@ public interface XulDomContainer {
 
   public Object getOuterContext();
 
-  public void registerBinding(XulComponent comp, String expr);
-
   @Deprecated
   public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr);
 
@@ -99,5 +97,6 @@ public interface XulDomContainer {
   public void removeOverlay(String src) throws XulException;
 
   public void invokeLater(Runnable runnable);
-
+  
+  public boolean isRegistered(String widgetHandlerName);
 }

@@ -22,13 +22,11 @@ public interface XulMenuitem extends XulComponent {
 
   public boolean isDisabled();
   public void setDisabled(boolean disabled);
-  public void setDisabled(String disabled);
   
   public String getImage();
   public void setImage(String image);
   
   public boolean isSelected();
-  public void setSelected(String selected);
   public void setSelected(boolean selected);
   
   public void setCommand(String command);

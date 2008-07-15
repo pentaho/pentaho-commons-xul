@@ -13,8 +13,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.components.XulLabel;
+import org.pentaho.ui.xul.impl.XulFragmentContainer;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
 
 import static org.junit.Assert.*;
@@ -118,6 +120,29 @@ public class XulLoaderTest {
     XulDomContainer container = loader.loadXul(doc);
     XulLabel testComponent = (XulLabel) container.getDocumentRoot().getElementById("nicknameLabel");
     assertEquals("Nickname", testComponent.getValue());
+  }
+  
+
+  @Test
+  public void testFragErrors() throws Exception{
+    
+    SAXReader rdr = new SAXReader();
+    InputStream in = getClass().getClassLoader().getResourceAsStream("resource/documents/includeTest.xul");
+    Document doc = rdr.read(in);
+    XulLoader loader = new SwingXulLoader();
+    loader.setRootDir("resource/documents");
+    XulFragmentContainer container = (XulFragmentContainer) loader.loadXulFragment(doc);
+
+    try{
+      container.loadFragment("foo");
+      fail("Should have errored");
+    } catch(XulException e){
+      
+    }
+
+    assertNull(container.loadFragment("foo", (ResourceBundle) null));
+    assertNull(container.getDocument(3));
+    
   }
   
 }

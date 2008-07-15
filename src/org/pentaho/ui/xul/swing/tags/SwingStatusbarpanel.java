@@ -63,8 +63,9 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
   
   public void setLabel(String label){
 //    this.label.setText(label);
+    this.label = new JLabel(label);
     panel.removeAll();
-    panel.add(new JLabel(label));
+    panel.add(this.label);
     panel.repaint();
   }
   

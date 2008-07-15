@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
 import org.pentaho.ui.xul.test.samples.SampleEventHandler;
+import org.pentaho.ui.xul.test.samples.TreeHandler;
 
 import static org.junit.Assert.*;
 
@@ -71,6 +72,36 @@ public class XulDomContainerTest {
     container.mergeContainer(container2);
     assertNotNull(container.getEventHandler("handler3"));
     
+  }
+  
+  @Test
+  public void testIsRegistered() throws Exception {
+
+    XulLoader loader = new SwingXulLoader();
+    XulDomContainer container = loader.loadXul("resource/documents/testEventHandlers.xul");
+    assertTrue(container.isRegistered("BUTTON"));
+    assertFalse(container.isRegistered("BOGUSjhjhh"));
+  }
+  
+  @Test
+  public void testRegisterHandler() throws Exception {
+
+    XulLoader loader = new SwingXulLoader();
+    XulDomContainer container = loader.loadXul("resource/documents/testEventHandlers.xul");
+    TreeHandler handler = new TreeHandler();
+    handler.setName("handler1");
+    container.addEventHandler(handler);
+    TreeHandler outHandler = (TreeHandler) container.getEventHandler("handler1");
+    assertNotNull(outHandler);
+    assertSame(handler, outHandler);
+  }
+
+  @Test
+  public void testBindings() throws Exception {
+
+    XulLoader loader = new SwingXulLoader();
+    XulDomContainer container = loader.loadXul("resource/documents/testEventHandlers.xul");
+    //container.createBinding(source, sourceAttr, targetId, targetAttr)
   }
 
 }

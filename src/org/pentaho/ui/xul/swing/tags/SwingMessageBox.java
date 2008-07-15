@@ -30,11 +30,12 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
   private Object[] buttons = defaultButtons;
   private Object icon = new Integer(JOptionPane.INFORMATION_MESSAGE);
   private boolean scrollable = false;
+  private XulComponent parent;
 
   public SwingMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("messagebox");
-    parent = domContainer.getDocumentRoot().getRootElement();
-    parent.addChild(this);
+    this.parent = domContainer.getDocumentRoot().getRootElement();
+    this.parent.addChild(this);
   }
   
   public Object[] getButtons() {
@@ -103,7 +104,7 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
     if(parentObject != null){
       return parentObject;
     } else {
-      return (Component) getParent().getManagedObject();
+      return (Component) this.parent.getManagedObject();
     }
   }
 

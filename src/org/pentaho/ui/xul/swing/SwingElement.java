@@ -185,6 +185,8 @@ public class SwingElement extends AbstractXulComponent {
   }
 
   public void setOnblur(final String method) {
+    super.setOnblur(method);
+    
     if (getJComponent() != null) {
       getJComponent().addFocusListener(new FocusListener() {
 

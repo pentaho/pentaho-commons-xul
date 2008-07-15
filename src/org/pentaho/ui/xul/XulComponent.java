@@ -86,6 +86,13 @@ public interface XulComponent extends Element, XulEventSource {
   public void setOnblur(String method);
   
   /**
+   * Gets the method that will be invoked when this component
+   * loses focus. Also hooks up any listeners for this event. 
+   */
+  public String getOnblur();
+  
+  
+  /**
    * Set the width of this control
    * 
    */

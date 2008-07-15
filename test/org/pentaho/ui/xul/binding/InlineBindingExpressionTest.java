@@ -30,5 +30,17 @@ public class InlineBindingExpressionTest {
     assertEquals("myModelProperty", exp.getModelAttr());
     assertEquals("myXulComponentProperty", exp.getXulCompAttr());
   }
+  
+
+  @Test
+  public void error() {
+    try{
+      InlineBindingExpression exp = new InlineBindingExpression("   myXulComponentProperty   = myModelProperty = test");
+ 
+    } catch(BindingException e){
+      return;
+    }
+    fail("should have thrown a BindingException");
+  }
 
 }

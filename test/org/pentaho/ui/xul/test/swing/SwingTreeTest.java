@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.JTable;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +48,7 @@ public class SwingTreeTest {
     tree = (XulTree) document.getElementById("testTable");
     tree2 = (XulTree) document.getElementById("testTable2");
     tree3 = (XulTree) document.getElementById("testTable3");
+    
 
   }
 
@@ -128,13 +131,6 @@ public class SwingTreeTest {
   }
   
   @Test
-  public void testSetGetWidth() throws Exception {
-    assertEquals(400, tree.getWidth());
-    tree.setWidth(500);
-    assertEquals(500, tree.getWidth());
-  }
-  
-  @Test
   public void testGetEnableColumnDrag() throws Exception {
     assertTrue(tree.isEnableColumnDrag());
     assertTrue(!tree2.isEnableColumnDrag());
@@ -191,6 +187,46 @@ public class SwingTreeTest {
       }
     }
     
+  }
+  
+  @Test
+  public void testEdit() throws Exception{
+    XulRunner runner = new SwingXulRunner();
+    runner.addContainer(container);
+    runner.initialize();
+    runner.start();
+    
+    
+    JTable table = (JTable) ((SwingTree)tree).getTable();
+    //Edit calls return false if there's a cell editor failure
+    assertTrue(table.editCellAt(0, 0));
+    assertTrue(table.editCellAt(0, 3));
+    assertTrue(table.editCellAt(0, 4));
+    
+  }
+  
+  @Test
+  public void testSetValueAt() throws Exception{
+    XulRunner runner = new SwingXulRunner();
+    runner.addContainer(container);
+    runner.initialize();
+    runner.start();
+    
+    JTable table = (JTable) ((SwingTree)tree).getTable();
+    table.setValueAt("Ted", 0, 1);
+    table.setValueAt(Boolean.FALSE, 0, 0);
+    table.setValueAt("baz", 0, 3);
+    table.setValueAt("tester", 0, 4);
+    assertEquals(Boolean.FALSE, table.getValueAt(0, 0));
+    assertEquals("Ted", table.getValueAt(0, 1));
+    assertEquals("tester", table.getValueAt(0, 4));
+    
+  }
+  
+  @Test
+  public void testRowAddCellText() throws Exception{
+    tree.getRootChildren().getItem(0).getRow().addCellText(2, "Bob");
+    //
   }
   
   @Test

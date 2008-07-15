@@ -80,10 +80,6 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     return menuitem.isSelected();
   }
 
-  public void setSelected(String selected) {
-    menuitem.setSelected(Boolean.parseBoolean(selected));
-  }
-
   public void setSelected(boolean selected) {
     menuitem.setSelected(selected);
   }

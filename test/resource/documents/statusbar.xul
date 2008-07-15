@@ -19,10 +19,10 @@
     <button id="removeMeButton" label="Remove Me!"/>
   </groupbox>
   
-  <statusbar>
-    <statusbarpanel image="testImage.png"/>
+  <statusbar id="bar">
+    <statusbarpanel image="testImage.png" id="imagePanel"/>
     <spacer flex="1"/>
     <progressmeter mode="determined" value="82"/>
-    <statusbarpanel label="Right panel"/>
+    <statusbarpanel label="Right panel" id="rightPanel"/>
   </statusbar>
 </window>
