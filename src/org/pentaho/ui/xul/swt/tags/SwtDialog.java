@@ -83,7 +83,7 @@ public class SwtDialog extends SwtElement implements XulDialog {
     }
     
     // If not, then try to use the API's parent parameter...
-    if ((possibleParent == null) && (parent != null)){
+    if ((possibleParent == null) && (parent != null) && parent.getManagedObject() instanceof Shell){
       possibleParent = (Shell) parent.getManagedObject();
     }
     this.domContainer = container;

@@ -140,11 +140,11 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.element.addChild(ele);
   }
 
-  
-  
-  public void addChildAt(Element element, int idx) {
-    this.element.addChildAt(element, idx);
-  }
+//  
+//  
+//  public void addChildAt(Element element, int idx) {
+//    this.element.addChildAt(element, idx);
+//  }
 
   public void removeChild(Element ele) {
     this.element.removeChild(ele);
