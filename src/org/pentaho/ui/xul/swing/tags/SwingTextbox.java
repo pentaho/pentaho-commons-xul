@@ -60,7 +60,8 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   private int max = -1;
 
   private int maxlength = -1;
-  private String oldValue;
+  
+  private String oldValue = null;
   
   public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
@@ -202,8 +203,11 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
       textComp.addKeyListener(new KeyListener() {
 	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
 	      public void keyReleased(KeyEvent e) {
-	        if(!oldValue.equals(textComp.getText())){
+	        if(oldValue != null && !oldValue.equals(textComp.getText())){
 	          SwingTextbox.this.changeSupport.firePropertyChange("value", oldValue, SwingTextbox.this.getValue());
+	          oldValue = textComp.getText();
+	        } else if(oldValue == null){
+	          //AWT error where sometimes the keyReleased is fired before keyPressed.
 	          oldValue = textComp.getText();
 	        } else {
 	          logger.debug("Special key pressed, ignoring");
