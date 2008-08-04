@@ -94,9 +94,9 @@
 		<copy todir="${bin.dir}" flatten="false">
 			<fileset dir="${src.dir}" excludes="**/*.java" />
 		</copy>
-		<copy todir="${bin.dir}/lib" flatten="false">
+		<!--<copy todir="${bin.dir}/lib" flatten="false">
 			<path refid="classpath" />
-		</copy>
+		</copy> -->
 		<!--
 		<copy todir="{bin.dir}/lib">
 	    	<fileset dir="${lib.dir}" includes="**/*.jar"/>
