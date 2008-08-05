@@ -54,10 +54,10 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
 
       public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
-          SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, ((SwingMenuitem)combobox
-              .getSelectedItem()).getLabel());
+          SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (T) ((SwingMenuitem)combobox
+            .getSelectedItem()).getLabel());
           SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
-          previousSelectedItem = (T) combobox.getSelectedItem();
+          previousSelectedItem = (T) ((SwingMenuitem)combobox.getSelectedItem()).getLabel();
         }
       }
 
@@ -71,20 +71,20 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
     model.removeAllElements();
 
     SwingMenuitem selecetdItem = null;
-    
+
     for (XulComponent item : popup.getChildNodes()) {
       JMenuItem jmenuItem = (JMenuItem) ((SwingMenuitem) item).getManagedObject();
       SwingMenuitem tempItem = (SwingMenuitem) item;
       model.addElement(tempItem);
-      if(tempItem.isSelected()){
+      if (tempItem.isSelected()) {
         selecetdItem = tempItem;
       }
     }
-    
-    if(selecetdItem != null){
+
+    if (selecetdItem != null) {
       model.setSelectedItem(selecetdItem);
     }
-    
+
     loaded = true;
     initialized = true;
   }
@@ -122,13 +122,13 @@ public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
   }
 
   public void setSelectedItem(T t) {
-  	SwingMenupopup popup = getPopupElement();
-  	for (XulComponent item : popup.getChildNodes()) {
+    SwingMenupopup popup = getPopupElement();
+    for (XulComponent item : popup.getChildNodes()) {
       SwingMenuitem tempItem = (SwingMenuitem) item;
       if (tempItem.getLabel().equals(extractLabel(t))) {
-      	this.combobox.setSelectedItem(tempItem);
+        this.combobox.setSelectedItem(tempItem);
       }
-  	}
+    }
   }
 
   public void setOncommand(final String command) {
