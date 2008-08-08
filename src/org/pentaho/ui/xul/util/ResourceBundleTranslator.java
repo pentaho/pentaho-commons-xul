@@ -60,7 +60,6 @@ public class ResourceBundleTranslator {
 		try{
 			return StringEscapeUtils.escapeXml(bundle.getString(key));
 		} catch(MissingResourceException e){
-			logger.error(String.format("Translation Error: Missing key from ResourceBundle (%s)", key));
 			//return unchanged so later ResourceBundles can have a go at it
 			return "\\${"+key+"}";
 		}
