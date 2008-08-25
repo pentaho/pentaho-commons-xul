@@ -196,17 +196,17 @@ public class ElementDom4J implements Element{
     
   }
   
-//  public void addChildAt(Element element, int idx) {
-//    org.dom4j.Element dElement = (org.dom4j.Element) element.getElementObject();
-//    
-//    org.dom4j.Element dElementparent = dElement.getParent();
-//    if(dElementparent != null){
-//      dElementparent.remove(dElement);
-//    }
-//    
-//    this.element.elements().add(idx, dElement);
-//    
-//  }
+  public void addChildAt(Element element, int idx) {
+    org.dom4j.Element dElement = (org.dom4j.Element) element.getElementObject();
+    
+    org.dom4j.Element dElementparent = dElement.getParent();
+    if(dElementparent != null){
+      dElementparent.remove(dElement);
+    }
+    
+    this.element.elements().add(idx, dElement);
+    
+  }
 
   public Object getElementObject(){
     return this.element;

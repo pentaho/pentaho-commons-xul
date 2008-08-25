@@ -100,6 +100,10 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.flex = flex;
   }
 
+  public void removeComponent(XulComponent component) {
+	  children.remove( component );
+  }
+  
   public void addComponent(XulComponent c) {
     children.add(c);
   }
@@ -140,11 +144,10 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.element.addChild(ele);
   }
 
-//  
-//  
-//  public void addChildAt(Element element, int idx) {
-//    this.element.addChildAt(element, idx);
-//  }
+    
+  public void addChildAt(Element element, int idx) {
+    this.element.addChildAt(element, idx);
+  }
 
   public void removeChild(Element ele) {
     this.element.removeChild(ele);
@@ -222,6 +225,11 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
     this.element.replaceChild(oldElement, newElement);
+    int idx = children.indexOf( oldElement );
+    if( idx > -1 ) {
+    	children.remove( idx );
+    	children.add( idx, newElement);
+    }
   }
 
   public void setHeight(int height) {

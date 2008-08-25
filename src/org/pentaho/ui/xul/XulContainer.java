@@ -27,6 +27,12 @@ public interface XulContainer extends XulComponent {
   public void addComponentAt(XulComponent component, int idx);
   
   /**
+   * The method used to remove a child from a container
+   * @param component the child component to remove from this container.
+   */
+  public void removeComponent(XulComponent component);
+  
+  /**
    * @see org.pentaho.ui.xul.util.Orient
    * @return the orientation for this container. Valid values are found in the Orient enum. 
    */
