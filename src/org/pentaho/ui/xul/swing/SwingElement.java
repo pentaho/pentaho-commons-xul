@@ -20,7 +20,6 @@ import javax.swing.JSplitPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Ignore;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulSplitter;
@@ -84,15 +83,12 @@ public class SwingElement extends AbstractXulComponent {
         splitter.setResizeWeight(splitterSize);
         if (totalFlex > 0) {
           splitter.addComponentListener(new ComponentListener() {
-            @Ignore
             public void componentHidden(ComponentEvent arg0) {
             }
 
-            @Ignore
             public void componentMoved(ComponentEvent arg0) {
             }
 
-            @Ignore
             public void componentShown(ComponentEvent arg0) {
             }
 
