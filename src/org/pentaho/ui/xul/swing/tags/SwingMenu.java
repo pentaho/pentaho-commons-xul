@@ -35,11 +35,15 @@ public class SwingMenu extends SwingElement implements XulMenu {
     for (XulComponent comp : children) {
       if (comp instanceof SwingMenupopup) {
 
-        for (XulComponent compInner : ((SwingMenupopup) comp).getChildNodes()) {
+        for (XulComponent compInner : comp.getChildNodes()) {
           if (compInner instanceof XulMenuseparator) {
             this.menu.addSeparator();
-          } else {
-            this.menu.add((JMenuItem) ((SwingMenuitem) compInner).getManagedObject());
+          }
+          else if (compInner instanceof SwingMenu) {
+            this.menu.add((JMenu) (compInner).getManagedObject());
+          }
+          else {
+            this.menu.add((JMenuItem) (compInner).getManagedObject());
           }
         }
       }
