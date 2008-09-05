@@ -93,6 +93,10 @@ public class SwingMenu extends SwingElement implements XulMenu {
     menu.setText(label);
   }
 
+  public void resetContainer()
+  {
+    menu.removeAll();
+  }
 }
 
   
