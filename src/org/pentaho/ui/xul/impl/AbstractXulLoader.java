@@ -9,6 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -68,9 +69,23 @@ public abstract class AbstractXulLoader implements XulLoader {
       String processedDoc = performIncludeTranslations(xulDocument.asXML());
       String localOutput = (mainBundle != null) ? ResourceBundleTranslator.translate(processedDoc, mainBundle)
           : processedDoc;
+      
       SAXReader rdr = new SAXReader();
+      //localOutput = localOutput.replace("UTF-8", "ISO-8859-1");
+      
+
+      System.out.println("============ Post Processed: ============");
+      System.out.println(localOutput);
+      System.out.println("============ End Post Processed: ============");
+      
+      
       final Document doc = rdr.read(new StringReader(localOutput));
 
+      System.out.println("============ After Parse: ============");
+      System.out.println(doc.asXML());
+      System.out.println("============ After Parse: ============");
+      
+      
       XulDomContainer container = new XulWindowContainer(this);
       container.setOuterContext(outerContext);
       parser.setContainer(container);
@@ -371,11 +386,43 @@ public abstract class AbstractXulLoader implements XulLoader {
           Attribute atr = (Attribute) o;
           sourceElement.addAttribute(atr.getName(), atr.getValue());
         }
+        
+        Document targetDocument = srcEle.getDocument();
 
         //lets start out by just including everything
         for (Object overlayChild : overlay.elements()) {
           Element pluckedElement = (Element) overlay.content().remove(overlay.content().indexOf(overlayChild));
-          sourceElement.add(pluckedElement);
+          
+          
+
+          String insertBefore = pluckedElement.attributeValue("insertbefore");
+          String insertAfter = pluckedElement.attributeValue("insertafter");
+          String position = pluckedElement.attributeValue("position");
+          
+          
+          //determine position to place it
+          int positionToInsert = -1;
+          if(insertBefore != null){
+            Element insertBeforeTarget = sourceElement.elementByID(insertBefore);
+            positionToInsert = sourceElement.elements().indexOf(insertBeforeTarget);
+            
+          } else if(insertAfter != null){
+            Element insertAfterTarget = sourceElement.elementByID(insertAfter);
+            positionToInsert = sourceElement.elements().indexOf(insertAfterTarget);
+            if(positionToInsert != -1){
+              positionToInsert++; //we want to be after that point;
+            }
+          } else if(position != null){
+            int pos = Integer.parseInt(position);
+            positionToInsert = (pos <= sourceElement.elements().size()) ? pos : -1;
+          }
+          if(positionToInsert == -1){
+            //default to last
+            positionToInsert = sourceElement.elements().size();
+          }
+          
+          sourceElement.elements().add(positionToInsert, pluckedElement);
+          
           logger.info("processed overlay child: " + ((Element) overlayChild).getName() + " : "
               + pluckedElement.getName());
         }
@@ -465,13 +512,40 @@ public abstract class AbstractXulLoader implements XulLoader {
       }
 
       for (Object childToParse : overlay.elements()) {
+        Element childElement = (Element) childToParse;
+        
         logger.info("Processing overlay on element with id: " + overlayId);
         parser.reset();
         parser.setContainer(container);
-        XulComponent c = parser.parse((Element) childToParse, (XulContainer) sourceElement);
-        sourceElement.addChild(c);
-        ((XulContainer) sourceElement).addComponent(c);
-        ((XulContainer) sourceElement).addChild(c);
+        XulComponent c = parser.parse(childElement, (XulContainer) sourceElement);
+        
+        String insertBefore = childElement.attributeValue("insertbefore");
+        String insertAfter = childElement.attributeValue("insertafter");
+        String position = childElement.attributeValue("position");
+        
+        XulContainer sourceContainer = ((XulContainer) sourceElement);
+        
+        //determine position to place it
+        int positionToInsert = -1;
+        if(insertBefore != null){
+          org.pentaho.ui.xul.dom.Element insertBeforeTarget = targetDocument.getElementById(insertBefore);
+          positionToInsert = sourceContainer.getChildNodes().indexOf(insertBeforeTarget);
+        } else if(insertAfter != null){
+          org.pentaho.ui.xul.dom.Element insertAfterTarget = targetDocument.getElementById(insertAfter);
+          positionToInsert = sourceContainer.getChildNodes().indexOf(insertAfterTarget);
+        } else if(position != null){
+          int pos = Integer.parseInt(position);
+          positionToInsert = (pos <= sourceContainer.getChildNodes().size()) ? pos : -1;
+        }
+        if(positionToInsert == -1){
+          //default to last
+          positionToInsert = sourceContainer.getChildNodes().size();
+        }
+        
+        sourceContainer.addComponentAt(c, positionToInsert);
+        sourceContainer.addChildAt(c, positionToInsert);
+        
+        
         logger.info("added child: " + c);
       }
       
