@@ -159,6 +159,23 @@ public class SwingElement extends AbstractXulComponent {
   }
 
   @Override
+  public void addComponentAt(XulComponent c, int pos) {
+    super.addComponentAt(c, pos);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+  
+  public void addChildAt(XulComponent c, int pos) {
+    super.addChildAt(c, pos);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+  
+  @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
 
     int idx = this.children.indexOf(oldElement);
