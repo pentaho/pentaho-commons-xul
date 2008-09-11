@@ -74,16 +74,16 @@ public abstract class AbstractXulLoader implements XulLoader {
       //localOutput = localOutput.replace("UTF-8", "ISO-8859-1");
       
 
-      System.out.println("============ Post Processed: ============");
-      System.out.println(localOutput);
-      System.out.println("============ End Post Processed: ============");
+//      System.out.println("============ Post Processed: ============");
+//      System.out.println(localOutput);
+//      System.out.println("============ End Post Processed: ============");
       
       
       final Document doc = rdr.read(new StringReader(localOutput));
 
-      System.out.println("============ After Parse: ============");
-      System.out.println(doc.asXML());
-      System.out.println("============ After Parse: ============");
+//      System.out.println("============ After Parse: ============");
+//      System.out.println(doc.asXML());
+//      System.out.println("============ After Parse: ============");
       
       
       XulDomContainer container = new XulWindowContainer(this);
