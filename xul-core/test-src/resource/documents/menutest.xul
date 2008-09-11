@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="label-test" title="Testing Menu"
+  orient="vertical"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
+  <script id="handler" src="org.pentaho.ui.xul.test.samples.ListBoxHandler"/>
+
+  <menubar id="findfiles-menubar">
+    <menu id="file-menu" label="File" accesskey="f" acceltext="f">
+      <menupopup id="file-popup">
+        <menuitem label="Exit" accesskey="c" command="mainController.close()" />
+      </menupopup>
+    </menu>
+    <menu id="edit-menu" label="Edit" accesskey="e">
+      <menupopup id="edit-popup">
+        <menuitem label="Cut" accesskey="t" command="mainController.cut()" />
+        <menuitem label="Copy" accesskey="c" command="mainController.copy()" />
+        <menuitem label="Paste" acceltext="P" accesskey="p" disabled="true" command="mainController.paste()" id="paseMenuItem" image="foo.png"/>
+      </menupopup>
+    </menu>
+    <menu id="file-menu" label="Help" accesskey="h">
+      <menupopup id="help-popup">
+        <menuitem label="Help Contents" accesskey="c" />
+      </menupopup>
+    </menu>
+  </menubar>
+
+</window>
