@@ -35,7 +35,7 @@
 		<property name="svnant.jar.dir" value="${basedir}/svnant" />
 		<mkdir dir="${svnant.jar.dir}" />
 		<echo message="installing svnant..." />
-		<get src="http://subclipse.tigris.org/files/documents/906/35081/svnant-1.1.0-RC2.zip" dest="${svnant.jar.dir}/svnant.zip" usetimestamp="true" />
+		<get src="http://subclipse.tigris.org/files/documents/906/43359/svnant-1.2.0-RC1.zip" dest="${svnant.jar.dir}/svnant.zip" usetimestamp="true" />
 
 		<unzip src="${svnant.jar.dir}/svnant.zip" dest="${svnant.jar.dir}">
 			<patternset>
@@ -125,7 +125,7 @@
 	</target>
 
 	<target name="svn-revision">
-		<svn>
+	    <svn javahl="${svnant.use-javahl}" svnkit="${svnant.use-svnkit}">
 			<status path="." revisionProperty="repository.revision" />
 		</svn>
 		<echo message="Subversion repository revision: ${repository.revision}" />
