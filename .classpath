@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/acegi-security-1.0.6.jar"/>
+	<classpathentry kind="lib" path="lib/activation-1.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-actionsequence-dom-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-bi-platform-api-2.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-connections-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-xul-core-2.0.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="test-lib/jaxen-1.1.jar"/>
+	<classpathentry kind="lib" path="test-lib/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib/x86-3.3.0-v3346.jar"/>
+	<classpathentry kind="lib" path="lib/jface-3.3.0-I20070606-0010.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
