@@ -73,7 +73,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       SAXReader rdr = new SAXReader();
       //localOutput = localOutput.replace("UTF-8", "ISO-8859-1");
       
-
+      // TODO these need to be logged at debug level or removed
       System.out.println("============ Post Processed: ============");
       System.out.println(localOutput);
       System.out.println("============ End Post Processed: ============");
