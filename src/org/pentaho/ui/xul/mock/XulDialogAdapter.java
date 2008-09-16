@@ -425,4 +425,7 @@ public abstract class XulDialogAdapter implements XulDialog {
 
   }
 
+  public void removeComponent(XulComponent arg0) {
+  
+  }
 }
