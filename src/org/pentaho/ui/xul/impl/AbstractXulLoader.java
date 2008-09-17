@@ -420,9 +420,11 @@ public abstract class AbstractXulLoader implements XulLoader {
             //default to last
             positionToInsert = sourceElement.elements().size();
           }
-          
-          sourceElement.elements().add(positionToInsert, pluckedElement);
-          
+          if(positionToInsert > sourceElement.elements().size()){
+            sourceElement.elements().add(pluckedElement);
+          } else {
+            sourceElement.elements().add(positionToInsert, pluckedElement);
+          }
           logger.info("processed overlay child: " + ((Element) overlayChild).getName() + " : "
               + pluckedElement.getName());
         }
