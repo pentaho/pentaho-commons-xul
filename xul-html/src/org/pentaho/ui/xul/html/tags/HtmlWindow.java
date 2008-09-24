@@ -1,6 +1,8 @@
 package org.pentaho.ui.xul.html.tags;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -45,10 +47,14 @@ public class HtmlWindow extends HtmlElement implements XulWindow {
 		  sb.append( "</div>\n" ); //$NON-NLS-1$
 	  }
 	  
-	  public void getScript( StringBuilder sb ) {
-		  // nothing to do
-	  }
-	  
+    public void getScript( StringBuilder sb ) {
+      getScript( new HashMap<String,String>(), sb );
+    }
+    
+    public void getScript( Map<String,String> properties, StringBuilder sb ) {
+      // nothing to do
+    }
+    
 	public void close() {
 		// TODO Auto-generated method stub
 

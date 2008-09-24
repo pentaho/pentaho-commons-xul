@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.html.tags.transmenu;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -20,12 +21,15 @@ public class HtmlMenupopup extends HtmlElement implements XulMenupopup {
 		  // nothing to do here
 	  }
 
-	  public void getScript( StringBuilder sb ) {
+	  public void getScript( Map<String,String> properties, StringBuilder sb ) {
 		  
 		  for( XulComponent child : children ) {
 			  if( child instanceof HtmlMenuitem ) {
-				  ((HtmlMenuitem) child).getScript(sb);
+				  ((HtmlMenuitem) child).getScript( properties, sb);
 			  }
+			  else if( child instanceof HtmlMenu ) {
+          ((HtmlMenu) child).getScript(properties, sb);
+        }
 		  }
 		  
 	  }

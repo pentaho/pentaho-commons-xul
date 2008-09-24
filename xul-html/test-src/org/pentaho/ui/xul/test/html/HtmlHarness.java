@@ -17,7 +17,7 @@ public class HtmlHarness {
 		      InputStream in = HtmlHarness.class.getClassLoader().getResourceAsStream("resource/documents/menutest2.xul"); //$NON-NLS-1$
 
 		      if(in == null){
-		        System.out.println("Input is null");
+//		        System.out.println("Input is null"); //$NON-NLS-1$
 		        System.exit(123);
 		      }
 
@@ -38,7 +38,7 @@ public class HtmlHarness {
 						((IHtmlElement) component).getHtml(sb);
 					}
 		      }
-		      System.out.println( sb );
+//		      System.out.println( sb );
 /*
 		      XulRunner runner = new HtmlXulRunner();
 		      runner.addContainer(container);
@@ -47,8 +47,7 @@ public class HtmlHarness {
 		      runner.start();
 */		      
 		    } catch(Exception e){
-		      System.out.println(e.getMessage());
-		      e.printStackTrace(System.out);
+		      e.printStackTrace();
 		    }
 		  }
 }

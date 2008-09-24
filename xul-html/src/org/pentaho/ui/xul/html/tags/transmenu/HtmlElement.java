@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.html.tags.transmenu;
 
 import java.beans.PropertyChangeListener;
+import java.util.Map;
 
 import org.pentaho.ui.xul.html.IHtmlElement;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
@@ -18,8 +19,8 @@ public abstract class HtmlElement extends AbstractXulComponent implements IHtmlE
 
 	public abstract void getHtml( StringBuilder sb );
 	
-	public abstract void getScript( StringBuilder sb );
-	
+  public abstract void getScript( Map<String,String> properties, StringBuilder sb );
+  
 	public void addPropertyChangeListener(PropertyChangeListener listener) {
 		// TODO Auto-generated method stub
 

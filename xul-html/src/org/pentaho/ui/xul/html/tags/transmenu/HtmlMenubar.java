@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.html.tags.transmenu;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulMenubar;
@@ -29,11 +32,15 @@ public class HtmlMenubar extends HtmlElement implements XulMenubar {
 		  sb.append( "</div>\n" ); //$NON-NLS-1$
 		  
 		  // now add the script
-		  getScript( sb );
+		  getScript( new HashMap<String,String>(), sb );
 		  
 	  }
 
-	  public void getScript( StringBuilder sb ) {
+    public void getScript( StringBuilder sb ) {
+      getScript( new HashMap<String,String>(), sb );
+    }	  
+	  
+	  public void getScript( Map<String,String> properties, StringBuilder sb ) {
 		  sb.append( "<script language=\"javascript\">\n" ) //$NON-NLS-1$
 		  .append( 	"if (TransMenu.isSupported()) {\n" ) //$NON-NLS-1$
 		  .append( 		"var topLevelMenuItems = new Array();\n" ) //$NON-NLS-1$
@@ -41,7 +48,7 @@ public class HtmlMenubar extends HtmlElement implements XulMenubar {
 
 		  for( XulComponent component : children ) {
 			  if( component instanceof HtmlMenu ) {
-				  ((HtmlMenu)component).getScript(sb);
+				  ((HtmlMenu)component).getScript( properties,sb);
 			  }
 		  }
 

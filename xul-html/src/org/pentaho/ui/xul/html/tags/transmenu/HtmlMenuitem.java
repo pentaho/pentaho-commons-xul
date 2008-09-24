@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.html.tags.transmenu;
 
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -27,9 +28,11 @@ public class HtmlMenuitem extends AbstractXulComponent implements XulMenuitem, I
 		// nothing to do
 	}
 	
-	  public void getScript( StringBuilder sb ) {
+	  public void getScript( Map<String,String> properties, StringBuilder sb ) {
 
-		  sb.append( "menu.addItem(\"" ) //$NON-NLS-1$
+	    String parentJscriptVar = properties.get( "parentJscriptVar" ); //$NON-NLS-1$
+		  sb.append( parentJscriptVar )
+		  .append( ".addItem(\"" ) //$NON-NLS-1$
 		  .append( getLabel() )
 		  .append( "\", \"" ) //$NON-NLS-1$
 		  .append( getCommand() )

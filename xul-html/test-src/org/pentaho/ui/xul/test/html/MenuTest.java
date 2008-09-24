@@ -122,24 +122,99 @@ public class MenuTest extends TestCase {
 	      assertTrue( "Set label failed", item.getLabel().equals( "test menu label" ) ); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public void testMenuPopup() {
-    	setupMenubar();
+  public void testMenuPopup() {
+    setupMenubar();
 
-	      XulComponent validate = menubar.getElementByXPath( "menu[6]/menupopup[1]" ); //$NON-NLS-1$
-	      assertNotNull( "Item not found", validate ); //$NON-NLS-1$
-	      assertTrue( "Item not a HtmlMenupopup", validate instanceof HtmlMenupopup ); //$NON-NLS-1$
-	      
-	      HtmlMenupopup item = (HtmlMenupopup) validate;
-	      
-	      item.setDisabled( true );
-	      assertFalse( "setDisabled is not supported", item.isDisabled() ); //$NON-NLS-1$
+      XulComponent validate = menubar.getElementByXPath( "menu[6]/menupopup[1]" ); //$NON-NLS-1$
+      assertNotNull( "Item not found", validate ); //$NON-NLS-1$
+      assertTrue( "Item not a HtmlMenupopup", validate instanceof HtmlMenupopup ); //$NON-NLS-1$
+      
+      HtmlMenupopup item = (HtmlMenupopup) validate;
+      
+      item.setDisabled( true );
+      assertFalse( "setDisabled is not supported", item.isDisabled() ); //$NON-NLS-1$
 
-	      // these do nothing but should not fail
-	      item.addPropertyChangeListener( null );
-	      item.removePropertyChangeListener( null );
-	      item.getHtml( null );
-	      
-	}
+      // these do nothing but should not fail
+      item.addPropertyChangeListener( null );
+      item.removePropertyChangeListener( null );
+      item.getHtml( null );
+      
+}
+
+  public void testSubSubMenu() {
+    setupMenubar();
+
+      XulComponent validate = menubar.getElementByXPath( "menu[6]/menupopup[1]/menu[1]" ); //$NON-NLS-1$
+      assertNotNull( "Item not found", validate ); //$NON-NLS-1$
+      assertTrue( "Item not a HtmlMenupopup", validate instanceof HtmlMenu ); //$NON-NLS-1$
+      
+      HtmlMenu menu = (HtmlMenu) validate;
+      assertEquals( "Menu label is wrong", "item6-7", menu.getLabel() );  //$NON-NLS-1$//$NON-NLS-2$
+      assertEquals( "Menu id is wrong", "submenu-menu-1", menu.getId() );  //$NON-NLS-1$//$NON-NLS-2$
+      
+      validate = menubar.getElementByXPath( "menu[6]/menupopup[1]/menu[1]/menupopup[1]/menuitem[1]" ); //$NON-NLS-1$
+      assertNotNull( "Item not found", validate ); //$NON-NLS-1$
+      assertTrue( "Item not a HtmlMenuitem", validate instanceof HtmlMenuitem ); //$NON-NLS-1$
+      
+      HtmlMenuitem item = (HtmlMenuitem) validate;
+      assertEquals( "Menu item label is wrong", "item6-7-1", item.getLabel() );  //$NON-NLS-1$//$NON-NLS-2$
+      assertEquals( "Menu item id is wrong", "3rd-level-item", item.getId() );  //$NON-NLS-1$//$NON-NLS-2$
+            
+      StringBuilder sb = new StringBuilder();
+      ((HtmlMenubar) menubar).getHtml(sb);
+      String html = sb.toString();
+      System.out.println( sb.toString() );
+      
+      assertTrue( "Menu label not in HTML", html.indexOf( "item1-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command1-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item2-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command2-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item3-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command3-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item4-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command4-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item5-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command5-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "menu6" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command6-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-2" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command6-2" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-3" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command6-3" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-4" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command6-4" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-5" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command6-5" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-6" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command6-6" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-7" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item6-7-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command6-7-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+
+      assertTrue( "Menu label not in HTML", html.indexOf( "item7-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      assertTrue( "Menu command not in HTML", html.indexOf( "command7-1" ) != -1 ); //$NON-NLS-1$ //$NON-NLS-2$
+      
+      sb = new StringBuilder();
+      ((HtmlMenubar) menubar).getScript(sb);
+      String script = sb.toString();
+      
+      assertTrue( "Script is not in HTML", html.indexOf( script ) != -1 ); //$NON-NLS-1$
+      
+}
 
 	public void testMenubar() {
     	setupMenubar();
