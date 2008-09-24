@@ -77,7 +77,7 @@ public class SwingXulLoader extends AbstractXulLoader implements XulLoader{
   
   @Override
   public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException {
-    return loadXul(xulDocument, null);
+    return loadXul(xulDocument, outerContext);
   }
 
   public XulDomContainer loadXul(Document xulDocument, Object outerContext) throws IllegalArgumentException, XulException {

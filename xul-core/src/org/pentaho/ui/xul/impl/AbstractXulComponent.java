@@ -109,7 +109,11 @@ public abstract class AbstractXulComponent implements XulComponent {
   }
 
   public void addComponentAt(XulComponent c, int idx) {
-    children.add(idx, c);
+    if(idx < children.size()){
+      children.add(idx, c);
+    } else {
+      children.add(c);
+    }
   }
   public void layout() {
     initialized = true;

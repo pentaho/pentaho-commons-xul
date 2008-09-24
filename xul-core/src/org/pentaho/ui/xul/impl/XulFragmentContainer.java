@@ -54,7 +54,7 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
   }
 
   public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException {
-    System.out.println("loadFragment not implemented in XulFragmentContainer");
+    logger.error("loadFragment not implemented in XulFragmentContainer");
     return null;
   }
 

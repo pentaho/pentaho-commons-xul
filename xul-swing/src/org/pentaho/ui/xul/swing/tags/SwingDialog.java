@@ -21,6 +21,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JComponent;
 import javax.swing.border.BevelBorder;
 
 import org.pentaho.ui.xul.XulComponent;
@@ -307,13 +308,34 @@ public class SwingDialog extends SwingElement implements XulDialog {
       if(rootElement != this){ //dialog is root, no JFrame Parent
         window = (XulWindow) rootElement;
       }
-  
+
       if(window != null){
         frame = (JFrame) window.getManagedObject();
         dialog = new JDialog(frame);
         centerComp = frame;
       } else {
-        dialog = new JDialog();
+
+        final Object context = domContainer.getOuterContext();
+        if (context instanceof JFrame)
+        {
+          frame = (JFrame) context;
+          centerComp = (Component) context;
+          dialog = new JDialog(frame);
+        }
+        else if (context instanceof JDialog)
+        {
+          dialog = new JDialog((JDialog) context);
+          centerComp = (Component) context;
+        }
+        else if (context instanceof JComponent)
+        {
+          dialog = new JDialog();
+          centerComp = (Component) context;
+        }
+        else
+        {
+          dialog = new JDialog();
+        }
       }
     }
 
