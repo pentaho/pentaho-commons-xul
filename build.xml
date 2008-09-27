@@ -7,7 +7,7 @@
   
   See common_build.xml for more details
 ============================================================================-->
-<project name="Web" basedir="." default="jar" 
+<project name="pentaho-xul-swt-v2" basedir="." default="jar" 
 	xmlns:ivy="antlib:org.apache.ivy.ant" >
 	
 	<description>
