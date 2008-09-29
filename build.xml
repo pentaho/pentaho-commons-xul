@@ -130,6 +130,7 @@
 	  <target name="test" depends="compile.compile,compile-tests" description="Compiles and runs unit tests">
 
 	    <junit dir="." printsummary="yes" haltonfailure="${junit.haltonfailure}">
+	    	<sysproperty key="java.awt.headless" value="true" />
 	      <classpath refid="test.classpath" />
 	      <formatter type="plain" />
 	      <batchtest fork="yes" todir="${testbin.dir}">
