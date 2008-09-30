@@ -539,14 +539,14 @@ public abstract class AbstractXulLoader implements XulLoader {
           int pos = Integer.parseInt(position);
           positionToInsert = (pos <= sourceContainer.getChildNodes().size()) ? pos : -1;
         }
-        if(positionToInsert == -1){
-          //default to last
-          positionToInsert = sourceContainer.getChildNodes().size();
+        if(positionToInsert == -1 || positionToInsert == sourceContainer.getChildNodes().size()) {
+        	//default to previous behavior
+          sourceContainer.addComponent(c);
+          sourceContainer.addChild(c);
+        } else {
+        	sourceContainer.addComponentAt(c, positionToInsert);
+        	sourceContainer.addChildAt(c, positionToInsert);
         }
-        
-        sourceContainer.addComponentAt(c, positionToInsert);
-        sourceContainer.addChildAt(c, positionToInsert);
-        
         
         logger.info("added child: " + c);
       }

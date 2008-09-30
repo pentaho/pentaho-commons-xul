@@ -19,6 +19,14 @@ public class SwingTabpanels extends SwingElement implements XulTabpanels {
   }
 
   @Override
+  public void addComponentAt(XulComponent c, int pos) {
+    super.addComponentAt(c, pos);
+    if(initialized){
+      ((SwingTabbox) getParent()).layout();
+    }
+  }
+  
+  @Override
   public void addComponent(XulComponent comp) {
     super.addComponent(comp);
     if (initialized) {
