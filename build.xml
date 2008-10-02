@@ -95,12 +95,12 @@
 
 
 	  <!--=======================================================================
-		    source.zip
+		    source.jar
 		    
 		    Creates a zip of the project source for distribution
 		    ====================================================================-->
-	  <target name="source.zip" depends="init">
-	    <jar jarfile="${dist.dir}/${ivy.artifact.id}-${project.revision}-sources.zip">
+	  <target name="source.jar" depends="init">
+	    <jar jarfile="${dist.dir}/${ivy.artifact.id}-${project.revision}-sources.jar">
   	      <fileset dir="xul-core/test-src" />
   		  <fileset dir="xul-swing/test-src" />
   		  <fileset dir="xul-html/test-src" />
