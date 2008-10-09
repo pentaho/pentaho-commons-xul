@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -8,9 +9,10 @@ import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
-import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.tags.SwingTextbox;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.TextType;
+import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTextbox extends SwtElement implements XulTextbox {
 
@@ -62,8 +64,16 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
    * @param text
    */
   public void setValue( String text ) {
-    this.text = text;
-    if ((!textBox.isDisposed()) && (text != null)) textBox.setText(text);
+    if(this.text == null || ! this.text.equals(text)){
+      this.text = text;
+      if ((!textBox.isDisposed()) && (text != null)){
+        int pos = textBox.getCaretPosition();
+        textBox.setText(text);
+        textBox.setSelection(pos);
+      }
+    } else {
+      int i=0;
+    }
   }
   
   public String getValue(){

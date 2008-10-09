@@ -25,6 +25,16 @@ public class SwtTabpanels extends SwtElement implements XulTabpanels{
     return (XulTabpanel) this.children.get(index);
   }
   
+
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    if(getParent() != null){
+      ((XulTabbox) getParent()).addTabpanel(this.children.indexOf(c));
+    }
+  }
+
+  
   @Override
   public void layout() {
   }

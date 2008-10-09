@@ -14,6 +14,7 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
   Object value=null;
   SwtTreeRow parentRow;
   boolean isEditable=false;
+  private int selectedIndex = 0;
   
   public SwtTreeCell(XulComponent parent){
     this(null, parent,null,"treecell");
@@ -21,7 +22,15 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
 
   public SwtTreeCell(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
-    parentRow = (SwtTreeRow) parent;
+    if(parent instanceof SwtTreeRow){
+      parentRow = (SwtTreeRow) parent;
+      parentRow.addCell(this);
+      parentRow.layout();
+    }
+  }
+  
+  public void setTreeRowParent(XulTreeRow row){
+    parentRow = (SwtTreeRow) row;
     parentRow.addCell(this);
   }
   
@@ -46,7 +55,12 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
   }
 
   public void setLabel(String label) {
+    String oldVal = this.label;
     this.label=label;
+    if(parentRow != null && oldVal != null && !oldVal.equals(label)){
+      parentRow.layout();
+    }
+    this.changeSupport.firePropertyChange("label", oldVal, label);
   }
 
   public void setSrc(String srcUrl) {
@@ -54,18 +68,23 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
   }
 
   public void setValue(Object value) {
+    Object oldVal = this.value;
     this.value=value;
-    parentRow.layout();
+    
+    if(parentRow != null && oldVal != null && !oldVal.equals(value) && oldVal != value){
+      parentRow.layout();
+    }
+    this.changeSupport.firePropertyChange("value", oldVal, value);
   }
 
   public int getSelectedIndex() {
-    return 0;
+    return selectedIndex;
   }
 
   public void setSelectedIndex(int index) {
-    
-        // TODO Auto-generated method stub 
-      
+    Object oldValue = this.selectedIndex;
+    this.selectedIndex = index;
+    this.changeSupport.firePropertyChange("selectedIndex", oldValue, index);
   }
 
 }

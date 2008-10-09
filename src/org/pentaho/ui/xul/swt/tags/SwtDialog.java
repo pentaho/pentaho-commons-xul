@@ -10,7 +10,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -20,9 +25,12 @@ import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.tags.SwingButton;
+import org.pentaho.ui.xul.swing.tags.SwingDialog;
 import org.pentaho.ui.xul.swt.DialogButton;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.custom.BasicDialog;
+import org.pentaho.ui.xul.util.Orient;
 
 public class SwtDialog extends SwtElement implements XulDialog {
 
@@ -82,17 +90,40 @@ public class SwtDialog extends SwtElement implements XulDialog {
       possibleParent = (Shell) container.getOuterContext();
     }
     
+    orient = Orient.VERTICAL;
+    
     // If not, then try to use the API's parent parameter...
     if ((possibleParent == null) && (parent != null) && parent.getManagedObject() instanceof Shell){
       possibleParent = (Shell) parent.getManagedObject();
     }
     this.domContainer = container;
+    this.setId(self.getAttributeValue("ID"));
     createDialog();
   }
 
   private void createDialog() {
-    dialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM));
-    managedObject = dialog.getMainArea();
+    
+    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM));
+    dialog = newDialog;
+    
+    dialog.getShell().addListener(SWT.Close, new Listener() {
+      public void handleEvent(Event event) {
+        event.doit = false;
+        if(dialog.getShell() != null && dialog.getShell().isDisposed() == false){
+          hide();
+        }
+      }
+    });
+    
+    Composite c = new Composite((Composite) dialog.getMainDialogArea(), SWT.BORDER);
+    
+    GridData gd = new GridData(GridData.FILL_BOTH);
+    gd.grabExcessVerticalSpace = true;
+    gd.grabExcessHorizontalSpace = true;
+    
+    c.setLayoutData(gd);
+
+    managedObject = c;
   }
   
   public Shell getShell(){
@@ -130,9 +161,14 @@ public class SwtDialog extends SwtElement implements XulDialog {
   public void setButtonlabelcancel(String label) {
     this.buttonlabelcancel = label;
   }
+  
+  public void setButtons(){
+    setButtons(dialog);
+  }
 
   public void setButtons(String buttonList) {
     buttons = buttonList.split(",");
+    setButtons();
   }
 
   public void setOndialogaccept(String command) {
@@ -159,15 +195,12 @@ public class SwtDialog extends SwtElement implements XulDialog {
 
   public void show() {
 
-    if (dialog == null) {
-      createDialog();
-    }
+    //createDialog();
     
     isDialogHidden = false;
 
     dialog.getShell().setText(title);
 
-    setButtons();
     
     // Because the dialog is built after the create() method is called, we 
     // need to ask the shell to try to re-determine an appropriate size for this dialog..
@@ -175,18 +208,30 @@ public class SwtDialog extends SwtElement implements XulDialog {
       
       // Don't allow the user to size the dialog smaller than is reasonable to 
       // layout the child components
-      Point pt = dialog.getPreferredSize();
-      dialog.setHeight( (pt.y < height) ? height : pt.y);
-      dialog.setWidth((pt.x < width) ? width : pt.x);
+      // REMOVED: although the idea is sound, labels of great length that are ment to wrap
+      //      will report their preferred size and quite large, which when applied is undesirable.
+      //Point pt = dialog.getPreferredSize();
+      //dialog.setHeight( (pt.y < height) ? height : pt.y);
+      //dialog.setWidth((pt.x < width) ? width : pt.x);
+      
+      
+      // Don't allow the user to size the dialog smaller than is reasonable to 
+      // layout the child components
+      dialog.setHeight(height);
+      dialog.setWidth(width);
+      
     }
     dialog.resizeBounds();
     
     // Timing is everything - fire the onLoad evetns so tht anyone who is trying to
     notifyListeners(XulRoot.EVENT_ON_LOAD);
     returnCode = dialog.open();
+    
+  //  dialog.setBlockOnOpen(true);
+//    dialog.getShell().setVisible(true);
   }
   
-  public void setButtons(){
+  public void setButtons(BasicDialog d){
     
     if (buttons == null){
       return;
@@ -194,10 +239,21 @@ public class SwtDialog extends SwtElement implements XulDialog {
     
     for (String buttonName : buttons) {
       DialogButton thisButton = DialogButton.valueOf(buttonName.trim().toUpperCase());
-      Button button = dialog.createButton(thisButton, false);
-      SwtButton swtButton = new SwtButton(button);
-      this.addChild(swtButton);
-
+      Button button = d.createButton(thisButton, false);
+      
+      SwtButton swtButton = null;
+      SwtButton existingButton = (this.getDocument() != null) ? (SwtButton) this.getElementById(this.getId()+"_" + buttonName.trim().toLowerCase()) : null;
+      if(this.getId() != null && existingButton != null){
+        //existing button, just needs a new Widget parent
+        swtButton = existingButton;
+        swtButton.setButton(button);
+      } else {
+        //new button needed
+        swtButton = new SwtButton(button);
+        swtButton.setId(this.getId()+"_" + buttonName.trim().toLowerCase());
+        this.addChild(swtButton);
+          
+      }
       switch (thisButton){
         case ACCEPT:
           if ((getButtonlabelaccept() != null) && (getButtonlabelaccept().trim().length() > 0)){
@@ -232,13 +288,38 @@ public class SwtDialog extends SwtElement implements XulDialog {
           }
           break;
       }
+      
     }
   }
 
   public void hide() {
+    if(dialog.getMainArea().isDisposed()){
+      return;
+    }
     returnCode = IDialogConstants.CLOSE_ID;
-    isDialogHidden = true;
+    
+    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM));
+    Control[] controls = dialog.getMainArea().getChildren();
+    for(Control c : controls){
+      c.setParent(newDialog.getMainArea());
+    }
+    setButtons(newDialog);
+    newDialog.getShell().layout();
+    
     dialog.close();
+    isDialogHidden = true;
+
+    dialog = newDialog;
+    dialog.getShell().addListener(SWT.Close, new Listener() {
+      public void handleEvent(Event event) {
+        hide();
+        event.doit = false;
+      }
+    });
+    
+    
+    managedObject = dialog.getMainArea();
+    
   }
 
   public void setVisible(boolean visible) {
@@ -293,7 +374,9 @@ public class SwtDialog extends SwtElement implements XulDialog {
     this.onload = method;
     dialog.getShell().addListener(XulRoot.EVENT_ON_LOAD, new Listener() {
       public void handleEvent(Event e) {
-        invoke(method);
+        if(!StringUtils.isEmpty(method)){
+          invoke(method);
+        }
       }
     });
   }
@@ -356,24 +439,32 @@ public class SwtDialog extends SwtElement implements XulDialog {
     return dialog.getShell();
   }
   
-	public String getOnclose() {
-		return onclose;
-	}
+  public String getOnclose() {
+    return onclose;
+  }
 
-	public String getOnunload() {
-		return onunload;
-	}
+  public String getOnunload() {
+    return onunload;
+  }
 
-	public void setOnclose(String onclose) {
-		this.onclose = onclose;
-	}
+  public void setOnclose(String onclose) {
+    this.onclose = onclose;
+  }
 
-	public void setOnunload(String onunload) {
-		this.onunload = onunload;
-	}
+  public void setOnunload(String onunload) {
+    this.onunload = onunload;
+  }
 
   public void invokeLater(Runnable runnable) {
     dialog.getShell().getDisplay().asyncExec(runnable);
   }
 
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    layout();
+  }
+
+  
+  
 }

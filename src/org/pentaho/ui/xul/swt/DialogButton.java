@@ -18,6 +18,11 @@ public enum DialogButton {
     this.id = id;
     this.defaultLabel = defaultLabel;
   }
+  
+  private DialogButton(DialogButton base, String defaultLabel){
+    this.id = base.id;
+    this.defaultLabel = defaultLabel;
+  }
 
   public String getLabel() {
     return label == null ? defaultLabel : label;
