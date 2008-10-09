@@ -84,4 +84,10 @@ public class SwingTreeRow extends SwingElement implements XulTreeRow {
 
   }
 
+  public void setParentTreeItem(XulTreeItem item) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
 }

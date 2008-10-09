@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.components.XulTreeCell;
+import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.dom.Element;
 
@@ -99,5 +100,11 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
     
     this.index = index;
     this.changeSupport.firePropertyChange("value", oldValue, value);
+  }
+
+  public void setTreeRowParent(XulTreeRow row) {
+    
+        // TODO Auto-generated method stub 
+      
   }
 }

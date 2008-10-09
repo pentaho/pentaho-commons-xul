@@ -113,4 +113,16 @@ public class SwingTabbox extends SwingElement implements XulTabbox {
       tabpane.remove(idx);
     }
   }
+
+  public void addTab(int idx) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public void addTabpanel(int idx) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
 }
