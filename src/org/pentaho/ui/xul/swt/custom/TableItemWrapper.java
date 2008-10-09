@@ -1,6 +1,9 @@
 package org.pentaho.ui.xul.swt.custom;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 
 import org.apache.commons.collections.IterableMap;
 import org.apache.commons.collections.map.HashedMap;
@@ -18,6 +21,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
@@ -28,6 +32,7 @@ import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTextbox;
+import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulTree;
@@ -37,6 +42,7 @@ import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.XulWindowContainer;
 import org.pentaho.ui.xul.swt.RowWidget;
+import org.pentaho.ui.xul.swt.tags.SwtTreeCell;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TextType;
 
@@ -49,11 +55,13 @@ public class TableItemWrapper implements RowWidget {
   XulTreeRow treeRow = null;
   
   TableEditor textEditor = null;
-  IterableMap checkedEditors = new HashedMap();
+  Map<Integer,TableEditor> checkedEditors = new HashMap<Integer,TableEditor>();
+  Map<Integer,TableEditor> dropEditors = new HashMap<Integer,TableEditor>();
   
   int firstEditableColumn = -1;
   
-  
+  private boolean comboBoxPresent = false;
+  private int rowHeight = 16;
   public TableItemWrapper(XulTree parent, XulTreeRow treeRow){
 
     this.treeRow = treeRow;
@@ -82,8 +90,18 @@ public class TableItemWrapper implements RowWidget {
       XulTreeCol column = columns.getColumn(i);
       if (column.getColumnType().equals(ColumnType.CHECKBOX)){
         makeCellEditable(i);
+      } else if (column.getColumnType().equals(ColumnType.COMBOBOX)){
+        makeCellEditable(i);
       }
     }
+    
+    parentTable.addListener(SWT.MeasureItem, new Listener() {
+      public void handleEvent(Event event) {
+        if(comboBoxPresent){  
+          event.height = rowHeight;
+        }
+      }
+   });
     
   }
   
@@ -106,6 +124,9 @@ public class TableItemWrapper implements RowWidget {
       case CHECKBOX:
         createEditableCheckbox(index);
         break;
+      case COMBOBOX:
+        comboBoxPresent = true;
+        //createDropDown(index);
       case TEXT:
       case PASSWORD:
         boolean isPassword = column.getColumnType().equals(ColumnType.PASSWORD);
@@ -268,6 +289,135 @@ public class TableItemWrapper implements RowWidget {
     parentTable.setSelection(new TableItem[] { item });
 
   }
+  
+  private void createDropDown(final int index){
+
+    TableEditor comboEditor = null;
+    Combo combo = null;
+    
+    if (dropEditors.containsKey(new Integer(index))){
+      comboEditor = (TableEditor) dropEditors.get(new Integer(index));
+      combo = (Combo) comboEditor.getEditor();
+      
+      if(treeRow.getCell(index) != null){
+        Vector<String> values = (Vector<String>) treeRow.getCell(index).getValue();
+        if(values != null){
+          combo.setItems((String[]) values.toArray(new String[]{}));
+          combo.select(treeRow.getCell(index).getSelectedIndex());
+        }
+        combo.setFocus();
+      }
+      return;
+    }
+
+    combo = new Combo(parentTable, SWT.DROP_DOWN | SWT.READ_ONLY);
+    this.rowHeight = combo.getBounds().height;
+    comboEditor = new TableEditor(parentTable);
+    comboEditor.setEditor(combo, item, index);
+    comboEditor.grabHorizontal=true;
+
+    dropEditors.put(new Integer(index), comboEditor);
+
+    if(treeRow.getCell(index) != null){
+      Vector<String> values = (Vector<String>) treeRow.getCell(index).getValue();
+      if(values != null){
+        combo.setItems((String[]) values.toArray());
+        combo.select(treeRow.getCell(index).getSelectedIndex());
+      }
+      combo.setFocus();
+      combo.setFocus();
+    }
+    final Combo innerCombo = combo;
+    combo.addSelectionListener(new SelectionAdapter(){
+      public void widgetSelected(SelectionEvent e){
+        item.setText(index, String.valueOf(innerCombo.getText()));
+        
+        XulTreeCell cell = TableItemWrapper.this.treeRow.getCell(index);
+        cell.setSelectedIndex(((Combo)e.widget).getSelectionIndex());
+        
+        parentTree.setActiveCellCoordinates(parentTree.getActiveCellCoordinates()[0], index);
+
+        // send all selection events back through to the parent table with the selection index... 
+        Document doc = parentTree.getDocument();
+        XulRoot window = (XulRoot) doc.getRootElement();
+        XulDomContainer container = window.getXulDomContainer();
+        try{
+          if(parentTree.getOnselect() != null){
+              container.invoke(parentTree.getOnselect(), new Object[] {parentTable.indexOf(item)});            
+          }
+          if(parentTree.getOnedit() != null){
+              container.invoke(parentTree.getOnedit(), new Object[] {parentTable.indexOf(item)});            
+          }
+        } catch (XulException ex){
+          logger.error("Error calling oncommand event",ex);
+        }
+      }
+    });
+    
+    Listener textListener = new Listener () {
+      @SuppressWarnings("fallthrough")
+      public void handleEvent ( Event e) {
+        
+        XulTreeCol column = parentTree.getColumns().getColumn(index);
+        
+        switch (column.getColumnType()){
+
+          case TEXT:
+          case PASSWORD:
+            break;
+          case CHECKBOX:
+            switch (e.type) {
+              case SWT.FocusOut:
+                syncText(index, String.valueOf(((Button)e.widget).getSelection()));
+                break;
+              case SWT.Traverse:
+                switch (e.detail) {
+                  case SWT.TRAVERSE_RETURN:
+                    syncText(index, String.valueOf(((Button)e.widget).getSelection()));
+                    //FALL THROUGH
+                  case SWT.TRAVERSE_ESCAPE:
+                    e.doit = false;
+                }
+                break;
+            }
+            break;
+          case COMBOBOX:
+            switch (e.type) {
+              case SWT.FocusOut:
+                syncText(index, String.valueOf(((Combo)e.widget).getText()));
+                break;
+              case SWT.Traverse:
+                switch (e.detail) {
+                  case SWT.TRAVERSE_RETURN:
+                    syncText(index, String.valueOf(((Combo)e.widget).getText()));
+                    //FALL THROUGH
+                  case SWT.TRAVERSE_ESCAPE:
+                    e.doit = false;
+                }
+                break;
+            }
+            break;
+          case PROGRESSMETER:
+            // TODO Log not supported yet... 
+            break;
+        }
+        
+        
+        
+        
+      }
+    };
+    
+    combo.addListener (SWT.FocusOut, textListener);
+    combo.addListener (SWT.Traverse, textListener);
+    combo.addTraverseListener(new TraverseListener(){
+
+      public void keyTraversed(TraverseEvent e) {
+        e.doit=false;
+      }
+      
+    });
+  }
 
   private void addTextListeners(Text edit, final int index){
 
@@ -398,12 +548,22 @@ public class TableItemWrapper implements RowWidget {
       }
     }
 
-    Iterator <Button> mapIt = checkedEditors.mapIterator();
-    while (mapIt.hasNext()) {
-      Button check = mapIt.next();
+    for (Integer index : checkedEditors.keySet()) {
+      Button check = (Button) checkedEditors.get(index).getEditor();
       if (check != null && !check.isDisposed()) {
         try {
           check.dispose();
+        } catch (SWTException swte) {
+          // intentionally swallow exception
+        }
+      }
+    }
+    
+    for (Integer index : dropEditors.keySet()) {
+      Combo cbo = (Combo) dropEditors.get(index).getEditor();
+      if (cbo != null && !cbo.isDisposed()) {
+        try {
+          cbo.dispose();
         } catch (SWTException swte) {
           // intentionally swallow exception
         }

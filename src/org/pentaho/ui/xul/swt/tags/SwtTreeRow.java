@@ -29,21 +29,36 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
   
   public SwtTreeRow(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
-    rowParent = (XulTreeItem)parent;
+
+    cells = new ArrayList<XulTreeCell>();
     
+    Object o = parent;
+    if(o instanceof XulTreeItem){
+      setParentTreeItem((XulTreeItem) parent);
+    }
+  }
+  
+  
+  public void setParentTreeItem(XulTreeItem c){
+    rowParent = (XulTreeItem)c;
+  
     widget =  (rowParent.isHierarchical()) ? new TreeItemWrapper(rowParent.getTree()) 
                                         : new TableItemWrapper(rowParent.getTree(), this);
     item = widget.getItem();
     managedObject = item;
     
-    cells = new ArrayList<XulTreeCell>();
-    
     rowParent.setRow(this);
+    layout();
     
   }
+  
 
   public void addCell(XulTreeCell cell) {
+    if(cells.contains(cell)){
+      return;
+    }
     cells.add(cell);
+    cell.setTreeRowParent(this);
   }
 
   public void addCellText(int index, String text) {
@@ -61,10 +76,15 @@ public class SwtTreeRow extends SwtElement implements XulTreeRow {
 
   @Override
   public void layout() {
+    if(widget == null){
+      return;
+    }
     int cellCount = 0;
     for (XulTreeCell cell : cells) {
       widget.setText(cellCount++, cell.getLabel());
+      widget.makeCellEditable(cellCount-1);
     }
+    ((SwtTree)this.rowParent.getTree()).widget.getComposite().getShell().redraw();
     super.layout();
   }
   

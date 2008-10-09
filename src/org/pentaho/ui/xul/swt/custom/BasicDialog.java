@@ -1,8 +1,10 @@
 package org.pentaho.ui.xul.swt.custom;
 
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -20,7 +22,8 @@ public class BasicDialog extends TitleAreaDialog {
   private int width = -999; 
   
   public BasicDialog(Shell shell) {
-    super(shell);
+    super(shell); 
+    setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
     create();
   }
   
@@ -43,13 +46,23 @@ public class BasicDialog extends TitleAreaDialog {
     contentArea = (Composite)super.createContents(parent);
     // TODO This should be dependent on whether we want to set up the header or not...
     getTitleImageLabel().dispose();
+    
+    System.out.println("createContents");
     return contentArea;
+  }
+  
+  
+
+  public Control getMainDialogArea() {
+    return dialogArea;
   }
 
   @Override
   protected Control createDialogArea(Composite parent) {
-    
-    dialogArea = (Composite) super.createDialogArea(parent);
+    Control c = super.createDialogArea(parent);
+    //c.setBackground(c.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
+    dialogArea = (Composite) c;
+    System.out.println("createDialogArea");
     return dialogArea;
   }
   
@@ -105,10 +118,12 @@ public class BasicDialog extends TitleAreaDialog {
 
   public void setHeight(int height) {
     this.height = height;
+    this.resizeBounds();
   }
 
   public void setWidth(int width) {
     this.width = width;
+    this.resizeBounds();
   }
 
   @Override

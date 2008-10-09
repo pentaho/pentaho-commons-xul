@@ -70,7 +70,9 @@ public class SwtTreeItem extends SwtElement implements XulTreeItem {
   }
 
   public void remove() {
-    row.remove();
+    if(row != null){
+      row.remove();
+    }
     //parentTreeChildren.removeItem(this);
   }
 

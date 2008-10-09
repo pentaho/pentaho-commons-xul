@@ -27,6 +27,15 @@ public class SwtTabs  extends SwtElement implements XulTabs{
     ((XulTabbox) getParent()).removeTab(this.getChildNodes().indexOf(ele));
     super.removeChild(ele);
   }
+  
+  
+  @Override
+  public void addComponent(XulComponent c) {
+    super.addComponent(c);
+    if(getParent() != null){
+      ((XulTabbox) getParent()).addTab(this.getChildNodes().indexOf(c));
+    }
+  }
 
   public int getTabCount() {
     return this.getChildNodes().size();

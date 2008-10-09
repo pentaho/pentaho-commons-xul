@@ -32,6 +32,7 @@ public class TableWrapper implements TabularWidget {
     table = new Table(parent, selection.getSwtStyle()|SWT.BORDER);
     table.setHeaderVisible(true);
     table.setLinesVisible(true);
+    table.setDragDetect(false);
     
 
     table.addMouseListener(new TableMouseAdapter());

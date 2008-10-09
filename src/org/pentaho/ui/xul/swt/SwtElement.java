@@ -7,12 +7,14 @@ import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulDeck;
+import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -113,12 +115,15 @@ public class SwtElement extends AbstractXulComponent {
     for (Object child : this.getChildNodes()) {
 
       SwtElement swtChild = (SwtElement) child;
-      Control c = (Control) swtChild.getManagedObject();
 
       // some children have no object they are managing... skip these kids!
 
-      if (c == null)
+      Object mo = swtChild.getManagedObject();
+      if (mo == null || !(mo instanceof Control) || swtChild instanceof XulDialog){
         continue;
+      }
+
+      Control c = (Control) swtChild.getManagedObject();
 
       GridData data = new GridData();
 
@@ -131,6 +136,19 @@ public class SwtElement extends AbstractXulComponent {
       // In XUL, flex defines how the children grab the excess space 
       // in the container - therefore, we need to grab the excess space... 
 
+      
+      switch (orient) {
+        case HORIZONTAL:
+          data.verticalAlignment = SWT.FILL;
+          data.grabExcessVerticalSpace = true;
+          break;
+        case VERTICAL:
+          data.horizontalAlignment = SWT.FILL;
+          data.grabExcessHorizontalSpace = true;
+          break;
+      }
+      
+      
       if (swtChild.getFlex() > 0) {
         data.grabExcessHorizontalSpace = true;
         data.grabExcessVerticalSpace = true;
@@ -140,7 +158,9 @@ public class SwtElement extends AbstractXulComponent {
 
         data.horizontalAlignment = SWT.FILL;
         data.verticalAlignment = SWT.FILL;
-      }
+      } 
+
+      
 
       // And finally, deal with the align attribute...
       // Align is the PARENT'S attribute, and affects the 

@@ -118,7 +118,8 @@ public class SwtMenuList<T> extends SwtElement implements XulMenuList<T> {
   }
 
   public T getSelectedItem() {
-    return (T) this.combobox.getItem(combobox.getSelectionIndex());
+    int idx = combobox.getSelectionIndex();
+    return (idx > -1 && idx < this.combobox.getItemCount())? (T) this.combobox.getItem(idx) : (T) null;
   }
 
   public void setSelectedItem(T t) {

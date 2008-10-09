@@ -109,6 +109,28 @@ public class SwtTabbox extends SwtElement implements XulTabbox{
     }
   }
 
+
+  public void addTab(int idx) {
+    TabItem item = new TabItem (tabFolder, SWT.NONE);
+    item.setText (tabs.getTabByIndex(idx).getLabel());
+    
+    //may have been added after panel
+    addTabpanel(idx);
+  }
+
+
+  public void addTabpanel(int idx) {
+    
+    //not sure if the tab has been added first, ignore if not
+    if(tabFolder.getItemCount() <= idx){
+      return;
+    }
+    TabItem item = tabFolder.getItem(idx);
+    item.setControl ((Control) panels.getTabpanelByIndex(idx).getManagedObject());
+    item.getControl().setEnabled(!tabs.getTabByIndex(idx).isDisabled());
+    
+  }
+
 }
 
   

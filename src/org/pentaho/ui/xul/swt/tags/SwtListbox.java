@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.commons.logging.Log;
@@ -150,6 +151,7 @@ public class SwtListbox extends SwtElement implements XulListbox{
     listBox.setSelection((String[])items);
     // SWT doesn't seem to fire this event when the selection
     // is made via code, only with a mouse or keyboard action.
+    
     listBox.notifyListeners(SWT.Selection, new Event());
   }
 

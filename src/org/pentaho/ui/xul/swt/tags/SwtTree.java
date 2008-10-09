@@ -19,6 +19,7 @@ import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
+import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.tags.SwingTree;
@@ -265,8 +266,10 @@ public class SwtTree extends SwtElement implements XulTree {
 	}
 
 	public void addTreeRow(XulTreeRow row) {
-		// TODO Auto-generated method stub
-		
+		this.addChild(row);
+		XulTreeItem item = new SwtTreeItem(this.getRootChildren());
+		row.setParentTreeItem(item);
+    ((SwtTreeRow)row).layout();
 	}
 
 	public void removeTreeRows(int[] rows) {
@@ -276,7 +279,7 @@ public class SwtTree extends SwtElement implements XulTree {
 
   public void update() {
     if(!this.isHierarchical){
-      ((Table) widget).update();
+      ((TableWrapper) widget).getComposite().update();
     } else {
       //TODO implement update for tree
     }
@@ -323,6 +326,9 @@ public class SwtTree extends SwtElement implements XulTree {
         
 
       }
+      this.widget.getComposite().getShell().redraw();
+      this.widget.getComposite().redraw();
+      this.widget.getComposite().getParent().redraw();
       
       //treat as a selection change
       changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
