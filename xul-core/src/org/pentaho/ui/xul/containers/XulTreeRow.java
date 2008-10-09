@@ -16,5 +16,7 @@ public interface XulTreeRow extends XulContainer {
     public XulTreeCell getCell(int index);
     
     public int getSelectedColumnIndex();
+    
+    public void setParentTreeItem(XulTreeItem item);
 
 }

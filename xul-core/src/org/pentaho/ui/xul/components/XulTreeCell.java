@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.components;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.containers.XulTreeRow;
 
 public interface XulTreeCell extends XulComponent {
   
@@ -18,4 +19,6 @@ public interface XulTreeCell extends XulComponent {
   
   public void setSelectedIndex(int index);
   public int getSelectedIndex();
+  
+  public void setTreeRowParent(XulTreeRow row);
 }
