@@ -23,6 +23,7 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.tags.SwingTree;
+import org.pentaho.ui.xul.swt.SwtBinding;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.TabularWidget;
@@ -317,7 +318,7 @@ public class SwtTree extends SwtElement implements XulTree {
             logger.info("applying binding expression [" + exp.getModelAttr() + "] to xul tree cell and model [" + o
                 + "]");
 
-            Binding binding = new Binding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+            Binding binding = new SwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
             domContainer.addBinding(binding);
             binding.fireSourceChanged();
           }
