@@ -34,24 +34,24 @@ public class DefaultBindingFactory implements BindingFactory {
   
   public Binding createBinding(String sourceId, String sourceAttr, String targetId, String targetAttr, BindingConvertor... converters) {
     constraintsCheck();
-    Binding b = new Binding(document.getElementById(sourceId), sourceAttr, document.getElementById(targetId), targetAttr);
+    Binding b = new DefaultBinding(document.getElementById(sourceId), sourceAttr, document.getElementById(targetId), targetAttr);
     return applyBinding(b, converters);
   }
 
   public Binding createBinding(Object source, String sourceAttr, String targetId, String targetAttr, BindingConvertor... converters) {
     constraintsCheck();
-    Binding b = new Binding(source, sourceAttr, document.getElementById(targetId), targetAttr);
+    Binding b = new DefaultBinding(source, sourceAttr, document.getElementById(targetId), targetAttr);
     return applyBinding(b, converters);
   }
 
   public Binding createBinding(String sourceId, String sourceAttr, Object target, String targetAttr, BindingConvertor... converters) {
     constraintsCheck();
-    Binding b = new Binding(document.getElementById(sourceId), sourceAttr, target, targetAttr);
+    Binding b = new DefaultBinding(document.getElementById(sourceId), sourceAttr, target, targetAttr);
     return applyBinding(b, converters);
   }
   
   public Binding createBinding(Object source, String sourceAttr, Object target, String targetAttr, BindingConvertor... converters) {
-    Binding b = new Binding(source, sourceAttr, target, targetAttr);
+    Binding b = new DefaultBinding(source, sourceAttr, target, targetAttr);
     return applyBinding(b, converters);
   }
 

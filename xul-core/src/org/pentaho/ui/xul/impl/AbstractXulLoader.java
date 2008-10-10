@@ -541,11 +541,11 @@ public abstract class AbstractXulLoader implements XulLoader {
         }
         if(positionToInsert == -1 || positionToInsert == sourceContainer.getChildNodes().size()) {
         	//default to previous behavior
-          sourceContainer.addComponent(c);
           sourceContainer.addChild(c);
+          sourceContainer.addComponent(c);
         } else {
-        	sourceContainer.addComponentAt(c, positionToInsert);
         	sourceContainer.addChildAt(c, positionToInsert);
+        	sourceContainer.addComponentAt(c, positionToInsert);
         }
         
         logger.info("added child: " + c);

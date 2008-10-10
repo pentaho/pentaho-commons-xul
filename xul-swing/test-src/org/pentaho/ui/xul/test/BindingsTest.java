@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.binding.BindingExpression;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulLabel;

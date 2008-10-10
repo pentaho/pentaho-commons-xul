@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.test.samples.BindingBean;
 
 public class NonXulBindingsTest {
@@ -13,7 +14,7 @@ public class NonXulBindingsTest {
   public void testObjectToObjectForwardBinding() {
     BindingBean a = new BindingBean();
     BindingBean b = new BindingBean();
-    Binding binding = new Binding(a, "property1", b, "property1");
+    Binding binding = new DefaultBinding(a, "property1", b, "property1");
     binding.bindForward();
     
     a.setProperty1("abc");
@@ -25,7 +26,7 @@ public class NonXulBindingsTest {
   public void testObjectToObjectReverseBinding() {
     BindingBean a = new BindingBean();
     BindingBean b = new BindingBean();
-    Binding binding = new Binding(a, "property1", b, "property1");
+    Binding binding = new DefaultBinding(a, "property1", b, "property1");
     binding.bindReverse();
     
     a.setProperty1("abc");

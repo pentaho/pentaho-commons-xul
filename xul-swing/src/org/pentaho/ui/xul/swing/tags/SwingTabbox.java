@@ -79,19 +79,21 @@ public class SwingTabbox extends SwingElement implements XulTabbox {
     tabpane.setSelectedIndex(selectedIndex);
     initialized = true;
   }
-
-  @Override
-  public void addComponentAt(XulComponent c, int pos) {
-    super.addComponentAt(c, pos);
-    if(initialized){
-      resetContainer();
-      layout();
-    }
-  }
   
   @Override
   public void addComponent(XulComponent c) {
     super.addComponent(c);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
+
+  
+  
+  @Override
+  public void addComponentAt(XulComponent c, int pos) {
+    super.addComponentAt(c, pos);
     if (initialized) {
       resetContainer();
       layout();

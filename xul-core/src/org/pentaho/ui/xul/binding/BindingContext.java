@@ -31,7 +31,7 @@ public class BindingContext {
     XulComponent target = container.getDocumentRoot().getElementById(expression.target);
     
     //TODO: bindingFactory.createBinding
-    Binding newBinding = new Binding(source, expression.sourceAttr, target, expression.targetAttr);
+    Binding newBinding = new DefaultBinding(source, expression.sourceAttr, target, expression.targetAttr);
     add(newBinding);
   }
 

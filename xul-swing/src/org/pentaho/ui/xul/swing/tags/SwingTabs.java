@@ -24,18 +24,18 @@ public class SwingTabs extends SwingElement implements XulTabs{
     children.remove(idx);
     ((XulTabbox) getParent()).removeTab(idx);
   }
-
-  @Override
-  public void addComponentAt(XulComponent c, int pos) {
-    super.addComponentAt(c, pos);
-    if(initialized){
-      ((SwingTabbox) getParent()).layout();
-    }
-  }
   
   @Override
   public void addComponent(XulComponent comp){
     super.addComponent(comp);
+    if(initialized){
+      ((SwingTabbox) getParent()).layout();
+    }
+  }
+
+  @Override
+  public void addComponentAt(XulComponent comp, int pos){
+    super.addComponentAt(comp, pos);
     if(initialized){
       ((SwingTabbox) getParent()).layout();
     }

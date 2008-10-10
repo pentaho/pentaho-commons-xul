@@ -48,7 +48,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
@@ -808,7 +808,7 @@ public class SwingTree extends SwingElement implements XulTree {
             logger.debug("applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + o
                 + "]");
 
-            Binding binding = new Binding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+            DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
             domContainer.addBinding(binding);
             binding.fireSourceChanged();
           }

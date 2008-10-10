@@ -21,6 +21,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingContext;
+import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.containers.XulRoot;
@@ -313,7 +314,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
 
   @Deprecated
   public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr){
-    Binding bind = new Binding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
+    Binding bind = new DefaultBinding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
     bindings.add(bind);
     return bind;
     
@@ -321,7 +322,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
 
   @Deprecated
   public Binding createBinding(String source, String sourceAttr, String targetId, String targetAttr){
-    Binding bind = new Binding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
+    Binding bind = new DefaultBinding(this.getDocumentRoot(), source, sourceAttr, targetId, targetAttr);
     bindings.add(bind);
     return bind;
   }

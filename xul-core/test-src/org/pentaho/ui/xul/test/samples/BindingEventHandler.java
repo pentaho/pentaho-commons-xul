@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.test.samples;
 
 import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.components.XulTextbox;
@@ -34,7 +35,7 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     productModel.addProduct(new Product(name, descr));
   }
   
-  public Binding removeMeBinding;
+  public DefaultBinding removeMeBinding;
   public void removeBinding(){
     getXulDomContainer().removeBinding(removeMeBinding);
   }
@@ -48,15 +49,15 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     XulLabel firstNameLbl = (XulLabel) document.getElementById("firstName");
     XulLabel lastNameLbl = (XulLabel) document.getElementById("lastName");
     
-    Binding binding = new Binding(model, "firstName", firstNameLbl, "value");
+    DefaultBinding binding = new DefaultBinding(model, "firstName", firstNameLbl, "value");
     getXulDomContainer().addBinding(binding);
     removeMeBinding = binding;
 
-    binding = new Binding(model, "lastName", lastNameLbl, "value");
+    binding = new DefaultBinding(model, "lastName", lastNameLbl, "value");
     getXulDomContainer().addBinding(binding);
     
     //Approach 2: First Name Textbox
-    binding = new Binding(document, model, "firstName", "firstNameInput", "value");
+    binding = new DefaultBinding(document, model, "firstName", "firstNameInput", "value");
     getXulDomContainer().addBinding(binding);
     
     //Approach 3: Last Name Textbox
@@ -81,7 +82,7 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     
     
     //Conversions
-    binding = new Binding(document, "degreesField", "value", "radiansField", "value");
+    binding = new DefaultBinding(document, "degreesField", "value", "radiansField", "value");
     binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
     binding.setConversion(new BindingConvertor<String, String>(){
       @Override
@@ -100,8 +101,8 @@ public class BindingEventHandler extends AbstractXulEventHandler {
     
     
     //Conversion text to selectedIndex
-    binding = getXulDomContainer().createBinding("nthItem", "value", "itemsList", "selectedIndex");
-    binding.setConversion(new BindingConvertor<String, Integer>(){
+    Binding bind = getXulDomContainer().createBinding("nthItem", "value", "itemsList", "selectedIndex");
+    bind.setConversion(new BindingConvertor<String, Integer>(){
       @Override
       public Integer sourceToTarget(String value) {
         return Integer.parseInt(value);
