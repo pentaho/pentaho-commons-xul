@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<dialog id="general-datasource-window"
+	title="${DatabaseDialog.Shell.title}" 
+	orient="vertical"
+	buttons="accept, cancel"
+	buttonlabelaccept="${DatabaseDialog.USER_OK}"
+	buttonlabelcancel="${DatabaseDialog.USER_CANCEL}"
+	ondialogaccept="dataHandler.onOK()"
+	ondialogcancel="dataHandler.onCancel()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:pen="http://www.pentaho.org/2008/xul"  >
+	
+	<!--  ###############################################################################  -->
+	<!--     Scripts for event handling                                                    -->
+	<!--  ###############################################################################  -->
+<!-- 	<script id="dataHandler" src="org.pentaho.ui.database.event.DataHandler" />  -->
+
+
+	<tree id="options-parameter-tree" flex="1" editable="true" >
+
+		<treecols id="option-column-list">
+		  	<treecol id="parameter-col" label="Parameter" flex="1" editable="true" />  
+			<treecol id="param-value-col" label="Value" flex="2" editable="true" />
+		</treecols>
+	</tree>
+				
+</dialog>
