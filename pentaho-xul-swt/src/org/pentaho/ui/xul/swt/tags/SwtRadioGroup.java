@@ -1,20 +1,13 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
 
-import org.eclipse.swt.widgets.Control;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulRadioGroup;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwtRadioGroup extends SwtBox implements XulRadioGroup {

@@ -1,12 +1,5 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JRadioButton;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -18,8 +11,6 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulRadio;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.SwingElement;
-import org.pentaho.ui.xul.swing.tags.SwingRadio;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtRadio extends SwtElement implements XulRadio{

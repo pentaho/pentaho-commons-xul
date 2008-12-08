@@ -1,7 +1,6 @@
 package org.pentaho.ui.xul.test.swt;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.InputStream;
@@ -16,8 +15,6 @@ import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.swing.SwingXulLoader;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
 

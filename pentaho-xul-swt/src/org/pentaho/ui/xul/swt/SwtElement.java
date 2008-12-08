@@ -7,7 +7,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
@@ -229,6 +228,10 @@ public class SwtElement extends AbstractXulComponent {
 
   public void setDisabled(boolean disabled) {
     //throw new NotImplementedException();
+  }
+
+  public void adoptAttributes(XulComponent component) {
+    throw new NotImplementedException();
   }
 
 }

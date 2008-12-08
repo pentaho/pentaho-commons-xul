@@ -4,14 +4,12 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCell;
@@ -22,7 +20,6 @@ import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.tags.SwingTree;
 import org.pentaho.ui.xul.swt.SwtBinding;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.TableSelection;
@@ -134,6 +131,10 @@ public class SwtTree extends SwtElement implements XulTree {
       }
     }
   }
+  
+  public enum SELECTION_MODE {
+    SINGLE, CELL, MULTIPLE
+  };
 
   public String getSeltype() {
     return selType.toString();

@@ -76,8 +76,8 @@ public class SwtXulLoader extends AbstractXulLoader{
   }
 
   @Override
-  public XulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException {
-    return loadXul(xulDocument, outerContext);
+  public XulDomContainer loadXul(Object xulDocument) throws IllegalArgumentException, XulException {
+    return loadXul((Document)xulDocument, outerContext);
   }
 
   public XulDomContainer loadXul(Document xulDocument, Object context) throws IllegalArgumentException, XulException {

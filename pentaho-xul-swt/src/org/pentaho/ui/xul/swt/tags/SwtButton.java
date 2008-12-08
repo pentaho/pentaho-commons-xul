@@ -5,14 +5,12 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.tags.SwingButton;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Direction;
 
@@ -98,7 +96,7 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public void setImage(String src) {
     this.image = src;   
-    button.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), SwingButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src)));
+    button.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src)));
   }
 
   public String getDir() {

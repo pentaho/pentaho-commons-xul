@@ -1,20 +1,15 @@
 package org.pentaho.ui.xul.test.swt;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.components.XulMessageBox;
-import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.swing.SwingXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
-import org.pentaho.ui.xul.swt.tags.SwtMessageBox;
 
 public class SwtMessageBoxTest {
 

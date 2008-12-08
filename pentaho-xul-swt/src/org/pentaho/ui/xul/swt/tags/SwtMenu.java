@@ -2,9 +2,6 @@ package org.pentaho.ui.xul.swt.tags;
 
 import java.util.ArrayList;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -14,8 +11,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuseparator;
 import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.tags.SwingMenuitem;
-import org.pentaho.ui.xul.swing.tags.SwingMenupopup;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtMenu  extends SwtElement implements XulMenu {

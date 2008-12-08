@@ -1,19 +1,16 @@
 package org.pentaho.ui.xul.test.swt;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuList;
 import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.swing.SwingXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 
 public class SwtMenuListTest {

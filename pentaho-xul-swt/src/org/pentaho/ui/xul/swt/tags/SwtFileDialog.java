@@ -1,10 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.io.File;
-
-import javax.swing.JFileChooser;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
@@ -12,11 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulFileDialog;
-import org.pentaho.ui.xul.components.XulFileDialog.RETURN_CODE;
-import org.pentaho.ui.xul.components.XulFileDialog.SEL_TYPE;
-import org.pentaho.ui.xul.components.XulFileDialog.VIEW_TYPE;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtFileDialog extends SwtElement implements XulFileDialog{

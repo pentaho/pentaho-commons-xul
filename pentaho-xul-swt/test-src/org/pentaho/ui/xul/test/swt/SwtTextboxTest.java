@@ -1,17 +1,14 @@
 package org.pentaho.ui.xul.test.swt;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
-import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.swing.SwingXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 
 public class SwtTextboxTest {

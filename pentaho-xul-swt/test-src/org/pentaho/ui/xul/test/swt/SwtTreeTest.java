@@ -17,11 +17,9 @@ import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.ui.xul.swing.SwingXulLoader;
-import org.pentaho.ui.xul.swing.SwingXulRunner;
-import org.pentaho.ui.xul.swing.tags.SwingTree;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
+import org.pentaho.ui.xul.swt.tags.SwtTree;
 import org.pentaho.ui.xul.util.ColumnType;
 
 public class SwtTreeTest {
@@ -41,7 +39,7 @@ public class SwtTreeTest {
 
     container = new SwtXulLoader().loadXul("resource/documents/treeTest.xul");
 
-    runner = new SwingXulRunner();
+    runner = new SwtXulRunner();
     runner.addContainer(container);
     document = container.getDocumentRoot();
     tree = (XulTree) document.getElementById("testTable");
@@ -102,7 +100,7 @@ public class SwtTreeTest {
   
   @Test
   public void testSelType() throws Exception {
-    assertEquals(SwingTree.SELECTION_MODE.MULTIPLE.toString(), tree.getSeltype());
+    assertEquals(SwtTree.SELECTION_MODE.MULTIPLE.toString(), tree.getSeltype());
   }
   
 

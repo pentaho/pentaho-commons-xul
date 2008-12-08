@@ -10,7 +10,6 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulImage;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.tags.SwingButton;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.SwtSwingConversion;
 
@@ -40,7 +39,7 @@ public class SwtImage extends SwtElement implements XulImage{
 
   public void setSrc(String src) {
     this.src = src;
-    label.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), SwingButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src)));
+    label.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src)));
   }
 
   public void setSrc(java.awt.Image img) {
