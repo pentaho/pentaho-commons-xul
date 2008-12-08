@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<window id="label-test" title="Testing labels and layout for SWT, Swing"
+	orient="horizontal"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<hbox id="label-box" orient="horizontal">
+		<label id="label-one" value="First Label" />
+		<label id="label-two" value="Second Label" />
+		<label id="label-three" value="Third Label" />
+	</hbox>
+
+</window>

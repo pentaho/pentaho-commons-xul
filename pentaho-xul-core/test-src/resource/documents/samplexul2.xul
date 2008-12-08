@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window   id="label-test" title="Testing Nick's Sample"
+	width="300" height="200"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script id="handler" src="org.pentaho.ui.xul.test.samples.ButtonTest"/>
+	
+	<vbox id="vbox1">
+		<hbox>
+			<label id="namelabel" value="What is your name?"/>
+			<textbox id="name" value=""/>
+		</hbox>
+		<button id="button1" label="${hello}" onclick="handler.sayHi()"/>
+		<label id="response" value="" />
+	</vbox>
+</window>

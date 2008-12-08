@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+<window id="label-test" title="Testing labels and layout for SWT, Swing"
+  orient="vertical"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:pen="http://www.pentaho.org/2008/xul"
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650" pen:appicon="window_icon.png">
+  <script id="handler" src="org.pentaho.ui.xul.test.samples.TreeHandler"/>
+  <tree flex="1" editable="true" seltype="multiple" enableColumnDrag="true" id="testTable" width="400">
+
+    <treecols id="column_list">
+      <treecol id="select_col" label="Selected" type="checkbox" editable="true" />
+      <treecol id="parameter_col" label="Name" flex="2" editable="false" />
+      <treecol id="default_col" label="Default Value" flex="1" editable="false" />
+      <treecol id="value_col" label="Value" flex="1" editable="true" type="combobox" />
+      <treecol id="description_col" label="Description" flex="5" editable="true" />
+    </treecols>
+
+    <treechildren id="main_treechildren">
+      <treeitem>
+        <treerow>
+          <treecell value="true"/>
+          <treecell label="Nick" id="cell"/>
+          <treecell label="bazz"/>
+          <treecell value="foo, bar, baz"/>
+          <treecell label="Testing"/>
+        </treerow>
+      </treeitem>
+      <treeitem>
+        <treerow>
+          <treecell value="false"/>
+          <treecell label="Barb"/>
+          <treecell label="bazz"/>
+          <treecell value="foo, bar, baz"/>
+          <treecell label="Testing 2"/>
+        </treerow>
+      </treeitem>
+    </treechildren>
+  </tree>
+
+
+  <tree flex="1" editable="true" seltype="cell" enableColumnDrag="false" id="testTable2">
+
+    <treecols id="column_list">
+      <treecol id="select_col" label="Selected" type="checkbox" editable="true" />
+      <treecol id="parameter_col" label="Name" flex="2" editable="false" />
+      <treecol id="default_col" label="Default Value" flex="1" editable="false" />
+      <treecol id="value_col" label="Value" flex="1" editable="true" type="combobox" />
+      <treecol id="description_col" label="Description" flex="5" editable="true" />
+    </treecols>
+
+    <treechildren id="main_treechildren">
+      <treeitem>
+        <treerow>
+          <treecell value="true"/>
+          <treecell label="Nick"/>
+          <treecell label="bazz"/>
+          <treecell value="foo, bar, baz"/>
+          <treecell label="Testing"/>
+        </treerow>
+      </treeitem>
+      <treeitem>
+        <treerow>
+          <treecell value="false"/>
+          <treecell label="Barb"/>
+          <treecell label="bazz"/>
+          <treecell value="foo, bar, baz"/>
+          <treecell label="Testing 2"/>
+        </treerow>
+      </treeitem>
+    </treechildren>
+  </tree>
+  
+  <tree flex="1" editable="true" seltype="cell" enableColumnDrag="false" id="testTable3">
+
+    <treecols id="column_list">
+      <treecol id="select_col" label="Enabled" type="checkbox" editable="true" pen:binding="value=enabled"/>
+      <treecol id="parameter_col" label="Name" flex="2" editable="false" pen:binding="label=name" />
+      <treecol id="default_col" label=" City" flex="1" editable="false"  pen:binding="label=city"/>
+      <treecol id="value_col" label="Titles" flex="1" editable="true" type="combobox"  pen:binding="value=titles"/>
+      <treecol id="description_col" label="Disposition" flex="5" editable="true" pen:binding="label=disposition"/>
+    </treecols>
+
+    <treechildren id="main_treechildren">
+    </treechildren>
+  </tree>
+  
+</window>

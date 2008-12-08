@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+<window id="label-test" title="Project Surfboard"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	 xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="600" width="800">
+
+<vbox flex="1">
+	
+ <menubar id="findfiles-menubar">
+  <menu id="file-menu" label="File" accesskey="f">
+    <menupopup id="file-popup">
+      <menuitem label="Open" accesskey="o" command="handler.open()"/>
+      <menuitem label="Save" accesskey="s"/>  
+      <menuseparator/>
+      <menuitem label="Close" accesskey="c"/>
+    </menupopup>
+  </menu>
+  <menu id="edit-menu" label="Edit" accesskey="e">
+    <menupopup id="edit-popup">
+      <menuitem label="Cut" accesskey="t"/>
+      <menuitem label="Copy" accesskey="c"/>
+      <menuitem label="Paste" accesskey="p" disabled="true"/>
+    </menupopup>
+  </menu>
+ </menubar>
+ 
+
+<hbox flex="1">
+	<vbox flex="1">
+		<vbox flex="4">
+			<groupbox flex="1"/>
+		</vbox>
+		<vbox flex="1">
+			<groupbox flex="1">
+				<tree flex="1" editable="true" seltype="single" enableColumnDrag="false" width="150">
+	
+					<treecols id="column_list">
+						<treecol id="select_col" label="Selected" flex="1" type="checkbox" editable="false" />
+						<treecol id="parameter_col" label="Name" flex="2" editable="true" />
+					</treecols>
+			
+					<treechildren id="main_treechildren">
+						<treeitem>
+							<treerow>
+								<treecell label="removeAbandonedTimeout" />
+								<treecell label="300" />
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="removeAbandonedTimeout" />
+								<treecell label="300" />
+							</treerow>
+						</treeitem>
+						<treeitem>
+							<treerow>
+								<treecell label="removeAbandonedTimeout" />
+								<treecell label="300" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+			
+				</tree>
+			</groupbox>
+		</vbox>
+	
+	</vbox>
+	<vbox flex="4">
+		<groupbox flex="1">
+			<vbox flex="1">
+				<label value="test"/>
+				<textbox/>
+			</vbox>
+		</groupbox>
+	</vbox>
+</hbox>
+
+</vbox>
+
+</window>

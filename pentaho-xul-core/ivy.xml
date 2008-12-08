@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+
+    <info organisation="pentaho" module="pentaho-xul-core" revision="${project.revision}"/>
+    
+    <configurations>
+    	<conf name="default"/>
+    	<conf name="test" visibility="private"/>
+    </configurations>
+    
+    <dependencies defaultconf="default->default">
+        <!--  external dependencies -->
+		<dependency org="commons-beanutils" name="commons-beanutils" rev="1.6" transitive="false" />
+        <dependency org="commons-collections" name="commons-collections" rev="3.2"/>
+        <dependency org="commons-lang"        name="commons-lang"        rev="2.2"/>
+        <dependency org="commons-logging"     name="commons-logging"     rev="1.1"   transitive="false"/>
+        <dependency org="dom4j"              name="dom4j"              rev="1.6.1">
+			<exclude org="xml-apis" name="xml-apis" />
+		</dependency>
+		<dependency org="org.codehaus.groovy" name="groovy-all"             rev="1.5.6" transitive="false"/>
+		
+        <!--  internal dependencies -->
+        
+        <!--  testing dependencies -->        
+        <dependency org="junit"      name="junit"               rev="4.4" conf="test->default"/>
+    	<dependency org="jaxen" 	 name="jaxen" 				rev="1.1" transitive="false" conf="test->default"/>
+    </dependencies>
+    
+</ivy-module>
