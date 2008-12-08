@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+  <menubar id="menubar" orient="horizontal"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional">
+   
+    <menu id="menu1">
+	    <menuitem id="menubar-item-to-delete1" label="item1-1" command="command1-1"/>
+   	</menu>
+   	
+    <menu id="menu2">
+	    <menuitem id="menubar-item-2" label="item2-1" command="command2-1"/>
+   	</menu>
+   	
+    <menu id="menu3">
+	    <menuitem id="menubar-item-to-delete2" label="item3-1" command="command3-1"/>
+   	</menu>
+   	
+    <menu id="menu4">
+	    <menuitem id="menubar-item-to-replace" label="item4-1" command="command4-1"/>
+   	</menu>
+
+    <menu id="menu5">
+	    <menuitem id="menubar-item-5" label="item5-1" command="command5-1"/>
+   	</menu>
+   	
+    <menu id="menubar-menu" label="menu6">
+      <menupopup id="submenu-popup">
+	    <menuitem id="submenu-item-to-delete1" label="item6-1" command="command6-1"/>
+	    <menuitem id="submenu-item-1" label="item6-2" command="command6-2"/>
+	    <menuitem id="submenu-item-to-delete2" label="item6-3" command="command6-3"/>
+	    <menuitem id="submenu-item-to-replace" label="item6-4" command="command6-4"/>
+	    <menuitem id="submenu-item-2" label="item6-5" command="command6-5"/>
+	    <menuitem id="submenu-item-to-delete3" label="item6-6" command="command6-6"/>
+		<menu id="submenu-menu-1" label="item6-7">
+		  <menupopup>
+			<menuitem id="3rd-level-item" label="item6-7-1" command="command6-7-1"/>
+		  </menupopup>
+		</menu>
+      </menupopup>
+    </menu>
+
+    <menu id="menu7">
+	    <menuitem id="menubar-item-to-delete3" label="item7-1" command="command7-1"/>
+   	</menu>
+   	
+
+  </menubar>
+
