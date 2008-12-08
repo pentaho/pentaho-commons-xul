@@ -1,0 +1,24 @@
+package org.pentaho.ui.xul.gwt.util;
+
+import org.pentaho.gwt.widgets.client.utils.MessageBundle;
+
+public class ResourceBundleTranslator {
+  
+  public static String translate(String input, MessageBundle bundle) {
+    int pos = 0;
+    while(input.indexOf("${", pos) > -1){
+      int start = input.indexOf("${", pos)+2;
+      int end = input.indexOf("}",start);
+      
+      String key = input.substring(start, end);
+      String transval = bundle.getString(key);
+      input = input.replace("${"+key+"}", transval);
+      pos = end+1;
+      
+    } 
+    
+    return input;
+    
+  }
+  
+}

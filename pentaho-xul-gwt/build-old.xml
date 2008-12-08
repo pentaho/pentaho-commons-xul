@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="pentaho-xul-gwt" default="compile" basedir=".">
+  <description>
+    pentaho-xul-gwt build file.  This is used to package up your project as a jar,
+    if you want to distribute it.  This isn't needed for normal operation.
+  </description>
+
+	<property name="dir.project.xul" value="../pentaho-xul-fresh"/>
+	<property name="dir.project.database" value="../pentaho-database"/>
+	
+  <!-- set classpath -->
+  <path id="project.class.path">
+    <pathelement path="${java.class.path}/"/>
+    <pathelement path="C:/lib/gwt-windows-1.5.3/gwt-user.jar"/>
+    <pathelement path="C:/lib/gwt-windows-1.5.3/gwt-servlet.jar"/>
+    <!-- Additional dependencies (such as junit) go here -->
+  </path>
+
+  <target name="import-pentaho-database-src">
+  	<copy todir="pentaho-database-src">
+      <fileset dir="${dir.project.database}/src" includes="**/*.xul"/>
+  	</copy>
+  </target>
+	
+  <target name="import-pentaho-xul-src">
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" includes="org/pentaho/ui/xul/XulC*.java"/>
+	</copy>
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" includes="org/pentaho/ui/xul/XulD*.java"/>
+	</copy>
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" includes="org/pentaho/ui/xul/XulE*.java"/>
+	</copy>
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" includes="org/pentaho/ui/xul/components/*.java"/>
+	</copy>
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" includes="org/pentaho/ui/xul/containers/*.java"/>
+	</copy>
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" excludes="org/pentaho/ui/xul/dom/DocumentFactory.java" includes="org/pentaho/ui/xul/dom/*.java"/>
+	</copy>
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" includes="org/pentaho/ui/xul/util/Orient.java"/>
+	</copy>
+	<copy todir="pentaho-xul-src">
+	  <fileset dir="${dir.project.xul}/src" includes="org/pentaho/ui/xul/impl/XulEventHandler.java"/>
+	</copy>
+	
+  </target>
+	
+  <target name="init">
+	<delete dir="dist/bin" />
+  	<!-- copy all necessary files to gwt/bin -->
+    <mkdir dir="dist/bin"/>
+
+  </target>
+	
+  <!-- 
+  GWT handles it's generators in a perculular way. The Generators needs to be aon the classpath as a 
+  compiled .class file, not merely as a source file. We compule the "precompile" package for that reason here
+  
+  ref: http://groups.google.com/group/Google-Web-Toolkit/browse_thread/thread/a20fa0a9c6210e96?hl=en&ie=UTF-8&q=Generators+and+the+GWT+compiler+classpath 
+  -->
+  <target name="compile" depends="init" description="Compile src to bin">
+    <javac srcdir="src" destdir="dist/bin" includes="**"  debug="on" debuglevel="lines,vars,source" source="1.5">
+      <classpath>
+        <fileset dir="lib">
+          <include name="*.jar" />
+        </fileset>  
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="package" depends="compile" description="Package up the project as a jar">
+    <jar destfile="dist/pentaho-xul-gwt.jar">
+      <fileset dir="dist/bin">
+        <include name="**"/>
+      </fileset>
+    </jar>
+    <copy todir="lib">
+      <fileset dir="dist" includes="pentaho-xul-gwt.jar"/>
+    </copy>
+    
+  </target>
+
+  <target name="clean">
+    <!-- Delete the dist directory tree -->
+    <delete dir="dist" />
+  </target>
+
+  <target name="all" depends="package"/>
+
+</project>

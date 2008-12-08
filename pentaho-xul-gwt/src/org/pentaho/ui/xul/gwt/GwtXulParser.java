@@ -1,0 +1,124 @@
+package org.pentaho.ui.xul.gwt;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.dom.Element;
+
+import com.google.gwt.user.client.Window;
+import com.google.gwt.xml.client.NodeList;
+
+public class GwtXulParser {
+  
+  private static final Map<String, GwtXulHandler> handlers = new HashMap<String, GwtXulHandler>();
+  
+  public static void registerHandler(String name, GwtXulHandler handler) {
+    handlers.put(name, handler);
+  }
+  
+  public static boolean isRegistered(String name){
+    return handlers.get(name) != null;
+  }
+  
+  Document xulDocument;
+  XulDomContainer xulDomContainer;
+  
+  public GwtXulParser() throws XulException {
+    try {
+      xulDocument = GwtDocumentFactory.createDocument();
+    } catch (Exception e) {
+      throw new XulException("Error getting Document instance", e);
+    }
+  }
+  
+  public void setContainer(XulDomContainer xulDomContainer) {
+    this.xulDomContainer = xulDomContainer;
+    xulDomContainer.addDocument(xulDocument);
+  }
+  
+  public Document parseDocument(com.google.gwt.xml.client.Element rootSrc) throws XulException {
+    Element root = parse(rootSrc, null);
+
+    //give root reference to runner for service calls
+    if(root instanceof XulWindow){
+      ((XulWindow)root).setXulDomContainer(this.xulDomContainer);
+    }
+
+    xulDocument.addChild(root);
+    return xulDocument;
+  }
+  
+  public Element parse(com.google.gwt.xml.client.Element rootSrc, XulContainer parent) throws XulException {
+    //parse element
+    Element root = getElement(rootSrc, parent);
+
+    //descend down a level and parse children (root would be a container in the case)
+    NodeList children = rootSrc.getChildNodes();
+    for (int i = 0; i < children.getLength(); i++) {
+      if (children.item(i) instanceof com.google.gwt.xml.client.Element) {
+        Element childElement = parse((com.google.gwt.xml.client.Element)children.item(i), (XulContainer) root);
+  
+        //TODO: remove once exception handling in place
+        if (childElement == null) {
+          continue;
+        }
+  
+        // Add to the XML DOM tree ...
+        root.addChild(childElement);
+  
+        // ... then add to the UI component tree.
+        if (root instanceof XulContainer) //more of an assert, should be true.
+          ((XulContainer) root).addComponent((XulComponent)childElement);
+      }
+    }
+    if (root != null && root instanceof AbstractGwtXulComponent) {
+      ((AbstractGwtXulComponent)root).layout();
+    }
+
+    return root;
+  }
+    
+  protected Element getElement(com.google.gwt.xml.client.Element srcEle, XulContainer parent) throws XulException {
+    XulComponent component = null;
+    
+    GwtXulHandler handler = handlers.get(srcEle.getNodeName());
+    if (handler != null) {
+      AbstractGwtXulComponent gxc = (AbstractGwtXulComponent)handler.newInstance();
+      gxc.setXulDomContainer(xulDomContainer);
+      gxc.init(srcEle);
+      return gxc;
+    } else {
+      System.out.println("Error: No Handler for type " + srcEle.getNodeName());
+      return null;
+    }
+//    Object handler = handlers.get(srcEle.getName().toUpperCase());
+//
+//    if (handler == null) {
+//      System.out.println("handler not found: " + srcEle.getName().toUpperCase());
+//      return null;
+//      //throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
+//    }
+//
+//    String tagName = srcEle.getName();
+//    Class<?> c;
+//    try {
+//      c = Class.forName((String) handler);
+//      Constructor<?> constructor = c
+//          .getConstructor(new Class[] { XulElement.class, XulDomContainer.class, String.class });
+//      XulElement ele = (XulElement) constructor.newInstance(parent, xulDomContainer, tagName);
+//
+//      Map<String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
+//      BeanUtils.populate(ele, attributesMap);
+//      return ele;
+//    } catch (Exception e) {
+//      throw new XulException(e);
+//    }
+  }
+}
