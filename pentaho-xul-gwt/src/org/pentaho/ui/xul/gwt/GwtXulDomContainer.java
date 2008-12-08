@@ -50,6 +50,7 @@ public class GwtXulDomContainer implements XulDomContainer {
 //    wrapper.setHandler(handler);
 //    this.handlerWrapers.put(handler, wrapper);
 //    this.handlers.put(handler.getName(), handler);
+    throw new UnsupportedOperationException("this method is not supported at this time.");
   }
   
   public void addEventHandler(EventHandlerWrapper wrapper){

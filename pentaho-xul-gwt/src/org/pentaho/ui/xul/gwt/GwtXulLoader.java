@@ -24,6 +24,13 @@ import org.pentaho.ui.xul.gwt.tags.GwtToolbarbutton;
 import org.pentaho.ui.xul.gwt.tags.GwtToolbarseparator;
 import org.pentaho.ui.xul.gwt.tags.GwtToolbarset;
 import org.pentaho.ui.xul.gwt.tags.GwtToolbarspacer;
+import org.pentaho.ui.xul.gwt.tags.GwtTree;
+import org.pentaho.ui.xul.gwt.tags.GwtTreeCell;
+import org.pentaho.ui.xul.gwt.tags.GwtTreeChildren;
+import org.pentaho.ui.xul.gwt.tags.GwtTreeCol;
+import org.pentaho.ui.xul.gwt.tags.GwtTreeCols;
+import org.pentaho.ui.xul.gwt.tags.GwtTreeItem;
+import org.pentaho.ui.xul.gwt.tags.GwtTreeRow;
 import org.pentaho.ui.xul.gwt.tags.GwtVbox;
 import org.pentaho.ui.xul.gwt.tags.GwtWindow;
 import org.pentaho.ui.xul.gwt.util.ResourceBundleTranslator;
@@ -78,7 +85,15 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
     GwtToolbarspacer.register();
     GwtToolbarset.register();
     GwtToolbarbutton.register();
-      
+    GwtTree.register();
+    GwtTreeCols.register();
+    GwtTreeCol.register();
+    GwtTreeChildren.register();
+    GwtTreeItem.register();
+    GwtTreeRow.register();
+    GwtTreeRow.register();
+    GwtTreeCell.register();
+     
   }
   
   /* (non-Javadoc)

@@ -1,9 +1,5 @@
 <module>
     <inherits name="org.pentaho.ui.xul"/>
-  <!-- <inherits name="com.google.gwt.user.User"/>
-    <inherits name="com.google.gwt.xml.XML"/>
-   	<inherits name="org.pentaho.gwt.widgets.Widgets"/>
-     -->  
     <source path=""/>
     <entry-point class="org.pentaho.ui.xul.gwt.sample.ExampleXulApp"/>
  </module>

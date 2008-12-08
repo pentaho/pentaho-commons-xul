@@ -49,7 +49,7 @@ public class GwtDomElement implements Element {
   }
 
   public XulComponent getParent() {
-    throw new UnsupportedOperationException();
+    return (XulComponent)parent;
   }
 
   public XulComponent getFirstChild() {
@@ -144,6 +144,7 @@ public class GwtDomElement implements Element {
   }
 
   public void setParent(Element parent) {
+    // this should be a GwtDomElement
     this.parent = parent;
   }
   
@@ -197,7 +198,7 @@ public class GwtDomElement implements Element {
     int index = children.indexOf(oldElement);
     children.remove(index);
     children.add(index, newElement);
-    ((GwtDomElement)newElement).setParent(this);
+    ((GwtDomElement)newElement).setParent((XulComponent)this);
   }
 
   public void addChildAt(Element element, int idx) {

@@ -87,7 +87,7 @@ public class EventHandlerGenerator extends Generator {
 
   private void generateMethods(SourceWriter sourceWriter) {
 
-    sourceWriter.println("public void execute(String method) { "); 
+    sourceWriter.println("public void execute(String method) { ");
     sourceWriter.indent();
 
     try{
@@ -108,6 +108,7 @@ public class EventHandlerGenerator extends Generator {
         } else {
           sourceWriter.println("handler."+methodName+"();");
         }
+        sourceWriter.println("return;");
         sourceWriter.outdent();
         sourceWriter.println("}");
       } 
@@ -117,6 +118,7 @@ public class EventHandlerGenerator extends Generator {
       logger.log(TreeLogger.ERROR, "PropertyMap ERROR!!!", e);
 
     }
+    sourceWriter.println("System.err.println(\"ERROR: method '\" + method + \"' not annotated with EventMethod.\");");
     sourceWriter.outdent(); 
     sourceWriter.println("}");
    
