@@ -18,6 +18,7 @@
         
         <!--  Testing dependencies -->
         <dependency org="junit"          name="junit"          rev="4.4"   conf="test->default"/>
+        <dependency org="jaxen" name="jaxen" rev="1.1" transitive="false" conf="test->default" />
 
     </dependencies>
 </ivy-module>
