@@ -1,24 +1,18 @@
-package org.pentaho.ui.xul.test.swing;
+package org.pentaho.ui.xul.test.swt;
 
-import java.io.InputStream;
-
-import javax.swing.JCheckBox;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.dom4j.Document;
-import org.dom4j.io.SAXReader;
 import org.eclipse.swt.widgets.Button;
 import org.junit.After;
 import org.junit.Before;
-import org.pentaho.ui.xul.components.XulButton;
-import org.pentaho.ui.xul.components.XulCheckbox;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.components.XulButton;
+import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
-
-import static org.junit.Assert.*;
 
 public class SwtCheckboxTest2 {
 
