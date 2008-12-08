@@ -14,7 +14,7 @@
     <!--
       <dependency org="pentaho" name="pentaho-bi-platform-api" rev="${project.revision}" changing="true"/>
     -->
-    <dependency org="pentaho" name="pentaho-xul-core" rev="${dependency.pentaho-xul-core.revision}" changing="true" />    
+    <dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" changing="true" />    
         
         <!--  testing dependencies -->
     <dependency org="junit" name="junit" rev="4.4" conf="test->default" />
