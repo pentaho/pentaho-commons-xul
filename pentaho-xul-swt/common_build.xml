@@ -242,6 +242,9 @@
     <fileset dir="${testlib.dir}">
       <include name="*.jar" />
     </fileset>
+    <fileset dir="${devlib.dir}">
+      <include name="*.jar" />
+    </fileset>
     <dirset dir="${classes.dir}" />
     <dirset dir="${testclasses.dir}" />
   </path>
