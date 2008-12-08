@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="general-datasource-window"
+	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="org.pentaho.ui.xul.test.samples.TabboxEventHandler" id="handler"/>
+	<tabbox id="myTabList" selectedIndex="2" flex="1">
+	  <tabs id="tabs">
+	    <tab label="A First tab" disabled="true" id="tab1"/>
+	    <tab label="Second tab" id="tab2"/>
+	    <tab label="Another tab" id="tab3"/>
+	    <tab label="Last tab" id="tab4"/>
+	  </tabs>
+	  <tabpanels id="tabpanels">
+	    <tabpanel>
+	      <groupbox>
+	        <caption label="testing"/>
+  				<label value="Tab 1"/>
+  		  </groupbox>
+			</tabpanel>
+	    <tabpanel>
+				<label value="Tab 2"/>
+			</tabpanel>
+	    <tabpanel id="panel3">
+				<label value="Tab 3"/>
+			</tabpanel>
+	    <tabpanel>
+				<label value="Tab 4"/>
+			</tabpanel>
+	  </tabpanels>
+	</tabbox>
+	<button label="disable 1" onclick="handler.setDisabled(false, 0)"/>
+	<button label="disable 2" onclick="handler.setDisabled(true, 1)"/>
+	<button label="disable 3" onclick="handler.setDisabled(true, 2)"/>
+	<button label="disable 4" onclick="handler.setDisabled(true, 3)"/>
+	
+</window>

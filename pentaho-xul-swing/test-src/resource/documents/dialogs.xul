@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:html="http://www.w3.org/1999/xhtml" width="300" height="200" title="Dialog Tester">
+	    
+	<script src="org.pentaho.ui.xul.test.samples.DialogHandler" id="handler"/>
+	
+	<dialog 
+   buttonlabelcancel="Cancel"
+   buttonlabelaccept="Save"
+   buttonlabelextra1="extra1"
+   buttonlabelextra2="extra2"
+   buttons="accept,cancel,extra1,extra2" 
+   ondialogaccept="onAccept"
+   ondialogcancel="onCancel"
+   ondialogextra1="onExtra1"
+   ondialogextra2="onExtra2"
+
+   id="dialog"
+   width="300"
+   height="200"
+   buttonalign="end"
+   title="Test Dialog"
+   >
+    
+    <dialogheader id="header" title="Options" description="My preferences"/>
+    
+    <groupbox>
+      <caption label="Colour"/>
+     
+      <label value="Nickname"/>
+      <textbox />
+   </groupbox>
+   
+	</dialog>
+	<button label="Show" onclick="handler.showDialog()"/>
+	
+  <vbox>
+    <dialog 
+   buttonlabelcancel="Cancel"
+   buttonlabelaccept="Save"
+   buttonlabelextra1="extra1"
+   buttonlabelextra2="extra2"
+   buttons="accept,cancel,extra1,extra2" 
+   ondialogaccept="onAccept"
+   ondialogcancel="onCancel"
+   ondialogextra1="onExtra1"
+   ondialogextra2="onExtra2"
+
+   id="dialog2"
+   width="300"
+   height="200"
+   buttonalign="end"
+   title="Test Dialog"
+   >
+    
+    <dialogheader id="header" title="Options" description="My preferences"/>
+    
+    <groupbox>
+      <caption label="Colour"/>
+     
+      <label value="Nickname"/>
+      <textbox />
+   </groupbox>
+   
+  </dialog>
+  </vbox>
+</window>
