@@ -20,6 +20,7 @@ public class GwtDomElement implements Element {
   
   public GwtDomElement(String name) {
     this.name = name;
+    children = new ArrayList<Element>();
   }
   
   public String getText() {
@@ -81,6 +82,9 @@ public class GwtDomElement implements Element {
   }
 
   public XulComponent getElementById(String id) {
+    if(id == null){
+      throw new IllegalArgumentException("ID null");
+    }
     if (id.equals(this.getAttributeValue("id"))) {
       return (XulComponent) this;
     } else if (children != null) {
@@ -202,8 +206,12 @@ public class GwtDomElement implements Element {
   }
 
   public void addChildAt(Element element, int idx) {
-    
-        // TODO Auto-generated method stub 
+
+    if (children == null) {
+      children = new ArrayList<Element>();
+    }
+    ((GwtDomElement)element).setParent(this);
+    children.add(idx, element);
       
   }
 

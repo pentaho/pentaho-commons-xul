@@ -31,19 +31,25 @@ public class GwtXulParser {
   XulDomContainer xulDomContainer;
   
   public GwtXulParser() throws XulException {
+  }
+  
+  private void resetParser(){
     try {
       xulDocument = GwtDocumentFactory.createDocument();
     } catch (Exception e) {
-      throw new XulException("Error getting Document instance", e);
+      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
   }
   
   public void setContainer(XulDomContainer xulDomContainer) {
+    resetParser();
     this.xulDomContainer = xulDomContainer;
     xulDomContainer.addDocument(xulDocument);
   }
   
   public Document parseDocument(com.google.gwt.xml.client.Element rootSrc) throws XulException {
+
     Element root = parse(rootSrc, null);
 
     //give root reference to runner for service calls
@@ -73,9 +79,6 @@ public class GwtXulParser {
         // Add to the XML DOM tree ...
         root.addChild(childElement);
   
-        // ... then add to the UI component tree.
-        if (root instanceof XulContainer) //more of an assert, should be true.
-          ((XulContainer) root).addComponent((XulComponent)childElement);
       }
     }
     if (root != null && root instanceof AbstractGwtXulComponent) {

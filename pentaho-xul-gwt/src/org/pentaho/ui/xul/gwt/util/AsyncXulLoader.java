@@ -3,6 +3,8 @@ package org.pentaho.ui.xul.gwt.util;
 import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.gwt.GwtXulDomContainer;
 import org.pentaho.ui.xul.gwt.GwtXulLoader;
 import org.pentaho.ui.xul.gwt.GwtXulRunner;
 
@@ -20,15 +22,40 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
   
   private String xulLocation;
   
+  private String bundle;
+  
   private IXulLoaderCallback callback;
+  
+  private boolean loadingOverlay = false;
+  
+  private GwtXulDomContainer container;
   
   public static void loadXul(String location, String bundle, IXulLoaderCallback callback){
     new AsyncXulLoader(location, bundle, callback);
   }
   
+  public static void loadOverlay(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
+    new AsyncXulLoader(location, bundle, container, callback);
+  }
+  
   private AsyncXulLoader(String location, String bundle, IXulLoaderCallback callback){
     xulLocation = location;
     this.callback = callback;
+    this.bundle = bundle;
+    
+    init();
+  }
+  
+  private AsyncXulLoader(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
+    xulLocation = location;
+    this.callback = callback;
+    this.bundle = bundle;
+    this.container = container;
+    this.loadingOverlay = true;
+    init();
+  }
+  
+  private void init(){
     String folder = "";
     String baseName = bundle;
 
@@ -57,7 +84,11 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
           }
 
           public void onResponseReceived(Request request, Response response) {
-            generateXul(response.getText());
+            if(AsyncXulLoader.this.loadingOverlay){
+              loadOverlay(response.getText());
+            } else {
+              generateXulContainer(response.getText());
+            }
           }
         });
       } catch (RequestException e) {
@@ -68,8 +99,28 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
       e.printStackTrace();
     }
   }
+  
+  private void loadOverlay(String xulStr){
+
+    com.google.gwt.xml.client.Document gwtDoc = XMLParser.parse(xulStr);
+    try{
+      
+
+      if(messageBundle != null){
+        this.container.loadOverlay(gwtDoc, messageBundle);
+      } else {
+        this.container.loadOverlay(gwtDoc);
+      }
+
+
+      callback.overlayLoaded();
+    } catch(XulException e){
+      Window.alert("Error loading XUL Overlay: "+e.getMessage());    //$NON-NLS-1$
+      e.printStackTrace();
+    }
+  }
    
-  private void generateXul(String xulStr){
+  private void generateXulContainer(String xulStr){
     try {
       
       GwtXulLoader loader = new GwtXulLoader();

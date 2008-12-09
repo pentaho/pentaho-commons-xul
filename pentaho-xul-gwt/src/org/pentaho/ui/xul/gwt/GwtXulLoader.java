@@ -16,6 +16,7 @@ import org.pentaho.ui.xul.gwt.tags.GwtHbox;
 import org.pentaho.ui.xul.gwt.tags.GwtLabel;
 import org.pentaho.ui.xul.gwt.tags.GwtListbox;
 import org.pentaho.ui.xul.gwt.tags.GwtListitem;
+import org.pentaho.ui.xul.gwt.tags.GwtOverlay;
 import org.pentaho.ui.xul.gwt.tags.GwtScript;
 import org.pentaho.ui.xul.gwt.tags.GwtSpacer;
 import org.pentaho.ui.xul.gwt.tags.GwtTextbox;
@@ -85,6 +86,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
     GwtToolbarspacer.register();
     GwtToolbarset.register();
     GwtToolbarbutton.register();
+    GwtOverlay.register();
     GwtTree.register();
     GwtTreeCols.register();
     GwtTreeCol.register();
@@ -93,7 +95,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
     GwtTreeRow.register();
     GwtTreeRow.register();
     GwtTreeCell.register();
-     
+      
   }
   
   /* (non-Javadoc)
@@ -102,6 +104,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
   public GwtXulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
 
     GwtXulDomContainer container = new GwtXulDomContainer();
+    container.setLoader(this);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getDocumentElement());
    
@@ -116,6 +119,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
     xulDocument = XMLParser.parse(translated);
     
     GwtXulDomContainer container = new GwtXulDomContainer();
+    container.setLoader(this);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getDocumentElement());
    
@@ -128,7 +132,8 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
   public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
-    XulDomContainer container = new GwtXulDomContainer();
+    GwtXulDomContainer container = new GwtXulDomContainer();
+    container.setLoader(this);
     parser.setContainer(container);
     parser.parseDocument(xulDocument.getDocumentElement());
     

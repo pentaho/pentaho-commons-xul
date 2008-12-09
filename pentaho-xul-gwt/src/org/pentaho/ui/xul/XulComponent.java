@@ -144,4 +144,16 @@ public interface XulComponent extends Element, XulEventSource {
   
   public void adoptAttributes(XulComponent component);
   
+  public String getInsertbefore();
+  public void setInsertbefore(String id);
+  
+  public String getInsertafter();
+  public void setInsertafter(String id);
+  
+  public int getPosition();
+  public void setPosition(int pos);
+  
+  public boolean getRemoveelement();
+  public void setRemoveelement(boolean flag);
+  
 }

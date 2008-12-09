@@ -58,7 +58,7 @@ public class GwtToolbar extends AbstractGwtXulComponent implements XulToolbar{
 
   @Override
   public void layout() {
-    for(XulComponent c : this.children){
+    for(XulComponent c : this.getChildNodes()){
       add(c);
     }
     if(!loaded){
@@ -94,7 +94,10 @@ public class GwtToolbar extends AbstractGwtXulComponent implements XulToolbar{
   @Override
   public void addChildAt(Element element, int idx) {
     super.addChildAt(element, idx);
-    toolbar.removeAll();
+    if(loaded == true){
+      toolbar.removeAll();
+      this.layout();
+    }
   }
 
   @Override

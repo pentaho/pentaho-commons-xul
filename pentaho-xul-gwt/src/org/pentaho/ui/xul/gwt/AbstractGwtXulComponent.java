@@ -28,16 +28,16 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected int flex = 0;
   protected String id;
   protected boolean flexLayout = false;
-  protected List<XulComponent> children;
-
+  protected String insertbefore, insertafter;
+  protected int position = -1;
+  
   protected String bgcolor, onblur, tooltiptext;
   protected int height, width, padding;
-  protected boolean disabled;
+  protected boolean disabled, removeElement;
 
   
   public AbstractGwtXulComponent(String name) {
     super(name);
-    children = new ArrayList<XulComponent>();
   }
 
 //  public AbstractGwtXulComponent(String tagName, Object managedObject) {
@@ -78,6 +78,25 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         e.printStackTrace();
       }
     }
+
+    if (hasAttribute(srcEle,"position")) {
+      try {
+        setPosition(Integer.parseInt(srcEle.getAttribute("position")));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    
+    if (srcEle.hasAttribute("insertbefore") && srcEle.getAttribute("insertbefore").trim().length() > 0) {
+      setInsertbefore(srcEle.getAttribute("insertbefore"));
+    }
+
+    if (srcEle.hasAttribute("insertafter") && srcEle.getAttribute("insertafter").trim().length() > 0) {
+      setInsertafter(srcEle.getAttribute("insertafter"));
+    }
+    if (srcEle.hasAttribute("removeelement") && srcEle.getAttribute("removeelement").trim().length() > 0) {
+      setRemoveelement("true".equals(srcEle.getAttribute("removeelement")));
+    }    
     
   }
   
@@ -95,7 +114,8 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   
   public void layout(){
     double totalFlex = 0.0;
-    for(XulComponent comp : children) {
+    
+    for(XulComponent comp : this.getChildNodes()) {
       
       if (comp instanceof GwtScript) {
         GwtScript script = (GwtScript) comp;
@@ -120,8 +140,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
     System.out.println("ORIENTATION of " + getId() + " (" + getName() + ") : " + this.getOrientation());
     
+    List<XulComponent> nodes = this.getChildNodes();
     for(int i=0; i<children.size(); i++){
-      XulComponent comp = children.get(i);
+      XulComponent comp = nodes.get(i);
     
       Object maybeComponent = comp.getManagedObject();
       if(maybeComponent == null || !(maybeComponent instanceof Widget)){
@@ -214,7 +235,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   public void addComponent(XulComponent c) {
-    children.add(c);
+    throw new UnsupportedOperationException("addComponent not supported");
   }
 
   public String getBgcolor() {
@@ -284,9 +305,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
 
   public void addComponentAt(XulComponent component, int idx) {
-    
-        // TODO Auto-generated method stub 
-      
+    throw new UnsupportedOperationException("addComponent not supported");
   }
 
   public void removeComponent(XulComponent component) {
@@ -294,4 +313,44 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         // TODO Auto-generated method stub 
       
   }
+
+  public String getInsertbefore() {
+  
+    return insertbefore;
+  }
+
+  public void setInsertbefore(String insertbefore) {
+  
+    this.insertbefore = insertbefore;
+  }
+
+  public String getInsertafter() {
+  
+    return insertafter;
+  }
+
+  public void setInsertafter(String insertafter) {
+  
+    this.insertafter = insertafter;
+  }
+
+  public int getPosition() {
+  
+    return position;
+  }
+
+  public void setPosition(int position) {
+  
+    this.position = position;
+  }
+
+  public boolean getRemoveelement() {
+    return removeElement;
+  }
+
+  public void setRemoveelement(boolean flag) {
+    this.removeElement = flag;
+  }
+  
+  
 }

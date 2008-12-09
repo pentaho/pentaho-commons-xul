@@ -47,7 +47,7 @@ public class GwtGroupBox extends AbstractGwtXulComponent implements XulGroupbox 
   @Override
   public void layout(){
     super.layout();
-    for(XulComponent comp : children){
+    for(XulComponent comp : this.getChildNodes()){
       if(comp instanceof GwtCaption){
         this.setCaption(((GwtCaption) comp).getLabel());
       }

@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulMessageBox;
+import org.pentaho.ui.xul.containers.XulOverlay;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 import org.pentaho.ui.xul.impl.XulEventHandler;
@@ -209,58 +211,74 @@ public class GwtXulDomContainer implements XulDomContainer {
       
   }
   
-  public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
-    XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
-    applyOverlay(overlayContainer.getDocumentRoot());
+  private void applyOverlay(Document doc){
+    this.document = getDocumentRoot();
     
-  }
-  
-  private void applyOverlay(Document overlay){
-    for(XulComponent child : overlay.getChildNodes()){
-      
-      XulComponent sourceDocumentNodeMatch;
-      if((sourceDocumentNodeMatch = this.document.getElementById(child.getId())) != null){
-        sourceDocumentNodeMatch.adoptAttributes(child);
-        
-        for(XulComponent overlayChild : child.getChildNodes()){
-          String position = overlayChild.getAttributeValue("position");
-          String insertBefore = overlayChild.getAttributeValue("insertbefore");
-          String insertAfter = overlayChild.getAttributeValue("insertafter");
+    for(XulComponent overlay : doc.getChildNodes()){
+      for(XulComponent child: overlay.getChildNodes()){
           
-          if(position != null){
-            int pos = Integer.parseInt(position);
-            sourceDocumentNodeMatch.addChildAt(overlayChild, pos);
-          } else if(insertBefore != null){
-            XulComponent relativeTo = document.getElementById(insertBefore);
-            if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
-              int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
-              relativePos--;
-              Math.abs(relativePos);
-              sourceDocumentNodeMatch.addChildAt(overlayChild, relativePos);
+        XulComponent sourceDocumentNodeMatch;
+        String childId = child.getId();
+        if(childId != null && (sourceDocumentNodeMatch = this.document.getElementById(childId)) != null){
+          
+
+          if(child.getRemoveelement()){
+            //punching out existing element NOTE: this is a non-reversable operation presently
+            sourceDocumentNodeMatch.getParent().removeChild(sourceDocumentNodeMatch);
+            continue;
+          }
+          
+          //Override any existing attributes
+          sourceDocumentNodeMatch.adoptAttributes(child);
+          
+          //Process all the children of the overlay and add them to the proper location in the existing document.
+          for(XulComponent overlayChild : child.getChildNodes()){
+            int position = overlayChild.getPosition();
+            String insertBefore = overlayChild.getInsertbefore();
+            String insertAfter = overlayChild.getInsertafter();
+            
+            XulContainer sourceContainer = ((XulContainer) sourceDocumentNodeMatch);
+            
+            if(position > -1){
+              sourceContainer.addChildAt(overlayChild, position);
+            } else if(insertBefore != null){
+              XulComponent relativeTo = document.getElementById(insertBefore);
+              if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
+                int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
+                relativePos--;
+                Math.abs(relativePos);
+                sourceContainer.addChildAt(overlayChild, relativePos);
+              } else {
+                sourceContainer.addChild(overlayChild);
+              }
+            } else if(insertAfter != null){
+              XulComponent relativeTo = document.getElementById(insertAfter);
+              if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
+                int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
+                relativePos++;
+                sourceContainer.addChildAt(overlayChild, relativePos);
+              } else {
+                sourceContainer.addChild(overlayChild);
+              }
             } else {
-              sourceDocumentNodeMatch.addChild(overlayChild);
+              sourceContainer.addChild(overlayChild);
             }
-          } else if(insertAfter != null){
-            XulComponent relativeTo = document.getElementById(insertBefore);
-            if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
-              int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
-              relativePos++;
-              sourceDocumentNodeMatch.addChildAt(overlayChild, relativePos);
-            } else {
-              sourceDocumentNodeMatch.addChild(overlayChild);
-            }
-          } else {
-            sourceDocumentNodeMatch.addChild(overlayChild);
+            
           }
           
         }
-        
       }
     }
   }
   
   public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc, MessageBundle bundle) throws XulException {
     XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc, bundle);
+    applyOverlay(overlayContainer.getDocumentRoot());
+    
+  }
+  
+  public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
+    XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
     applyOverlay(overlayContainer.getDocumentRoot());
     
   }
@@ -279,6 +297,10 @@ public class GwtXulDomContainer implements XulDomContainer {
     
         // TODO Auto-generated method stub 
       
+  }
+  
+  public void setLoader(GwtXulLoader loader){
+    this.loader = loader;
   }
 
 }
