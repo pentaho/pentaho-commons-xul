@@ -53,6 +53,12 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected int padding = -1;
 
   protected String onblur;
+
+  protected String insertbefore, insertafter;
+  
+  protected boolean removeElement;
+  
+  protected int position = -1;
   
   public AbstractXulComponent(Element element) {
     this.element = element;
@@ -284,4 +290,37 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.padding = padding;   
   }
   
+
+  public String getInsertafter() {
+    return this.insertafter;
+  }
+
+  public String getInsertbefore() {
+    return this.insertbefore;
+  }
+
+  public int getPosition() {
+    return this.position;
+  }
+
+  public boolean getRemoveelement() {
+    return this.removeElement;
+  }
+
+  public void setInsertafter(String id) {
+    this.insertafter = id;
+  }
+
+  public void setInsertbefore(String id) {
+    this.insertbefore = id;
+  }
+
+  public void setPosition(int pos) {
+    this.position = pos;
+  }
+
+  public void setRemoveelement(boolean flag) {
+    this.removeElement = flag;
+  }
+
 }
