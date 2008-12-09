@@ -161,26 +161,27 @@ public class GwtXulDomContainer implements XulDomContainer {
       String eventID = method.substring(0, method.indexOf("."));
       String methodName = method.substring(method.indexOf(".")+1);
       
-      Object[] arguments = getArgs(methodName);
-      if(arguments != null){
-        return invoke(method.substring(0,method.indexOf("("))+"()", arguments);
-      } else {
-        methodName = methodName.substring(0,methodName.indexOf("("));
+      if(args == null || args.length == 0){
+        Object[] arguments = getArgs(methodName);
+        if(arguments != null){
+          return invoke(method.substring(0,method.indexOf("("))+"()", arguments);
+        } 
       }
+      methodName = methodName.substring(0,methodName.indexOf("("));
       
       EventHandlerWrapper wrapper = this.handlerWrapers.get(this.handlers.get(eventID));
       
       if(args.length > 0){
-        Class[] classes = new Class[args.length];
-        
-        for(int i=0; i<args.length; i++){
-          classes[i] = unBoxPrimative(args[i].getClass());
-        }
+//        Class[] classes = new Class[args.length];
+//        
+//        for(int i=0; i<args.length; i++){
+//          classes[i] = unBoxPrimative(args[i].getClass());
+//        }
         //Add in parameter support
-        wrapper.execute(methodName);
+        wrapper.execute(methodName, args);
         return null;
       } else {
-        wrapper.execute(methodName);
+        wrapper.execute(methodName, new Object[]{});
         return null;
       }
     } catch (Exception e) {

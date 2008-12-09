@@ -10,6 +10,9 @@ import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.core.ext.typeinfo.JParameter;
+import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
+import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
@@ -87,7 +90,7 @@ public class EventHandlerGenerator extends Generator {
 
   private void generateMethods(SourceWriter sourceWriter) {
 
-    sourceWriter.println("public void execute(String method) { ");
+    sourceWriter.println("public void execute(String method, Object[] args) { ");
     sourceWriter.indent();
 
     try{
@@ -96,23 +99,33 @@ public class EventHandlerGenerator extends Generator {
       
       for(JMethod m : classType.getMethods()){
         String methodName = m.getName();
-        boolean isEventMethod = (m.getAnnotation(EventMethod.class) != null);
-        if(!isEventMethod){
-          continue;
-        }
+//        boolean isEventMethod = (m.getAnnotation(EventMethod.class) != null);
+//        if(!isEventMethod){
+//          continue;
+//        }
         sourceWriter.println("if(method.equals(\""+methodName+"\")){");
         sourceWriter.indent();
-        if(methodName.equals("setData")){
-          //setData takes one parameter
-          sourceWriter.println("handler.setData((Object) null);");
-        } else {
-          sourceWriter.println("handler."+methodName+"();");
+        
+        boolean firstParam = true;
+        //method call
+        sourceWriter.print("handler."+methodName+"(");
+        int argPos = 0;
+        for(JParameter param : m.getParameters()){
+          if(!firstParam){
+            sourceWriter.print(", ");
+          } else {
+            firstParam = false;
+          }
+          sourceWriter.print("("+boxPrimative(param.getType())+") args["+argPos+"]");
         }
+        sourceWriter.print(");");
+        //end method call
+        
         sourceWriter.println("return;");
         sourceWriter.outdent();
         sourceWriter.println("}");
       } 
-    }catch (Exception e) {
+    } catch (Exception e) {
 
       // record to logger that Map generation threw an exception 
       logger.log(TreeLogger.ERROR, "PropertyMap ERROR!!!", e);
@@ -166,4 +179,12 @@ public class EventHandlerGenerator extends Generator {
 
   }
   
+  private String boxPrimative(JType type){
+    if(type.isPrimitive() != null){
+      JPrimitiveType primative = type.isPrimitive();
+      return primative.getQualifiedBoxedSourceName();
+    } else {
+      return type.getQualifiedSourceName();
+    }
+  }
 }
