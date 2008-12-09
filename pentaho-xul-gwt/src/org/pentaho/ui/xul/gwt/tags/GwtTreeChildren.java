@@ -1,8 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
@@ -23,37 +22,41 @@ public class GwtTreeChildren extends AbstractGwtXulComponent implements XulTreeC
     });
   }
   
-  List<XulTreeItem> items;
-  
   public GwtTreeChildren() {
     super("treechildren");
   }
   
-  public void layout() {
-    items = (List) getElementsByTagName("treeitem");
-  }
-
   public void addItem(XulTreeItem item) {
-    // TODO Auto-generated method stub
-    
+    addChild(item);
   }
 
   public XulTreeRow addNewRow() {
-    // TODO Auto-generated method stub
+    try {
+      XulTreeRow row = (XulTreeRow)getDocument().createElement("treerow");
+      XulTreeItem item = (XulTreeItem)getDocument().createElement("treeitem");
+      item.setRow(row);
+      addItem(item);
+      return row;
+    } catch (XulException e) {
+      e.printStackTrace();
+    }
     return null;
   }
 
   public XulTreeItem getItem(int rowIndex) {
-    return items.get(rowIndex);
+    return (XulTreeItem)getChildNodes().get(rowIndex);
   }
 
   public int getItemCount() {
-    return items.size();
+    if (getChildNodes() != null) {
+      return getChildNodes().size();
+    } else {
+      return 0;
+    }
   }
 
   public XulTree getTree() {
-    // TODO Auto-generated method stub
-    return null;
+    return (XulTree)getParent();
   }
 
   public boolean isAlternatingbackground() {
@@ -66,19 +69,12 @@ public class GwtTreeChildren extends AbstractGwtXulComponent implements XulTreeC
     return false;
   }
 
-  public void removeAll() {
-    // TODO Auto-generated method stub
-    
-  }
-
   public void removeItem(XulTreeItem item) {
-    // TODO Auto-generated method stub
-    
+    removeChild(item);
   }
 
   public void removeItem(int rowIndex) {
-    // TODO Auto-generated method stub
-    
+    removeChild(getChildNodes().get(rowIndex));
   }
 
   public void setAlternatingbackground(boolean alt) {
@@ -89,6 +85,12 @@ public class GwtTreeChildren extends AbstractGwtXulComponent implements XulTreeC
   public void adoptAttributes(XulComponent component) {
     // TODO Auto-generated method stub
     
+  }
+
+  public void removeAll() {
+    for (Element element : getChildNodes()) {
+      removeChild(element);
+    }
   }
   
 }

@@ -24,14 +24,8 @@ public class GwtTreeCols extends AbstractGwtXulComponent implements XulTreeCols 
     super("treecols");
   }
   
-  @Override
-  public void layout() {
-    // getTree().setColumns(this);
-  }
-  
   public void addColumn(XulTreeCol column) {
-    // TODO Auto-generated method stub
-    
+    addChild(column);
   }
 
   public XulTreeCol getColumn(int index) {

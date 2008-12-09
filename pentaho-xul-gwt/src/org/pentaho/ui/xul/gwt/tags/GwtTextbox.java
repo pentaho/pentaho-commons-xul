@@ -7,7 +7,9 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.TextBoxBase;
 
 public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   
@@ -15,6 +17,9 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 
   protected String max, min, type, oninput;
   protected boolean readonly;
+  protected boolean multiline = false;
+  private Integer rows;
+  private Integer cols;
   
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
@@ -25,7 +30,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     });
   }
   
-  private TextBox textBox;
+  private TextBoxBase textBox;
   
   public GwtTextbox() {
     super(ELEMENT_NAME);
@@ -37,6 +42,19 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     super.init(srcEle);
     setValue(srcEle.getAttribute("value"));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
+    setMultiline("true".equals(srcEle.getAttribute("multiline")));
+    setRows(getInt(srcEle.getAttribute("rows")));
+    setCols(getInt(srcEle.getAttribute("cols")));
+  }
+  
+  public Integer getInt(String val) {
+    if (val != null) {
+      try {
+        return Integer.parseInt(val);
+      } catch (Exception e) {
+      }
+    }
+    return null;
   }
   
   public String getValue(){
@@ -48,6 +66,14 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
   
   public void layout(){
+    if (multiline) {
+      managedObject = textBox = new TextArea();
+      ((TextArea)textBox).setCharacterWidth(cols);
+      ((TextArea)textBox).setVisibleLines(rows);
+      
+    } else {
+      managedObject = textBox = new TextBox();
+    }
   }
 
   public int getMaxlength() {
@@ -70,7 +96,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
 
   public void setMultiline(boolean multi) {
-    
+    this.multiline = multi;
   }
 
   public String getMax() {
@@ -132,5 +158,21 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     if(component.getAttributeValue("disabled") != null){
       setDisabled("true".equals(component.getAttributeValue("disabled")));
     }
+  }
+
+  void setRows(Integer rows) {
+    this.rows = rows;
+  }
+
+  Integer getRows() {
+    return rows;
+  }
+
+  void setCols(Integer cols) {
+    this.cols = cols;
+  }
+
+  Integer getCols() {
+    return cols;
   }
 }

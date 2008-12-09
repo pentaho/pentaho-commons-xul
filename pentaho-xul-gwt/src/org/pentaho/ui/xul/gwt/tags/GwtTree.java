@@ -31,17 +31,26 @@ public class GwtTree extends AbstractGwtXulComponent implements XulTree {
     super("tree");
   }
   
+  public void addChild(Element element) {
+    super.addChild(element);
+    if (element.getName().equals("treecols")) {
+      columns = (XulTreeCols)element;
+    } else if (element.getName().equals("treechildren")) {
+      rootChildren = (XulTreeChildren)element;
+    }
+  }
+  
   public void addTreeRow(XulTreeRow row) {
-    // TODO Auto-generated method stub
-    
+      GwtTreeItem item = new GwtTreeItem();
+      item.setRow(row);
+      this.rootChildren.addItem(item);
+      
+      // update UI
+      populate();
   }
   
   // need to handle layouting
   public void layout() {
-    
-    // setup columns
-    columns = (XulTreeCols)getElementsByTagName("treecols").get(0);
-    rootChildren = (XulTreeChildren)getElementsByTagName("treechildren").get(0);
     
     String cols[] = new String[getColumns().getColumnCount()];
     int len[] = new int[cols.length];
@@ -54,17 +63,21 @@ public class GwtTree extends AbstractGwtXulComponent implements XulTree {
     // use base table from pentaho widgets library for now
     
     BaseTable table = new BaseTable(cols, len);
+    managedObject = table;
     
-    Object data[][] = new Object[getRootChildren().getItemCount()][cols.length];
+    populate();
+  }
+  
+  private void populate() {
+    BaseTable table = (BaseTable)managedObject;
+    Object data[][] = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
     
     for (int i = 0; i < getRootChildren().getItemCount(); i++) {
-      for (int j = 0; j < cols.length; j++) {
+      for (int j = 0; j < getColumns().getColumnCount(); j++) {
         data[i][j] = getRootChildren().getItem(i).getRow().getCell(j).getLabel();
       }
     }
-    
     table.populateTable(data);
-    managedObject = table;
   }
 
   public void clearSelection() {
@@ -106,8 +119,7 @@ public class GwtTree extends AbstractGwtXulComponent implements XulTree {
   }
 
   public int getRows() {
-    // TODO Auto-generated method stub
-    return 0;
+    return rootChildren.getItemCount();
   }
 
   public int[] getSelectedRows() {
@@ -151,7 +163,10 @@ public class GwtTree extends AbstractGwtXulComponent implements XulTree {
   }
 
   public void setColumns(XulTreeCols columns) {
-    this.columns = columns;
+    if (getColumns() != null) {
+      this.removeChild(getColumns());
+    }
+    addChild(columns);
   }
 
   public void setData(Object data) {
@@ -185,8 +200,10 @@ public class GwtTree extends AbstractGwtXulComponent implements XulTree {
   }
 
   public void setRootChildren(XulTreeChildren rootChildren) {
-    // TODO Auto-generated method stub
-    
+    if (getRootChildren() != null) {
+      this.removeChild(getRootChildren());
+    }
+    addChild(rootChildren);
   }
 
   public void setRows(int rows) {

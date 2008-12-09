@@ -79,4 +79,6 @@ public interface XulDomContainer {
   public void invokeLater(Runnable runnable);
   
   public boolean isRegistered(String widgetHandlerName);
+  
+  public XulLoader getXulLoader();
 }

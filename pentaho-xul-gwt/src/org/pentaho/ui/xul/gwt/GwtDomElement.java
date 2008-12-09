@@ -63,8 +63,9 @@ public class GwtDomElement implements Element {
 
   public List<XulComponent> getChildNodes() {
     ArrayList<XulComponent> list = new ArrayList<XulComponent>();
-    
-    
+    if (this.children == null) {
+      return list;
+    }
     for(Element ele : this.children){
       list.add((XulComponent) ele);
       
@@ -126,7 +127,11 @@ public class GwtDomElement implements Element {
   }
 
   public List<XulComponent> getElementsByTagName(String tagName) {
+    
     ArrayList<XulComponent> list = new ArrayList<XulComponent>();
+    if (children == null) {
+      return list;
+    }
     for (Element child : children) {
       if (child.getName().equals(tagName)) {
         list.add((XulComponent) child);
@@ -135,8 +140,6 @@ public class GwtDomElement implements Element {
     return list;
     
   }
-
-
   
   public void addChild(Element element) {
     if (children == null) {

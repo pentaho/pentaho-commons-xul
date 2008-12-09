@@ -19,9 +19,6 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     });
   }
   
-  String label;
-  Object value;
-  
   public GwtTreeCell() {
     super("treecell");
   }
@@ -33,7 +30,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public String getLabel() {
-    return label;
+    return getAttributeValue("label");
   }
 
   public int getSelectedIndex() {
@@ -47,7 +44,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public Object getValue() {
-    return value;
+    return getAttributeValue("value");
   }
 
   public boolean isEditable() {
@@ -61,8 +58,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public void setLabel(String label) {
-    this.label = label;
-    
+    this.setAttribute("label", label);
   }
 
   public void setSelectedIndex(int index) {
@@ -81,7 +77,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public void setValue(Object value) {
-    this.value = value;
+    this.setAttribute("value", "" + value);
   }
 
   public void adoptAttributes(XulComponent component) {

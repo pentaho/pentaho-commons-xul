@@ -1,11 +1,14 @@
 package org.pentaho.ui.xul.gwt;
 
 
+import java.util.ResourceBundle;
+
 import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.gwt.tags.GwtBox;
 import org.pentaho.ui.xul.gwt.tags.GwtButton;
 import org.pentaho.ui.xul.gwt.tags.GwtCaption;
@@ -47,7 +50,7 @@ import com.google.gwt.xml.client.XMLParser;
  * @author nbaker
  *
  */
-public class GwtXulLoader implements IMessageBundleLoadCallback{//implements XulLoader{
+public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
 
   private GwtXulParser parser;
   private Document doc;
@@ -114,8 +117,8 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
    */
-  public GwtXulDomContainer loadXul(Document xulDocument, MessageBundle bundle) throws IllegalArgumentException, XulException{
-    String translated = ResourceBundleTranslator.translate(xulDocument.toString(), bundle);
+  public GwtXulDomContainer loadXul(Document xulDocument, Object bundle) throws IllegalArgumentException, XulException{
+    String translated = ResourceBundleTranslator.translate(xulDocument.toString(), (MessageBundle)bundle);
     xulDocument = XMLParser.parse(translated);
     
     GwtXulDomContainer container = new GwtXulDomContainer();
@@ -141,7 +144,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
   }
 
   public XulComponent createElement(String elementName) throws XulException {
-    return null;
+    return parser.getElement(elementName, null);
   }
 
   public GwtXulLoader getNewInstance() throws XulException {
@@ -201,6 +204,26 @@ public class GwtXulLoader implements IMessageBundleLoadCallback{//implements Xul
 
   public void bundleLoaded(String bundleName) {
     
+  }
+
+  public XulDomContainer loadXul(Object xulDocument) throws IllegalArgumentException, XulException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public XulDomContainer loadXul(String resource, Object bundle) throws XulException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public XulDomContainer loadXulFragment(Object xulDocument) throws IllegalArgumentException, XulException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public XulDomContainer loadXulFragment(String resource, Object bundle) throws XulException {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

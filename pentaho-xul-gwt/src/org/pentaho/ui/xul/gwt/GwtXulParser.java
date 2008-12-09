@@ -12,7 +12,6 @@ import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.NodeList;
 
 public class GwtXulParser {
@@ -58,6 +57,8 @@ public class GwtXulParser {
     }
 
     xulDocument.addChild(root);
+    xulDocument.setXulDomContainer(this.xulDomContainer);
+    
     return xulDocument;
   }
   
@@ -88,8 +89,7 @@ public class GwtXulParser {
     return root;
   }
     
-  protected Element getElement(com.google.gwt.xml.client.Element srcEle, XulContainer parent) throws XulException {
-    XulComponent component = null;
+  protected XulComponent getElement(com.google.gwt.xml.client.Element srcEle, XulContainer parent) throws XulException {
     
     GwtXulHandler handler = handlers.get(srcEle.getNodeName());
     if (handler != null) {
@@ -101,27 +101,23 @@ public class GwtXulParser {
       System.out.println("Error: No Handler for type " + srcEle.getNodeName());
       return null;
     }
-//    Object handler = handlers.get(srcEle.getName().toUpperCase());
-//
-//    if (handler == null) {
-//      System.out.println("handler not found: " + srcEle.getName().toUpperCase());
-//      return null;
-//      //throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
-//    }
-//
-//    String tagName = srcEle.getName();
-//    Class<?> c;
-//    try {
-//      c = Class.forName((String) handler);
-//      Constructor<?> constructor = c
-//          .getConstructor(new Class[] { XulElement.class, XulDomContainer.class, String.class });
-//      XulElement ele = (XulElement) constructor.newInstance(parent, xulDomContainer, tagName);
-//
-//      Map<String, String> attributesMap = XulUtil.AttributesToMap(srcEle.attributes());
-//      BeanUtils.populate(ele, attributesMap);
-//      return ele;
-//    } catch (Exception e) {
-//      throw new XulException(e);
-//    }
   }
+  
+  public XulComponent getElement(String name) throws XulException{
+    return getElement(name, null);
+  }
+
+  public XulComponent getElement(String name, XulComponent defaultParent) throws XulException{
+    GwtXulHandler handler = handlers.get(name);
+    if (handler != null) {
+      AbstractGwtXulComponent gxc = (AbstractGwtXulComponent)handler.newInstance();
+      gxc.setXulDomContainer(xulDomContainer);
+      gxc.setParent(defaultParent);
+      return gxc;
+    } else {
+      System.out.println("Error: No Handler for type " + name);
+      return null;
+    }
+  }
+
 }

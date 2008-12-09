@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.util.List;
+
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
@@ -20,23 +22,22 @@ public class GwtTreeItem extends AbstractGwtXulComponent implements XulTreeItem 
     });
   }
   
-  XulTreeRow row;
-  
   public GwtTreeItem() {
     super("treeitem");
   }
-
-  public void layout() {
-    // get XulTreeRow
-    row = (XulTreeRow)getElementsByTagName("treerow").get(0);
-  }
   
   public XulTreeRow getRow() {
-    return row;
+    List list = getElementsByTagName("treerow");
+    if (list.size() > 0) {
+      return (XulTreeRow)list.get(0);
+    }
+    return null;
   }
 
   public XulTree getTree() {
-    // TODO Auto-generated method stub
+    if (getParent() != null) { // tree children
+      return (XulTree)getParent().getParent();
+    }
     return null;
   }
 
@@ -69,10 +70,12 @@ public class GwtTreeItem extends AbstractGwtXulComponent implements XulTreeItem 
     // TODO Auto-generated method stub
     
   }
-
+  
   public void setRow(XulTreeRow row) {
-    // TODO Auto-generated method stub
-    
+    if (getRow() != null) {
+      this.removeChild(getRow());
+    }
+    this.addChild(row);
   }
 
   public void adoptAttributes(XulComponent component) {

@@ -8,6 +8,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.containers.XulOverlay;
 import org.pentaho.ui.xul.dom.Document;
@@ -302,6 +303,10 @@ public class GwtXulDomContainer implements XulDomContainer {
   
   public void setLoader(GwtXulLoader loader){
     this.loader = loader;
+  }
+
+  public XulLoader getXulLoader() {
+    return loader;
   }
 
 }

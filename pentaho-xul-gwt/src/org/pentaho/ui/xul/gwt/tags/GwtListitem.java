@@ -30,6 +30,7 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
   public void init(com.google.gwt.xml.client.Element srcEle) {
     super.init(srcEle);
     setLabel(srcEle.getAttribute("label"));
+    setValue(srcEle.getAttribute("value"));
   }
   public String getLabel(){
     return label;
@@ -48,7 +49,10 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
   }
 
   public Object getValue() {
-    return value;
+    if (value != null) {
+      return value;
+    }
+    return label;
   }
 
   public boolean isSelected() {

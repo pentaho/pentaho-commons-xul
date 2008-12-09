@@ -1,7 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTreeItem;
@@ -22,29 +20,22 @@ public class GwtTreeRow extends AbstractGwtXulComponent implements XulTreeRow {
     });
   }
   
-  List<XulTreeCell> cells;
-  
   public GwtTreeRow() {
     super("treerow");
   }
 
-  public void layout() {
-    // setup XulTreeCells
-    cells = (List) getElementsByTagName("treecell");
-  }
-  
   public void addCell(XulTreeCell cell) {
-    // TODO Auto-generated method stub
-    
+    addChild(cell);
   }
 
   public void addCellText(int index, String text) {
-    // TODO Auto-generated method stub
-    
+    GwtTreeCell cell = new GwtTreeCell();
+    cell.setLabel(text);
+    addCell(cell);
   }
 
   public XulTreeCell getCell(int index) {
-    return cells.get(index);
+    return (XulTreeCell)getChildNodes().get(index);
   }
 
   public int getSelectedColumnIndex() {
@@ -63,8 +54,7 @@ public class GwtTreeRow extends AbstractGwtXulComponent implements XulTreeRow {
   }
 
   public void setParentTreeItem(XulTreeItem item) {
-    // TODO Auto-generated method stub
-    
+    super.setParent(item);
   }
 
   public void adoptAttributes(XulComponent component) {

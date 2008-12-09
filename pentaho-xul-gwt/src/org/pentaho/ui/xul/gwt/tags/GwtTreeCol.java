@@ -18,8 +18,6 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     });
   }
   
-  String label;
-
   public GwtTreeCol() {
     super("treecol");
   }
@@ -45,7 +43,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public String getLabel() {
-    return label;
+    return getAttributeValue("label");
   }
 
   public String getSortDirection() {
@@ -114,7 +112,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public void setLabel(String label) {
-    this.label = label;
+    setAttribute("label", label);
   }
 
   public void setPrimary(boolean primo) {

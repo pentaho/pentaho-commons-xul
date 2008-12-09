@@ -9,7 +9,8 @@ import org.pentaho.ui.xul.dom.Element;
 public class GwtDomDocument extends GwtDomElement implements Document {
   
   Element rootElement;
- 
+  XulDomContainer container;
+  
   public GwtDomDocument() {
     super("DOCUMENT");
   }
@@ -28,7 +29,7 @@ public class GwtDomDocument extends GwtDomElement implements Document {
   }
 
   public XulComponent createElement(String elementName) throws XulException {
-    return null;
+    return this.container.getXulLoader().createElement(elementName);
   }
 
   public void invokeLater(Runnable runnable) {
@@ -54,8 +55,6 @@ public class GwtDomDocument extends GwtDomElement implements Document {
   }
 
   public void setXulDomContainer(XulDomContainer container) {
-    
-        // TODO Auto-generated method stub 
-      
+    this.container = container;
   }
 }
