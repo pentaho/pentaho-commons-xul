@@ -289,9 +289,14 @@ public class GwtXulDomContainer implements XulDomContainer {
     XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
     
     for(XulComponent child : overlayContainer.getDocumentRoot().getChildNodes()){
-      
-      XulComponent insertedNode = document.getElementById(child.getId());
-      insertedNode.getParent().removeChild(insertedNode);
+      String id = child.getId();
+      if(id == null | id.equals("")){
+        continue;
+      }
+      XulComponent insertedNode = document.getElementById(id);
+      if(insertedNode != null){
+        insertedNode.getParent().removeChild(insertedNode);
+      }
     }
   }
 
