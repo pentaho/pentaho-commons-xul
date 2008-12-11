@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul;
 
+import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
 /**
@@ -37,4 +38,20 @@ public interface XulContainer extends XulComponent {
    * @return the orientation for this container. Valid values are found in the Orient enum. 
    */
   public Orient getOrientation();
+  
+
+  /**
+   * Specifies the alignment of children when the size of the container is greater than the
+   * size of it's children.
+   * 
+   * @param align one of [start, center, end].
+   */
+  public void setAlign(String align);
+  
+  /**
+   * Returns the alignment of children.
+   * 
+   * @return String specifying the alignment [start, center, end]. 
+   */
+  public Align getAlign();
 }
