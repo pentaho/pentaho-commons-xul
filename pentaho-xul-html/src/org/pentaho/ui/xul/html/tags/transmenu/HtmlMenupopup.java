@@ -7,8 +7,9 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.html.AbstractHtmlContainer;
 
-public class HtmlMenupopup extends HtmlElement implements XulMenupopup {
+public class HtmlMenupopup extends AbstractHtmlContainer implements XulMenupopup {
 
 	  public HtmlMenupopup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		    super("menupopup"); //$NON-NLS-1$

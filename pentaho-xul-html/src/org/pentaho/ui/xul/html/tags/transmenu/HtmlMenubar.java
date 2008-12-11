@@ -7,9 +7,10 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulMenubar;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.html.AbstractHtmlContainer;
 import org.pentaho.ui.xul.html.IHtmlElement;
 
-public class HtmlMenubar extends HtmlElement implements XulMenubar {
+public class HtmlMenubar extends AbstractHtmlContainer implements XulMenubar {
 
 	public HtmlMenubar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 	    super( tagName );

@@ -9,10 +9,11 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.html.AbstractHtmlContainer;
 import org.pentaho.ui.xul.html.IHtmlElement;
 import org.pentaho.ui.xul.html.tags.transmenu.HtmlElement;
 
-public class HtmlWindow extends HtmlElement implements XulWindow {
+public class HtmlWindow extends AbstractHtmlContainer implements XulWindow {
 
 	private XulDomContainer domContainer;
 	

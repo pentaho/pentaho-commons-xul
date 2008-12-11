@@ -7,8 +7,9 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.html.AbstractHtmlContainer;
 
-public class HtmlMenu extends HtmlElement implements XulMenu {
+public class HtmlMenu extends AbstractHtmlContainer implements XulMenu {
 
 	private String label;
 	
