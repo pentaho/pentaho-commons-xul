@@ -8,10 +8,11 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
-public class GwtTreeChildren extends AbstractGwtXulComponent implements XulTreeChildren {
+public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeChildren {
 
   public static void register() {
     GwtXulParser.registerHandler("treechildren",

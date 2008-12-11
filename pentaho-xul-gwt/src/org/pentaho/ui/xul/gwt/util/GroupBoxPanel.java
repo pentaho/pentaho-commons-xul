@@ -2,11 +2,9 @@ package org.pentaho.ui.xul.gwt.util;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.ComplexPanel;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class GroupBoxPanel extends SimplePanel {
+public class GroupBoxPanel extends VerticalPanel {
   private Element legend;  
   
   public GroupBoxPanel() {  

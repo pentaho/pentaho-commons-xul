@@ -5,14 +5,16 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulBox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class GwtBox extends AbstractGwtXulComponent implements XulBox {
+public class GwtBox extends AbstractGwtXulContainer implements XulBox {
 
   static final String ELEMENT_NAME = "box"; //$NON-NLS-1$
   

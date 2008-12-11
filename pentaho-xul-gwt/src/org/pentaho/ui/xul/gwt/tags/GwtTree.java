@@ -11,10 +11,11 @@ import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
-public class GwtTree extends AbstractGwtXulComponent implements XulTree {
+public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
   public static void register() {
     GwtXulParser.registerHandler("tree", 

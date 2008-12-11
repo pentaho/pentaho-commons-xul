@@ -4,14 +4,16 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
-public class GwtHbox extends AbstractGwtXulComponent implements XulHbox {
+public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
 
   static final String ELEMENT_NAME = "hbox"; //$NON-NLS-1$
   
@@ -24,7 +26,7 @@ public class GwtHbox extends AbstractGwtXulComponent implements XulHbox {
     });
   }
   
-  String align;
+  Align alignment;
   
   public GwtHbox() {
     super(ELEMENT_NAME);
@@ -40,22 +42,34 @@ public class GwtHbox extends AbstractGwtXulComponent implements XulHbox {
   public void adoptAttributes(XulComponent component) {
 
   }
+
+  @Override
+  public void setHeight(int height) {
+    super.setHeight(height);
+    container.setHeight(height+"px");
+  }
+
+  @Override
+  public void setWidth(int width) {
+    super.setWidth(width);
+    container.setWidth(width+"px");
+  }
   
   public void layout() {
-    HorizontalPanel hpanel = new HorizontalPanel();
-    managedObject = container = hpanel;
-    if ("left".equals(align) || "start".equals(align)) {
-      hpanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
-    } else if ("right".equals(align) || "end".equals(align)) {
-      hpanel.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
-    } else if ("center".equals(align) || "center".equals(align)) {
-      hpanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-    }
     super.layout();
   }
   
   public void setAlign(String align) {
-    this.align = align;
+    try{
+      this.alignment = Align.valueOf(align.toUpperCase());
+    } catch(Exception e){
+      System.out.println("Cannot parse ["+align+"] as Align value");
+      
+    }
+  }
+  
+  public Align getAlign(){
+    return this.alignment;
   }
   
 }

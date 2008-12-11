@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.Orient;
@@ -19,7 +20,7 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GwtListbox extends AbstractGwtXulComponent implements XulListbox, ChangeListener {
+public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, ChangeListener {
   
   static final String ELEMENT_NAME = "listbox"; //$NON-NLS-1$
   

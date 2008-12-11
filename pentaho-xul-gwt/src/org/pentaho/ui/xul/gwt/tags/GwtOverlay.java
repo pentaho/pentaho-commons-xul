@@ -4,10 +4,11 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.components.XulOverlay;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
-public class GwtOverlay extends AbstractGwtXulComponent implements XulOverlay{
+public class GwtOverlay extends AbstractGwtXulContainer implements XulOverlay{
 
   
   public static void register() {

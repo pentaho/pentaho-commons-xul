@@ -4,12 +4,13 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.util.GroupBoxPanel;
 import org.pentaho.ui.xul.util.Orient;
 
-public class GwtGroupBox extends AbstractGwtXulComponent implements XulGroupbox {
+public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox {
 
   static final String ELEMENT_NAME = "groupbox"; //$NON-NLS-1$
   

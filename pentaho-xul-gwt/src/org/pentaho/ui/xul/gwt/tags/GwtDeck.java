@@ -4,6 +4,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.Orient;
@@ -11,7 +12,7 @@ import org.pentaho.ui.xul.util.Orient;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GwtDeck extends AbstractGwtXulComponent implements XulDeck {
+public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
 
   static final String ELEMENT_NAME = "deck"; //$NON-NLS-1$
   

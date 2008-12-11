@@ -12,10 +12,11 @@ import org.pentaho.ui.xul.containers.XulToolbar;
 import org.pentaho.ui.xul.containers.XulToolbarset;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
-public class GwtToolbar extends AbstractGwtXulComponent implements XulToolbar{
+public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
   private String toolbarName;
   private ToolbarMode mode = ToolbarMode.ICONS;
   private Toolbar toolbar = new Toolbar();
