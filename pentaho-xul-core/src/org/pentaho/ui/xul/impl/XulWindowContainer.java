@@ -147,8 +147,8 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   }
   
 
-  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException {
-    XulDomContainer container = this.xulLoader.loadXulFragment(xulLocation, res);
+  public XulDomContainer loadFragment(String xulLocation, Object bundle) throws XulException {
+    XulDomContainer container = this.xulLoader.loadXulFragment(xulLocation, (ResourceBundle)bundle);
     return container;  
   }
 

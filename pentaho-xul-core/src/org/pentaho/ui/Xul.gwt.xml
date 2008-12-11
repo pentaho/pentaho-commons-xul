@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+
+      <!-- Inherit the core Web Toolkit stuff.                        -->
+      <inherits name='com.google.gwt.user.User'/>
+      <inherits name='com.googlecode.gwtx.Java'/> 
+      <source path="xul">
+        <include name="*.java"/>
+<!--        <exclude name="XulLoader.java"/>-->
+        <include name="**/components/*"/>
+        <include name="**/containers/*"/>
+        <include name="**/binding/Binding.java"/>
+        <include name="**/binding/InlineBindingExpression.java"/>
+        <include name="**/binding/BindingException.java"/>
+        <include name="**/binding/BindingConvertor.java"/>
+        <include name="**/binding/BindingContext.java"/>
+        <include name="**/dom/*"/>
+        <exclude name="**/dom/DocumentFactory*"/>
+        <include name="**/impl/XulEventHandler*"/>
+        <include name="**/impl/AbstractXulEventHandler*"/>
+        <include name="**/util/ColumnType*"/>
+        <include name="**/util/Orient*"/>
+      </source>
+	
+</module>

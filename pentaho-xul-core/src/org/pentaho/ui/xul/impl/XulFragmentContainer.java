@@ -3,8 +3,6 @@
  */
 package org.pentaho.ui.xul.impl;
 
-import java.util.ResourceBundle;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -53,7 +51,7 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
     return null;
   }
 
-  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException {
+  public XulDomContainer loadFragment(String xulLocation, Object bundle) throws XulException {
     logger.error("loadFragment not implemented in XulFragmentContainer");
     return null;
   }

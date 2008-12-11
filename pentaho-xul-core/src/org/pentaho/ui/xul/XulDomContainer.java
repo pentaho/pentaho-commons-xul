@@ -4,7 +4,6 @@
 package org.pentaho.ui.xul;
 
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.dom.Document;
@@ -31,7 +30,7 @@ public interface XulDomContainer {
    */
   public void addEventHandler(String id, String eventClassName) throws XulException;
 
-  public XulDomContainer loadFragment(String xulLocation, ResourceBundle res) throws XulException;
+  public XulDomContainer loadFragment(String xulLocation, Object bundle) throws XulException;
   
   public void loadFragment(String id, String src) throws XulException;
 

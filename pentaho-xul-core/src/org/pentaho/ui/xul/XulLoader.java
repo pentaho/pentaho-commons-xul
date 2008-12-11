@@ -3,8 +3,6 @@
  */
 package org.pentaho.ui.xul;
 
-import java.util.ResourceBundle;
-
 /**
  * The XulLoader will build the DOM model and corresponding managed UI implementation
  * from the XUL document. 
@@ -64,7 +62,7 @@ public interface XulLoader {
    * the XUL library component from the XUL XML.  
    * @throws XulException Exception thrown if errors encountered getting an instance of the parser. 
    */
-  public XulDomContainer loadXul(String resource, ResourceBundle bundle) throws  XulException;
+  public XulDomContainer loadXul(String resource, Object bundle) throws  XulException;
 
   /**
    * Loads a XUL document fragment into a container, building the necessary model, impl and event handling.
@@ -92,7 +90,7 @@ public interface XulLoader {
    * the XUL library component from the XUL XML.  
    * @throws XulException Exception thrown if errors encountered getting an instance of the parser. 
    */
-  public XulDomContainer loadXulFragment(String resource, ResourceBundle bundle) throws  XulException;
+  public XulDomContainer loadXulFragment(String resource, Object bundle) throws  XulException;
 
   
   /**
