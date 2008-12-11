@@ -66,9 +66,9 @@ public class SwtFileDialog extends SwtElement implements XulFileDialog{
     return showOpen();
   }
   
-  public RETURN_CODE showOpenDialog(File f) {
+  public RETURN_CODE showOpenDialog(Object f) {
     if(f != null){
-      fileHint = f;
+      fileHint = (File) f;
     }
     return showOpen();
   }
@@ -78,9 +78,9 @@ public class SwtFileDialog extends SwtElement implements XulFileDialog{
     return showSave();
   }
 
-  public RETURN_CODE showSaveDialog(File f) {
+  public RETURN_CODE showSaveDialog(Object f) {
     if(f != null){
-      fileHint = f;
+      fileHint = (File) f;
     }
     return showSave();
   }
