@@ -64,8 +64,8 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     return showOpen();
   }
   
-  public RETURN_CODE showOpenDialog(File f) {
-    fc = new JFileChooser(f);
+  public RETURN_CODE showOpenDialog(Object f) {
+    fc = new JFileChooser((File) f);
     return showOpen();
   }
 
@@ -75,8 +75,8 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     return showSave();
   }
 
-  public RETURN_CODE showSaveDialog(File f) {
-    fc = new JFileChooser(f);
+  public RETURN_CODE showSaveDialog(Object f) {
+    fc = new JFileChooser((File) f);
     return showSave();
   }
   
