@@ -10,13 +10,13 @@ public interface XulFileDialog extends XulComponent {
   public enum VIEW_TYPE{FILES_DIRECTORIES, DIRECTORIES}
  
   public RETURN_CODE showOpenDialog();
-  public RETURN_CODE showOpenDialog(File f);
+  public RETURN_CODE showOpenDialog(Object f);
   
   public RETURN_CODE showSaveDialog();
-  public RETURN_CODE showSaveDialog(File f);
+  public RETURN_CODE showSaveDialog(Object f);
   
-  public File getFile();
-  public File[] getFiles();
+  public Object getFile();
+  public Object[] getFiles();
   
   public void setSelectionMode(SEL_TYPE type);
   public SEL_TYPE getSelectionMode();

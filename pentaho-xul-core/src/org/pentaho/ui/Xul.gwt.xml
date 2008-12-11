@@ -20,6 +20,7 @@
         <include name="**/impl/AbstractXulEventHandler*"/>
         <include name="**/util/ColumnType*"/>
         <include name="**/util/Orient*"/>
+        <include name="**/util/Align*"/>
       </source>
 	
 </module>

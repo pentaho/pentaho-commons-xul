@@ -16,7 +16,7 @@ public class FileBrowserHandler extends AbstractXulEventHandler{
       XulFileDialog dialog = (XulFileDialog) document.createElement("filedialog");
       RETURN_CODE retval = dialog.showSaveDialog();
       if(retval == RETURN_CODE.OK){
-        File file = dialog.getFile();
+        File file = (File) dialog.getFile();
         filename.setValue(file.getName());
       }
       
