@@ -1,11 +1,15 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.util.List;
+
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.util.ColumnType;
 
 public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
@@ -143,6 +147,16 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   public void adoptAttributes(XulComponent component) {
     // TODO Auto-generated method stub
     
+  }
+
+  public List<InlineBindingExpression> getBindingExpressions() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public ColumnType getColumnType() {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

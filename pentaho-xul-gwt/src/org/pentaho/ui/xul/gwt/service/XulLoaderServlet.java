@@ -1,4 +1,4 @@
-package org.pentaho.ui.gwt.xul.service;
+package org.pentaho.ui.xul.gwt.service;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -10,7 +10,6 @@ import java.io.Reader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.ui.xul.service.XulLoaderService;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

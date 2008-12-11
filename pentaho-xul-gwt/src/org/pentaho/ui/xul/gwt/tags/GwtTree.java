@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.beans.PropertyChangeListener;
 import java.util.Collection;
 
 import org.pentaho.gwt.widgets.client.table.BaseTable;
@@ -230,5 +231,6 @@ public class GwtTree extends AbstractGwtXulComponent implements XulTree {
     // TODO Auto-generated method stub
     
   }
+
 
 }

@@ -2,20 +2,20 @@ package org.pentaho.ui.xul.gwt;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
+import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.components.XulMessageBox;
-import org.pentaho.ui.xul.containers.XulOverlay;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 import org.pentaho.ui.xul.impl.XulEventHandler;
-
-import com.google.gwt.core.client.GWT;
 
 public class GwtXulDomContainer implements XulDomContainer {
 
@@ -312,6 +312,46 @@ public class GwtXulDomContainer implements XulDomContainer {
 
   public XulLoader getXulLoader() {
     return loader;
+  }
+
+  public void addBinding(Binding binding) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void addInitializedBinding(Binding b) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Binding createBinding(String source, String sourceAttr, String targetId, String targetAttr) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public XulDomContainer loadFragment(String xulLocation, Object bundle) throws XulException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void loadOverlay(String src) throws XulException {
+    throw new RuntimeException("not yet implemented");
+    
+  }
+
+  public void removeBinding(Binding binding) {
+    throw new RuntimeException("not yet implemented");
+    
+  }
+
+  public void removeOverlay(String src) throws XulException {
+    throw new RuntimeException("not yet implemented");
+    
   }
 
 }

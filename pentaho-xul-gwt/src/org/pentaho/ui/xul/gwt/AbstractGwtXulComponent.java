@@ -3,11 +3,12 @@
  */
 package org.pentaho.ui.xul.gwt;
 
-import java.util.ArrayList;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSourceAdapter;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.gwt.tags.GwtScript;
 import org.pentaho.ui.xul.util.Orient;
@@ -34,6 +35,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected String bgcolor, onblur, tooltiptext;
   protected int height, width, padding;
   protected boolean disabled, removeElement;
+  private XulEventSourceAdapter xulEventSourceAdapter = new XulEventSourceAdapter();
 
   
   public AbstractGwtXulComponent(String name) {
@@ -352,5 +354,18 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     this.removeElement = flag;
   }
   
+
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    xulEventSourceAdapter.addPropertyChangeListener(listener);
+    
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    xulEventSourceAdapter.removePropertyChangeListener(listener);
+    
+  }
   
+  public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    xulEventSourceAdapter.addPropertyChangeListener(propertyName, listener);
+  }
 }

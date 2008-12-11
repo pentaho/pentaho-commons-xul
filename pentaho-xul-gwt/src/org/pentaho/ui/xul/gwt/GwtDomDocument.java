@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.gwt;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 
@@ -56,5 +57,15 @@ public class GwtDomDocument extends GwtDomElement implements Document {
 
   public void setXulDomContainer(XulDomContainer container) {
     this.container = container;
+  }
+
+  public void addBinding(Binding bind) {
+    throw new RuntimeException("not yet implemented");
+    
+  }
+
+  public void addInitializedBinding(Binding b) {
+    throw new RuntimeException("not yet implemented");
+    
   }
 }

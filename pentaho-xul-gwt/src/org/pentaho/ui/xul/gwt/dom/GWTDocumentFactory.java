@@ -1,26 +1,26 @@
 /**
  * 
  */
-package org.pentaho.ui.xul.dom;
+package org.pentaho.ui.xul.gwt.dom;
 
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.gwt.GwtDomDocument;
 
 /**
  * @author OEM
  *
  */
-public class DocumentFactory {
+public class GWTDocumentFactory {
   private static Class concreteClass;
   private static Class elementClass;
   
   public static void registerDOMClass(Class clazz){
-    DocumentFactory.concreteClass = clazz;
+    GWTDocumentFactory.concreteClass = clazz;
   }
 
   public static void registerElementClass(Class clazz){
-    DocumentFactory.elementClass = clazz;
+    GWTDocumentFactory.elementClass = clazz;
   }
  
   public static Document createDocument() throws XulException{

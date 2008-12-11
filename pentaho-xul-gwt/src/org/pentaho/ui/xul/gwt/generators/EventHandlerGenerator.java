@@ -1,8 +1,6 @@
-package org.pentaho.ui.gwt.xul.generators;
+package org.pentaho.ui.xul.gwt.generators;
 
 import java.io.PrintWriter;
-
-import org.pentaho.ui.xul.EventMethod;
 
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;

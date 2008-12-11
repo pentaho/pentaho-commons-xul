@@ -1,14 +1,14 @@
 package org.pentaho.ui.xul.gwt;
 
 
-import java.util.ResourceBundle;
-
 import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
+import org.pentaho.ui.xul.gwt.service.XulLoaderService;
+import org.pentaho.ui.xul.gwt.service.XulLoaderServiceAsync;
 import org.pentaho.ui.xul.gwt.tags.GwtBox;
 import org.pentaho.ui.xul.gwt.tags.GwtButton;
 import org.pentaho.ui.xul.gwt.tags.GwtCaption;
@@ -38,8 +38,6 @@ import org.pentaho.ui.xul.gwt.tags.GwtTreeRow;
 import org.pentaho.ui.xul.gwt.tags.GwtVbox;
 import org.pentaho.ui.xul.gwt.tags.GwtWindow;
 import org.pentaho.ui.xul.gwt.util.ResourceBundleTranslator;
-import org.pentaho.ui.xul.service.XulLoaderService;
-import org.pentaho.ui.xul.service.XulLoaderServiceAsync;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
@@ -53,7 +51,6 @@ import com.google.gwt.xml.client.XMLParser;
 public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
 
   private GwtXulParser parser;
-  private Document doc;
   public static final XulLoaderServiceAsync SERVICE = (XulLoaderServiceAsync) GWT.create(XulLoaderService.class);
   static{
     ServiceDefTarget endpoint = (ServiceDefTarget) SERVICE;
@@ -104,12 +101,13 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
    */
-  public GwtXulDomContainer loadXul(Document xulDocument) throws IllegalArgumentException, XulException{
+  public GwtXulDomContainer loadXul(Object xulDocument) throws IllegalArgumentException, XulException{
 
+    Document document = (Document)xulDocument;
     GwtXulDomContainer container = new GwtXulDomContainer();
     container.setLoader(this);
     parser.setContainer(container);
-    parser.parseDocument(xulDocument.getDocumentElement());
+    parser.parseDocument(document.getDocumentElement());
    
     return container;
   }
@@ -117,14 +115,15 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXul(org.w3c.dom.Document)
    */
-  public GwtXulDomContainer loadXul(Document xulDocument, Object bundle) throws IllegalArgumentException, XulException{
+  public GwtXulDomContainer loadXul(Object xulDocument, Object bundle) throws IllegalArgumentException, XulException{
+    Document document = (Document)xulDocument;
     String translated = ResourceBundleTranslator.translate(xulDocument.toString(), (MessageBundle)bundle);
     xulDocument = XMLParser.parse(translated);
     
     GwtXulDomContainer container = new GwtXulDomContainer();
     container.setLoader(this);
     parser.setContainer(container);
-    parser.parseDocument(xulDocument.getDocumentElement());
+    parser.parseDocument(document.getDocumentElement());
    
     return container;
   }
@@ -134,11 +133,12 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
-  public XulDomContainer loadXulFragment(Document xulDocument) throws IllegalArgumentException, XulException {
+  public XulDomContainer loadXulFragment(Object xulDocument) throws IllegalArgumentException, XulException {
+    Document document = (Document)xulDocument;
     GwtXulDomContainer container = new GwtXulDomContainer();
     container.setLoader(this);
     parser.setContainer(container);
-    parser.parseDocument(xulDocument.getDocumentElement());
+    parser.parseDocument(document.getDocumentElement());
     
     return container;
   }
@@ -159,71 +159,50 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     return GwtXulParser.isRegistered(elementName);
   }
 
-  public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException {
-    return null;  
-  }
-
-
-  public XulDomContainer loadXulFragment(String resource) throws IllegalArgumentException, XulException {
-    return null;  
-  }
-
-
-  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
-      XulDomContainer container) throws XulException {
-    
-        // TODO Auto-generated method stub 
-      
-  }
-
-  public void register(String tagName, String className) {
-    
-        // TODO Auto-generated method stub 
-      
-  }
-
-  public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)
-      throws XulException {
-    
-        // TODO Auto-generated method stub 
-      
-  }
-
-  public void setOuterContext(Object context) {
-    
-        // TODO Auto-generated method stub 
-      
-  }
-
-  public void setRootDir(String str) {
-    
-        // TODO Auto-generated method stub 
-      
-  }
-
-
   public void bundleLoaded(String bundleName) {
     
   }
 
-  public XulDomContainer loadXul(Object xulDocument) throws IllegalArgumentException, XulException {
-    // TODO Auto-generated method stub
-    return null;
+  public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException {
+    throw new RuntimeException("not yet implemented");
   }
 
   public XulDomContainer loadXul(String resource, Object bundle) throws XulException {
-    // TODO Auto-generated method stub
-    return null;
+    throw new RuntimeException("not yet implemented");
   }
 
-  public XulDomContainer loadXulFragment(Object xulDocument) throws IllegalArgumentException, XulException {
-    // TODO Auto-generated method stub
-    return null;
+  public XulDomContainer loadXulFragment(String resource) throws IllegalArgumentException, XulException {
+    throw new RuntimeException("not yet implemented");
   }
 
   public XulDomContainer loadXulFragment(String resource, Object bundle) throws XulException {
-    // TODO Auto-generated method stub
-    return null;
+    throw new RuntimeException("not yet implemented");
   }
 
+  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
+      XulDomContainer container) throws XulException {
+    throw new RuntimeException("not yet implemented");
+    
+  }
+
+  public void register(String tagName, String className) {
+    throw new RuntimeException("not yet implemented");
+    
+  }
+
+  public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)
+      throws XulException {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setOuterContext(Object context) {
+    throw new RuntimeException("not yet implemented");
+    
+  }
+
+  public void setRootDir(String str) {
+    throw new RuntimeException("not yet implemented");
+    
+  }
 }

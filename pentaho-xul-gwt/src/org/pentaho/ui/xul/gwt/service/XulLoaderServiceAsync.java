@@ -1,4 +1,4 @@
-package org.pentaho.ui.xul.service;
+package org.pentaho.ui.xul.gwt.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

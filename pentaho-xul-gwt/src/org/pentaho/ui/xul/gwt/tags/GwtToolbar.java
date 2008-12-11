@@ -4,8 +4,6 @@ import org.pentaho.gwt.widgets.client.toolbar.Toolbar;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarGroup;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulContainer;
-import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulToolbarbutton;
 import org.pentaho.ui.xul.components.XulToolbarseparator;
 import org.pentaho.ui.xul.components.XulToolbarspacer;
@@ -16,9 +14,6 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
-
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Image;
 
 public class GwtToolbar extends AbstractGwtXulComponent implements XulToolbar{
   private String toolbarName;
