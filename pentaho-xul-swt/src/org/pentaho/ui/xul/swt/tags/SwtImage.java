@@ -42,7 +42,7 @@ public class SwtImage extends SwtElement implements XulImage{
     label.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src)));
   }
 
-  public void setSrc(java.awt.Image img) {
+  public void setSrc(Object img) {
     label.setImage(
       new Image(
           ((Composite) parent.getManagedObject()).getDisplay(), 
