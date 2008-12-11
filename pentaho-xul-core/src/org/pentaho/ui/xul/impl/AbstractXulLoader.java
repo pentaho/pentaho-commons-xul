@@ -149,12 +149,12 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   }
 
-  public XulDomContainer loadXul(String resource, ResourceBundle bundle) throws XulException {
+  public XulDomContainer loadXul(String resource, Object bundle) throws XulException {
 
     final Document doc = getDocFromClasspath(resource);
 
     setRootDir(resource);
-    mainBundle = bundle;
+    mainBundle = (ResourceBundle) bundle;
     return this.loadXul(doc);
 
   }
@@ -174,13 +174,13 @@ public abstract class AbstractXulLoader implements XulLoader {
     return loadXulFragment(resource, res);
   }
 
-  public XulDomContainer loadXulFragment(String resource, ResourceBundle bundle) throws XulException {
+  public XulDomContainer loadXulFragment(String resource, Object bundle) throws XulException {
 
     try {
 
       InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
 
-      String localOutput = ResourceBundleTranslator.translate(in, bundle);
+      String localOutput = ResourceBundleTranslator.translate(in, (ResourceBundle) bundle);
 
       SAXReader rdr = new SAXReader();
       final Document doc = rdr.read(new StringReader(localOutput));
