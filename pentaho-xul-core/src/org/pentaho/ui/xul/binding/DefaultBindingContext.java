@@ -11,18 +11,18 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 
-public class BindingContext {
+public class DefaultBindingContext implements BindingContext {
 
   private XulDomContainer container;
 
   private List<Binding> bindings = new ArrayList<Binding>();
 
-  private static final Log logger = LogFactory.getLog(BindingContext.class);
+  private static final Log logger = LogFactory.getLog(DefaultBindingContext.class);
 
   //internal map of Binding to PropChangeListeners, used to cleanup upon removal
   private Map<Binding, List<PropertyChangeListener>> bindingListeners = new HashMap<Binding, List<PropertyChangeListener>>();
 
-  public BindingContext(XulDomContainer container) {
+  public DefaultBindingContext(XulDomContainer container) {
     this.container = container;
   }
 

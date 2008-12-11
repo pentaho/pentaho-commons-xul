@@ -1,10 +1,10 @@
 package org.pentaho.ui.xul.binding;
 
 import java.beans.PropertyChangeListener;
-import java.lang.ref.Reference;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
 
 public interface Binding {
@@ -19,11 +19,11 @@ public interface Binding {
 
   void initialize();
 
-  Reference getSource();
+  Object getSource();
 
   void setSource(Object source);
 
-  Reference getTarget();
+  Object getTarget();
 
   void setTarget(Object target);
 
@@ -47,8 +47,7 @@ public interface Binding {
 
   void setReverseConversion(boolean reverseConversion);
 
-  void fireSourceChanged() throws IllegalArgumentException, IllegalAccessException,
-      InvocationTargetException;
+  void fireSourceChanged() throws IllegalArgumentException, XulException, InvocationTargetException;
 
   void bindForward();
 

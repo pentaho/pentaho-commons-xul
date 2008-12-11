@@ -15,6 +15,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulEventSource;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
 import org.pentaho.ui.xul.dom.Document;
 
@@ -181,9 +182,15 @@ public class DefaultBinding implements Binding {
     this.reverseConversion = reverseConversion;
   }
 
-  public void fireSourceChanged() throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-    Object getRetVal = sourceGetterMethod.invoke(getSource().get());
-    forwardListener.propertyChange(new PropertyChangeEvent(getSource(), getSourceAttr(), null, getRetVal));
+  public void fireSourceChanged() throws IllegalArgumentException, XulException, InvocationTargetException {
+    try{
+      Object getRetVal = sourceGetterMethod.invoke(getSource().get());
+      forwardListener.propertyChange(new PropertyChangeEvent(getSource(), getSourceAttr(), null, getRetVal));
+    } catch(IllegalAccessException e){
+      //TODO: re-implement IllegalAccessException.
+      //cannot be in interface due to GWT incompatibility.
+      throw new XulException(e);
+    }
   }
 
   public void bindForward() {
