@@ -53,9 +53,9 @@ public class SwingImage extends SwingElement implements XulImage{
     this.src = src;
     
   }
-  public void setSrc(Image img) {
-    this.image = img;
-    ico = new ImageIcon(img);
+  public void setSrc(Object img) {
+    this.image = (Image)img;
+    ico = new ImageIcon(this.image);
     if(lbl != null){
       lbl.setIcon(ico);
     }
