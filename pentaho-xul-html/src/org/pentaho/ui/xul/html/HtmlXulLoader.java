@@ -79,5 +79,15 @@ public class HtmlXulLoader extends AbstractXulLoader {
 		    return parser.getElement(elementName, defaultParent);
 		  }
 
+      public XulDomContainer loadXul(String resource, Object bundle) throws XulException {
+        throw new UnsupportedOperationException();
+      }
+
+      public XulDomContainer loadXulFragment(String resource, Object bundle) throws XulException {
+        throw new UnsupportedOperationException();
+          
+      }
+
+		  
 
 }
