@@ -11,10 +11,10 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwingDeck extends SwingElement implements XulDeck {
+public class SwingDeck extends AbstractSwingContainer implements XulDeck {
 
   protected JPanel container;
 

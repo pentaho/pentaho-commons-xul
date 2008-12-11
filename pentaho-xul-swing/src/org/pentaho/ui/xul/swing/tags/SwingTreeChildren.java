@@ -10,9 +10,10 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTreeChildren extends SwingElement implements XulTreeChildren {
+public class SwingTreeChildren extends AbstractSwingContainer implements XulTreeChildren {
 
   XulTree tree;
 

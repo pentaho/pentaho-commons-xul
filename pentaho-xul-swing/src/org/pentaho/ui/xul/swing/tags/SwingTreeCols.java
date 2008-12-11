@@ -8,9 +8,10 @@ import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTreeCols extends SwingElement implements XulTreeCols {
+public class SwingTreeCols extends AbstractSwingContainer implements XulTreeCols {
 
   XulTree table;
 

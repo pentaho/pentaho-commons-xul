@@ -58,9 +58,10 @@ import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTree extends SwingElement implements XulTree {
+public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   private JTable table;
 

@@ -6,9 +6,10 @@ import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTabpanels extends SwingElement implements XulTabpanels {
+public class SwingTabpanels extends AbstractSwingContainer implements XulTabpanels {
   public SwingTabpanels(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabpanels");
     this.managedObject = "empty";

@@ -24,9 +24,10 @@ import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingMenuList<T> extends SwingElement implements XulMenuList<T> {
+public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuList<T> {
 
   private JComboBox combobox;
 

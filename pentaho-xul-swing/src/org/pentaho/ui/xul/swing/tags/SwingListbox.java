@@ -22,10 +22,11 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwingListbox extends SwingElement implements XulListbox, ListSelectionListener{
+public class SwingListbox extends AbstractSwingContainer implements XulListbox, ListSelectionListener{
   private static final long serialVersionUID = 3064125049914932493L;
 
   private JList listBox;

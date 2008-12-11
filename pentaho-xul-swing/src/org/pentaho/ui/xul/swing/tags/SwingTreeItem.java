@@ -11,9 +11,10 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTreeItem extends SwingElement implements XulTreeItem {
+public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem {
   private static final Log logger = LogFactory.getLog(SwingTreeItem.class);
 
   private XulTreeRow row;

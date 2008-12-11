@@ -10,18 +10,17 @@ import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Window;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JComponent;
 import javax.swing.border.BevelBorder;
 
 import org.pentaho.ui.xul.XulComponent;
@@ -33,10 +32,10 @@ import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwingDialog extends SwingElement implements XulDialog {
+public class SwingDialog extends AbstractSwingContainer implements XulDialog {
   
   XulDomContainer domContainer = null;
 

@@ -11,11 +11,12 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulTabpanel;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.dom.Element;
 
-public class SwingTabpanel extends SwingElement implements XulTabpanel{
+public class SwingTabpanel extends AbstractSwingContainer implements XulTabpanel{
 	
 	
 	public SwingTabpanel(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {

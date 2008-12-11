@@ -16,6 +16,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
@@ -24,7 +25,7 @@ import org.pentaho.ui.xul.util.Orient;
  * @author OEM
  *
  */
-public class SwingHbox extends SwingElement implements XulHbox {
+public class SwingHbox extends AbstractSwingContainer implements XulHbox {
 
   private static final Log logger = LogFactory.getLog(SwingHbox.class);
 

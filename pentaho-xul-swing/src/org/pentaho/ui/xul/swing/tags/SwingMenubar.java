@@ -10,9 +10,10 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulMenubar;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingMenubar extends SwingElement implements XulMenubar {
+public class SwingMenubar extends AbstractSwingContainer implements XulMenubar {
 
   private JMenuBar menuBar;
 

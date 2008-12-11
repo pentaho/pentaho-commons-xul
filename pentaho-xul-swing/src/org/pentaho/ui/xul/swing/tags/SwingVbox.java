@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
@@ -21,7 +22,7 @@ import org.pentaho.ui.xul.util.Orient;
  * @author nbaker
  *
  */
-public class SwingVbox extends SwingElement implements XulVbox {
+public class SwingVbox extends AbstractSwingContainer implements XulVbox {
 
   public SwingVbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Vbox");

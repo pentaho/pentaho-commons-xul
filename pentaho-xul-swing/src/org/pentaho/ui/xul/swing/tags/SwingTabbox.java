@@ -11,9 +11,10 @@ import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTabbox extends SwingElement implements XulTabbox {
+public class SwingTabbox extends AbstractSwingContainer implements XulTabbox {
 
   private JTabbedPane tabpane;
 

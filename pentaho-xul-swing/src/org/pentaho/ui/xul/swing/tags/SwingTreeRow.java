@@ -7,9 +7,10 @@ import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingTreeRow extends SwingElement implements XulTreeRow {
+public class SwingTreeRow extends AbstractSwingContainer implements XulTreeRow {
   XulTreeItem treeItem;
 
   private XulTree tree;

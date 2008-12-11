@@ -7,9 +7,10 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingMenupopup extends SwingElement implements XulMenupopup {
+public class SwingMenupopup extends AbstractSwingContainer implements XulMenupopup {
 
   public SwingMenupopup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menupopup");
