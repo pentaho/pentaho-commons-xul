@@ -8,10 +8,11 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwtDeck extends SwtElement implements XulDeck {
+public class SwtDeck extends AbstractSwtXulContainer implements XulDeck {
 
   protected Composite box;
 

@@ -20,12 +20,13 @@ import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.DialogButton;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.custom.BasicDialog;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwtDialog extends SwtElement implements XulDialog {
+public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   Shell possibleParent;
 

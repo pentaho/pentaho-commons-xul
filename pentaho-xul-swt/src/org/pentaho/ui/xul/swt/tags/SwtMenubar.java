@@ -9,9 +9,10 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulMenubar;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtMenubar extends SwtElement implements XulMenubar {
+public class SwtMenubar extends AbstractSwtXulContainer implements XulMenubar {
 
   private Menu menuBar;
 

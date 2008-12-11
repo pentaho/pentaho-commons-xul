@@ -12,9 +12,10 @@ import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtTabbox extends SwtElement implements XulTabbox{
+public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
 
   
   private TabFolder tabFolder;

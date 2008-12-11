@@ -6,10 +6,11 @@ import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.dom.Element;
 
-public class SwtTreeItem extends SwtElement implements XulTreeItem {
+public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem {
 
   protected XulTreeChildren parentTreeChildren = null;
   

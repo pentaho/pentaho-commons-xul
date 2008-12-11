@@ -7,11 +7,12 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
 
 
-public class SwtTabpanel extends SwtElement implements XulTabpanel{
+public class SwtTabpanel extends AbstractSwtXulContainer implements XulTabpanel{
   
   private Composite panel;
   

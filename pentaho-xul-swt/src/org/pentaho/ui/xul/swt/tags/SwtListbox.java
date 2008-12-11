@@ -15,9 +15,10 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtListbox extends SwtElement implements XulListbox{
+public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
   private static final Log logger = LogFactory.getLog(SwtListbox.class);
 

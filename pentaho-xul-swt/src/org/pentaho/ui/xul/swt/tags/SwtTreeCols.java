@@ -13,9 +13,10 @@ import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtTreeCols extends SwtElement implements XulTreeCols {
+public class SwtTreeCols extends AbstractSwtXulContainer implements XulTreeCols {
   
   protected XulTree parentTree = null;
   

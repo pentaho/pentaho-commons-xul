@@ -20,6 +20,7 @@ import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtBinding;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.TableSelection;
@@ -27,7 +28,7 @@ import org.pentaho.ui.xul.swt.TabularWidget;
 import org.pentaho.ui.xul.swt.custom.TableWrapper;
 import org.pentaho.ui.xul.swt.custom.TreeWrapper;
 
-public class SwtTree extends SwtElement implements XulTree {
+public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   // Tables and trees 
   // share so much of the same API, I wrapped their common methods 

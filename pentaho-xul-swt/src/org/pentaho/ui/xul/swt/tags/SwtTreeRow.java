@@ -9,13 +9,14 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.RowWidget;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.custom.TableItemWrapper;
 import org.pentaho.ui.xul.swt.custom.TreeItemWrapper;
 import org.pentaho.ui.xul.dom.Element;
 
-public class SwtTreeRow extends SwtElement implements XulTreeRow {
+public class SwtTreeRow extends AbstractSwtXulContainer implements XulTreeRow {
   
   protected RowWidget widget;
   protected Item item;

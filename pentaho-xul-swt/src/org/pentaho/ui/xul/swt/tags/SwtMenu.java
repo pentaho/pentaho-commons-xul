@@ -11,9 +11,10 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuseparator;
 import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtMenu  extends SwtElement implements XulMenu {
+public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
 
   private Menu menu;
   

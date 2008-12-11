@@ -5,9 +5,10 @@ import org.pentaho.ui.xul.components.XulTab;
 import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtTabs  extends SwtElement implements XulTabs{
+public class SwtTabs  extends AbstractSwtXulContainer implements XulTabs{
   public SwtTabs(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabs");
     this.managedObject = "empty";

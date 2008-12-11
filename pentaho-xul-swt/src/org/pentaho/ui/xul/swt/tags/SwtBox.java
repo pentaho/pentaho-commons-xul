@@ -5,11 +5,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulBox;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.dom.Element;
 
-public class SwtBox extends SwtElement implements XulBox {
+public class SwtBox extends AbstractSwtXulContainer implements XulBox {
   private static final long serialVersionUID = 582736100041411600L;
 
   protected Composite box;

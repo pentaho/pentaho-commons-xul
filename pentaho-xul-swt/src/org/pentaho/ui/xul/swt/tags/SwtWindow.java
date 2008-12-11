@@ -14,10 +14,11 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwtWindow extends SwtElement implements XulWindow {
+public class SwtWindow extends AbstractSwtXulContainer implements XulWindow {
   private static final long serialVersionUID = 6711745093238802441L;
 
   Shell shell;

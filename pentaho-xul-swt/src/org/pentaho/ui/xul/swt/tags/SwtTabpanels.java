@@ -6,9 +6,10 @@ import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtTabpanels extends SwtElement implements XulTabpanels{
+public class SwtTabpanels extends AbstractSwtXulContainer implements XulTabpanels{
   
   private XulTabbox tabbox;
   public SwtTabpanels(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {

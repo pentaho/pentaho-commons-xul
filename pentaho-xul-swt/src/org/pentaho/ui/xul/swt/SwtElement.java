@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.containers.XulDialog;
@@ -21,7 +22,7 @@ public class SwtElement extends AbstractXulComponent {
   private static final long serialVersionUID = -4407080035694005764L;
 
   // Per XUL spec, STRETCH is the default align value.
-  private Align align = Align.STRETCH;
+  private SwtAlign align = SwtAlign.STRETCH;
 
   protected Orient orient = Orient.HORIZONTAL;
 
@@ -41,15 +42,6 @@ public class SwtElement extends AbstractXulComponent {
     this.flex = flex;
   }
 
-  public void setAlign(String align) {
-    this.align = Align.valueOf(align.toUpperCase());
-  }
-
-  public String getAlign() {
-    if (align == null)
-      return null;
-    return align.toString();
-  }
 
   public void setOrient(String orientation) {
     orient = Orient.valueOf(orientation.toUpperCase());
@@ -165,15 +157,16 @@ public class SwtElement extends AbstractXulComponent {
       // Align is the PARENT'S attribute, and affects the 
       // opposite direction of the orientation.
 
-      if (getAlign() != null) {
-        Align a = Align.valueOf(getAlign());
+      if (swtChild instanceof XulContainer && ((XulContainer) swtChild).getAlign() != null) {
+        SwtAlign swtAlign = SwtAlign.valueOf(((XulContainer) swtChild).getAlign().toString());
+        
         if (orient.equals(Orient.HORIZONTAL)) {
-          data.verticalAlignment = a.getSwtAlign();
+          data.verticalAlignment = swtAlign.getSwtAlign();
           if (data.verticalAlignment == SWT.FILL) {
             data.grabExcessVerticalSpace = true;
           }
         } else { //Orient.VERTICAL
-          data.horizontalAlignment = a.getSwtAlign();
+          data.horizontalAlignment = swtAlign.getSwtAlign();
           if (data.horizontalAlignment == SWT.FILL) {
             data.grabExcessHorizontalSpace = true;
           }

@@ -9,7 +9,7 @@ import org.eclipse.swt.SWT;
  * @author gmoran
  *
  */
-public enum Align {
+public enum SwtAlign {
   
   START(SWT.BEGINNING), 
   CENTER(SWT.CENTER), 
@@ -19,7 +19,7 @@ public enum Align {
   
   private final int equivalent;
   
-  private Align(int swtEquivalent){
+  private SwtAlign(int swtEquivalent){
     this.equivalent = swtEquivalent;
   }
   

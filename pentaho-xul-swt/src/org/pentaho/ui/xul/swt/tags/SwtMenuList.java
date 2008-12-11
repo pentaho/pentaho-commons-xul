@@ -29,11 +29,12 @@ import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
-public class SwtMenuList<T> extends SwtElement implements XulMenuList<T> {
+public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuList<T> {
 
   private Combo combobox;
 
