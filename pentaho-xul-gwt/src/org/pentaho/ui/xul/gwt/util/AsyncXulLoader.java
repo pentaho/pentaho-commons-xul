@@ -27,7 +27,7 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
   private IXulLoaderCallback callback;
   
   private boolean loadingOverlay = false;
-  
+  private boolean removingOverlay = false;
   private boolean fromSource = false;
   
   private GwtXulDomContainer container;
@@ -38,42 +38,51 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
     
   }
   
-  public static void loadOverlayFromUrl(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
-    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback);
-    loader.init();
-  }
-
   public static void loadXulFromSource(String source, String bundle, IXulLoaderCallback callback){
     AsyncXulLoader loader = new AsyncXulLoader(source, bundle, callback, true);
     loader.init();
   }
   
-  public static void loadOverlayFromSource(String source, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
-    AsyncXulLoader loader = new AsyncXulLoader(source, bundle, container, callback, true);
+  public static void loadOverlayFromUrl(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
+    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback, true, false);
     loader.init();
   }
   
-  private AsyncXulLoader(String location, String bundle, IXulLoaderCallback callback){
-    xulSrc = location;
-    this.callback = callback;
-    this.bundle = bundle;
-    
+  public static void removeOverlayFromUrl(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback) {
+    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback, false, false);
+    loader.init();
+  }
+
+  public static void loadOverlayFromSource(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
+    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback, true, true);
+    loader.init();
   }
   
-  private AsyncXulLoader(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
-    this(location, bundle, callback);
-    this.container = container;
-    this.loadingOverlay = true;
+  public static void removeOverlayFromSource(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback) {
+    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback, false, true);
+    loader.init();
+  }
+
+  
+  private AsyncXulLoader(String source, String bundle, IXulLoaderCallback callback){
+    xulSrc = source;
+    this.callback = callback;
+    this.bundle = bundle;
   }
   
   private AsyncXulLoader(String source, String bundle, IXulLoaderCallback callback, boolean fromSource){
     this(source, bundle, callback);
-    this.fromSource = true;    
+    this.fromSource = fromSource;    
   }
   
-  private AsyncXulLoader(String source, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback, boolean fromSource){
-    this(source, bundle, container, callback);
-    this.fromSource = true;    
+  private AsyncXulLoader(String source, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback, boolean loadOverlay, boolean fromSource){
+    this(source, bundle, callback, fromSource);
+    this.container = container;
+    if(loadOverlay) {
+      this.loadingOverlay = true;  
+    } else  {
+      this.removingOverlay = true;
+    }
   }
   
   private void init(){
@@ -95,9 +104,12 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
   }
   
   public void bundleLoaded(String bundleName) {
+    
     if(fromSource){   //already given Xul source
       if(loadingOverlay){
         loadOverlay(xulSrc);
+      } if(removingOverlay) {
+        removeOverlay(xulSrc);
       } else {
         generateXulContainer(xulSrc);
       }
@@ -117,6 +129,8 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
           public void onResponseReceived(Request request, Response response) {
             if(AsyncXulLoader.this.loadingOverlay){
               loadOverlay(response.getText());
+            } else if(AsyncXulLoader.this.removingOverlay) {
+              removeOverlay(response.getText());
             } else {
               generateXulContainer(response.getText());
             }
@@ -129,6 +143,18 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
       Window.alert("error loading bundle: "+e.getMessage());    //$NON-NLS-1$
       e.printStackTrace();
     }
+  }
+  
+  private void removeOverlay(String xulStr) {
+    com.google.gwt.xml.client.Document gwtDoc = XMLParser.parse(xulStr);
+    try{
+      this.container.removeOverlay(gwtDoc);
+      callback.overlayRemoved();
+    } catch(XulException e){
+      Window.alert("Error loading XUL Overlay: "+e.getMessage());    //$NON-NLS-1$
+      e.printStackTrace();
+    }
+    
   }
   
   private void loadOverlay(String xulStr){
