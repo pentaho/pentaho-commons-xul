@@ -20,7 +20,7 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
 
   private MessageBundle messageBundle;
   
-  private String xulLocation;
+  private String xulSrc;
   
   private String bundle;
   
@@ -28,31 +28,52 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
   
   private boolean loadingOverlay = false;
   
+  private boolean fromSource = false;
+  
   private GwtXulDomContainer container;
   
-  public static void loadXul(String location, String bundle, IXulLoaderCallback callback){
-    new AsyncXulLoader(location, bundle, callback);
+  public static void loadXulFromUrl(String location, String bundle, IXulLoaderCallback callback){
+    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, callback);
+    loader.init();
+    
   }
   
-  public static void loadOverlay(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
-    new AsyncXulLoader(location, bundle, container, callback);
+  public static void loadOverlayFromUrl(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
+    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback);
+    loader.init();
+  }
+
+  public static void loadXulFromSource(String source, String bundle, IXulLoaderCallback callback){
+    AsyncXulLoader loader = new AsyncXulLoader(source, bundle, callback, true);
+    loader.init();
+  }
+  
+  public static void loadOverlayFromSource(String source, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
+    AsyncXulLoader loader = new AsyncXulLoader(source, bundle, container, callback, true);
+    loader.init();
   }
   
   private AsyncXulLoader(String location, String bundle, IXulLoaderCallback callback){
-    xulLocation = location;
+    xulSrc = location;
     this.callback = callback;
     this.bundle = bundle;
     
-    init();
   }
   
   private AsyncXulLoader(String location, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback){
-    xulLocation = location;
-    this.callback = callback;
-    this.bundle = bundle;
+    this(location, bundle, callback);
     this.container = container;
     this.loadingOverlay = true;
-    init();
+  }
+  
+  private AsyncXulLoader(String source, String bundle, IXulLoaderCallback callback, boolean fromSource){
+    this(source, bundle, callback);
+    this.fromSource = true;    
+  }
+  
+  private AsyncXulLoader(String source, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback, boolean fromSource){
+    this(source, bundle, container, callback);
+    this.fromSource = true;    
   }
   
   private void init(){
@@ -74,8 +95,18 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
   }
   
   public void bundleLoaded(String bundleName) {
+    if(fromSource){   //already given Xul source
+      if(loadingOverlay){
+        loadOverlay(xulSrc);
+      } else {
+        generateXulContainer(xulSrc);
+      }
+      return;
+    }
+    
+    //Load XUL source from server
     try {
-      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, xulLocation);    //$NON-NLS-1$
+      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, xulSrc);    //$NON-NLS-1$
 
       try {
         Request response = builder.sendRequest(null, new RequestCallback() {
