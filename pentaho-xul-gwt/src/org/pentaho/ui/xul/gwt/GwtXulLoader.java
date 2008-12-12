@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.gwt.tags.GwtButton;
 import org.pentaho.ui.xul.gwt.tags.GwtCaption;
 import org.pentaho.ui.xul.gwt.tags.GwtCheckbox;
 import org.pentaho.ui.xul.gwt.tags.GwtDeck;
+import org.pentaho.ui.xul.gwt.tags.GwtDialog;
 import org.pentaho.ui.xul.gwt.tags.GwtGroupBox;
 import org.pentaho.ui.xul.gwt.tags.GwtHbox;
 import org.pentaho.ui.xul.gwt.tags.GwtLabel;
@@ -95,6 +96,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     GwtTreeRow.register();
     GwtTreeRow.register();
     GwtTreeCell.register();
+    GwtDialog.register();
       
   }
   

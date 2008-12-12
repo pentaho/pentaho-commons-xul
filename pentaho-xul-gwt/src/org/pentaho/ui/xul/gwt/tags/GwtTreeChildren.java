@@ -92,6 +92,9 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
     for (Element element : getChildNodes()) {
       removeChild(element);
     }
+    if (getTree() != null) {
+      ((GwtTree)getTree()).updateUI();
+    }
   }
   
 }

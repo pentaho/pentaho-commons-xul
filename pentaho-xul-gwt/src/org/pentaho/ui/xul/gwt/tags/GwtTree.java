@@ -1,19 +1,27 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 
 import org.pentaho.gwt.widgets.client.table.BaseTable;
+import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+
+import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
+import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
+import com.google.gwt.widgetideas.table.client.TableSelectionListener;
+import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
@@ -33,6 +41,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     super("tree");
   }
   
+  public void init(com.google.gwt.xml.client.Element srcEle) {
+    super.init(srcEle);
+    setOnselect(srcEle.getAttribute("onselect"));
+    setOnedit(srcEle.getAttribute("onedit"));
+    setSeltype(srcEle.getAttribute("seltype"));
+  }
+  
   public void addChild(Element element) {
     super.addChild(element);
     if (element.getName().equals("treecols")) {
@@ -48,7 +63,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       this.rootChildren.addItem(item);
       
       // update UI
-      populate();
+      updateUI();
   }
   
   // need to handle layouting
@@ -64,14 +79,44 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
     // use base table from pentaho widgets library for now
     
-    BaseTable table = new BaseTable(cols, len);
-    managedObject = table;
+    SelectionPolicy policy = SelectionPolicy.DISABLED;
+    if ("single".equals(getSeltype())) {
+      policy = SelectionPolicy.ONE_ROW;
+    } else if ("multiple".equals(getSeltype())) {
+      policy = SelectionPolicy.MULTI_ROW;
+    }
     
-    populate();
+    BaseTable table = new BaseTable(cols, null, new BaseColumnComparator[cols.length], policy);
+    table.addTableSelectionListener(new TableSelectionListener() {
+      public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
+      }
+      public void onCellHover(SourceTableSelectionEvents sender, int row, int cell) {
+      }
+      public void onCellUnhover(SourceTableSelectionEvents sender, int row, int cell) {
+      }
+      public void onRowDeselected(SourceTableSelectionEvents sender, int row) {
+      }
+      public void onRowHover(SourceTableSelectionEvents sender, int row) {
+      }
+      public void onRowUnhover(SourceTableSelectionEvents sender, int row) {
+      }
+      public void onRowsSelected(SourceTableSelectionEvents sender, int firstRow, int numRows) {
+        try {
+          if (getOnselect() != null && getOnselect().trim().length() > 0) {
+            getXulDomContainer().invoke(getOnselect(), new Object[]{});
+          }
+        } catch (XulException e) {
+          e.printStackTrace();
+        }
+      }
+    });
+    managedObject = table;
+    updateUI();
   }
   
-  private void populate() {
+  public void updateUI() {
     BaseTable table = (BaseTable)managedObject;
+    
     Object data[][] = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
     
     for (int i = 0; i < getRootChildren().getItemCount(); i++) {
@@ -79,7 +124,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         data[i][j] = getRootChildren().getItem(i).getRow().getCell(j).getLabel();
       }
     }
+    if (getHeight() != 0) {
+      table.setTableHeight(getHeight() + "px");
+    }
     table.populateTable(data);
+    ResizableWidgetCollection.get().setResizeCheckingEnabled(false);
+  }
+  
+  public void afterLayout() {
+    updateUI();
   }
 
   public void clearSelection() {
@@ -107,13 +160,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public String getOnedit() {
-    // TODO Auto-generated method stub
-    return null;
+    return getAttributeValue("onedit");
   }
 
   public String getOnselect() {
-    // TODO Auto-generated method stub
-    return null;
+    return getAttributeValue("onselect");
   }
 
   public XulTreeChildren getRootChildren() {
@@ -121,17 +172,40 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public int getRows() {
-    return rootChildren.getItemCount();
+    if (rootChildren == null) {
+      return 0;
+    } else {
+      return rootChildren.getItemCount();
+    }
   }
 
   public int[] getSelectedRows() {
-    // TODO Auto-generated method stub
-    return null;
+    BaseTable table = (BaseTable)managedObject;
+    if (table == null) {
+      return new int[0];
+    }
+    Set<Integer> rows = table.getSelectedRows();
+    int rarr[] = new int[rows.size()];
+    int i = 0;
+    for (Integer v : rows) {
+      rarr[i++] = v;
+    }
+    return rarr;
+  }
+  
+  public void setSelectedRows(int[] rows) {
+    BaseTable table = (BaseTable)managedObject;
+    if (table == null) {
+      // this only works after the table has been materialized
+      return;
+    }
+    for (int r : rows) {
+      table.selectRow(r);
+    }
   }
 
   public String getSeltype() {
-    // TODO Auto-generated method stub
-    return null;
+    return getAttributeValue("seltype");
   }
 
   public Object[][] getValues() {
@@ -155,8 +229,21 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void removeTreeRows(int[] rows) {
-    // TODO Auto-generated method stub
+    // sort the rows high to low
+    ArrayList<Integer> rowArray = new ArrayList<Integer>();
+    for (int i = 0; i < rows.length; i++) {
+      rowArray.add(rows[i]);
+    }   
+    Collections.sort(rowArray, Collections.reverseOrder());
     
+    // remove the items in that order
+    for (int i = 0; i < rowArray.size(); i++) {
+      int item = rowArray.get(i);
+      if (item >= 0 && item < rootChildren.getItemCount()) {
+        this.rootChildren.removeItem(item);
+      }
+    }
+    updateUI();
   }
 
   public void setActiveCellCoordinates(int row, int column) {
@@ -192,13 +279,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void setOnedit(String onedit) {
-    // TODO Auto-generated method stub
-    
+    this.setAttribute("onedit", onedit);
   }
 
   public void setOnselect(String select) {
-    // TODO Auto-generated method stub
-    
+    this.setAttribute("onselect", select);
   }
 
   public void setRootChildren(XulTreeChildren rootChildren) {
@@ -213,14 +298,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
   }
 
-  public void setSelectedRows(int[] rows) {
-    // TODO Auto-generated method stub
-    
-  }
+
 
   public void setSeltype(String type) {
     // TODO Auto-generated method stub
-    
+    // SINGLE, CELL, MULTIPLE, NONE
+    this.setAttribute("seltype", type);
   }
 
   public void update() {

@@ -73,6 +73,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
         try{
           GwtToolbarbutton.this.getXulDomContainer().invoke(method, new Object[]{});
         } catch(XulException e){
+          e.printStackTrace();
         }
       }
     });
