@@ -7,10 +7,12 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSourceAdapter;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.gwt.tags.GwtScript;
+import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -118,6 +120,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
   
   public void layout(){
+    if(this instanceof XulContainer == false){
+      //Core version of parser doesn't call layout unless the node is a container...
+      return;
+    }
     double totalFlex = 0.0;
     
     for(XulComponent comp : this.getChildNodes()) {
@@ -137,6 +143,34 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     System.out.println("ORIENTATION of " + getId() + " (" + getName() + ") : " + this.getOrientation());
     
     List<XulComponent> nodes = this.getChildNodes();
+    
+
+    XulContainer thisContainer = (XulContainer) this;
+    
+
+    if(!flexLayout && thisContainer.getAlign() != null){
+      SimplePanel fillerPanel = new SimplePanel();
+      switch(thisContainer.getAlign()){
+        case END:
+          container.add(fillerPanel);
+          if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
+            ((VerticalPanel) container).setCellHeight(fillerPanel, "100%");
+          } else {
+            ((HorizontalPanel) container).setCellWidth(fillerPanel, "100%");
+          }
+          break;
+        case CENTER:
+          container.add(fillerPanel);
+          
+          if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
+            ((VerticalPanel) container).setCellHeight(fillerPanel, "50%");
+          } else {
+            ((HorizontalPanel) container).setCellWidth(fillerPanel, "50%");
+          }
+          break;
+      } 
+    }
+    
     for(int i=0; i<children.size(); i++){
       XulComponent comp = nodes.get(i);
     
@@ -168,18 +202,34 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       }
       
       if (i + 1 == children.size() && !flexLayout) {
-        SimplePanel fillerPanel = new SimplePanel();
-        container.add(fillerPanel);
         
-        if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
-          ((VerticalPanel) container).setCellHeight(fillerPanel, "100%");
-        } else {
-          ((HorizontalPanel) container).setCellWidth(fillerPanel, "100%");
-        }
-
       }
     }
-   
+    if(!flexLayout && thisContainer.getAlign() != null){
+      SimplePanel fillerPanel = new SimplePanel();
+      switch(thisContainer.getAlign()){
+        case START:
+          container.add(fillerPanel);
+          if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
+            ((VerticalPanel) container).setCellHeight(fillerPanel, "100%");
+          } else {
+            ((HorizontalPanel) container).setCellWidth(fillerPanel, "100%");
+          }
+          break;
+        case CENTER:
+          container.add(fillerPanel);
+          
+          if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
+            ((VerticalPanel) container).setCellHeight(fillerPanel, "50%");
+          } else {
+            ((HorizontalPanel) container).setCellWidth(fillerPanel, "50%");
+          }
+          break;
+        case END:
+         break;
+      } 
+    }
+    
   }
   
   public Orient getOrientation(){
