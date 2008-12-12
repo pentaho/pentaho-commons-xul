@@ -4,9 +4,9 @@
       <!-- Inherit the core Web Toolkit stuff.                        -->
       <inherits name='com.google.gwt.user.User'/>
       <inherits name='com.googlecode.gwtx.Java'/> 
+      <!-- import xul source, excluding anything that isn't part of the pentaho-xul API -->
       <source path="xul">
         <include name="*.java"/>
-<!--        <exclude name="XulLoader.java"/>-->
         <include name="**/components/*"/>
         <include name="**/containers/*"/>
         <include name="**/binding/Binding.java"/>
