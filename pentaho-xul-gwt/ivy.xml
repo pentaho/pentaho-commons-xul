@@ -28,9 +28,15 @@
         <dependency org="com.google.gwt" name="gwt-dev"  rev="1.5.2" m:classifier="linux"    conf="default->default"/>
         <dependency org="com.google.code.gwtx" name="gwtx" rev="1.5-20081002"/>
                 
-        <dependency org="pentaho" name="pentaho-gwt-widgets" rev="${dependency.pentaho-gwt-widgets.revision}" changing="true"/>
-    	<dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" changing="true" />
-
+        <dependency org="pentaho" name="pentaho-gwt-widgets" rev="${dependency.pentaho-gwt-widgets.revision}" conf="default->default" changing="true">
+          <artifact name="pentaho-gwt-widgets"/>
+          <artifact name="pentaho-gwt-widgets" type="source" ext="jar" m:classifier="sources"/>
+        </dependency>
+        
+        <dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" conf="default->default" changing="true">
+          <artifact name="pentaho-xul-core"/>
+          <artifact name="pentaho-xul-core" type="source" ext="jar" m:classifier="sources"/>
+        </dependency>
         
         <!--  Testing dependencies -->
         <dependency org="junit"          name="junit"          rev="4.4"   conf="test->default"/>
