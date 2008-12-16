@@ -18,6 +18,7 @@
         <exclude name="**/dom/DocumentFactory*"/>
         <include name="**/impl/XulEventHandler*"/>
         <include name="**/impl/AbstractXulEventHandler*"/>
+        <include name="**/impl/DefaultXulOverlay*"/>
         <include name="**/util/ColumnType*"/>
         <include name="**/util/Orient*"/>
         <include name="**/util/Align*"/>
