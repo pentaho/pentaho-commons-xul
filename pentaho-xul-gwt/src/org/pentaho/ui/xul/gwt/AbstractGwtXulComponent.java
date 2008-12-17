@@ -187,6 +187,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         component.setWidth("100%");
         
         int componentFlex = comp.getFlex();
+        if(componentFlex == 0){
+          continue;
+        }
         String percentage = Math.round((componentFlex/totalFlex) *100)+"%";
         if(this.getOrientation() == Orient.VERTICAL){ //VBox
           ((VerticalPanel) container).setCellHeight(component, percentage);

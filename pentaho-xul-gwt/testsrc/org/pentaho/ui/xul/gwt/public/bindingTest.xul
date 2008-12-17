@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window width="400" height="275" title="Testing..." onload="controller.init()">
+  <hbox>
+    <label value="Model name is: " flex="1"/>
+    <label id="testLabel" flex="2"/>
+  </hbox>
+  <hbox>
+    <label value="Enter name: " flex="1"/>
+    <textbox id="nameTextbox" flex="2"/>
+  </hbox>
+  <button label="click me" onclick="controller.click()"/>
+ 
+</window>

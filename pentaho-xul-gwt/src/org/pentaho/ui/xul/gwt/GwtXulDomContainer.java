@@ -2,7 +2,6 @@ package org.pentaho.ui.xul.gwt;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulComponent;
@@ -12,8 +11,10 @@ import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 
@@ -24,6 +25,11 @@ public class GwtXulDomContainer implements XulDomContainer {
   Map<XulEventHandler, EventHandlerWrapper> handlerWrapers = new HashMap<XulEventHandler, EventHandlerWrapper>();
   GwtXulLoader loader;
   
+  protected GwtBindingContext bindings;
+  
+  public GwtXulDomContainer(){
+    bindings = new GwtBindingContext();
+  }
   
   public void addDocument(Document document) {
     this.document = document;
@@ -315,7 +321,8 @@ public class GwtXulDomContainer implements XulDomContainer {
   }
 
   public void addBinding(Binding binding) {
-    // TODO Auto-generated method stub
+
+    bindings.add(binding);
     
   }
 

@@ -60,12 +60,12 @@ public class GwtDomDocument extends GwtDomElement implements Document {
   }
 
   public void addBinding(Binding bind) {
-    throw new RuntimeException("not yet implemented");
+    ((GwtXulDomContainer) this.container).addBinding(bind);
     
   }
 
   public void addInitializedBinding(Binding b) {
-    throw new RuntimeException("not yet implemented");
+    ((GwtXulDomContainer) this.container).addBinding(b);
     
   }
 }
