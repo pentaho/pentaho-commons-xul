@@ -38,7 +38,10 @@ public class GwtXulRunner { // implements XulRunner {
     System.out.println("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
-      containers.get(0).invoke(rootEle.getOnload(), new Object[]{});
+      String onloads[] = onLoad.split(",");
+      for (String ol : onloads) {
+        containers.get(0).invoke(ol.trim(), new Object[]{});
+      }
     }
     
     if(rootEle instanceof GwtWindow){
