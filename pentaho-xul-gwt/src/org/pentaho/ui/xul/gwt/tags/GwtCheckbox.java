@@ -40,6 +40,7 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     setLabel(srcEle.getAttribute("label"));
     setChecked("true".equals(srcEle.getAttribute("checked")));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
+    setCommand(srcEle.getAttribute("command"));
   }
   
   /* (non-Javadoc)
