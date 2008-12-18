@@ -97,10 +97,11 @@ public class EventHandlerGenerator extends Generator {
       
       for(JMethod m : classType.getMethods()){
         String methodName = m.getName();
-//        boolean isEventMethod = (m.getAnnotation(EventMethod.class) != null);
-//        if(!isEventMethod){
-//          continue;
-//        }
+
+        if(!m.isPublic()){
+          continue;
+        }
+        
         sourceWriter.println("if(method.equals(\""+methodName+"\")){");
         sourceWriter.indent();
         
