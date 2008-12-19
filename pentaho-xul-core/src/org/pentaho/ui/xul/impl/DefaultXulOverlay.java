@@ -24,11 +24,15 @@ public class DefaultXulOverlay implements XulOverlay {
     return overlayUri;
   }
 
-  public String getSource() {
-    return source;
+  public String getOverlayXml() {
+    return getSource();
   }
 
   public String getResourceBundleUri() {
     return resourceBundleUri;
+  }
+
+  public String getSource() {
+    return source;
   }
 }

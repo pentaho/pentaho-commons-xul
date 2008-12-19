@@ -22,6 +22,8 @@ public interface XulOverlay {
    * @return Overlay XML
    */
   public String getSource();
+  @Deprecated //use getSource
+  public String getOverlayXml();
   
   
   /**
