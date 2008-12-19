@@ -49,12 +49,17 @@ public class GwtOverlay extends AbstractGwtXulContainer implements XulOverlay{
     //No layout required
   }
 
-    public String getOverlayUri() {
+  public String getOverlayUri() {
     // TODO Auto-generated method stub
     return null;
   }
 
   public String getResourceBundleUri() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public String getOverlayXml() {
     // TODO Auto-generated method stub
     return null;
   }
