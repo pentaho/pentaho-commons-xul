@@ -6,6 +6,7 @@ package org.pentaho.ui.xul.gwt;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
@@ -34,6 +35,10 @@ public class GwtXulRunner { // implements XulRunner {
    */
   public void initialize() throws XulException{
     //get first Element, should be a JFrame and show it.
+    XulComponent c = containers.get(0).getDocumentRoot().getRootElement();
+    if(c instanceof XulWindow == false){
+      return;
+    }
     XulWindow rootEle = (XulWindow) containers.get(0).getDocumentRoot().getRootElement();
     System.out.println("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();

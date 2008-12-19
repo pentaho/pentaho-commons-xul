@@ -111,10 +111,10 @@ public class GwtXulDomContainer implements XulDomContainer {
 
 
   private Object[] getArgs(String methodCall){
-    if(methodCall.indexOf("()") > -1){
+    if(methodCall.endsWith("()")){
       return null;
     }
-    String argsList = methodCall.substring(methodCall.indexOf("(")+1, methodCall.indexOf(")"));
+    String argsList = methodCall.substring(methodCall.indexOf("(")+1, methodCall.lastIndexOf(")"));
     String[] stringArgs = argsList.split(",");
     Object[] args = new Object[ stringArgs.length ];
     int i=-1;
@@ -246,6 +246,10 @@ public class GwtXulDomContainer implements XulDomContainer {
             String insertAfter = overlayChild.getInsertafter();
             
             XulContainer sourceContainer = ((XulContainer) sourceDocumentNodeMatch);
+            
+            
+            //change Components document reference.
+            ((AbstractGwtXulComponent) overlayChild).setXulDomContainer(this);
             
             if(position > -1){
               sourceContainer.addChildAt(overlayChild, position);

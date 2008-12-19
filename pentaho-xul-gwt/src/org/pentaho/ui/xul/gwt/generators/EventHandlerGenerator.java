@@ -116,6 +116,7 @@ public class EventHandlerGenerator extends Generator {
             firstParam = false;
           }
           sourceWriter.print("("+boxPrimative(param.getType())+") args["+argPos+"]");
+          argPos++;
         }
         sourceWriter.print(");");
         //end method call

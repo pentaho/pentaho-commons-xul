@@ -108,7 +108,7 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
     if(fromSource){   //already given Xul source
       if(loadingOverlay){
         loadOverlay(xulSrc);
-      } if(removingOverlay) {
+      } else if(removingOverlay) {
         removeOverlay(xulSrc);
       } else {
         generateXulContainer(xulSrc);
