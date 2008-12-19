@@ -152,7 +152,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   }
 
   public void setType(String type) {
-   
+    this.type = type;
   }
 
   @Override
