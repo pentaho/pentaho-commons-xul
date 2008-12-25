@@ -5,6 +5,7 @@
     
     <configurations>
     	<conf name="default"/>
+        <conf name="source"/>
     	<conf name="test" visibility="private"/>
     </configurations>
  
