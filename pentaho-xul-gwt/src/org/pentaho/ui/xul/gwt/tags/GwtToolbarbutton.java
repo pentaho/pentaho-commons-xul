@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,7 +20,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   private ToolbarButton button;
 
-  private String dir, group, image, onclick, tooltip, disabledImage, type;
+  private String dir, group, image, onclick, tooltip, disabledImage, type, downimage, downimagedisabled;
   
   public GwtToolbarbutton(){
     super("toolbarbutton");
@@ -39,9 +40,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     setType(srcEle.getAttribute("type"));
 
     if(this.type != null && this.type.equals("toggle")){
-      button = new ToolbarButton(new Image());
-    } else {
       button = new ToolbarToggleButton(new Image());
+    } else {
+      button = new ToolbarButton(new Image());
     };
     managedObject = button;
     
@@ -51,6 +52,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     setTooltiptext(srcEle.getAttribute("tooltiptext"));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setDisabledImage(srcEle.getAttribute("disabledimage"));
+    setDownimage(srcEle.getAttribute("downimage"));
   }
   
   
@@ -143,10 +145,17 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   }
 
   public void setSelected(boolean selected) {
-    if(button instanceof ToolbarButton){
-      //not sure what to do here
-    } else if(button instanceof ToolbarToggleButton){
+    if(button instanceof ToolbarToggleButton){
       ((ToolbarToggleButton) button).setSelected(selected,true);
+    } else if(button instanceof ToolbarButton){
+    }
+    
+  }
+  
+  public void setSelected(boolean selected, boolean fireEvent) {
+    if(button instanceof ToolbarToggleButton){
+      ((ToolbarToggleButton) button).setSelected(selected,fireEvent);
+    } else if(button instanceof ToolbarButton){
     }
     
   }
@@ -180,6 +189,28 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     }
     
     
+  }
+
+  public String getDownimage() {
+    return this.downimage;
+  }
+
+  public String getDownimagedisabled() {
+    return this.downimagedisabled;  
+  }
+
+  public void setDownimage(String img) {
+    this.downimage = img;
+    if(img != null && img.length() > 0){
+      button.setDownImage(new Image(img));
+    }
+  }
+
+  public void setDownimagedisabled(String img) {
+    this.downimagedisabled = img;
+    if(img != null && img.length() > 0){
+      button.setDownImageDisabled(new Image(img));
+    }
   }
   
   

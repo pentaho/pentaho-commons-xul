@@ -218,6 +218,11 @@ public class GwtBinding implements Binding{
     //find set method
     final GwtBindingMethod targetSetMethod = GwtBindingContext.typeController.findSetMethod(b, vb);
 
+    if(targetSetMethod == null){
+      throw new BindingException("Error finding setter method [" + vb + "] on target: "+b);
+      
+    }
+    
     //setup prop change listener to handle binding
     PropertyChangeListener listener = new PropertyChangeListener() {
       public void propertyChange(final PropertyChangeEvent evt) {
