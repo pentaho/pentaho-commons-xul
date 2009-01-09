@@ -558,6 +558,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         Attribute atr = (Attribute) o;
         try{
           BeanUtils.setProperty(sourceElement, atr.getName(), atr.getValue());
+          sourceElement.setAttribute(atr.getName(), atr.getValue());
         } catch(InvocationTargetException e){
           logger.error(e);
         } catch(IllegalAccessException e){
