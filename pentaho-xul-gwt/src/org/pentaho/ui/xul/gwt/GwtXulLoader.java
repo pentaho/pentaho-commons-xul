@@ -120,7 +120,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
   public GwtXulDomContainer loadXul(Object xulDocument, Object bundle) throws IllegalArgumentException, XulException{
     Document document = (Document)xulDocument;
     String translated = ResourceBundleTranslator.translate(xulDocument.toString(), (MessageBundle)bundle);
-    xulDocument = XMLParser.parse(translated);
+    document = XMLParser.parse(translated);
     
     GwtXulDomContainer container = new GwtXulDomContainer();
     container.setLoader(this);
