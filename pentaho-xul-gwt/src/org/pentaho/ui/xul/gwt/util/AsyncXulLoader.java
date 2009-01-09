@@ -91,7 +91,7 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
 
     //we have to separate the folder from the base name
     if(bundle.indexOf("/") > -1){
-      folder = bundle.substring(0, folder.lastIndexOf("/")+1);
+      folder = bundle.substring(0, bundle.lastIndexOf("/")+1);
       baseName = bundle.substring(bundle.lastIndexOf("/")+1);
     }
     
