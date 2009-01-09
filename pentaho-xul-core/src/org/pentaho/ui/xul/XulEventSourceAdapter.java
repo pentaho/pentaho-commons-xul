@@ -3,7 +3,9 @@ package org.pentaho.ui.xul;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-
+/**
+ * Basic PropertyChangeSupport for use in XulEventSource Binding classes
+ */
 public class XulEventSourceAdapter implements XulEventSource{
 
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
