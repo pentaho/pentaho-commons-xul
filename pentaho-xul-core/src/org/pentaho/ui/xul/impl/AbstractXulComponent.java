@@ -60,6 +60,8 @@ public abstract class AbstractXulComponent implements XulComponent {
   
   protected int position = -1;
   
+  protected boolean visible;
+  
   public AbstractXulComponent(Element element) {
     this.element = element;
     children = new ArrayList<XulComponent>();
@@ -323,4 +325,10 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.removeElement = flag;
   }
 
+  public boolean isVisible(){
+    return this.visible;
+  }
+  public void setVisible(boolean visible){
+    this.visible = visible;
+  }
 }

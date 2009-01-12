@@ -160,4 +160,7 @@ public interface XulComponent extends Element, XulEventSource {
   
   public boolean getRemoveelement();
   public void setRemoveelement(boolean flag);
+
+  public boolean isVisible();
+  public void setVisible(boolean visible);
 }
