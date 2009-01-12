@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
@@ -34,8 +35,8 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     managedObject = container = new HorizontalPanel();
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setAlign(srcEle.getAttribute("align"));
   }
   

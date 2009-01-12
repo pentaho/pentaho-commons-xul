@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulOverlay;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
@@ -22,8 +23,8 @@ public class GwtOverlay extends AbstractGwtXulContainer implements XulOverlay{
   public GwtOverlay(){
     super("overlay");
   }
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-   super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+   super.init(srcEle, container);
   }
   
   public String getSrc() {

@@ -162,6 +162,7 @@ public class TypeControllerGenerator extends Generator {
 
           sourceWriter.println("public Object invoke(Object obj, Object[] args) throws XulException { ");
           sourceWriter.indent();
+          sourceWriter.println("try{");
           sourceWriter.println(type.getQualifiedSourceName()+" target = ("+type.getQualifiedSourceName()+") obj;");
           
           JParameter[] params = m.getParameters();
@@ -181,7 +182,10 @@ public class TypeControllerGenerator extends Generator {
           } else {
             sourceWriter.println("return "+boxReturnType(m)+" target."+methodName+"("+argList+");");
           }
+
+          sourceWriter.println("}catch(Exception e){ throw new XulException(\"error with "+type.getQualifiedSourceName()+"\"+e.getMessage());}");
           sourceWriter.println("}");
+
           sourceWriter.outdent();
           sourceWriter.println("});");
           

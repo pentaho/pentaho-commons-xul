@@ -179,7 +179,7 @@ public class GwtBinding implements Binding{
 
   public void fireSourceChanged() throws IllegalArgumentException, XulException, InvocationTargetException {
     try{
-      Object getRetVal = sourceGetterMethod.invoke(target, new Object[]{getSource()});
+      Object getRetVal = sourceGetterMethod.invoke(source, new Object[]{});
       forwardListener.propertyChange(new PropertyChangeEvent(getSource(), getSourceAttr(), null, getRetVal));
     } catch(Exception e){
       //TODO: re-implement IllegalAccessException.

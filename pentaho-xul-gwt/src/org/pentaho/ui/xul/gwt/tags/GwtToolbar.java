@@ -16,6 +16,8 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
+import com.google.gwt.user.client.ui.Panel;
+
 public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
   private String toolbarName;
   private ToolbarMode mode = ToolbarMode.ICONS;
@@ -73,7 +75,7 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
     } else if(c instanceof XulToolbarspring){
       toolbar.add(Toolbar.GLUE);
     } else if(c instanceof XulToolbarspacer){
-      toolbar.addSpacer(((XulToolbarspacer) c).getWidth());
+      toolbar.add((Panel) c.getManagedObject());
     }
   }
 

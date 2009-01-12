@@ -1,8 +1,10 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.dom.Element;
@@ -13,6 +15,8 @@ import org.pentaho.ui.xul.util.ColumnType;
 
 public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
+  private String binding;
+  
   public static void register() {
     GwtXulParser.registerHandler("treecol", 
     new GwtXulHandler() {
@@ -26,9 +30,10 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     super("treecol");
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
+    setBinding(srcEle.getAttribute("pen:binding"));
   }
   
   public void autoSize() {
@@ -37,8 +42,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public String getBinding() {
-    // TODO Auto-generated method stub
-    return null;
+    return binding;
   }
 
   public String getCustomeditor() {
@@ -91,8 +95,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public void setBinding(String binding) {
-    // TODO Auto-generated method stub
-    
+    this.binding = binding;
   }
 
   public void setCustomeditor(String customClass) {
@@ -150,8 +153,14 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public List<InlineBindingExpression> getBindingExpressions() {
-    // TODO Auto-generated method stub
-    return null;
+    List<InlineBindingExpression> exps = new ArrayList<InlineBindingExpression>();
+    if(binding == null){
+      return exps;
+    }
+    for (String bindingExpText : binding.split(",")) {
+      exps.add(new InlineBindingExpression(bindingExpText.trim()));
+    }
+    return exps;
   }
 
   public ColumnType getColumnType() {

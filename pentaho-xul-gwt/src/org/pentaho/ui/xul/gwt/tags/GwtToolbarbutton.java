@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.gwt.tags;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarToggleButton;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulToolbarbutton;
 import org.pentaho.ui.xul.dom.Element;
@@ -15,6 +16,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.NamedNodeMap;
+import com.google.gwt.xml.client.Node;
 
 public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulToolbarbutton{
 
@@ -35,8 +38,8 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     });
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setType(srcEle.getAttribute("type"));
 
     if(this.type != null && this.type.equals("toggle")){
@@ -53,6 +56,11 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setDisabledImage(srcEle.getAttribute("disabledimage"));
     setDownimage(srcEle.getAttribute("downimage"));
+    String vis = srcEle.getAttribute("pen:visible");
+    if(vis != null && !vis.equals("")){
+      setVisible("true".equals(vis));
+    }
+    
   }
   
   
@@ -187,6 +195,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     if(component.getAttributeValue("tooltiptext") != null){
       setTooltiptext(component.getAttributeValue("tooltiptext"));
     }
+    if(component.getAttributeValue("pen:visible") != null){
+      setVisible("true".equals(component.getAttributeValue("pen:visible")));
+    }
     
     
   }
@@ -212,7 +223,12 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
       button.setDownImageDisabled(new Image(img));
     }
   }
-  
+
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+    button.setVisible(visible);
+  }
   
 }
 

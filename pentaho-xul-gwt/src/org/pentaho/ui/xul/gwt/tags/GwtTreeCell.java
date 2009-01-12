@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
@@ -23,8 +24,8 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     super("treecell");
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
     setValue(srcEle.getAttribute("value"));
   }

@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulCheckbox;
 import org.pentaho.ui.xul.containers.XulWindow;
@@ -35,8 +36,8 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     managedObject = checkBox = new CheckBox();
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
     setChecked("true".equals(srcEle.getAttribute("checked")));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));

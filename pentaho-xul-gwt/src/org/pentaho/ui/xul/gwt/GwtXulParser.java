@@ -95,7 +95,7 @@ public class GwtXulParser {
     if (handler != null) {
       AbstractGwtXulComponent gxc = (AbstractGwtXulComponent)handler.newInstance();
       gxc.setXulDomContainer(xulDomContainer);
-      gxc.init(srcEle);
+      gxc.init(srcEle, xulDomContainer);
       return gxc;
     } else {
       System.out.println("Error: No Handler for type " + srcEle.getNodeName());

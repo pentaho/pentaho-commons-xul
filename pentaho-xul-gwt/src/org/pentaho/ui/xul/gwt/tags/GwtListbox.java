@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
@@ -45,8 +46,8 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     listBox.addChangeListener(this);
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setRows(2);
     if (srcEle.hasAttribute("rows") && srcEle.getAttribute("rows").trim().length() > 0) {
       try {

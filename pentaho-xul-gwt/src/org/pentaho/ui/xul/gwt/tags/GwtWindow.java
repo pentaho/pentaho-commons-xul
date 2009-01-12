@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
@@ -63,8 +64,8 @@ public class GwtWindow extends AbstractGwtXulContainer implements XulWindow {
   }
   
 
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     if (srcEle.hasAttribute("title") && srcEle.getAttribute("title").trim().length() > 0) {
       setTitle(srcEle.getAttribute("title"));
     }

@@ -247,33 +247,42 @@ public class GwtXulDomContainer implements XulDomContainer {
             
             XulContainer sourceContainer = ((XulContainer) sourceDocumentNodeMatch);
             
-            
-            //change Components document reference.
-            ((AbstractGwtXulComponent) overlayChild).setXulDomContainer(this);
-            
-            if(position > -1){
-              sourceContainer.addChildAt(overlayChild, position);
-            } else if(insertBefore != null){
-              XulComponent relativeTo = document.getElementById(insertBefore);
-              if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
-                int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
-                relativePos--;
-                Math.abs(relativePos);
-                sourceContainer.addChildAt(overlayChild, relativePos);
-              } else {
-                sourceContainer.addChild(overlayChild);
-              }
-            } else if(insertAfter != null){
-              XulComponent relativeTo = document.getElementById(insertAfter);
-              if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
-                int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
-                relativePos++;
-                sourceContainer.addChildAt(overlayChild, relativePos);
-              } else {
-                sourceContainer.addChild(overlayChild);
-              }
+            String id = overlayChild.getId();
+            XulComponent existingElement = null;
+            if(id != null && !id.equals("")){
+              existingElement = sourceContainer.getElementById(id);
+            }
+            if(existingElement != null){
+              existingElement.adoptAttributes(overlayChild);
             } else {
-              sourceContainer.addChild(overlayChild);
+            
+              //change Components document reference.
+              ((AbstractGwtXulComponent) overlayChild).setXulDomContainer(this);
+              
+              if(position > -1){
+                sourceContainer.addChildAt(overlayChild, position);
+              } else if(insertBefore != null){
+                XulComponent relativeTo = document.getElementById(insertBefore);
+                if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
+                  int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
+                  relativePos--;
+                  Math.abs(relativePos);
+                  sourceContainer.addChildAt(overlayChild, relativePos);
+                } else {
+                  sourceContainer.addChild(overlayChild);
+                }
+              } else if(insertAfter != null){
+                XulComponent relativeTo = document.getElementById(insertAfter);
+                if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
+                  int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
+                  relativePos++;
+                  sourceContainer.addChildAt(overlayChild, relativePos);
+                } else {
+                  sourceContainer.addChild(overlayChild);
+                }
+              } else {
+                sourceContainer.addChild(overlayChild);
+              }
             }
             
           }

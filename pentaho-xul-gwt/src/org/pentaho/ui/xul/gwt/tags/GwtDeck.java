@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
@@ -36,8 +37,8 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     managedObject = container = new DeckPanel();
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     if (srcEle.hasAttribute("selectedIndex") && srcEle.getAttribute("selectedIndex").trim().length() > 0) {
       try {
         setSelectedIndex(Integer.parseInt(srcEle.getAttribute("selectedIndex")));

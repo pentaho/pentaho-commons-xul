@@ -8,7 +8,12 @@ import java.util.Set;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
 import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.DefaultBinding;
+import org.pentaho.ui.xul.binding.InlineBindingExpression;
+import org.pentaho.ui.xul.components.XulTreeCell;
+import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
@@ -17,7 +22,9 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
 import com.google.gwt.widgetideas.table.client.TableSelectionListener;
@@ -36,16 +43,18 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
   XulTreeCols columns = null;
   XulTreeChildren rootChildren = null;
+  private XulDomContainer domContainer;
   
   public GwtTree() {
     super("tree");
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setOnselect(srcEle.getAttribute("onselect"));
     setOnedit(srcEle.getAttribute("onedit"));
     setSeltype(srcEle.getAttribute("seltype"));
+    this.domContainer = container;
   }
   
   public void addChild(Element element) {
@@ -65,6 +74,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       // update UI
       updateUI();
   }
+  private BaseTable table;
   
   // need to handle layouting
   public void layout() {
@@ -86,7 +96,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       policy = SelectionPolicy.MULTI_ROW;
     }
     
-    BaseTable table = new BaseTable(cols, null, new BaseColumnComparator[cols.length], policy);
+    table = new BaseTable(cols, null, new BaseColumnComparator[cols.length], policy);
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
       }
@@ -105,6 +115,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
           if (getOnselect() != null && getOnselect().trim().length() > 0) {
             getXulDomContainer().invoke(getOnselect(), new Object[]{});
           }
+          Integer[] selectedRows = table.getSelectedRows().toArray(new Integer[table.getSelectedRows().size()]);
+          //set.toArray(new Integer[]) doesn't unwrap ><
+          int[] rows = new int[selectedRows.length];
+          for(int i=0; i<selectedRows.length; i++){
+            rows[i] = selectedRows[i];
+          }
+          GwtTree.this.setSelectedRows(rows);
         } catch (XulException e) {
           e.printStackTrace();
         }
@@ -202,6 +219,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     for (int r : rows) {
       table.selectRow(r);
     }
+    this.changeSupport.firePropertyChange("selectedRows",null,rows);
   }
 
   public String getSeltype() {
@@ -269,7 +287,40 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public <T> void setElements(Collection<T> elements) {
-    // TODO Auto-generated method stub
+    this.getRootChildren().removeAll();
+    
+    
+    if(elements == null){
+      updateUI();
+      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
+      return;
+    }
+    try {
+      for (T o : elements) {
+        XulTreeRow row = this.getRootChildren().addNewRow();
+
+        for (XulComponent col : this.getColumns().getChildNodes()) {
+          XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+          for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
+        
+            GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+            domContainer.addBinding(binding);
+            binding.fireSourceChanged();
+          }
+
+          row.addCell(cell);
+        }
+
+      }
+      updateUI();
+      
+      //treat as a selection change
+      changeSupport.firePropertyChange("  ", null, getSelectedRows());
+    } catch (XulException e) {
+      Window.alert("error adding elements"+e);
+    } catch (Exception e) {
+      Window.alert("error adding elements"+e);
+    }
     
   }
 

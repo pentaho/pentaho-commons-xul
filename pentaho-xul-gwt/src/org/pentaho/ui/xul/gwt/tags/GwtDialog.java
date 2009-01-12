@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.dom.Element;
@@ -36,8 +37,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   // we don't add ourselves to the main screen
   public void layout() {}
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setButtons(srcEle.getAttribute("buttons"));
     setOndialogaccept(srcEle.getAttribute("ondialogaccept"));
     setOndialogcancel(srcEle.getAttribute("ondialogcancel"));

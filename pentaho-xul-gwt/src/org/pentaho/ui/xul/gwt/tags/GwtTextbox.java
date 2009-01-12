@@ -1,15 +1,20 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
+import com.google.gwt.user.client.ui.Widget;
 
 public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   
@@ -35,11 +40,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   public GwtTextbox() {
     super(ELEMENT_NAME);
     managedObject = textBox = new TextBox();
+
     // textBox.setPreferredSize(new Dimension(150,18));
   }
 
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setValue(srcEle.getAttribute("value"));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setMultiline("true".equals(srcEle.getAttribute("multiline")));
@@ -74,6 +80,21 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     } else {
       managedObject = textBox = new TextBox();
     }
+    setupListeners();
+  }
+  
+  private void setupListeners(){
+    textBox.addKeyboardListener(new KeyboardListener(){
+
+      public void onKeyDown(Widget arg0, char arg1, int arg2) {}
+
+      public void onKeyPress(Widget arg0, char arg1, int arg2) {}
+
+      public void onKeyUp(Widget arg0, char arg1, int arg2) {
+        GwtTextbox.this.changeSupport.firePropertyChange("value", "", textBox.getText());
+      }
+      
+    });
   }
 
   public int getMaxlength() {

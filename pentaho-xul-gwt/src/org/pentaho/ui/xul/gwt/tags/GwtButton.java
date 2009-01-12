@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulWindow;
@@ -35,8 +36,8 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     managedObject = button = new Button();
   }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
     setOnclick(srcEle.getAttribute("onclick"));
     setImage(srcEle.getAttribute("image"));

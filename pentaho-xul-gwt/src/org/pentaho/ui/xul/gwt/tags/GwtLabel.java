@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.gwt.tags;
 
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
@@ -30,8 +31,8 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     managedObject = label = new Label();
   }
 
-  public void init(com.google.gwt.xml.client.Element srcEle) {
-    super.init(srcEle);
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
     setValue(srcEle.getAttribute("value"));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
   }

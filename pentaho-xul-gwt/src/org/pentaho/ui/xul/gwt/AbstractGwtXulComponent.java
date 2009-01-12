@@ -4,15 +4,15 @@
 package org.pentaho.ui.xul.gwt;
 
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulEventSourceAdapter;
-import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.gwt.tags.GwtScript;
-import org.pentaho.ui.xul.util.Align;
+import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -20,12 +20,14 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.NamedNodeMap;
+import com.google.gwt.xml.client.Node;
 
 /**
  * @author OEM
  *
  */
-public abstract class AbstractGwtXulComponent extends GwtDomElement implements XulComponent {
+public abstract class AbstractGwtXulComponent extends GwtDomElement implements XulComponent, XulEventSource {
 
   protected XulDomContainer xulDomContainer;
   protected Panel container;
@@ -40,8 +42,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected String bgcolor, onblur, tooltiptext;
   protected int height, width, padding;
   protected boolean disabled, removeElement;
-  private XulEventSourceAdapter xulEventSourceAdapter = new XulEventSourceAdapter();
-
+  protected boolean visible = true;
+  protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+  
   
   public AbstractGwtXulComponent(String name) {
     super(name);
@@ -53,7 +56,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 //    children = new ArrayList<XulComponent>();
 //  }
   
-  public void init(com.google.gwt.xml.client.Element srcEle) {
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     if (srcEle.hasAttribute("id")) {
       setId(srcEle.getAttribute("id"));
     }
@@ -104,6 +107,15 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     if (srcEle.hasAttribute("removeelement") && srcEle.getAttribute("removeelement").trim().length() > 0) {
       setRemoveelement("true".equals(srcEle.getAttribute("removeelement")));
     }    
+    
+
+    NamedNodeMap attrs = srcEle.getAttributes();
+    for(int i=0; i<attrs.getLength(); i++){
+      Node n = attrs.item(i);
+      if(n != null){
+        this.setAttribute(n.getNodeName(), n.getNodeValue());
+      }
+    }
     
   }
   
@@ -183,8 +195,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         container.add(component);
       }
       if(flexLayout){
-        component.setHeight("100%");
-        component.setWidth("100%");
         
         int componentFlex = comp.getFlex();
         if(componentFlex == 0){
@@ -193,8 +203,18 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         String percentage = Math.round((componentFlex/totalFlex) *100)+"%";
         if(this.getOrientation() == Orient.VERTICAL){ //VBox
           ((VerticalPanel) container).setCellHeight(component, percentage);
+
+          component.setWidth("100%"); 
+          if(comp.getFlex() > 0){
+            component.setHeight("100%");
+          }
         } else {                                      //HBox 
           ((HorizontalPanel) container).setCellWidth(component, percentage);
+          
+          component.setHeight("100%");
+          if(comp.getFlex() > 0){
+            component.setWidth("100%"); 
+          }
         }
       } else {
         if(this.getOrientation() == Orient.VERTICAL){ //VBox
@@ -388,13 +408,32 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   
 
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    xulEventSourceAdapter.addPropertyChangeListener(listener);
-    
+    changeSupport.addPropertyChangeListener(listener);
+  }
+  
+  public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    changeSupport.addPropertyChangeListener(propertyName, listener);
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    xulEventSourceAdapter.removePropertyChangeListener(listener);
-    
+    changeSupport.removePropertyChangeListener(listener);
   }
+  
+  protected void firePropertyChange(String attr, Object previousVal, Object newVal){
+    if(previousVal == null && newVal == null){
+      return;
+    }
+    changeSupport.firePropertyChange(attr, previousVal, newVal);
+  }
+  
+  public boolean isVisible() {
+    return this.visible;
+  }
+
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+  }
+  
+  
   
 }
