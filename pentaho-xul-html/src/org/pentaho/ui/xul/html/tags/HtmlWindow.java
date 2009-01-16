@@ -27,8 +27,7 @@ public class HtmlWindow extends AbstractHtmlContainer implements XulWindow {
 	
 	  public HtmlWindow(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		    super( tagName );
-		    children = new ArrayList<XulComponent>();
-		    managedObject = children;
+		    managedObject = "window";
 		    this.domContainer = domContainer;
 	  }
 
@@ -39,7 +38,7 @@ public class HtmlWindow extends AbstractHtmlContainer implements XulWindow {
 		  .append( getId() )
 		  .append("\">\n"); //$NON-NLS-1$
 		  
-		  for( XulComponent component : children ) {
+		  for( Element component : getChildNodes()) {
 			  if( component instanceof IHtmlElement ) {
 				  ((IHtmlElement)component).getHtml(sb);
 			  }

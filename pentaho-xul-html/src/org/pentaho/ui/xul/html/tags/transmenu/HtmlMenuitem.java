@@ -20,8 +20,6 @@ public class HtmlMenuitem extends AbstractXulComponent implements XulMenuitem, I
 	public HtmlMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 	    super( tagName );
 
-	    children = new ArrayList<XulComponent>();
-
 	  }
 
 	public void getHtml( StringBuilder sb ) {

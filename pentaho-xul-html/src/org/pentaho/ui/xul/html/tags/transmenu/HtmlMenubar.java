@@ -24,7 +24,7 @@ public class HtmlMenubar extends AbstractHtmlContainer implements XulMenubar {
 		  .append( getId() )
 		  .append("\">\n"); //$NON-NLS-1$
 		  
-		  for( XulComponent component : children ) {
+		  for( Element component : getChildNodes()) {
 			  if( component instanceof HtmlMenu ) {
 				  ((IHtmlElement)component).getHtml(sb);
 			  }
@@ -47,7 +47,7 @@ public class HtmlMenubar extends AbstractHtmlContainer implements XulMenubar {
 		  .append( 		"var topLevelMenuItems = new Array();\n" ) //$NON-NLS-1$
 		  .append( 		"var ms = new TransMenuSet(TransMenu.direction.down, 1, 0, TransMenu.reference.bottomLeft);\n" ); //$NON-NLS-1$
 
-		  for( XulComponent component : children ) {
+		  for( Element component : getChildNodes()) {
 			  if( component instanceof HtmlMenu ) {
 				  ((HtmlMenu)component).getScript( properties,sb);
 			  }
@@ -58,14 +58,7 @@ public class HtmlMenubar extends AbstractHtmlContainer implements XulMenubar {
 		  sb.append( "</script>\n" ); //$NON-NLS-1$
 
 	  }
-	  
-	public void addComponent(XulComponent c) {
-		    super.addComponent(c);
-	}
 
-	public void addComponentAt(XulComponent c, int idx) {
-		super.addComponentAt(c, idx);
-	}
 
   public void adoptAttributes(XulComponent component) {
     // TODO Auto-generated method stub

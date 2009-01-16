@@ -13,8 +13,6 @@ public class HtmlMenupopup extends AbstractHtmlContainer implements XulMenupopup
 
 	  public HtmlMenupopup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		    super("menupopup"); //$NON-NLS-1$
-		    children = new ArrayList<XulComponent>();
-		    managedObject = children;
 	  }
 
 	  
@@ -24,7 +22,7 @@ public class HtmlMenupopup extends AbstractHtmlContainer implements XulMenupopup
 
 	  public void getScript( Map<String,String> properties, StringBuilder sb ) {
 		  
-		  for( XulComponent child : children ) {
+		  for( Element child : getChildNodes()) {
 			  if( child instanceof HtmlMenuitem ) {
 				  ((HtmlMenuitem) child).getScript( properties, sb);
 			  }
