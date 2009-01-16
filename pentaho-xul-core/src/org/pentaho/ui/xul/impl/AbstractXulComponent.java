@@ -38,8 +38,6 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   protected boolean flexLayout = false;
 
-  protected List<XulComponent> children;
-
   protected int width;
 
   protected int height;
@@ -64,14 +62,12 @@ public abstract class AbstractXulComponent implements XulComponent {
   
   public AbstractXulComponent(Element element) {
     this.element = element;
-    children = new ArrayList<XulComponent>();
 
   }
 
   public AbstractXulComponent(String name) {
     try {
       this.element = DocumentFactory.createElement(name, this);
-      children = new ArrayList<XulComponent>();
     } catch (XulException e) {
       logger.error(String.format("error creating XulElement (%s)", name), e);
       throw new IllegalArgumentException(String.format("error creating XulElement (%s)", name), e);
@@ -108,21 +104,6 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.flex = flex;
   }
 
-  public void removeComponent(XulComponent component) {
-	  children.remove( component );
-  }
-  
-  public void addComponent(XulComponent c) {
-    children.add(c);
-  }
-
-  public void addComponentAt(XulComponent c, int idx) {
-    if(idx < children.size()){
-      children.add(idx, c);
-    } else {
-      children.add(c);
-    }
-  }
   public void layout() {
     initialized = true;
   }
@@ -145,7 +126,7 @@ public abstract class AbstractXulComponent implements XulComponent {
       logger.error("Error calling oncommand event", e);
     }
   }
-
+  
   //passthrough DOM methods below
   //TODO: extract methods below into abstract class
   public String getName() {
@@ -237,11 +218,6 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
     this.element.replaceChild(oldElement, newElement);
-    int idx = children.indexOf( oldElement );
-    if( idx > -1 ) {
-    	children.remove( idx );
-    	children.add( idx, newElement);
-    }
   }
 
   public void setHeight(int height) {

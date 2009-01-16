@@ -28,12 +28,10 @@ public class MenuUtil {
 				  if( anchor.getParent() instanceof XulMenu && anchor.getParent().getParent() instanceof XulMenubar ) {
 					  // we are deleting an item from the menubar
 					  // the order of these next lines is important
-					  ((XulContainer)anchor.getParent().getParent()).removeComponent( anchor.getParent() );
 					  anchor.getParent().getParent().removeChild( anchor.getParent() );
 				  } else {
 					  // we are removing an item from a submenu
 					  // the order of these next lines is important
-					  ((XulContainer)anchor.getParent()).removeComponent( anchor );
 					  anchor.getParent().removeChild( anchor );
 				  }
 				  // we are done
@@ -62,30 +60,18 @@ public class MenuUtil {
 				  XulComponent newItem = getMenuComponent( customization, xulLoader, parent );
 				  // create the new item
 				  if( customization.getCustomizationType() == CustomizationType.INSERT_AFTER ) {
-					  if( parent instanceof XulContainer ) {
-						  ((XulContainer) parent).addComponentAt( newItem, anchorIndex+1 );
-					  }
 					  parent.addChildAt(newItem, anchorIndex+1 ); 
 					  result = true;
 				  }
 				  else if( customization.getCustomizationType() == CustomizationType.INSERT_BEFORE ) {
-					  if( parent instanceof XulContainer ) {
-						  ((XulContainer) parent).addComponentAt( newItem, anchorIndex );
-					  }
 					  parent.addChildAt(newItem, anchorIndex ); 
 					  result = true;
 				  }
 				  else if( customization.getCustomizationType() == CustomizationType.FIRST_CHILD ) {
-					  if( parent instanceof XulContainer ) {
-						  ((XulContainer) parent).addComponentAt( newItem, 0 );
-					  }
 					  parent.addChildAt( newItem, 0 ); 
 					  result = true;
 				  }
 				  else if( customization.getCustomizationType() == CustomizationType.LAST_CHILD ) {
-					  if( parent instanceof XulContainer ) {
-						  ((XulContainer) parent).addComponent( newItem );
-					  }
 					  parent.addChild( newItem ); 
 					  result = true;
 				  }
@@ -115,7 +101,6 @@ public class MenuUtil {
 				  XulMenu menu = (XulMenu) xulLoader.createElement("menu"); //$NON-NLS-1$
 				  menu.setLabel( customization.getLabel() );
 				  menu.addChild( menuItem );
-				  menu.addComponent( menuItem );
 				  menu.setId( customization.getId()+"-menu" ); //$NON-NLS-1$
 				  menu.setID( customization.getId()+"-menu" ); //$NON-NLS-1$
 				  component = menu;
@@ -131,7 +116,6 @@ public class MenuUtil {
 			  menu.setID( customization.getId()+"-menu" ); //$NON-NLS-1$
 			  XulMenupopup menuPopup = (XulMenupopup) xulLoader.createElement("menupopup"); //$NON-NLS-1$
 			  menu.addChild( menuPopup );
-			  menu.addComponent( menuPopup );
 			  menuPopup.setId( customization.getId() );
 			  menuPopup.setID( customization.getId() );
 		  }

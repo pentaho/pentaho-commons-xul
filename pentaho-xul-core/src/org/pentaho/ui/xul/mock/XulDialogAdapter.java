@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.Namespace;
+import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
 public abstract class XulDialogAdapter implements XulDialog {
@@ -428,5 +429,71 @@ public abstract class XulDialogAdapter implements XulDialog {
   public void removeComponent(XulComponent component) {
     
   }
+
+  public void adoptAttributes(XulComponent component) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public String getInsertafter() {
+    return null;
+  }
+
+  public String getInsertbefore() {
+    return null;
+  }
+
+  public String getOnblur() {
+    return null;
+  }
+
+  public int getPosition() {
+    return 0;
+  }
+
+  public boolean getRemoveelement() {
+    return false;
+  }
+
+  public boolean isVisible() {
+    return true;
+  }
+
+  public void setInsertafter(String id) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public void setInsertbefore(String id) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public void setPosition(int pos) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public void setRemoveelement(boolean flag) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public Align getAlign() {
+    return Align.START;
+  }
+
+  public void setAlign(String align) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+  
+  
   
 }
