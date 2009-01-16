@@ -18,8 +18,6 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
   XulComponent parent;
   public SwtMenupopup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menupopup");
-    children = new ArrayList<XulComponent>();
-    managedObject = children;
     this.parent = parent;
     
   }

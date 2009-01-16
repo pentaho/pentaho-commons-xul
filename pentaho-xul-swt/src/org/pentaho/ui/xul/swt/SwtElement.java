@@ -197,7 +197,6 @@ public class SwtElement extends AbstractXulComponent {
     if (!thisWidget.isDisposed()) {
       thisWidget.dispose();
     }
-    this.addComponent(newElement);
     ((Control) newElement.getManagedObject()).setParent((Composite) this.getManagedObject());
 
     layout();

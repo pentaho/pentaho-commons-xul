@@ -31,8 +31,8 @@ public class SwtTabs  extends AbstractSwtXulContainer implements XulTabs{
   
   
   @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
+  public void addChild(Element c) {
+    super.addChild(c);
     if(getParent() != null){
       ((XulTabbox) getParent()).addTab(this.getChildNodes().indexOf(c));
     }

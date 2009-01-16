@@ -57,8 +57,6 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
 
     this.xulDomContainer = domContainer;
 
-    children = new ArrayList<XulComponent>();
-
     combobox = new Combo((Composite)parent.getManagedObject(), SWT.READ_ONLY);
     
     managedObject = combobox;

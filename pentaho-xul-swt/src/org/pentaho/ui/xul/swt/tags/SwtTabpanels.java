@@ -23,15 +23,15 @@ public class SwtTabpanels extends AbstractSwtXulContainer implements XulTabpanel
   }
   
   public XulTabpanel getTabpanelByIndex(int index) {
-    return (XulTabpanel) this.children.get(index);
+    return (XulTabpanel) this.getChildNodes().get(index);
   }
   
 
   @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
+  public void addChild(Element c) {
+    super.addChild(c);
     if(getParent() != null){
-      ((XulTabbox) getParent()).addTabpanel(this.children.indexOf(c));
+      ((XulTabbox) getParent()).addTabpanel(this.getChildNodes().indexOf(c));
     }
   }
 

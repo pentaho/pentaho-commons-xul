@@ -328,7 +328,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   public void layout() {
     super.layout();
 
-    for (XulComponent comp : this.children) {
+    for (XulComponent comp : getChildNodes()) {
       if (comp instanceof XulDialogheader) {
         header = (XulDialogheader) comp;
       }
@@ -452,13 +452,5 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   public void invokeLater(Runnable runnable) {
     dialog.getShell().getDisplay().asyncExec(runnable);
   }
-
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    layout();
-  }
-
-  
   
 }

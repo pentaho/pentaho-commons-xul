@@ -42,8 +42,8 @@ public class SwtDeck extends AbstractSwtXulContainer implements XulDeck {
 
   public void setSelectedIndex(int index) {
     selectedChildIndex = index;
-    if ((children != null) && (!children.isEmpty())) {
-      XulComponent control = children.get(selectedChildIndex);
+    if (!getChildNodes().isEmpty()) {
+      XulComponent control = getChildNodes().get(selectedChildIndex);
       layout.topControl = (Control) control.getManagedObject();
       layout();
     }

@@ -21,8 +21,6 @@ public class SwtMenubar extends AbstractSwtXulContainer implements XulMenubar {
   public SwtMenubar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menubar");
 
-    children = new ArrayList<XulComponent>();
-
     menuBar = new Menu ((Shell) parent.getManagedObject(), SWT.BAR);
     ((Shell) parent.getManagedObject()).setMenuBar(menuBar);
     managedObject = menuBar;
@@ -46,13 +44,5 @@ public class SwtMenubar extends AbstractSwtXulContainer implements XulMenubar {
     initialized = true;
   }
 
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-//    if (initialized) {
-//      resetContainer();
-//      layout();
-//    }
-  }
 
 }

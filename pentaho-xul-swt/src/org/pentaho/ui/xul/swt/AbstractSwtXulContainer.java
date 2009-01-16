@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt;
 
+import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.util.Align;
 
@@ -24,7 +25,21 @@ public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
     }
   }
   
+
+  @Deprecated
+  public void addComponent(XulComponent component) {
+    this.addChild(component);
+  }
   
+  @Deprecated
+  public void addComponentAt(XulComponent component, int idx) {
+    this.addChildAt(component, idx);  
+  }
+
+  @Deprecated
+  public void removeComponent(XulComponent component) {
+    this.removeChild(component);
+  }
   
   
 }

@@ -27,7 +27,6 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
   public SwtMenu(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menu");
     
-    children = new ArrayList<XulComponent>();
     
     header = new MenuItem((Menu) parent.getManagedObject(), SWT.CASCADE);
     dropdown = new Menu((Shell) parent.getParent().getManagedObject(), SWT.DROP_DOWN);
@@ -44,7 +43,7 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
   }
   
   public void layout() {
-    for (XulComponent comp : children) {
+    for (Element comp : getChildNodes()) {
       if (comp instanceof SwtMenupopup) {
 
         for (XulComponent compInner : ((SwtMenupopup) comp).getChildNodes()) {
