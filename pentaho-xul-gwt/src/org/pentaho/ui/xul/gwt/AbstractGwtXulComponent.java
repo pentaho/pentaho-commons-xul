@@ -358,16 +358,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   
 
 
-  public void addComponentAt(XulComponent component, int idx) {
-    throw new UnsupportedOperationException("addComponent not supported");
-  }
-
-  public void removeComponent(XulComponent component) {
-    
-        // TODO Auto-generated method stub 
-      
-  }
-
   public String getInsertbefore() {
   
     return insertbefore;
