@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import javax.swing.JTabbedPane;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTabpanel;
@@ -81,26 +82,6 @@ public class SwingTabbox extends AbstractSwingContainer implements XulTabbox {
     initialized = true;
   }
   
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  
-  
-  @Override
-  public void addComponentAt(XulComponent c, int pos) {
-    super.addComponentAt(c, pos);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
   public void setTabDisabledAt(boolean flag, int pos) {
     tabpane.setEnabledAt(pos, !flag);
   }
@@ -118,14 +99,10 @@ public class SwingTabbox extends AbstractSwingContainer implements XulTabbox {
   }
 
   public void addTab(int idx) {
-    
-        // TODO Auto-generated method stub 
-      
+    throw new NotImplementedException("addTab(int) not implemented in Swing");
   }
 
   public void addTabpanel(int idx) {
-    
-        // TODO Auto-generated method stub 
-      
+    throw new NotImplementedException("addTabpanel(int) not implemented in Swing");
   }
 }

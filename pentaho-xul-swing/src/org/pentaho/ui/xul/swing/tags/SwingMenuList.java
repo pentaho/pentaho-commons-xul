@@ -46,8 +46,6 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
 
     this.xulDomContainer = domContainer;
 
-    children = new ArrayList<XulComponent>();
-
     combobox = new JComboBox(new DefaultComboBoxModel());
     managedObject = combobox;
 
@@ -90,17 +88,9 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     initialized = true;
   }
 
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
 
   public SwingMenupopup getPopupElement() {
-    for (XulComponent comp : children) {
+    for (Element comp : getChildNodes()) {
       if (SwingMenupopup.class.isAssignableFrom(comp.getClass())) {
         return (SwingMenupopup) comp;
       }

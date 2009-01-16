@@ -33,8 +33,6 @@ public class SwingGroupbox extends AbstractSwingContainer implements XulGroupbox
     super("groupbox");
     this.orientation = Orient.VERTICAL;
 
-    children = new ArrayList<XulComponent>();
-
     container = new ScrollablePanel(new GridBagLayout());
     container.setBorder(BorderFactory.createTitledBorder(""));
     managedObject = container;
@@ -87,7 +85,7 @@ public class SwingGroupbox extends AbstractSwingContainer implements XulGroupbox
   public void layout() {
     resetContainer();
     super.layout();
-    for (XulComponent comp : children) {
+    for (Element comp : getChildNodes()) {
       if (comp instanceof SwingCaption) {
         this.setCaption(((SwingCaption) comp).getLabel());
       }
@@ -95,18 +93,8 @@ public class SwingGroupbox extends AbstractSwingContainer implements XulGroupbox
   }
 
   @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  @Override
   public void removeChild(Element ele) {
     super.removeChild(ele);
-    children.remove(ele);
     if (initialized) {
       resetContainer();
       layout();

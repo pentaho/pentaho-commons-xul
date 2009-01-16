@@ -14,11 +14,6 @@ public class SwingMenupopup extends AbstractSwingContainer implements XulMenupop
 
   public SwingMenupopup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menupopup");
-
-    children = new ArrayList<XulComponent>();
-
-    managedObject = children;
-
   }
 
   public void layout() {
@@ -31,24 +26,6 @@ public class SwingMenupopup extends AbstractSwingContainer implements XulMenupop
     }
   }
 
-
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  @Override
-  public void removeChild(Element ele) {
-    super.removeChild(ele);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
 
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {

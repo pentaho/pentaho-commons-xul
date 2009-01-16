@@ -20,8 +20,6 @@ public class SwingMenubar extends AbstractSwingContainer implements XulMenubar {
   public SwingMenubar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menubar");
 
-    children = new ArrayList<XulComponent>();
-
     menuBar = new JMenuBar();
     menuBar.setMinimumSize(new Dimension(20, 20));
     managedObject = menuBar;
@@ -30,7 +28,7 @@ public class SwingMenubar extends AbstractSwingContainer implements XulMenubar {
 
   @Override
   public void layout() {
-    for (XulComponent comp : children) {
+    for (Element comp : getChildNodes()) {
       if (comp instanceof SwingMenu) {
         this.menuBar.add((JMenu) ((SwingMenu) comp).getManagedObject());
       }
@@ -38,13 +36,5 @@ public class SwingMenubar extends AbstractSwingContainer implements XulMenubar {
     initialized = true;
   }
 
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
 
 }

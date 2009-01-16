@@ -31,9 +31,7 @@ public class SwingHbox extends AbstractSwingContainer implements XulHbox {
 
   public SwingHbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("Hbox");
-
-    children = new ArrayList<XulComponent>();
-
+    
     container = new ScrollablePanel(new GridBagLayout());
     container.setOpaque(false);
     managedObject = container;
@@ -43,18 +41,8 @@ public class SwingHbox extends AbstractSwingContainer implements XulHbox {
   }
 
   @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  @Override
   public void removeChild(Element ele) {
     super.removeChild(ele);
-    children.remove(ele);
     if (initialized) {
       resetContainer();
       layout();

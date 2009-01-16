@@ -33,7 +33,6 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
       throw new IllegalArgumentException("error creating treeitem", e);
     }
 
-    this.children.add(row);
     super.addChild(row);
     this.row = row;
     managedObject = "empty";
@@ -90,7 +89,7 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
 
   @Override
   public void layout() {
-    for (XulComponent comp : this.children) { //should be the only one in there
+    for (Element comp : getChildNodes()) { //should be the only one in there
       if (comp instanceof XulTreeRow) { //more of an assert, should be true;
         this.row = (SwingTreeRow) comp;
       } else {

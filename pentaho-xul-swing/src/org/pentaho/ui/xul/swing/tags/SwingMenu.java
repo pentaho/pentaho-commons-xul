@@ -24,8 +24,6 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
   public SwingMenu(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menu");
     
-    children = new ArrayList<XulComponent>();
-    
     menu = new JMenu();
     managedObject = menu;
     
@@ -33,7 +31,7 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
   
 
   public void layout() {
-    for (XulComponent comp : children) {
+    for (Element comp : getChildNodes()) {
       if (comp instanceof SwingMenupopup) {
 
         for (XulComponent compInner : comp.getChildNodes()) {
@@ -51,16 +49,7 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
     }
     initialized = true;
   }
-
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
+  
   public String getAcceltext() {
     return accel;
   }

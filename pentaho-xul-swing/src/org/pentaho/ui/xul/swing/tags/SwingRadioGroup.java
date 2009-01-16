@@ -42,16 +42,9 @@ public class SwingRadioGroup extends AbstractSwingContainer implements XulRadioG
 	}
 
 	@Override
-	public void addComponent(XulComponent c) {
-		addComponentToButtonGroup(c);
-    super.addComponent(c);
-		resetContainer();
-		super.layout();
-		
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
+	public void addChild(Element c) {
+		addComponentToButtonGroup((XulComponent) c);
+    super.addChild(c);
 	}
 
 	protected void addComponentToButtonGroup(XulComponent c) {

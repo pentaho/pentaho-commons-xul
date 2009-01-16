@@ -16,31 +16,13 @@ public class SwingTabpanels extends AbstractSwingContainer implements XulTabpane
   }
 
   public XulTabpanel getTabpanelByIndex(int index) {
-    return (index < children.size()) ? (SwingTabpanel) this.children.get(index) : null;
-  }
-
-  @Override
-  public void addComponent(XulComponent comp) {
-    super.addComponent(comp);
-    if (initialized) {
-      ((SwingTabbox) getParent()).layout();
-    }
-  }
-  
-  @Override
-  public void addComponentAt(XulComponent c, int pos) {
-    super.addComponentAt(c, pos);
-    if (initialized) {
-      ((SwingTabbox) getParent()).layout();
-    }
+    return (index < getChildNodes().size()) ? (SwingTabpanel) this.getChildNodes().get(index) : null;
   }
 
   @Override
   public void removeChild(Element ele) {
+    int idx = getChildNodes().indexOf(ele);
     super.removeChild(ele);
-    int idx = children.indexOf(ele);
-    children.remove(idx);
-    System.out.println("Tabpanel index: " + idx);
     ((XulTabbox) getParent()).removeTabpanel(idx);
   }
 

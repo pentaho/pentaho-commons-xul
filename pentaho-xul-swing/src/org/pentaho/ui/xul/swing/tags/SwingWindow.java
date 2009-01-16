@@ -81,8 +81,6 @@ public class SwingWindow extends AbstractSwingContainer implements XulWindow {
     this.orientation = Orient.VERTICAL;
     this.xulContainer = domContainer;
     
-    children = new ArrayList<XulComponent>();
-
     container = new JPanel(new GridBagLayout());
     //container.setBorder(BorderFactory.createLineBorder(Color.green));
     managedObject = container;
@@ -259,32 +257,6 @@ public class SwingWindow extends AbstractSwingContainer implements XulWindow {
          Toolkit.getDefaultToolkit().getSystemClipboard();
     clipboard.setContents(data, data);
   }
-
-
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    resetContainer();
-    layout();
-  }
-
-  @Override
-  public void removeChild(Element ele) {
-    super.removeChild(ele);
-    children.remove(ele);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  @Override
-  public void addComponentAt(XulComponent c, int idx) {
-    super.addComponentAt(c, idx);
-    super.resetContainer();
-    super.layout();
-  }
-
 
   public Object getRootObject() {
     return frame;

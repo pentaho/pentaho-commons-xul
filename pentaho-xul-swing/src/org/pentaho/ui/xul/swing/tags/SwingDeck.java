@@ -39,20 +39,8 @@ public class SwingDeck extends AbstractSwingContainer implements XulDeck {
   }
 
   @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  @Override
   public void addChild(Element ele) {
     super.addChild(ele);
-    this.container.add((Component) ((XulComponent) ele).getManagedObject(), "" + numChildren);
-    numChildren++;
-
   }
 
   public int getSelectedIndex() {
@@ -66,6 +54,11 @@ public class SwingDeck extends AbstractSwingContainer implements XulDeck {
 
   public void layout() {
     initialized = true;
+    numChildren = 0;
+    for(Element e : getChildNodes()){
+      this.container.add((Component) ((XulComponent) e).getManagedObject(), ""+numChildren);
+      numChildren++;
+    }
   }
 
 }

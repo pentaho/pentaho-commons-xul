@@ -100,7 +100,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   
   public void layout(){
    
-    for(XulComponent comp : children){
+    for(Element comp : getChildNodes()){
       if(comp instanceof SwingListitem){
         this.model.addElement(comp);
         logger.info("added swingListitem to model");
@@ -170,7 +170,6 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   
   public void removeItems(){
     this.model.removeAllElements();
-    this.children.clear();
     for(XulComponent c : this.getChildNodes()){
       this.removeChild(c);
     }
@@ -221,7 +220,6 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
       }
 
       this.addChild(item);
-      this.addComponent(item);
     }
 
     layout();

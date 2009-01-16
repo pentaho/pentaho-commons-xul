@@ -11,6 +11,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
@@ -124,25 +126,6 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
     }
     return dialog;
   }
-  
-  @Override
-  public void addComponent(XulComponent component) {
-    super.addComponent(component);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  @Override
-  public void removeChild(Element ele) {
-    super.removeChild(ele);
-    children.remove(ele);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
 
   public String getButtonlabelaccept() {
     return buttonlabelaccept;
@@ -178,14 +161,6 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
 
   public void setButtons(String buttons) {
     btns = buttons;
-    String[] tempButtons = buttons.split(",");
-
-    for (int i = 0; i < tempButtons.length;  i++) {
-      SwingButton btn = new SwingButton(null, this, this.domContainer, "button");
-      addChild(btn);
-      this.buttons.put(SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()), btn);
-      btn.setId(ID+"_" + SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()).toString().toLowerCase());
-    }
   }
 
   public void setOndialogaccept(String command) {
@@ -205,10 +180,18 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
   public void show() {
 
     // we delay instantiation in order to setup a modal relationship.
+    
+
     if (dialog == null) {
+
+      //adding more children in the createDialog step, setting this to false keeps 
+      //layout from being called again, looping forever
+      this.initialized = false;
       createDialog();
       dialog.pack();
+      this.initialized = true;
     }
+    
     dialog.setLocationRelativeTo(centerComp);
     dialog.setVisible(true);
   }
@@ -225,15 +208,47 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
     }
   }
 
+  private boolean buttonsProcessed = false;
   @Override
   public void layout() {
+    
+    //Unfortunately, the dialog buttons need to be on the DOM, but not processed by the layout routine.
+    //We could have copied all of the layout routine here, instead I'm removing the buttons from the DOM
+    //and then adding them back later.
+    this.initialized = false;
+    for(Map.Entry<BUTTONS, XulButton> btn : this.buttons.entrySet()){
+      this.removeChild(btn.getValue());
+    }
     super.layout();
 
-    for (XulComponent comp : this.children) {
+    for (Element comp : getChildNodes()) {
       if (comp instanceof XulDialogheader) {
         header = (XulDialogheader) comp;
       }
     }
+
+    //setting initialized = false prevents layout from looping
+    this.initialized = false;
+    if(!buttonsProcessed){
+      if(this.btns != null){
+        String[] tempButtons = btns.split(",");
+    
+        for (int i = 0; i < tempButtons.length;  i++) {
+          SwingButton btn = new SwingButton(null, this, this.domContainer, "button");
+          addChild(btn);
+          this.buttons.put(SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()), btn);
+          btn.setId(ID+"_" + SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()).toString().toLowerCase());
+        }
+      }
+      buttonsProcessed = true;
+    } else {
+      //add the buttons to the DOM so they can be accessed by others
+      for(Map.Entry<BUTTONS, XulButton> btn : this.buttons.entrySet()){
+        this.addChild(btn.getValue());
+      }
+    }
+    this.initialized = true;
+    
   }
 
   public int getHeight() {
@@ -290,7 +305,7 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
   private Component centerComp;
 
   private void createDialog() {
-    
+
     if(getParent() instanceof XulRoot){
       Object parentObj = getParent().getManagedObject();
       if(parentObj instanceof Dialog){

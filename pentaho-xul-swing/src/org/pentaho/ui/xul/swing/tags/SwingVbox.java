@@ -51,25 +51,6 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
     gc.weightx = 1;
 
   }
-
-  @Override
-  public void addComponent(XulComponent component) {
-    super.addComponent(component);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
-
-  @Override
-  public void removeChild(Element ele) {
-    super.removeChild(ele);
-    children.remove(ele);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
-  }
   
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {

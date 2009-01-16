@@ -26,7 +26,6 @@ public class SwingTreeRow extends AbstractSwingContainer implements XulTreeRow {
   }
 
   public void addCell(XulTreeCell cell) {
-    this.children.add(cell);
     super.addChild(cell);
   }
 
@@ -40,8 +39,8 @@ public class SwingTreeRow extends AbstractSwingContainer implements XulTreeRow {
   public void addCellText(int index, String text) {
 
     SwingTreeCell cell = null;
-    if (index < children.size()) {
-      cell = (SwingTreeCell) children.get(index);
+    if (index < getChildNodes().size()) {
+      cell = (SwingTreeCell) getChildNodes().get(index);
     } else {
       cell = new SwingTreeCell(this);
       this.addCell(cell);
@@ -68,8 +67,8 @@ public class SwingTreeRow extends AbstractSwingContainer implements XulTreeRow {
   }
 
   public XulTreeCell getCell(int index) {
-    if (index < this.children.size()) {
-      return (SwingTreeCell) this.children.get(index);
+    if (index < this.getChildNodes().size()) {
+      return (SwingTreeCell) this.getChildNodes().get(index);
     } else {
       return null;
     }

@@ -19,7 +19,6 @@ public class SwingTreeCols extends AbstractSwingContainer implements XulTreeCols
     super("treecols");
     table = (XulTree) parent;
 
-    children = new ArrayList<XulComponent>();
     managedObject = "empty";
   }
 
@@ -29,11 +28,11 @@ public class SwingTreeCols extends AbstractSwingContainer implements XulTreeCols
   }
 
   public XulTreeCol getColumn(int index) {
-    return (XulTreeCol) this.children.get(index);
+    return (XulTreeCol) this.getChildNodes().get(index);
   }
 
   public int getColumnCount() {
-    return this.children.size();
+    return this.getChildNodes().size();
   }
 
   public XulTree getTree() {

@@ -23,6 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulSplitter;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -54,21 +55,21 @@ public class SwingElement extends AbstractXulComponent {
     super.layout();
     double totalFlex = 0.0;
 
-    for (XulComponent comp : children) {
+    for (Element comp : getChildNodes()) {
       //if (comp.getManagedObject() == null) {
       //continue;
       //}
-      if (comp.getFlex() > 0) {
+      if (((XulComponent) comp).getFlex() > 0) {
         flexLayout = true;
-        totalFlex += comp.getFlex();
+        totalFlex += ((XulComponent) comp).getFlex();
       }
     }
 
     gc.fill = GridBagConstraints.BOTH;
 
     double currentFlexTotal = 0.0;
-    for (int i = 0; i < children.size(); i++) {
-      XulComponent comp = children.get(i);
+    for (int i = 0; i < getChildNodes().size(); i++) {
+      XulComponent comp = (XulComponent) getChildNodes().get(i);
 
       if (comp instanceof XulSplitter) {
         JPanel prevContainer = container;
@@ -132,7 +133,7 @@ public class SwingElement extends AbstractXulComponent {
       Component component = (Component) maybeComponent;
       container.add(component, gc);
 
-      if (i + 1 == children.size() && !flexLayout) {
+      if (i + 1 == getChildNodes().size() && !flexLayout) {
 
         if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
           gc.weighty = 1.0;
@@ -159,8 +160,8 @@ public class SwingElement extends AbstractXulComponent {
   }
 
   @Override
-  public void addComponentAt(XulComponent c, int pos) {
-    super.addComponentAt(c, pos);
+  public void addChild(Element e) {
+    super.addChild(e);
     if (initialized) {
       resetContainer();
       layout();
@@ -174,20 +175,26 @@ public class SwingElement extends AbstractXulComponent {
       layout();
     }
   }
+
+  @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    if (initialized) {
+      resetContainer();
+      layout();
+    }
+  }
   
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
 
-    int idx = this.children.indexOf(oldElement);
+    int idx = this.getChildNodes().indexOf(oldElement);
     if (idx == -1) {
       logger.error(oldElement.getName() + " not found in children");
       throw new XulDomException(oldElement.getName() + " not found in children");
     } else {
       super.replaceChild(oldElement, newElement);
-      this.children.set(idx, newElement);
-
       container.removeAll();
-
       layout();
       this.container.revalidate();
     }

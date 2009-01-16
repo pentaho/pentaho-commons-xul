@@ -25,9 +25,7 @@ public class SwingStatusbar extends AbstractSwingContainer implements XulStatusb
 
   public SwingStatusbar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("statusbar");
-
-    children = new ArrayList<XulComponent>();
-
+    
     container = new ScrollablePanel(new GridBagLayout());
     container.setBackground(Color.decode("#EFEFEF"));
     container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.gray));
@@ -63,15 +61,6 @@ public class SwingStatusbar extends AbstractSwingContainer implements XulStatusb
     resetContainer();
     initialized = true;
     super.layout();
-  }
-
-  @Override
-  public void addComponent(XulComponent c) {
-    super.addComponent(c);
-    if (initialized) {
-      resetContainer();
-      layout();
-    }
   }
 
   @Override

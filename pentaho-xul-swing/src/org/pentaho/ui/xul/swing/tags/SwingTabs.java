@@ -20,23 +20,23 @@ public class SwingTabs extends AbstractSwingContainer implements XulTabs{
 
   @Override
   public void removeChild(Element ele) {
+    int idx = getChildNodes().indexOf(ele);
     super.removeChild(ele);
-    int idx = children.indexOf(ele);
-    children.remove(idx);
     ((XulTabbox) getParent()).removeTab(idx);
+    ((SwingTabbox) getParent()).layout();
   }
   
   @Override
-  public void addComponent(XulComponent comp){
-    super.addComponent(comp);
+  public void addChild(Element comp){
+    super.addChild(comp);
     if(initialized){
       ((SwingTabbox) getParent()).layout();
     }
   }
 
   @Override
-  public void addComponentAt(XulComponent comp, int pos){
-    super.addComponentAt(comp, pos);
+  public void addChildAt(Element comp, int pos){
+    super.addChildAt(comp, pos);
     if(initialized){
       ((SwingTabbox) getParent()).layout();
     }
