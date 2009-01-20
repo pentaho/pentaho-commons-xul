@@ -97,6 +97,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     }
     
     table = new BaseTable(cols, null, new BaseColumnComparator[cols.length], policy);
+
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
       }

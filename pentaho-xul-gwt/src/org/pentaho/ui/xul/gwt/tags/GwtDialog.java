@@ -3,14 +3,14 @@ package org.pentaho.ui.xul.gwt.tags;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.util.Orient;
 
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -29,9 +29,11 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   }
   
   DialogBox dialog = null;
+  private XulDomContainer xulContainer;
   
   public GwtDialog() {
     super("dialog");
+    this.orientation = Orient.VERTICAL;
   }
   
   // we don't add ourselves to the main screen
@@ -39,6 +41,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
+    this.xulContainer = container;
     setButtons(srcEle.getAttribute("buttons"));
     setOndialogaccept(srcEle.getAttribute("ondialogaccept"));
     setOndialogcancel(srcEle.getAttribute("ondialogcancel"));
@@ -165,52 +168,75 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     
     
     dialog = new DialogBox();
+    dialog.setWidth(getWidth()+"px");
+    dialog.setHeight(getHeight()+"px");
+    
     dialog.setTitle(getTitle());
     dialog.setText(getTitle());
     // implement the buttons
     VerticalPanel panel = new VerticalPanel();
-    SimplePanel contentPanel = new SimplePanel();
-    panel.add(contentPanel);
+    SimplePanel wrapper = new SimplePanel();
+    
+    VerticalPanel contentPanel = new VerticalPanel();
+    contentPanel.setStyleName("dialog-content");
+    contentPanel.setWidth("100%");
+    wrapper.add(contentPanel);
+    panel.add(wrapper);
+    panel.setCellWidth(contentPanel, "100%");
+    panel.setStyleName("dialog");
+    
     
     String buttons = getButtons();
     HorizontalPanel buttonPanel = null;
     if (buttons != null && buttons.trim().length() > 0) {
       buttonPanel = new HorizontalPanel();
       
-      String buttonalign = getButtonalign();
-      if ("center".equals(buttonalign)) {
-        buttonPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-      } else if ("left".equals(buttonalign)) {
-        buttonPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_LEFT);
-      } else if ("right".equals(buttonalign)) {
-        buttonPanel.setHorizontalAlignment(HorizontalPanel.ALIGN_RIGHT);
-      }
-      
       String buttonStr[] = buttons.split(",");
       for (String button : buttonStr) {
         final String buttonVal = button.trim();
-        Button buttonObj = new Button(getAttributeValue("buttonlabel" + buttonVal));
-        buttonObj.addClickListener(new ClickListener() {
-          public void onClick(Widget arg0) {
-            try {
-              getXulDomContainer().invoke(getAttributeValue("ondialog" + buttonVal), new Object[]{});
-            } catch (XulException e) {
-              e.printStackTrace();
-            }
-          }
-        });
-        buttonPanel.add(buttonObj);
+        
+        try{
+          XulButton buttonObj = (XulButton) this.xulContainer.getDocumentRoot().createElement("button");
+          buttonObj.setLabel(getAttributeValue("buttonlabel" + buttonVal));
+          
+          buttonObj.setOnclick(getAttributeValue("ondialog" + buttonVal));
+          buttonPanel.add((Widget)buttonObj.getManagedObject());
+        } catch(XulException e){
+          System.out.println("Error creating button: "+e.getMessage());
+          e.printStackTrace();
+        }
+        
+        
       }
     }
     
     if (buttonPanel != null) {
-      panel.add(buttonPanel);
+      //wrap buttonPanel in another one to style top border
+      HorizontalPanel buttonPanelWrapper = new HorizontalPanel();
+      
+      buttonPanelWrapper.setStyleName("dialog-button-panel");
+      buttonPanelWrapper.add(buttonPanel);
+      buttonPanelWrapper.setWidth("100%");
+      panel.add(buttonPanelWrapper);
+      panel.setCellWidth(buttonPanelWrapper, "100%");
+      String buttonalign = getButtonalign();
+      if ("center".equals(buttonalign)) {
+        buttonPanelWrapper.setCellHorizontalAlignment(buttonPanel, HorizontalPanel.ALIGN_CENTER);
+      } else if ("left".equals(buttonalign)) {
+        buttonPanelWrapper.setCellHorizontalAlignment(buttonPanel, HorizontalPanel.ALIGN_LEFT);
+      } else if ("right".equals(buttonalign)) {
+        buttonPanelWrapper.setCellHorizontalAlignment(buttonPanel, HorizontalPanel.ALIGN_RIGHT);
+      }
+      
     }
     
     // render dialog contents
     container = contentPanel;
 
     super.layout();
+    panel.setSpacing(1);
+    panel.setHeight("100%");
+    panel.setWidth("100%");
     dialog.add(panel);
 //    dialog.setWidth("100px");
 //    dialog.setHeight("100px");

@@ -1,0 +1,147 @@
+.hbox{
+
+}
+.hbox > tbody > tr > td{
+  padding: 0px 3px 0px 3px;
+}
+.vbox{
+
+}
+.vbox > tbody > tr > td{  
+  padding: 3px 0px 3px 0px;
+}
+
+.dialog > tbody > tr > td > div{
+  padding: 3px;
+}
+
+.dialog-content > tbody > tr > td{
+  padding: 3px;
+}
+
+.dialog-button-panel{
+  border-top: 1px solid #777;
+}
+
+.dialog-button-panel > tbody > tr > td{
+  padding: 4px 0px 0px 0px;
+}
+
+.checkbox label{
+	padding-left:3px;
+}
+
+.image-button-over{
+	cursor:pointer;
+}
+
+/*=========================  TOOLBAR  =========================*/
+.toolbar{
+  width:100%;
+  background-image: none;
+  height:100%;  
+  vertical-align: middle;
+  background-color: #d8d8d8;
+  border-top: none;
+  border-left: none;
+  border-left: none;  
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #848484
+}
+
+
+
+/*=========================  TABLE  =========================*/
+.headerTable >tbody > tr > td{
+  padding:4px;
+}
+.gwt-ScrollTable {
+  border: 1px solid #848484;
+}
+
+.gwt-ScrollTable .headerWrapper {
+  background: #d2d2d2 repeat-x scroll left bottom;
+}
+
+.gwt-ScrollTable .footerWrapper {
+  background: #858585;
+  border-top: 1px solid #848484;
+}
+
+.gwt-ScrollTable .dataTable td {
+  overflow: hidden;
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.gwt-ScrollTable .headerTable td {
+  font-weight: normal;
+  color: #000000;
+  border-right: 1px solid #848484;
+}
+
+.gwt-ScrollTable .headerTable-disabled td {
+  font-weight: normal;
+  color: #000000;
+  border-right: 0px;
+}
+
+.gwt-ScrollTable .dataTable tr {
+  background: white;
+}
+
+.gwt-ScrollTable .dataTable-disabled tr {
+  background: white;
+}
+
+.gwt-ScrollTable .dataTable td {
+  border-bottom: 1px solid #BEBEBE;
+}
+
+.gwt-ScrollTable .dataTable-disabled td {
+  border-bottom: 0px;
+}
+
+.gwt-ScrollTable .dataTable tr.hovering {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ScrollTable .dataTable-disabled tr.hovering {
+  cursor: default;
+}
+
+.gwt-ScrollTable .dataTable td.hovering {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ScrollTable .dataTable-disabled td.hovering {
+  cursor: default;
+}
+
+.gwt-ScrollTable .dataTable tr.selected {
+  background: #BEBEBE none repeat scroll 0% 0%;
+}
+
+.gwt-ScrollTable .pagingOptions {
+  background: #e8e8e8 none repeat scroll 0% 0%;
+  border-right: 1px solid #848484;
+  border-top: 1px solid #848484;
+  padding: 1px 0px;
+}
+
+.gwt-ScrollTable .pagingOptions .errorLabel {
+  color: red;
+}
+
+.gwt-CellEditor {
+  background: white none repeat scroll 0% 0%;
+  border: 3px solid #BEBEBE;
+  padding: 4px;
+}
+
+.gwt-CellEditor td {
+  padding: 4px;
+}

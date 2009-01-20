@@ -17,4 +17,5 @@
     <generate-with class="org.pentaho.ui.xul.gwt.generators.TypeControllerGenerator" > 
         <when-type-assignable class="org.pentaho.ui.xul.gwt.binding.TypeController"/> 
     </generate-with>
+    <stylesheet src="xul.css"/>
  </module>

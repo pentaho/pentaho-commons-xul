@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.buttons.ImageButton;
+import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -18,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   
   static final String ELEMENT_NAME = "button"; //$NON-NLS-1$
-  private String dir, group, image, type, onclick, tooltip;
+  private String dir, group, image, type, onclick, tooltip, disabledImage;
   
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
@@ -29,15 +31,24 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     });
   }
   
-  private Button button;
+  private RoundedButton button;
+  private ImageButton imageButton;
+  private boolean disabled;
   
   public GwtButton() {
     super(ELEMENT_NAME);
-    managedObject = button = new Button();
+    managedObject = button = new RoundedButton();
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    if(srcEle.hasAttribute("image")){
+      managedObject = imageButton = new ImageButton();
+    } else {
+      managedObject = button = new RoundedButton();
+    }
+    
     super.init(srcEle, container);
+    
     setLabel(srcEle.getAttribute("label"));
     setOnclick(srcEle.getAttribute("onclick"));
     setImage(srcEle.getAttribute("image"));
@@ -47,7 +58,9 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   
   public void setLabel(String label){
     this.setAttribute("label", label);
-    button.setText(label);
+    if(button != null){
+      button.setText(label);
+    }
   }
 
   /* (non-Javadoc)
@@ -55,26 +68,37 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
    */
   public void setOnclick( final String method) {
     this.onclick = method;
-    button.addClickListener(new ClickListener(){
+    ClickListener listener = new ClickListener(){
       public void onClick(Widget sender) {try{
         GwtButton.this.getXulDomContainer().invoke(method, new Object[]{});
       } catch(XulException e){
         e.printStackTrace();
       }
       }
-    });
+    };
+    
+    if(button != null){
+      button.addClickListener(listener);
+    } else {
+      imageButton.addClickListener(listener);
+    }
   }
 
   public String getLabel() {
-    return button.getText();
+    return (button != null)?button.getText():null;
   }
 
   public boolean isDisabled() {
-    return ! button.isEnabled();
+    return disabled;
   }
 
   public void setDisabled(boolean dis) {
-    button.setEnabled(!dis);
+    this.disabled = dis;
+    if(button != null){
+      button.setEnabled(!dis);
+    } else {
+      imageButton.setEnabled(!dis);
+    }
   }
 
   public void doClick() {
@@ -126,7 +150,12 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
   public void setImage(String src) {
     this.image = src;
-    //TODO: implement images on buttons
+    this.imageButton.setEnabledUrl(src);
+  }
+  
+  public void setDisabledImage(String src) {
+    this.disabledImage = src;
+    this.imageButton.setDisabledUrl(src);
   }
 
   public void setSelected(String selected) {
@@ -135,13 +164,30 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void setSelected(boolean selected) {
-    button.setFocus(selected);  
+    if(button != null){
+      button.setFocus(selected);
+    } else {
+      imageButton.setFocus(selected);
+    }
   }
 
   public void setType(String type) {
     
         // TODO Auto-generated method stub 
       
+  }
+  
+  
+
+  @Override
+  public void setTooltiptext(String tooltip) {
+    super.setTooltiptext(tooltip);
+    if(button != null){
+      button.setTitle(tooltip);
+    } else {
+      imageButton.setTitle(tooltip);
+    }
+    
   }
 
   public void adoptAttributes(XulComponent component) {

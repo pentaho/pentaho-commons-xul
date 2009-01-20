@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
@@ -32,11 +33,25 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
-    if (srcEle.hasAttribute("caption")) {
-      setCaption(srcEle.getAttribute("caption"));  
-    }
   }
   
+  
+  
+  @Override
+  public void addChild(Element element) {
+    if(element instanceof XulCaption){
+        setCaption(((XulCaption) element).getLabel());  
+    }
+    super.addChild(element);
+  }
+
+  @Override
+  public void addChildAt(Element element, int idx) {
+    
+        // TODO Auto-generated method stub super.addChildAt(element, idx);
+      
+  }
+
   public void resetContainer(){
     container.clear();
   }

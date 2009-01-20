@@ -75,7 +75,9 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
     } else if(c instanceof XulToolbarspring){
       toolbar.add(Toolbar.GLUE);
     } else if(c instanceof XulToolbarspacer){
-      toolbar.add((Panel) c.getManagedObject());
+      Panel p = (Panel) c.getManagedObject();
+      p.setWidth("100%");
+      toolbar.add(p);
     }
   }
 

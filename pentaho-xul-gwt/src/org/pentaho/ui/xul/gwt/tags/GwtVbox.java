@@ -28,6 +28,7 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
     super(ELEMENT_NAME);
     this.orientation = Orient.VERTICAL;
     managedObject = container = new VerticalPanel();
+    ((VerticalPanel) container).setStyleName("vbox");
   }
 
 

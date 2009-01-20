@@ -3,10 +3,13 @@ package org.pentaho.ui.xul.gwt.sample;
 import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.gwt.GwtXulDomContainer;
 import org.pentaho.ui.xul.gwt.GwtXulLoader;
 import org.pentaho.ui.xul.gwt.GwtXulRunner;
+import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -33,7 +36,7 @@ public class ExampleXulApp implements EntryPoint, IMessageBundleLoadCallback {
       GwtXulRunner runner = new GwtXulRunner();
   
       com.google.gwt.xml.client.Document gwtDoc = XMLParser.parse(xul);
-      XulDomContainer container;
+      GwtXulDomContainer container;
 
       if(bundle != null){
         container = loader.loadXul(gwtDoc, bundle);
@@ -41,9 +44,11 @@ public class ExampleXulApp implements EntryPoint, IMessageBundleLoadCallback {
         container = loader.loadXul(gwtDoc);
       }
 
-      //EventHandlerWrapper wrapper = GWT.create(String.class);
+      EventHandlerWrapper wrapper = GWT.create(TestController.class);
+      TestController instance = new TestController();
+      wrapper.setHandler(instance);
       
-      //container.addEventHandler(wrapper);
+      container.addEventHandler(wrapper);
 //      container.addEventHandler(new SampleEventHandler());
 //      container.addEventHandler(new SampleEventHandler2());
       
@@ -58,7 +63,7 @@ public class ExampleXulApp implements EntryPoint, IMessageBundleLoadCallback {
   public void bundleLoaded(String bundleName) {
     try {
 
-      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "toolbar.xul");
+      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "dash.xul");
 
       try {
         Request response = builder.sendRequest(null, new RequestCallback() {

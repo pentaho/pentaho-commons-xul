@@ -40,7 +40,8 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected int position = -1;
   
   protected String bgcolor, onblur, tooltiptext;
-  protected int height, width, padding;
+  protected int height, padding;
+  protected int width;
   protected boolean disabled, removeElement;
   protected boolean visible = true;
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
@@ -192,37 +193,47 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       }
       Widget component = (Widget) wrappedWidget;
       if(component != null){
+        System.out.println("adding: "+comp.getName());
         container.add(component);
       }
-      if(flexLayout){
+      if(flexLayout && component != null){
         
         int componentFlex = comp.getFlex();
-        if(componentFlex == 0){
-          continue;
-        }
-        String percentage = Math.round((componentFlex/totalFlex) *100)+"%";
-        if(this.getOrientation() == Orient.VERTICAL){ //VBox
-          ((VerticalPanel) container).setCellHeight(component, percentage);
-
-          component.setWidth("100%"); 
-          if(comp.getFlex() > 0){
-            component.setHeight("100%");
+        if(componentFlex > 0){
+         
+          String percentage = Math.round((componentFlex/totalFlex) *100)+"%";
+          if(this.getOrientation() == Orient.VERTICAL){ //VBox
+            ((VerticalPanel) container).setCellHeight(component, percentage);
+            ((VerticalPanel) container).setCellWidth(component, "100%");
+  
+            if(comp.getFlex() > 0){
+              component.setHeight("100%");
+            }
+          } else {                                      //HBox 
+            ((HorizontalPanel) container).setCellWidth(component, percentage);
+            ((HorizontalPanel) container).setCellHeight(component, "100%");
+            
+            if(comp.getFlex() > 0){
+              component.setWidth("100%"); 
+            }
           }
-        } else {                                      //HBox 
-          ((HorizontalPanel) container).setCellWidth(component, percentage);
-          
-          component.setHeight("100%");
-          if(comp.getFlex() > 0){
-            component.setWidth("100%"); 
-          }
-        }
-      } else {
-        if(this.getOrientation() == Orient.VERTICAL){ //VBox
-          component.setWidth("100%");
-        } else {                                      //HBox 
-          component.setHeight("100%"); 
         }
       }
+      //By default 100%, respect hard-coded width
+      if(this.getOrientation() == Orient.VERTICAL){ //VBox
+        if(comp.getWidth() > 0){
+          component.setWidth(comp.getWidth()+"px");
+        } else {
+          component.setWidth("100%");
+        }
+      } else {                                      //HBox 
+        if(comp.getHeight() > 0){
+          component.setHeight(comp.getHeight()+"px");
+        } else {
+          component.setHeight("100%");
+        }
+      }
+    
       
       if (i + 1 == children.size() && !flexLayout) {
         
@@ -254,6 +265,13 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
     
   }
+  
+  private native void printInnerHTML(Widget w)/*-{
+    if(w){
+      alert(w);
+    }
+  }-*/;
+  
   
   public Orient getOrientation(){
     return this.orientation;
@@ -354,6 +372,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setWidth(int width) {
     this.width = width;  
+    System.out.println(this.getName()+" width: "+this.width);
   }
   
 

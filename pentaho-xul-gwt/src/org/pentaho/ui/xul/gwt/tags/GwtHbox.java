@@ -4,7 +4,6 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
@@ -12,7 +11,6 @@ import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 
 public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
 
@@ -33,6 +31,8 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     super(ELEMENT_NAME);
     this.orientation = Orient.HORIZONTAL;
     managedObject = container = new HorizontalPanel();
+    ((HorizontalPanel) container).setStyleName("hbox");
+    
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
