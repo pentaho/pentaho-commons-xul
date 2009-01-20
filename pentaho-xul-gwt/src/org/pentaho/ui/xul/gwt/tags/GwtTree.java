@@ -139,7 +139,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
     for (int i = 0; i < getRootChildren().getItemCount(); i++) {
       for (int j = 0; j < getColumns().getColumnCount(); j++) {
-        data[i][j] = getRootChildren().getItem(i).getRow().getCell(j).getLabel();
+        String label = getRootChildren().getItem(i).getRow().getCell(j).getLabel();
+        if(label == null || label.equals("")){
+          label = "&nbsp;";
+        }
+        data[i][j] = label;
       }
     }
     if (getHeight() != 0) {
