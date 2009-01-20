@@ -37,11 +37,14 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   
   public GwtButton() {
     super(ELEMENT_NAME);
+    //programatic creation doesn't call init() create here for them
     managedObject = button = new RoundedButton();
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     if(srcEle.hasAttribute("image")){
+      //we create a button by default, remove it here
+      button = null;
       managedObject = imageButton = new ImageButton();
     } else {
       managedObject = button = new RoundedButton();
