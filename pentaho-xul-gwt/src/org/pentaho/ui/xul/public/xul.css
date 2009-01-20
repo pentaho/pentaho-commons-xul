@@ -97,6 +97,7 @@
 
 .gwt-ScrollTable .dataTable td {
   border-bottom: 1px solid #BEBEBE;
+  border-right: 1px solid #BEBEBE;
 }
 
 .gwt-ScrollTable .dataTable-disabled td {
