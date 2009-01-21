@@ -132,8 +132,6 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException {
 
-    InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
-
     Document doc = getDocFromClasspath(resource);
 
     setRootDir(resource);
@@ -329,7 +327,8 @@ public abstract class AbstractXulLoader implements XulLoader {
       while ((line = reader.readLine()) != null) {
         buf.append(line);
       }
-
+      in.close();
+      
       String upperedIdDoc = this.upperCaseIDAttrs(buf.toString());
       SAXReader rdr = new SAXReader();
       return rdr.read(new StringReader(upperedIdDoc));
@@ -341,7 +340,8 @@ public abstract class AbstractXulLoader implements XulLoader {
   private Document getDocFromClasspath(String src) throws XulException {
     InputStream in = getClass().getClassLoader().getResourceAsStream(this.getRootDir() + src);
     if (in != null) {
-      return getDocFromInputStream(in);
+      Document doc = getDocFromInputStream(in);
+      return doc;
     } else {
       //try fully qualified name
       in = getClass().getClassLoader().getResourceAsStream(src);
