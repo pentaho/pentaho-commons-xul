@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
+import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -42,7 +43,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    if(srcEle.hasAttribute("image")){
+    if(!StringUtils.isEmpty(srcEle.getAttribute("image"))){
       //we create a button by default, remove it here
       button = null;
       managedObject = imageButton = new ImageButton();
@@ -51,11 +52,18 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     }
     
     super.init(srcEle, container);
-    
-    setLabel(srcEle.getAttribute("label"));
-    setOnclick(srcEle.getAttribute("onclick"));
-    setImage(srcEle.getAttribute("image"));
-    setTooltiptext(srcEle.getAttribute("tooltiptext"));
+    if(!StringUtils.isEmpty(srcEle.getAttribute("label"))){
+      setLabel(srcEle.getAttribute("label"));
+    }
+    if(!StringUtils.isEmpty(srcEle.getAttribute("onclick"))){
+      setOnclick(srcEle.getAttribute("onclick"));
+    }
+    if(!StringUtils.isEmpty(srcEle.getAttribute("image"))){
+      setImage(srcEle.getAttribute("image"));
+    }
+    if(!StringUtils.isEmpty(srcEle.getAttribute("tooltiptext"))){
+      setTooltiptext(srcEle.getAttribute("tooltiptext"));
+    }
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
   }
   
