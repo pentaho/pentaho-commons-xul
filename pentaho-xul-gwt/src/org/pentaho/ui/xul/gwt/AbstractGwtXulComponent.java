@@ -442,6 +442,11 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public void setVisible(boolean visible) {
     this.visible = visible;
   }
+
+  public void onDomReady() {
+      
+  }
+  
   
   
   

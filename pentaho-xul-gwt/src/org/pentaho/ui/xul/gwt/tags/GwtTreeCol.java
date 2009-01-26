@@ -168,4 +168,23 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return null;
   }
 
+  private String childrenBinding, comboBinding;
+  public String getChildrenbinding() {
+    return childrenBinding;
+  }
+
+  public String getCombobinding() {
+    return comboBinding;  
+  }
+
+  public void setChildrenbinding(String childProperty) {
+    this.childrenBinding = childProperty;  
+  }
+
+  public void setCombobinding(String property) {
+    this.comboBinding = property;
+  }
+  
+  
+
 }

@@ -10,21 +10,25 @@ import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparat
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
+import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBinding;
+import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
+import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
 import com.google.gwt.widgetideas.table.client.TableSelectionListener;
@@ -44,6 +48,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   XulTreeCols columns = null;
   XulTreeChildren rootChildren = null;
   private XulDomContainer domContainer;
+  private Tree tree;
   
   public GwtTree() {
     super("tree");
@@ -75,10 +80,83 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       updateUI();
   }
   private BaseTable table;
+  private boolean isHierarchical = false;
   
   // need to handle layouting
   public void layout() {
+
+    //XulComponent primaryColumn = this.getElementByXPath("//treecol[@primary='true']");
+    //XulComponent isaContainer = this.getElementByXPath("treechildren/treeitem[@container='true']");
+
+    //isHierarchical = (primaryColumn != null) || (isaContainer != null);
     
+    XulTreeItem item = (XulTreeItem) this.getRootChildren().getFirstChild();
+    if(item.getAttributeValue("container") != null && item.getAttributeValue("container").equals("true")){
+      isHierarchical = true;
+    }
+    if(isHierarchical()){
+      setupTree();
+    } else {
+      setupTable();
+    }
+  }
+  private void setupTree(){
+    tree = new Tree();
+    managedObject = tree;
+    updateUI();
+  }
+  
+  private void populateTree(){
+    tree.removeItems();
+    TreeItem topNode = new TreeItem("placeholder");
+    if(this.rootChildren == null){
+      this.rootChildren = (XulTreeChildren) this.getChildNodes().get(1);
+    }
+    for (XulComponent c : this.rootChildren.getChildNodes()){
+      XulTreeItem item = (XulTreeItem) c;
+      TreeItem node = createNode(item);
+      tree.addItem(node);
+    }
+    
+  }
+  
+  private void populateTable(){
+    BaseTable table = (BaseTable)managedObject;
+    
+    Object data[][] = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
+    
+    for (int i = 0; i < getRootChildren().getItemCount(); i++) {
+      for (int j = 0; j < getColumns().getColumnCount(); j++) {
+        String label = getRootChildren().getItem(i).getRow().getCell(j).getLabel();
+        if(label == null || label.equals("")){
+          label = "&nbsp;";
+        }
+        data[i][j] = label;
+      }
+    }
+    if (getHeight() != 0) {
+      table.setTableHeight(getHeight() + "px");
+    }
+    table.populateTable(data);
+    ResizableWidgetCollection.get().setResizeCheckingEnabled(false);
+  }
+  
+  private TreeItem createNode(XulTreeItem item){
+    TreeItem node = new TreeItem(item.getRow().getCell(0).getLabel());
+    if(item.getChildNodes().size() > 1){
+      //has children
+      //TODO: make this more defensive
+      XulTreeChildren children = (XulTreeChildren) item.getChildNodes().get(1);
+      for(XulComponent c : children.getChildNodes()){
+
+        TreeItem childNode = createNode((XulTreeItem) c);
+        node.addItem(childNode);
+      }
+    }
+    return node;
+  }
+  
+  private void setupTable(){
     String cols[] = new String[getColumns().getColumnCount()];
     int len[] = new int[cols.length];
     // for each column
@@ -133,24 +211,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
   
   public void updateUI() {
-    BaseTable table = (BaseTable)managedObject;
-    
-    Object data[][] = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
-    
-    for (int i = 0; i < getRootChildren().getItemCount(); i++) {
-      for (int j = 0; j < getColumns().getColumnCount(); j++) {
-        String label = getRootChildren().getItem(i).getRow().getCell(j).getLabel();
-        if(label == null || label.equals("")){
-          label = "&nbsp;";
-        }
-        data[i][j] = label;
-      }
+    if(this.isHierarchical()){
+      populateTree();
+    } else {
+      populateTable();
     }
-    if (getHeight() != 0) {
-      table.setTableHeight(getHeight() + "px");
-    }
-    table.populateTable(data);
-    ResizableWidgetCollection.get().setResizeCheckingEnabled(false);
   }
   
   public void afterLayout() {
@@ -247,8 +312,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public boolean isHierarchical() {
-    // TODO Auto-generated method stub
-    return false;
+    return isHierarchical;
   }
 
   public void removeTreeRows(int[] rows) {
@@ -301,21 +365,30 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       return;
     }
     try {
-      for (T o : elements) {
-        XulTreeRow row = this.getRootChildren().addNewRow();
-
-        for (XulComponent col : this.getColumns().getChildNodes()) {
-          XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
-          for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
-        
-            GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
-            domContainer.addBinding(binding);
-            binding.fireSourceChanged();
+      if(table != null){
+        for (T o : elements) {
+          XulTreeRow row = this.getRootChildren().addNewRow();
+  
+          for (XulComponent col : this.getColumns().getChildNodes()) {
+            XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+            for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
+          
+              GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+              domContainer.addBinding(binding);
+              binding.fireSourceChanged();
+            }
+  
+            row.addCell(cell);
           }
-
-          row.addCell(cell);
+  
         }
+      } else { //tree
 
+        for (T o : elements) {
+          XulTreeRow row = this.getRootChildren().addNewRow();
+          addTreeChild(o, row);
+        }
+        
       }
       updateUI();
       
@@ -327,6 +400,40 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       Window.alert("error adding elements"+e);
     }
     
+  }
+  
+  private <T> void addTreeChild(T element, XulTreeRow row){
+    try{
+      XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+      
+      for (InlineBindingExpression exp : ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getBindingExpressions()) {
+        GwtBinding binding = new GwtBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        domContainer.addBinding(binding);
+        binding.fireSourceChanged();
+      }
+  
+      row.addCell(cell);
+      
+      //find children
+      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+      property = "get"+(property.substring(0,1).toUpperCase() + property.substring(1));
+      
+      GwtBindingMethod childrenMethod = GwtBindingContext.typeController.findGetMethod(element, property);
+      
+      Collection<T> children = (Collection<T>) childrenMethod.invoke(element, new Object[]{});
+      XulTreeChildren treeChildren = null;
+      
+      if(children != null && children.size() > 0){
+        treeChildren = (XulTreeChildren) getDocument().createElement("treechildren");
+        row.getParent().addChild(treeChildren);
+      }
+      for(T child : children){
+        row = treeChildren.addNewRow();
+        addTreeChild(child, row);
+      }
+    } catch (Exception e) {
+      Window.alert("error adding elements"+e.getMessage());
+    }
   }
 
   public void setEnableColumnDrag(boolean drag) {

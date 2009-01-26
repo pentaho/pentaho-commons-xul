@@ -44,11 +44,11 @@ public class ExampleXulApp implements EntryPoint, IMessageBundleLoadCallback {
         container = loader.loadXul(gwtDoc);
       }
 
-      EventHandlerWrapper wrapper = GWT.create(TestController.class);
-      TestController instance = new TestController();
-      wrapper.setHandler(instance);
-      
-      container.addEventHandler(wrapper);
+//      EventHandlerWrapper wrapper = GWT.create(TestController.class);
+//      TestController instance = new TestController();
+//      wrapper.setHandler(instance);
+//      
+//      container.addEventHandler(wrapper);
 //      container.addEventHandler(new SampleEventHandler());
 //      container.addEventHandler(new SampleEventHandler2());
       
@@ -63,7 +63,7 @@ public class ExampleXulApp implements EntryPoint, IMessageBundleLoadCallback {
   public void bundleLoaded(String bundleName) {
     try {
 
-      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "dash.xul");
+      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, "tree.xul");
 
       try {
         Request response = builder.sendRequest(null, new RequestCallback() {

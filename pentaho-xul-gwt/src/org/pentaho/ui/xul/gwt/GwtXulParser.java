@@ -49,7 +49,7 @@ public class GwtXulParser {
   
   public Document parseDocument(com.google.gwt.xml.client.Element rootSrc) throws XulException {
 
-    Element root = parse(rootSrc, null);
+    XulComponent root = parse(rootSrc, null);
 
     //give root reference to runner for service calls
     if(root instanceof XulWindow){
@@ -59,12 +59,22 @@ public class GwtXulParser {
     xulDocument.addChild(root);
     xulDocument.setXulDomContainer(this.xulDomContainer);
     
+
+    //descend back down firing notification that everything is on the tree.
+    notifyDomReady(root);
+    
     return xulDocument;
   }
-  
-  public Element parse(com.google.gwt.xml.client.Element rootSrc, XulContainer parent) throws XulException {
+
+  private void notifyDomReady(XulComponent node){
+    node.onDomReady();
+    for(XulComponent c : node.getChildNodes()){
+      notifyDomReady(c);
+    }
+  }
+  public XulComponent parse(com.google.gwt.xml.client.Element rootSrc, XulContainer parent) throws XulException {
     //parse element
-    Element root = getElement(rootSrc, parent);
+    XulComponent root = getElement(rootSrc, parent);
 
     //descend down a level and parse children (root would be a container in the case)
     NodeList children = rootSrc.getChildNodes();
