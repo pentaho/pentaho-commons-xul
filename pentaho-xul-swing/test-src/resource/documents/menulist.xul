@@ -18,7 +18,7 @@
         <menuitem label="Customers" />
 			</menupopup>
 		</menulist>
-    <menulist label="level" id="list2" pen:bind="label">
+    <menulist label="level" id="list2" pen:binding="label">
       <menupopup>
        
       </menupopup>
