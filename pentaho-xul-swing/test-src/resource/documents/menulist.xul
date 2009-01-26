@@ -7,7 +7,7 @@
    xmlns:pen="http://www.pentaho.org/2008/xul"
    height="450" width="650">
 	
-	<script src="org.pentaho.ui.xul.test.samples.MenuEventHandler" id="handler"/>
+	<script src="org.pentaho.ui.xul.samples.MenuEventHandler" id="handler"/>
 	
 	<hbox>
 		<menulist label="cube" oncommand="handler.changeState()" id="list" pen:binding="label">
@@ -18,7 +18,7 @@
         <menuitem label="Customers" />
 			</menupopup>
 		</menulist>
-    <menulist label="level" id="list2" pen:binding="label">
+    <menulist label="level" id="list2" pen:binding="name">
       <menupopup>
        
       </menupopup>
