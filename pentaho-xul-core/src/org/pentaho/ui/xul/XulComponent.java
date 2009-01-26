@@ -163,4 +163,11 @@ public interface XulComponent extends Element, XulEventSource {
 
   public boolean isVisible();
   public void setVisible(boolean visible);
+  
+  /**
+   * Called by the parser when the document is fully parsed. Some implementations require
+   * knowledge of parents above the document, or only behave properly when an unbroken chain
+   * to the root is in place.
+   */
+  public void onDomReady();
 }

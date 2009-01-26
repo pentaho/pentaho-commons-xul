@@ -71,7 +71,17 @@ public class XulParser {
       xulDocument.addChild(parent);
     }
     
+    //descend back down firing notification that everything is on the tree.
+    notifyDomReady(root);
+    
     return xulDocument;
+  }
+  
+  private void notifyDomReady(XulComponent node){
+    node.onDomReady();
+    for(XulComponent c : node.getChildNodes()){
+      notifyDomReady(c);
+    }
   }
   
   public XulContainer getPlaceHolderRoot() throws XulException{

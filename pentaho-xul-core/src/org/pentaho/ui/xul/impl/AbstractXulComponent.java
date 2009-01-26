@@ -307,4 +307,10 @@ public abstract class AbstractXulComponent implements XulComponent {
   public void setVisible(boolean visible){
     this.visible = visible;
   }
+
+  public void onDomReady() {
+    
+  }
+  
+  
 }
