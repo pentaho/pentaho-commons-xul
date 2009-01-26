@@ -158,4 +158,26 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   public void setBinding(String binding) {
     this.binding = binding;
   }
+
+  public String getChildrenbinding() {
+    return null;
+  }
+
+  public String getCombobinding() {
+    return null;  
+  }
+
+  public void setChildrenbinding(String childProperty) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+
+  public void setCombobinding(String property) {
+    
+        // TODO Auto-generated method stub 
+      
+  }
+  
+  
 }
