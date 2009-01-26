@@ -52,7 +52,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     combobox.addItemListener(new ItemListener() {
 
       public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED && !inLayoutProcess) {
+        if (e.getStateChange() == ItemEvent.SELECTED && !inLayoutProcess && initialized) {
           fireSelectedEvents();
         }
       }
@@ -66,6 +66,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
   public void layout() {
     inLayoutProcess = true;
     if(suppressLayout){
+      inLayoutProcess = false;
       return;
     }
     SwingMenupopup popup = getPopupElement();
@@ -89,9 +90,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
         firstChild = false;
       }
     }
-
-    loaded = true;
-    initialized = true;
+    
     inLayoutProcess = false;
 
     if (selectedItem != null) {
@@ -102,7 +101,15 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
       }
       model.setSelectedItem(selectedItem);
     }
-    
+    initialized = true;
+    loaded = true;
+  }
+  
+  public void onDomReady(){
+
+    if(combobox.getSelectedItem() != null){
+      fireSelectedEvents();
+    }
   }
   
   private void fireSelectedEvents(){

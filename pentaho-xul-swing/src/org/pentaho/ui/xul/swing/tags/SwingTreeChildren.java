@@ -43,6 +43,19 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
   }
 
   public XulTree getTree() {
+    if(tree == null){
+      XulComponent c = getParent();
+      
+      while(c != null){
+        if(c instanceof XulTree){
+          tree = (XulTree) c;
+          break;
+        }
+        System.out.println(c.getName());
+        
+        c = c.getParent();
+      }
+    }
     return tree;
   }
 
@@ -64,18 +77,18 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
     while (getChildNodes().size() > 0) {
       removeItem(0, false);
     }
-    tree.update();
+    getTree().update();
   }
 
   public void removeItem(XulTreeItem item) {
     this.removeChild(item);
-    tree.update();
+    getTree().update();
   }
 
   public void removeItem(int rowIndex, boolean refresh) {
     this.removeChild(getChildNodes().get(rowIndex));
     if (refresh) {
-    	tree.update();
+      getTree().update();
     }
     
   }
@@ -112,7 +125,7 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
 
   @Override
   public void layout() {
-    if(tree != null){
+    if(getTree() != null){
       tree.setRootChildren(this);
       initialized = true;
     }
