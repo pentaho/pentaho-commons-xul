@@ -228,7 +228,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void setDisabled(boolean dis) {
     this.disabled = dis;
-    table.setEnabled(!this.disabled);
+    if(table != null){
+      table.setEnabled(!this.disabled);
+    }
   }
 
   public void setEditable(boolean edit) {
@@ -243,6 +245,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public void setOnselect(final String select) {
+    if(table != null){
     table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 
       public void valueChanged(ListSelectionEvent event) {
@@ -252,6 +255,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         invoke(select, new Object[] { new Integer(table.getSelectedRow()) });
       }
     });
+    }
   }
 
   private XulTreeCols columns;
@@ -456,7 +460,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     
     table.getTableHeader().setReorderingAllowed(this.isEnableColumnDrag());
     
-
+    this.setDisabled(this.isDisabled());
   }
   private TreeModel treeModel;
   
