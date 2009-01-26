@@ -20,8 +20,7 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
 
   public SwingTreeChildren(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treechildren");
-
-    tree = (XulTree) parent;
+    
     managedObject = "empty";
 
   }
@@ -91,9 +90,32 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
   }
 
   @Override
+  public void onDomReady() {
+    //TODO: move this into constructor once the "self" element is real
+    //Due to many nested TreeItems with their own TreeChildren, we have to walk up the DOm
+    //an unknown positions to find the tree.
+    if(tree == null){
+      XulComponent c = getParent();
+    
+      while(c != null){
+        if(c instanceof XulTree){
+          tree = (XulTree) c;
+          break;
+        }
+        System.out.println(c.getName());
+        
+        c = c.getParent();
+      }
+    }
+    layout();
+  }
+
+  @Override
   public void layout() {
-    tree.setRootChildren(this);
-    initialized = true;
+    if(tree != null){
+      tree.setRootChildren(this);
+      initialized = true;
+    }
   }
 
 }

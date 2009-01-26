@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<window id="general-window" title="Grids" orient="vertical" height="500" width="700"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <tree id="tree2" flex="1" hidecolumnpicker="true">
+    <treecols>
+      <treecol id="sex2" flex="1" label="Cats" primary="true" />
+    </treecols>
+    <treechildren>
+
+      <treeitem container="true" open="true">
+        <treerow>
+          <treecell label="Female" />
+        </treerow>
+        <treechildren>
+
+          <treeitem container="true" open="true">
+            <treerow>
+              <treecell label="Gray" />
+            </treerow>
+            <treechildren>
+              <treeitem>
+                <treerow>
+                  <treecell label="Pearl" />
+                </treerow>
+              </treeitem>
+            </treechildren>
+          </treeitem>
+
+          <treeitem container="true" open="true">
+            <treerow>
+              <treecell label="White" />
+            </treerow>
+            <treechildren>
+              <treeitem>
+                <treerow>
+                  <treecell label="Cosmo" />
+                </treerow>
+              </treeitem>
+            </treechildren>
+          </treeitem>
+
+          <treeitem container="true" open="true">
+            <treerow>
+              <treecell label="Orange" />
+            </treerow>
+            <treechildren>
+              <treeitem>
+                <treerow>
+                  <treecell label="Tribble" />
+                </treerow>
+              </treeitem>
+            </treechildren>
+          </treeitem>
+
+        </treechildren>
+      </treeitem>
+
+      <treeitem container="true" open="true">
+        <treerow>
+          <treecell label="Male" />
+        </treerow>
+        <treechildren>
+
+          <treeitem container="true" open="true">
+            <treerow>
+              <treecell label="Black" />
+            </treerow>
+            <treechildren>
+              <treeitem>
+                <treerow>
+                  <treecell label="Aramis" />
+                </treerow>
+              </treeitem>
+              <treeitem>
+                <treerow>
+                  <treecell label="Fergus" />
+                </treerow>
+              </treeitem>
+              <treeitem>
+                <treerow>
+                  <treecell label="Clint" />
+                </treerow>
+              </treeitem>
+            </treechildren>
+          </treeitem>
+
+          <treeitem container="true" open="true">
+            <treerow>
+              <treecell label="Orange" />
+            </treerow>
+            <treechildren>
+              <treeitem>
+                <treerow>
+                  <treecell label="Butter" />
+                </treerow>
+              </treeitem>
+              <treeitem>
+                <treerow>
+                  <treecell label="Zippy" />
+                </treerow>
+              </treeitem>
+            </treechildren>
+          </treeitem>
+
+          <treeitem container="true" open="true">
+            <treerow>
+              <treecell label="Tabby" />
+            </treerow>
+            <treechildren>
+              <treeitem>
+                <treerow>
+                  <treecell label="Feathers" />
+                </treerow>
+              </treeitem>
+            </treechildren>
+          </treeitem>
+
+          <treeitem container="true" open="true">
+            <treerow>
+              <treecell label="Holstein" />
+            </treerow>
+            <treechildren>
+              <treeitem>
+                <treerow>
+                  <treecell label="Yakima" />
+                </treerow>
+              </treeitem>
+            </treechildren>
+          </treeitem>
+
+        </treechildren>
+      </treeitem>
+    </treechildren>
+  </tree>
+</window>

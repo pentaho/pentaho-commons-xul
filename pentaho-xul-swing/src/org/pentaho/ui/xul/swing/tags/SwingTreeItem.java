@@ -18,6 +18,7 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
   private static final Log logger = LogFactory.getLog(SwingTreeItem.class);
 
   private XulTreeRow row;
+  private XulTreeChildren treeChildren; //Hierachical tree
 
   public SwingTreeItem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treeitem");
@@ -89,13 +90,24 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
 
   @Override
   public void layout() {
-    for (Element comp : getChildNodes()) { //should be the only one in there
-      if (comp instanceof XulTreeRow) { //more of an assert, should be true;
-        this.row = (SwingTreeRow) comp;
-      } else {
-        logger.error("SwingTreeItem's child is not a XulTreeRow");
+    if(getChildNodes().size() > 1){
+      //tree
+      for (Element comp : getChildNodes()) { //should be the only one in there
+        if (comp instanceof XulTreeRow) { //more of an assert, should be true;
+          this.row = (SwingTreeRow) comp;
+        } else {
+          this.treeChildren = (XulTreeChildren) comp;
+        }
+      }
+    } else {
+      //table
+      for (Element comp : getChildNodes()) { //should be the only one in there
+        if (comp instanceof XulTreeRow) { //more of an assert, should be true;
+          this.row = (SwingTreeRow) comp;
+        }
       }
     }
+    
     initialized = true;
   }
 }
