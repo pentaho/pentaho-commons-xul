@@ -759,7 +759,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     public int getRowCount() {
       if (this.tree != null) {
-        return this.tree.getRootChildren().getItemCount();
+        XulTreeChildren children = this.tree.getRootChildren();
+        return (children != null)? children.getItemCount() : 0;
       } else {
         return 0;
       }
