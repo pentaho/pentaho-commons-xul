@@ -46,6 +46,14 @@ public interface XulTreeCol extends XulComponent {
   
   public void setBinding(String binding);
   public String getBinding();
+
+  
+  public void setChildrenbinding(String childProperty);
+  public String getChildrenbinding();
+  
+  public String getCombobinding();
+  public void setCombobinding(String property);
+  
   public List<InlineBindingExpression> getBindingExpressions();
 
 }
