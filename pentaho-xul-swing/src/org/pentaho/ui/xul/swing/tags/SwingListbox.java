@@ -160,6 +160,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   private void fireSetSelectedIndices(int[] indices) {
     if(!Arrays.equals(curSelectedIndices, indices)) {
       this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
+      this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndices, getSelectedIndex());
       curSelectedIndices = indices;
     }
   }

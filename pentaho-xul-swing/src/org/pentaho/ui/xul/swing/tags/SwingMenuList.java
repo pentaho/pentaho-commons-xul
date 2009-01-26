@@ -52,11 +52,8 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     combobox.addItemListener(new ItemListener() {
 
       public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-          SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (T) ((SwingMenuitem)combobox
-            .getSelectedItem()).getLabel());
-          SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
-          previousSelectedItem = (T) ((SwingMenuitem)combobox.getSelectedItem()).getLabel();
+        if (e.getStateChange() == ItemEvent.SELECTED && !inLayoutProcess) {
+          fireSelectedEvents();
         }
       }
 
@@ -64,28 +61,56 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
 
   }
 
+  private boolean suppressLayout = false;
+  private boolean inLayoutProcess = false;
   public void layout() {
+    inLayoutProcess = true;
+    if(suppressLayout){
+      return;
+    }
     SwingMenupopup popup = getPopupElement();
     DefaultComboBoxModel model = (DefaultComboBoxModel) this.combobox.getModel();
     model.removeAllElements();
 
-    SwingMenuitem selecetdItem = null;
+    SwingMenuitem selectedItem = null;
 
+    System.out.println("Popup children size: "+popup.getChildNodes().size());
+    
+    //capture first child as default selection
+    boolean firstChild = true;
     for (XulComponent item : popup.getChildNodes()) {
+      System.out.println("adding child");
       JMenuItem jmenuItem = (JMenuItem) ((SwingMenuitem) item).getManagedObject();
       SwingMenuitem tempItem = (SwingMenuitem) item;
       model.addElement(tempItem);
-      if (tempItem.isSelected()) {
-        selecetdItem = tempItem;
+      
+      if (tempItem.isSelected() || firstChild) {
+        selectedItem = tempItem;
+        firstChild = false;
       }
-    }
-
-    if (selecetdItem != null) {
-      model.setSelectedItem(selecetdItem);
     }
 
     loaded = true;
     initialized = true;
+    inLayoutProcess = false;
+
+    if (selectedItem != null) {
+      //if first setting it to the currently selected one will not fire event.
+      //manually firing here
+      if(model.getSelectedItem() == selectedItem){
+        fireSelectedEvents();
+      }
+      model.setSelectedItem(selectedItem);
+    }
+    
+  }
+  
+  private void fireSelectedEvents(){
+
+    SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (T) ((SwingMenuitem)combobox
+        .getSelectedItem()).getLabel());
+      SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
+      previousSelectedItem = (T) ((SwingMenuitem)combobox.getSelectedItem()).getLabel();
   }
 
 
@@ -177,6 +202,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
   }
 
   public void setElements(Collection<T> tees) {
+    this.suppressLayout = true;
     XulMenupopup popup = getPopupElement();
     for (XulComponent menuItem : popup.getChildNodes()) {
       popup.removeChild(menuItem);
@@ -186,13 +212,14 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
       SwingMenuitem item = new SwingMenuitem(null, popup, this.xulDomContainer, null);
 
       String attribute = getBinding();
-      if (StringUtils.isEmpty(attribute)) {
+      if (!StringUtils.isEmpty(attribute)) {
         item.setLabel(extractLabel(t));
       }
 
       popup.addChild(item);
     }
 
+    this.suppressLayout = false;
     layout();
   }
 
