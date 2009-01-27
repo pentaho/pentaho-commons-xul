@@ -91,7 +91,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     //isHierarchical = (primaryColumn != null) || (isaContainer != null);
     
     XulTreeItem item = (XulTreeItem) this.getRootChildren().getFirstChild();
-    if(item.getAttributeValue("container") != null && item.getAttributeValue("container").equals("true")){
+    if(item != null && item.getAttributeValue("container") != null && item.getAttributeValue("container").equals("true")){
       isHierarchical = true;
     }
     if(isHierarchical()){
