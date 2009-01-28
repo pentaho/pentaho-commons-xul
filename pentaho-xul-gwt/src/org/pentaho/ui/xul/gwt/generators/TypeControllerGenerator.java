@@ -73,7 +73,35 @@ public class TypeControllerGenerator extends Generator {
         
   }
 
+  
+  private String getTypeName(JType type){
+    String sType = "";  
 
+    if(type.isArray() != null){
+      sType = type.isArray().getQualifiedSourceName();
+      if(sType.contains("extends")){
+        sType = sType.substring(sType.indexOf("extends")+7).trim();
+      }
+      if(sType.contains("[]") == false){
+        sType+="[]";
+      }
+
+      System.out.println("array: "+sType);
+    } else if(type.isGenericType() != null || type.getQualifiedSourceName().contains("extends")){
+      if(type.isGenericType() != null && type.getQualifiedSourceName().contains("extends")){
+        sType = type.isGenericType().getQualifiedSourceName();
+      } else {
+        sType = "Object";
+      }
+    } else if(type.isPrimitive() != null){
+      JPrimitiveType primative = type.isPrimitive();
+      sType = primative.getQualifiedBoxedSourceName();
+    } else {
+      sType = type.getQualifiedSourceName();
+    }
+    return sType;
+  }
+  
   private void generateClass(TreeLogger logger, GeneratorContext context) { 
 
     // get print writer that receives the source code 
@@ -151,45 +179,50 @@ public class TypeControllerGenerator extends Generator {
       String keyRoot = generateTypeKey(type);
 
       try{
-        for(JMethod m : type.getMethods()){
-          if(!m.isPublic()){
-            continue;
-          }
-          String methodName = m.getName();
-
-          sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), new GwtBindingMethod(){");
-          
-
-          sourceWriter.println("public Object invoke(Object obj, Object[] args) throws XulException { ");
-          sourceWriter.indent();
-          sourceWriter.println("try{");
-          sourceWriter.println(type.getQualifiedSourceName()+" target = ("+type.getQualifiedSourceName()+") obj;");
-          
-          JParameter[] params = m.getParameters();
-          String argList = "";
-          int pos = 0;
-          for(JParameter param : params){
-            if(pos > 0){
-              argList += ", ";
+        
+        JClassType loopType = type;
+        while(loopType.getSuperclass() != null && loopType.getSuperclass().getSimpleSourceName().equals("Object") == false){
+          for(JMethod m : loopType.getMethods()){
+            if(!m.isPublic()){
+              continue;
             }
-            argList += "("+boxPrimative(param.getType())+") args["+pos+"]";
-            pos++;
+            String methodName = m.getName();
+  
+            sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), new GwtBindingMethod(){");
+            
+  
+            sourceWriter.println("public Object invoke(Object obj, Object[] args) throws XulException { ");
+            sourceWriter.indent();
+            sourceWriter.println("try{");
+            sourceWriter.println(loopType.getQualifiedSourceName()+" target = ("+loopType.getQualifiedSourceName()+") obj;");
+            
+            JParameter[] params = m.getParameters();
+            String argList = "";
+            int pos = 0;
+            for(JParameter param : params){
+              if(pos > 0){
+                argList += ", ";
+              }
+              argList += "("+getTypeName(param.getType())+") args["+pos+"]";
+              pos++;
+            }
+            
+            if(isVoidReturn(m.getReturnType())){
+              sourceWriter.println("target."+methodName+"("+argList+");");
+              sourceWriter.println("return null;");
+            } else {
+              sourceWriter.println("return "+boxReturnType(m)+" target."+methodName+"("+argList+");");
+            }
+  
+            sourceWriter.println("}catch(Exception e){ throw new XulException(\"error with "+type.getQualifiedSourceName()+"\"+e.getMessage());}");
+            sourceWriter.println("}");
+  
+            sourceWriter.outdent();
+            sourceWriter.println("});");
+            
           }
-          
-          if(isVoidReturn(m.getReturnType())){
-            sourceWriter.println("target."+methodName+"("+argList+");");
-            sourceWriter.println("return null;");
-          } else {
-            sourceWriter.println("return "+boxReturnType(m)+" target."+methodName+"("+argList+");");
-          }
-
-          sourceWriter.println("}catch(Exception e){ throw new XulException(\"error with "+type.getQualifiedSourceName()+"\"+e.getMessage());}");
-          sourceWriter.println("}");
-
-          sourceWriter.outdent();
-          sourceWriter.println("});");
-          
-        } 
+          loopType = loopType.getSuperclass();
+        }
       } catch (Exception e) {
 
         // record to logger that Map generation threw an exception 

@@ -12,9 +12,13 @@ import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulEventSourceAdapter;
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.util.Orient;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -447,7 +451,29 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       
   }
   
+  public void resetContainer() {
+  }
+  protected void invoke(String method) {
+    invoke(method, null);
+  }
+
+  protected void invoke(String method, Object[] args) {
+    Document doc = getDocument();
+    XulRoot window = (XulRoot) doc.getRootElement();
+    XulDomContainer con = window.getXulDomContainer();
+
+    try {
+      if (args == null) {
+        args = new Object[] {};
+      }
+      con.invoke(method, args);
+    } catch (XulException e) {
+      Window.alert("Error calling oncommand event"+e.getMessage());
+    }
+  }
+  public void adoptAttributes(XulComponent component) {
+    
+    // TODO Auto-generated method stub 
   
-  
-  
+}
 }

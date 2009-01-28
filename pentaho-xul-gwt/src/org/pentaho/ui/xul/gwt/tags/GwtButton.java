@@ -47,6 +47,8 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
       //we create a button by default, remove it here
       button = null;
       managedObject = imageButton = new ImageButton();
+      imageButton.setHeight("");
+      imageButton.setWidth("");
     } else {
       managedObject = button = new RoundedButton();
     }
@@ -199,6 +201,14 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
       imageButton.setTitle(tooltip);
     }
     
+  }
+  
+  public void layout(){
+    super.layout();
+    if(imageButton != null){
+      imageButton.setHeight("");
+      imageButton.setWidth("");
+    }
   }
 
   public void adoptAttributes(XulComponent component) {

@@ -34,6 +34,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
     setBinding(srcEle.getAttribute("pen:binding"));
+    setChildrenbinding(srcEle.getAttribute("pen:childrenbinding"));
   }
   
   public void autoSize() {

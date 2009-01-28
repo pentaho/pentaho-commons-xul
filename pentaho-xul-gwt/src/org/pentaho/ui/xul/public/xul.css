@@ -35,6 +35,22 @@
 	cursor:pointer;
 }
 
+
+.gwt-Tree {
+  background: white;
+}
+
+.gwt-Tree .gwt-TreeItem {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+  background-color: #C3D9FF;
+  cursor: pointer;
+  cursor: hand;
+}
+
 /*=========================  TOOLBAR  =========================*/
 .toolbar{
   width:100%;

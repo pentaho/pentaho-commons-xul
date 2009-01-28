@@ -239,10 +239,17 @@ public class GwtBinding implements Binding{
               return;
             }
             System.out.println("Setting val: "+finalVal+" on: "+targetObject);
+            if(targetSetMethod == null){
+              System.out.println("Error Setting val targetMethod null: "+finalVal+" on: "+targetObject+"."+GwtBinding.this.targetAttr);
+            }
+            if(targetObject == null){
+              System.out.println("Error Setting val targetObject null: "+finalVal+" on: "+targetObject+"."+GwtBinding.this.targetAttr);
+            }
             targetSetMethod.invoke(targetObject, new Object[]{finalVal});
+            
           
           } catch (Exception e) {
-            throw new BindingException("Error invoking setter method [" + targetSetMethod + "] on target: "+target, e);
+            throw new BindingException("Error invoking setter method [" + targetAttr + "] on target: "+target, e);
           }
         }
       }

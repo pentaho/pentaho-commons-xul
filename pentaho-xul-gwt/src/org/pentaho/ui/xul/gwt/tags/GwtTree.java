@@ -27,8 +27,10 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
 import com.google.gwt.widgetideas.table.client.TableSelectionListener;
@@ -81,19 +83,19 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
   private BaseTable table;
   private boolean isHierarchical = false;
-  
+  private boolean firstLayout = true;
   // need to handle layouting
   public void layout() {
+    if(firstLayout){
 
-    //XulComponent primaryColumn = this.getElementByXPath("//treecol[@primary='true']");
-    //XulComponent isaContainer = this.getElementByXPath("treechildren/treeitem[@container='true']");
-
-    //isHierarchical = (primaryColumn != null) || (isaContainer != null);
-    
-    XulTreeItem item = (XulTreeItem) this.getRootChildren().getFirstChild();
-    if(item != null && item.getAttributeValue("container") != null && item.getAttributeValue("container").equals("true")){
-      isHierarchical = true;
+      XulTreeItem item = (XulTreeItem) this.getRootChildren().getFirstChild();
+      
+      if(item != null && item.getAttributeValue("container") != null && item.getAttributeValue("container").equals("true")){
+        isHierarchical = true;
+      }
+      firstLayout = false;
     }
+
     if(isHierarchical()){
       setupTree();
     } else {
@@ -101,9 +103,61 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     }
   }
   private void setupTree(){
-    tree = new Tree();
-    managedObject = tree;
+    if(tree == null){
+      tree = new Tree();
+      ScrollPanel sp = new ScrollPanel(tree);
+      managedObject = sp;
+    } 
+    tree.addTreeListener(new TreeListener(){
+
+      public void onTreeItemSelected(TreeItem arg0) {
+          
+        int pos = GwtTree.this.findPosition(tree.getItem(0), arg0, 0).foundPosition;
+          
+        if(pos > -1){
+          GwtTree.this.changeSupport.firePropertyChange("selectedRows",null,new int[]{pos});
+        }
+        
+
+      }
+
+      public void onTreeItemStateChanged(TreeItem arg0) {
+          
+      }
+      
+    });
     updateUI();
+  }
+  
+  private class PositionPair{
+    int foundPosition = -1;
+    int curPos;
+    TreeItem itemToFind;
+    public PositionPair(int curPos, TreeItem itemToFind, int foundPosition){
+      this.foundPosition = foundPosition;
+      this.curPos = curPos;
+      this.itemToFind = itemToFind;
+    }
+  }
+  
+  private PositionPair findPosition(TreeItem curItem, TreeItem itemToFind, int curPos){
+    if(curItem == itemToFind){
+      PositionPair p = new PositionPair(curPos, itemToFind, curPos);
+      return p;
+    } else if(curItem.getChildIndex(itemToFind) > -1) {
+      curPos = curPos+1;
+      return new PositionPair(curPos, itemToFind, curItem.getChildIndex(itemToFind)+curPos);
+    } else {
+      for(int i=0; i<curItem.getChildCount(); i++){
+        PositionPair p;
+        if((p = findPosition(curItem.getChild(i), itemToFind, curPos +i)).foundPosition > -1){
+          return p;
+        }
+        curPos += curItem.getChildCount() + 1;
+      }
+      return new PositionPair(curPos, itemToFind, -1);
+    }
+    
   }
   
   private void populateTree(){
@@ -267,17 +321,29 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public int[] getSelectedRows() {
-    BaseTable table = (BaseTable)managedObject;
-    if (table == null) {
-      return new int[0];
+    if(this.isHierarchical()){
+      TreeItem item = tree.getSelectedItem();
+      for(int i=0; i <tree.getItemCount(); i++){
+        if(tree.getItem(i) == item){
+          return new int[]{i};
+        }
+      }
+      
+      return new int[]{};
+      
+    } else {
+      BaseTable table = (BaseTable)managedObject;
+      if (table == null) {
+        return new int[0];
+      }
+      Set<Integer> rows = table.getSelectedRows();
+      int rarr[] = new int[rows.size()];
+      int i = 0;
+      for (Integer v : rows) {
+        rarr[i++] = v;
+      }
+      return rarr;
     }
-    Set<Integer> rows = table.getSelectedRows();
-    int rarr[] = new int[rows.size()];
-    int i = 0;
-    for (Integer v : rows) {
-      rarr[i++] = v;
-    }
-    return rarr;
   }
   
   public void setSelectedRows(int[] rows) {
@@ -395,9 +461,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       //treat as a selection change
       changeSupport.firePropertyChange("  ", null, getSelectedRows());
     } catch (XulException e) {
-      Window.alert("error adding elements"+e);
+      Window.alert("error adding elements "+e);
+      System.out.println(e.getMessage());
+      e.printStackTrace();
     } catch (Exception e) {
-      Window.alert("error adding elements"+e);
+      Window.alert("error adding elements "+e);
+      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
     
   }
@@ -416,7 +486,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       
       //find children
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
-      property = "get"+(property.substring(0,1).toUpperCase() + property.substring(1));
       
       GwtBindingMethod childrenMethod = GwtBindingContext.typeController.findGetMethod(element, property);
       
@@ -432,7 +501,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         addTreeChild(child, row);
       }
     } catch (Exception e) {
-      Window.alert("error adding elements"+e.getMessage());
+      Window.alert("error adding elements "+e.getMessage());
+      e.printStackTrace();
     }
   }
 

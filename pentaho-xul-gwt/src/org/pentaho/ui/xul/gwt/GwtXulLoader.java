@@ -20,6 +20,9 @@ import org.pentaho.ui.xul.gwt.tags.GwtHbox;
 import org.pentaho.ui.xul.gwt.tags.GwtLabel;
 import org.pentaho.ui.xul.gwt.tags.GwtListbox;
 import org.pentaho.ui.xul.gwt.tags.GwtListitem;
+import org.pentaho.ui.xul.gwt.tags.GwtMenuList;
+import org.pentaho.ui.xul.gwt.tags.GwtMenuitem;
+import org.pentaho.ui.xul.gwt.tags.GwtMenupopup;
 import org.pentaho.ui.xul.gwt.tags.GwtOverlay;
 import org.pentaho.ui.xul.gwt.tags.GwtScript;
 import org.pentaho.ui.xul.gwt.tags.GwtSpacer;
@@ -97,6 +100,9 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     GwtTreeRow.register();
     GwtTreeCell.register();
     GwtDialog.register();
+    GwtMenuList.register();
+    GwtMenuitem.register();
+    GwtMenupopup.register();
       
   }
   
