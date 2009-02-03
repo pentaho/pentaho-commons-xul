@@ -1,6 +1,8 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 
+import org.pentaho.gwt.widgets.client.text.ToolTip;
+import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulLabel;
@@ -38,7 +40,10 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   }
   
   public void layout(){
-    label.setTitle(this.getTooltiptext());
+    if(StringUtils.isEmpty(this.getTooltiptext()) == false){
+      label.addMouseListener(new ToolTip(this.getTooltiptext(), 1000));
+    }
+
   }
 
   public void setValue(String value){
