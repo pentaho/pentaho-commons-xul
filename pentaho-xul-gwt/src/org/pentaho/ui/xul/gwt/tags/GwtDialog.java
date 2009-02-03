@@ -53,6 +53,11 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     setButtonlabelextra1(srcEle.getAttribute("buttonlabelextra1"));
     setButtonlabelextra2(srcEle.getAttribute("buttonlabelextra2"));    
     
+    setButtonlabelacceptTooltiptext(srcEle.getAttribute("pen:buttonlabelaccepttooltiptext"));
+    setButtonlabelcancelTooltiptext(srcEle.getAttribute("pen:buttonlabelcanceltooltiptext"));
+    setButtonlabelextra1Tooltiptext(srcEle.getAttribute("pen:buttonlabelextra1tooltiptext"));
+    setButtonlabelextra2Tooltiptext(srcEle.getAttribute("pen:buttonlabelextra2tooltiptext"));    
+        
     setButtonalign(srcEle.getAttribute("buttonalign"));
     setTitle(srcEle.getAttribute("title"));
     setOnclose(srcEle.getAttribute("onclose"));
@@ -80,6 +85,23 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     return getAttributeValue("buttonlabelextra2");
   }
 
+  public String getButtonlabelacceptTooltipText() {
+    return getAttributeValue("buttonlabelaccepttooltiptext");
+  }
+
+  public String getButtonlabelcancelTooltipText() {
+    return getAttributeValue("buttonlabelcanceltooltiptext");
+  }
+
+  public String getButtonlabelextra1TooltipText() {
+    return getAttributeValue("buttonlabelextra1tooltiptext");
+  }
+
+  public String getButtonlabelextra2TooltipText() {
+    return getAttributeValue("buttonlabelextra2tooltiptext");
+  }
+
+  
   public String getButtons() {
     return getAttributeValue("buttons");
   }
@@ -117,19 +139,35 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   public void setButtonlabelaccept(String label) {
     this.setAttribute("buttonlabelaccept", label);
   }
+  
+  public void setButtonlabelacceptTooltiptext(String tooltip) {
+    this.setAttribute("buttonlabelaccepttooltiptext", tooltip);
+  }
 
   public void setButtonlabelcancel(String label) {
     this.setAttribute("buttonlabelcancel", label);
   }
 
+  public void setButtonlabelcancelTooltiptext(String tooltip) {
+    this.setAttribute("buttonlabelcanceltooltiptext", tooltip);
+  }
+  
   public void setButtonlabelextra1(String label) {
     this.setAttribute("buttonlabelextra1", label);
   }
 
+  public void setButtonlabelextra1Tooltiptext(String tooltip) {
+    this.setAttribute("buttonlabelextra1tooltiptext", tooltip);
+  }
+  
   public void setButtonlabelextra2(String label) {
     this.setAttribute("buttonlabelextra2", label);
   }
 
+  public void setButtonlabelextra2Tooltiptext(String tooltip) {
+    this.setAttribute("buttonlabelextra2tooltiptext", tooltip);
+  }
+  
   public void setButtons(String buttons) {
     this.setAttribute("buttons", buttons);
   }
@@ -198,7 +236,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
         try{
           XulButton buttonObj = (XulButton) this.xulContainer.getDocumentRoot().createElement("button");
           buttonObj.setLabel(getAttributeValue("buttonlabel" + buttonVal));
-          
+          buttonObj.setTooltiptext(getAttributeValue("buttonlabel" + buttonVal + "tooltiptext"));
           buttonObj.setOnclick(getAttributeValue("ondialog" + buttonVal));
           buttonPanel.add((Widget)buttonObj.getManagedObject());
         } catch(XulException e){

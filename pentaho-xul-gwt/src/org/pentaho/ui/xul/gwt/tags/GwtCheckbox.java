@@ -64,6 +64,7 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   
 
   public void layout(){
+    checkBox.setTitle(this.getTooltiptext());
   }
   
   public void setLabel(String label){
