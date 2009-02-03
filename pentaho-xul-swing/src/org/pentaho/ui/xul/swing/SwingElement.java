@@ -168,7 +168,7 @@ public class SwingElement extends AbstractXulComponent {
     }
   }
   
-  public void addChildAt(XulComponent c, int pos) {
+  public void addChildAt(Element c, int pos) {
     super.addChildAt(c, pos);
     if (initialized) {
       resetContainer();
