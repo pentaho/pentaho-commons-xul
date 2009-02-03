@@ -174,7 +174,10 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   @Override
   public void setTooltiptext(String tooltip) {
-    button.setToolTip(tooltip);
+    super.setTooltiptext(tooltip);
+    if(button != null){
+      button.setToolTip(tooltip);
+    }
   }
 
 
