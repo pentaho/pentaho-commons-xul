@@ -70,6 +70,11 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       // TODO: setOrient should live in an interface somewhere???
       setOrient(srcEle.getAttribute("orient"));
     }
+    if (srcEle.hasAttribute("tooltiptext") && srcEle.getAttribute("tooltiptext").trim().length() > 0) {
+      // TODO: setOrient should live in an interface somewhere???
+      setTooltiptext(srcEle.getAttribute("tooltiptext"));
+    }
+    
     
     if (srcEle.hasAttribute("flex") && srcEle.getAttribute("flex").trim().length() > 0) {
       try {
@@ -475,5 +480,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     
     // TODO Auto-generated method stub 
   
-}
+  }
+  
 }
