@@ -16,6 +16,7 @@ import org.pentaho.ui.xul.util.ColumnType;
 public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
   private String binding;
+  private String type;
   
   public static void register() {
     GwtXulParser.registerHandler("treecol", 
@@ -35,6 +36,8 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     setLabel(srcEle.getAttribute("label"));
     setBinding(srcEle.getAttribute("pen:binding"));
     setChildrenbinding(srcEle.getAttribute("pen:childrenbinding"));
+    setType(srcEle.getAttribute("type"));
+    this.setCombobinding(srcEle.getAttribute("pen:combobinding"));
   }
   
   public void autoSize() {
@@ -66,8 +69,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public String getType() {
-    // TODO Auto-generated method stub
-    return null;
+    return type;
   }
 
   public boolean isEditable() {
@@ -144,8 +146,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public void setType(String type) {
-    // TODO Auto-generated method stub
-    
+    this.type = type;
   }
 
   public void adoptAttributes(XulComponent component) {

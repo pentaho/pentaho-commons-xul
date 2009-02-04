@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.util.Vector;
+
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
@@ -11,6 +13,9 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 
 public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell {
 
+  private Object value;
+  private int selectedIndex;
+  
   public static void register() {
     GwtXulParser.registerHandler("treecell",
     new GwtXulHandler() {
@@ -35,8 +40,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public int getSelectedIndex() {
-    // TODO Auto-generated method stub
-    return 0;
+    return selectedIndex;
   }
 
   public String getSrc() {
@@ -45,7 +49,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public Object getValue() {
-    return getAttributeValue("value");
+    return this.value;
   }
 
   public boolean isEditable() {
@@ -59,11 +63,15 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public void setLabel(String label) {
+    String prevVal = this.getAttributeValue("label");
     this.setAttribute("label", label);
+    this.firePropertyChange("label", prevVal, label);
   }
 
   public void setSelectedIndex(int index) {
-    // TODO Auto-generated method stub
+    int oldVal = this.selectedIndex;
+    this.selectedIndex = index;
+    this.firePropertyChange("selectedIndex", oldVal, index);
     
   }
 
@@ -78,7 +86,26 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public void setValue(Object value) {
-    this.setAttribute("value", "" + value);
+    Object previousVal = this.value;
+    
+    if (value instanceof String && ((String) value).indexOf(",") == -1) {
+      //String and not a comma separated list
+      this.value = Boolean.parseBoolean(((String) value));
+    } else if (value instanceof String && ((String) value).indexOf(",") > -1) {
+      //String and a comma separated list
+      String[] list = ((String) value).split(",");
+      Vector<String> vec = new Vector<String>();
+      for (String item : list) {
+        vec.add(item);
+      }
+      this.value = vec;
+
+    } else if (value instanceof Boolean) {
+      this.value = (Boolean) value;
+    } else {
+      this.value = value;
+    }
+    this.firePropertyChange("value", previousVal, value);
   }
 
   public void adoptAttributes(XulComponent component) {

@@ -145,14 +145,15 @@ public class TypeControllerGenerator extends Generator {
     // start constructor source generation 
     sourceWriter.println("public " + className + "() { "); 
     sourceWriter.indent(); 
-    sourceWriter.println("super();"); 
+    sourceWriter.println("super();");
+    sourceWriter.println("populateMap0();"); 
     
-
-    //write out the map of wrapped classes
-    populateMapWtihWrappers(sourceWriter);
 
     sourceWriter.outdent(); 
     sourceWriter.println("}"); 
+    //write out the map of wrapped classes
+    populateMapWtihWrappers(sourceWriter);
+
 
   }
   
@@ -175,19 +176,50 @@ public class TypeControllerGenerator extends Generator {
   
 
   private void populateMapWtihWrappers(SourceWriter sourceWriter){
+    int methodNum = 0;
+    int methodCount = 0;
+    int totalClassCount = 0;
+    sourceWriter.println("public void populateMap"+methodNum+"(){ "); 
+    sourceWriter.indent();
+    sourceWriter.println("GwtBindingMethod otherM;");
     for(JClassType type : implementingTypes){
+      System.out.println("-------------------------");
       String keyRoot = generateTypeKey(type);
 
+      System.out.println("generating type: "+type.getQualifiedSourceName());
+      if(type.isAbstract()){
+        System.out.println("abstract");
+        continue;
+      }
       try{
         
         JClassType loopType = type;
-        while(loopType.getSuperclass() != null && loopType.getSuperclass().getSimpleSourceName().equals("Object") == false){
+        JClassType eventSourceType = typeOracle.getType("org.pentaho.ui.xul.XulEventSource");
+        while(loopType.getSuperclass() != null && loopType.getSimpleSourceName().equals("Object") == false && loopType.isAssignableTo(eventSourceType)){
+
+          System.out.println("    generating inner type: "+loopType.getQualifiedSourceName());
           for(JMethod m : loopType.getMethods()){
             if(!m.isPublic()){
               continue;
             }
+            methodCount++;
+            if(methodCount > 100){
+              methodNum++;
+              sourceWriter.println("populateMap"+methodNum+"();");
+              sourceWriter.outdent();
+              sourceWriter.println("};");
+              sourceWriter.println("public void populateMap"+methodNum+"(){ "); 
+              sourceWriter.println("GwtBindingMethod otherM;");
+              sourceWriter.indent();
+              methodCount = 0;
+            }
+            System.out.println("        generating inner type method: "+m.getName());
+            
             String methodName = m.getName();
-  
+            sourceWriter.println("otherM = wrappedTypes.get(\""+loopType.getClass().getName()+"_"+methodName+"\".toLowerCase());");
+            sourceWriter.println("if(otherM == null){");
+            sourceWriter.indent();
+            totalClassCount++;
             sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), new GwtBindingMethod(){");
             
   
@@ -219,6 +251,8 @@ public class TypeControllerGenerator extends Generator {
   
             sourceWriter.outdent();
             sourceWriter.println("});");
+            sourceWriter.outdent();
+            sourceWriter.println("}");
             
           }
           loopType = loopType.getSuperclass();
@@ -229,9 +263,12 @@ public class TypeControllerGenerator extends Generator {
         logger.log(TreeLogger.ERROR, "PropertyMap ERROR!!!", e);
 
       }
-      
      
     }
+    
+    sourceWriter.outdent();
+    sourceWriter.println("}");
+    System.out.println("Done generating wrappers: "+totalClassCount+" classes created in the map");
   }
 
   private String generateTypeKey(JClassType type){

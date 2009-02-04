@@ -7,15 +7,13 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GwtButton extends AbstractGwtXulComponent implements XulButton {
@@ -46,7 +44,10 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     if(!StringUtils.isEmpty(srcEle.getAttribute("image"))){
       //we create a button by default, remove it here
       button = null;
-      managedObject = imageButton = new ImageButton();
+      imageButton = new ImageButton();
+      SimplePanel sp = new SimplePanel();
+      managedObject = sp;
+      sp.add(imageButton);
       imageButton.setHeight("");
       imageButton.setWidth("");
     } else {
@@ -164,6 +165,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public void setImage(String src) {
     this.image = src;
     this.imageButton.setEnabledUrl(src);
+    this.imageButton.setDisabledUrl(src);
   }
   
   public void setDisabledImage(String src) {
