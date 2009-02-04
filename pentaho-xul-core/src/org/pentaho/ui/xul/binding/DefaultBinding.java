@@ -243,6 +243,7 @@ public class DefaultBinding implements Binding {
             targetSetMethod.invoke(targetObject, finalVal);
           
           } catch (Exception e) {
+            logger.error(e);
             throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "+target.get(), e);
           }
         }
