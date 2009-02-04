@@ -535,6 +535,10 @@ public abstract class AbstractXulLoader implements XulLoader {
         } else if(insertAfter != null){
           org.pentaho.ui.xul.dom.Element insertAfterTarget = targetDocument.getElementById(insertAfter);
           positionToInsert = sourceContainer.getChildNodes().indexOf(insertAfterTarget);
+          if (positionToInsert != -1)
+          {
+            positionToInsert += 1;
+          }
         } else if(position != null){
           int pos = Integer.parseInt(position);
           positionToInsert = (pos <= sourceContainer.getChildNodes().size()) ? pos : -1;
