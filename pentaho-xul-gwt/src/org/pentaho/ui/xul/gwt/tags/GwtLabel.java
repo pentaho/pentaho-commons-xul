@@ -41,7 +41,9 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   
   public void layout(){
     label.setTitle(this.getTooltiptext());
-
+    if(StringUtils.isEmpty(this.getTooltiptext()) == false){
+      label.addMouseListener(new ToolTip(this.getTooltiptext(), 1000));
+    }
   }
 
   public void setValue(String value){
