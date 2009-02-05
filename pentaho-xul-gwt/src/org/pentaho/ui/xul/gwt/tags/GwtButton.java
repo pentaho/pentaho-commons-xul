@@ -12,36 +12,39 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GwtButton extends AbstractGwtXulComponent implements XulButton {
-  
+
   static final String ELEMENT_NAME = "button"; //$NON-NLS-1$
+
   private String dir, group, image, type, onclick, tooltip, disabledImage;
-  
+
   public static void register() {
-    GwtXulParser.registerHandler(ELEMENT_NAME, 
-    new GwtXulHandler() {
+    GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
       public Element newInstance() {
         return new GwtButton();
       }
     });
   }
-  
+
   private RoundedButton button;
+
   private ImageButton imageButton;
+
   private boolean disabled;
-  
+
   public GwtButton() {
     super(ELEMENT_NAME);
     //programatic creation doesn't call init() create here for them
     managedObject = button = new RoundedButton();
   }
-  
+
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    if(!StringUtils.isEmpty(srcEle.getAttribute("image"))){
+    if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
       //we create a button by default, remove it here
       button = null;
       imageButton = new ImageButton();
@@ -53,26 +56,26 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     } else {
       managedObject = button = new RoundedButton();
     }
-    
+
     super.init(srcEle, container);
-    if(!StringUtils.isEmpty(srcEle.getAttribute("label"))){
+    if (!StringUtils.isEmpty(srcEle.getAttribute("label"))) {
       setLabel(srcEle.getAttribute("label"));
     }
-    if(!StringUtils.isEmpty(srcEle.getAttribute("onclick"))){
+    if (!StringUtils.isEmpty(srcEle.getAttribute("onclick"))) {
       setOnclick(srcEle.getAttribute("onclick"));
     }
-    if(!StringUtils.isEmpty(srcEle.getAttribute("image"))){
+    if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
       setImage(srcEle.getAttribute("image"));
     }
-    if(!StringUtils.isEmpty(srcEle.getAttribute("tooltiptext"))){
+    if (!StringUtils.isEmpty(srcEle.getAttribute("tooltiptext"))) {
       setTooltiptext(srcEle.getAttribute("tooltiptext"));
     }
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
   }
-  
-  public void setLabel(String label){
+
+  public void setLabel(String label) {
     this.setAttribute("label", label);
-    if(button != null){
+    if (button != null) {
       button.setText(label);
     }
   }
@@ -80,18 +83,19 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.components.XulButton#setOnClick(java.lang.String)
    */
-  public void setOnclick( final String method) {
+  public void setOnclick(final String method) {
     this.onclick = method;
-    ClickListener listener = new ClickListener(){
-      public void onClick(Widget sender) {try{
-        GwtButton.this.getXulDomContainer().invoke(method, new Object[]{});
-      } catch(XulException e){
-        e.printStackTrace();
-      }
+    ClickListener listener = new ClickListener() {
+      public void onClick(Widget sender) {
+        try {
+          GwtButton.this.getXulDomContainer().invoke(method, new Object[] {});
+        } catch (XulException e) {
+          e.printStackTrace();
+        }
       }
     };
-    
-    if(button != null){
+
+    if (button != null) {
       button.addClickListener(listener);
     } else {
       imageButton.addClickListener(listener);
@@ -99,7 +103,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public String getLabel() {
-    return (button != null)?button.getText():null;
+    return (button != null) ? button.getText() : null;
   }
 
   public boolean isDisabled() {
@@ -108,7 +112,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
   public void setDisabled(boolean dis) {
     this.disabled = dis;
-    if(button != null){
+    if (button != null) {
       button.setEnabled(!dis);
     } else {
       imageButton.setEnabled(!dis);
@@ -116,21 +120,20 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void doClick() {
-    
+
     //button.click();  This was not working for me, TODO: investigate programatic click
-    if(onclick == null){
+    if (onclick == null) {
       return;
     }
-    try{
-      GwtButton.this.getXulDomContainer().invoke(onclick, new Object[]{});
-    } catch(XulException e){
+    try {
+      GwtButton.this.getXulDomContainer().invoke(onclick, new Object[] {});
+    } catch (XulException e) {
       e.printStackTrace();
     }
   }
 
-  
   public String getDir() {
-    return dir;  
+    return dir;
   }
 
   public String getGroup() {
@@ -138,11 +141,11 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public String getImage() {
-    return image;  
+    return image;
   }
 
   public String getOnclick() {
-    return onclick;  
+    return onclick;
   }
 
   public String getType() {
@@ -150,7 +153,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public boolean isSelected() {
-    return false;  
+    return false;
   }
 
   public void setDir(String dir) {
@@ -163,23 +166,25 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void setImage(String src) {
+    src = GWT.getModuleBaseURL() + src;
     this.image = src;
     this.imageButton.setEnabledUrl(src);
     this.imageButton.setDisabledUrl(src);
   }
-  
+
   public void setDisabledImage(String src) {
+    src = GWT.getModuleBaseURL() + src;
     this.disabledImage = src;
     this.imageButton.setDisabledUrl(src);
   }
 
   public void setSelected(String selected) {
-     button.setFocus(Boolean.parseBoolean(selected));
-     //TODO: implement selected with button group;
+    button.setFocus(Boolean.parseBoolean(selected));
+    //TODO: implement selected with button group;
   }
 
   public void setSelected(boolean selected) {
-    if(button != null){
+    if (button != null) {
       button.setFocus(selected);
     } else {
       imageButton.setFocus(selected);
@@ -187,27 +192,25 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void setType(String type) {
-    
-        // TODO Auto-generated method stub 
-      
+
+    // TODO Auto-generated method stub 
+
   }
-  
-  
 
   @Override
   public void setTooltiptext(String tooltip) {
     super.setTooltiptext(tooltip);
-    if(button != null){
+    if (button != null) {
       button.setTitle(tooltip);
     } else {
       imageButton.setTitle(tooltip);
     }
-    
+
   }
-  
-  public void layout(){
+
+  public void layout() {
     super.layout();
-    if(imageButton != null){
+    if (imageButton != null) {
       imageButton.setHeight("");
       imageButton.setWidth("");
     }
@@ -215,21 +218,21 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
   public void adoptAttributes(XulComponent component) {
 
-    if(component.getAttributeValue("label") != null){
+    if (component.getAttributeValue("label") != null) {
       setLabel(component.getAttributeValue("label"));
     }
-    if(component.getAttributeValue("onclick") != null){
+    if (component.getAttributeValue("onclick") != null) {
       setOnclick(component.getAttributeValue("onclick"));
     }
-    if(component.getAttributeValue("image") != null){
+    if (component.getAttributeValue("image") != null) {
       setImage(component.getAttributeValue("image"));
     }
-    if(component.getAttributeValue("tooltiptext") != null){
+    if (component.getAttributeValue("tooltiptext") != null) {
       setTooltiptext(component.getAttributeValue("tooltiptext"));
     }
-    if(component.getAttributeValue("disabled") != null){
+    if (component.getAttributeValue("disabled") != null) {
       setDisabled("true".equals(component.getAttributeValue("disabled")));
     }
   }
-  
+
 }
