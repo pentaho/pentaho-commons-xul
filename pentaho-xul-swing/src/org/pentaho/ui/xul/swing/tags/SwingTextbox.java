@@ -103,10 +103,12 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   }
 
   public void setDisabled(boolean dis) {
+    boolean oldValue = this.disabled;
     this.disabled = dis;
     if (managedObject != null) {
       textComp.setEnabled(!dis);
     }
+    this.changeSupport.firePropertyChange("disabled", oldValue, dis);
   }
 
   public void setMaxlength(int length) {
