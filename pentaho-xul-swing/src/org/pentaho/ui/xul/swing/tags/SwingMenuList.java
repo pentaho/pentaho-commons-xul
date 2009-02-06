@@ -219,9 +219,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
       SwingMenuitem item = new SwingMenuitem(null, popup, this.xulDomContainer, null);
 
       String attribute = getBinding();
-      if (!StringUtils.isEmpty(attribute)) {
-        item.setLabel(extractLabel(t));
-      }
+      item.setLabel(extractLabel(t));
 
       popup.addChild(item);
     }
