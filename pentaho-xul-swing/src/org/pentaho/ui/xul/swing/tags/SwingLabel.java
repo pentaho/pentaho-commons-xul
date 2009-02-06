@@ -50,7 +50,9 @@ public class SwingLabel extends SwingElement implements XulLabel{
   }
 
   public void setDisabled(boolean dis) {
+    boolean oldValue = !label.isEnabled();
     label.setEnabled(!dis);
+    this.changeSupport.firePropertyChange("disabled", oldValue, dis);
   }
 
 }
