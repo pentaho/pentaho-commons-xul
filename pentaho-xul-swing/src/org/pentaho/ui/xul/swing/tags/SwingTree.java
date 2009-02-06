@@ -133,11 +133,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public XulTreeChildren getRootChildren() {
-    return this.rootChildren;
+    if(rootChildren == null){
+      rootChildren = (XulTreeChildren) this.getChildNodes().get(1);
+    }
+    return rootChildren;
   }
 
   public int getRows() {
-    return this.rootChildren.getItemCount();
+    return getRootChildren().getItemCount();
   }
 
   public String getSeltype() {
@@ -147,10 +150,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public Object[][] getValues() {
 
     TableModel model = table.getModel();
-    Object[][] data = new Object[this.rootChildren.getChildNodes().size()][model.getColumnCount()];
+    Object[][] data = new Object[getRootChildren().getChildNodes().size()][model.getColumnCount()];
 
     int y = 0;
-    for (XulComponent item : this.rootChildren.getChildNodes()) {
+    for (XulComponent item : getRootChildren().getChildNodes()) {
       int x = 0;
       for (XulComponent tempCell : ((XulTreeItem) item).getRow().getChildNodes()) {
         SwingTreeCell cell = (SwingTreeCell) tempCell;
@@ -279,27 +282,27 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void addTreeRow(XulTreeRow row) {
 
-    this.rootChildren.addItem(new SwingTreeItem(row));
+    getRootChildren().addItem(new SwingTreeItem(row));
 
     table.updateUI();
   }
 
   public void removeTreeRows(int[] rows) {
-
-  	// sort the rows high to low
-  	ArrayList<Integer> rowArray = new ArrayList<Integer>();
-  	for (int i = 0; i < rows.length; i++) {
-  		rowArray.add(rows[i]);
-  	}  	
-  	Collections.sort(rowArray, Collections.reverseOrder());
+    
+    // sort the rows high to low
+    ArrayList<Integer> rowArray = new ArrayList<Integer>();
+    for (int i = 0; i < rows.length; i++) {
+      rowArray.add(rows[i]);
+    }  	
+    Collections.sort(rowArray, Collections.reverseOrder());
   	
-  	// remove the items in that order
-  	for (int i = 0; i < rowArray.size(); i++) {
-  		int item = rowArray.get(i);
-  		if (item >= 0 && item < rootChildren.getItemCount()) {
-  			this.rootChildren.removeItem(item);
-  		}
-  	}
+    // remove the items in that order
+    for (int i = 0; i < rowArray.size(); i++) {
+      int item = rowArray.get(i);
+      if (item >= 0 && item < getRootChildren().getItemCount()) {
+        getRootChildren().removeItem(item);
+      }
+    }
 
     table.updateUI();
     //treat as selection change.
@@ -466,10 +469,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   
   private void setupTree(){
     DefaultMutableTreeNode topNode = new DefaultMutableTreeNode("placeholder");
-    if(this.rootChildren == null){
-      this.rootChildren = (XulTreeChildren) this.getChildNodes().get(1);
-    }
-    for (XulComponent c : this.rootChildren.getChildNodes()){
+    for (XulComponent c : getRootChildren().getChildNodes()){
       XulTreeItem item = (XulTreeItem) c;
       DefaultMutableTreeNode node = createNode(item);
       topNode.add(node);
@@ -556,7 +556,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public void addRow(XulTreeRow row) {
     SwingTreeItem item = new SwingTreeItem(row);
 
-    this.rootChildren.addItem(item);
+    getRootChildren().addItem(item);
 
   }
 
@@ -598,7 +598,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
             }
             return checkbox;
           case COMBOBOX:
-            final SwingTreeCell cell = (SwingTreeCell) rootChildren.getItem(row).getRow().getCell(
+            final SwingTreeCell cell = (SwingTreeCell) getRootChildren().getItem(row).getRow().getCell(
                 SwingTree.this.columns.getChildNodes().indexOf(col));
 
             Vector data;
