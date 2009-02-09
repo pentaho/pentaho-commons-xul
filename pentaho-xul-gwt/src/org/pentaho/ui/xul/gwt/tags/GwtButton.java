@@ -70,6 +70,9 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     if (!StringUtils.isEmpty(srcEle.getAttribute("tooltiptext"))) {
       setTooltiptext(srcEle.getAttribute("tooltiptext"));
     }
+    if (!StringUtils.isEmpty(srcEle.getAttribute("pen:disabledimage"))) {
+      this.setDisabledImage(srcEle.getAttribute("pen:disabledimage"));
+    }
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
   }
 
