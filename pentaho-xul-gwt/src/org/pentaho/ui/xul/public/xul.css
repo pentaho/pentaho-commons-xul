@@ -162,3 +162,21 @@
 .gwt-CellEditor td {
   padding: 4px;
 }
+
+.glasspane{
+	position: absolute;
+  background-color: black;
+  opacity: 0.3;
+  filter:alpha(opacity=30);
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: 300;
+  margin: 0px;
+  padding: 0px;
+  display: none;
+}
+.xul-label{
+  white-space: nowrap;
+}
