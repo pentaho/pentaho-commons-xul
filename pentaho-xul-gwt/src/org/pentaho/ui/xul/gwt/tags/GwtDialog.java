@@ -11,6 +11,8 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.Orient;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -30,9 +32,13 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   
   DialogBox dialog = null;
   private XulDomContainer xulContainer;
+  private SimplePanel glasspane = new SimplePanel();
+  private static int dialogPos = 300;
   
   public GwtDialog() {
     super("dialog");
+    glasspane.setStyleName("glasspane");
+    this.managedObject = glasspane;
     this.orientation = Orient.VERTICAL;
   }
   
@@ -125,6 +131,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   public void hide() {
     if (dialog != null) {
       dialog.hide();
+      GwtDialog.dialogPos--;
+      glasspane.getElement().getStyle().setProperty("display", "none");
     }
   }
 
@@ -201,6 +209,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     if (dialog != null) {
       // create a new dialog if necessary
       dialog.show();
+      glasspane.getElement().getStyle().setProperty("display", "block");
       return;
     }
     
@@ -283,6 +292,18 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     dialog.center();
     dialog.show();
     
+    Style glassPaneStyle = glasspane.getElement().getStyle();
+
+    glassPaneStyle.setProperty("width", "100%");
+    glassPaneStyle.setProperty("height", "100%");
+    glassPaneStyle.setProperty("display", "block");
+    
+    
+    glasspane.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos));
+    
+    dialog.getElement().getStyle().setProperty("zIndex",  ""+(++GwtDialog.dialogPos));
+    
+        
   }
 
   public String getOnclose() {
@@ -324,12 +345,18 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
 
   public void setTitle(String title) {
     this.setAttribute("title", title);
-    
   }
 
   public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
+
   }
+
+  @Override
+  public void onDomReady() {
+
+  }
+  
+  
+  
   
 }
