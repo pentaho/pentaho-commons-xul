@@ -360,6 +360,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     } else {
       populateTable();
     }
+    changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
   }
   
   public void afterLayout() {
@@ -517,7 +518,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
     if(elements == null || elements.size() == 0){
       updateUI();
-      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
       return;
     }
     try {
