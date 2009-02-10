@@ -515,7 +515,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     this.getRootChildren().removeAll();
     
     
-    if(elements == null){
+    if(elements == null || elements.size() == 0){
       updateUI();
       changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
       return;
