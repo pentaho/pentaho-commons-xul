@@ -39,6 +39,13 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   public GwtDialog() {
     super("dialog");
     glasspane.setStyleName("glasspane");
+
+    Style glassPaneStyle = glasspane.getElement().getStyle();
+
+    glassPaneStyle.setProperty("width", "100%");
+    glassPaneStyle.setProperty("height", "100%");
+    glassPaneStyle.setProperty("display", "block");
+    
     this.managedObject = null;
     this.orientation = Orient.VERTICAL;
   }
@@ -210,7 +217,12 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     if (dialog != null) {
       // create a new dialog if necessary
       dialog.show();
-      glasspane.getElement().getStyle().setProperty("display", "block");
+
+      RootPanel.get().add(glasspane);
+      
+      glasspane.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos));
+      dialog.getElement().getStyle().setProperty("zIndex",  ""+(++GwtDialog.dialogPos));
+      
       return;
     }
     
@@ -290,12 +302,12 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
 //    dialog.setHeight("100px");
     
     
-    RootPanel.get().add(glasspane);
-    
     // display dialog
     dialog.center();
     dialog.show();
     
+
+    RootPanel.get().add(glasspane);
     Style glassPaneStyle = glasspane.getElement().getStyle();
 
     glassPaneStyle.setProperty("width", "100%");
