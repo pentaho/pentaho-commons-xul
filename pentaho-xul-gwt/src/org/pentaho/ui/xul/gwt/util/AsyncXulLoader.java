@@ -31,6 +31,8 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
   private boolean fromSource = false;
   
   private GwtXulDomContainer container;
+  public static final String PROPERTIES_EXTENSION = ".properties"; //$NON-NLS-1$
+  public static final String SEPARATOR = "/"; //$NON-NLS-1$
   
   public static void loadXulFromUrl(String location, String bundle, IXulLoaderCallback callback){
     AsyncXulLoader loader = new AsyncXulLoader(location, bundle, callback);
@@ -86,17 +88,22 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
   }
   
   private void init(){
-    String folder = "";
+    String folder = ""; //$NON-NLS-1$
     String baseName = bundle;
 
     //we have to separate the folder from the base name
-    if(bundle.indexOf("/") > -1){
-      folder = bundle.substring(0, bundle.lastIndexOf("/")+1);
-      baseName = bundle.substring(bundle.lastIndexOf("/")+1);
+    if(bundle.indexOf(SEPARATOR) > -1){
+      folder = bundle.substring(0, bundle.lastIndexOf(SEPARATOR)+1);
+      baseName = bundle.substring(bundle.lastIndexOf(SEPARATOR)+1);
+    }
+    
+    //some may put the .properties on incorrectly
+    if(baseName.contains(PROPERTIES_EXTENSION)){
+      baseName = baseName.substring(0, baseName.indexOf(PROPERTIES_EXTENSION));
     }
     
     try {
-      messageBundle = new MessageBundle(folder, baseName, this );    //$NON-NLS-1$   //$NON-NLS-2$
+      messageBundle = new MessageBundle(folder, baseName, this );    
     } catch (Exception e) {
       Window.alert("Error loading message bundle: "+e.getMessage());    //$NON-NLS-1$
       e.printStackTrace();
@@ -118,7 +125,7 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
     
     //Load XUL source from server
     try {
-      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, xulSrc);    //$NON-NLS-1$
+      RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, xulSrc);    
 
       try {
         Request response = builder.sendRequest(null, new RequestCallback() {
