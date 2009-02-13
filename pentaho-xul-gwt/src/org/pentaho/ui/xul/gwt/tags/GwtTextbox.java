@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
@@ -39,8 +40,17 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   
   public GwtTextbox() {
     super(ELEMENT_NAME);
-    managedObject = textBox = new TextBox();
-
+    textBox = new TextBox();
+    
+    // Firefox 2 and sometimes 3 fails to render cursors in Textboxes if they're contained in absolutely
+    // positioned div's, such as when they're in dialogs. The workaround is to wrap the <input> in a div
+    // with overflow: auto;
+    SimplePanel sp = new SimplePanel();
+    sp.getElement().getStyle().setProperty("overflow", "auto");
+    sp.getElement().getStyle().setProperty("width", "100%");
+    sp.add(textBox);
+    managedObject = sp;
+      
     // textBox.setPreferredSize(new Dimension(150,18));
   }
 
@@ -71,6 +81,9 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     textBox.setText(text);
   }
   
+  // TODO: this double initialization is not good. Any values previously set will be lost in a second layout
+  // move to local variables if this late binding is really needed and take advantage of the new onDomReady event 
+  // to late bind instead of using layout.
   public void layout(){
     if (multiline) {
       managedObject = textBox = new TextArea();
@@ -78,7 +91,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       ((TextArea)textBox).setVisibleLines(rows);
       
     } else {
-      managedObject = textBox = new TextBox();
+      //managedObject = textBox = new TextBox();
+      SimplePanel sp = new SimplePanel();
+      sp.getElement().getStyle().setProperty("overflow", "auto");
+      sp.getElement().getStyle().setProperty("width", "100%");
+      sp.add(textBox);
+      managedObject = sp;
     }
     setupListeners();
   }

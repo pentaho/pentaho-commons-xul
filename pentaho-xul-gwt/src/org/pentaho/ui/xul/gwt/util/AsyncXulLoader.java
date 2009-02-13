@@ -101,6 +101,10 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback{
     if(baseName.contains(PROPERTIES_EXTENSION)){
       baseName = baseName.substring(0, baseName.indexOf(PROPERTIES_EXTENSION));
     }
+    //some may put the .properties on incorrectly
+    if(baseName.contains(".properties")){
+      baseName = baseName.substring(0, baseName.indexOf(".properties"));
+    }
     
     try {
       messageBundle = new MessageBundle(folder, baseName, this );    
