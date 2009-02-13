@@ -46,7 +46,7 @@
 }
 
 .gwt-Tree .gwt-TreeItem-selected {
-  background-color: #C3D9FF;
+  background-color: #DDDDDD;
   cursor: pointer;
   cursor: hand;
 }
