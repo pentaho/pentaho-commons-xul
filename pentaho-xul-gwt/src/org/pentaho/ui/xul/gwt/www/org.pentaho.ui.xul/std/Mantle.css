@@ -107,7 +107,7 @@
   opacity: 0.20;
   background-color:  #000000;
   /* Transparency for IE */
-  background-image: expression('url(/pentaho/mantle/wait-background.gif)');
+  background-image: expression('url(mantle/wait-background.gif)');
   background-color: expression('transparent');
   /*
   opacity: 0.20;
