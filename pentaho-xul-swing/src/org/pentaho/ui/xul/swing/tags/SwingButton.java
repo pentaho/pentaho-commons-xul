@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentAdapter;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.AbstractButton;
@@ -164,20 +165,20 @@ public class SwingButton extends SwingElement implements XulButton{
   }
 
   public void setImage(String src) {
-    this.image = src;
-    URL url = SwingButton.class.getClassLoader().getResource(this.domContainer.getXulLoader().getRootDir()+src);
-    
-    if(url == null){
+  	try {
+	    this.image = src;
+	    URL rootDir = SwingButton.class.getClassLoader().getResource(this.domContainer.getXulLoader().getRootDir());
+	    URL iconPath = new URL(rootDir, src);
+	    Icon ico = new ImageIcon(iconPath);
+	    if(ico == null){
+	      logger.error("Image could not be found: "+ico);
+	    } else {
+	      this.getButton().setIcon(ico);
+	    }
+  	} catch (MalformedURLException e) {
       logger.error("Could not find resource");
       logger.error(this.domContainer.getXulLoader().getRootDir()+src);
-      return;
-    }
-    Icon ico = new ImageIcon(url);
-    if(ico == null){
-      logger.error("Image could not be found: "+ico);
-    } else {
-      this.getButton().setIcon(ico);
-    }
+  	}
   }
 
   public String getDir() {
