@@ -28,4 +28,23 @@
       FOUND IN common_build.xml.
     -->
 
+  <!--=======================================================================
+      resolve (override)
+      
+      Override to include resolution of IVY codegen
+      ====================================================================-->
+  <target name="resolve" depends="resolve-compile" description="Resolves all IVY configurations">
+    <ant antfile="${common.build.file}" target="resolve" />
+  </target>
+
+
+  <!--=======================================================================
+      resolve-compile
+      
+      Resolves the compile specific dependencies
+      ====================================================================-->
+  <target name="resolve-compile" depends="resolve-init" description="Resolves compile configurations">
+    <ivy:resolve file="ivy.xml" conf="compile" />
+    <ivy:retrieve conf="compile" pattern="${lib.dir}/[module]-[revision](-[classifier]).[ext]" />
+  </target>
 </project>
