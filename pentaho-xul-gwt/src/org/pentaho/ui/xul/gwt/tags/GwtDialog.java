@@ -239,6 +239,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       public void hide() {
         // User may press the "ESC" key, invoking this code
         super.hide();
+        RootPanel.get().remove(glasspane);
         GlassPane.getInstance().hide();
       }
       
