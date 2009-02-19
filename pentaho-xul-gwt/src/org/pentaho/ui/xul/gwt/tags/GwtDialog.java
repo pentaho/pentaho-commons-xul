@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -34,7 +35,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   DialogBox dialog = null;
   private XulDomContainer xulContainer;
   private SimplePanel glasspane = new SimplePanel();
-  private static int dialogPos = 300;
+  private static int dialogPos = 1100;
   
   public GwtDialog() {
     super("dialog");
@@ -141,6 +142,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       dialog.hide();
       GwtDialog.dialogPos--;
       RootPanel.get().remove(glasspane);
+      GlassPane.getInstance().hide();
     }
   }
 
@@ -214,11 +216,16 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
 
   public void show() {
 
+    // create a new dialog if necessary
     if (dialog != null) {
-      // create a new dialog if necessary
+      dialog.center();
       dialog.show();
 
+      // Show glasspane element
       RootPanel.get().add(glasspane);
+
+      // Notify GlassPane listeners
+      GlassPane.getInstance().show();
       
       glasspane.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos));
       dialog.getElement().getStyle().setProperty("zIndex",  ""+(++GwtDialog.dialogPos));
@@ -227,7 +234,15 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     }
     
     
-    dialog = new DialogBox();
+    dialog = new DialogBox(){
+      @Override
+      public void hide() {
+        // User may press the "ESC" key, invoking this code
+        super.hide();
+        GlassPane.getInstance().hide();
+      }
+      
+    };
     dialog.setWidth(getWidth()+"px");
     dialog.setHeight(getHeight()+"px");
     
@@ -301,6 +316,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
 //    dialog.setWidth("100px");
 //    dialog.setHeight("100px");
     
+    // Notify GlassPane listeners
+    GlassPane.getInstance().show();
     
     // display dialog
     dialog.center();
