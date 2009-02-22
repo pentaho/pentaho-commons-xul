@@ -110,7 +110,11 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       for (XulComponent menuItem : popup.getChildNodes()) {
         popup.removeChild(menuItem);
       }
-  
+      if(elements == null || elements.size() == 0){
+        this.suppressLayout = false;
+        layout();
+        return;
+      }
       for (T t : elements) {
         GwtMenuitem item = new GwtMenuitem(popup);
   
