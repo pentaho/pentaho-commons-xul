@@ -599,6 +599,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       
       for (InlineBindingExpression exp : ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getBindingExpressions()) {
         GwtBinding binding = new GwtBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
       }
