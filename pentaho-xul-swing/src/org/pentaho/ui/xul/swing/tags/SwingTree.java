@@ -54,6 +54,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCell;
@@ -923,6 +924,11 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                   + "]");
   
               DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+              
+              if (!this.editable) {
+                binding.setBindingType(Binding.Type.ONE_WAY);
+              }
+              
               domContainer.addBinding(binding);
               binding.fireSourceChanged();
 
@@ -972,6 +978,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
             + "]");
   
         DefaultBinding binding = new DefaultBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        // trees are never editable; therefore binding is one way
+        binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
       }
