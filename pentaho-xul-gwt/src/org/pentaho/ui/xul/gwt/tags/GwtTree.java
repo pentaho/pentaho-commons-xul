@@ -11,6 +11,7 @@ import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparat
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
@@ -207,7 +208,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
   
   private void populateTable(){
-    BaseTable table = (BaseTable)managedObject;
     
     Object data[][] = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
     
@@ -423,7 +423,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       return new int[]{};
       
     } else {
-      BaseTable table = (BaseTable)managedObject;
       if (table == null) {
         return new int[0];
       }
@@ -438,7 +437,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
   
   public void setSelectedRows(int[] rows) {
-    BaseTable table = (BaseTable)managedObject;
     if (table == null) {
       // this only works after the table has been materialized
       return;
@@ -557,11 +555,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                 domContainer.addBinding(binding);
                 binding.fireSourceChanged();
                 
-              } else {
+              } else if(o instanceof XulEventSource){
 
                 GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                 domContainer.addBinding(binding);
                 binding.fireSourceChanged();
+              } else {
+                cell.setLabel(o.toString());
               }
             }
   
@@ -662,8 +662,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void update() {
-    // TODO Auto-generated method stub
-    
+    updateUI();
   }
 
   public void adoptAttributes(XulComponent component) {

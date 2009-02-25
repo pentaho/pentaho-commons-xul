@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -47,6 +46,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private boolean suppressLayout = false;
   private boolean inLayoutProcess = false;
   private String previousSelectedItem = null;
+  private String onCommand;
   
   public GwtMenuList() {
     super(ELEMENT_NAME);
@@ -72,6 +72,8 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     setBinding(srcEle.getAttribute("pen:binding"));
+
+    setOnCommand(srcEle.getAttribute("oncommand"));
   }
   
   public String getBinding() {
@@ -221,6 +223,14 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (String) getSelectedItem());
     GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, getSelectedIndex());
       previousSelectedItem = (String) getSelectedItem();
+      
+      if(StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false){
+        try {
+          GwtMenuList.this.getXulDomContainer().invoke(GwtMenuList.this.getOnCommand(), new Object[] {});
+        } catch (XulException e) {
+          e.printStackTrace();
+        }
+      }
   }
 
   @Override
@@ -265,5 +275,17 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   public void resetContainer(){
     this.layout();
   }
+
+  public String getOnCommand() {
+  
+    return onCommand;
+  }
+
+  public void setOnCommand(String command) {
+  
+    this.onCommand = command;
+  }
+  
+  
  
 }

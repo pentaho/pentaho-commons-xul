@@ -26,6 +26,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   protected boolean multiline = false;
   private Integer rows;
   private Integer cols;
+  private String value;
   
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
@@ -74,11 +75,11 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
   
   public String getValue(){
-    return textBox.getText();
+    return value;
   }
 
   public void setValue(String text){
-    textBox.setText(text);
+    value = text;
   }
   
   // TODO: this double initialization is not good. Any values previously set will be lost in a second layout
@@ -98,6 +99,13 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       sp.add(textBox);
       managedObject = sp;
     }
+    if(this.getWidth() > 0){
+      textBox.setWidth(this.getWidth()+"px");
+    }
+    if(this.getHeight() > 0){
+      textBox.setHeight(this.getHeight()+"px");
+    }
+    textBox.setText(getValue());
     setupListeners();
   }
   
