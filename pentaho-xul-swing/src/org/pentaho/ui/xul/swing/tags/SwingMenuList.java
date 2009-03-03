@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -235,4 +236,17 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
   public void setSelectedIndex(int idx) {
     this.combobox.setSelectedIndex(idx);
   }
+
+  @Override
+  public void setWidth(int width) {
+    super.setWidth(width);
+    Dimension box = new Dimension();
+    box.height =this.combobox.getPreferredSize().height;
+    box.width = width;
+    this.combobox.setMaximumSize(box);
+    this.combobox.setPreferredSize(box);
+    this.combobox.setMinimumSize(box);
+  }
+  
+  
 }
