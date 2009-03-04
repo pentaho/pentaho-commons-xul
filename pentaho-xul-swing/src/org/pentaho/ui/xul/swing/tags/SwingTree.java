@@ -48,6 +48,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -55,6 +56,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.Binding;
+import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCell;
@@ -182,11 +184,11 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       y++;
     }
 
-    //		for(int row=0; row<this.rootChildren.getRowCount(); row++){
-    //			for(int col=0; col<model.getColumnCount(); col++){
-    //				data[row][col] = model.getValueAt(row,col);
-    //			}
-    //		}
+    //    for(int row=0; row<this.rootChildren.getRowCount(); row++){
+    //      for(int col=0; col<model.getColumnCount(); col++){
+    //        data[row][col] = model.getValueAt(row,col);
+    //      }
+    //    }
     return data;
   }
 
@@ -294,9 +296,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     ArrayList<Integer> rowArray = new ArrayList<Integer>();
     for (int i = 0; i < rows.length; i++) {
       rowArray.add(rows[i]);
-    }  	
+    }   
     Collections.sort(rowArray, Collections.reverseOrder());
-  	
+    
     // remove the items in that order
     for (int i = 0; i < rowArray.size(); i++) {
       int item = rowArray.get(i);
@@ -915,32 +917,52 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         
         if(table != null){
           for (T o : elements) {
-          XulTreeRow row = this.getRootChildren().addNewRow();
+            XulTreeRow row = this.getRootChildren().addNewRow();
+    
+            for (XulComponent col : this.getColumns().getChildNodes()) {
+              final XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+              XulTreeCol column = (XulTreeCol) col;
+              for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
+                logger.debug("applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + o
+                    + "]");
+    
+                if(((XulTreeCol) col).getType().equalsIgnoreCase("combobox")){
+                  DefaultBinding binding = new DefaultBinding(o, ((XulTreeCol) col).getCombobinding(), cell, "value");
+                  binding.setBindingType(Binding.Type.ONE_WAY);
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+                  
+                  binding = new DefaultBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
+                  binding.setConversion(new BindingConvertor<Object, Integer>(){
   
-          for (XulComponent col : this.getColumns().getChildNodes()) {
-            XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
-            for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
-              logger.debug("applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + o
-                  + "]");
+                    @Override
+                    public Integer sourceToTarget(Object value) {
+                      int index = ((Vector) cell.getValue()).indexOf(value);
+                      return index > -1 ? index : 0;
+                    }
   
-              DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                    @Override
+                    public Object targetToSource(Integer value) {
+                      return ((Vector)cell.getValue()).get(value);
+                    }
+                    
+                  });
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+                  
+                } else {
+                  DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                  if (!this.editable) {
+                    binding.setBindingType(Binding.Type.ONE_WAY);
+                  }
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+                }
               
-              if (!this.editable) {
-                binding.setBindingType(Binding.Type.ONE_WAY);
               }
               
-              domContainer.addBinding(binding);
-              binding.fireSourceChanged();
-
-              if(((XulTreeCol) col).getType().equalsIgnoreCase("combobox")){
-                binding = new DefaultBinding(o, ((XulTreeCol) col).getCombobinding(), cell, "value");
-                domContainer.addBinding(binding);
-                binding.fireSourceChanged();
-              }
+              row.addCell(cell);
             }
-  
-            row.addCell(cell);
-          }
           }
         } else {//tree
           
@@ -977,8 +999,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         logger.debug("applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + element
             + "]");
   
+        // Tree Bindings are one-way for now as you cannot edit tree nodes
         DefaultBinding binding = new DefaultBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
-        // trees are never editable; therefore binding is one way
         binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
