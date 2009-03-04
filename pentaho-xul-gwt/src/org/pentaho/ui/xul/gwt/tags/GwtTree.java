@@ -78,7 +78,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     setOnselect(srcEle.getAttribute("onselect"));
     setOnedit(srcEle.getAttribute("onedit"));
     setSeltype(srcEle.getAttribute("seltype"));
-    this.setEditable("true".equals(srcEle.getAttribute("seltype")));
+    this.setEditable("true".equals(srcEle.getAttribute("editable")));
     this.domContainer = container;
   }
   
@@ -512,8 +512,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void setEditable(boolean edit) {
-    // TODO Auto-generated method stub
-    
+    this.editable = edit;
   }
 
   public <T> void setElements(Collection<T> elements) {
