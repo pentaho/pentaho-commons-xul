@@ -1,7 +1,5 @@
 package org.pentaho.ui.xul.swing.tags;
 
-import java.util.ArrayList;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
