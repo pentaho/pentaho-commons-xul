@@ -65,7 +65,7 @@ public class GwtDomDocument extends GwtDomElement implements Document {
   }
 
   public void addInitializedBinding(Binding b) {
-    ((GwtXulDomContainer) this.container).addBinding(b);
+    ((GwtXulDomContainer) this.container).addInitializedBinding(b);
     
   }
 }

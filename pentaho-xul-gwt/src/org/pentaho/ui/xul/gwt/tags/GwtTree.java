@@ -66,6 +66,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   XulTreeChildren rootChildren = null;
   private XulDomContainer domContainer;
   private Tree tree;
+  private boolean suppressEvents = false;
+  private boolean editable = false;
   
   public GwtTree() {
     super("tree");
@@ -76,6 +78,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     setOnselect(srcEle.getAttribute("onselect"));
     setOnedit(srcEle.getAttribute("onedit"));
     setSeltype(srcEle.getAttribute("seltype"));
+    this.setEditable("true".equals(srcEle.getAttribute("seltype")));
     this.domContainer = container;
   }
   
@@ -147,7 +150,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
           }
         }
           
-        if(pos > -1){
+        if(pos > -1 && GwtTree.this.suppressEvents == false){
           GwtTree.this.changeSupport.firePropertyChange("selectedRows",null,new int[]{pos});
         }
         
@@ -359,8 +362,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       populateTree();
     } else {
       populateTable();
+    };
+    if(this.suppressEvents == false){
+      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
     }
-    changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
   }
   
   public void afterLayout() {
@@ -444,7 +449,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     for (int r : rows) {
       table.selectRow(r);
     }
-    this.changeSupport.firePropertyChange("selectedRows",null,rows);
+    if(this.suppressEvents == false){
+      this.changeSupport.firePropertyChange("selectedRows",null,rows);
+    }
   }
 
   public String getSeltype() {
@@ -457,8 +464,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public boolean isEditable() {
-    // TODO Auto-generated method stub
-    return false;
+    return editable;
   }
 
   public boolean isEnableColumnDrag() {
@@ -511,6 +517,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public <T> void setElements(Collection<T> elements) {
+    suppressEvents = true;
     this.getRootChildren().removeAll();
     
     
@@ -536,7 +543,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                 domContainer.addBinding(binding);
                 binding.fireSourceChanged();
                 
-
                 binding = new GwtBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
                 binding.setConversion(new BindingConvertor<Object, Integer>(){
 
@@ -558,6 +564,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
               } else if(o instanceof XulEventSource){
 
                 GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                if(GwtTree.this.isEditable() == false){
+                  binding.setBindingType(Binding.Type.ONE_WAY);
+                }
                 domContainer.addBinding(binding);
                 binding.fireSourceChanged();
               } else {
@@ -577,10 +586,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         }
         
       }
-      updateUI();
-      
       //treat as a selection change
-      changeSupport.firePropertyChange("  ", null, getSelectedRows());
     } catch (XulException e) {
       Window.alert("error adding elements "+e);
       System.out.println(e.getMessage());
@@ -590,7 +596,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       System.out.println(e.getMessage());
       e.printStackTrace();
     }
-    
+
+    suppressEvents = false;
+    updateUI();
   }
   
   private <T> void addTreeChild(T element, XulTreeRow row){

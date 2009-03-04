@@ -191,13 +191,13 @@ public class GwtBinding implements Binding{
   public void bindForward() {
     setForwardListener(setupBinding(getSource(), getSourceAttr(), getTarget(), getTargetAttr(), Direction.FORWARD));
     sourceGetterMethod = getterMethods.pop();
-    System.out.println("Forward binding established: " + source + "." + sourceAttr + " ==> " + target + "." + targetAttr);
+    //System.out.println("Forward binding established: " + source + "." + sourceAttr + " ==> " + target + "." + targetAttr);
   }
 
   public void bindReverse() {
     setReverseListener(setupBinding(getTarget(), getTargetAttr(), getSource(), getSourceAttr(), Direction.BACK));
     targetGetterMethod = getterMethods.pop();
-    System.out.println("Reverse binding established: " + source + "." + sourceAttr + " <== " + target + "." + targetAttr);
+    //System.out.println("Reverse binding established: " + source + "." + sourceAttr + " <== " + target + "." + targetAttr);
   }
 
   protected PropertyChangeListener setupBinding(final Object a, final String va, final Object b, final String vb,
@@ -238,7 +238,7 @@ public class GwtBinding implements Binding{
               GwtBinding.this.destroyBindings();                      
               return;
             }
-            System.out.println("Setting val: "+finalVal+" on: "+targetObject);
+            //System.out.println("Setting val: "+finalVal+" on: "+targetObject);
             if(targetSetMethod == null){
               System.out.println("Error Setting val targetMethod null: "+finalVal+" on: "+targetObject+"."+GwtBinding.this.targetAttr);
             }
