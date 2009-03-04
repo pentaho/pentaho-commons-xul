@@ -42,6 +42,8 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
   XulDomContainer domContainer = null;
 
   private JDialog dialog = null;
+  
+  private Boolean resizable = false;
 
   private String buttonlabelaccept;
 
@@ -352,9 +354,9 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
         }
       }
     }
-
+    
     dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-    dialog.setResizable(false);
+    dialog.setResizable(getResizable());
     dialog.setLayout(new BorderLayout());
     
     JPanel mainPanel = new JPanel(new BorderLayout());
@@ -512,6 +514,14 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
 
   public void invokeLater(Runnable runnable) {
     EventQueue.invokeLater(runnable);
+  }
+
+  public Boolean getResizable() {
+    return resizable;
+  }
+
+  public void setResizable(Boolean resizable) {
+    this.resizable = resizable;
   }
 
 }

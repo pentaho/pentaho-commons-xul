@@ -389,6 +389,22 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   public void onDomReady() {
 
   }
+
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulDialog#getResizable()
+   */
+  public Boolean getResizable() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulDialog#setResizable(java.lang.Boolean)
+   */
+  public void setResizable(Boolean resizable) {
+    // TODO Auto-generated method stub
+    
+  }
   
   
   

@@ -50,5 +50,9 @@ public interface XulDialog extends XulRoot {
   public boolean isHidden();
 
   public void setVisible(boolean visible);
+  
+  public Boolean getResizable();
+
+  public void setResizable(Boolean resizable);
 
 }
