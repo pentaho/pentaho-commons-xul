@@ -21,9 +21,9 @@ public class BasicDialog extends TitleAreaDialog {
   private int height = -999;
   private int width = -999; 
   
-  public BasicDialog(Shell shell) {
+  public BasicDialog(Shell shell, boolean resizable) {
     super(shell); 
-    setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
+    setResizable(resizable);
     create();
   }
   
@@ -37,7 +37,7 @@ public class BasicDialog extends TitleAreaDialog {
    * @param args params to main
    */
   public static void main(String[] args) {
-    new BasicDialog(new Shell()).open();
+    new BasicDialog(new Shell(), true).open();
   }
 
   @Override
@@ -131,4 +131,12 @@ public class BasicDialog extends TitleAreaDialog {
     // Empty on purpose
   }
   
+  protected void setResizable(boolean resize){
+    // TODO: find a better way to do this conditional bitmask
+    if(resize){
+      setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
+    } else {
+      setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+    }
+  }
 }

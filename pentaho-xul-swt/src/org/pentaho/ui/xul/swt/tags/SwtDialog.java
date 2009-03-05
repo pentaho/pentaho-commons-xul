@@ -73,6 +73,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private String ondialogextra1;
 
   private String ondialogextra2;
+  
+  private boolean resizable = false;
 
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
 
@@ -92,12 +94,17 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     }
     this.domContainer = container;
     this.setId(self.getAttributeValue("ID"));
+    
+    // TODO: deferr this creation until later when all attributes are assigned. For now just get the 
+    // resizable one
+    String resizableStr = self.getAttributeValue("resizable");
+    this.setResizable(resizableStr != null && resizableStr.equals("true"));
     createDialog();
   }
 
   private void createDialog() {
     
-    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM));
+    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), getResizable());
     dialog = newDialog;
     
     dialog.getShell().addListener(SWT.Close, new Listener() {
@@ -292,7 +299,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     }
     returnCode = IDialogConstants.CLOSE_ID;
     
-    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM));
+    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), getResizable());
     Control[] controls = dialog.getMainArea().getChildren();
     for(Control c : controls){
       c.setParent(newDialog.getMainArea());
@@ -451,6 +458,14 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   public void invokeLater(Runnable runnable) {
     dialog.getShell().getDisplay().asyncExec(runnable);
+  }
+
+  public Boolean getResizable() {
+    return resizable;
+  }
+
+  public void setResizable(Boolean resizable) {
+    this.resizable = resizable;
   }
   
 }
