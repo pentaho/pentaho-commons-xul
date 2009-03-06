@@ -493,6 +493,9 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
   }
 
   public Object getRootObject() {
+    if (dialog == null) {
+      createDialog();
+    }
     return dialog;
   }
 
