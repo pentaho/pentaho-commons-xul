@@ -319,10 +319,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public void setSeltype(String type) {
+    this.selType = SELECTION_MODE.valueOf(type.toUpperCase());
     if(table == null){
       return;
     }
-    this.selType = SELECTION_MODE.valueOf(type.toUpperCase());
     switch (this.selType) {
       case CELL:
         table.setCellSelectionEnabled(true);
@@ -387,7 +387,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     tableModel = new XulTableModel(this);
     //    }
     table.setModel(this.tableModel);
-
+    this.setSeltype(getSeltype());
     TableColumnModel columnModel = table.getColumnModel();
 
     for (int i = 0; i < columns.getChildNodes().size(); i++) {
