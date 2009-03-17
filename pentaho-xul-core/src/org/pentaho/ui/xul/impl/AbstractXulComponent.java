@@ -12,8 +12,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.util.Align;
-import org.pentaho.ui.xul.dnd.DragHandler;
-import org.pentaho.ui.xul.dnd.DragType;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
@@ -328,4 +326,6 @@ public abstract class AbstractXulComponent implements XulComponent {
       logger.error(e);
     }
   }
+
+  
 }
