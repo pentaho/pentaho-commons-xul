@@ -12,20 +12,6 @@ public abstract class AbstractSwingContainer extends SwingElement implements Xul
     super(tagName);
   }
 
-  public Align getAlign() {
-    return alignment;
-  }
-
-  public void setAlign(String align) {
-    try{
-      this.alignment = Align.valueOf(align.toUpperCase());
-    } catch(Exception e){
-      System.out.println("could not parse ["+align+"] as Align value");
-      
-    }
-  }
-
-
   @Deprecated
   public void addComponent(XulComponent component) {
     this.addChild(component);

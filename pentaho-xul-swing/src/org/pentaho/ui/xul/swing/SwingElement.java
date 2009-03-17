@@ -22,10 +22,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.components.XulSplitter;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.util.Align;
 
 /**
  * @author OEM
@@ -65,11 +67,14 @@ public class SwingElement extends AbstractXulComponent {
       }
     }
 
-    gc.fill = GridBagConstraints.BOTH;
-
     double currentFlexTotal = 0.0;
+
+    Align alignment = (getAlign() != null)? Align.valueOf(this.getAlign().toUpperCase()) : null;
+
     for (int i = 0; i < getChildNodes().size(); i++) {
       XulComponent comp = (XulComponent) getChildNodes().get(i);
+    gc.fill = GridBagConstraints.BOTH;
+
 
       if (comp instanceof XulSplitter) {
         JPanel prevContainer = container;
@@ -130,17 +135,50 @@ public class SwingElement extends AbstractXulComponent {
 
       currentFlexTotal += comp.getFlex();
 
+      if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
+        if(alignment != null){
+          gc.fill = GridBagConstraints.NONE;
+          switch(alignment){
+            case START:
+              gc.anchor = GridBagConstraints.WEST;
+              break;
+            case CENTER:
+              gc.anchor = GridBagConstraints.CENTER;
+              break;
+            case  END:
+              gc.anchor = GridBagConstraints.EAST;
+              break;
+          }
+        }
+
+      } else {
+        if(alignment != null){
+          gc.fill = GridBagConstraints.NONE;
+          switch(alignment){
+            case START:
+              gc.anchor = GridBagConstraints.NORTH;
+              break;
+            case CENTER:
+              gc.anchor = GridBagConstraints.CENTER;
+              break;
+            case  END:
+              gc.anchor = GridBagConstraints.SOUTH;
+              break;
+          }
+        }
+      }
+
       Component component = (Component) maybeComponent;
       container.add(component, gc);
 
       if (i + 1 == getChildNodes().size() && !flexLayout) {
-
         if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
-          gc.weighty = 1.0;
-        } else {
-          gc.weightx = 1.0;
-        }
+        gc.weighty = 1.0;
 
+      } else {
+        gc.weightx = 1.0;
+       
+      }
         container.add(Box.createGlue(), gc);
       }
     }
