@@ -6,9 +6,6 @@ package org.pentaho.ui.xul;
 import java.beans.PropertyChangeListener;
 
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.dnd.DragHandler;
-import org.pentaho.ui.xul.dnd.DragType;
-import org.pentaho.ui.xul.util.Align;
 
 /**
  * The base interface for any XUL widget. 
@@ -189,5 +186,7 @@ public interface XulComponent extends Element, XulEventSource {
    * @return String specifying the alignment [start, center, end].
    */
   public String getAlign();
+
+
   
 }
