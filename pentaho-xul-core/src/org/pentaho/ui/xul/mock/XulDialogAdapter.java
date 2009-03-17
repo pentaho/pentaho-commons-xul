@@ -484,8 +484,8 @@ public abstract class XulDialogAdapter implements XulDialog {
       
   }
 
-  public Align getAlign() {
-    return Align.START;
+  public String getAlign() {
+    return Align.START.toString();
   }
 
   public void setAlign(String align) {

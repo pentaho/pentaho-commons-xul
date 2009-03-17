@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -12,6 +11,9 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.util.Align;
+import org.pentaho.ui.xul.dnd.DragHandler;
+import org.pentaho.ui.xul.dnd.DragType;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
@@ -59,7 +61,9 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected int position = -1;
   
   protected boolean visible;
-  
+
+  protected Align alignment;
+
   public AbstractXulComponent(Element element) {
     this.element = element;
 
@@ -304,6 +308,7 @@ public abstract class AbstractXulComponent implements XulComponent {
   public boolean isVisible(){
     return this.visible;
   }
+
   public void setVisible(boolean visible){
     this.visible = visible;
   }
@@ -311,6 +316,16 @@ public abstract class AbstractXulComponent implements XulComponent {
   public void onDomReady() {
     
   }
-  
-  
+
+  public String getAlign() {
+    return (alignment != null)? alignment.toString() : null;
+  }
+
+  public void setAlign(String alignment) {
+    try{
+      this.alignment = Align.valueOf(alignment.toUpperCase());
+    } catch(Exception e){
+      logger.error(e);
+    }
+  }
 }

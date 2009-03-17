@@ -6,6 +6,9 @@ package org.pentaho.ui.xul;
 import java.beans.PropertyChangeListener;
 
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.dnd.DragHandler;
+import org.pentaho.ui.xul.dnd.DragType;
+import org.pentaho.ui.xul.util.Align;
 
 /**
  * The base interface for any XUL widget. 
@@ -170,4 +173,29 @@ public interface XulComponent extends Element, XulEventSource {
    * to the root is in place.
    */
   public void onDomReady();
+
+  /**
+   * Called by the DragHandler when the component needs to export an object.
+   * @param obj
+   * @param type Type Of drag operation (move, copy, link)
+   */
+  public void exportDragObject(Object obj, DragType type);
+
+
+
+  /**
+   * Specifies the alignment of children when the size of the container is greater than the
+   * size of it's children.
+   *
+   * @param align one of [start, center, end].
+   */
+  public void setAlign(String align);
+
+  /**
+   * Returns the alignment of children.
+   *
+   * @return String specifying the alignment [start, center, end].
+   */
+  public String getAlign();
+  
 }
