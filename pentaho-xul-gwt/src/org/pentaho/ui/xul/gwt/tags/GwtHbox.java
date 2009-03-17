@@ -60,18 +60,5 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     super.layout();
   }
   
-  public void setAlign(String align) {
-    try{
-      this.alignment = Align.valueOf(align.toUpperCase());
-    } catch(Exception e){
-      System.out.println("Cannot parse ["+align+"] as Align value");
-      
-    }
-  }
-  
-  public Align getAlign(){
-    return this.alignment;
-  }
-  
 }
 
