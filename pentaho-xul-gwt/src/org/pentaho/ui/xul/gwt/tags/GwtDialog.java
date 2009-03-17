@@ -247,8 +247,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     dialog.setWidth(getWidth()+"px");
     dialog.setHeight(getHeight()+"px");
     
-    dialog.setTitle(getTitle());
     dialog.setText(getTitle());
+
     // implement the buttons
     VerticalPanel panel = new VerticalPanel();
     SimplePanel wrapper = new SimplePanel();
