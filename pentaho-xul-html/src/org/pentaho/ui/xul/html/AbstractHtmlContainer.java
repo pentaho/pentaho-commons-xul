@@ -13,20 +13,6 @@ public abstract class AbstractHtmlContainer extends HtmlElement implements XulCo
     super(tagName);
   }
 
-  public Align getAlign() {
-    return this.alignment;
-  }
-
-  public void setAlign(String align) {
-    try{
-      this.alignment = Align.valueOf(align.toUpperCase());
-    } catch(Exception e){
-      System.out.println("could not parse ["+align+"] as Align value"); 
-    }  
-  }
-
-
-
   @Deprecated
   public void addComponent(XulComponent component) {
     this.addChild(component);
