@@ -12,22 +12,6 @@ public abstract class AbstractGwtXulContainer extends AbstractGwtXulComponent im
     super(tagName);
   }
   
-  
-
-  public void setAlign(String align) {
-    try{
-      this.alignment = Align.valueOf(align.toUpperCase());
-    } catch(Exception e){
-      System.out.println("Cannot parse ["+align+"] as Align value");
-      
-    }
-  }
-  
-  public Align getAlign(){
-    return this.alignment;
-  }
-
-
   @Deprecated
   public void addComponent(XulComponent component) {
     this.addChild(component);

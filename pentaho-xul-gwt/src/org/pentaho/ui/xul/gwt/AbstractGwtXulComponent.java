@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.util.Align;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -49,6 +50,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected boolean disabled, removeElement;
   protected boolean visible = true;
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+  protected String alignment;
   
   
   public AbstractGwtXulComponent(String name) {
@@ -168,11 +170,13 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     
 
     XulContainer thisContainer = (XulContainer) this;
-    
 
+    Align alignment = (thisContainer.getAlign() !=  null)? Align.valueOf(thisContainer.getAlign().toUpperCase()) : null;
+
+    // TODO: this is a different behavior than we implemented in Swing.
     if(!flexLayout && thisContainer.getAlign() != null){
       SimplePanel fillerPanel = new SimplePanel();
-      switch(thisContainer.getAlign()){
+      switch(alignment){
         case END:
           container.add(fillerPanel);
           if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
@@ -248,9 +252,12 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         
       }
     }
+
+
+    // TODO: this is a different behavior than we implemented in Swing.
     if(!flexLayout && thisContainer.getAlign() != null){
       SimplePanel fillerPanel = new SimplePanel();
-      switch(thisContainer.getAlign()){
+      switch(alignment){
         case START:
           container.add(fillerPanel);
           if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
@@ -481,5 +488,12 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     // TODO Auto-generated method stub 
   
   }
-  
+
+  public void setAlign(String align) {
+    this.alignment = align;
+  }
+
+  public String getAlign() {
+    return alignment;
+  }
 }
