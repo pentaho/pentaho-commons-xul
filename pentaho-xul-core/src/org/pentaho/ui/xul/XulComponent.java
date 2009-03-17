@@ -174,14 +174,6 @@ public interface XulComponent extends Element, XulEventSource {
    */
   public void onDomReady();
 
-  /**
-   * Called by the DragHandler when the component needs to export an object.
-   * @param obj
-   * @param type Type Of drag operation (move, copy, link)
-   */
-  public void exportDragObject(Object obj, DragType type);
-
-
 
   /**
    * Specifies the alignment of children when the size of the container is greater than the
