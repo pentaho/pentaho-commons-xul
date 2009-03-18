@@ -18,6 +18,7 @@ import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.util.Align;
+import org.pentaho.gwt.widgets.client.utils.StringUtils;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -171,10 +172,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
     XulContainer thisContainer = (XulContainer) this;
 
-    Align alignment = (thisContainer.getAlign() !=  null)? Align.valueOf(thisContainer.getAlign().toUpperCase()) : null;
+    Align alignment = (StringUtils.isEmpty(thisContainer.getAlign()) == false)? Align.valueOf(thisContainer.getAlign().toUpperCase()) : null;
 
     // TODO: this is a different behavior than we implemented in Swing.
-    if(!flexLayout && thisContainer.getAlign() != null){
+    if(!flexLayout && StringUtils.isEmpty(thisContainer.getAlign()) == false){
       SimplePanel fillerPanel = new SimplePanel();
       switch(alignment){
         case END:
@@ -255,7 +256,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
 
     // TODO: this is a different behavior than we implemented in Swing.
-    if(!flexLayout && thisContainer.getAlign() != null){
+    if(!flexLayout && StringUtils.isEmpty(thisContainer.getAlign()) == false){
       SimplePanel fillerPanel = new SimplePanel();
       switch(alignment){
         case START:
@@ -496,4 +497,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public String getAlign() {
     return alignment;
   }
+
+
 }
