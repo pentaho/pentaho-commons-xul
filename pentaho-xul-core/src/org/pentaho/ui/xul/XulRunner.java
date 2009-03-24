@@ -5,8 +5,6 @@ package org.pentaho.ui.xul;
 
 import java.util.List;
 
-import org.dom4j.Document;
-
 
 /**
  * The XULRunner provides an encapsulated environment to run and manage 
