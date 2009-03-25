@@ -118,6 +118,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 
       public void onKeyUp(Widget arg0, char arg1, int arg2) {
         GwtTextbox.this.changeSupport.firePropertyChange("value", "", textBox.getText());
+        setValue(textBox.getText());
       }
       
     });
