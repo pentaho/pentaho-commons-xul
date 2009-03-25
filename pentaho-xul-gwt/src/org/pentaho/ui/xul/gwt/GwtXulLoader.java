@@ -114,8 +114,11 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     Document document = (Document)xulDocument;
     GwtXulDomContainer container = new GwtXulDomContainer();
     container.setLoader(this);
-    parser.setContainer(container);
-    parser.parseDocument(document.getDocumentElement());
+    
+    // We don't want to re-use the old parser as this will cause issues.
+    GwtXulParser anotherParser = new GwtXulParser();
+    anotherParser.setContainer(container);
+    anotherParser.parseDocument(document.getDocumentElement());
    
     return container;
   }
