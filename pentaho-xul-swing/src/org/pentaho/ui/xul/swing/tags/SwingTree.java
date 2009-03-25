@@ -99,8 +99,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   private boolean isHierarchical = false;
 
+  // TODO: migrate to XulTree interface
   public enum SELECTION_MODE {
-    SINGLE, CELL, MULTIPLE
+    SINGLE, CELL, MULTIPLE, NONE
   };
 
   private SELECTION_MODE selType = SELECTION_MODE.SINGLE;
