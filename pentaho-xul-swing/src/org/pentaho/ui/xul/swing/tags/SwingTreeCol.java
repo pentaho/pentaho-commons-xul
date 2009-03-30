@@ -23,7 +23,8 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
 	private TableColumnModel model;
 	private String binding;
 	private String comboBinding;
-  private String bindingChildrenProperty;
+    private String bindingChildrenProperty;
+    private String columnTypeBinding;
   
 	public SwingTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecol");
@@ -186,7 +187,15 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   public void setCombobinding(String property) {
     this.comboBinding = property;  
   }
-  
+
+
+  public void setColumntypebinding(String propertyName){
+    this.columnTypeBinding = propertyName;
+  }
+
+  public String getColumntypebinding(){
+    return this.columnTypeBinding;
+  }
   
 
 }

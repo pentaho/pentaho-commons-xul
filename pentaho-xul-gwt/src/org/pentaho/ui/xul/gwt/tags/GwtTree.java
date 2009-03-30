@@ -252,6 +252,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
     String colType = this.columns.getColumn(x).getType();
     String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
+
+    if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
+      GwtBindingMethod method = GwtBindingContext.typeController.findSetMethod(this.columns.getColumn(x), "columnTypeBinding");
+      try{
+        colType = (String) method.invoke(this.columns.getColumn(x), new Object[]{});
+
+      } catch (Exception e){
+        System.out.println("Could not extract column type from binding");
+      }
+    }
+
     if(StringUtils.isEmpty(colType)){
       return new HTML(val);
     } else if(colType.equals("text")){
@@ -292,7 +303,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       lb.setSelectedIndex(idx);
       return lb;
       
-    } else { return new HTML(val); }
+    } else {
+      return new HTML(val);
+    }
     
     
   }

@@ -17,6 +17,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
   private String binding;
   private String type;
+  private String columnTypeBinding;
   
   public static void register() {
     GwtXulParser.registerHandler("treecol", 
@@ -38,6 +39,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     setChildrenbinding(srcEle.getAttribute("pen:childrenbinding"));
     setType(srcEle.getAttribute("type"));
     this.setCombobinding(srcEle.getAttribute("pen:combobinding"));
+    this.setColumntypebinding(srcEle.getAttribute("pen:columntypebinding"));
   }
   
   public void autoSize() {
@@ -187,6 +189,13 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     this.comboBinding = property;
   }
   
-  
+
+  public void setColumntypebinding(String propertyName){
+    this.columnTypeBinding = propertyName;
+  }
+
+  public String getColumntypebinding(){
+    return this.columnTypeBinding;
+  }
 
 }

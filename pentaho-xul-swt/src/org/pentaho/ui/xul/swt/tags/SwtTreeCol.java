@@ -30,6 +30,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   private boolean editable = false;
   private String customClass = null;
   private String binding;
+  private String columnTypeBinding;
 
   public SwtTreeCol(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -178,6 +179,15 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
         // TODO Auto-generated method stub 
       
   }
-  
+
+
+
+  public void setColumntypebinding(String propertyName){
+    this.columnTypeBinding = propertyName;
+  }
+
+  public String getColumntypebinding(){
+    return this.columnTypeBinding;
+  }
   
 }
