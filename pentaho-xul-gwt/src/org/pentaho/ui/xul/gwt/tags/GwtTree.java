@@ -252,6 +252,16 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     return node;
   }
   
+  private String extractDynamicColType(Object row, int columnPos) {
+    GwtBindingMethod method = GwtBindingContext.typeController.findGetMethod(row, this.columns.getColumn(columnPos).getColumntypebinding());
+    try{
+      return (String) method.invoke(row, new Object[]{});
+    } catch (Exception e){
+      System.out.println("Could not extract column type from binding");
+    }
+    return "text"; // default //$NON-NLS-1$
+  }
+  
   private Widget getColumnEditor(final int x, final int y){
     
     
@@ -260,13 +270,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
     if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
       Object row = elements.toArray()[y];
-      GwtBindingMethod method = GwtBindingContext.typeController.findGetMethod(row, this.columns.getColumn(x).getColumntypebinding());
-      try{
-        colType = (String) method.invoke(row, new Object[]{});
-
-      } catch (Exception e){
-        System.out.println("Could not extract column type from binding");
-      }
+      colType = extractDynamicColType(row, x);
     }
 
     if(StringUtils.isEmpty(colType)){
@@ -549,14 +553,19 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         for (T o : elements) {
           XulTreeRow row = this.getRootChildren().addNewRow();
   
-          for (XulComponent col : this.getColumns().getChildNodes()) {
-
+          for (int x=0; x< this.getColumns().getChildNodes().size(); x++) {
+            XulComponent col = this.getColumns().getColumn(x);
+              
             XulTreeCol column = ((XulTreeCol) col);
             final XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
             for (InlineBindingExpression exp : column.getBindingExpressions()) {
           
+              String colType = column.getType();
+              if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
+                colType = extractDynamicColType(o, x);
+              }
               
-              if(column.getType() != null && column.getType().equals("combobox")){
+              if(colType != null && colType.equals("combobox")){
                 GwtBinding binding = new GwtBinding(o, column.getCombobinding(), cell, "value");
                 binding.setBindingType(Binding.Type.ONE_WAY);
                 domContainer.addBinding(binding);
