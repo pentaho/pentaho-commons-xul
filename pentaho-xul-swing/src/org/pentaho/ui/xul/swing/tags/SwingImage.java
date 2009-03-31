@@ -62,11 +62,16 @@ public class SwingImage extends SwingElement implements XulImage{
     logger.info("set new Image Src");
   }
 
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+    layout();
+  }
   
   @Override
   public void layout(){
     this.panel.removeAll();
-    if(ico == null){
+    
+    if(ico == null || !visible) {
       return;
     }
   
