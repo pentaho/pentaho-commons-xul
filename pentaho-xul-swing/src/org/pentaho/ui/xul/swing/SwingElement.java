@@ -22,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.components.XulSplitter;
 import org.pentaho.ui.xul.dom.Element;
@@ -200,6 +201,15 @@ public class SwingElement extends AbstractXulComponent {
   @Override
   public void addChild(Element e) {
     super.addChild(e);
+
+    if(e instanceof AbstractSwingContainer){
+      ((AbstractSwingContainer) e).resetContainer();
+    }
+
+    if(e instanceof AbstractXulComponent){
+      ((AbstractXulComponent) e).layout();
+    }
+
     if (initialized) {
       resetContainer();
       layout();
