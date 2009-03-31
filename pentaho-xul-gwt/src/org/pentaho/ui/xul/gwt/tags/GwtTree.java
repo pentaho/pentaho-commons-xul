@@ -254,7 +254,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
 
     if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
-      GwtBindingMethod method = GwtBindingContext.typeController.findSetMethod(this.columns.getColumn(x), "columnTypeBinding");
+      GwtBindingMethod method = GwtBindingContext.typeController.findGetMethod(this.columns.getColumn(x), "columnTypeBinding");
       try{
         colType = (String) method.invoke(this.columns.getColumn(x), new Object[]{});
 
