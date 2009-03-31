@@ -53,6 +53,11 @@ import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
+  /**
+   * Cached elements.
+   */
+  private Collection elements; 
+  
   public static void register() {
     GwtXulParser.registerHandler("tree", 
     new GwtXulHandler() {
@@ -254,9 +259,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
 
     if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
-      GwtBindingMethod method = GwtBindingContext.typeController.findGetMethod(this.columns.getColumn(x), "columnTypeBinding");
+      Object row = elements.toArray()[y];
+      GwtBindingMethod method = GwtBindingContext.typeController.findGetMethod(row, this.columns.getColumn(x).getColumntypebinding());
       try{
-        colType = (String) method.invoke(this.columns.getColumn(x), new Object[]{});
+        colType = (String) method.invoke(row, new Object[]{});
 
       } catch (Exception e){
         System.out.println("Could not extract column type from binding");
@@ -529,6 +535,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public <T> void setElements(Collection<T> elements) {
+    this.elements = elements;
     suppressEvents = true;
     this.getRootChildren().removeAll();
     
