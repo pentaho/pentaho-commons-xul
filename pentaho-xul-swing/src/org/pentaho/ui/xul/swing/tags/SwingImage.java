@@ -51,7 +51,7 @@ public class SwingImage extends SwingElement implements XulImage{
       logger.error("Image could not be found: "+ico);
     }
     this.src = src;
-    
+    layout();
   }
   public void setSrc(Object img) {
     this.image = (Image)img;
