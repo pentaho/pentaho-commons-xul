@@ -203,11 +203,10 @@ public class SwingElement extends AbstractXulComponent {
     super.addChild(e);
 
     if(e instanceof AbstractSwingContainer){
-      ((AbstractSwingContainer) e).resetContainer();
-    }
-
-    if(e instanceof AbstractXulComponent){
-      ((AbstractXulComponent) e).layout();
+      AbstractSwingContainer container = (AbstractSwingContainer) e;
+      if(container.initialized == false){
+        container.layout();
+      }
     }
 
     if (initialized) {

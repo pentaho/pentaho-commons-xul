@@ -42,7 +42,7 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   protected int height;
 
-  protected boolean initialized = false;
+  public boolean initialized = false;
   
   protected String tooltip;
   
