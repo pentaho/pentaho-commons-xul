@@ -58,7 +58,7 @@ public abstract class AbstractXulComponent implements XulComponent {
   
   protected int position = -1;
   
-  protected boolean visible;
+  protected boolean visible = true;
 
   protected Align alignment;
 
