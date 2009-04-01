@@ -23,8 +23,7 @@ public class SwingTreeCols extends AbstractSwingContainer implements XulTreeCols
   }
 
   public void addColumn(XulTreeCol column) {
-    // TODO Auto-generated method stub
-
+    this.addChild(column);
   }
 
   public XulTreeCol getColumn(int index) {
@@ -37,7 +36,7 @@ public class SwingTreeCols extends AbstractSwingContainer implements XulTreeCols
 
   public XulTree getTree() {
     // TODO Auto-generated method stub
-    return null;
+    return table;
   }
 
   public boolean isHierarchical() {

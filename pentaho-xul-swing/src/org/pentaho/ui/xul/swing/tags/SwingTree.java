@@ -37,6 +37,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -48,7 +49,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -380,22 +380,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   int numOfListeners = 0;
   
-  private void setupTable(){
-
-    //generate table object based on TableModel and TableColumnModel
-
-    //    if(tableModel == null){
-    tableModel = new XulTableModel(this);
-    //    }
-    table.setModel(this.tableModel);
-    this.setSeltype(getSeltype());
+  private void updateColumnModel(){
     TableColumnModel columnModel = table.getColumnModel();
 
     for (int i = 0; i < columns.getChildNodes().size(); i++) {
       if (i >= columnModel.getColumnCount()) {
         break;
       }
-
+      
       SwingTreeCol child = (SwingTreeCol) columns.getChildNodes().get(i);
       TableColumn col = columnModel.getColumn(i);
 
@@ -411,8 +403,22 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       //      for(int z=0; z<cells.size(); z++){
       //        XulComponent cell = cells.get(z);
       //      }
-      initialized = true;
     }
+  }
+  
+  private void setupTable(){
+
+    //generate table object based on TableModel and TableColumnModel
+
+    //    if(tableModel == null){
+    tableModel = new XulTableModel(this);
+    //    }
+    table.setModel(this.tableModel);
+    this.setSeltype(getSeltype());
+    
+    updateColumnModel();
+    
+    initialized = true;
 
     table.addComponentListener(new ComponentListener() {
       boolean loaded = false;
@@ -574,6 +580,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void update() {
     if(table != null){
+      table.setModel(new XulTableModel(this));
+      updateColumnModel();
       table.updateUI();
     } else {
       tree.updateUI();
@@ -747,20 +755,19 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       super(root);
     }
   }
-
+  
   private class XulTableModel extends AbstractTableModel {
 
     SwingTree tree = null;
 
     public XulTableModel(SwingTree tree) {
       this.tree = tree;
-      Vector<String> columnNames = new Vector<String>();
-      for (XulComponent col : tree.getColumns().getChildNodes()) {
-        columnNames.add(((XulTreeCol) col).getLabel());
-      }
-
     }
 
+    public void update(){
+      
+    }
+    
     public int getColumnCount() {
       return this.tree.getColumns().getColumnCount();
     }

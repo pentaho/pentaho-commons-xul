@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.swing.tags;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.TableColumnModel;
@@ -19,7 +18,6 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
 	private String label;
 	private ColumnType type = ColumnType.TEXT;
 	private boolean editable = false;
-	private SwingTree tree;
 	private TableColumnModel model;
 	private String binding;
 	private String comboBinding;
@@ -28,9 +26,6 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   
 	public SwingTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecol");
-		tree = (SwingTree) parent.getParent();
-		
-	
 		managedObject = "empty";
 	}
 
