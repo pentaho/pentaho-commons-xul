@@ -12,8 +12,8 @@ public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
     super(tagName);
   }
 
-  public Align getAlign() {
-    return alignment;
+  public String getAlign() {
+    return alignment.toString();
   }
 
   public void setAlign(String align) {

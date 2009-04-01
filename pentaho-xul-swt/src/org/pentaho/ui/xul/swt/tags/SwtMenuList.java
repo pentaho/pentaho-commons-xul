@@ -34,6 +34,7 @@ import org.pentaho.ui.xul.swt.SwtElement;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
+//TODO: Move creation of combobox to late initialization to support switching from editable to non-editable.
 public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuList<T> {
 
   private Combo combobox;
@@ -52,32 +53,44 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   
   private SwtMenuitem selectedItem = null;
 
+  private boolean editable = false;
+
+  private XulComponent parent;
   public SwtMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menulist");
 
     this.xulDomContainer = domContainer;
+    this.parent = parent;
+    setupCombobox();
 
-    combobox = new Combo((Composite)parent.getManagedObject(), SWT.READ_ONLY);
-    
+  }
+
+
+  private void setupCombobox(){
+
+
+    if(editable){
+      combobox = new Combo((Composite)parent.getManagedObject(), SWT.DROP_DOWN);
+    } else {
+      combobox = new Combo((Composite)parent.getManagedObject(), SWT.DROP_DOWN | SWT.READ_ONLY);
+    }
     managedObject = combobox;
 
     combobox.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
 
       public void widgetSelected(SelectionEvent e) {
-        SwtMenuList.this.changeSupport.firePropertyChange("selectedItem", 
+        SwtMenuList.this.changeSupport.firePropertyChange("selectedItem",
             previousSelectedItem, combobox.getItem(combobox.getSelectionIndex())
         );
         SwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", null
             , combobox.getSelectionIndex());
-        
+
         previousSelectedItem = (T) combobox.getItem(combobox.getSelectionIndex());
-      
+
       }
 
     });
-
   }
-  
   
 
   @Override
@@ -116,9 +129,9 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
     setElements(tees);
   }
 
-  public T getSelectedItem() {
+  public String getSelectedItem() {
     int idx = combobox.getSelectionIndex();
-    return (idx > -1 && idx < this.combobox.getItemCount())? (T) this.combobox.getItem(idx) : (T) null;
+    return (idx > -1 && idx < this.combobox.getItemCount())? this.combobox.getItem(idx) : null;
   }
 
   public void setSelectedItem(T t) {
@@ -190,12 +203,12 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
       try{
         XulMenuitem item = (XulMenuitem) xulDomContainer.getDocumentRoot().createElement("menuitem");
 
-      String attribute = getBinding();
-      if (StringUtils.isEmpty(attribute)) {
-        item.setLabel(extractLabel(t));
-      }
-
-      popup.addChild(item);
+        String attribute = getBinding();
+        if (StringUtils.isEmpty(attribute)) {
+          item.setLabel(extractLabel(t));
+        }
+  
+        popup.addChild(item);
       } catch(XulException e){
         logger.error("Unable to create new menulist menuitem: ", e);
       }
@@ -209,5 +222,21 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
 
   public void setSelectedIndex(int idx) {
     this.combobox.select(idx);  
+  }
+
+  public void setEditable(boolean editable) {
+    this.editable = editable;
+  }
+
+  public boolean getEditable() {
+    return editable;
+  }
+
+  public String getValue() {
+    return getSelectedItem();
+  }
+
+  public void setValue(String value) {
+    combobox.setText(value);
   }
 }
