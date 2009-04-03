@@ -92,8 +92,8 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     return listbox.getSelectedIndex();  
   }
 
-  public T getSelectedItem() {
-    return (T) listbox.getItemText(listbox.getSelectedIndex());
+  public String getSelectedItem() {
+    return listbox.getItemText(listbox.getSelectedIndex());
   }
 
   public void replaceAllItems(Collection tees) throws XulDomException {
@@ -285,7 +285,20 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   
     this.onCommand = command;
   }
-  
-  
- 
+
+  public void setEditable(boolean editable) {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public boolean getEditable() {
+    return false;  //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public String getValue() {
+    return null;  //To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  public void setValue(String value) {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
 }
