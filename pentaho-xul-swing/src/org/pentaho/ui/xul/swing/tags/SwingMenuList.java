@@ -1,10 +1,7 @@
 package org.pentaho.ui.xul.swing.tags;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +10,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
+import javax.swing.text.JTextComponent;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -40,7 +38,9 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
 
   private String binding;
 
-  private T previousSelectedItem = null;
+  private String previousSelectedItem = null;
+
+  private boolean editable = false;
 
   public SwingMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menulist");
@@ -115,10 +115,12 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
   
   private void fireSelectedEvents(){
 
-    SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (T) ((SwingMenuitem)combobox
-        .getSelectedItem()).getLabel());
+
+
+    
+    SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, this.getSelectedItem());
       SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
-      previousSelectedItem = (T) ((SwingMenuitem)combobox.getSelectedItem()).getLabel();
+      previousSelectedItem = getSelectedItem();
   }
 
 
@@ -141,8 +143,12 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     setElements(tees);
   }
 
-  public T getSelectedItem() {
-    return (T) ((SwingMenuitem) this.combobox.getModel().getSelectedItem()).getLabel();
+  public String getSelectedItem() {
+
+    if(editable){
+      return textComp.getText();
+    }
+    return ((SwingMenuitem) this.combobox.getModel().getSelectedItem()).getLabel();
   }
 
   public void setSelectedItem(T t) {
@@ -247,6 +253,49 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     this.combobox.setPreferredSize(box);
     this.combobox.setMinimumSize(box);
   }
-  
-  
+
+  private String oldValue = "";
+  private JTextComponent textComp;
+  public void setEditable(boolean editable) {
+    this.editable = editable;
+    combobox.setEditable(editable);
+    if(editable){
+      textComp = (JTextComponent) combobox.getEditor().getEditorComponent();
+
+      textComp.addKeyListener(new KeyListener() {
+	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
+	      public void keyReleased(KeyEvent e) {
+	        if(oldValue != null && !oldValue.equals(textComp.getText())){
+	          SwingMenuList.this.changeSupport.firePropertyChange("value", oldValue, SwingMenuList.this.getValue());
+	          oldValue = textComp.getText();
+	        } else if(oldValue == null){
+	          //AWT error where sometimes the keyReleased is fired before keyPressed.
+	          oldValue = textComp.getText();
+	        } else {
+	          logger.debug("Special key pressed, ignoring");
+	        }
+	      }
+
+        public void keyTyped(KeyEvent e) {
+        }
+
+      });
+    }
+  }
+
+  public boolean getEditable() {
+    return this.editable;
+  }
+
+  public String getValue() {
+    return (textComp != null)
+        ? textComp.getText()
+        : ((SwingMenuitem) this.combobox.getModel().getSelectedItem()).getLabel();
+  }
+
+  public void setValue(String value) {
+    if(editable){
+      ((JTextComponent) combobox.getEditor().getEditorComponent()).setText(value);
+    }
+  }
 }

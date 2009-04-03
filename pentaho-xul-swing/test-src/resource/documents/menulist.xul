@@ -5,7 +5,7 @@
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	 xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" 
    xmlns:pen="http://www.pentaho.org/2008/xul"
-   height="450" width="650">
+   height="450" width="650" onload="handler.init()">
 	
 	<script src="org.pentaho.ui.xul.samples.MenuEventHandler" id="handler"/>
 	
@@ -23,5 +23,15 @@
        
       </menupopup>
     </menulist>
+
+
+		<menulist label="editable" id="list3" editable="true">
+			<menupopup>
+				<menuitem label="Sales" id="sales" />
+				<menuitem label="Regions"
+          selected="true" id="regions"/>
+        <menuitem label="Customers" />
+			</menupopup>
+		</menulist>
 	</hbox>
 </window>

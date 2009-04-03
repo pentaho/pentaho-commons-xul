@@ -16,7 +16,7 @@ public interface XulMenuList<T> extends XulContainer {
 
   public void replaceAllItems(Collection<T> tees) throws XulDomException;
 
-  public T getSelectedItem();
+  public String getSelectedItem();
   
   public void setSelectedItem(T t);
 
@@ -33,5 +33,22 @@ public interface XulMenuList<T> extends XulContainer {
   public void setBinding(String binding);
 
   public String getBinding();
-  
+
+  public void setEditable(boolean editable);
+
+  public boolean getEditable();
+
+  /**
+   * Returns the user entered value in the case of an editable menulist
+   *
+   * @return String user entered value
+   */
+  public String getValue();
+
+  /**
+   * Sets teh value of the menulist if it's editable.
+   *
+   * @param value
+   */
+  public void setValue(String value);
 }
