@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
+import org.pentaho.gwt.widgets.client.listbox.ListItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
@@ -23,13 +25,13 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuList<T> {
 
   static final String ELEMENT_NAME = "menulist"; //$NON-NLS-1$
-  
+  private boolean editable;
+
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -40,7 +42,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
   
   private Label label;
-  private ListBox listbox;
+  private CustomListBox listbox;
   private String bindingProperty;
   private boolean loaded = false;
   private boolean suppressLayout = false;
@@ -50,7 +52,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   
   public GwtMenuList() {
     super(ELEMENT_NAME);
-    managedObject = listbox = new ListBox();
+    managedObject = listbox = new CustomListBox();
     
     listbox.addChangeListener(new ChangeListener(){
 
@@ -81,19 +83,19 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   public Collection getElements() {
-    List<String> vals = new ArrayList<String>();
-    for(int i=0; i<listbox.getItemCount(); i++){
-      vals.add(listbox.getItemText(i));
+    List<Object> vals = new ArrayList<Object>();
+    for(int i=0; i<listbox.getItems().size(); i++){
+      vals.add(listbox.getItems().get(i).getValue());
     }
     return vals;
   }
 
   public int getSelectedIndex() {
-    return listbox.getSelectedIndex();  
+    return listbox.getSelectedIndex();
   }
 
   public String getSelectedItem() {
-    return listbox.getItemText(listbox.getSelectedIndex());
+    return listbox.getSelectedItem().getValue().toString();
   }
 
   public void replaceAllItems(Collection tees) throws XulDomException {
@@ -241,7 +243,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       return;
     }
     GwtMenupopup popup = getPopupElement();
-    this.listbox.clear();
+    this.listbox.removeAll();
 
     GwtMenuitem selectedItem = null;
 
@@ -287,18 +289,24 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   public void setEditable(boolean editable) {
-    //To change body of implemented methods use File | Settings | File Templates.
+    this.listbox.setEditable(editable);
+    this.editable = editable;
   }
 
   public boolean getEditable() {
-    return false;  //To change body of implemented methods use File | Settings | File Templates.
+    return editable;
   }
 
   public String getValue() {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return getSelectedItem();
   }
 
   public void setValue(String value) {
-    //To change body of implemented methods use File | Settings | File Templates.
+    for(ListItem item : listbox.getItems()){
+      if(item.getValue().equals(value)){
+        listbox.setSelectedItem(item);
+        return;
+      }
+    }
   }
 }
