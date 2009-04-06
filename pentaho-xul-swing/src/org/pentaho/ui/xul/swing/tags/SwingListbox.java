@@ -99,7 +99,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   }
   
   public void layout(){
-   
+    this.model.clear();
     for(Element comp : getChildNodes()){
       if(comp instanceof SwingListitem){
         this.model.addElement(comp);
