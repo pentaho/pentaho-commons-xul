@@ -34,6 +34,10 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
 
   public void adoptAttributes(XulComponent component) {
 
+    setFlex(component.getFlex());
+    setHeight(component.getHeight());
+    setWidth(component.getWidth());
+    
   }
 
   @Override
