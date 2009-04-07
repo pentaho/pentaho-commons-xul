@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -13,7 +16,6 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -36,6 +38,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   private XulDomContainer xulContainer;
   private SimplePanel glasspane = new SimplePanel();
   private static int dialogPos = 1100;
+  private List<XulButton> dialogButtons = new ArrayList<XulButton>();
   
   public GwtDialog() {
     super("dialog");
@@ -52,7 +55,30 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   }
   
   // we don't add ourselves to the main screen
-  public void layout() {}
+  public void layout() {
+    String buttons = getButtons();
+    if (buttons != null && buttons.trim().length() > 0) {
+      
+      String buttonStr[] = buttons.split(",");
+      for (String button : buttonStr) {
+        final String buttonVal = button.trim();
+        
+        try{
+          XulButton buttonObj = (XulButton) this.xulContainer.getDocumentRoot().createElement("button");
+          buttonObj.setLabel(getAttributeValue("buttonlabel" + buttonVal));
+          buttonObj.setTooltiptext(getAttributeValue("buttonlabel" + buttonVal + "tooltiptext"));
+          buttonObj.setOnclick(getAttributeValue("ondialog" + buttonVal));
+          buttonObj.setId(this.getId()+ "_" + button);
+          this.addChild(buttonObj);
+          dialogButtons.add(buttonObj);
+        } catch(XulException e){
+          System.out.println("Error creating button: "+e.getMessage());
+          e.printStackTrace();
+        }
+      }
+    }
+    
+  }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
@@ -254,36 +280,26 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     SimplePanel wrapper = new SimplePanel();
     
     VerticalPanel contentPanel = new VerticalPanel();
+    contentPanel.setHeight("100%");
+    contentPanel.setWidth("100%");
     contentPanel.setStyleName("dialog-content");
     contentPanel.setWidth("100%");
     wrapper.add(contentPanel);
     panel.add(wrapper);
-    panel.setCellWidth(contentPanel, "100%");
+    panel.setCellWidth(wrapper, "100%");
     panel.setStyleName("dialog");
     
+    // render dialog contents
+    container = contentPanel;
     
-    String buttons = getButtons();
-    HorizontalPanel buttonPanel = null;
-    if (buttons != null && buttons.trim().length() > 0) {
-      buttonPanel = new HorizontalPanel();
-      
-      String buttonStr[] = buttons.split(",");
-      for (String button : buttonStr) {
-        final String buttonVal = button.trim();
-        
-        try{
-          XulButton buttonObj = (XulButton) this.xulContainer.getDocumentRoot().createElement("button");
-          buttonObj.setLabel(getAttributeValue("buttonlabel" + buttonVal));
-          buttonObj.setTooltiptext(getAttributeValue("buttonlabel" + buttonVal + "tooltiptext"));
-          buttonObj.setOnclick(getAttributeValue("ondialog" + buttonVal));
-          buttonPanel.add((Widget)buttonObj.getManagedObject());
-        } catch(XulException e){
-          System.out.println("Error creating button: "+e.getMessage());
-          e.printStackTrace();
-        }
-        
-        
-      }
+    HorizontalPanel buttonPanel = new HorizontalPanel();
+    for(XulButton btn : dialogButtons){
+      this.removeChild(btn);
+      buttonPanel.add((Widget) btn.getManagedObject());
+    }
+    super.layout();
+    for(XulButton btn : dialogButtons){
+      this.addChild(btn);
     }
     
     if (buttonPanel != null) {
@@ -306,10 +322,6 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       
     }
     
-    // render dialog contents
-    container = contentPanel;
-
-    super.layout();
     panel.setSpacing(1);
     panel.setHeight("100%");
     panel.setWidth("100%");

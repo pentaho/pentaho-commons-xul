@@ -49,6 +49,8 @@ public class GwtXulParser {
   
   public Document parseDocument(com.google.gwt.xml.client.Element rootSrc) throws XulException {
 
+    xulDocument.setXulDomContainer(this.xulDomContainer);
+    
     XulComponent root = parse(rootSrc, null);
 
     //give root reference to runner for service calls
@@ -57,7 +59,6 @@ public class GwtXulParser {
     }
 
     xulDocument.addChild(root);
-    xulDocument.setXulDomContainer(this.xulDomContainer);
     
 
     //descend back down firing notification that everything is on the tree.
