@@ -29,6 +29,9 @@ public class SwingTabpanels extends AbstractSwingContainer implements XulTabpane
   @Override
   public void layout() {
     initialized = true;
+    if (getParent() != null) {
+    	((SwingElement)getParent()).layout();
+    }
   }
 
 }

@@ -74,6 +74,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   private JTable table;
 
   private JTree tree;
+  
+  private ListSelectionListener selectionListener;
 
   private JScrollPane scrollpane;
 
@@ -252,16 +254,17 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public void setOnselect(final String select) {
-    if(table != null){
-    table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
+  	selectionListener = new ListSelectionListener() {
       public void valueChanged(ListSelectionEvent event) {
         if (event.getValueIsAdjusting() == true) {
           return;
         }
         invoke(select, new Object[] { new Integer(table.getSelectedRow()) });
       }
-    });
+    };
+  	
+    if(table != null) {
+	    table.getSelectionModel().addListSelectionListener(selectionListener);
     }
   }
 
@@ -358,6 +361,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       tree = new JTree();
     } else {
       table = new JTable();
+      if (selectionListener != null) {
+      	table.getSelectionModel().addListSelectionListener(selectionListener);
+      }
     }
     
     JComponent comp = (table != null ? table : tree);
@@ -934,8 +940,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
               for (InlineBindingExpression exp : ((XulTreeCol) col).getBindingExpressions()) {
                 logger.debug("applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + o
                     + "]");
-    
-                if(((XulTreeCol) col).getType().equalsIgnoreCase("combobox")){
+                String comboBinding = ((XulTreeCol) col).getCombobinding();
+                if(((XulTreeCol) col).getType().equalsIgnoreCase("combobox") && comboBinding != null){
                   DefaultBinding binding = new DefaultBinding(o, ((XulTreeCol) col).getCombobinding(), cell, "value");
                   binding.setBindingType(Binding.Type.ONE_WAY);
                   domContainer.addBinding(binding);
