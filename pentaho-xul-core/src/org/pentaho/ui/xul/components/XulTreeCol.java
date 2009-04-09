@@ -57,8 +57,10 @@ public interface XulTreeCol extends XulComponent {
   public String getColumntypebinding();
   public void setColumntypebinding(String property);
 
-
-
   public List<InlineBindingExpression> getBindingExpressions();
+
+  public String getDisabledbinding();
+  public void setDisabledbinding(String property);
+
 
 }

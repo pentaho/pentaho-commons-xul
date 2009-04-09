@@ -18,7 +18,8 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private String binding;
   private String type;
   private String columnTypeBinding;
-  
+  private String disabledBinding;
+
   public static void register() {
     GwtXulParser.registerHandler("treecol", 
     new GwtXulHandler() {
@@ -198,4 +199,11 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return this.columnTypeBinding;
   }
 
+  public String getDisabledbinding() {
+    return disabledBinding;
+  }
+
+  public void setDisabledbinding(String property) {
+    this.disabledBinding = property;
+  }
 }

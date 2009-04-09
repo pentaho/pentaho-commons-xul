@@ -19,12 +19,13 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
 	private ColumnType type = ColumnType.TEXT;
 	private boolean editable = false;
 	private TableColumnModel model;
-	private String binding;
+	private String binding = "";
 	private String comboBinding;
-    private String bindingChildrenProperty;
-    private String columnTypeBinding;
-  
-	public SwingTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
+  private String bindingChildrenProperty;
+  private String columnTypeBinding;
+  private String disabledBinding;
+
+  public SwingTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecol");
 		managedObject = "empty";
 	}
@@ -191,6 +192,12 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   public String getColumntypebinding(){
     return this.columnTypeBinding;
   }
-  
 
+  public String getDisabledbinding() {
+    return disabledBinding;
+  }
+
+  public void setDisabledbinding(String property) {
+    this.disabledBinding = property;
+  }
 }

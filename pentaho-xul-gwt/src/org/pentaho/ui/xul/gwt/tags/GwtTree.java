@@ -9,6 +9,7 @@ import java.util.Vector;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
 import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
@@ -264,7 +265,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   
   private Widget getColumnEditor(final int x, final int y){
     
-    
+
+    final XulTreeCol column = this.columns.getColumn(x);
     String colType = this.columns.getColumn(x).getType();
     String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
 
@@ -291,17 +293,22 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       });
       b.setText(val);
       return b;
-    } else if(colType.equals("combobox")){
-      final ListBox lb = new ListBox();
+    } else if(colType.equals("combobox") || colType.equals("editablecombobox")){
+      final CustomListBox lb = new CustomListBox();
       final XulTreeCell cell = getRootChildren().getItem(y).getRow().getCell(x); 
       lb.addChangeListener(new ChangeListener(){
 
         public void onChange(Widget arg0) {
-          cell.setSelectedIndex(lb.getSelectedIndex());
+
+          if(column.getType().equals("editablecombobox")){
+            cell.setLabel(lb.getValue());
+          } else {
+            cell.setSelectedIndex(lb.getSelectedIndex());
+          }
         }
         
       });
-      
+
       Vector vals = (Vector) cell.getValue();
       for(Object label : vals){
         lb.addItem(label.toString());
@@ -311,6 +318,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         idx = 0;
       }
       lb.setSelectedIndex(idx);
+      if(colType.equals("editablecombobox")){
+        lb.setEditable(true);
+      }
+
       return lb;
       
     } else {
@@ -539,94 +550,99 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public <T> void setElements(Collection<T> elements) {
-    this.elements = elements;
-    suppressEvents = true;
-    this.getRootChildren().removeAll();
-    
-    
-    if(elements == null || elements.size() == 0){
-      updateUI();
-      return;
-    }
-    try {
-      if(table != null){
-        for (T o : elements) {
-          XulTreeRow row = this.getRootChildren().addNewRow();
-  
-          for (int x=0; x< this.getColumns().getChildNodes().size(); x++) {
-            XulComponent col = this.getColumns().getColumn(x);
-              
-            XulTreeCol column = ((XulTreeCol) col);
-            final XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
-            for (InlineBindingExpression exp : column.getBindingExpressions()) {
-          
-              String colType = column.getType();
-              if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
-                colType = extractDynamicColType(o, x);
-              }
-              
-              if(colType != null && colType.equals("combobox")){
-                GwtBinding binding = new GwtBinding(o, column.getCombobinding(), cell, "value");
-                binding.setBindingType(Binding.Type.ONE_WAY);
-                domContainer.addBinding(binding);
-                binding.fireSourceChanged();
-                
-                binding = new GwtBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
-                binding.setConversion(new BindingConvertor<Object, Integer>(){
+    try{
+      this.elements = elements;
+      suppressEvents = true;
+      this.getRootChildren().removeAll();
 
-                  @Override
-                  public Integer sourceToTarget(Object value) {
-                    int index = ((Vector) cell.getValue()).indexOf(value);
-                    return index > -1 ? index : 0;
-                  }
 
-                  @Override
-                  public Object targetToSource(Integer value) {
-                    return ((Vector)cell.getValue()).get(value);
-                  }
-                  
-                });
-                domContainer.addBinding(binding);
-                binding.fireSourceChanged();
-                
-              } else if(o instanceof XulEventSource){
-
-                GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
-                if(GwtTree.this.isEditable() == false){
-                  binding.setBindingType(Binding.Type.ONE_WAY);
-                }
-                domContainer.addBinding(binding);
-                binding.fireSourceChanged();
-              } else {
-                cell.setLabel(o.toString());
-              }
-            }
-  
-            row.addCell(cell);
-          }
-  
-        }
-      } else { //tree
-
-        for (T o : elements) {
-          XulTreeRow row = this.getRootChildren().addNewRow();
-          addTreeChild(o, row);
-        }
-        
+      if(elements == null || elements.size() == 0){
+        updateUI();
+        return;
       }
-      //treat as a selection change
-    } catch (XulException e) {
-      Window.alert("error adding elements "+e);
-      System.out.println(e.getMessage());
-      e.printStackTrace();
-    } catch (Exception e) {
-      Window.alert("error adding elements "+e);
+      try {
+        if(table != null){
+          for (T o : elements) {
+            XulTreeRow row = this.getRootChildren().addNewRow();
+
+            for (int x=0; x< this.getColumns().getChildNodes().size(); x++) {
+              XulComponent col = this.getColumns().getColumn(x);
+
+              XulTreeCol column = ((XulTreeCol) col);
+              final XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+              for (InlineBindingExpression exp : column.getBindingExpressions()) {
+
+                String colType = column.getType();
+                if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
+                  colType = extractDynamicColType(o, x);
+                }
+
+                if(colType != null && (colType.equals("combobox") || colType.equals("editablecombobox"))){
+                  GwtBinding binding = new GwtBinding(o, column.getCombobinding(), cell, "value");
+                  binding.setBindingType(Binding.Type.ONE_WAY);
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+
+                  binding = new GwtBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
+                  binding.setConversion(new BindingConvertor<Object, Integer>(){
+
+                    @Override
+                    public Integer sourceToTarget(Object value) {
+                      int index = ((Vector) cell.getValue()).indexOf(value);
+                      return index > -1 ? index : 0;
+                    }
+
+                    @Override
+                    public Object targetToSource(Integer value) {
+                      return ((Vector)cell.getValue()).get(value);
+                    }
+
+                  });
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+
+                } else if(o instanceof XulEventSource){
+
+                  GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                  if(GwtTree.this.isEditable() == false){
+                    binding.setBindingType(Binding.Type.ONE_WAY);
+                  }
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+                } else {
+                  cell.setLabel(o.toString());
+                }
+              }
+
+              row.addCell(cell);
+            }
+
+          }
+        } else { //tree
+
+          for (T o : elements) {
+            XulTreeRow row = this.getRootChildren().addNewRow();
+            addTreeChild(o, row);
+          }
+
+        }
+        //treat as a selection change
+      } catch (XulException e) {
+        Window.alert("error adding elements "+e);
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+      } catch (Exception e) {
+        Window.alert("error adding elements "+e);
+        System.out.println(e.getMessage());
+        e.printStackTrace();
+      }
+
+      suppressEvents = false;
+      updateUI();
+    } catch(Exception e){
       System.out.println(e.getMessage());
       e.printStackTrace();
     }
-
-    suppressEvents = false;
-    updateUI();
   }
   
   private <T> void addTreeChild(T element, XulTreeRow row){

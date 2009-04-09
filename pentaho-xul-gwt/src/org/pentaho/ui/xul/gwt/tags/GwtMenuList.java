@@ -65,6 +65,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         if (!loaded) {
           return;
         }
+
         fireSelectedEvents();
       }
       
@@ -126,7 +127,6 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         if (!StringUtils.isEmpty(attribute)) {
           item.setLabel(extractLabel(t));
         }
-  
         popup.addChild(item);
       }
   
@@ -214,17 +214,18 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     }
   }
 
-
   public void adoptAttributes(XulComponent component) {
       
   }
 
-
+  private int selectedIndex = -1;
   private void fireSelectedEvents(){
 
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (String) getSelectedItem());
-    GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, getSelectedIndex());
-      previousSelectedItem = (String) getSelectedItem();
+    int prevSelectedIndex = selectedIndex;
+    selectedIndex = getSelectedIndex();
+    GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
+    previousSelectedItem = (String) getSelectedItem();
       
       if(StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false){
         try {

@@ -31,6 +31,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   private String customClass = null;
   private String binding;
   private String columnTypeBinding;
+  private String disabledBinding;
 
   public SwtTreeCol(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -188,6 +189,15 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
 
   public String getColumntypebinding(){
     return this.columnTypeBinding;
+  }
+  
+  
+  public String getDisabledbinding() {
+    return disabledBinding;
+  }
+
+  public void setDisabledbinding(String property) {
+    this.disabledBinding = property;
   }
   
 }

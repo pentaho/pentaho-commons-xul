@@ -249,6 +249,8 @@ public class GwtBinding implements Binding{
             
           
           } catch (Exception e) {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
             throw new BindingException("Error invoking setter method [" + targetAttr + "] on target: "+target, e);
           }
         }
