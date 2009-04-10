@@ -498,5 +498,4 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     return alignment;
   }
 
-
 }

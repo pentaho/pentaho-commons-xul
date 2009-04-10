@@ -75,8 +75,11 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
 
   public void setValue(String text){
-    value = text;
-    textBox.setText(getValue());
+    String prevVal = this.value;
+    this.value = text;
+    textBox.setText(text);
+    this.firePropertyChange("value", prevVal, text);
+
   }
   
   // TODO: this double initialization is not good. Any values previously set will be lost in a second layout
@@ -122,7 +125,6 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       public void onKeyPress(Widget arg0, char arg1, int arg2) {}
 
       public void onKeyUp(Widget arg0, char arg1, int arg2) {
-        GwtTextbox.this.changeSupport.firePropertyChange("value", "", textBox.getText());
         setValue(textBox.getText());
       }
       

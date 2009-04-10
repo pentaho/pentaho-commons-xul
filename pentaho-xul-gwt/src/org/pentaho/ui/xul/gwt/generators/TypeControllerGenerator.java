@@ -140,7 +140,7 @@ public class TypeControllerGenerator extends Generator {
   
   private void generateConstructor(SourceWriter sourceWriter) { 
 
-    sourceWriter.println("Map<String, GwtBindingMethod> wrappedTypes = new HashMap<String, GwtBindingMethod>();");
+    sourceWriter.println("public Map<String, GwtBindingMethod> wrappedTypes = new HashMap<String, GwtBindingMethod>();");
 
     // start constructor source generation 
     sourceWriter.println("public " + className + "() { "); 
@@ -162,10 +162,19 @@ public class TypeControllerGenerator extends Generator {
     sourceWriter.indent();
     
 
-    sourceWriter.println("return wrappedTypes.get((obj.getClass().getName()+\"_get\"+propertyName).toLowerCase());");
+    sourceWriter.println("GwtBindingMethod retVal = wrappedTypes.get((obj.getClass().getName()+\"_get\"+propertyName).toLowerCase());");
+
+    sourceWriter.println("if(retVal == null){");
+    sourceWriter.indent();
+    sourceWriter.println("retVal = wrappedTypes.get((obj.getClass().getName()+\"_is\"+propertyName).toLowerCase());");
     sourceWriter.outdent();
     sourceWriter.println("}");
-    
+
+    sourceWriter.println("return retVal;");
+
+    sourceWriter.outdent();
+    sourceWriter.println("}");
+
     sourceWriter.println("public GwtBindingMethod findSetMethod(Object obj, String propertyName){");
     sourceWriter.indent();
     

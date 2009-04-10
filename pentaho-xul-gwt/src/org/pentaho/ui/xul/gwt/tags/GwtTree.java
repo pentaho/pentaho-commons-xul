@@ -1,30 +1,27 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
-import java.util.Vector;
-
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.*;
+import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
+import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
+import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
+import com.google.gwt.widgetideas.table.client.TableSelectionListener;
+import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
 import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
-import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
-import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
+import org.pentaho.ui.xul.binding.DefaultBinding;
+import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
-import org.pentaho.ui.xul.containers.XulTree;
-import org.pentaho.ui.xul.containers.XulTreeChildren;
-import org.pentaho.ui.xul.containers.XulTreeCols;
-import org.pentaho.ui.xul.containers.XulTreeItem;
-import org.pentaho.ui.xul.containers.XulTreeRow;
+import org.pentaho.ui.xul.containers.*;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
@@ -33,24 +30,7 @@ import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.SourcesTableEvents;
-import com.google.gwt.user.client.ui.TableListener;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.TreeListener;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
-import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
-import com.google.gwt.widgetideas.table.client.TableSelectionListener;
-import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
+import java.util.*;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
@@ -269,6 +249,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     final XulTreeCol column = this.columns.getColumn(x);
     String colType = this.columns.getColumn(x).getType();
     String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
+    final GwtTreeCell cell = (GwtTreeCell) getRootChildren().getItem(y).getRow().getCell(x);
 
     if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
       Object row = elements.toArray()[y];
@@ -278,24 +259,44 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     if(StringUtils.isEmpty(colType)){
       return new HTML(val);
     } else if(colType.equals("text")){
-      final TextBox b = new TextBox();
-      b.addKeyboardListener(new KeyboardListener(){
+
+      try{
+
+        GwtTextbox b = (GwtTextbox) this.domContainer.getDocumentRoot().createElement("textbox");
+        b.layout();
+        b.setValue(val);
+        GwtBinding bind = new GwtBinding(cell, "label", b, "value");
+        bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(bind);
+        bind.fireSourceChanged();
+
+        bind = new GwtBinding(cell, "disabled", b, "disabled");
+        bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(bind);
+        bind.fireSourceChanged();
+
+        return (Widget) b.getManagedObject();
+      } catch(Exception e){
+        System.out.println("error creating textbox, fallback");
+        e.printStackTrace();
+        final TextBox b = new TextBox();
+        b.addKeyboardListener(new KeyboardListener(){
 
 
-        public void onKeyDown(Widget arg0, char arg1, int arg2) {}
+          public void onKeyDown(Widget arg0, char arg1, int arg2) {}
 
-        public void onKeyPress(Widget arg0, char arg1, int arg2) {}
+          public void onKeyPress(Widget arg0, char arg1, int arg2) {}
 
-        public void onKeyUp(Widget arg0, char arg1, int arg2) {
-          getRootChildren().getItem(y).getRow().getCell(x).setLabel(b.getText());
-        }
-        
-      });
-      b.setText(val);
-      return b;
+          public void onKeyUp(Widget arg0, char arg1, int arg2) {
+            getRootChildren().getItem(y).getRow().getCell(x).setLabel(b.getText());
+          }
+
+        });
+        b.setText(val);
+        return b;
+      }
     } else if(colType.equals("combobox") || colType.equals("editablecombobox")){
       final CustomListBox lb = new CustomListBox();
-      final XulTreeCell cell = getRootChildren().getItem(y).getRow().getCell(x); 
       lb.addChangeListener(new ChangeListener(){
 
         public void onChange(Widget arg0) {
@@ -598,8 +599,19 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                     }
 
                   });
+
                   domContainer.addBinding(binding);
                   binding.fireSourceChanged();
+
+                  if(colType.equalsIgnoreCase("editablecombobox")){
+                    binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                    if (!this.editable) {
+                      binding.setBindingType(Binding.Type.ONE_WAY);
+                    } else {
+                      binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+                    }
+                    domContainer.addBinding(binding);
+                  }
 
                 } else if(o instanceof XulEventSource){
 
@@ -612,6 +624,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                 } else {
                   cell.setLabel(o.toString());
                 }
+              }
+
+              if(column.getDisabledbinding() != null){
+                String prop = column.getDisabledbinding();
+                GwtBinding bind = new GwtBinding(o, column.getDisabledbinding(), cell, "disabled");
+                bind.setBindingType(Binding.Type.ONE_WAY);
+                domContainer.addBinding(bind);
+                bind.fireSourceChanged();
               }
 
               row.addCell(cell);

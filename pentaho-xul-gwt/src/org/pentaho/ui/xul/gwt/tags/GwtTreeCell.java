@@ -113,4 +113,17 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     
   }
 
+  private boolean disabled = false;
+  @Override
+  public boolean isDisabled() {
+    return disabled;
+  }
+
+  @Override
+  public void setDisabled(boolean disabled){
+    boolean prevVal = this.disabled;
+    this.disabled = disabled;
+    super.setDisabled(disabled);
+    this.firePropertyChange("disabled", prevVal, disabled);
+  }
 }
