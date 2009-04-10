@@ -6,9 +6,9 @@
   xmlns:pen="http://www.pentaho.org/2008/xul"
   onload="handler1.onload(), handler2.onload(5), handler2.onload(5.2), handler2.onload('hello'), handler2.onload(true)"
   >
-  <script id="handler1" src="org.pentaho.ui.xul.test.samples.SampleEventHandler"/>
-  <script id="handler2" src="org.pentaho.ui.xul.test.samples.SampleEventHandler"/>
-  <script id="handler5" src="org.pentaho.ui.xul.test.samples.testHandler.groovy"/>
+  <script id="handler1" src="org.pentaho.ui.xul.samples.SampleEventHandler"/>
+  <script id="handler2" src="org.pentaho.ui.xul.samples.SampleEventHandler"/>
+  <script id="handler5" src="org.pentaho.ui.xul.samples.testHandler.groovy"/>
   <hbox>
     <textbox id="textbox1" value="initial value"/>
   </hbox>

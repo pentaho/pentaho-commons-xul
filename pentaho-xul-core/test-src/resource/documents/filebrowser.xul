@@ -3,7 +3,7 @@
 <window id="general-datasource-window"
   title="Testing progressmeters for SWT, Swing" orient="vertical" height="80" width="400"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script src="org.pentaho.ui.xul.test.samples.FileBrowserHandler" id="handler"/>
+  <script src="org.pentaho.ui.xul.samples.FileBrowserHandler" id="handler"/>
   
   <textbox id="fileName"/>
   <button label="Save" onclick="handler.showSave()"/>

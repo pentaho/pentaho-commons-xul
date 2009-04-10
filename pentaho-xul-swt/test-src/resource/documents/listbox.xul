@@ -5,7 +5,7 @@
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   xmlns:pen="http://www.pentaho.org/2008/xul"
    xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
-  <script id="handler" src="org.pentaho.ui.xul.test.samples.ListBoxHandler"/>
+  <script id="handler" src="org.pentaho.ui.xul.samples.ListBoxHandler"/>
 
     <listbox id="listbox" rows="5" onselect="handler.consume()" disabled="false" seltype="single" selectedindex="1">
       <listitem label="Native(JDBC)" id="listItem0" />

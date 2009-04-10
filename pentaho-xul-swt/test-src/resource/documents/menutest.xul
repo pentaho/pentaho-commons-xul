@@ -4,7 +4,7 @@
   orient="vertical"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
    xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
-  <script id="handler" src="org.pentaho.ui.xul.test.samples.ListBoxHandler"/>
+  <script id="handler" src="org.pentaho.ui.xul.samples.ListBoxHandler"/>
 
   <menubar id="findfiles-menubar">
     <menu id="file-menu" label="File" accesskey="f" acceltext="f">

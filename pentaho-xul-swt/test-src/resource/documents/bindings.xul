@@ -7,7 +7,7 @@
 	xmlns:pen="http://www.pentaho.org/2008/xul"
 	height="650" width="650" onload="handler.onLoad()">
 
-  <script src="org.pentaho.ui.xul.test.samples.BindingEventHandler" id="handler"/>
+  <script src="org.pentaho.ui.xul.samples.BindingEventHandler" id="handler"/>
   
 	<groupbox>
 		<caption value="Components with Backing Model"/>

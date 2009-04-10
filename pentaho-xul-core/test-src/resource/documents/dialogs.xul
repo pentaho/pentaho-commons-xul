@@ -3,7 +3,7 @@
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
     xmlns:html="http://www.w3.org/1999/xhtml" width="300" height="200" title="Dialog Tester">
 	    
-	<script src="org.pentaho.ui.xul.test.samples.DialogHandler" id="handler"/>
+	<script src="org.pentaho.ui.xul.samples.DialogHandler" id="handler"/>
 	
 	<dialog 
    buttonlabelcancel="Cancel"

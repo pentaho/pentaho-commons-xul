@@ -4,7 +4,7 @@
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
 	width="600" height="450" onload="dataHandler.onLoad()">
 	
-	<script id="dataHandler" src="org.pentaho.ui.xul.test.samples.DatasourceHandler" />
+	<script id="dataHandler" src="org.pentaho.ui.xul.samples.DatasourceHandler" />
 	
 	<hbox id="all-box" flex="1">
 		<groupbox id="options-box" orient="vertical" flex="1">
