@@ -27,7 +27,8 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   private String selType;
   private int rowsToDisplay = 0;
   String onSelect = null;
-  
+
+private String binding;
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     listBox = new List((Composite)parent.getManagedObject(), SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
@@ -176,20 +177,23 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
 
   public <T> Collection<T> getElements() {
     return null;
-        // TODO Auto-generated method stub return null;
       
   }
 
   public <T> void setElements(Collection<T> elements) {
-    
-        // TODO Auto-generated method stub 
+    // implement binding support.
       
   }
 
   public void setSelectedIndices(int[] indices) {
-    // TODO Auto-generated method stub
     
   }
 
+  public void setBinding(String binding) {
+    this.binding = binding;
+  }
 
+  public String getBinding() {
+    return binding;
+  }
 }
