@@ -110,11 +110,6 @@ public interface XulListbox extends XulContainer {
    */
   public void setSelectedItem(Object item);
 
-  /**
-   * 
-   * @param index Set the given index as selected in the listbox. 
-   */
-  public void setSelectedindex(String index);
 
   /**
    * 
@@ -173,7 +168,9 @@ public interface XulListbox extends XulContainer {
 
   <T> Collection<T> getElements();
 
+  public void setBinding(String binding);
 
+  public String getBinding();
   
 
 }

@@ -23,6 +23,7 @@
         <include name="**/util/ColumnType*"/>
         <include name="**/util/Orient*"/>
         <include name="**/util/Align*"/>
+        <include name="**/util/TextType*"/>
       </source>
 	
 </module>

@@ -229,8 +229,8 @@ public class GwtBinding implements Binding{
         final PropertyChangeListener cThis = this;
         if (evt.getPropertyName().equalsIgnoreCase(va)) {
           try {
-            Object value = evaluateExpressions(evt.getNewValue());
-            final Object finalVal = doConversions(value, dir);
+            Object value = doConversions(evt.getNewValue(), dir);
+            final Object finalVal = evaluateExpressions(value);
             
             Object targetObject = b;
             if(targetObject == null){

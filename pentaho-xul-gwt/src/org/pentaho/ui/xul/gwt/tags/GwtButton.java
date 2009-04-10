@@ -90,10 +90,12 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     this.onclick = method;
     ClickListener listener = new ClickListener() {
       public void onClick(Widget sender) {
-        try {
-          GwtButton.this.getXulDomContainer().invoke(method, new Object[] {});
-        } catch (XulException e) {
-          e.printStackTrace();
+        if(!GwtButton.this.disabled) {
+          try {
+            GwtButton.this.getXulDomContainer().invoke(method, new Object[] {});
+          } catch (XulException e) {
+            e.printStackTrace();
+          }
         }
       }
     };

@@ -12,6 +12,8 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.util.GroupBoxPanel;
 import org.pentaho.ui.xul.util.Orient;
 
+import com.google.gwt.user.client.ui.VerticalPanel;
+
 public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox {
 
   static final String ELEMENT_NAME = "groupbox"; //$NON-NLS-1$
@@ -29,6 +31,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     super(ELEMENT_NAME);
     this.orientation = Orient.VERTICAL;
     managedObject = container = new GroupBoxPanel();
+    ((VerticalPanel) container).setStyleName("vbox");
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {

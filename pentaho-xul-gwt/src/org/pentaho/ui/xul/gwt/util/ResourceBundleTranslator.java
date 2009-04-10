@@ -13,7 +13,7 @@ public class ResourceBundleTranslator {
       String key = input.substring(start, end);
       String transval = bundle.getString(key);
       input = input.replace("${"+key+"}", transval);
-      pos = end+1;
+      pos = start+1;
       
     } 
     
