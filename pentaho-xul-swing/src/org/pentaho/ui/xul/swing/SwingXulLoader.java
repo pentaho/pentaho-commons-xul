@@ -67,6 +67,14 @@ public class SwingXulLoader extends AbstractXulLoader implements XulLoader{
     parser.registerHandler("STATUSBARPANEL", "org.pentaho.ui.xul.swing.tags.SwingStatusbarpanel");
     parser.registerHandler("IMAGE", "org.pentaho.ui.xul.swing.tags.SwingImage");
     parser.registerHandler("SEPARATOR", "org.pentaho.ui.xul.swing.tags.SwingSeparator");
+
+
+
+    parser.registerHandler("GRID", "org.pentaho.ui.xul.swing.tags.SwingGrid");
+    parser.registerHandler("COLUMNS", "org.pentaho.ui.xul.swing.tags.SwingColumns");
+    parser.registerHandler("COLUMN", "org.pentaho.ui.xul.swing.tags.SwingColumn");
+    parser.registerHandler("ROWS", "org.pentaho.ui.xul.swing.tags.SwingRows");
+    parser.registerHandler("ROW", "org.pentaho.ui.xul.swing.tags.SwingRow");
     
 
   }
