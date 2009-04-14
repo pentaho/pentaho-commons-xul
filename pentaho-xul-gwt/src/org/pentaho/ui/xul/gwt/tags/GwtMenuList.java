@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.listbox.ListItem;
+import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
@@ -25,6 +25,7 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuList<T> {
@@ -49,10 +50,25 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private boolean inLayoutProcess = false;
   private String previousSelectedItem = null;
   private String onCommand;
-  
+  private SimplePanel wrapper = null;
   public GwtMenuList() {
     super(ELEMENT_NAME);
-    managedObject = listbox = new CustomListBox();
+    wrapper = new SimplePanel() {
+
+      @Override
+      public void setHeight(String height) {
+      }
+
+      @Override
+      public void setWidth(String width) {
+        super.setWidth(width);
+        listbox.setWidth(width);
+      }
+      
+    };
+    listbox = new CustomListBox();
+    wrapper.add(listbox);
+    managedObject = wrapper;
     
     listbox.addChangeListener(new ChangeListener(){
 

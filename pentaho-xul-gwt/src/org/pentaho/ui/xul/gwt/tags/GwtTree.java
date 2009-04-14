@@ -735,6 +735,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
   public void update() {
     updateUI();
+    layout();
   }
 
   public void adoptAttributes(XulComponent component) {

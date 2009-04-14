@@ -25,6 +25,7 @@ import org.pentaho.ui.xul.gwt.tags.GwtMenuitem;
 import org.pentaho.ui.xul.gwt.tags.GwtMenupopup;
 import org.pentaho.ui.xul.gwt.tags.GwtOverlay;
 import org.pentaho.ui.xul.gwt.tags.GwtScript;
+import org.pentaho.ui.xul.gwt.tags.GwtScrollbox;
 import org.pentaho.ui.xul.gwt.tags.GwtSpacer;
 import org.pentaho.ui.xul.gwt.tags.GwtTextbox;
 import org.pentaho.ui.xul.gwt.tags.GwtToolbar;
@@ -103,6 +104,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     GwtMenuList.register();
     GwtMenuitem.register();
     GwtMenupopup.register();
+    GwtScrollbox.register();
       
   }
   

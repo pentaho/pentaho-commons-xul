@@ -44,7 +44,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected boolean flexLayout = false;
   protected String insertbefore, insertafter;
   protected int position = -1;
-  
+  protected boolean initialized;
   protected String bgcolor, onblur, tooltiptext;
   protected int height, padding;
   protected int width;
@@ -129,7 +129,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         this.setAttribute(n.getNodeName(), n.getNodeValue());
       }
     }
-    
   }
   
   private boolean hasAttribute(com.google.gwt.xml.client.Element ele, String attr){
@@ -280,7 +279,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
          break;
       } 
     }
-    
+    initialized = true;
   }
   
   private native void printInnerHTML(Widget w)/*-{

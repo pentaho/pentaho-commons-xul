@@ -26,7 +26,20 @@ public class GwtTreeCols extends AbstractGwtXulContainer implements XulTreeCols 
   }
   
   public void addColumn(XulTreeCol column) {
-    addChild(column);
+    super.addChild(column);
+  }
+  
+  private XulTree tree;
+  private XulTree getParentTree(){
+    return (tree != null) ? tree : (tree = (XulTree) this.getParent());
+  }
+
+  @Override
+  public void addChild(Element element) {
+    super.addChild(element);
+    if(getParentTree() != null) {
+      getParentTree().update();  
+    }
   }
 
   public XulTreeCol getColumn(int index) {

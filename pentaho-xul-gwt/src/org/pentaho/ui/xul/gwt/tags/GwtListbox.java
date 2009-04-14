@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, ChangeListener {
 
   static final String ELEMENT_NAME = "listbox"; //$NON-NLS-1$
+  private int selectedIndex = -1;
 
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
@@ -128,10 +129,15 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     Element rootElement = doc.getRootElement();
     XulWindow window = (XulWindow) rootElement;
     try {
-      this.getXulDomContainer().invoke(onselect, new Object[] {});
+      if(onselect != null && onselect.length() > 0) {
+        this.getXulDomContainer().invoke(onselect, new Object[] {new Integer(listBox.getSelectedIndex())});
+      }
     } catch (XulException e) {
       e.printStackTrace();
     }
+    
+    this.setSelectedIndex(listBox.getSelectedIndex());
+    
   }
 
   public Object getSelectedItem() {
@@ -245,11 +251,18 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     }
 
     layout();
-
+    if(elements.size() > 0) {
+      setSelectedIndex(0);
+    }
   }
 
   public void setSelectedIndex(int index) {
+    int oldValue = this.selectedIndex;
+    this.selectedIndex = index;
     this.listBox.setSelectedIndex(index);
+    
+    this.firePropertyChange("selectedIndex", oldValue, index);
+    
   }
 
   public void setSelectedIndices(int[] indices) {
