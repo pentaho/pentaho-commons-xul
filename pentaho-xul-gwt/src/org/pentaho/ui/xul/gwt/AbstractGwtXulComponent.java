@@ -484,8 +484,41 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
   }
   public void adoptAttributes(XulComponent component) {
+    if (StringUtils.isEmpty(component.getAttributeValue("tooltiptext")) == false) {
+      // TODO: setOrient should live in an interface somewhere???
+      setTooltiptext(component.getAttributeValue("tooltiptext"));
+    }
     
-    // TODO Auto-generated method stub 
+    if (StringUtils.isEmpty(component.getAttributeValue("flex")) == false) {
+      try {
+        setFlex(Integer.parseInt(component.getAttributeValue("flex")));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    
+    if (StringUtils.isEmpty(component.getAttributeValue("width")) == false) {
+      try {
+        setWidth(Integer.parseInt(component.getAttributeValue("width")));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    if (StringUtils.isEmpty(component.getAttributeValue("height")) == false) {
+      try {
+        setHeight(Integer.parseInt(component.getAttributeValue("height")));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    if (StringUtils.isEmpty(component.getAttributeValue("position")) == false) {
+      try {
+        setPosition(Integer.parseInt(component.getAttributeValue("position")));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
   
   }
 

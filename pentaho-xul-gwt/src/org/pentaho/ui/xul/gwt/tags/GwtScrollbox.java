@@ -88,7 +88,7 @@ public class GwtScrollbox extends AbstractGwtXulContainer implements XulScrollbo
 
 
   public void adoptAttributes(XulComponent component) {
-    
+    super.adoptAttributes(component);
   }
   public boolean isOverflowx() {
     return overflowx;
