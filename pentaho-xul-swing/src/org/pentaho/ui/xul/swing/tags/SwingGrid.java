@@ -80,4 +80,12 @@ public class SwingGrid extends AbstractSwingContainer implements XulGrid {
     }
     this.initialized = true;
   }
+
+  /* (non-Javadoc)
+   * @see org.pentaho.ui.xul.containers.XulGrid#update()
+   */
+  public void update() {
+    resetContainer();
+    layout();
+  }
 }

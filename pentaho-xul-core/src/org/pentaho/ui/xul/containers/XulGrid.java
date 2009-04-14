@@ -7,5 +7,5 @@ import org.pentaho.ui.xul.XulContainer;
  * Date: Apr 14, 2009
  */
 public interface XulGrid extends XulContainer {
-
+  public void update();
 }
