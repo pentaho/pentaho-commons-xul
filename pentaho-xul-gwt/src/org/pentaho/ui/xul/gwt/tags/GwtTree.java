@@ -301,7 +301,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
         public void onChange(Widget arg0) {
 
-          if(column.getType().equals("editablecombobox")){
+            if(column.getType().equals("editablecombobox")){
             cell.setLabel(lb.getValue());
           } else {
             cell.setSelectedIndex(lb.getSelectedIndex());
@@ -309,6 +309,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         }
         
       });
+      lb.setWidth("100%");
 
       Vector vals = (Vector) cell.getValue();
       for(Object label : vals){
@@ -613,7 +614,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                     domContainer.addBinding(binding);
                   }
 
-                } else if(o instanceof XulEventSource){
+                } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){
 
                   GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                   if(GwtTree.this.isEditable() == false){
@@ -626,7 +627,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                 }
               }
 
-              if(column.getDisabledbinding() != null){
+              if(StringUtils.isEmpty(column.getDisabledbinding()) == false){
                 String prop = column.getDisabledbinding();
                 GwtBinding bind = new GwtBinding(o, column.getDisabledbinding(), cell, "disabled");
                 bind.setBindingType(Binding.Type.ONE_WAY);

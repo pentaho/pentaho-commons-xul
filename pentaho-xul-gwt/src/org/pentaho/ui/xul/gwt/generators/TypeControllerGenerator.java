@@ -206,7 +206,9 @@ public class TypeControllerGenerator extends Generator {
         JClassType eventSourceType = typeOracle.getType("org.pentaho.ui.xul.XulEventSource");
         while(loopType.getSuperclass() != null && loopType.getSimpleSourceName().equals("Object") == false && loopType.isAssignableTo(eventSourceType)){
 
-          System.out.println("    generating inner type: "+loopType.getQualifiedSourceName());
+          String superName = generateTypeKey(loopType);
+
+          System.out.println("    generating inner type: "+superName);
           for(JMethod m : loopType.getMethods()){
             if(!m.isPublic()){
               continue;
@@ -225,11 +227,15 @@ public class TypeControllerGenerator extends Generator {
             System.out.println("        generating inner type method: "+m.getName());
             
             String methodName = m.getName();
-            sourceWriter.println("otherM = wrappedTypes.get(\""+loopType.getClass().getName()+"_"+methodName+"\".toLowerCase());");
+            sourceWriter.println("otherM = wrappedTypes.get(\""+superName+"_"+methodName+"\".toLowerCase());");
+            sourceWriter.println("if(otherM != null){");
+              sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), otherM);");
+            sourceWriter.println("}");
+
             sourceWriter.println("if(otherM == null){");
             sourceWriter.indent();
             totalClassCount++;
-            sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), new GwtBindingMethod(){");
+            sourceWriter.println("GwtBindingMethod newMethod = new GwtBindingMethod(){");
             
   
             sourceWriter.println("public Object invoke(Object obj, Object[] args) throws XulException { ");
@@ -259,7 +265,10 @@ public class TypeControllerGenerator extends Generator {
             sourceWriter.println("}");
   
             sourceWriter.outdent();
-            sourceWriter.println("});");
+            sourceWriter.println("};");
+            sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), newMethod);");
+
+            sourceWriter.println("wrappedTypes.put((\""+superName+"_"+methodName+"\").toLowerCase(), newMethod);");
             sourceWriter.outdent();
             sourceWriter.println("}");
             
