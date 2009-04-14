@@ -319,7 +319,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       if(idx < 0){
         idx = 0;
       }
-      lb.setSelectedIndex(idx);
+      if(idx < vals.size()){
+        lb.setSelectedIndex(idx);
+      }
       if(colType.equals("editablecombobox")){
         lb.setEditable(true);
       }
