@@ -13,8 +13,11 @@ import org.pentaho.ui.xul.gwt.tags.GwtBox;
 import org.pentaho.ui.xul.gwt.tags.GwtButton;
 import org.pentaho.ui.xul.gwt.tags.GwtCaption;
 import org.pentaho.ui.xul.gwt.tags.GwtCheckbox;
+import org.pentaho.ui.xul.gwt.tags.GwtColumn;
+import org.pentaho.ui.xul.gwt.tags.GwtColumns;
 import org.pentaho.ui.xul.gwt.tags.GwtDeck;
 import org.pentaho.ui.xul.gwt.tags.GwtDialog;
+import org.pentaho.ui.xul.gwt.tags.GwtGrid;
 import org.pentaho.ui.xul.gwt.tags.GwtGroupBox;
 import org.pentaho.ui.xul.gwt.tags.GwtHbox;
 import org.pentaho.ui.xul.gwt.tags.GwtLabel;
@@ -24,6 +27,8 @@ import org.pentaho.ui.xul.gwt.tags.GwtMenuList;
 import org.pentaho.ui.xul.gwt.tags.GwtMenuitem;
 import org.pentaho.ui.xul.gwt.tags.GwtMenupopup;
 import org.pentaho.ui.xul.gwt.tags.GwtOverlay;
+import org.pentaho.ui.xul.gwt.tags.GwtRow;
+import org.pentaho.ui.xul.gwt.tags.GwtRows;
 import org.pentaho.ui.xul.gwt.tags.GwtScript;
 import org.pentaho.ui.xul.gwt.tags.GwtScrollbox;
 import org.pentaho.ui.xul.gwt.tags.GwtSpacer;
@@ -105,7 +110,11 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     GwtMenuitem.register();
     GwtMenupopup.register();
     GwtScrollbox.register();
-      
+    GwtColumn.register();
+    GwtColumns.register();
+    GwtRow.register();
+    GwtRows.register();
+    GwtGrid.register();
   }
   
   /* (non-Javadoc)
