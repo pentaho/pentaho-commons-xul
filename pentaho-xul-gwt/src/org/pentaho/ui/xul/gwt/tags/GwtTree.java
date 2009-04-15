@@ -297,6 +297,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       }
     } else if(colType.equals("combobox") || colType.equals("editablecombobox")){
       final CustomListBox lb = new CustomListBox();
+
+      lb.setWidth("100%");
+
+      Vector vals = (Vector) cell.getValue();
+      for(Object label : vals){
+        lb.addItem(label.toString());
+      }
       lb.addChangeListener(new ChangeListener(){
 
         public void onChange(Widget arg0) {
@@ -307,14 +314,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
             cell.setSelectedIndex(lb.getSelectedIndex());
           }
         }
-        
-      });
-      lb.setWidth("100%");
 
-      Vector vals = (Vector) cell.getValue();
-      for(Object label : vals){
-        lb.addItem(label.toString());
-      }
+      });
+      
       int idx = cell.getSelectedIndex();
       if(idx < 0){
         idx = 0;
