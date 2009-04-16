@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
+import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -17,11 +18,13 @@ import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.DockPanel.DockLayoutConstant;
 
 public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
 
@@ -69,6 +72,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
           buttonObj.setTooltiptext(getAttributeValue("buttonlabel" + buttonVal + "tooltiptext"));
           buttonObj.setOnclick(getAttributeValue("ondialog" + buttonVal));
           buttonObj.setId(this.getId()+ "_" + button);
+          buttonObj.setAlign(getAttributeValue("pen:" +buttonVal + "buttonalign"));
           this.addChild(buttonObj);
           dialogButtons.add(buttonObj);
         } catch(XulException e){
@@ -100,6 +104,12 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     setButtonlabelextra2Tooltiptext(srcEle.getAttribute("pen:buttonlabelextra2tooltiptext"));    
         
     setButtonalign(srcEle.getAttribute("buttonalign"));
+    
+    setAcceptbuttonalign(srcEle.getAttribute("pen:acceptbuttonalign"));
+    setCancelbuttonalign(srcEle.getAttribute("pen:cancelbuttonalign"));
+    setExtra1buttonalign(srcEle.getAttribute("pen:extra1buttonalign"));
+    setExtra2buttonalign(srcEle.getAttribute("pen:extra2buttonalign"));
+    
     setTitle(srcEle.getAttribute("title"));
     setOnclose(srcEle.getAttribute("onclose"));
     setOnload(srcEle.getAttribute("onload"));
@@ -126,6 +136,22 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     return getAttributeValue("buttonlabelextra2");
   }
 
+  public String getAcceptbuttonalign() {
+    return getAttributeValue("pen:acceptbuttonalign");
+  }
+
+  public String getCancelbuttonalign() {
+    return getAttributeValue("pen:cancelbuttonalign");
+  }
+
+  public String getExtra1buttonalign() {
+    return getAttributeValue("pen:extra1buttonalign");
+  }
+
+  public String getExtra2buttonalign() {
+    return getAttributeValue("pen:extra2buttonalign");
+  }
+  
   public String getButtonlabelacceptTooltipText() {
     return getAttributeValue("buttonlabelaccepttooltiptext");
   }
@@ -180,6 +206,22 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     this.setAttribute("buttonalign", align);
   }
 
+  public void setAcceptbuttonalign(String align) {
+    this.setAttribute("pen:acceptbuttonalign", align);
+  }
+
+  public void setCancelbuttonalign(String align) {
+    this.setAttribute("pen:cancelbuttonalign", align);
+  }
+
+  public void setExtra1buttonalign(String align) {
+    this.setAttribute("pen:extra1buttonalign", align);
+  }
+
+  public void setExtra2buttonalign(String align) {
+    this.setAttribute("pen:extra2buttonalign", align);
+  }
+  
   public void setButtonlabelaccept(String label) {
     this.setAttribute("buttonlabelaccept", label);
   }
@@ -253,8 +295,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       // Notify GlassPane listeners
       GlassPane.getInstance().show();
       
-      glasspane.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos));
-      dialog.getElement().getStyle().setProperty("zIndex",  ""+(++GwtDialog.dialogPos));
+      glasspane.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos));//$NON-NLS-1$
+      dialog.getElement().getStyle().setProperty("zIndex",  ""+(++GwtDialog.dialogPos));//$NON-NLS-1$
       
       return;
     }
@@ -270,8 +312,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       }
       
     };
-    dialog.setWidth(getWidth()+"px");
-    dialog.setHeight(getHeight()+"px");
+    dialog.setWidth(getWidth()+"px");//$NON-NLS-1$
+    dialog.setHeight(getHeight()+"px");//$NON-NLS-1$
     
     dialog.setText(getTitle());
 
@@ -279,23 +321,66 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     VerticalPanel panel = new VerticalPanel();
     
     VerticalPanel contentPanel = new VerticalPanel();
-    contentPanel.setHeight("100%");
-    contentPanel.setWidth("100%");
-    contentPanel.setStyleName("dialog-content");
-    contentPanel.setWidth("100%");
+    contentPanel.setHeight("100%");//$NON-NLS-1$
+    contentPanel.setWidth("100%");//$NON-NLS-1$
+    contentPanel.setStyleName("dialog-content");//$NON-NLS-1$
+    contentPanel.setWidth("100%");//$NON-NLS-1$
     
     panel.add(contentPanel);
-    panel.setCellWidth(contentPanel, "100%");
-    panel.setStyleName("dialog");
+    panel.setCellWidth(contentPanel, "100%");//$NON-NLS-1$
+    panel.setStyleName("dialog");//$NON-NLS-1$
     
     // render dialog contents
     container = contentPanel;
-    
+    // Check for individual button alignment. If the main align properties is set on the Dialog box then all the
+    // individual alignment for the button will be ignored
+    boolean ignoreIndividualButtonAlign = false;
+    String buttonalign = getButtonalign();
+    if(!StringUtils.isEmpty(buttonalign)) {
+      ignoreIndividualButtonAlign = true;
+    }
+
+    //HorizontalPanel buttonPanel = new HorizontalPanel();
     HorizontalPanel buttonPanel = new HorizontalPanel();
+    HorizontalPanel leftButtonPanel = new HorizontalPanel();
+    HorizontalPanel centerButtonPanel = new HorizontalPanel();
+    HorizontalPanel rightButtonPanel = new HorizontalPanel();
+    rightButtonPanel.setSpacing(3);
+    centerButtonPanel.setSpacing(3);
+    leftButtonPanel.setSpacing(3);
     for(XulButton btn : dialogButtons){
       this.removeChild(btn);
-      buttonPanel.add((Widget) btn.getManagedObject());
+      Widget widget = (Widget) btn.getManagedObject();
+      if(!ignoreIndividualButtonAlign) {
+        String align = btn.getAlign();
+        if(!StringUtils.isEmpty(align)) {
+          if ("center".equals(align)) { //$NON-NLS-1$
+            centerButtonPanel.add(widget);
+          } else if ("left".equals(align)) {//$NON-NLS-1$
+            leftButtonPanel.add(widget);
+          } else if ("right".equals(align)) {//$NON-NLS-1$
+            rightButtonPanel.add(widget);
+          }
+        }        
+      } else {
+        if ("center".equals(buttonalign)) { //$NON-NLS-1$
+          centerButtonPanel.add(widget);
+        } else if ("left".equals(buttonalign)) {//$NON-NLS-1$
+          leftButtonPanel.add(widget);
+        } else if ("right".equals(buttonalign)) {//$NON-NLS-1$
+          rightButtonPanel.add(widget);
+        }
+      }
     }
+
+    buttonPanel.add(leftButtonPanel);
+    buttonPanel.setCellHorizontalAlignment(leftButtonPanel, HorizontalPanel.ALIGN_LEFT);
+    buttonPanel.add(centerButtonPanel);
+    buttonPanel.setCellHorizontalAlignment(centerButtonPanel, HorizontalPanel.ALIGN_CENTER);
+    buttonPanel.setCellWidth(centerButtonPanel, "100%");
+    buttonPanel.add(rightButtonPanel);
+    buttonPanel.setCellHorizontalAlignment(rightButtonPanel, HorizontalPanel.ALIGN_RIGHT);
+    
     super.layout();
     for(XulButton btn : dialogButtons){
       this.addChild(btn);
@@ -304,30 +389,18 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     if (buttonPanel != null) {
       //wrap buttonPanel in another one to style top border
       HorizontalPanel buttonPanelWrapper = new HorizontalPanel();
-      
-      buttonPanelWrapper.setStyleName("dialog-button-panel");
+      buttonPanelWrapper.setStyleName("dialog-button-panel");//$NON-NLS-1$
       buttonPanelWrapper.add(buttonPanel);
-      buttonPanelWrapper.setWidth("100%");
+      buttonPanelWrapper.setWidth("100%");//$NON-NLS-1$
       panel.add(buttonPanelWrapper);
-      panel.setCellWidth(buttonPanelWrapper, "100%");
-      String buttonalign = getButtonalign();
-      if ("center".equals(buttonalign)) {
-        buttonPanelWrapper.setCellHorizontalAlignment(buttonPanel, HorizontalPanel.ALIGN_CENTER);
-      } else if ("left".equals(buttonalign)) {
-        buttonPanelWrapper.setCellHorizontalAlignment(buttonPanel, HorizontalPanel.ALIGN_LEFT);
-      } else if ("right".equals(buttonalign)) {
-        buttonPanelWrapper.setCellHorizontalAlignment(buttonPanel, HorizontalPanel.ALIGN_RIGHT);
-      }
-      
+      buttonPanelWrapper.setCellWidth(buttonPanel, "100%");
     }
     
     panel.setSpacing(1);
-    panel.setHeight("100%");
-    panel.setWidth("100%");
+    panel.setHeight("100%");//$NON-NLS-1$
+    panel.setWidth("100%");//$NON-NLS-1$
     dialog.add(panel);
-//    dialog.setWidth("100px");
-//    dialog.setHeight("100px");
-    
+
     // Notify GlassPane listeners
     GlassPane.getInstance().show();
     
