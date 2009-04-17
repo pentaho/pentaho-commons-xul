@@ -71,7 +71,9 @@ public class SwingGrid extends AbstractSwingContainer implements XulGrid {
       for(XulComponent xulComp : row.getChildNodes()){
         Component comp =  (Component) xulComp.getManagedObject();
         int flex = columns.getChildNodes().get(gc.gridx).getFlex();
-        gc.weightx = (flex / colFlexTotal);
+        if (colFlexTotal > 0) {
+          gc.weightx = (flex / colFlexTotal);
+        }
         grid.add(comp, gc);
         gc.gridx++;
       }
