@@ -157,19 +157,15 @@ public class SwtElement extends AbstractXulComponent {
       // Align is the PARENT'S attribute, and affects the 
       // opposite direction of the orientation.
 
-      if (swtChild instanceof XulContainer && ((XulContainer) swtChild).getAlign() != null) {
+      if (((XulComponent) swtChild).getAlign() != null) {
         SwtAlign swtAlign = SwtAlign.valueOf(((XulContainer) swtChild).getAlign().toString());
         
         if (orient.equals(Orient.HORIZONTAL)) {
-          data.verticalAlignment = swtAlign.getSwtAlign();
-          if (data.verticalAlignment == SWT.FILL) {
             data.grabExcessVerticalSpace = true;
-          }
+          
         } else { //Orient.VERTICAL
-          data.horizontalAlignment = swtAlign.getSwtAlign();
-          if (data.horizontalAlignment == SWT.FILL) {
             data.grabExcessHorizontalSpace = true;
-          }
+          
         }
       }
       c.setLayoutData(data);
