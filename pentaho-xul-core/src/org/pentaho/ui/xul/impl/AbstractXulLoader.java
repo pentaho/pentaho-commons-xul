@@ -40,7 +40,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   protected Object outerContext = null;
 
-  private static final Log logger = LogFactory.getLog(AbstractXulLoader.class);
+  protected static final Log logger = LogFactory.getLog(AbstractXulLoader.class);
 
   private ResourceBundle mainBundle = null;
 
@@ -266,7 +266,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       } else {
         //try fully qualified name
         src = ele.attributeValue("src");
-        in = getClass().getClassLoader().getResourceAsStream(src);
+        in = getClass().getClassLoader().getResourceAsStream(this.rootDir + src);
         if (in != null) {
           includedSources.add(src);
           logger.info("Adding include src: " + src);
@@ -318,7 +318,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     return srcDoc;
   }
 
-  private Document getDocFromInputStream(InputStream in) throws XulException {
+  protected Document getDocFromInputStream(InputStream in) throws XulException {
     try {
 
       BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -337,7 +337,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
-  private Document getDocFromClasspath(String src) throws XulException {
+  protected Document getDocFromClasspath(String src) throws XulException {
     InputStream in = getClass().getClassLoader().getResourceAsStream(this.getRootDir() + src);
     if (in != null) {
       Document doc = getDocFromInputStream(in);
@@ -353,7 +353,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
-  private void processOverlay(String overlaySrc, Document doc) {
+  protected void processOverlay(String overlaySrc, Document doc) {
     try {
       final Document overlayDoc = getDocFromClasspath(overlaySrc);
       processOverlay(overlayDoc.getRootElement(), doc.getRootElement());
@@ -362,7 +362,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
-  private void processOverlay(Element overlayEle, Element srcEle) {
+  protected void processOverlay(Element overlayEle, Element srcEle) {
     for (Object child : overlayEle.elements()) {
       Element overlay = (Element) child;
       String overlayId = overlay.attributeValue("ID");
@@ -506,11 +506,16 @@ public abstract class AbstractXulLoader implements XulLoader {
     for (Object child : overlayRoot.elements()) {
       Element overlay = (Element) child;
       String overlayId = overlay.attributeValue("ID");
-
+      String removeElement = overlay.attributeValue("removeelement");
+      
       org.pentaho.ui.xul.dom.Element sourceElement = targetDocument.getElementById(overlayId);
       if (sourceElement == null) {
         logger.warn("Cannot overlay element with id [" + overlayId + "] as it does not exist in the target document.");
         continue;
+      }
+      
+      if(removeElement != null && removeElement.equals("true")){
+        sourceElement.getParent().removeChild(sourceElement);
       }
 
       for (Object childToParse : overlay.elements()) {
