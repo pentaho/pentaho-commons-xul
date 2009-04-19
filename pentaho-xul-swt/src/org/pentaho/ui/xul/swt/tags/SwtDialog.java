@@ -75,6 +75,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private String ondialogextra2;
   
   private boolean resizable = false;
+  
+  private boolean buttonsCreated = false;
 
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
 
@@ -165,11 +167,14 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   
   public void setButtons(){
     setButtons(dialog);
+    buttonsCreated = true;
   }
 
   public void setButtons(String buttonList) {
     buttons = buttonList.split(",");
-    setButtons();
+    if(this.initialized){
+      setButtons();
+    }
   }
 
   public void setOndialogaccept(String command) {
@@ -197,6 +202,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   public void show() {
 
     //createDialog();
+    
+    if(buttonsCreated == false){
+      setButtons();
+    }
     
     isDialogHidden = false;
 

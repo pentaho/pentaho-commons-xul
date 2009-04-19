@@ -6,7 +6,7 @@ import org.pentaho.ui.xul.util.Align;
 
 public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
 
-  protected Align alignment;
+  protected Align alignment = Align.CENTER;
   
   public AbstractSwtXulContainer(String tagName){
     super(tagName);
