@@ -61,32 +61,6 @@ public class SwingButton extends SwingElement implements XulButton{
     }
   }
 
-  /**
-   * This listener is added so the button can register itself with the buttongroup collection as
-   * durring creation there's no way of accessing the root level element (window) where the collection
-   * is stored.
-   */
-  private class RegisterWithButtonGroupHandler extends ComponentAdapter
-  {
-    private final AbstractButton button;
-
-    public RegisterWithButtonGroupHandler(final AbstractButton button)
-    {
-      this.button = button;
-    }
-
-    public void componentResized(ComponentEvent arg0) {
-      buttonGroup = ((SwingWindow) SwingButton.this.getDocument().getRootElement()).getButtonGroup(group);
-      buttonGroup.add(button);
-      if(buttonGroup.getButtonCount() == 1){
-        //first button in, TODO: remove once selected="true" attribute supported
-        button.setSelected(true);
-      }
-      button.removeComponentListener(this);
-    }
-
-  }
-
   private static final Log logger = LogFactory.getLog(SwingButton.class);
   private String image;
   private Direction dir;
@@ -110,6 +84,19 @@ public class SwingButton extends SwingElement implements XulButton{
   protected AbstractButton getButton()
   {
     return (AbstractButton) managedObject;
+  }  
+  
+  @Override
+  public void onDomReady() {
+    if(this.group != null && getDocument() != null && getDocument().getRootElement() instanceof SwingWindow){
+      buttonGroup = ((SwingWindow) SwingButton.this.getDocument().getRootElement()).getButtonGroup(group);
+      AbstractButton button = (AbstractButton) managedObject;
+      buttonGroup.add(button);
+      if(buttonGroup.getButtonCount() == 1){
+        //first button in, TODO: remove once selected="true" attribute supported
+        button.setSelected(true);
+      }
+    }
   }
 
   protected void setButton(final AbstractButton button)
@@ -208,10 +195,6 @@ public class SwingButton extends SwingElement implements XulButton{
       	this.setOnclick(this.getOnclick());
       }
       setButton(button);
-      
-      if(this.group != null){
-        button.addComponentListener(new RegisterWithButtonGroupHandler(button));
-      }
       
     }
     final AbstractButton button = getButton();
