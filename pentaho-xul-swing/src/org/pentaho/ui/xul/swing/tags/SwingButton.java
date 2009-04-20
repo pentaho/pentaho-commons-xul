@@ -192,11 +192,11 @@ public class SwingButton extends SwingElement implements XulButton{
       button.setIcon(oldButton.getIcon());
       button.setEnabled(oldButton.isEnabled());
       button.setSelected(this.selected);
-      if(this.getOnclick() != null){
-      	this.setOnclick(this.getOnclick());
-      }
       setButton(button);
-      
+
+      if(this.getOnclick() != null){
+        this.setOnclick(this.getOnclick());
+      }
     }
     final AbstractButton button = getButton();
     //adjust orientation of label and icon
