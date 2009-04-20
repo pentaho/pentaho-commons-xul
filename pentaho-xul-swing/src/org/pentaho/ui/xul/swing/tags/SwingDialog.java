@@ -11,12 +11,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -35,9 +37,10 @@ import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
+import org.pentaho.ui.xul.swing.SwingRoot;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwingDialog extends AbstractSwingContainer implements XulDialog {
+public class SwingDialog extends AbstractSwingContainer implements XulDialog, SwingRoot {
   
   XulDomContainer domContainer = null;
 
@@ -91,6 +94,14 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
 
   private String ID;
   private XulComponent parent = null;
+  
+
+  /**
+   * Xul Buttons can belong to radio button groups without a "radiogroup" element in the DOM
+   * This collection facilitates this behavior.
+   */
+  private Map<String, ButtonGroup> anonymousButtonGroups = new HashMap<String, ButtonGroup>();
+  
   public SwingDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("dialog");
     ID = self.getAttributeValue("ID");
@@ -104,6 +115,16 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog {
     managedObject = "empty";
 
     resetContainer();
+  }
+  
+  public ButtonGroup getButtonGroup(String group){
+    if(anonymousButtonGroups.containsKey(group)){
+      return anonymousButtonGroups.get(group);
+    } else {
+      ButtonGroup grp = new ButtonGroup();
+      anonymousButtonGroups.put(group, grp);
+      return grp;
+    }
   }
 
   public void resetContainer() {

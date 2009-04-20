@@ -37,6 +37,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swing.SwingRoot;
 import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.dom.Element;
 
@@ -44,7 +45,7 @@ import org.pentaho.ui.xul.dom.Element;
  * @author OEM
  *
  */
-public class SwingWindow extends AbstractSwingContainer implements XulWindow {
+public class SwingWindow extends AbstractSwingContainer implements XulWindow, SwingRoot {
   private static final Log logger = LogFactory.getLog(SwingElement.class);
   
   JFrame frame;

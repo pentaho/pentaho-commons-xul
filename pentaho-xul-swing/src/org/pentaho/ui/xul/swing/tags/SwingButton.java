@@ -29,6 +29,7 @@ import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swing.SwingRoot;
 import org.pentaho.ui.xul.util.Direction;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -88,8 +89,8 @@ public class SwingButton extends SwingElement implements XulButton{
   
   @Override
   public void onDomReady() {
-    if(this.group != null && getDocument() != null && getDocument().getRootElement() instanceof SwingWindow){
-      buttonGroup = ((SwingWindow) SwingButton.this.getDocument().getRootElement()).getButtonGroup(group);
+    if(this.group != null && getDocument() != null && getDocument().getRootElement() instanceof SwingRoot){
+      buttonGroup = ((SwingRoot) SwingButton.this.getDocument().getRootElement()).getButtonGroup(group);
       AbstractButton button = (AbstractButton) managedObject;
       buttonGroup.add(button);
       if(buttonGroup.getButtonCount() == 1){
