@@ -77,6 +77,9 @@ public class SwingXulLoader extends AbstractXulLoader implements XulLoader{
     parser.registerHandler("ROW", "org.pentaho.ui.xul.swing.tags.SwingRow");
     
 
+    parser.registerHandler("SCALE", "org.pentaho.ui.xul.swing.tags.SwingScale");
+    
+
   }
 
   public XulLoader getNewInstance() throws XulException{
