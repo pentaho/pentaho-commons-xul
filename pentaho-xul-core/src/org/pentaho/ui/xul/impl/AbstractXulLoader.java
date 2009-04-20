@@ -554,6 +554,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         } else {
         	sourceContainer.addChildAt(c, positionToInsert);
         }
+        notifyOverlayDomReady(c);
         
         logger.info("added child: " + c);
       }
@@ -575,6 +576,13 @@ public abstract class AbstractXulLoader implements XulLoader {
 
     }
 
+  }
+  
+  protected void notifyOverlayDomReady(XulComponent comp){
+    comp.onDomReady();
+    for(XulComponent ele : comp.getChildNodes()){
+      notifyOverlayDomReady( ele);
+    }
   }
 
   public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)

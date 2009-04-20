@@ -71,8 +71,14 @@ public class XulParser {
       xulDocument.addChild(parent);
     }
     
-    //descend back down firing notification that everything is on the tree.
-    notifyDomReady(root);
+    // descend back down firing notification that everything is on the tree.
+    // do not do this for overlays as they will get the notification when added 
+    // to the real document.
+    if(rootSrc.getName().equalsIgnoreCase("window") ||
+        rootSrc.getName().equalsIgnoreCase("dialog")){
+      notifyDomReady(root);
+    }
+    
     
     return xulDocument;
   }
