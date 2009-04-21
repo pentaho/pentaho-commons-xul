@@ -19,6 +19,7 @@ public class SwingScale extends SwingElement implements XulScale{
   private int max = 100;
   private int value = 0;
   private int increment = 1;
+  private JSlider slider;
   
   private String direction;
   
@@ -65,12 +66,15 @@ public class SwingScale extends SwingElement implements XulScale{
   public void setValue(int value) {
     int prevVal = this.value;
     this.value = value;
+    if(slider != null){
+      slider.setValue(value);
+    }
     this.changeSupport.firePropertyChange("value", prevVal, value);
   }
 
   public void layout() {
     int orient = (orientation == Orient.VERTICAL)? JSlider.VERTICAL: JSlider.HORIZONTAL;
-    final JSlider slider = new JSlider(orient, this.min, this.max, Math.max(min, this.value));
+    slider = new JSlider(orient, this.min, this.max, Math.max(min, this.value));
     this.managedObject = slider;
     
     slider.setMajorTickSpacing(this.increment);
@@ -82,7 +86,7 @@ public class SwingScale extends SwingElement implements XulScale{
 
       
       public void stateChanged(ChangeEvent arg0) {
-        setValue(slider.getValue());
+        setValue(SwingScale.this.slider.getValue());
       }
       
     });
