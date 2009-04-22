@@ -619,9 +619,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                   }
 
                 } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){
-
+                
                   GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
-                  if(GwtTree.this.isEditable() == false){
+                  if(column.isEditable() == false){
                     binding.setBindingType(Binding.Type.ONE_WAY);
                   }
                   domContainer.addBinding(binding);

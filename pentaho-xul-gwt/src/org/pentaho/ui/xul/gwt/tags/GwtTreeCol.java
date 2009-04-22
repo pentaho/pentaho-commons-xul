@@ -19,6 +19,8 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private String type;
   private String columnTypeBinding;
   private String disabledBinding;
+  private boolean editable;
+
 
   public static void register() {
     GwtXulParser.registerHandler("treecol", 
@@ -42,6 +44,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     setCombobinding(srcEle.getAttribute("pen:combobinding"));
     setColumntypebinding(srcEle.getAttribute("pen:columntypebinding"));
     setDisabledbinding(srcEle.getAttribute("pen:disabledbinding"));
+    setEditable("true".equalsIgnoreCase(srcEle.getAttribute("editable"))); //$NON-NLS-1$ //$NON-NLS-2$
   }
   
   public void autoSize() {
@@ -77,8 +80,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public boolean isEditable() {
-    // TODO Auto-generated method stub
-    return false;
+    return editable;
   }
 
   public boolean isFixed() {
@@ -111,8 +113,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public void setEditable(boolean edit) {
-    // TODO Auto-generated method stub
-    
+    this.editable = edit;
   }
 
   public void setFixed(boolean fixed) {
