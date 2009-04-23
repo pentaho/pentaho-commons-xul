@@ -141,17 +141,24 @@ public class SwtElement extends AbstractXulComponent {
       
       
       if (swtChild.getFlex() > 0) {
-        data.grabExcessHorizontalSpace = true;
-        data.grabExcessVerticalSpace = true;
+        if(swtChild.getWidth() == 0){
+          data.grabExcessHorizontalSpace = true;
+          data.horizontalAlignment = SWT.FILL;
+        }
 
-        // In XUL, if align attribute is left off, the 
-        // default is to fill available space ... (ALIGN=STRETCH)
+        if(swtChild.getHeight() == 0){
+          data.grabExcessVerticalSpace = true;
+          data.verticalAlignment = SWT.FILL;
+        }
+      }
 
-        data.horizontalAlignment = SWT.FILL;
-        data.verticalAlignment = SWT.FILL;
-      } 
+      if(swtChild.getWidth() > 0){
+        data.widthHint = swtChild.getWidth();
+      }
 
-      
+      if(swtChild.getHeight() > 0){
+        data.heightHint = swtChild.getHeight();
+      }
 
       // And finally, deal with the align attribute...
       // Align is the PARENT'S attribute, and affects the 
@@ -161,11 +168,16 @@ public class SwtElement extends AbstractXulComponent {
         SwtAlign swtAlign = SwtAlign.valueOf(((XulContainer) swtChild).getAlign().toString());
         
         if (orient.equals(Orient.HORIZONTAL)) {
+
+          if(swtChild.getHeight() < 0){
             data.grabExcessVerticalSpace = true;
+          }
           
         } else { //Orient.VERTICAL
+
+          if(swtChild.getWidth() < 0){
             data.grabExcessHorizontalSpace = true;
-          
+          }
         }
       }
       c.setLayoutData(data);
