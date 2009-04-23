@@ -3,6 +3,8 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
@@ -43,7 +45,11 @@ public class SwingImage extends SwingElement implements XulImage{
     
     // Then try to see if we can get the fully qualified file
     if (url == null) {
-      url = SwingImage.class.getClassLoader().getResource(src);
+      try {
+        url = new File(src).toURL();
+      } catch (MalformedURLException e) {
+        // do nothing and let the null url get caught below.
+      }
     }
     
     if(url == null){
@@ -96,6 +102,7 @@ public class SwingImage extends SwingElement implements XulImage{
       this.panel.setMinimumSize(new Dimension(this.getWidth(), this.getHeight()));
     }
     
+    panel.revalidate();
   }
   
   public void refresh() {
