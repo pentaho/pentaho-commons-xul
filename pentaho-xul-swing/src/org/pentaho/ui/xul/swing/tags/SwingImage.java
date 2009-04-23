@@ -5,9 +5,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.net.URL;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -40,7 +38,10 @@ public class SwingImage extends SwingElement implements XulImage{
   }
   public void setSrc(String src) {
 
-    URL url = SwingButton.class.getClassLoader().getResource(this.container.getXulLoader().getRootDir()+src);
+    URL url = SwingImage.class.getClassLoader().getResource(this.container.getXulLoader().getRootDir()+src);
+    if (url == null) {
+      url = SwingImage.class.getClassLoader().getResource(src);
+    }
     
     if(url == null){
       logger.error("Could not find resource: "+src);
@@ -54,6 +55,10 @@ public class SwingImage extends SwingElement implements XulImage{
     layout();
   }
   public void setSrc(Object img) {
+    if (img instanceof String) {
+      setSrc((String)img);
+      return;
+    }
     this.image = (Image)img;
     ico = new ImageIcon(this.image);
     if(lbl != null){
