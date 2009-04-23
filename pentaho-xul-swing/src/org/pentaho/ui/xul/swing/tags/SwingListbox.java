@@ -37,6 +37,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   private String onselect;
   private JScrollPane scrollPane;
   private static final Log logger = LogFactory.getLog(SwingListbox.class);
+  private boolean initialized = false;
   private XulDomContainer xulDomContainer;
 
   private String binding;
@@ -215,9 +216,8 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
       SwingListitem item = new SwingListitem(null, this, this.xulDomContainer, null);
 
       String attribute = getBinding();
-      if (!StringUtils.isEmpty(attribute)) {
-        item.setLabel(extractLabel(t));
-      }
+      item.setLabel(extractLabel(t));
+      
 
       this.addChild(item);
     }
