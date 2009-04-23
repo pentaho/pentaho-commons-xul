@@ -75,12 +75,10 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
 
   public void setValue(String text){
-    if(text != null && !(text.equals(value))) {
       String prevVal = this.value;
       this.value = text;
       textBox.setText(text);
       this.firePropertyChange("value", prevVal, text);
-    }
   }
   
   // TODO: this double initialization is not good. Any values previously set will be lost in a second layout
