@@ -38,7 +38,10 @@ public class SwingImage extends SwingElement implements XulImage{
   }
   public void setSrc(String src) {
 
+    // First try the relative path
     URL url = SwingImage.class.getClassLoader().getResource(this.container.getXulLoader().getRootDir()+src);
+    
+    // Then try to see if we can get the fully qualified file
     if (url == null) {
       url = SwingImage.class.getClassLoader().getResource(src);
     }
@@ -94,10 +97,10 @@ public class SwingImage extends SwingElement implements XulImage{
     }
     
   }
+  
   public void refresh() {
     this.panel.updateUI();
   }
-  
   
 }
 
