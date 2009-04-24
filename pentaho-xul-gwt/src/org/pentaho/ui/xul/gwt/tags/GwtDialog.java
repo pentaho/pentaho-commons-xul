@@ -356,38 +356,30 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
         if(!StringUtils.isEmpty(align)) {
           if ("center".equals(align)) { //$NON-NLS-1$
             centerButtonPanel.add(widget);
-            centerButtonPanel.setCellHorizontalAlignment(widget, HorizontalPanel.ALIGN_CENTER);
           } else if ("left".equals(align)) {//$NON-NLS-1$
             leftButtonPanel.add(widget);
-            leftButtonPanel.setCellHorizontalAlignment(widget, HorizontalPanel.ALIGN_LEFT);
           } else if ("right".equals(align)) {//$NON-NLS-1$
             rightButtonPanel.add(widget);
-            rightButtonPanel.setCellHorizontalAlignment(widget, HorizontalPanel.ALIGN_RIGHT);
           }
         }        
       } else {
         if ("center".equals(buttonalign)) { //$NON-NLS-1$
           centerButtonPanel.add(widget);
-          centerButtonPanel.setCellHorizontalAlignment(widget, HorizontalPanel.ALIGN_CENTER);
         } else if ("left".equals(buttonalign)) {//$NON-NLS-1$
           leftButtonPanel.add(widget);
-          leftButtonPanel.setCellHorizontalAlignment(widget, HorizontalPanel.ALIGN_LEFT);
         } else if ("right".equals(buttonalign)) {//$NON-NLS-1$
           rightButtonPanel.add(widget);
-          rightButtonPanel.setCellHorizontalAlignment(widget, HorizontalPanel.ALIGN_RIGHT);
         }
       }
     }
 
     buttonPanel.add(leftButtonPanel);
     buttonPanel.setCellHorizontalAlignment(leftButtonPanel, HorizontalPanel.ALIGN_LEFT);
-    buttonPanel.setCellWidth(leftButtonPanel, "33%"); //$NON-NLS-1$
     buttonPanel.add(centerButtonPanel);
     buttonPanel.setCellHorizontalAlignment(centerButtonPanel, HorizontalPanel.ALIGN_CENTER);
-    buttonPanel.setCellWidth(centerButtonPanel, "34%");//$NON-NLS-1$
+    buttonPanel.setCellWidth(centerButtonPanel, "100%");
     buttonPanel.add(rightButtonPanel);
     buttonPanel.setCellHorizontalAlignment(rightButtonPanel, HorizontalPanel.ALIGN_RIGHT);
-    buttonPanel.setCellWidth(rightButtonPanel, "33%");//$NON-NLS-1$
     
     super.layout();
     for(XulButton btn : dialogButtons){
@@ -401,7 +393,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       buttonPanelWrapper.add(buttonPanel);
       buttonPanelWrapper.setWidth("100%");//$NON-NLS-1$
       panel.add(buttonPanelWrapper);
-      buttonPanelWrapper.setCellWidth(buttonPanel, "100%");//$NON-NLS-1$
+      buttonPanelWrapper.setCellWidth(buttonPanel, "100%");
     }
     
     panel.setSpacing(1);
