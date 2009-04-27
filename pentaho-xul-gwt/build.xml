@@ -45,6 +45,10 @@
 	</target>
 
 	<target name="package">
+	    <zip destfile="${gwt.package.zipfile}" compress="true" >
+			<zipfileset dir="${src.dir}" prefix="">
+			</zipfileset>
+	    </zip>
 	</target>
 	
     <target name="dist" depends="jar">
