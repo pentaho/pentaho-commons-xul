@@ -51,7 +51,7 @@
 	    </zip>
 	</target>
 	
-    <target name="dist" depends="jar">
+    <target name="dist" depends="jar, package">
     </target>
 	
 </project>
