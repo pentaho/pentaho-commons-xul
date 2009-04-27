@@ -209,6 +209,7 @@ public class TypeControllerGenerator extends Generator {
           String superName = generateTypeKey(loopType);
 
           System.out.println("    generating inner type: "+superName);
+          totalClassCount++;
           for(JMethod m : loopType.getMethods()){
             if(!m.isPublic()){
               continue;
@@ -224,7 +225,7 @@ public class TypeControllerGenerator extends Generator {
               sourceWriter.indent();
               methodCount = 0;
             }
-            System.out.println("        generating inner type method: "+m.getName());
+            //System.out.println("        generating inner type method: "+m.getName());
             
             String methodName = m.getName();
             sourceWriter.println("otherM = wrappedTypes.get(\""+superName+"_"+methodName+"\".toLowerCase());");
@@ -234,7 +235,6 @@ public class TypeControllerGenerator extends Generator {
 
             sourceWriter.println("if(otherM == null){");
             sourceWriter.indent();
-            totalClassCount++;
             sourceWriter.println("GwtBindingMethod newMethod = new GwtBindingMethod(){");
             
   
