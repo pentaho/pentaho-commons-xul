@@ -44,6 +44,9 @@
 		</ant>
 	</target>
 
+	<target name="package">
+	</target>
+	
     <target name="dist" depends="jar">
     </target>
 	
