@@ -20,6 +20,7 @@ import org.pentaho.ui.xul.gwt.tags.GwtDialog;
 import org.pentaho.ui.xul.gwt.tags.GwtGrid;
 import org.pentaho.ui.xul.gwt.tags.GwtGroupBox;
 import org.pentaho.ui.xul.gwt.tags.GwtHbox;
+import org.pentaho.ui.xul.gwt.tags.GwtImage;
 import org.pentaho.ui.xul.gwt.tags.GwtLabel;
 import org.pentaho.ui.xul.gwt.tags.GwtListbox;
 import org.pentaho.ui.xul.gwt.tags.GwtListitem;
@@ -83,6 +84,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     GwtDeck.register();
     GwtGroupBox.register();
     GwtHbox.register();
+    GwtImage.register();
     GwtLabel.register();
     GwtListbox.register();
     GwtListitem.register();
