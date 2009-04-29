@@ -125,9 +125,6 @@ public class XulParser {
       // Add to the XML DOM tree ...
       root.addChild(childElement);
 
-      // ... then add to the UI component tree.
-      if (root instanceof XulContainer) //more of an assert, should be true.
-        ((XulContainer) root).addChild(childElement);
     }
     if (root != null) {
       // should layout be part of the public API?
