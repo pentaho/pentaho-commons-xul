@@ -90,6 +90,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private boolean firstLayout = true;
   // need to handle layouting
   public void layout() {
+    if(this.getRootChildren() == null){
+      //most likely an overlay
+      return;
+    }
     if(firstLayout){
 
       XulTreeItem item = (XulTreeItem) this.getRootChildren().getFirstChild();
@@ -744,7 +748,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
+    super.adoptAttributes(component);
     
   }
 
