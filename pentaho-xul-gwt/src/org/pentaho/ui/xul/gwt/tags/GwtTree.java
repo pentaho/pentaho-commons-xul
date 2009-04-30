@@ -218,6 +218,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     if (getHeight() != 0) {
       table.setTableHeight(getHeight() + "px");
     }
+    if (getWidth() != 0) {
+      table.setTableWidth(getWidth() + "px");
+    }
     table.populateTable(data);
     ResizableWidgetCollection.get().setResizeCheckingEnabled(false);
   }
@@ -305,9 +308,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       lb.setWidth("100%");
 
       Vector vals = (Vector) cell.getValue();
+      lb.setSuppressLayout(true);
       for(Object label : vals){
         lb.addItem(label.toString());
       }
+      lb.setSuppressLayout(false);
       lb.addChangeListener(new ChangeListener(){
 
         public void onChange(Widget arg0) {
@@ -361,12 +366,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
     table = new BaseTable(cols, null, new BaseColumnComparator[cols.length], policy);
 
-    table.addTableListener(new TableListener(){
-
-      public void onCellClicked(SourcesTableEvents arg0, int y, int x) {
-      }
-      
-    });
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
       }
@@ -397,6 +396,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         }
       }
     });
+    table.setHeight(this.getHeight()+"px");
+    table.setWidth(this.getWidth()+"px");
     managedObject = table;
     updateUI();
   }

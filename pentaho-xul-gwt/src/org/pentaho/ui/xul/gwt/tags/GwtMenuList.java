@@ -259,6 +259,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       inLayoutProcess = false;
       return;
     }
+    listbox.setSuppressLayout(true);
     GwtMenupopup popup = getPopupElement();
     this.listbox.removeAll();
 
@@ -276,7 +277,8 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         firstChild = false;
       }
     }
-    
+
+    listbox.setSuppressLayout(false);
     inLayoutProcess = false;
 
     if (selectedItem != null) {
