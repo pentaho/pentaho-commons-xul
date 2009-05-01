@@ -112,7 +112,9 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   public String getSelectedItem() {
-    return listbox.getSelectedItem().getValue().toString();
+    ListItem selectedItem = listbox.getSelectedItem();
+    
+    return (selectedItem == null) ? null : listbox.getSelectedItem().getValue().toString();
   }
 
   public void replaceAllItems(Collection tees) throws XulDomException {
@@ -127,6 +129,8 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
     try{
       suppressLayout = true;
+      listbox.setSuppressLayout(true);
+      
       XulMenupopup popup = getPopupElement();
       for (XulComponent menuItem : popup.getChildNodes()) {
         popup.removeChild(menuItem);
@@ -147,6 +151,8 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       }
   
       this.suppressLayout = false;
+      
+      listbox.setSuppressLayout(false);
       layout();
     } catch(Exception e){
       System.out.println(e.getMessage());
@@ -236,14 +242,14 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   private int selectedIndex = -1;
   private void fireSelectedEvents(){
-
+    
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (String) getSelectedItem());
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
     GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
     previousSelectedItem = (String) getSelectedItem();
       
-      if(StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false){
+      if(StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false && prevSelectedIndex != selectedIndex){
         try {
           GwtMenuList.this.getXulDomContainer().invoke(GwtMenuList.this.getOnCommand(), new Object[] {});
         } catch (XulException e) {
@@ -264,8 +270,6 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     this.listbox.removeAll();
 
     GwtMenuitem selectedItem = null;
-
-    System.out.println("Popup children size: "+popup.getChildNodes().size());
     
     //capture first child as default selection
     boolean firstChild = true;

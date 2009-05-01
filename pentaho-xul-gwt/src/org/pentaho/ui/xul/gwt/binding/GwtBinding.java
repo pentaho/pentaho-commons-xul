@@ -238,7 +238,7 @@ public class GwtBinding implements Binding{
               GwtBinding.this.destroyBindings();                      
               return;
             }
-            //System.out.println("Setting val: "+finalVal+" on: "+targetObject);
+            //System.out.println("Setting val: "+finalVal+" on: "+targetObject +" prop: "+vb);
             if(targetSetMethod == null){
               System.out.println("Error Setting val targetMethod null: "+finalVal+" on: "+targetObject+"."+GwtBinding.this.targetAttr);
             }

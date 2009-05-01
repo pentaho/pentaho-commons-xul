@@ -111,6 +111,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     }
   }
   private ScrollPanel sp;
+  private int prevSelectionPos = -1;
   private void setupTree(){
     if(tree == null){
       tree = new Tree();
@@ -139,11 +140,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
             break;
           }
         }
-          
-        if(pos > -1 && GwtTree.this.suppressEvents == false){
+        
+        if(pos > -1 && GwtTree.this.suppressEvents == false && prevSelectionPos != pos){
           GwtTree.this.changeSupport.firePropertyChange("selectedRows",null,new int[]{pos});
         }
-        
+        prevSelectionPos = pos;
 
       }
 
@@ -408,9 +409,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     } else {
       populateTable();
     };
-    if(this.suppressEvents == false){
-      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
-    }
+//    if(this.suppressEvents == false){
+//      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
+//    }
   }
   
   public void afterLayout() {
@@ -485,17 +486,22 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       return rarr;
     }
   }
-  
+ 
+  private int[] selectedRows;
   public void setSelectedRows(int[] rows) {
     if (table == null) {
       // this only works after the table has been materialized
       return;
     }
+ 
+    int[] prevSelected = selectedRows;
+    selectedRows = rows;;
+    
     for (int r : rows) {
       table.selectRow(r);
     }
-    if(this.suppressEvents == false){
-      this.changeSupport.firePropertyChange("selectedRows",null,rows);
+    if(this.suppressEvents == false && Arrays.equals(selectedRows, prevSelected) == false){
+      this.changeSupport.firePropertyChange("selectedRows", prevSelected, rows);
     }
   }
 
@@ -561,6 +567,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public <T> void setElements(Collection<T> elements) {
+
     try{
       this.elements = elements;
       suppressEvents = true;
