@@ -1,11 +1,12 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
-import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
-import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
-import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
-import com.google.gwt.widgetideas.table.client.TableSelectionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
+import java.util.Vector;
+
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
 import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
@@ -17,11 +18,13 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
-import org.pentaho.ui.xul.binding.DefaultBinding;
-import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
-import org.pentaho.ui.xul.containers.*;
+import org.pentaho.ui.xul.containers.XulTree;
+import org.pentaho.ui.xul.containers.XulTreeChildren;
+import org.pentaho.ui.xul.containers.XulTreeCols;
+import org.pentaho.ui.xul.containers.XulTreeItem;
+import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
@@ -30,7 +33,21 @@ import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 
-import java.util.*;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.TreeListener;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
+import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
+import com.google.gwt.widgetideas.table.client.TableSelectionListener;
+import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
@@ -55,8 +72,40 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private boolean suppressEvents = false;
   private boolean editable = false;
   
+  /**
+   * Used when this widget is a tree. Not used when this widget is a table.
+   */
+  private ScrollPanel scrollPanel = new ScrollPanel();
+  
+  /**
+   * The managed object. If this widget is a tree, then the tree is added to the scrollPanel, which is added to this
+   * simplePanel. If this widget is a table, then the table is added directly to this simplePanel.
+   */
+  private SimplePanel simplePanel = new SimplePanel();
+  
+  /**
+   * Clears the parent panel and adds the given widget.
+   * @param widget tree or table to set in parent panel
+   */
+  protected void setWidgetInPanel(final Widget widget) {
+    if (isHierarchical()) {
+      scrollPanel.clear();
+      simplePanel.add(scrollPanel);
+      scrollPanel.add(widget);
+    } else {
+      simplePanel.clear();
+      simplePanel.add(widget);
+    }
+  }
+  
   public GwtTree() {
     super("tree");
+
+    // managedObject is neither a native GWT tree nor a table since the entire native GWT object is thrown away each 
+    // time we call setup{Tree|Table}; because the widget is thrown away, we need to reconnect the new widget to the
+    // simplePanel, which is the managedObject
+    managedObject = simplePanel;
+   
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -110,22 +159,23 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       setupTable();
     }
   }
-  private ScrollPanel sp;
+
   private int prevSelectionPos = -1;
   private void setupTree(){
     if(tree == null){
       tree = new Tree();
-      sp = new ScrollPanel(tree);
-      SimplePanel div = new SimplePanel();
-      div.add(sp);
-      managedObject = div;
+      setWidgetInPanel(tree);
     }
-    if(getWidth() > 0){
-      sp.setWidth(getWidth()+"px");
-      sp.setHeight(getHeight()+"px");
-      sp.getElement().getStyle().setProperty("backgroundColor", "white");
+    scrollPanel.setWidth("100%"); //$NON-NLS-1$
+    scrollPanel.setHeight("100%"); //$NON-NLS-1$
+    scrollPanel.getElement().getStyle().setProperty("backgroundColor", "white");  //$NON-NLS-1$//$NON-NLS-2$
+    if (getWidth() > 0){
+      scrollPanel.setWidth(getWidth()+"px"); //$NON-NLS-1$
     }
-    
+    if (getHeight() > 0) {
+      scrollPanel.setHeight(getHeight()+"px"); //$NON-NLS-1$
+    }
+
     tree.addTreeListener(new TreeListener(){
 
       public void onTreeItemSelected(TreeItem arg0) {
@@ -397,9 +447,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         }
       }
     });
-    table.setHeight(this.getHeight()+"px");
-    table.setWidth(this.getWidth()+"px");
-    managedObject = table;
+
+    setWidgetInPanel(table);
+    
+    table.setTableWidth("100%"); //$NON-NLS-1$
+    table.setTableHeight("100%"); //$NON-NLS-1$
+    if (getWidth() > 0){
+      table.setTableWidth(getWidth()+"px"); //$NON-NLS-1$
+    }
+    if (getHeight() > 0) {
+      table.setTableHeight(getHeight()+"px"); //$NON-NLS-1$
+    }
     updateUI();
   }
   
