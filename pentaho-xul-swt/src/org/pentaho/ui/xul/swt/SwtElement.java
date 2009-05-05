@@ -15,6 +15,7 @@ import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.containers.XulDialog;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -30,9 +31,44 @@ public class SwtElement extends AbstractXulComponent {
 
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
+  private boolean disabled;
+
   public SwtElement(String tagName) {
     super(tagName);
   }
+  
+  @Override
+  public void addChild(Element e) {
+    super.addChild(e);
+
+    if(e instanceof XulContainer){
+      AbstractSwtXulContainer container = (AbstractSwtXulContainer) e;
+      if(container.initialized == false){
+        container.layout();
+      }
+    }
+
+    if (initialized) {
+      layout();
+      ((XulComponent) e).onDomReady();
+    }
+  }
+  
+  public void addChildAt(Element c, int pos) {
+    super.addChildAt(c, pos);
+    if (initialized) {
+      layout();
+    }
+  }
+
+  @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    if (initialized) {
+      layout();
+    }
+  }
+  
 
   public int getFlex() {
     return flex;
@@ -223,11 +259,11 @@ public class SwtElement extends AbstractXulComponent {
   }
 
   public boolean isDisabled() {
-    throw new NotImplementedException();
+    return disabled;
   }
 
   public void setDisabled(boolean disabled) {
-    //throw new NotImplementedException();
+    this.disabled= disabled;
   }
 
   public void adoptAttributes(XulComponent component) {

@@ -106,7 +106,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   private void createDialog() {
     
-    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), getResizable());
+    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true);
     dialog = newDialog;
     
     dialog.getShell().addListener(SWT.Close, new Listener() {

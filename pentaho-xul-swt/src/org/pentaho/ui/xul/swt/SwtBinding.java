@@ -71,8 +71,11 @@ public class SwtBinding extends DefaultBinding {
               logger.error("Binding Error! Update to XulComponenet (" + target.get() + "," + targetAttr
                   + ") outside of event thread!");
 
-              
-              Display.getCurrent().syncExec(new Runnable() {
+              Display display = Display.getCurrent();
+              if(display == null){
+                display = Display.getDefault();
+              }
+              display.syncExec(new Runnable() {
                   public void run() {
                     try {
                       Object targetObject = b.get();
@@ -92,7 +95,7 @@ public class SwtBinding extends DefaultBinding {
                   }
               });
               
-
+              return;
             }
 
             Object targetObject = b.get();

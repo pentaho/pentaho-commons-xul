@@ -3,6 +3,8 @@ package org.pentaho.ui.xul.swt.tags;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.table.TableColumnModel;
+
 import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Tree;
@@ -14,190 +16,194 @@ import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.swt.ColumnWidget;
 import org.pentaho.ui.xul.swt.SwtElement;
-import org.pentaho.ui.xul.swt.custom.TableColumnWrapper;
-import org.pentaho.ui.xul.swt.custom.TreeColumnWrapper;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeCol extends SwtElement implements XulTreeCol {
 
+    private String label;
+    private ColumnType type = ColumnType.TEXT;
+    private boolean editable = false;
+    private TableColumnModel model;
+    private String binding = "";
+    private String comboBinding;
+    private String bindingChildrenProperty;
+    private String columnTypeBinding;
+    private String disabledBinding;
 
-  protected ColumnWidget widget;
-  protected Item item;
-  protected XulTreeCols columnParent;
-  
-  private ColumnType type = ColumnType.TEXT;
-  private boolean editable = false;
-  private String customClass = null;
-  private String binding;
-  private String columnTypeBinding;
-  private String disabledBinding;
+    public SwtTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
+      super("treecol");
+      managedObject = "empty";
+    }
 
-  public SwtTreeCol(Element self, XulComponent parent, XulDomContainer container, String tagName) {
-    super(tagName);
-    columnParent = (XulTreeCols)parent;
-    
-    widget =  (columnParent.isHierarchical()) ? new TreeColumnWrapper((Tree)columnParent.getTree().getManagedObject()) 
-                                        : new TableColumnWrapper((Table)columnParent.getTree().getManagedObject());
-    item = widget.getItem();
-    managedObject = item;
-    columnParent.addColumn(this);
-  }
-  
-  public String getSortDirection() {
-    return null;
-  }
+    public void autoSize() {
+      // TODO Auto-generated method stub
+      
+    }
 
-  public String getSrc() {
-    // TODO Auto-generated method stub
-    return null;
-  }
+    public ColumnType getColumnType() {
+      return this.type;
+    }
 
-  public String getType() {
-    return type.toString();
-  }
-  
-  public ColumnType getColumnType(){
-    return type;
-  }
+    public String getLabel() {
+      return label;
+    }
 
-  public int getWidth() {
-    return widget.getWidth();
-  }
+    public String getSortDirection() {
+      // TODO Auto-generated method stub
+      return null;
+    }
 
-  public boolean isEditable() {
-    return editable;
-  }
+    public String getSrc() {
+      // TODO Auto-generated method stub
+      return null;
+    }
 
-  public boolean isFixed() {
-    return widget.getResizable();
-  }
+    public String getType() {
+      return this.type.toString();
+    }
 
-  public boolean isHidden() {
-    return false;
-  }
+    public int getWidth() {
+      // TODO Auto-generated method stub
+      return 0;
+    }
 
-  public boolean isPrimary() {
-    // TODO Auto-generated method stub
-    return false;
-  }
+    public boolean isEditable() {
+      return this.editable;
+    }
 
-  public boolean isSortActive() {
-    // TODO Auto-generated method stub
-    return false;
-  }
+    public boolean isFixed() {
+      // TODO Auto-generated method stub
+      return false;
+    }
 
-  public void setEditable(boolean edit) {
-    editable = edit;
-  }
+    public boolean isHidden() {
+      // TODO Auto-generated method stub
+      return false;
+    }
 
-  public void setFixed(boolean fixed) {
-    widget.setResizable(!fixed);
-  }
+    public boolean isPrimary() {
+      // TODO Auto-generated method stub
+      return false;
+    }
 
-  public void setHidden(boolean hide) {
-    // TODO Auto-generated method stub
+    public boolean isSortActive() {
+      // TODO Auto-generated method stub
+      return false;
+    }
 
-  }
+    public void setEditable(boolean edit) {
+      this.editable = edit;
+    }
 
-  public void setLabel(String label) {
-    widget.setText(label);
+    public void setFixed(boolean fixed) {
+      // TODO Auto-generated method stub
+      
+    }
 
-  }
+    public void setHidden(boolean hide) {
+      // TODO Auto-generated method stub
+      
+    }
 
-  public String getLabel() {
-    return widget.getText();
-  }
+    public void setLabel(String label) {
+      this.label = label;
+      
+    }
 
-  public void setPrimary(boolean primo) {
-    // TODO Auto-generated method stub
+    public void setPrimary(boolean primo) {
+      // TODO Auto-generated method stub
+      
+    }
 
-  }
+    public void setSortActive(boolean sort) {
+      // TODO Auto-generated method stub
+      
+    }
 
-  public void setSortActive(boolean sort) {
-    // TODO Auto-generated method stub
+    public void setSortDirection(String dir) {
+      // TODO Auto-generated method stub
+      
+    }
 
-  }
+    public void setSrc(String srcUrl) {
+      // TODO Auto-generated method stub
+      
+    }
 
-  public void setSortDirection(String dir) {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void setSrc(String srcUrl) {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void setType(String type) {
+    public void setType(String type) {
       this.type = ColumnType.valueOf(type.toUpperCase());
-  }
-
-  public void setWidth(int width) {
-    widget.setWidth(width);
-  }
-  
-  public void autoSize(){
-    widget.autoSize();
-  }
-
-  public String getCustomeditor() {
-    return customClass;
-  }
-
-  public void setCustomeditor(String customClass) {
-    this.customClass = customClass;
-  }
-
-  public List<InlineBindingExpression> getBindingExpressions() {
-    return BindingUtil.getBindingExpressions(binding);
-  }
-
-  public String getBinding() {
-    return binding;
-  }
-
-  public void setBinding(String binding) {
-    this.binding = binding;
-  }
-
-  public String getChildrenbinding() {
-    return null;
-  }
-
-  public String getCombobinding() {
-    return null;  
-  }
-
-  public void setChildrenbinding(String childProperty) {
-    
-        // TODO Auto-generated method stub 
       
-  }
+    }
 
-  public void setCombobinding(String property) {
-    
-        // TODO Auto-generated method stub 
+    public void setWidth(int width) {
+      // TODO Auto-generated method stub
       
-  }
+    }
+
+    public String getCustomclass() {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public void setCustomclass(String customClass) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public String getCustomeditor() {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public void setCustomeditor(String customClass) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public List<InlineBindingExpression> getBindingExpressions() {
+      return BindingUtil.getBindingExpressions(binding);
+    }
+
+    public void setBinding(String binding) {
+      this.binding = binding;
+    }
+    
+    public String getBinding() {
+      return binding;
+    }
+    
+
+    public String getChildrenbinding() {
+      return bindingChildrenProperty;
+    }
+
+    public void setChildrenbinding(String childProperty) {
+      this.bindingChildrenProperty = childProperty;  
+    }
+
+    public String getCombobinding() {
+      return comboBinding;
+    }
+
+    public void setCombobinding(String property) {
+      this.comboBinding = property;  
+    }
 
 
+    public void setColumntypebinding(String propertyName){
+      this.columnTypeBinding = propertyName;
+    }
 
-  public void setColumntypebinding(String propertyName){
-    this.columnTypeBinding = propertyName;
-  }
+    public String getColumntypebinding(){
+      return this.columnTypeBinding;
+    }
 
-  public String getColumntypebinding(){
-    return this.columnTypeBinding;
-  }
-  
-  
-  public String getDisabledbinding() {
-    return disabledBinding;
-  }
+    public String getDisabledbinding() {
+      return disabledBinding;
+    }
 
-  public void setDisabledbinding(String property) {
-    this.disabledBinding = property;
+    public void setDisabledbinding(String property) {
+      this.disabledBinding = property;
+    }
   }
-  
-}

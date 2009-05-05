@@ -16,7 +16,8 @@ public enum TableSelection {
   // XUL defines "cell" level selection as: 
   // cell: Individual cells can be selected. (This means only a single cell at a time).
   CELL(SWT.SINGLE),  
-  TEXT(SWT.SINGLE);
+  TEXT(SWT.SINGLE),
+  NONE(SWT.NONE);
 
   private final int equivalent;
   

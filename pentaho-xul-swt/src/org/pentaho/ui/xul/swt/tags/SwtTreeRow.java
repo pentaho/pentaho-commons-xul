@@ -7,108 +7,94 @@ import org.eclipse.swt.widgets.Item;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
+import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.RowWidget;
 import org.pentaho.ui.xul.swt.SwtElement;
-import org.pentaho.ui.xul.swt.custom.TableItemWrapper;
-import org.pentaho.ui.xul.swt.custom.TreeItemWrapper;
 import org.pentaho.ui.xul.dom.Element;
 
 public class SwtTreeRow extends AbstractSwtXulContainer implements XulTreeRow {
-  
-  protected RowWidget widget;
-  protected Item item;
-  protected XulTreeItem rowParent;
-  
-  private List <XulTreeCell> cells = null;
-  
-  public SwtTreeRow(XulComponent parent){
-    this(null, parent, null, "treerow");
-  }
-  
-  public SwtTreeRow(Element self, XulComponent parent, XulDomContainer container, String tagName) {
-    super(tagName);
 
-    cells = new ArrayList<XulTreeCell>();
-    
-    Object o = parent;
-    if(o instanceof XulTreeItem){
-      setParentTreeItem((XulTreeItem) parent);
-    }
-  }
-  
-  
-  public void setParentTreeItem(XulTreeItem c){
-    rowParent = (XulTreeItem)c;
-  
-    widget =  (rowParent.isHierarchical()) ? new TreeItemWrapper(rowParent.getTree()) 
-                                        : new TableItemWrapper(rowParent.getTree(), this);
-    item = widget.getItem();
-    managedObject = item;
-    
-    rowParent.setRow(this);
-    layout();
-    
-  }
-  
+    XulTreeItem treeItem;
 
-  public void addCell(XulTreeCell cell) {
-    if(cells.contains(cell)){
-      return;
-    }
-    cells.add(cell);
-    cell.setTreeRowParent(this);
-  }
+    private XulTree tree;
 
-  public void addCellText(int index, String text) {
-    
-    SwtTreeCell cell  = null;
-    if(index < cells.size()){
-      cell = (SwtTreeCell)cells.get(index);
-      cell.setLabel(text);
-    }else{
-      cell = new SwtTreeCell(this);
-      cell.setLabel(text);
+    public SwtTreeRow(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
+      super("treerow");
+      managedObject = "empty";
     }
-    layout();
-  }
 
-  @Override
-  public void layout() {
-    if(widget == null){
-      return;
+    public SwtTreeRow(XulComponent parent) {
+      super("treerow");
+      managedObject = "empty";
     }
-    int cellCount = 0;
-    for (XulTreeCell cell : cells) {
-      widget.setText(cellCount++, cell.getLabel());
-      widget.makeCellEditable(cellCount-1);
-    }
-    ((SwtTree)this.rowParent.getTree()).widget.getComposite().getShell().redraw();
-    super.layout();
-  }
-  
-  public void makeCellEditable(int index){
-    widget.makeCellEditable(index);
-  }
-  
-  public void remove(){
-    widget.remove();
-    rowParent.setRow(null);
-  }
 
-	public XulTreeCell getCell(int index) {
-	  if (cells.size()<=index){
-	    return null;
-	  }
-		return this.cells.get(index);
-	}
-
-  public int getSelectedColumnIndex() {
-    if (rowParent.getTree() == null){
-      return -1;
+    public void addCell(XulTreeCell cell) {
+      super.addChild(cell);
     }
-    return rowParent.getTree().getActiveCellCoordinates()[1];
+
+    private XulTree getTree() {
+      if (tree == null) {
+        tree = (SwtTree) this.getParent().getParent().getParent();
+      }
+      return tree;
+    }
+
+    public void addCellText(int index, String text) {
+
+      SwtTreeCell cell = null;
+      if (index < getChildNodes().size()) {
+        cell = (SwtTreeCell) getChildNodes().get(index);
+      } else {
+        cell = new SwtTreeCell(this);
+        this.addCell(cell);
+      }
+
+      switch (getTree().getColumns().getColumn(index).getColumnType()) {
+        case CHECKBOX:
+        case COMBOBOX:
+          cell.setValue(text);
+          break;
+        default:
+          cell.setLabel(text);
+      }
+      getTree().update();
+      layout();
+    }
+
+    public void makeCellEditable(int index) {
+      // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void layout() {
+      initialized = true;
+    }
+
+    public XulTreeCell getCell(int index) {
+      if (index < this.getChildNodes().size()) {
+        return (SwtTreeCell) this.getChildNodes().get(index);
+      } else {
+        return null;
+      }
+
+    }
+
+    public int getSelectedColumnIndex() {
+      return 0;
+    }
+
+    public void remove() {
+      // TODO Auto-generated method stub
+
+    }
+
+    public void setParentTreeItem(XulTreeItem item) {
+      
+          // TODO Auto-generated method stub 
+        
+    }
+
   }
-}

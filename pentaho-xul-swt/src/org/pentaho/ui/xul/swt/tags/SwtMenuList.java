@@ -74,6 +74,7 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
     } else {
       combobox = new Combo((Composite)parent.getManagedObject(), SWT.DROP_DOWN | SWT.READ_ONLY);
     }
+
     managedObject = combobox;
 
     combobox.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
@@ -113,9 +114,14 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
       }
       combobox.add(mItem.getLabel());
     }
+    int idx = -1;
     if(selectedItem != null){
-      combobox.select(combobox.indexOf(selectedItem.toString()));
+      idx = combobox.indexOf(selectedItem.toString());
+    } else if( popup.getChildNodes().size() > 0){
+      idx = 0;
     }
+    this.setSelectedIndex(idx);
+    
     loaded = true;
   }
 
@@ -204,9 +210,7 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
         XulMenuitem item = (XulMenuitem) xulDomContainer.getDocumentRoot().createElement("menuitem");
 
         String attribute = getBinding();
-        if (StringUtils.isEmpty(attribute)) {
-          item.setLabel(extractLabel(t));
-        }
+        item.setLabel(extractLabel(t));
   
         popup.addChild(item);
       } catch(XulException e){
@@ -221,7 +225,14 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   }
 
   public void setSelectedIndex(int idx) {
-    this.combobox.select(idx);  
+    this.combobox.select(idx);
+    if(idx >= 0){
+      changeSupport.firePropertyChange("selectedItem",
+          previousSelectedItem, combobox.getItem(combobox.getSelectionIndex())
+      );
+    }
+    changeSupport.firePropertyChange("selectedIndex", null
+        , combobox.getSelectionIndex());
   }
 
   public void setEditable(boolean editable) {
