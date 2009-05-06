@@ -228,9 +228,10 @@ public class GwtBinding implements Binding{
       public void propertyChange(final PropertyChangeEvent evt) {
         final PropertyChangeListener cThis = this;
         if (evt.getPropertyName().equalsIgnoreCase(va)) {
+          Object finalVal = null;
           try {
             Object value = doConversions(evt.getNewValue(), dir);
-            final Object finalVal = evaluateExpressions(value);
+            finalVal = evaluateExpressions(value);
             
             Object targetObject = b;
             if(targetObject == null){
@@ -251,7 +252,7 @@ public class GwtBinding implements Binding{
           } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-            throw new BindingException("Error invoking setter method [" + targetAttr + "] on target: "+target, e);
+            throw new BindingException("Error invoking setter method for property [" + targetAttr + "] on target [" + b + "] with arg [" + finalVal + "] which is of type [" + finalVal == null ? "null" : finalVal.getClass().getName() + "]", e);
           }
         }
       }
