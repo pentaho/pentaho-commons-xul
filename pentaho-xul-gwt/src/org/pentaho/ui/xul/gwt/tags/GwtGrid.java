@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulColumns;
 import org.pentaho.ui.xul.containers.XulGrid;
 import org.pentaho.ui.xul.containers.XulRows;
@@ -11,8 +12,10 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.Grid;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,9 +35,12 @@ public class GwtGrid  extends AbstractGwtXulContainer implements XulGrid {
   }
   
   public GwtGrid() {
-    super("columns"); //$NON-NLS-1$
-    this.managedObject = grid;
-    resetContainer();
+    super("grid"); //$NON-NLS-1$
+  }
+
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
+    setAlign(srcEle.getAttribute("align"));
   }
 
   public void update() {
@@ -54,7 +60,7 @@ public class GwtGrid  extends AbstractGwtXulContainer implements XulGrid {
       sp = new ScrollPanel(grid);
       SimplePanel div = new SimplePanel();
       div.add(sp);
-      managedObject = div;
+      managedObject = container = div;
     }
 
     if(getFlex() > 0) {
@@ -65,8 +71,8 @@ public class GwtGrid  extends AbstractGwtXulContainer implements XulGrid {
     } else if(getWidth() > 0){
       sp.setWidth(getWidth()+"px");//$NON-NLS-1$
       sp.setHeight(getHeight()+"px");//$NON-NLS-1$
-      sp.getElement().getStyle().setProperty("backgroundColor", "white"); //$NON-NLS-1$ //$NON-NLS-2$
     }
+    grid.setCellSpacing(1);
     updateUI();
   }
 
@@ -98,6 +104,11 @@ public class GwtGrid  extends AbstractGwtXulContainer implements XulGrid {
         XulComponent rowComponent = rowList.get(colCount);
         Widget widget =  (Widget) rowComponent.getManagedObject();
         grid.setWidget(rowCount, colCount, widget);
+        if(rowCount == 0) {
+          grid.getRowFormatter().setStyleName(rowCount, "rowHeaderFormat");
+        } else {
+          grid.getRowFormatter().setStyleName(rowCount, "cellFormat");  
+        }
         if(!columnFlexLayout) {
           grid.getCellFormatter().setWidth(rowCount, colCount, component.getWidth() + "%"); //$NON-NLS-1$
         } else {

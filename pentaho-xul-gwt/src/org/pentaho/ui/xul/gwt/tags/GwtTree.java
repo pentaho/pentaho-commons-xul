@@ -71,7 +71,19 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private Tree tree;
   private boolean suppressEvents = false;
   private boolean editable = false;
+  private boolean visible = false;
   
+  public boolean isVisible() {
+    return visible;
+  }
+
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+    if(simplePanel != null) {
+      simplePanel.setVisible(visible);
+    }
+  }
+
   /**
    * Used when this widget is a tree. Not used when this widget is a table.
    */
@@ -158,6 +170,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     } else {
       setupTable();
     }
+    setVisible(visible);
   }
 
   private int prevSelectionPos = -1;
@@ -321,6 +334,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       try{
 
         GwtTextbox b = (GwtTextbox) this.domContainer.getDocumentRoot().createElement("textbox");
+        b.setDisabled(!column.isEditable());
         b.layout();
         b.setValue(val);
         GwtBinding bind = new GwtBinding(cell, "label", b, "value");
