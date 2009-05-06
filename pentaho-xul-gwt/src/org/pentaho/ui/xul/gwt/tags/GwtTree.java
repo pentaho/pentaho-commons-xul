@@ -71,7 +71,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private Tree tree;
   private boolean suppressEvents = false;
   private boolean editable = false;
-  private boolean visible = false;
+  private boolean visible = true;
   
   public boolean isVisible() {
     return visible;
