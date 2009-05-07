@@ -225,7 +225,11 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   }
 
   public void setSelectedIndex(int idx) {
-    this.combobox.select(idx);
+    if(idx == -1){
+      this.combobox.clearSelection();
+    } else {
+      this.combobox.select(idx);
+    }
     if(idx >= 0){
       changeSupport.firePropertyChange("selectedItem",
           previousSelectedItem, combobox.getItem(combobox.getSelectionIndex())

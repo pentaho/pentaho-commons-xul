@@ -232,34 +232,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         .getManagedObject());
     parentComposite.addControlListener(new ControlAdapter() {
       public void controlResized(ControlEvent e) {
-        Rectangle area = parentComposite.getClientArea();
-        Point preferredSize = table.getTable().computeSize(SWT.DEFAULT,
-            SWT.DEFAULT);
-        int width = area.width - 2 * table.getTable().getBorderWidth();
-        if (preferredSize.y > area.height + table.getTable().getHeaderHeight()) {
-          // Subtract the scrollbar width from the total column width
-          // if a vertical scrollbar will be required
-          Point vBarSize = table.getTable().getVerticalBar().getSize();
-          width -= vBarSize.x;
-        }
-        width -= 20;
-        double totalFlex = 0;
-        for (XulComponent col : getColumns().getChildNodes()) {
-          totalFlex += ((XulTreeCol) col).getFlex();
-        }
-
-        int colIdx = 0;
-        for (XulComponent col : getColumns().getChildNodes()) {
-          TableColumn c = table.getTable().getColumn(colIdx);
-          int colFlex = ((XulTreeCol) col).getFlex();
-          if (totalFlex == 0) {
-            c.setWidth(Math.round(width / getColumns().getColumnCount()));
-          } else if (colFlex > 0) {
-            c.setWidth(Integer.parseInt(""
-                + Math.round(width * (colFlex / totalFlex))));
-          }
-          colIdx++;
-        }
+        resizeColumns();
 
       }
     });
@@ -269,6 +242,42 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   }
 
+  private void resizeColumns(){
+    final Composite parentComposite = ((Composite) parentComponent
+      .getManagedObject());
+    Rectangle area = parentComposite.getClientArea();
+    Point preferredSize = table.getTable().computeSize(SWT.DEFAULT,
+        SWT.DEFAULT);
+    int width = area.width - 2 * table.getTable().getBorderWidth();
+    if (preferredSize.y > area.height + table.getTable().getHeaderHeight()) {
+      // Subtract the scrollbar width from the total column width
+      // if a vertical scrollbar will be required
+      Point vBarSize = table.getTable().getVerticalBar().getSize();
+      width -= vBarSize.x;
+    }
+    width -= 20;
+    double totalFlex = 0;
+    for (XulComponent col : getColumns().getChildNodes()) {
+      totalFlex += ((XulTreeCol) col).getFlex();
+    }
+
+    int colIdx = 0;
+    for (XulComponent col : getColumns().getChildNodes()) {
+      if(colIdx >= table.getTable().getColumnCount()){
+        break;
+      }
+      TableColumn c = table.getTable().getColumn(colIdx);
+      int colFlex = ((XulTreeCol) col).getFlex();
+      if (totalFlex == 0) {
+        c.setWidth(Math.round(width / getColumns().getColumnCount()));
+      } else if (colFlex > 0) {
+        c.setWidth(Integer.parseInt(""
+            + Math.round(width * (colFlex / totalFlex))));
+      }
+      colIdx++;
+    }
+  }
+  
   private void setSelectedIndex(int idx) {
 
     this.selectedIndex = idx;
@@ -283,8 +292,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   private void setupColumns() {
 
-    for (int i = 0; i < table.getTable().getColumnCount(); i++) {
-      table.getTable().getColumn(i).dispose();
+    while(table.getTable().getColumnCount() > 0){
+      table.getTable().getColumn(0).dispose();
     }
 
     // Add Columns
@@ -295,7 +304,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
 
     // Pack the columns
-    for (int i = 0, n = table.getTable().getColumnCount(); i < n; i++) {
+    for (int i = 0; i < table.getTable().getColumnCount();  i++) {
       table.getTable().getColumn(i).pack();
     }
 
@@ -338,6 +347,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     table.setCellEditors(editors);
 
     table.setColumnProperties(names);
+    resizeColumns();
 
   }
 
@@ -523,6 +533,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       this.tree.setInput(this);
       this.tree.refresh();
     } else {
+
+      setupColumns();
       this.table.setInput(this);
       this.table.refresh();
 
