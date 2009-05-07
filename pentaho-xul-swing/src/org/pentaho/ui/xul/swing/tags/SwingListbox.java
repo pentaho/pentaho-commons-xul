@@ -109,6 +109,17 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
     if(this.selectedIndex > -1){
       this.listBox.setSelectedIndex(selectedIndex);
     }
+    
+    int width = this.listBox.getSize().width;
+    int height = this.listBox.getSize().height;
+    if(this.getWidth() > 0){
+      width = this.getWidth();
+    }
+    if(this.getHeight() > 0){
+      height = this.getHeight();
+    }
+    this.listBox.setSize(width, height);
+    
     initialized = true;
   }
 

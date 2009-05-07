@@ -90,6 +90,16 @@ public class SwingGroupbox extends AbstractSwingContainer implements XulGroupbox
         this.setCaption(((SwingCaption) comp).getLabel());
       }
     }
+
+    int width = this.container.getSize().width;
+    int height = this.container.getSize().height;
+    if(this.getWidth() > 0){
+      width = this.getWidth();
+    }
+    if(this.getHeight() > 0){
+      height = this.getHeight();
+    }
+    this.container.setSize(width, height);
   }
 
   @Override

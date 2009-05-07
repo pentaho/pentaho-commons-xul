@@ -15,7 +15,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingTreeChildren extends AbstractSwingContainer implements XulTreeChildren {
 
-  XulTree tree;
+  private XulTree tree;
 
 
   public SwingTreeChildren(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
