@@ -51,6 +51,11 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
     super.setWidth(width);
     container.setWidth(width+"px");
   }
-  
-  
+  @Override  
+  public void setBgcolor(String bgcolor) {
+    if(container != null) {
+      container.getElement().getStyle().setProperty("backgroundColor", bgcolor);
+    }
+  }
+
 }

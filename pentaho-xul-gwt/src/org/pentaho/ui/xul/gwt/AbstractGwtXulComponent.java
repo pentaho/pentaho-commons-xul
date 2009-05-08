@@ -279,9 +279,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
          break;
       } 
     }
-    if(!StringUtils.isEmpty(getBgcolor())) {
-      container.getElement().getStyle().setProperty("background-color", getBgcolor());  
-    }    
     initialized = true;
   }
   
@@ -487,9 +484,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
   }
   public void adoptAttributes(XulComponent component) {
-    this.height = component.getHeight();
-    this.width = component.getWidth();
-    this.flex = component.getFlex();
     if (StringUtils.isEmpty(component.getAttributeValue("tooltiptext")) == false) {
       // TODO: setOrient should live in an interface somewhere???
       setTooltiptext(component.getAttributeValue("tooltiptext"));

@@ -60,5 +60,11 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     super.layout();
   }
   
+  @Override
+  public void setBgcolor(String bgcolor) {
+    if(container != null) {
+      container.getElement().getStyle().setProperty("backgroundColor", bgcolor);
+    }
+  }
 }
 
