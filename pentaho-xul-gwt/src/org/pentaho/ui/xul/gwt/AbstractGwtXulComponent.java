@@ -279,6 +279,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
          break;
       } 
     }
+    if(!StringUtils.isEmpty(getBgcolor())) {
+      container.getElement().getStyle().setProperty("background-color", getBgcolor());  
+    }    
     initialized = true;
   }
   
