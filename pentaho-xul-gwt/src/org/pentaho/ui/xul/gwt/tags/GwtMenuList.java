@@ -265,9 +265,9 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       inLayoutProcess = false;
       return;
     }
-    listbox.setSuppressLayout(true);
     GwtMenupopup popup = getPopupElement();
     this.listbox.removeAll();
+    listbox.setSuppressLayout(true);
 
     GwtMenuitem selectedItem = null;
     
