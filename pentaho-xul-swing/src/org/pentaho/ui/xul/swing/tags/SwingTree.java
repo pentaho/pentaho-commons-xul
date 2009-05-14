@@ -590,6 +590,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       updateColumnModel();
       table.updateUI();
     } else {
+      setupTree();
       tree.updateUI();
     }
   }
