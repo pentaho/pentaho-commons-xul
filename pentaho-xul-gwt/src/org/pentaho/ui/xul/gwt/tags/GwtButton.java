@@ -239,5 +239,16 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
       setDisabled("true".equals(component.getAttributeValue("disabled")));
     }
   }
+  
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+
+    if (button != null) {
+      button.setVisible(visible);
+    } else {
+      imageButton.setVisible(visible);
+    }
+  }
 
 }
