@@ -137,7 +137,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       managedObject = tree;
     } else {
       table = new TableViewer((Composite) parentComponent.getManagedObject(),
-          SWT.BORDER);
+          SWT.MULTI | SWT.H_SCROLL
+          | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
       managedObject = table;
     }
     if (isHierarchical) {
@@ -292,62 +293,65 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   private void setupColumns() {
 
-    while(table.getTable().getColumnCount() > 0){
-      table.getTable().getColumn(0).dispose();
-    }
-
-    // Add Columns
-    for (XulComponent col : this.columns.getChildNodes()) {
-      TableColumn tc = new TableColumn(table.getTable(), SWT.LEFT);
-      String lbl = ((XulTreeCol) col).getLabel();
-      tc.setText(lbl != null ? lbl : "");
-    }
-
-    // Pack the columns
-    for (int i = 0; i < table.getTable().getColumnCount();  i++) {
-      table.getTable().getColumn(i).pack();
-    }
-
-    if (table.getCellEditors() != null) {
-      for (int i = 0; i < table.getCellEditors().length; i++) {
-        table.getCellEditors()[i].dispose();
+    if(table.getTable().getColumnCount() != this.columns.getColumnCount()){
+      
+      while(table.getTable().getColumnCount() > 0){
+        table.getTable().getColumn(0).dispose();
       }
-    }
-
-    CellEditor[] editors = new CellEditor[this.columns.getChildNodes().size()];
-    String[] names = new String[getColumns().getColumnCount()];
-    int i = 0;
-    for (XulComponent c : this.columns.getChildNodes()) {
-      XulTreeCol col = (XulTreeCol) c;
-
-      CellEditor editor;
-      ColumnType type = col.getColumnType();
-      switch (type) {
-      case TEXT:
-        editor = new TextCellEditor(table.getTable());
-        break;
-      case CHECKBOX:
-        editor = new CheckboxCellEditor(table.getTable());
-        break;
-      case COMBOBOX:
-        editor = new ComboBoxCellEditor(table.getTable(), new String[] {},
-            SWT.READ_ONLY);
-        break;
-      case EDITABLECOMBOBOX:
-        editor = new ComboBoxCellEditor(table.getTable(), new String[] {});
-        break;
-      default:
-        editor = new TextCellEditor(table.getTable());
-        break;
+  
+      // Add Columns
+      for (XulComponent col : this.columns.getChildNodes()) {
+        TableColumn tc = new TableColumn(table.getTable(), SWT.LEFT);
+        String lbl = ((XulTreeCol) col).getLabel();
+        tc.setText(lbl != null ? lbl : "");
       }
-      editors[i] = editor;
-      names[i] = "" + i;
-      i++;
+  
+      // Pack the columns
+      for (int i = 0; i < table.getTable().getColumnCount();  i++) {
+        table.getTable().getColumn(i).pack();
+      }
+  
+      if (table.getCellEditors() != null) {
+        for (int i = 0; i < table.getCellEditors().length; i++) {
+          table.getCellEditors()[i].dispose();
+        }
+      }
+  
+      CellEditor[] editors = new CellEditor[this.columns.getChildNodes().size()];
+      String[] names = new String[getColumns().getColumnCount()];
+      int i = 0;
+      for (XulComponent c : this.columns.getChildNodes()) {
+        XulTreeCol col = (XulTreeCol) c;
+  
+        CellEditor editor;
+        ColumnType type = col.getColumnType();
+        switch (type) {
+        case TEXT:
+          editor = new TextCellEditor(table.getTable());
+          break;
+        case CHECKBOX:
+          editor = new CheckboxCellEditor(table.getTable());
+          break;
+        case COMBOBOX:
+          editor = new ComboBoxCellEditor(table.getTable(), new String[] {},
+              SWT.READ_ONLY);
+          break;
+        case EDITABLECOMBOBOX:
+          editor = new ComboBoxCellEditor(table.getTable(), new String[] {});
+          break;
+        default:
+          editor = new TextCellEditor(table.getTable());
+          break;
+        }
+        editors[i] = editor;
+        names[i] = "" + i;
+        i++;
+      }
+      table.setCellEditors(editors);
+  
+      table.setColumnProperties(names);
+      resizeColumns();
     }
-    table.setCellEditors(editors);
-
-    table.setColumnProperties(names);
-    resizeColumns();
 
   }
 
@@ -771,5 +775,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
     return "text"; // default //$NON-NLS-1$
   }
+
+  public Object getSelectedItem() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  
+  
 
 }
