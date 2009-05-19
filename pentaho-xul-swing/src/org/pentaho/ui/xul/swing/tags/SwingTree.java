@@ -4,7 +4,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +32,6 @@ import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-import javax.swing.text.JTextComponent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -35,26 +40,25 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.commons.lang.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.binding.DefaultBinding;
@@ -68,6 +72,7 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
+import org.pentaho.ui.xul.util.ColumnType;
 
 public class SwingTree extends AbstractSwingContainer implements XulTree {
 
@@ -504,6 +509,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
       public void valueChanged(TreeSelectionEvent e) {
         SwingTree.this.changeSupport.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
+        SwingTree.this.fireSelectedItem();
       }
 
     });
@@ -1160,6 +1166,64 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public <T> Collection<T> getElements() {
     return null;
   }
+
+  public Object getSelectedItem() {
+    if(this.isHierarchical && this.elements != null){
+
+      int[] vals = tree.getSelectionRows();
+      if(vals.length == 0){
+        return null;
+      }
+
+      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+      property = "get"+(property.substring(0,1).toUpperCase() + property.substring(1));
+      Method childrenMethod = null;
+      try{
+        childrenMethod = element.getClass().getMethod(property, new Class[]{});
+      } catch(NoSuchMethodException e){
+        logger.error(e);
+        return null;
+      }
+      
+      Object parent = this.elements;
+      
+      
+      
+      Object selectedItem = findSelectedItem(this.elements, childrenMethod, 0, vals[0]);
+      
+    } 
+    return null;
+  }
+  
+  private void fireSelectedItem(){
+    this.changeSupport.firePropertyChange("selectedItem", null, getSelectedItem());
+  }
+  
+  private Object findSelectedItem(Object parent, Method childrenMethod, int curPos, int targetPos){
+    if(curPos == targetPos){
+      return parent;
+    }
+    Collection children = null;
+    try{
+      children = (Collection) childrenMethod.invoke(parent, new Object[]{});
+    } catch(Exception e){
+      logger.error(e);
+      return null;
+    }
+    
+    if(children == null || children.size() == 0){
+      return null;
+    }
+    
+    for(Object child : children){
+      Object found = findSelectedItem(child, childrenMethod, ++curPos, targetPos);
+      if(found != null){
+        return found;
+      }
+    }
+    return null;
+  }
+  
 
   
 }
