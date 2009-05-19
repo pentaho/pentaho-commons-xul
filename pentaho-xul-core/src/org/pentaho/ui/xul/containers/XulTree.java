@@ -72,4 +72,5 @@ public interface XulTree extends XulContainer {
 
   <T> Collection<T> getElements();
 
+  Object getSelectedItem();
 }
