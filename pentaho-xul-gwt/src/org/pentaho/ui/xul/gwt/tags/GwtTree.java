@@ -832,5 +832,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
   }
 
+  public Object getSelectedItem() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  
 
 }
