@@ -1185,8 +1185,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         return null;
       }
       
-      Object selectedItem = findSelectedItem(this.elements, childrenMethod, 0, vals[0]);
-      return selectedItem;
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, childrenMethod, new FindSelectedItemTuple(vals[0]));
+      return tuple != null ? tuple.selectedItem : null;
     } 
     return null;
   }
@@ -1195,9 +1195,20 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     this.changeSupport.firePropertyChange("selectedItem", null, getSelectedItem());
   }
   
-  private Object findSelectedItem(Object parent, Method childrenMethod, int curPos, int targetPos){
-    if(curPos == targetPos){
-      return parent;
+  private static class FindSelectedItemTuple{
+    Object selectedItem = null;
+    int curpos = -1; //ignores first element (root)
+    int selectedIndex;
+    
+    public FindSelectedItemTuple(int selectedIndex){
+      this.selectedIndex = selectedIndex;
+    }
+  }
+  
+  private FindSelectedItemTuple findSelectedItem(Object parent, Method childrenMethod, FindSelectedItemTuple tuple){
+    if(tuple.curpos == tuple.selectedIndex){
+      tuple.selectedItem = parent;
+      return tuple;
     }
     Collection children = null;
     try{
@@ -1212,9 +1223,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     }
     
     for(Object child : children){
-      Object found = findSelectedItem(child, childrenMethod, ++curPos, targetPos);
-      if(found != null){
-        return found;
+      tuple.curpos++;
+      findSelectedItem(child, childrenMethod, tuple);
+      if(tuple.selectedItem != null){
+        return tuple;
       }
     }
     return null;
