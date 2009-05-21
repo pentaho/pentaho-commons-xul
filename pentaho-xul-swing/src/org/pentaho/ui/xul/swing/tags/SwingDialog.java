@@ -329,13 +329,14 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
 
   private void createDialog() {
 
-    if(getParent() instanceof XulRoot){
+    if(getParent() instanceof XulDialog){
+      Object parentObj = ((SwingDialog) getParent()).getDialog();
+      dialog = new JDialog((Dialog) parentObj);
+      centerComp = (Component) parentObj;
+    } else if(getParent() instanceof XulWindow) {
+      
       Object parentObj = getParent().getManagedObject();
-      if(parentObj instanceof Dialog){
-        dialog = new JDialog((Dialog) parentObj);
-      } else {
-        dialog = new JDialog((Frame) parentObj);
-      }
+      dialog = new JDialog((Frame) parentObj);
       centerComp = (Component) parentObj;
     } else {
     

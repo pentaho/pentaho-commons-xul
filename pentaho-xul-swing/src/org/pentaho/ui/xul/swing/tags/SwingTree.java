@@ -1171,7 +1171,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     if(this.isHierarchical && this.elements != null){
 
       int[] vals = tree.getSelectionRows();
-      if(vals.length == 0){
+      if(vals == null || vals.length == 0){
         return null;
       }
 
