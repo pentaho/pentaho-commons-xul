@@ -355,6 +355,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     }
 
     //HorizontalPanel buttonPanel = new HorizontalPanel();
+    VerticalPanel buffer = new VerticalPanel();
     HorizontalPanel buttonPanel = new HorizontalPanel();
     HorizontalPanel leftButtonPanel = new HorizontalPanel();
     HorizontalPanel centerButtonPanel = new HorizontalPanel();
@@ -362,6 +363,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     rightButtonPanel.setSpacing(3);
     centerButtonPanel.setSpacing(3);
     leftButtonPanel.setSpacing(3);
+
     for(XulButton btn : dialogButtons){
       this.removeChild(btn);
       Widget widget = (Widget) btn.getManagedObject();
@@ -387,6 +389,20 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       }
     }
 
+    leftButtonPanel.add(buffer);
+    leftButtonPanel.setCellWidth(buffer, "100%");
+    leftButtonPanel.setCellHorizontalAlignment(buffer, HorizontalPanel.ALIGN_RIGHT);
+    rightButtonPanel.add(buffer);
+    rightButtonPanel.setCellWidth(buffer, "100%");
+    rightButtonPanel.setCellHorizontalAlignment(buffer, HorizontalPanel.ALIGN_LEFT);
+    centerButtonPanel.add(buffer);
+    centerButtonPanel.setCellWidth(buffer, "100%");
+    centerButtonPanel.setCellHorizontalAlignment(buffer, HorizontalPanel.ALIGN_RIGHT);
+    centerButtonPanel.add(buffer);
+    centerButtonPanel.setCellWidth(buffer, "100%");
+    centerButtonPanel.setCellHorizontalAlignment(buffer, HorizontalPanel.ALIGN_LEFT);
+
+    
     buttonPanel.add(leftButtonPanel);
     buttonPanel.setCellHorizontalAlignment(leftButtonPanel, HorizontalPanel.ALIGN_LEFT);
     buttonPanel.add(centerButtonPanel);
