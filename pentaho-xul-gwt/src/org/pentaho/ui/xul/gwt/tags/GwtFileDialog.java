@@ -88,13 +88,12 @@ public class GwtFileDialog extends AbstractGwtXulContainer implements XulFileDia
     this.viewType = type;     
   }
 
-  @Override
+
   public RETURN_CODE showOpenDialog() {
     doClick(GwtFileDialog.upload.getElement());    
     return null;
   }
 
-  @Override
   public RETURN_CODE showOpenDialog(Object f) {
     doClick(GwtFileDialog.upload.getElement());
     return null;
@@ -104,13 +103,12 @@ public class GwtFileDialog extends AbstractGwtXulContainer implements XulFileDia
   element.click();
   }-*/;
 
-  @Override
+
   public RETURN_CODE showSaveDialog() {
 
     return null;
   }
 
-  @Override
   public RETURN_CODE showSaveDialog(Object f) {
     // TODO Auto-generated method stub
     return null;
