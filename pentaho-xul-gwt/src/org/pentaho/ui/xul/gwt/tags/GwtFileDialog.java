@@ -11,35 +11,19 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class GwtFileDialog extends AbstractGwtXulContainer implements XulFileDialog{
-  static FormPanel uploadForm = null;
-  static FileUpload upload = null; 
+  private FormPanel uploadForm = null;
+  private FileUpload upload = null; 
   private Panel parentObject = null;
   private XulComponent parent;
   private SEL_TYPE selectionType = SEL_TYPE.SINGLE;
   private VIEW_TYPE viewType = VIEW_TYPE.FILES_DIRECTORIES;
-  static {
-    uploadForm = new FormPanel();
-    uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
-    uploadForm.setMethod(FormPanel.METHOD_POST);
-    // Create a panel to hold all of the form widgets.
-    VerticalPanel panel = new VerticalPanel();
-    uploadForm.setWidget(panel);
-    uploadForm.setVisible(false);
-    // Create a TextBox, giving it a name so that it will be submitted.
-    final TextBox tb = new TextBox();
-    tb.setName("textBoxFormElement");
-    panel.add(tb);
-    // Create a FileUpload widget.
-    upload = new FileUpload();
-    upload.setName("uploadFormElement");
-    panel.add(upload);
-  }
+
   public static void register() {
-    GwtXulParser.registerHandler("filedialog", 
+    GwtXulParser.registerHandler("filedialog",  //$NON-NLS-1$
     new GwtXulHandler() {
       public Element newInstance() {
         return new GwtFileDialog();
@@ -49,6 +33,18 @@ public class GwtFileDialog extends AbstractGwtXulContainer implements XulFileDia
   
   public GwtFileDialog() {
     super("filedialog");
+    uploadForm = new FormPanel();
+    uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+    uploadForm.setMethod(FormPanel.METHOD_POST);
+    // Create a panel to hold all of the form widgets.
+    VerticalPanel panel = new VerticalPanel();
+    uploadForm.setWidget(panel);
+    uploadForm.setVisible(false);
+    // Create a FileUpload widget.
+    upload = new FileUpload();
+    upload.setName("uploadFormElement"); //$NON-NLS-1$
+    panel.add(upload);
+    RootPanel.get().add(uploadForm);    
     this.managedObject = uploadForm;
   }
 
@@ -88,21 +84,27 @@ public class GwtFileDialog extends AbstractGwtXulContainer implements XulFileDia
     this.viewType = type;     
   }
 
-
   public RETURN_CODE showOpenDialog() {
-    doClick(GwtFileDialog.upload.getElement());    
-    return null;
+    doClick(upload.getElement());    
+    if(upload.getFilename() != null) {
+      return RETURN_CODE.OK; 
+     } else {
+       return RETURN_CODE.CANCEL;
+     }
   }
 
   public RETURN_CODE showOpenDialog(Object f) {
-    doClick(GwtFileDialog.upload.getElement());
-    return null;
+    doClick(upload.getElement());
+    if(upload.getFilename() != null) {
+     return RETURN_CODE.OK; 
+    } else {
+      return RETURN_CODE.CANCEL;
+    }
   }
   
   public native void doClick(com.google.gwt.user.client.Element element)/*-{
   element.click();
   }-*/;
-
 
   public RETURN_CODE showSaveDialog() {
 
@@ -114,5 +116,7 @@ public class GwtFileDialog extends AbstractGwtXulContainer implements XulFileDia
     return null;
   }
   
-
+  public FormPanel getUploadForm() {
+    return uploadForm;
+  }
 }
