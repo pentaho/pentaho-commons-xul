@@ -35,6 +35,9 @@ public class TypeControllerGenerator extends Generator {
   
   private List<JClassType> implementingTypes;
   
+  // Keep track of generated method classes. Used to optimize code for inherited methods
+  private List<String> generatedMethods = new ArrayList<String>();
+  
   @Override
   public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
 
@@ -190,7 +193,7 @@ public class TypeControllerGenerator extends Generator {
     int totalClassCount = 0;
     sourceWriter.println("public void populateMap"+methodNum+"(){ "); 
     sourceWriter.indent();
-    sourceWriter.println("GwtBindingMethod otherM;");
+    sourceWriter.println("GwtBindingMethod newMethod = null;");
     for(JClassType type : implementingTypes){
       System.out.println("-------------------------");
       String keyRoot = generateTypeKey(type);
@@ -221,56 +224,55 @@ public class TypeControllerGenerator extends Generator {
               sourceWriter.outdent();
               sourceWriter.println("};");
               sourceWriter.println("public void populateMap"+methodNum+"(){ "); 
-              sourceWriter.println("GwtBindingMethod otherM;");
               sourceWriter.indent();
+              sourceWriter.println("GwtBindingMethod newMethod = null;");
               methodCount = 0;
             }
             //System.out.println("        generating inner type method: "+m.getName());
             
             String methodName = m.getName();
-            sourceWriter.println("otherM = wrappedTypes.get(\""+superName+"_"+methodName+"\".toLowerCase());");
-            sourceWriter.println("if(otherM != null){");
-              sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), otherM);");
-            sourceWriter.println("}");
-
-            sourceWriter.println("if(otherM == null){");
-            sourceWriter.indent();
-            sourceWriter.println("GwtBindingMethod newMethod = new GwtBindingMethod(){");
             
-  
-            sourceWriter.println("public Object invoke(Object obj, Object[] args) throws XulException { ");
-            sourceWriter.indent();
-            sourceWriter.println("try{");
-            sourceWriter.println(loopType.getQualifiedSourceName()+" target = ("+loopType.getQualifiedSourceName()+") obj;");
-            
-            JParameter[] params = m.getParameters();
-            String argList = "";
-            int pos = 0;
-            for(JParameter param : params){
-              if(pos > 0){
-                argList += ", ";
-              }
-              argList += "("+getTypeName(param.getType())+") args["+pos+"]";
-              pos++;
-            }
-            
-            if(isVoidReturn(m.getReturnType())){
-              sourceWriter.println("target."+methodName+"("+argList+");");
-              sourceWriter.println("return null;");
+            // check to see if a superclass implements the same method
+            if(generatedMethods.contains((superName+"_"+methodName).toLowerCase())){
+              
+              sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), wrappedTypes.get(\""+superName+"_"+methodName+"\".toLowerCase()));");
             } else {
-              sourceWriter.println("return "+boxReturnType(m)+" target."+methodName+"("+argList+");");
+              sourceWriter.println("newMethod = new GwtBindingMethod(){");
+            
+  
+              sourceWriter.println("public Object invoke(Object obj, Object[] args) throws XulException { ");
+              sourceWriter.indent();
+              sourceWriter.println("try{");
+              sourceWriter.println(loopType.getQualifiedSourceName()+" target = ("+loopType.getQualifiedSourceName()+") obj;");
+              
+              JParameter[] params = m.getParameters();
+              String argList = "";
+              int pos = 0;
+              for(JParameter param : params){
+                if(pos > 0){
+                  argList += ", ";
+                }
+                argList += "("+getTypeName(param.getType())+") args["+pos+"]";
+                pos++;
+              }
+              
+              if(isVoidReturn(m.getReturnType())){
+                sourceWriter.println("target."+methodName+"("+argList+");");
+                sourceWriter.println("return null;");
+              } else {
+                sourceWriter.println("return "+boxReturnType(m)+" target."+methodName+"("+argList+");");
+              }
+    
+              sourceWriter.println("}catch(Exception e){ throw new XulException(\"error with "+type.getQualifiedSourceName()+"\"+e.getMessage());}");
+              sourceWriter.println("}");
+    
+              sourceWriter.outdent();
+              sourceWriter.println("};");
+              sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), newMethod);");
+              sourceWriter.println("wrappedTypes.put((\""+superName+"_"+methodName+"\").toLowerCase(), newMethod);");
+              generatedMethods.add((keyRoot+"_"+methodName).toLowerCase());
+              generatedMethods.add((superName+"_"+methodName).toLowerCase());
             }
-  
-            sourceWriter.println("}catch(Exception e){ throw new XulException(\"error with "+type.getQualifiedSourceName()+"\"+e.getMessage());}");
-            sourceWriter.println("}");
-  
-            sourceWriter.outdent();
-            sourceWriter.println("};");
-            sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), newMethod);");
-
-            sourceWriter.println("wrappedTypes.put((\""+superName+"_"+methodName+"\").toLowerCase(), newMethod);");
-            sourceWriter.outdent();
-            sourceWriter.println("}");
             
           }
           loopType = loopType.getSuperclass();
