@@ -798,6 +798,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
             comboBox.setEnabled(! cell.isDisabled());
             comp = comboBox;
             break;
+          case LABEL:
+            JLabel lbl = new JLabel(cell.getLabel());
+            comp = lbl;
+            break;
           default:
             final JTextField label = new JTextField((String) value);
 
@@ -842,8 +846,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
           } else {
             return box.getSelectedIndex();
           }
-        } else {
+        } else if (control instanceof JTextField) {
           return ((JTextField) control).getText();
+        } else {
+          return ((JLabel) control).getText();
         }
       }
 
