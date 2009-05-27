@@ -603,8 +603,16 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   private String extractDynamicColType(Object row, int columnPos) {
     try{
-      Method method = row.getClass().getMethod(this.columns.getColumn(columnPos).getColumntypebinding());
-      return (String) method.invoke(row, new Object[]{});
+      String rawMethod = this.columns.getColumn(columnPos).getColumntypebinding();
+      
+      StringBuilder methodName = new StringBuilder();
+      
+      methodName.append("get");
+      methodName.append(rawMethod.substring(0, 1).toUpperCase());
+      methodName.append(rawMethod.substring(1));
+      
+      Method method = row.getClass().getMethod(methodName.toString());
+      return ((String) method.invoke(row, new Object[]{})).toUpperCase();
     } catch (Exception e){
       System.out.println("Could not extract column type from binding");
     }
@@ -951,8 +959,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         return;
       }
       XulTreeCell cell = row.getRow().getCell(columnIndex);
+      
+      ColumnType colType = tree.getColumns().getColumn(columnIndex).getColumnType();
+       
+      if(colType == ColumnType.DYNAMIC){
+        colType = ColumnType.valueOf(extractDynamicColType(elements.toArray()[rowIndex], columnIndex));
+      }
 
-      switch (tree.getColumns().getColumn(columnIndex).getColumnType()) {
+      switch (colType) {
         case CHECKBOX:
           cell.setValue((Boolean) value);
           break;
@@ -1037,7 +1051,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                     + "]");
 
                 String colType = column.getType();
-                if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
+                if(StringUtils.isEmpty(colType) == false && colType.equalsIgnoreCase("dynamic")){
                   colType = extractDynamicColType(o, x);
                 }
 
@@ -1164,7 +1178,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public <T> Collection<T> getElements() {
-    return null;
+    return this.elements;
   }
 
   public Object getSelectedItem() {
