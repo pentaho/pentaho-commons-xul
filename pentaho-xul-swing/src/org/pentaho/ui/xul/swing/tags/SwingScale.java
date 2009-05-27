@@ -19,6 +19,7 @@ public class SwingScale extends SwingElement implements XulScale{
   private int max = 100;
   private int value = 0;
   private int increment = 1;
+  private int pageIncrement = 1;
   private JSlider slider;
   
   private String direction;
@@ -40,7 +41,7 @@ public class SwingScale extends SwingElement implements XulScale{
   }
 
   public int getPageincrement() {
-    return increment;
+    return pageIncrement;
   }
 
   public int getValue() {
@@ -60,8 +61,18 @@ public class SwingScale extends SwingElement implements XulScale{
   }
 
   public void setPageincrement(int increment) {
-    this.increment = increment;
+    this.pageIncrement = increment;
   }
+
+  public int getInc() {
+    return this.increment;
+  }
+
+  public void setInc(int increment) {
+    this.increment = increment;
+    
+  }
+  
 
   public void setValue(int value) {
     int prevVal = this.value;
@@ -77,9 +88,10 @@ public class SwingScale extends SwingElement implements XulScale{
     slider = new JSlider(orient, this.min, this.max, Math.max(min, this.value));
     this.managedObject = slider;
     
-    slider.setMajorTickSpacing(this.increment);
+    slider.setMajorTickSpacing(this.pageIncrement);
+//    slider.setExtent(this.pageIncrement);
     
-    slider.setSnapToTicks(true);
+    slider.setSnapToTicks(false);
     slider.setPaintTicks(true);
     
     slider.addChangeListener(new ChangeListener(){
@@ -92,4 +104,5 @@ public class SwingScale extends SwingElement implements XulScale{
     });
 
   }
+
 }
