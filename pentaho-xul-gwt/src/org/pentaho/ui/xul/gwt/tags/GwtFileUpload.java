@@ -59,7 +59,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     }
     
     uploadForm = new FormPanel();
-    uploadForm.setAction(GWT.getModuleBaseURL() + getAction());
+    uploadForm.setAction(getAction());
     uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
     uploadForm.setMethod(FormPanel.METHOD_POST);
     // Create a panel to hold all of the form widgets.
