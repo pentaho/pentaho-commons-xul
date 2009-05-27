@@ -48,8 +48,10 @@ public class SwingDeck extends AbstractSwingContainer implements XulDeck {
   }
 
   public void setSelectedIndex(int index) {
+    int previousVal = selectedChildIndex;
     selectedChildIndex = index;
     cardLayout.show(container, "" + index);
+    this.changeSupport.firePropertyChange("disabled", previousVal, index);
   }
 
   public void layout() {
