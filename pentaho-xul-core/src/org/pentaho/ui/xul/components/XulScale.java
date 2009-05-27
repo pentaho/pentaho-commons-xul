@@ -16,6 +16,9 @@ public interface XulScale extends XulComponent {
   public void setPageincrement(int increment);
   public int getPageincrement();
   
+  public void setInc(int increment);
+  public int getInc();
+  
   public void setValue(int value);
   public int getValue();
   
