@@ -47,7 +47,7 @@ public class GwtFileDialog extends AbstractGwtXulContainer implements XulFileDia
     RootPanel.get().add(uploadForm);    
     this.managedObject = uploadForm;
   }
-
+  
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     if(container != null) {

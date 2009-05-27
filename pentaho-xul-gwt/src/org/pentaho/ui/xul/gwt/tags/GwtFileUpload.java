@@ -1,0 +1,145 @@
+package org.pentaho.ui.xul.gwt.tags;
+
+import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
+import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.components.XulFileUpload;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
+import org.pentaho.ui.xul.gwt.GwtXulHandler;
+import org.pentaho.ui.xul.gwt.GwtXulParser;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUpload{
+  private String uploadSuccessMethod, uploadFailureMethod;
+  public final static String ERROR = "ERROR:";  
+  private FormPanel uploadForm = null;
+  private FileUpload upload = null; 
+  private VerticalPanel mainPanel;
+  private String action;
+  private static final String ELEMENT_NAME = "pen:fileupload"; //$NON-NLS-1$
+  public static void register() {
+    GwtXulParser.registerHandler(ELEMENT_NAME,
+    new GwtXulHandler() {
+      public Element newInstance() {
+        return new GwtFileUpload();
+      }
+    });
+  }
+
+  public GwtFileUpload() {
+    super(ELEMENT_NAME);
+    this.managedObject = new VerticalPanel();;
+  }
+
+  @SuppressWarnings("deprecation")
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    managedObject = mainPanel = new VerticalPanel();
+
+    super.init(srcEle, container);
+    if (!StringUtils.isEmpty(srcEle.getAttribute("action"))) {
+      setAction(srcEle.getAttribute("action"));
+    }
+    if (!StringUtils.isEmpty(srcEle.getAttribute("onuploadsuccess"))) {
+      setOnUploadSuccess(srcEle.getAttribute("onuploadsuccess"));
+    }
+    if (!StringUtils.isEmpty(srcEle.getAttribute("onuploadfailure"))) {
+      setOnUploadFailure(srcEle.getAttribute("onuploadfailure"));
+    }
+    
+    uploadForm = new FormPanel();
+    uploadForm.setAction(GWT.getModuleBaseURL() + getAction());
+    uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
+    uploadForm.setMethod(FormPanel.METHOD_POST);
+    // Create a panel to hold all of the form widgets.
+    VerticalPanel panel = new VerticalPanel();
+    panel.setSpacing(3);
+    uploadForm.setWidget(panel);
+    uploadForm.setVisible(true);
+    // Create a FileUpload widget.
+    upload = new FileUpload();
+    upload.setName("uploadFormElement"); //$NON-NLS-1$
+    upload.setVisible(true);
+    panel.add(upload);
+    mainPanel.add(uploadForm);
+    
+    // Add a 'Upload' button.
+    RoundedButton uploadSubmitButton = new RoundedButton("Upload");
+    panel.setSpacing(3);
+    panel.add(uploadSubmitButton);
+
+    uploadSubmitButton.addClickListener(new ClickListener() {
+      public void onClick(Widget sender) {
+        uploadForm.submit();
+      }
+    });
+
+    uploadForm.addFormHandler(new FormHandler() {
+      public void onSubmit(FormSubmitEvent event) {
+      }
+
+      public void onSubmitComplete(FormSubmitCompleteEvent event) {
+        String results = event.getResults();
+        try {
+          if(results != null && results.indexOf(ERROR) >= 0) {
+           if(results.indexOf(ERROR) + ERROR.length() < results.length()) {
+             GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable(results.substring(results.indexOf(ERROR) + ERROR.length()))});           
+           } else {
+             GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable(results)});           
+           }
+          } else {
+            if(results != null) {
+              String result = results.replaceAll("\\<.*?>","");
+              GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadSuccess(), new Object[] {result});
+            } else {
+              GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable("Unable to find upload service or Upload service returned nothing")});
+            }
+          }
+        } catch(XulException xule) {
+          xule.printStackTrace(); 
+        }
+      }
+    });
+
+    uploadForm.setWidth("100%");
+
+  }
+
+  public String getAction() {
+    return action;
+  }
+
+
+  public String getOnUploadFailure() {
+    return uploadFailureMethod;
+  }
+
+  public String getOnUploadSuccess() {
+    return uploadSuccessMethod;
+  }
+
+
+  public void setAction(String action) {
+    this.action = action;
+  }
+
+  public void setOnUploadFailure(String method) {
+   this.uploadFailureMethod = method;   
+  }
+
+  public void setOnUploadSuccess(String method) {
+    this.uploadSuccessMethod = method;    
+  }
+
+}
