@@ -282,20 +282,6 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     }
   }
 
-  @Override
-  public void setHeight(int height) {
-    if(dialog != null) {
-      dialog.setHeight(getHeight()+"px");//$NON-NLS-1$   
-    }
-   }
-
-  @Override
-  public void setWidth(int width) {
-    if(dialog != null) {
-      dialog.setWidth(width+"px");//$NON-NLS-1$  
-    }
-  }
-
   public void show() {
 
     // create a new dialog if necessary
