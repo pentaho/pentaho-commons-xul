@@ -801,6 +801,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
           case LABEL:
             JLabel lbl = new JLabel(cell.getLabel());
             comp = lbl;
+            control = lbl;
             break;
           default:
             final JTextField label = new JTextField((String) value);
@@ -895,8 +896,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       if (cell == null) {
         return null;
       }
+      
+      ColumnType colType = col.getColumnType();
+      if(colType == ColumnType.DYNAMIC){
+        colType = ColumnType.valueOf(extractDynamicColType(elements.toArray()[rowIndex], columnIndex));
+      }
+      
       try {
-        switch (col.getColumnType()) {
+        switch (colType) {
           case CHECKBOX:
             if (cell.getValue() != null) {
               return cell.getValue();
