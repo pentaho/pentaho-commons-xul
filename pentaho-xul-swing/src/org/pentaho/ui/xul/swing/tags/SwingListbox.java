@@ -42,6 +42,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   private String binding;
 
   private int[] curSelectedIndices = new int[0];
+  private int curSelectedIndex = -1;
   
   public SwingListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -170,9 +171,12 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   private void fireSetSelectedIndices(int[] indices) {
     if(!Arrays.equals(curSelectedIndices, indices)) {
       this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
-      this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndices, getSelectedIndex());
       curSelectedIndices = indices;
     }
+
+    this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndex, getSelectedIndex());
+    curSelectedIndex = getSelectedIndex();
+    
   }
   
   public void addItem(Object item) {
