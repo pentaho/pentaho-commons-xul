@@ -393,6 +393,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   private void updateColumnModel(){
     TableColumnModel columnModel = table.getColumnModel();
+    totalFlex = 0;
 
     for (int i = 0; i < columns.getChildNodes().size(); i++) {
       if (i >= columnModel.getColumnCount()) {
@@ -444,9 +445,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       }
 
       public void componentResized(ComponentEvent e) {
-        if (loaded) {
-          return;
-        }
+//        if (loaded) {
+//          return;
+//        }
         Rectangle size = table.getBounds();
         int newWidth = size.width;
         if (SwingTree.this.rows > -1) {
@@ -456,14 +457,19 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         int newHeight = size.height;
 
         for (int i = 0; i < table.getColumnCount(); i++) {
-          int flex = SwingTree.this.columns.getColumn(table.getColumnModel().getColumn(i).getModelIndex()).getFlex();
-          int newColWidth = (int) (newWidth * ((double) flex / totalFlex));
+          int newColWidth = 50; //reasonable default size
+          if(totalFlex > 0){
+            int flex = SwingTree.this.columns.getColumn(table.getColumnModel().getColumn(i).getModelIndex()).getFlex();
+            newColWidth = (int) (newWidth * ((double) flex / totalFlex));
+          } else {
+            newColWidth = (int) (newWidth * ((double) 1/ table.getColumnCount()));
+            
+          }
 
-          int headerWidth = table.getColumnModel().getColumn(i).getPreferredWidth();
-          int setWidth = newColWidth; //(headerWidth > newColWidth) ? headerWidth : newColWidth;
+          table.getColumnModel().getColumn(i).setWidth(newColWidth);
+          table.getColumnModel().getColumn(i).setPreferredWidth(newColWidth);
 
-          table.getColumnModel().getColumn(i).setWidth(setWidth);
-          table.getColumnModel().getColumn(i).setPreferredWidth(setWidth);
+          table.getColumnModel().getColumn(i).setMinWidth(newColWidth);
         }
         loaded = true;
 
@@ -1102,6 +1108,18 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                     domContainer.addBinding(binding);
                   }
 
+                } else if(colType.equalsIgnoreCase("checkbox")) {
+
+                  if(StringUtils.isNotEmpty(exp.getModelAttr())){
+                    DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, "value");
+                    
+                    if (!this.editable) {
+                      binding.setBindingType(Binding.Type.ONE_WAY);
+                    }
+                    domContainer.addBinding(binding);
+                    binding.fireSourceChanged();
+                  }
+                  
                 } else {
                   if(StringUtils.isNotEmpty(exp.getModelAttr())){
                     DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
