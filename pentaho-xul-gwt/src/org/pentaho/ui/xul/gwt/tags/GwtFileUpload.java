@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUpload{
   private String uploadSuccessMethod, uploadFailureMethod;
-  public final static String ERROR = "ERROR:";  
+  public final static String ERROR = ".ERROR_";  
   private FormPanel uploadForm = null;
   private FileUpload upload = null; 
   private VerticalPanel mainPanel;
@@ -94,9 +94,8 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
         try {
           if(results != null && results.indexOf(ERROR) >= 0) {
            if(results.indexOf(ERROR) + ERROR.length() < results.length()) {
-             GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable(results.substring(results.indexOf(ERROR) + ERROR.length()))});           
-           } else {
-             GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable(results)});           
+             String result = results.replaceAll("\\<.*?>","");
+             GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable(result)});
            }
           } else {
             if(results != null) {
