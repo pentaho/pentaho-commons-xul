@@ -322,14 +322,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
     final GwtTreeCell cell = (GwtTreeCell) getRootChildren().getItem(y).getRow().getCell(x);
 
-    if(StringUtils.isEmpty(colType) == false && colType.equalsIgnoreCase("dynamic")){
+    if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
       Object row = elements.toArray()[y];
       colType = extractDynamicColType(row, x);
     }
 
-    if(StringUtils.isEmpty(colType)){
+    if(StringUtils.isEmpty(colType) || !column.isEditable()){
       return new HTML(val);
-    } else if(colType.equalsIgnoreCase("text")){
+    } else if(colType.equals("text")){
 
       try{
 
@@ -367,7 +367,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         b.setText(val);
         return b;
       }
-    } else if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox")){
+    } else if(colType.equals("combobox") || colType.equals("editablecombobox")){
       final CustomListBox lb = new CustomListBox();
 
       lb.setWidth("100%");
@@ -382,7 +382,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
         public void onChange(Widget arg0) {
 
-            if(column.getType().equalsIgnoreCase("editablecombobox")){
+            if(column.getType().equals("editablecombobox")){
             cell.setLabel(lb.getValue());
           } else {
             cell.setSelectedIndex(lb.getSelectedIndex());
@@ -398,7 +398,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       if(idx < vals.size()){
         lb.setSelectedIndex(idx);
       }
-      if(colType.equalsIgnoreCase("editablecombobox")){
+      if(colType.equals("editablecombobox")){
         lb.setEditable(true);
       }
 
@@ -663,11 +663,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
               for (InlineBindingExpression exp : column.getBindingExpressions()) {
 
                 String colType = column.getType();
-                if(StringUtils.isEmpty(colType) == false && colType.equalsIgnoreCase("dynamic")){
+                if(StringUtils.isEmpty(colType) == false && colType.equals("dynamic")){
                   colType = extractDynamicColType(o, x);
                 }
 
-                if(colType != null && (colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))){
+                if(colType != null && (colType.equals("combobox") || colType.equals("editablecombobox"))){
                   GwtBinding binding = new GwtBinding(o, column.getCombobinding(), cell, "value");
                   binding.setBindingType(Binding.Type.ONE_WAY);
                   domContainer.addBinding(binding);

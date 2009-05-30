@@ -87,6 +87,16 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
 
     uploadForm.addFormHandler(new FormHandler() {
       public void onSubmit(FormSubmitEvent event) {
+        if(upload.getFilename() == null) {
+          try {
+            GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable("No file has been selected. Please select the file to upload")});
+            return;
+          } catch (XulException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          
+        }
       }
 
       public void onSubmitComplete(FormSubmitCompleteEvent event) {
