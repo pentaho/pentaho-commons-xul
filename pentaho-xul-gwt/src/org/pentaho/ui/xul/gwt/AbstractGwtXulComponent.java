@@ -104,7 +104,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     
     if (hasAttribute(srcEle,"visible")) {
       try {
-        Window.alert("Visible tag found: " + srcEle.getAttribute("visible")); //$NON-NLS-1$ //$NON-NLS-2$
         setVisible(srcEle.getAttribute("visible").equalsIgnoreCase("true")? true : false); //$NON-NLS-1$ //$NON-NLS-2$
       } catch (Exception e) {
         e.printStackTrace();
@@ -158,14 +157,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       return;
     }
     
-    if(this.visible == false){
-      Window.alert("Alpha"); //$NON-NLS-1$
-    }
-    
-    if(this.visible == false && this.container != null){
-      Window.alert("Bravo"); //$NON-NLS-1$
-      ((Widget) container).getElement().getStyle().setProperty("display", "none"); //$NON-NLS-1$ //$NON-NLS-2$
-    }
+    setVisible(isVisible());
     
     double totalFlex = 0.0;
     
@@ -476,6 +468,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setVisible(boolean visible) {
     this.visible = visible;
+    
+    if(this.container != null){
+      ((Widget) this.container).getElement().getStyle().setProperty("display", (this.visible) ? "" : "none"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    }
   }
 
   public void onDomReady() {
@@ -537,6 +533,14 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       } catch (Exception e) {
         e.printStackTrace();
       }
+    }
+    
+    if (StringUtils.isEmpty(component.getAttributeValue("visible")) == false){ //$NON-NLS-1$
+      try {
+        setVisible(component.getAttributeValue("visible").equalsIgnoreCase("true")? true : false); //$NON-NLS-1$ //$NON-NLS-2$
+      } catch (Exception e) {
+        e.printStackTrace();
+      }      
     }
   
   }
