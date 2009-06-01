@@ -294,7 +294,9 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
       try {
         GwtBindingMethod m = GwtBindingContext.typeController.findGetMethod(t, attribute);
         if(m == null){
-          System.out.println("could not find getter method for "+t+"."+attribute); //$NON-NLS-1$ //$NON-NLS-2$
+          System.out.println("could not find getter method for "+t+"."+attribute+"; returning toString"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+          return t.toString();
+          
         }
         return m.invoke(t, new Object[]{}).toString();
         
