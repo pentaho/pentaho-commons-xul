@@ -94,37 +94,40 @@ public class EventHandlerGenerator extends Generator {
     try{
       JClassType classType = typeOracle.getType(typeName);
       
-      
-      for(JMethod m : classType.getMethods()){
-        String methodName = m.getName();
+      do{
+        for(JMethod m : classType.getMethods()){
+          String methodName = m.getName();
 
-        if(!m.isPublic()){
-          continue;
-        }
-        
-        sourceWriter.println("if(method.equals(\""+methodName+"\")){");
-        sourceWriter.indent();
-        
-        boolean firstParam = true;
-        //method call
-        sourceWriter.print("handler."+methodName+"(");
-        int argPos = 0;
-        for(JParameter param : m.getParameters()){
-          if(!firstParam){
-            sourceWriter.print(", ");
-          } else {
-            firstParam = false;
+          if(!m.isPublic()){
+            continue;
           }
-          sourceWriter.print("("+boxPrimative(param.getType())+") args["+argPos+"]");
-          argPos++;
+          
+          sourceWriter.println("if(method.equals(\""+methodName+"\")){");
+          sourceWriter.indent();
+          
+          boolean firstParam = true;
+          //method call
+          sourceWriter.print("handler."+methodName+"(");
+          int argPos = 0;
+          for(JParameter param : m.getParameters()){
+            if(!firstParam){
+              sourceWriter.print(", ");
+            } else {
+              firstParam = false;
+            }
+            sourceWriter.print("("+boxPrimative(param.getType())+") args["+argPos+"]");
+            argPos++;
+          }
+          sourceWriter.print(");");
+          //end method call
+          
+          sourceWriter.println("return;");
+          sourceWriter.outdent();
+          sourceWriter.println("}");
         }
-        sourceWriter.print(");");
-        //end method call
-        
-        sourceWriter.println("return;");
-        sourceWriter.outdent();
-        sourceWriter.println("}");
-      } 
+      } while( (classType = classType.getSuperclass()).getSimpleSourceName().equals("Object") == false);
+      
+       
     } catch (Exception e) {
 
       // record to logger that Map generation threw an exception 
