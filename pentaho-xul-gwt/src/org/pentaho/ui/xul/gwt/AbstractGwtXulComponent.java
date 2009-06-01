@@ -101,6 +101,15 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         e.printStackTrace();
       }
     }
+    
+    if (hasAttribute(srcEle,"visible")) {
+      try {
+        Window.alert("Visible tag found: " + srcEle.getAttribute("visible")); //$NON-NLS-1$ //$NON-NLS-2$
+        setVisible(srcEle.getAttribute("visible").equalsIgnoreCase("true")? true : false); //$NON-NLS-1$ //$NON-NLS-2$
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
 
     if (hasAttribute(srcEle,"position")) {
       try {
@@ -148,6 +157,16 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       //Core version of parser doesn't call layout unless the node is a container...
       return;
     }
+    
+    if(this.visible == false){
+      Window.alert("Alpha"); //$NON-NLS-1$
+    }
+    
+    if(this.visible == false && this.container != null){
+      Window.alert("Bravo"); //$NON-NLS-1$
+      ((Widget) container).getElement().getStyle().setProperty("display", "none"); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+    
     double totalFlex = 0.0;
     
     for(XulComponent comp : this.getChildNodes()) {

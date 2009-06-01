@@ -36,7 +36,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public String getLabel() {
-    return (getAttributeValue("label") != null && getAttributeValue("label").trim().length() > 0) ? getAttributeValue("label") : "&nbsp;";
+    return getAttributeValue("label");
   }
 
   public int getSelectedIndex() {
