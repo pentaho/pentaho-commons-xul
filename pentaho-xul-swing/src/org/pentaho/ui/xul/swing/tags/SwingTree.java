@@ -519,6 +519,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       }
 
     });
+    
+    this.setExpanded(this.getExpanded());
 
   }
 
@@ -1032,6 +1034,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   private boolean suppressEvents = false;
   private Collection elements;
+
+  private boolean expanded;
   public <T> void setElements(Collection<T> elements) {
     suppressEvents = true;
     this.elements = elements;
@@ -1275,6 +1279,24 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       }
     }
     return null;
+  }
+  
+  public void setExpanded(boolean expanded){
+    this.expanded = expanded;
+    if(this.tree != null){
+      int rowCount = 0;
+      int newRowCount = 0;
+      while((newRowCount = tree.getRowCount()) > 0 && newRowCount > rowCount){
+        rowCount = newRowCount;
+        for(int i=0; i<rowCount; i++){
+          tree.expandRow(i);
+        }
+      }
+    }
+  }
+  
+  public boolean getExpanded(){
+    return this.expanded;
   }
   
 
