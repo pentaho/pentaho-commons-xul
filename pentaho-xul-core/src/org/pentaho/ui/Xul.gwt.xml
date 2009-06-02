@@ -24,6 +24,7 @@
         <include name="**/util/Orient*"/>
         <include name="**/util/Align*"/>
         <include name="**/util/TextType*"/>
+        <include name="**/util/TreeCellEditor*"/>
       </source>
 	
 </module>

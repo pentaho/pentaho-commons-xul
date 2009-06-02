@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.containers;
 import java.util.Collection;
 
 import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.util.TreeCellEditor;
 
 public interface XulTree extends XulContainer {
 
@@ -73,4 +74,6 @@ public interface XulTree extends XulContainer {
   <T> Collection<T> getElements();
 
   Object getSelectedItem();
+  
+  void registerCellEditor(String key, TreeCellEditor editor);
 }
