@@ -63,6 +63,7 @@ import org.pentaho.ui.xul.swt.tags.treeutil.XulTableContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeLabelProvider;
 import org.pentaho.ui.xul.util.ColumnType;
+import org.pentaho.ui.xul.util.TreeCellEditor;
 
 public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
@@ -779,6 +780,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   public Object getSelectedItem() {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  public void registerCellEditor(String key, TreeCellEditor editor) {
+    // TODO Auto-generated method stub
+    
   }
   
   
