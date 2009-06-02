@@ -490,7 +490,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     
   }
   
-  
-  
+  public void setModal(Boolean modal) {
+   throw new RuntimeException("Not Yet Implemented");
+  }
   
 }
