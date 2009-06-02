@@ -418,9 +418,18 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     String cols[] = new String[getColumns().getColumnCount()];
     int len[] = new int[cols.length];
     // for each column
+    
+    
+    int totalFlex = 0;
+    for (int i = 0; i < cols.length; i++) {
+      totalFlex += getColumns().getColumn(i).getFlex();
+    }
+    
     for (int i = 0; i < cols.length; i++) {
       cols[i] = getColumns().getColumn(i).getLabel();
-      len[i] = 100;
+      if(totalFlex > 0 && getWidth() > 0){
+        len[i] = (int) (getWidth() * ((double) getColumns().getColumn(i).getFlex() / totalFlex))  - 15;
+      } 
     }
     
     // use base table from pentaho widgets library for now
@@ -432,7 +441,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       policy = SelectionPolicy.MULTI_ROW;
     }
     
-    table = new BaseTable(cols, null, new BaseColumnComparator[cols.length], policy);
+    int[] colWidths = (getWidth() > 0 && totalFlex > 0) ? len : null;
+    table = new BaseTable(cols, colWidths, new BaseColumnComparator[cols.length], policy);
 
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
@@ -831,8 +841,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void adoptAttributes(XulComponent component) {
-    super.adoptAttributes(component);
-    
+    super.adoptAttributes(component);    
   }
 
   public Object getSelectedItem() {
