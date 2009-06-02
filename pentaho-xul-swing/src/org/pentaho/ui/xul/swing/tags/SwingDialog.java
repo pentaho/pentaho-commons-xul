@@ -47,6 +47,8 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
   private JDialog dialog = null;
   
   private Boolean resizable = false;
+  
+  private Boolean modal = true;
 
   private String buttonlabelaccept;
 
@@ -295,6 +297,14 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
       dialog.setSize(width, dialog.getSize().height);
     }
   }
+  
+  public void setModal(Boolean modal) {
+  	this.modal = modal;
+  }
+  
+  public Boolean isModal() {
+  	return modal;
+  }
 
   public String getButtonalign() {
     return this.buttonAlignment.toString().toLowerCase();
@@ -387,7 +397,7 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     mainPanel.setBorder(BorderFactory.createEmptyBorder(pad, pad, pad, pad));
 
     dialog.setTitle(title);
-    dialog.setModal(true);
+    dialog.setModal(isModal());
     dialog.add(mainPanel, BorderLayout.CENTER);
     mainPanel.add(container, BorderLayout.CENTER);
     container.setOpaque(false);

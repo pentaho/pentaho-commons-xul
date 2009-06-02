@@ -54,5 +54,6 @@ public interface XulDialog extends XulRoot {
   public Boolean getResizable();
 
   public void setResizable(Boolean resizable);
-
+  
+  public void setModal(Boolean modal);
 }
