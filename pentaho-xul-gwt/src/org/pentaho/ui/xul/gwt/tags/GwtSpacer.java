@@ -42,6 +42,6 @@ public class GwtSpacer extends AbstractGwtXulComponent implements XulSpacer {
   
 
   public void adoptAttributes(XulComponent component) {
-    
+    super.adoptAttributes(component);
   }
 }
