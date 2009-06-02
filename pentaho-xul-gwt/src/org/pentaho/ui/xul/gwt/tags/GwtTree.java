@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
+import org.pentaho.gwt.widgets.client.dialogs.PromptDialogBox;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
+import org.pentaho.gwt.widgets.client.listbox.DefaultListItem;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
 import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
@@ -32,11 +38,21 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.util.TreeCellEditor;
+import org.pentaho.ui.xul.util.TreeCellEditorListener;
 
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.PopupListener;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -72,6 +88,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private boolean suppressEvents = false;
   private boolean editable = false;
   private boolean visible = true;
+  
+  private Map<String, TreeCellEditor> customEditors = new HashMap<String, TreeCellEditor>();
   
   public boolean isVisible() {
     return visible;
@@ -117,7 +135,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     // time we call setup{Tree|Table}; because the widget is thrown away, we need to reconnect the new widget to the
     // simplePanel, which is the managedObject
     managedObject = simplePanel;
-   
+    
+    this.registerCellEditor("custom-editor", new CustomEditor());   
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -403,6 +422,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       }
 
       return lb;
+      
+    } else if (colType != null && customEditors.containsKey(colType)){
+      return new CustomCellEditorWrapper(cell, customEditors.get(colType));
       
     } else {
       if(val == null || val.equals("")){
@@ -715,6 +737,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                     domContainer.addBinding(binding);
                   }
 
+                } else if(colType != null && this.customEditors.containsKey(colType)){
+                  
+                  GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, "value");
+                  binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+                  
                 } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){
                 
                   GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
@@ -849,6 +878,95 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     return null;
   }
 
+  public void registerCellEditor(String key, TreeCellEditor editor){
+    customEditors.put(key, editor);
+  }
+
+  public static class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorListener{
+    
+    private TreeCellEditor editor;
+    private Label label = new Label();
+    private XulTreeCell cell;
+    
+    public CustomCellEditorWrapper(XulTreeCell cell, TreeCellEditor editor){
+      super();
+      this.sinkEvents(Event.MOUSEEVENTS);
+      this.editor = editor;
+      this.cell = cell;
+      this.add( label );
+      this.label.setText(cell.getValue().toString());
+      
+      editor.addTreeCellEditorListener(this);
+    }
+    
+    public void onCellEditorClosed(Object value) {
+      this.label.setText(value.toString());
+      cell.setValue(value);
+    }
+
+    @Override
+    public void onBrowserEvent(Event event) {
+      int code = event.getTypeInt();
+      switch(code){
+        case Event.ONMOUSEUP:
+          editor.setValue(cell.getValue());
+          editor.show();
+        default:
+          break;
+      }
+      super.onBrowserEvent(event);
+    }
+    
+    
+  }
   
+  private static class CustomEditor implements TreeCellEditor, PopupListener{
+    
+    PromptDialogBox dialog;
+    
+    TextBox txt = new TextBox();
+    private TreeCellEditorListener listener;
+    
+    public CustomEditor(){
+      dialog = new PromptDialogBox("Enter Value", "Ok", "Cancel", true, false);
+      dialog.addPopupListener(this);
+      
+      HorizontalPanel panel = new HorizontalPanel();
+      panel.add(new Label("Enter Your Name"));
+      panel.add(txt);
+      dialog.setContent(panel);
+      
+    }
+    
+    public Object getValue() {
+      return txt.getText();
+    }
+
+    public void hide() {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void setValue(Object val) {
+      txt.setText(val.toString());
+      
+    }
+
+    public void show() {
+      dialog.getElement().getStyle().setProperty("zIndex", "10000");
+      dialog.center();
+    }
+
+    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
+      this.listener.onCellEditorClosed(txt.getText());
+    }
+    
+    public void addTreeCellEditorListener(TreeCellEditorListener listener){
+      this.listener = listener;
+    }
+    
+    
+    
+  }
 
 }

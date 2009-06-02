@@ -7,7 +7,7 @@
   
   See common_build.xml for more details
 ============================================================================-->
-<project name="Pentaho Reporting Platform Plugin" basedir="." default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="pentaho-xul-gwt" basedir="." default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<description>
 	  This build file is used to create the Pentaho Commons Action Sequence DOM 
