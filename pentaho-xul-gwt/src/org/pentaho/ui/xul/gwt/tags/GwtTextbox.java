@@ -25,7 +25,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   protected boolean readonly;
   protected boolean multiline = false;
   private Integer rows;
-  private Integer cols;
+  private Integer cols = -1;
   private String value;
   
   public static void register() {
@@ -97,8 +97,11 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       default: //regular text  
         if (multiline) {
           managedObject = textBox = new TextArea();
-          ((TextArea)textBox).setCharacterWidth(cols);
-          ((TextArea)textBox).setVisibleLines(rows);
+          
+          if(cols != null && cols > -1){
+            ((TextArea)textBox).setCharacterWidth(cols);
+            ((TextArea)textBox).setVisibleLines(rows);
+          }
           
         } else {
           //managedObject = textBox = new TextBox();
