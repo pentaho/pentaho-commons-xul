@@ -1017,11 +1017,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public void setSelectedRows(int[] rows) {
-    table.clearSelection();
-    for (int row : rows) {
-      table.changeSelection(row, -1, false, false);
+    if (isHierarchical) {
+      tree.setSelectionRows(rows);
+    } else {
+      table.clearSelection();
+      for (int row : rows) {
+        table.changeSelection(row, -1, false, false);
+      }
     }
-
   }
 
   public String getOnedit() {
