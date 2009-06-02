@@ -476,5 +476,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   public void setResizable(Boolean resizable) {
     this.resizable = resizable;
   }
+
+  public void setModal(Boolean modal) {
+   throw new RuntimeException("Not Yet Implemented");
+  }
+  
+  
   
 }
