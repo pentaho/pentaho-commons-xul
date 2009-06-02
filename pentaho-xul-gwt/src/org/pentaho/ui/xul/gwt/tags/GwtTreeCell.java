@@ -88,7 +88,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   public void setValue(Object value) {
     Object previousVal = this.value;
     
-    if (value instanceof String && ((String) value).indexOf(",") == -1) {
+    if (value instanceof String && ((String) value).indexOf(",") == -1 && (value.equals("false") || value.equals("true"))) {
       //String and not a comma separated list
       this.value = Boolean.parseBoolean(((String) value));
     } else if (value instanceof String && ((String) value).indexOf(",") > -1) {
