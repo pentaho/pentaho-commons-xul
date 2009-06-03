@@ -400,8 +400,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       lb.addChangeListener(new ChangeListener(){
 
         public void onChange(Widget arg0) {
-
-            if(column.getType().equalsIgnoreCase("editablecombobox")){
+          if(column.getType().equalsIgnoreCase("editablecombobox")){
             cell.setLabel(lb.getValue());
           } else {
             cell.setSelectedIndex(lb.getSelectedIndex());
@@ -675,6 +674,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
   public <T> void setElements(Collection<T> elements) {
 
+    Window.alert("set elements!");
     try{
       this.elements = elements;
       suppressEvents = true;
@@ -703,6 +703,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                 }
 
                 if(colType != null && (colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))){
+                  Window.alert("Combobox");
                   GwtBinding binding = new GwtBinding(o, column.getCombobinding(), cell, "value");
                   binding.setBindingType(Binding.Type.ONE_WAY);
                   domContainer.addBinding(binding);
@@ -728,6 +729,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                   binding.fireSourceChanged();
 
                   if(colType.equalsIgnoreCase("editablecombobox")){
+                    Window.alert("adding editablecombobox binding");
                     binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                     if (!this.editable) {
                       binding.setBindingType(Binding.Type.ONE_WAY);
@@ -882,7 +884,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     customEditors.put(key, editor);
   }
 
-  public static class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorListener{
+  public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorListener{
     
     private TreeCellEditor editor;
     private Label label = new Label();
@@ -910,7 +912,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       switch(code){
         case Event.ONMOUSEUP:
           editor.setValue(cell.getValue());
-          editor.show();
+          
+          int col = cell.getParent().getChildNodes().indexOf(cell);
+          XulTreeItem item = (XulTreeItem) cell.getParent().getParent();
+          int row = item.getParent().getChildNodes().indexOf(item);
+          Object boundObj = (GwtTree.this.getElements() != null) ? GwtTree.this.getElements().toArray()[row] : null;
+          String columnBinding = GwtTree.this.getColumns().getColumn(col).getBinding();
+          
+          editor.show(row, col, boundObj, columnBinding);
         default:
           break;
       }
@@ -952,7 +961,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       
     }
 
-    public void show() {
+    public void show(int row, int col, Object boundObj, String columnBinding) {
       dialog.getElement().getStyle().setProperty("zIndex", "10000");
       dialog.center();
     }
