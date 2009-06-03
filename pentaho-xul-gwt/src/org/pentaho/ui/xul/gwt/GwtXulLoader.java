@@ -1,6 +1,9 @@
 package org.pentaho.ui.xul.gwt;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
 import org.pentaho.ui.xul.XulComponent;
@@ -152,6 +155,9 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
     
     GwtXulDomContainer container = new GwtXulDomContainer();
     container.setLoader(this);
+    List<Object> resourceBundles = new ArrayList<Object>();
+    resourceBundles.add(bundle);
+    container.setResourceBundles(resourceBundles);
     parser.setContainer(container);
     parser.parseDocument(document.getDocumentElement());
    

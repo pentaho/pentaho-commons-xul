@@ -1,6 +1,8 @@
 package org.pentaho.ui.xul.gwt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.pentaho.gwt.widgets.client.utils.MessageBundle;
@@ -11,7 +13,6 @@ import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.binding.Binding;
-import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
@@ -24,6 +25,7 @@ public class GwtXulDomContainer implements XulDomContainer {
   Map<String, XulEventHandler> handlers = new HashMap<String, XulEventHandler>();
   Map<XulEventHandler, EventHandlerWrapper> handlerWrapers = new HashMap<XulEventHandler, EventHandlerWrapper>();
   GwtXulLoader loader;
+  private List<Object> resourceBundles = new ArrayList<Object>();
   
   protected GwtBindingContext bindings;
   
@@ -372,6 +374,18 @@ public class GwtXulDomContainer implements XulDomContainer {
   public void removeOverlay(String src) throws XulException {
     throw new RuntimeException("not yet implemented");
     
+  }
+
+  public void setResourceBundles(final List<Object> resourceBundles) {
+    if (resourceBundles != null) {
+      this.resourceBundles = resourceBundles;
+    } else {
+      this.resourceBundles = new ArrayList<Object>();
+    }
+  }
+
+  public List<Object> getResourceBundles() {
+    return resourceBundles;
   }
 
 }
