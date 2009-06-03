@@ -24,6 +24,7 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   private String bindingChildrenProperty;
   private String columnTypeBinding;
   private String disabledBinding;
+  private String colType;
 
   public SwingTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecol");
@@ -54,7 +55,7 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
 	}
 
 	public String getType() {
-		return this.type.toString();
+		return this.colType;
 	}
 
 	public int getWidth() {
@@ -126,8 +127,12 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
 	}
 
 	public void setType(String type) {
-		this.type = ColumnType.valueOf(type.toUpperCase());
-		
+	  this.colType = type;
+	  try{
+      this.type = ColumnType.valueOf(type.toUpperCase());
+    } catch(Exception e){
+      this.type = ColumnType.CUSTOM;
+    }
 	}
 
 	public void setWidth(int width) {

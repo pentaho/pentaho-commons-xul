@@ -10,12 +10,16 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.CellEditor;
@@ -25,6 +29,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -49,6 +54,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellEditor;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
@@ -73,6 +79,7 @@ import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.util.ColumnType;
+import org.pentaho.ui.xul.util.TreeCellEditorListener;
 
 public class SwingTree extends AbstractSwingContainer implements XulTree {
 
@@ -105,6 +112,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   private Vector<String> columnNames = new Vector<String>();
 
   private boolean isHierarchical = false;
+  
+  private Map<String, org.pentaho.ui.xul.util.TreeCellEditor> customEditors = new HashMap<String, org.pentaho.ui.xul.util.TreeCellEditor>();
+  
 
   // TODO: migrate to XulTree interface
   public enum SELECTION_MODE {
@@ -120,6 +130,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     this.domContainer = domContainer;
 
+    this.registerCellEditor("custom-editor", new CustomTreeCellEditor());
+    
   }
 
   public JTable getTable() {
@@ -692,6 +704,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
             }
             comboBox.setEnabled(! cell.isDisabled());
             return comboBox;
+          case CUSTOM:
+            return new CustomCellEditorWrapper(cell, customEditors.get(col.getType()));
           default:
             JLabel label = new JLabel((String) value);
 
@@ -811,6 +825,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
             comp = lbl;
             control = lbl;
             break;
+          case CUSTOM:
+            return new CustomCellEditorWrapper(cell, customEditors.get(col.getType()));
           default:
             final JTextField label = new JTextField((String) value);
 
@@ -1127,6 +1143,13 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                     binding.fireSourceChanged();
                   }
                   
+                } else if(colType != null && this.customEditors.containsKey(colType)){
+                  
+                  DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, "value");
+                  binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+                  domContainer.addBinding(binding);
+                  binding.fireSourceChanged();
+                  
                 } else {
                   if(StringUtils.isNotEmpty(exp.getModelAttr())){
                     DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
@@ -1301,7 +1324,77 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public boolean getExpanded(){
     return this.expanded;
   }
-  
 
+  public void registerCellEditor(String key,
+      org.pentaho.ui.xul.util.TreeCellEditor editor) {
+    this.customEditors.put(key, editor);
+    
+  }
+    
+  private class CustomCellEditorWrapper extends JLabel implements TreeCellEditorListener{
+
+    private org.pentaho.ui.xul.util.TreeCellEditor editor;
+    private XulTreeCell cell;
+    public CustomCellEditorWrapper(XulTreeCell cell, org.pentaho.ui.xul.util.TreeCellEditor editor){
+      super();
+      this.editor = editor;
+      editor.addTreeCellEditorListener(this);
+      this.cell = cell;
+      this.setText(this.cell.getValue().toString());
+      
+      final int col = cell.getParent().getChildNodes().indexOf(cell);
+      XulTreeItem item = (XulTreeItem) cell.getParent().getParent();
+      final int row = item.getParent().getChildNodes().indexOf(item);
+      final Object boundObj = (SwingTree.this.getElements() != null) ? SwingTree.this.getElements().toArray()[row] : null;
+      final String columnBinding = SwingTree.this.getColumns().getColumn(col).getBinding();
+      
+      this.addMouseListener(new MouseAdapter(){
+
+        
+        @Override
+        public void mousePressed(MouseEvent arg0) {
+          CustomCellEditorWrapper.this.editor.show(row, col, boundObj, columnBinding);
+        }
+        
+        
+        
+      });
+    }
+    
+    public void onCellEditorClosed(Object value) {
+      this.setText(value.toString());
+      cell.setValue(value);
+    }
+    
+  }
+  
+  private static class CustomTreeCellEditor implements org.pentaho.ui.xul.util.TreeCellEditor{
+    private TreeCellEditorListener listener;
+    
+    public void addTreeCellEditorListener(TreeCellEditorListener listener) {
+      this.listener = listener;
+    }
+
+    public Object getValue() {
+      // TODO Auto-generated method stub
+      return null;
+    }
+
+    public void hide() {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void setValue(Object val) {
+      // TODO Auto-generated method stub
+      
+    }
+
+    public void show(int row, int col, Object boundObj, String columnBinding) {
+      String returnVal = JOptionPane.showInputDialog("Enter a Value");
+      this.listener.onCellEditorClosed(returnVal);
+    }
+    
+  }
   
 }
