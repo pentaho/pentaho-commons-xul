@@ -674,7 +674,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
   public <T> void setElements(Collection<T> elements) {
 
-    Window.alert("set elements!");
     try{
       this.elements = elements;
       suppressEvents = true;
@@ -703,7 +702,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                 }
 
                 if(colType != null && (colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))){
-                  Window.alert("Combobox");
                   GwtBinding binding = new GwtBinding(o, column.getCombobinding(), cell, "value");
                   binding.setBindingType(Binding.Type.ONE_WAY);
                   domContainer.addBinding(binding);
@@ -729,7 +727,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                   binding.fireSourceChanged();
 
                   if(colType.equalsIgnoreCase("editablecombobox")){
-                    Window.alert("adding editablecombobox binding");
                     binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                     if (!this.editable) {
                       binding.setBindingType(Binding.Type.ONE_WAY);
