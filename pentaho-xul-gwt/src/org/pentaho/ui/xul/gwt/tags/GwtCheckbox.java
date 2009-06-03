@@ -19,7 +19,7 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   
   static final String ELEMENT_NAME = "checkbox"; //$NON-NLS-1$
   private String command;
-  
+  private boolean checked;
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -85,7 +85,10 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   }
 
   public void setChecked(boolean checked) {
+   boolean previousVal = this.checked;
    checkBox.setChecked(checked); 
+   this.checked = checked;
+   this.firePropertyChange("checked", previousVal, checked);
   }
 
   public void setDisabled(boolean dis) {

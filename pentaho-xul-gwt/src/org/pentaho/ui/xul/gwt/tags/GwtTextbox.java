@@ -1,10 +1,12 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.GwtDomElement;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.TextType;
@@ -218,6 +220,10 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
 
   public void adoptAttributes(XulComponent component) {
+    super.adoptAttributes(component);
+
+    setRows(getInt(component.getAttributeValue("rows")));
+    setCols(getInt(component.getAttributeValue("cols")));
 
     if(component.getAttributeValue("value") != null){
       setValue(component.getAttributeValue("value"));

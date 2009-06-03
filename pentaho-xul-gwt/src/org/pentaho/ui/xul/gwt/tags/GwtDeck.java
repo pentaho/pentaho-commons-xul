@@ -67,7 +67,7 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
 
   public void setSelectedIndex(int index) {
     int previousVal = selectedIndex;
-    if (index < container.getWidgetCount()) {
+    if (index < container.getWidgetCount() && index >= 0) {
       container.showWidget(index);
     }
     selectedIndex = index;

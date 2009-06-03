@@ -490,6 +490,13 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     
   }
   
+  @Override
+  public void setBgcolor(String bgcolor) {
+    if(container != null) {
+      container.getElement().getStyle().setProperty("backgroundColor", bgcolor);
+    }
+  }
+  
   public void setModal(Boolean modal) {
    throw new RuntimeException("Not Yet Implemented");
   }

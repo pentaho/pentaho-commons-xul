@@ -240,6 +240,10 @@ public class GwtXulDomContainer implements XulDomContainer {
           
           //Override any existing attributes
           sourceDocumentNodeMatch.adoptAttributes(child);
+          ((AbstractGwtXulComponent) sourceDocumentNodeMatch.getParent()).layout();
+          if(sourceDocumentNodeMatch.getParent() != null && sourceDocumentNodeMatch.getParent() instanceof XulContainer) {
+            ((AbstractGwtXulComponent) sourceDocumentNodeMatch.getParent()).layout();
+          }
           
           //Process all the children of the overlay and add them to the proper location in the existing document.
           for(XulComponent overlayChild : child.getChildNodes()){
@@ -256,6 +260,10 @@ public class GwtXulDomContainer implements XulDomContainer {
             }
             if(existingElement != null){
               existingElement.adoptAttributes(overlayChild);
+              ((AbstractGwtXulComponent) existingElement.getParent()).layout();
+              if(existingElement.getParent() != null && existingElement.getParent() instanceof XulContainer) {
+                ((AbstractGwtXulComponent) existingElement.getParent()).layout();
+              }
             } else {
             
               //change Components document reference.

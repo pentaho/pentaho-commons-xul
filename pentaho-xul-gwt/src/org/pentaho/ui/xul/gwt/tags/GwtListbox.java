@@ -272,7 +272,8 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   }
 
   public void adoptAttributes(XulComponent component) {
-
+    super.adoptAttributes(component);
+    
     if (component.getAttributeValue("selectedindex") != null) {//$NON-NLS-1$
       setSelectedIndex(Integer.parseInt(component.getAttributeValue("selectedindex")));//$NON-NLS-1$
     }
