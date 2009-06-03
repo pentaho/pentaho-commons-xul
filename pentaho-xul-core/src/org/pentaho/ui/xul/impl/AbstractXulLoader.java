@@ -43,6 +43,8 @@ public abstract class AbstractXulLoader implements XulLoader {
   protected static final Log logger = LogFactory.getLog(AbstractXulLoader.class);
 
   private ResourceBundle mainBundle = null;
+  
+  private List<Object> resourceBundleList  = new ArrayList<Object>();
 
   public AbstractXulLoader() throws XulException {
 
@@ -87,6 +89,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       
       XulDomContainer container = new XulWindowContainer(this);
       container.setOuterContext(outerContext);
+      container.setResourceBundles(this.resourceBundleList);
       parser.setContainer(container);
       parser.parseDocument(doc.getRootElement());
 
@@ -117,6 +120,7 @@ public abstract class AbstractXulLoader implements XulLoader {
   public XulDomContainer loadXulFragment(Object xulDocument) throws IllegalArgumentException, XulException {
     Document document = (Document)xulDocument;
     XulDomContainer container = new XulFragmentContainer(this);
+    container.setResourceBundles(this.resourceBundleList);
     container.setOuterContext(outerContext);
 
     parser.reset();
@@ -153,6 +157,8 @@ public abstract class AbstractXulLoader implements XulLoader {
 
     setRootDir(resource);
     mainBundle = (ResourceBundle) bundle;
+
+    resourceBundleList.add(mainBundle);  
     return this.loadXul(doc);
 
   }
@@ -178,6 +184,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
       InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
 
+      resourceBundleList.add((ResourceBundle) bundle);  
       String localOutput = ResourceBundleTranslator.translate(in, (ResourceBundle) bundle);
 
       SAXReader rdr = new SAXReader();
@@ -203,6 +210,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       try {
         ResourceBundle res = ResourceBundle.getBundle(includeSrc.replace(".xul", ""));
         output = ResourceBundleTranslator.translate(output, res);
+        resourceBundleList.add((ResourceBundle) res);  
       } catch (MissingResourceException e) {
         continue;
       } catch (IOException e) {
@@ -218,6 +226,7 @@ public abstract class AbstractXulLoader implements XulLoader {
           continue;
         }
         output = ResourceBundleTranslator.translate(output, res);
+        resourceBundleList.add((ResourceBundle) res);  
       } catch (MissingResourceException e) {
         continue;
       } catch (IOException e) {
@@ -467,6 +476,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     if(res != null){
       try{
         runningTranslatedOutput = ResourceBundleTranslator.translate(runningTranslatedOutput, res);
+        resourceBundleList.add((ResourceBundle) res);  
   
        } catch(IOException e){
         logger.error("Error loading resource bundle for overlay: "+overlaySrc, e);

@@ -9,7 +9,9 @@ import java.awt.EventQueue;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +40,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   protected XulLoader xulLoader;
   protected HashMap<String, XulEventHandler> eventHandlers;
   protected HashMap<String, XulDataModel> models;
+  private List<Object> resourceBundleList ;
   
   protected BindingContext bindings;
   
@@ -345,5 +348,16 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     rootEle.invokeLater(runnable);
     
   }
+
+  public List<Object> getResourceBundles() {
+    return this.resourceBundleList;
+  }
+
+  public void setResourceBundles(List<Object> resourceBundles) {
+    this.resourceBundleList = resourceBundles;
+    
+  }
+  
+  
   
 }
