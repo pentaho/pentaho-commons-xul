@@ -3,6 +3,8 @@
  */
 package org.pentaho.ui.xul;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.pentaho.ui.xul.binding.Binding;
@@ -97,4 +99,8 @@ public interface XulDomContainer {
   public void invokeLater(Runnable runnable);
   
   public boolean isRegistered(String widgetHandlerName);
+  
+  public void setResourceBundles(List<Object> resourceBundles);
+
+  public List<Object> getResourceBundles();
 }
