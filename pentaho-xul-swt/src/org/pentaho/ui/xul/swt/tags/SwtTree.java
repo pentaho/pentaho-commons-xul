@@ -98,6 +98,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private TableSelection selType = TableSelection.SINGLE;
 
   private boolean isHierarchical = false;
+  
+  private ColumnType[] currentColumnTypes = null;
 
   private int activeRow = -1;
   private int activeColumn = -1;
@@ -291,10 +293,50 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     }
   }
+  
+  private void createColumnTypesSnapshot(){
+    if(this.columns.getChildNodes().size() > 0){
+      Object[] xulTreeColArray = this.columns.getChildNodes().toArray();
+      
+      currentColumnTypes = new ColumnType[xulTreeColArray.length];
+      
+      for(int i = 0; i < xulTreeColArray.length; i++){
+        currentColumnTypes[i] = ColumnType.valueOf(((XulTreeCol)xulTreeColArray[i]).getType());
+      }
+    } else {
+      // Create an empty array to indicate that it has been processed, but contains 0 columns
+      currentColumnTypes = new ColumnType[0];
+    }
+  }
+  
+  private boolean columnsNeedUpdate(){
+    
+    // Differing number of columsn
+    if(table.getTable().getColumnCount() != this.columns.getColumnCount()){
+      return true;
+    }
+    
+    // First run, always update
+    if(currentColumnTypes == null){
+      return true;
+    }
+    
+    // Column Types have changed
+    Object[] xulTreeColArray = this.columns.getChildNodes().toArray();
+    for(int i = 0; i < xulTreeColArray.length; i++){
+      if(!currentColumnTypes[i].toString().equalsIgnoreCase(((XulTreeCol)xulTreeColArray[i]).getType())){
+        // A column has changed its type. Columns need updating
+        return true;
+      }
+    }
+    
+    // Columns have not changed and do not need updating
+    return false;    
+  }
 
   private void setupColumns() {
 
-    if(table.getTable().getColumnCount() != this.columns.getColumnCount()){
+    if(columnsNeedUpdate()){
       
       while(table.getTable().getColumnCount() > 0){
         table.getTable().getColumn(0).dispose();
@@ -304,7 +346,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       for (XulComponent col : this.columns.getChildNodes()) {
         TableColumn tc = new TableColumn(table.getTable(), SWT.LEFT);
         String lbl = ((XulTreeCol) col).getLabel();
-        tc.setText(lbl != null ? lbl : "");
+        tc.setText(lbl != null ? lbl : ""); //$NON-NLS-1$
       }
   
       // Pack the columns
@@ -345,13 +387,15 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           break;
         }
         editors[i] = editor;
-        names[i] = "" + i;
+        names[i] = "" + i; //$NON-NLS-1$
         i++;
       }
       table.setCellEditors(editors);
   
       table.setColumnProperties(names);
       resizeColumns();
+      
+      createColumnTypesSnapshot();
     }
 
   }
