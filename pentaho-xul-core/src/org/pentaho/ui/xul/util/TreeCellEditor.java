@@ -6,7 +6,7 @@ public interface TreeCellEditor {
   
   public Object getValue();
   
-  public void show();
+  public void show(int row, int col, Object boundObj, String columnBinding);
   
   public void hide();
   
