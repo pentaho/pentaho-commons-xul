@@ -24,7 +24,7 @@
         <include name="**/util/Orient*"/>
         <include name="**/util/Align*"/>
         <include name="**/util/TextType*"/>
-        <include name="**/util/TreeCellEditor*"/>
+        <include name="**/util/TreeCell*"/>
         <include name="**/util/AbstractXulDialogController*"/>
         <include name="**/util/DialogController*"/>
       </source>
