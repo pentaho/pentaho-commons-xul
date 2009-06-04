@@ -39,6 +39,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   
   DialogBox dialog = null;
   private XulDomContainer xulContainer;
+  private String bgColor = null;
   private SimplePanel glasspane = new SimplePanel();
   private static int dialogPos = 1100;
   private List<XulButton> dialogButtons = new ArrayList<XulButton>();
@@ -329,9 +330,12 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     panel.add(contentPanel);
     panel.setCellWidth(contentPanel, "100%");//$NON-NLS-1$
     panel.setStyleName("dialog");//$NON-NLS-1$
-    
     // render dialog contents
     container = contentPanel;
+    if(getBgcolor() != null) {
+      container.getElement().getStyle().setProperty("backgroundColor", getBgcolor());
+    }
+
     // Check for individual button alignment. If the main align properties is set on the Dialog box then all the
     // individual alignment for the button will be ignored
     boolean ignoreIndividualButtonAlign = false;
@@ -492,6 +496,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   
   @Override
   public void setBgcolor(String bgcolor) {
+    this.bgColor = bgcolor;
     if(container != null) {
       container.getElement().getStyle().setProperty("backgroundColor", bgcolor);
     }
@@ -499,6 +504,10 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   
   public void setModal(Boolean modal) {
    throw new RuntimeException("Not Yet Implemented");
+  }
+
+  public String getBgcolor() {
+    return this.bgColor;
   }
   
 }

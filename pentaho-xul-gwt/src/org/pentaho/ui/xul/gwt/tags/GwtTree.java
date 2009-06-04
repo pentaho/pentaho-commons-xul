@@ -544,8 +544,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public <T> Collection<T> getElements() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.elements;
   }
 
   public String getOnedit() {
@@ -893,7 +892,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       this.editor = editor;
       this.cell = cell;
       this.add( label );
-      this.label.setText(cell.getValue().toString());
+      this.label.setText((cell.getValue() != null) ? cell.getValue().toString() : " ");
       
       editor.addTreeCellEditorListener(this);
     }
