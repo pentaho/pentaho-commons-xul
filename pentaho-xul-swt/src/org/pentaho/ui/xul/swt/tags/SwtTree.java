@@ -64,6 +64,7 @@ import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeLabelProvider;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TreeCellEditor;
+import org.pentaho.ui.xul.util.TreeCellRenderer;
 
 public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
@@ -337,6 +338,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private void setupColumns() {
 
     if(columnsNeedUpdate()){
+
+      if (table.getCellEditors() != null) {
+        for (int i = 0; i < table.getCellEditors().length; i++) {
+          table.getCellEditors()[i].dispose();
+        }
+      }
       
       while(table.getTable().getColumnCount() > 0){
         table.getTable().getColumn(0).dispose();
@@ -354,11 +361,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         table.getTable().getColumn(i).pack();
       }
   
-      if (table.getCellEditors() != null) {
-        for (int i = 0; i < table.getCellEditors().length; i++) {
-          table.getCellEditors()[i].dispose();
-        }
-      }
   
       CellEditor[] editors = new CellEditor[this.columns.getChildNodes().size()];
       String[] names = new String[getColumns().getColumnCount()];
@@ -830,6 +832,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     // TODO Auto-generated method stub
     
   }
+
+  public void registerCellRenderer(String key, TreeCellRenderer renderer) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
+  
   
   
 
