@@ -80,6 +80,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TreeCellEditorListener;
+import org.pentaho.ui.xul.util.TreeCellRenderer;
 
 public class SwingTree extends AbstractSwingContainer implements XulTree {
 
@@ -1330,7 +1331,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     this.customEditors.put(key, editor);
     
   }
+  
+  
     
+  public void registerCellRenderer(String key, TreeCellRenderer renderer) {
+    // TODO Auto-generated method stub
+    
+  }
+
   private class CustomCellEditorWrapper extends JLabel implements TreeCellEditorListener{
 
     private org.pentaho.ui.xul.util.TreeCellEditor editor;
