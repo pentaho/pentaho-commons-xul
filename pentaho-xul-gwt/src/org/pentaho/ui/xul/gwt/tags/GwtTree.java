@@ -40,6 +40,7 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellEditorListener;
+import org.pentaho.ui.xul.util.TreeCellRenderer;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -90,6 +91,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private boolean visible = true;
   
   private Map<String, TreeCellEditor> customEditors = new HashMap<String, TreeCellEditor>();
+  private Map<String, TreeCellRenderer> customRenderers = new HashMap<String, TreeCellRenderer>();
+  
   
   public boolean isVisible() {
     return visible;
@@ -136,7 +139,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     // simplePanel, which is the managedObject
     managedObject = simplePanel;
     
-    this.registerCellEditor("custom-editor", new CustomEditor());   
+    this.registerCellEditor("custom-editor", new CustomEditor());
+    this.registerCellRenderer("custom-editor", new CustomRenderer());
+    
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -423,7 +428,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       return lb;
       
     } else if (colType != null && customEditors.containsKey(colType)){
-      return new CustomCellEditorWrapper(cell, customEditors.get(colType));
+      if(this.customRenderers.containsKey(colType)){
+        return new CustomCellEditorWrapper(cell, customEditors.get(colType), customRenderers.get(colType));
+      } else {
+        return new CustomCellEditorWrapper(cell, customEditors.get(colType));
+      }
       
     } else {
       if(val == null || val.equals("")){
@@ -879,10 +888,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   public void registerCellEditor(String key, TreeCellEditor editor){
     customEditors.put(key, editor);
   }
+  
+  
+  public void registerCellRenderer(String key, TreeCellRenderer renderer) {
+    customRenderers.put(key, renderer);
+    
+  }
 
   public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorListener{
     
     private TreeCellEditor editor;
+    private TreeCellRenderer renderer;
     private Label label = new Label();
     private XulTreeCell cell;
     
@@ -897,9 +913,30 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       editor.addTreeCellEditorListener(this);
     }
     
+    public CustomCellEditorWrapper(XulTreeCell cell, TreeCellEditor editor, TreeCellRenderer renderer){
+      this(cell, editor);
+      this.renderer = renderer;
+      
+      if(this.renderer.supportsNativeComponent()){
+        this.clear();
+        this.add((Widget) this.renderer.getNativeComponent());
+      } else {
+        this.label.setText(this.renderer.getText(cell.getValue()));
+      }
+      
+    }
+    
     public void onCellEditorClosed(Object value) {
-      this.label.setText(value.toString());
       cell.setValue(value);
+      if(this.renderer == null){
+        this.label.setText(value.toString());
+      } else if(this.renderer.supportsNativeComponent()){
+        this.clear();
+        this.add((Widget) this.renderer.getNativeComponent());
+      } else {
+        this.label.setText(this.renderer.getText(value));
+      }
+      
     }
 
     @Override
@@ -910,8 +947,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
           editor.setValue(cell.getValue());
           
           int col = cell.getParent().getChildNodes().indexOf(cell);
+          
           XulTreeItem item = (XulTreeItem) cell.getParent().getParent();
           int row = item.getParent().getChildNodes().indexOf(item);
+          
           Object boundObj = (GwtTree.this.getElements() != null) ? GwtTree.this.getElements().toArray()[row] : null;
           String columnBinding = GwtTree.this.getColumns().getColumn(col).getBinding();
           
@@ -923,6 +962,21 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     }
     
     
+  }
+  
+  private static class CustomRenderer implements TreeCellRenderer{
+
+    public Object getNativeComponent() {
+      return null;
+    }
+
+    public String getText(Object value) {
+      return "custom: "+value;
+    }
+
+    public boolean supportsNativeComponent() {
+      return false;
+    }
   }
   
   private static class CustomEditor implements TreeCellEditor, PopupListener{
@@ -969,8 +1023,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     public void addTreeCellEditorListener(TreeCellEditorListener listener){
       this.listener = listener;
     }
-    
-    
     
   }
 
