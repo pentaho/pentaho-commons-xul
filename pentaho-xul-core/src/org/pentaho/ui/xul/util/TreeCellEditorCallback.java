@@ -1,5 +1,5 @@
 package org.pentaho.ui.xul.util;
 
-public interface TreeCellEditorListener {
+public interface TreeCellEditorCallback {
   void onCellEditorClosed(Object value);
 }
