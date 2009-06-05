@@ -39,7 +39,7 @@ import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.util.TreeCellEditor;
-import org.pentaho.ui.xul.util.TreeCellEditorListener;
+import org.pentaho.ui.xul.util.TreeCellEditorCallback;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
 import com.google.gwt.user.client.DOM;
@@ -895,7 +895,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
   }
 
-  public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorListener{
+  public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorCallback{
     
     private TreeCellEditor editor;
     private TreeCellRenderer renderer;
@@ -908,9 +908,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       this.editor = editor;
       this.cell = cell;
       this.add( label );
+      if(cell.getValue() != null) {
       this.label.setText((cell.getValue() != null) ? cell.getValue().toString() : " ");
-      
-      editor.addTreeCellEditorListener(this);
+      }
     }
     
     public CustomCellEditorWrapper(XulTreeCell cell, TreeCellEditor editor, TreeCellRenderer renderer){
@@ -921,7 +921,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         this.clear();
         this.add((Widget) this.renderer.getNativeComponent());
       } else {
-        this.label.setText(this.renderer.getText(cell.getValue()));
+        this.label.setText((this.renderer.getText(cell.getValue()) != null) ? this.renderer.getText(cell.getValue()) : " ");
       }
       
     }
@@ -934,7 +934,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         this.clear();
         this.add((Widget) this.renderer.getNativeComponent());
       } else {
-        this.label.setText(this.renderer.getText(value));
+        this.label.setText((this.renderer.getText(cell.getValue()) != null) ? this.renderer.getText(cell.getValue()) : " ");        
       }
       
     }
@@ -954,7 +954,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
           Object boundObj = (GwtTree.this.getElements() != null) ? GwtTree.this.getElements().toArray()[row] : null;
           String columnBinding = GwtTree.this.getColumns().getColumn(col).getBinding();
           
-          editor.show(row, col, boundObj, columnBinding);
+          editor.show(row, col, boundObj, columnBinding, this);
         default:
           break;
       }
@@ -982,10 +982,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private static class CustomEditor implements TreeCellEditor, PopupListener{
     
     PromptDialogBox dialog;
-    
+    TreeCellEditorCallback callback;    
     TextBox txt = new TextBox();
-    private TreeCellEditorListener listener;
-    
+
     public CustomEditor(){
       dialog = new PromptDialogBox("Enter Value", "Ok", "Cancel", true, false);
       dialog.addPopupListener(this);
@@ -1011,17 +1010,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       
     }
 
-    public void show(int row, int col, Object boundObj, String columnBinding) {
+    public void show(int row, int col, Object boundObj, String columnBinding, TreeCellEditorCallback callback) {
+      this.callback = callback;
       dialog.getElement().getStyle().setProperty("zIndex", "10000");
       dialog.center();
     }
 
     public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-      this.listener.onCellEditorClosed(txt.getText());
-    }
-    
-    public void addTreeCellEditorListener(TreeCellEditorListener listener){
-      this.listener = listener;
+      this.callback.onCellEditorClosed(txt.getText());
     }
     
   }

@@ -158,7 +158,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
     
     setVisible(isVisible());
-    
+    if(this.container != null){
+      this.container.clear();
+    }
     double totalFlex = 0.0;
     
     for(XulComponent comp : this.getChildNodes()) {

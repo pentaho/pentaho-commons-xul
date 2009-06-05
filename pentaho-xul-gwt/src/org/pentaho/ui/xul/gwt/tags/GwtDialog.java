@@ -38,6 +38,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   }
   
   DialogBox dialog = null;
+  private boolean visible;
   private XulDomContainer xulContainer;
   private String bgColor = null;
   private SimplePanel glasspane = new SimplePanel();
@@ -276,6 +277,11 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   }
 
   public void setVisible(boolean visible) {
+    if(this.visible = visible) {
+      return;
+    }
+    super.setVisible(visible);
+    
     if (visible) {
       show();
     } else {
@@ -287,6 +293,14 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
 
     // create a new dialog if necessary
     if (dialog != null) {
+
+      for(XulButton btn : dialogButtons){
+        this.removeChild(btn);
+      }
+      super.layout();
+      for(XulButton btn : dialogButtons){
+        this.addChild(btn);
+      }
       dialog.center();
       dialog.show();
 

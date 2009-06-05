@@ -79,7 +79,7 @@ import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.util.ColumnType;
-import org.pentaho.ui.xul.util.TreeCellEditorListener;
+import org.pentaho.ui.xul.util.TreeCellEditorCallback;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
 public class SwingTree extends AbstractSwingContainer implements XulTree {
@@ -1331,22 +1331,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     this.customEditors.put(key, editor);
     
   }
-  
-  
     
-  public void registerCellRenderer(String key, TreeCellRenderer renderer) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  private class CustomCellEditorWrapper extends JLabel implements TreeCellEditorListener{
+  private class CustomCellEditorWrapper extends JLabel implements TreeCellEditorCallback{
 
     private org.pentaho.ui.xul.util.TreeCellEditor editor;
     private XulTreeCell cell;
     public CustomCellEditorWrapper(XulTreeCell cell, org.pentaho.ui.xul.util.TreeCellEditor editor){
       super();
       this.editor = editor;
-      editor.addTreeCellEditorListener(this);
       this.cell = cell;
       this.setText(this.cell.getValue().toString());
       
@@ -1361,7 +1353,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         
         @Override
         public void mousePressed(MouseEvent arg0) {
-          CustomCellEditorWrapper.this.editor.show(row, col, boundObj, columnBinding);
+          CustomCellEditorWrapper.this.editor.show(row, col, boundObj, columnBinding, CustomCellEditorWrapper.this);
         }
         
         
@@ -1377,11 +1369,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
   
   private static class CustomTreeCellEditor implements org.pentaho.ui.xul.util.TreeCellEditor{
-    private TreeCellEditorListener listener;
-    
-    public void addTreeCellEditorListener(TreeCellEditorListener listener) {
-      this.listener = listener;
-    }
+    private TreeCellEditorCallback callback;
 
     public Object getValue() {
       // TODO Auto-generated method stub
@@ -1398,10 +1386,15 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       
     }
 
-    public void show(int row, int col, Object boundObj, String columnBinding) {
+    public void show(int row, int col, Object boundObj, String columnBinding,TreeCellEditorCallback callback) {
+      this.callback = callback;
       String returnVal = JOptionPane.showInputDialog("Enter a Value");
-      this.listener.onCellEditorClosed(returnVal);
+      this.callback.onCellEditorClosed(returnVal);
     }
+    
+  }
+
+  public void registerCellRenderer(String key, TreeCellRenderer renderer) {
     
   }
   
