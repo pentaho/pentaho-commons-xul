@@ -50,6 +50,10 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   }
 
   public void setSrc(String src) {
+    if(src == null){
+      image.setUrl(null);
+      return;
+    }
     image.setUrl(GWT.getModuleBaseURL() + src);
   }
 
