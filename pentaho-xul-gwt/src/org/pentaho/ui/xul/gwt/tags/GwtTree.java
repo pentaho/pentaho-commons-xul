@@ -459,7 +459,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       cols[i] = getColumns().getColumn(i).getLabel();
       if(totalFlex > 0 && getWidth() > 0){
         len[i] = (int) (getWidth() * ((double) getColumns().getColumn(i).getFlex() / totalFlex))  - 15;
-      } 
+      } else if(getColumns().getColumn(i).getWidth() > 0){
+        len[i] = getColumns().getColumn(i).getWidth();
+      }
     }
     
     // use base table from pentaho widgets library for now
@@ -471,8 +473,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       policy = SelectionPolicy.MULTI_ROW;
     }
     
-    int[] colWidths = (getWidth() > 0 && totalFlex > 0) ? len : null;
-    table = new BaseTable(cols, colWidths, new BaseColumnComparator[cols.length], policy);
+    table = new BaseTable(cols, len, new BaseColumnComparator[cols.length], policy);
 
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
@@ -519,6 +520,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
   
   public void updateUI() {
+    if(this.suppressLayout) {
+      return;
+    }
     if(this.isHierarchical()){
       populateTree();
     } else {

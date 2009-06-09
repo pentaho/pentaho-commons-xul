@@ -46,6 +46,9 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     if (command != null && command.trim().length() > 0) {
       setCommand(command);
     }
+    if(srcEle.getAttribute("pen:class") != null && srcEle.getAttribute("pen:class").length() > 0){
+      setClass(srcEle.getAttribute("pen:class"));
+    }
   }
   
   /* (non-Javadoc)
@@ -122,5 +125,9 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     if(component.getAttributeValue("disabled") != null){
       setDisabled("true".equals(component.getAttributeValue("disabled")));
     }
+  }
+  
+  public void setClass(String className){
+    checkBox.setStylePrimaryName(className);
   }
 }
