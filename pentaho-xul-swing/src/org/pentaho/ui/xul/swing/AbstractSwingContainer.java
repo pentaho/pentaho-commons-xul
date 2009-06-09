@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.util.Align;
 public abstract class AbstractSwingContainer extends SwingElement implements XulContainer{
 
   protected Align alignment;
+  protected boolean suppressLayout;
   
   public AbstractSwingContainer(String tagName){
     super(tagName);
@@ -26,7 +27,10 @@ public abstract class AbstractSwingContainer extends SwingElement implements Xul
   public void removeComponent(XulComponent component) {
     this.removeChild(component);
   }
-  
+
+  public void suppressLayout(boolean suppress) {
+    this.suppressLayout = suppress;
+  }
   
   
 }
