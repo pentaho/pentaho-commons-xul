@@ -45,4 +45,11 @@ public interface XulContainer extends XulComponent {
    */
   public Orient getOrientation();
   
+  /**
+   * Defeats layout calls. Useful for bulk updates.
+   * 
+   * @param suppress
+   */
+  public void suppressLayout(boolean suppress);
+  
 }
