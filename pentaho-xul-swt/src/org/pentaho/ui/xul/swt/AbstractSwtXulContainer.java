@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.util.Align;
 public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
 
   protected Align alignment = Align.CENTER;
+  protected boolean suppressLayout;
   
   public AbstractSwtXulContainer(String tagName){
     super(tagName);
@@ -40,7 +41,10 @@ public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
   public void removeComponent(XulComponent component) {
     this.removeChild(component);
   }
-  
+
+  public void suppressLayout(boolean suppress) {
+    this.suppressLayout = suppress;
+  }
   
 }
   
