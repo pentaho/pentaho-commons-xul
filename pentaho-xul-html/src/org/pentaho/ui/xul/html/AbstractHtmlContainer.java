@@ -8,6 +8,7 @@ import org.pentaho.ui.xul.util.Align;
 public abstract class AbstractHtmlContainer extends HtmlElement implements XulContainer{
 
   protected Align alignment;
+  protected boolean suppressLayout;
   
   public AbstractHtmlContainer(String tagName){
     super(tagName);
@@ -27,6 +28,10 @@ public abstract class AbstractHtmlContainer extends HtmlElement implements XulCo
   public void removeComponent(XulComponent component) {
     this.removeChild(component);
   }
+  public void suppressLayout(boolean suppress) {
+    this.suppressLayout = suppress;
+  }
+  
 }
 
   
