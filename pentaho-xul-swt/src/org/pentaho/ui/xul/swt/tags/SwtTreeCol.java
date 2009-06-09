@@ -130,10 +130,13 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
       // TODO Auto-generated method stub
       
     }
-
+;
     public void setType(String type) {
-      this.type = ColumnType.valueOf(type.toUpperCase());
-      
+      try{
+        this.type = ColumnType.valueOf(type.toUpperCase());
+      } catch(Exception e){
+        this.type = ColumnType.CUSTOM;
+      }
     }
 
     public void setWidth(int width) {
