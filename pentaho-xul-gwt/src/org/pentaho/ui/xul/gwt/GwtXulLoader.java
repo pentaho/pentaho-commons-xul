@@ -4,8 +4,8 @@ package org.pentaho.ui.xul.gwt;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
-import org.pentaho.gwt.widgets.client.utils.MessageBundle;
+import org.pentaho.gwt.widgets.client.utils.i18n.IResourceBundleLoadCallback;
+import org.pentaho.gwt.widgets.client.utils.i18n.ResourceBundle;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -65,7 +65,7 @@ import com.google.gwt.xml.client.XMLParser;
  * @author nbaker
  *
  */
-public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
+public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
 
   private GwtXulParser parser;
   public static final XulLoaderServiceAsync SERVICE = (XulLoaderServiceAsync) GWT.create(XulLoaderService.class);
@@ -150,7 +150,7 @@ public class GwtXulLoader implements IMessageBundleLoadCallback, XulLoader {
    */
   public GwtXulDomContainer loadXul(Object xulDocument, Object bundle) throws IllegalArgumentException, XulException{
     Document document = (Document)xulDocument;
-    String translated = ResourceBundleTranslator.translate(xulDocument.toString(), (MessageBundle)bundle);
+    String translated = ResourceBundleTranslator.translate(xulDocument.toString(), (ResourceBundle)bundle);
     document = XMLParser.parse(translated);
     
     GwtXulDomContainer container = new GwtXulDomContainer();

@@ -1,7 +1,7 @@
 package org.pentaho.ui.xul.gwt.util;
 
-import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
-import org.pentaho.gwt.widgets.client.utils.MessageBundle;
+import org.pentaho.gwt.widgets.client.utils.i18n.IResourceBundleLoadCallback;
+import org.pentaho.gwt.widgets.client.utils.i18n.ResourceBundle;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.gwt.GwtXulDomContainer;
@@ -17,9 +17,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.xml.client.Node;
 import com.google.gwt.xml.client.XMLParser;
 
-public class AsyncXulLoader implements IMessageBundleLoadCallback {
+public class AsyncXulLoader implements IResourceBundleLoadCallback {
 
-  private MessageBundle messageBundle;
+  private ResourceBundle messageBundle;
 
   private String xulSrc;
 
@@ -112,7 +112,7 @@ public class AsyncXulLoader implements IMessageBundleLoadCallback {
     }
 
     try {
-      messageBundle = new MessageBundle(folder, baseName, this);
+      messageBundle = new ResourceBundle(folder, baseName, true, this);
     } catch (Exception e) {
       Window.alert("Error loading message bundle: " + e.getMessage()); //$NON-NLS-1$
       e.printStackTrace();

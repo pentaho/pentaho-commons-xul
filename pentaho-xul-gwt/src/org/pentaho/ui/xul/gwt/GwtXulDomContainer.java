@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.pentaho.gwt.widgets.client.utils.MessageBundle;
+import org.pentaho.gwt.widgets.client.utils.i18n.ResourceBundle;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -294,7 +294,7 @@ public class GwtXulDomContainer implements XulDomContainer {
     }
   }
   
-  public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc, MessageBundle bundle) throws XulException {
+  public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc, ResourceBundle bundle) throws XulException {
     XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc, bundle);
     applyOverlay(overlayContainer.getDocumentRoot());
     
