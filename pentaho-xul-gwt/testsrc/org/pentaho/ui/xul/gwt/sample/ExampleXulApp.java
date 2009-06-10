@@ -1,15 +1,12 @@
 package org.pentaho.ui.xul.gwt.sample;
 
-import org.pentaho.gwt.widgets.client.utils.IMessageBundleLoadCallback;
-import org.pentaho.gwt.widgets.client.utils.MessageBundle;
-import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.gwt.widgets.client.utils.i18n.IResourceBundleLoadCallback;
+import org.pentaho.gwt.widgets.client.utils.i18n.ResourceBundle;
 import org.pentaho.ui.xul.gwt.GwtXulDomContainer;
 import org.pentaho.ui.xul.gwt.GwtXulLoader;
 import org.pentaho.ui.xul.gwt.GwtXulRunner;
-import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
@@ -18,12 +15,12 @@ import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.xml.client.XMLParser;
 
-public class ExampleXulApp implements EntryPoint, IMessageBundleLoadCallback {
+public class ExampleXulApp implements EntryPoint, IResourceBundleLoadCallback {
 
-  private MessageBundle bundle;
+  private ResourceBundle bundle;
   public void onModuleLoad() {
     try {
-      bundle = new MessageBundle("","toolbar", this );
+      bundle = new ResourceBundle("", "toolbar", true, this );
     } catch (Exception e) {
       e.printStackTrace();
     }
