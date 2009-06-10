@@ -299,7 +299,12 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     }
     if(getSelectedIndex() > -1){
       if(currentSelectedIndex < listbox.getItems().size()) {
-        listbox.setSelectedIndex(currentSelectedIndex);  
+        int index = getIndexForItem(currentSelectedItem);
+        if(index > 0) {
+         listbox.setSelectedIndex(currentSelectedIndex);
+        } else {
+          listbox.setSelectedIndex(0);
+        }
       } else {
         listbox.setSelectedIndex(0);
       }
@@ -342,5 +347,18 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         return;
       }
     }
+  }
+  
+  private int getIndexForItem(Object obj) {
+    int index = -1;
+    if(obj != null){
+      for(ListItem item:listbox.getItems()) {
+        index++;
+        if(item.getValue() != null && item.getValue().equals(obj.toString())) {
+          return index;
+        }
+      }
+    }
+    return index;
   }
 }
