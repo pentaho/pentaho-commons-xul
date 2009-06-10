@@ -10,6 +10,7 @@ import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulMenuList;
 import org.pentaho.ui.xul.containers.XulMenupopup;
@@ -220,7 +221,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   private String extractLabel(T t) {
     String attribute = getBinding();
-    if (StringUtils.isEmpty(attribute)) {
+    if (StringUtils.isEmpty(attribute) || !(t instanceof XulEventSource)) {
       return t.toString();
     } else {
       try {
@@ -260,11 +261,14 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   @Override
   public void layout() {
+
     inLayoutProcess = true;
     if(suppressLayout){
       inLayoutProcess = false;
       return;
     }
+    int currentSelectedIndex = getSelectedIndex();
+    Object currentSelectedItem = listbox.getSelectedItem();
     GwtMenupopup popup = getPopupElement();
     this.listbox.removeAll();
     listbox.setSuppressLayout(true);
@@ -292,6 +296,13 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         fireSelectedEvents();
       }
       setSelectedItem((T) selectedItem.getLabel());
+    }
+    if(getSelectedIndex() > -1){
+      if(currentSelectedIndex < listbox.getItems().size()) {
+        listbox.setSelectedIndex(currentSelectedIndex);  
+      } else {
+        listbox.setSelectedIndex(0);
+      }
     }
     loaded = true;
   }

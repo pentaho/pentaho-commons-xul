@@ -43,9 +43,7 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     setChecked("true".equals(srcEle.getAttribute("checked")));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     String command = srcEle.getAttribute("command");
-    if (command != null && command.trim().length() > 0) {
-      setCommand(command);
-    }
+    setCommand(command);
     if(srcEle.getAttribute("pen:class") != null && srcEle.getAttribute("pen:class").length() > 0){
       setClass(srcEle.getAttribute("pen:class"));
     }
@@ -89,7 +87,9 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
 
   public void setChecked(boolean checked) {
    boolean previousVal = this.checked;
-   checkBox.setChecked(checked); 
+   if(checked != checkBox.isChecked()) {
+     checkBox.setChecked(checked); 
+   }
    this.checked = checked;
    this.firePropertyChange("checked", previousVal, checked);
   }
@@ -102,7 +102,10 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     checkBox.addClickListener(new ClickListener(){
       public void onClick(Widget sender) {
         try{
-          GwtCheckbox.this.getXulDomContainer().invoke(method, new Object[]{});
+          if(method != null) {
+            GwtCheckbox.this.getXulDomContainer().invoke(method, new Object[]{});
+          }
+          setChecked(checkBox.isChecked());
         } catch(XulException e){
           e.printStackTrace();
         }
