@@ -481,6 +481,9 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
 
   public void setTitle(String title) {
     this.setAttribute("title", title);
+    if(dialog != null) {
+      dialog.setText(getTitle());
+    }
   }
 
   public void adoptAttributes(XulComponent component) {

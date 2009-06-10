@@ -303,10 +303,10 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         if(index > 0) {
          listbox.setSelectedIndex(currentSelectedIndex);
         } else {
-          listbox.setSelectedIndex(0);
+          listbox.setSelectedIndex(listbox.getSelectedIndex());
         }
       } else {
-        listbox.setSelectedIndex(0);
+        listbox.setSelectedIndex(listbox.getSelectedIndex());
       }
     }
     loaded = true;
