@@ -2,7 +2,9 @@ package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
+import org.pentaho.gwt.widgets.client.utils.ButtonHelper;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.gwt.widgets.client.utils.ButtonHelper.ButtonLabelType;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -13,14 +15,17 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
   static final String ELEMENT_NAME = "button"; //$NON-NLS-1$
-
+  enum DIRECTION {forward, reverse};
+  enum ORIENT {horizontal, vertical}
   private String dir, group, image, type, onclick, tooltip, disabledImage;
 
   public static void register() {
@@ -31,6 +36,8 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     });
   }
 
+  private Button customButton;
+  
   private RoundedButton button;
 
   private ImageButton imageButton;
@@ -44,7 +51,14 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
+    if(!StringUtils.isEmpty(srcEle.getAttribute("dir")) && !StringUtils.isEmpty(srcEle.getAttribute("image")) && !StringUtils.isEmpty(srcEle.getAttribute("label"))) {
+      
+      customButton = new Button(ButtonHelper.createButtonLabel(
+          new Image(srcEle.getAttribute("image")),
+          srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient"))));
+      managedObject = customButton;
+      button = null;
+    } else if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
       //we create a button by default, remove it here
       button = null;
       imageButton = new ImageButton();
@@ -102,8 +116,10 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
     if (button != null) {
       button.addClickListener(listener);
-    } else {
+    } else if (imageButton != null) {
       imageButton.addClickListener(listener);
+    } else if (customButton != null) {
+      customButton.addClickListener(listener);
     }
   }
 
@@ -119,8 +135,10 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     this.disabled = dis;
     if (button != null) {
       button.setEnabled(!dis);
-    } else {
+    } else if (imageButton != null) {
       imageButton.setEnabled(!dis);
+    } else if (customButton != null) {
+      customButton.setEnabled(!dis);
     }
   }
 
@@ -171,10 +189,12 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void setImage(String src) {
-    src = GWT.getModuleBaseURL() + src;
-    this.image = src;
-    this.imageButton.setEnabledUrl(src);
-    this.imageButton.setDisabledUrl(src);
+    if(imageButton != null) {
+      src = GWT.getModuleBaseURL() + src;
+      this.image = src;
+      this.imageButton.setEnabledUrl(src);
+      this.imageButton.setDisabledUrl(src);
+    }
   }
 
   public void setDisabledImage(String src) {
@@ -191,8 +211,10 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public void setSelected(boolean selected) {
     if (button != null) {
       button.setFocus(selected);
-    } else {
+    } else if (imageButton != null) {
       imageButton.setFocus(selected);
+    } else if (customButton != null) {
+      customButton.setFocus(selected);
     }
   }
 
@@ -207,8 +229,10 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     super.setTooltiptext(tooltip);
     if (button != null) {
       button.setTitle(tooltip);
-    } else {
+    } else if (imageButton != null) {
       imageButton.setTitle(tooltip);
+    } else if (customButton != null) {
+      customButton.setTitle(tooltip);
     }
 
   }
@@ -246,9 +270,31 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
     if (button != null) {
       button.setVisible(visible);
-    } else {
+    } else if (imageButton != null) {
       imageButton.setVisible(visible);
+    } else if (customButton != null) {
+      customButton.setVisible(visible);
     }
   }
 
+  private ButtonLabelType getButtonLabelOrigin(String direction, String orient) {
+    if(direction == null || direction.length() <= 0) {
+      direction = DIRECTION.forward.toString();
+    }
+    if(orient == null || orient.length() <= 0) {
+      orient = ORIENT.horizontal.toString();
+    }
+    
+    if(direction != null && orient != null) {
+      if(direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.vertical.toString())) {
+        return ButtonLabelType.TEXT_ON_BOTTOM;
+      } else if(direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.vertical.toString())) {
+        return ButtonLabelType.TEXT_ON_TOP;
+      } else if(direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.horizontal.toString())) {
+        return ButtonLabelType.TEXT_ON_LEFT;
+      } else if(direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.horizontal.toString())) {
+        return ButtonLabelType.TEXT_ON_RIGHT;
+      }
+    } return ButtonLabelType.NO_TEXT;
+  }
 }
