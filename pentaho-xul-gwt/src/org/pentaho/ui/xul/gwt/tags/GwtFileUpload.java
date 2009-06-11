@@ -64,6 +64,8 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     uploadForm.setAction(getAction());
     uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
     uploadForm.setMethod(FormPanel.METHOD_POST);
+    uploadForm.setHeight(getHeight() + "px");
+    uploadForm.setWidth(getWidth() + "px");
     // Create a panel to hold all of the form widgets.
     HorizontalPanel panel = new HorizontalPanel();
     uploadForm.setWidget(panel);
@@ -72,8 +74,16 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     upload = new FileUpload();
     upload.setName("uploadFormElement"); //$NON-NLS-1$
     upload.setVisible(true);
+    upload.setHeight(getHeight() + "px");
+    upload.setWidth(getWidth() + "px");
     panel.add(upload);
     mainPanel.add(uploadForm);
+    if(getHeight() >= 0) {
+      mainPanel.setHeight(getHeight() + "px");
+    }
+    if(getWidth() >= 0) {
+      mainPanel.setWidth(getWidth() + "px");
+    }
     
     // Add a 'Upload' button.
     RoundedButton uploadSubmitButton = new RoundedButton(getButtonLabelUpload());
