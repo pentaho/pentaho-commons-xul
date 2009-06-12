@@ -180,3 +180,23 @@
 .xul-label{
   white-space: nowrap;
 }
+
+.gwt-Button {
+  font-size: 0.85em;
+  border: 1px outset #ccc;
+  background-color: #ddd;
+}
+.gwt-Button:down {
+  border: 1px inset #ccc;
+  cursor:pointer;
+}
+.gwt-Button:hover {
+  border-color: #9cf #69e #69e #7af;
+  background-color: #eee;
+  cursor:hand;
+}
+.gwt-Button:disabled {
+  color: #888;
+  background-color: #ccc;
+  cursor:none;
+}
