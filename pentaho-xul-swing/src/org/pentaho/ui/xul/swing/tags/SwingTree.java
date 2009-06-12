@@ -1098,7 +1098,16 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                   colType = extractDynamicColType(o, x);
                 }
 
-                if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox") && column.getCombobinding() != null){
+                if(colType == null){
+                  if(StringUtils.isNotEmpty(exp.getModelAttr())){
+                    DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                    if (!this.editable) {
+                      binding.setBindingType(Binding.Type.ONE_WAY);
+                    }
+                    domContainer.addBinding(binding);
+                    binding.fireSourceChanged();
+                  }
+                } else if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox") && column.getCombobinding() != null){
                   DefaultBinding binding = new DefaultBinding(o, column.getCombobinding(), cell, "value");
                   binding.setBindingType(Binding.Type.ONE_WAY);
                   domContainer.addBinding(binding);
@@ -1122,7 +1131,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                   domContainer.addBinding(binding);
                   binding.fireSourceChanged();
 
-                  if(colType.equalsIgnoreCase("editablecombobox")){
+                 if(colType.equalsIgnoreCase("editablecombobox")){
+                  
                     binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                     if (!this.editable) {
                       binding.setBindingType(Binding.Type.ONE_WAY);
