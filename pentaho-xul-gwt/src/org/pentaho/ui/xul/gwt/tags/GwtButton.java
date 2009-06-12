@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.buttons.CustomButton;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper;
@@ -36,7 +37,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     });
   }
 
-  private Button customButton;
+  private CustomButton customButton;
   
   private RoundedButton button;
 
@@ -53,9 +54,8 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     if(!StringUtils.isEmpty(srcEle.getAttribute("dir")) && !StringUtils.isEmpty(srcEle.getAttribute("image")) && !StringUtils.isEmpty(srcEle.getAttribute("label"))) {
       
-      customButton = new Button(ButtonHelper.createButtonLabel(
-          new Image(srcEle.getAttribute("image")),
-          srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient"))));
+      customButton = new CustomButton(new Image(srcEle.getAttribute("image")),
+          srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")));
       managedObject = customButton;
       button = null;
     } else if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
