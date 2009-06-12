@@ -89,6 +89,10 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     });  
   }
   
+  public CustomListBox getNativeListBox(){
+    return this.listbox;
+  }
+  
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     setBinding(srcEle.getAttribute("pen:binding"));
@@ -347,6 +351,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         return;
       }
     }
+    listbox.setValue(value);
   }
   
   private int getIndexForItem(Object obj) {
