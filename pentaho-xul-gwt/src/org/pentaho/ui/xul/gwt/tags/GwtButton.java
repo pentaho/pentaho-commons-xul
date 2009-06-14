@@ -38,6 +38,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   //private CustomButton customButton;
+  private String className;
   private Button customButton;
   private RoundedButton button;
 
@@ -54,12 +55,20 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     if(!StringUtils.isEmpty(srcEle.getAttribute("dir")) && !StringUtils.isEmpty(srcEle.getAttribute("image")) && !StringUtils.isEmpty(srcEle.getAttribute("label"))) {
       
+      if(!StringUtils.isEmpty(srcEle.getAttribute("pen:classname"))) {
+        /* customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
+        srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")),,srcEle.getAttribute("pen:classname"));*/
+        customButton = new Button(ButtonHelper.createButtonLabel(
+        new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
+        srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")),srcEle.getAttribute("pen:classname")));
+        
+      } else {
      /* customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
           srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")));*/
       customButton = new Button(ButtonHelper.createButtonLabel(
           new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
           srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient"))));
-      
+      }
       managedObject = customButton;
       button = null;
     } else if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
@@ -91,6 +100,10 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     if (!StringUtils.isEmpty(srcEle.getAttribute("pen:disabledimage"))) {
       this.setDisabledImage(srcEle.getAttribute("pen:disabledimage"));
     }
+    if (!StringUtils.isEmpty(srcEle.getAttribute("pen:classname"))) {
+      this.setClassName(srcEle.getAttribute("pen:classname"));
+    }
+    
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
   }
 
@@ -300,5 +313,13 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
         return ButtonLabelType.TEXT_ON_RIGHT;
       }
     } return ButtonLabelType.NO_TEXT;
+  }
+
+  public void setClassName(String className) {
+    this.className = className;
+  }
+
+  public String getClassName() {
+    return className;
   }
 }
