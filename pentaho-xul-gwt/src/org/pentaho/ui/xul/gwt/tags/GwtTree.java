@@ -428,7 +428,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         if(colType.equalsIgnoreCase("editablecombobox")){
           lb.setEditable(true);
           
-          GwtBinding bind = new GwtBinding(cell, "value", glb, "selectedIndex");
+          GwtBinding bind = new GwtBinding(cell, "selectedIndex", glb, "selectedIndex");
           bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
           domContainer.addBinding(bind);
           if(cell.getLabel() == null){
@@ -443,7 +443,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
           
         } else {
 
-          GwtBinding bind = new GwtBinding(cell, "value", glb, "selectedIndex");
+          GwtBinding bind = new GwtBinding(cell, "selectedIndex", glb, "selectedIndex");
           bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
           domContainer.addBinding(bind);
           bind.fireSourceChanged();
