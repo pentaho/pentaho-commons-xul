@@ -45,6 +45,7 @@ import org.pentaho.ui.xul.util.TreeCellRenderer;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -392,41 +393,103 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         return b;
       }
     } else if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox")){
-      final CustomListBox lb = new CustomListBox();
-
-      lb.setWidth("100%");
-
-      Vector vals = (Vector) cell.getValue();
-      lb.setSuppressLayout(true);
-      for(Object label : vals){
-        lb.addItem(label.toString());
-      }
-      lb.setSuppressLayout(false);
-      lb.addChangeListener(new ChangeListener(){
-
-        public void onChange(Widget arg0) {
-          if(column.getType().equalsIgnoreCase("editablecombobox")){
-            cell.setLabel(lb.getValue());
-          } else {
-            cell.setSelectedIndex(lb.getSelectedIndex());
-          }
+      try{
+        final GwtMenuList glb = (GwtMenuList) this.domContainer.getDocumentRoot().createElement("menulist");
+  
+        final CustomListBox lb = glb.getNativeListBox();
+  
+        lb.setWidth("100%");
+  
+        Vector vals = (Vector) cell.getValue();
+        lb.setSuppressLayout(true);
+        for(Object label : vals){
+          lb.addItem(label.toString());
         }
+        lb.setSuppressLayout(false);
+        lb.addChangeListener(new ChangeListener(){
+  
+          public void onChange(Widget arg0) {
+            if(column.getType().equalsIgnoreCase("editablecombobox")){
+              cell.setLabel(lb.getValue());
+            } else {
+              cell.setSelectedIndex(lb.getSelectedIndex());
+            }
+          }
+  
+        });
+        
+        int idx = cell.getSelectedIndex();
+        if(idx < 0){
+          idx = 0;
+        }
+        if(idx < vals.size()){
+          lb.setSelectedIndex(idx);
+        }
+        if(colType.equalsIgnoreCase("editablecombobox")){
+          lb.setEditable(true);
+          
+          GwtBinding bind = new GwtBinding(cell, "value", glb, "selectedIndex");
+          bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+          domContainer.addBinding(bind);
+          if(cell.getLabel() == null){
+            bind.fireSourceChanged();
+          }
+          
+          bind = new GwtBinding(cell, "label", glb, "value");
+          bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+          domContainer.addBinding(bind);
+          bind.fireSourceChanged();
 
-      });
-      
-      int idx = cell.getSelectedIndex();
-      if(idx < 0){
-        idx = 0;
-      }
-      if(idx < vals.size()){
-        lb.setSelectedIndex(idx);
-      }
-      if(colType.equalsIgnoreCase("editablecombobox")){
-        lb.setEditable(true);
-      }
+          
+        } else {
 
-      return lb;
-      
+          GwtBinding bind = new GwtBinding(cell, "value", glb, "selectedIndex");
+          bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+          domContainer.addBinding(bind);
+          bind.fireSourceChanged();
+
+        }
+  
+        return lb;
+      } catch(Exception e){
+        System.out.println("error creating menulist, fallback");
+        e.printStackTrace();
+        final CustomListBox lb = new CustomListBox();
+        
+        lb.setWidth("100%");
+  
+        Vector vals = (Vector) cell.getValue();
+        lb.setSuppressLayout(true);
+        for(Object label : vals){
+          lb.addItem(label.toString());
+        }
+        lb.setSuppressLayout(false);
+        lb.addChangeListener(new ChangeListener(){
+  
+          public void onChange(Widget arg0) {
+            if(column.getType().equalsIgnoreCase("editablecombobox")){
+              cell.setLabel(lb.getValue());
+            } else {
+              cell.setSelectedIndex(lb.getSelectedIndex());
+            }
+          }
+  
+        });
+        
+        int idx = cell.getSelectedIndex();
+        if(idx < 0){
+          idx = 0;
+        }
+        if(idx < vals.size()){
+          lb.setSelectedIndex(idx);
+        }
+        if(colType.equalsIgnoreCase("editablecombobox")){
+          lb.setEditable(true);
+        }
+        lb.setValue(cell.getLabel());
+  
+        return lb;
+      }
     } else if (colType != null && customEditors.containsKey(colType)){
       if(this.customRenderers.containsKey(colType)){
         return new CustomCellEditorWrapper(cell, customEditors.get(colType), customRenderers.get(colType));
@@ -538,8 +601,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void clearSelection() {
-    // TODO Auto-generated method stub
-    
+    this.setSelectedRows(new int[]{});
   }
 
   public int[] getActiveCellCoordinates() {
@@ -746,6 +808,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
                       binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
                     }
                     domContainer.addBinding(binding);
+                    binding.fireSourceChanged();
                   }
 
                 } else if(colType != null && this.customEditors.containsKey(colType)){
@@ -800,6 +863,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       }
 
       suppressEvents = false;
+      this.clearSelection();
       updateUI();
     } catch(Exception e){
       System.out.println(e.getMessage());
@@ -911,7 +975,29 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       this.sinkEvents(Event.MOUSEEVENTS);
       this.editor = editor;
       this.cell = cell;
-      this.add( label );
+      HorizontalPanel hPanel = new HorizontalPanel();
+      hPanel.setStylePrimaryName("slimTable");
+      SimplePanel labelWrapper = new SimplePanel();
+      labelWrapper.getElement().getStyle().setProperty("overflow", "hidden");
+      labelWrapper.setWidth("100%");
+      labelWrapper.add(label);
+      
+      hPanel.add(labelWrapper);
+      hPanel.setCellWidth(labelWrapper, "100%");
+      
+      Button btn = new Button("...");
+      btn.getElement().getStyle().setProperty("margin", "0px");
+      
+      hPanel.add(btn);
+      hPanel.setSpacing(0);
+      hPanel.setBorderWidth(0);
+      hPanel.setWidth("100%");
+      labelWrapper.getElement().getParentElement().getStyle().setProperty("padding", "0px");
+      labelWrapper.getElement().getParentElement().getStyle().setProperty("border", "0px");
+      btn.getElement().getParentElement().getStyle().setProperty("padding", "0px");
+      btn.getElement().getParentElement().getStyle().setProperty("border", "0px");
+      
+      this.add( hPanel );
       if(cell.getValue() != null) {
       this.label.setText((cell.getValue() != null) ? cell.getValue().toString() : " ");
       }
