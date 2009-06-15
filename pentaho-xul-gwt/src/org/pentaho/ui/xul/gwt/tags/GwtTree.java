@@ -945,7 +945,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void adoptAttributes(XulComponent component) {
-    super.adoptAttributes(component);    
+    super.adoptAttributes(component);
+    layout();
   }
 
   public Object getSelectedItem() {
