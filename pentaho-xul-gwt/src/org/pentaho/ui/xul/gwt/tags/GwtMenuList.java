@@ -274,6 +274,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     int currentSelectedIndex = getSelectedIndex();
     Object currentSelectedItem = listbox.getSelectedItem();
     GwtMenupopup popup = getPopupElement();
+    selectedIndex = -1;
     listbox.setSuppressLayout(true);
     this.listbox.removeAll();
 
