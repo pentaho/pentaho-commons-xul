@@ -133,4 +133,12 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   public void setClass(String className){
     checkBox.setStylePrimaryName(className);
   }
+
+  @Override
+  public void setTooltiptext(String tooltip) {
+    super.setTooltiptext(tooltip);
+    checkBox.setTitle(this.getTooltiptext());
+  }
+  
+  
 }

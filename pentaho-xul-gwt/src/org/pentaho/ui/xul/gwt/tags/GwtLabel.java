@@ -77,4 +77,12 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
       setValue(component.getAttributeValue("value"));
     }
   }
+
+  @Override
+  public void setTooltiptext(String tooltip) {
+    super.setTooltiptext(tooltip);
+    label.setTitle(this.getTooltiptext());
+  }
+  
+  
 }

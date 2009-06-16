@@ -81,4 +81,12 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     }
   }
 
+  @Override
+  public void setTooltiptext(String tooltip) {
+    super.setTooltiptext(tooltip);
+    image.setTitle(this.getTooltiptext());
+  }
+  
+  
+
 }
