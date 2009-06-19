@@ -304,7 +304,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
         data[i][j] = getColumnEditor(j,i);
       }
     }
-    
+    if (getHeight() != 0) {
+      table.setTableHeight(getHeight() + "px");
+    }
+    if (getWidth() != 0) {
+      table.setTableWidth(getWidth() + "px");
+    }
+    table.populateTable(data);
+    ResizableWidgetCollection.get().setResizeCheckingEnabled(false);
   }
   
   private TreeItem createNode(XulTreeItem item){
@@ -563,26 +570,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     });
 
     setWidgetInPanel(table);
-
+    
     table.setTableWidth("100%"); //$NON-NLS-1$
     table.setTableHeight("100%"); //$NON-NLS-1$
-    scrollPanel.setWidth("100%"); //$NON-NLS-1$
-    scrollPanel.setHeight("100%"); //$NON-NLS-1$
-   
-    if(getWidth() > 0 && totalFlex > 0){ //going to allocate available space, hard-code table width
-      if (getWidth() > 0){
-        table.setTableWidth(getWidth()+"px"); //$NON-NLS-1$
-      }
-      if (getHeight() > 0) {
-        table.setTableHeight(getHeight()+"px"); //$NON-NLS-1$
-      }
-    } else if(getWidth() > 0){ // let the table grow, but constrain it in the scrollpanel
-      if (getWidth() > 0){
-        scrollPanel.setWidth(getWidth()+"px"); //$NON-NLS-1$
-      }
-      if (getHeight() > 0) {
-        scrollPanel.setHeight(getHeight()+"px"); //$NON-NLS-1$
-      }
+    if (getWidth() > 0){
+      table.setTableWidth(getWidth()+"px"); //$NON-NLS-1$
+    }
+    if (getHeight() > 0) {
+      table.setTableHeight(getHeight()+"px"); //$NON-NLS-1$
     }
     updateUI();
   }
@@ -945,6 +940,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public void update() {
+    updateUI();
     layout();
   }
 
