@@ -60,7 +60,13 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   }
   
   // we don't add ourselves to the main screen
+  private boolean preventLayout = false;
   public void layout() {
+    if(preventLayout){
+      return;
+    } else {
+      preventLayout = true;
+    }
     String buttons = getButtons();
     if (buttons != null && buttons.trim().length() > 0) {
       
@@ -83,7 +89,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
         }
       }
     }
-    
+    preventLayout = false;
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
