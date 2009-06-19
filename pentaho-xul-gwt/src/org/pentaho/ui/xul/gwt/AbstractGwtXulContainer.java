@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Widget;
 public abstract class AbstractGwtXulContainer extends AbstractGwtXulComponent implements XulContainer{
 
   protected Align alignment;
+  protected boolean suppressLayout;
   
   public AbstractGwtXulContainer(String tagName){
     super(tagName);
@@ -56,6 +57,11 @@ public abstract class AbstractGwtXulContainer extends AbstractGwtXulComponent im
       }
     }
   }
+
+  public void suppressLayout(boolean suppress) {
+    this.suppressLayout = suppress;
+  }
+  
 }
 
   
