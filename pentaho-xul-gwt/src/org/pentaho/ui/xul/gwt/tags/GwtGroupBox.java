@@ -45,14 +45,14 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     if(!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
-      this.container.setWidth(srcEle.getAttribute("width") + "px");
+      captionPanel.setWidth(srcEle.getAttribute("width") + "px");
     } else {
-      this.container.setWidth("100%"); 
+      captionPanel.setWidth("100%"); 
     }
     if(!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
-      this.container.setHeight(srcEle.getAttribute("height") + "px");
+      captionPanel.setHeight(srcEle.getAttribute("height") + "px");
     } else {
-      this.container.setHeight("100%");
+      captionPanel.setHeight("100%");
     }
     
   }
@@ -114,11 +114,11 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
   
   @Override
   public void setHeight(int height) {
-    this.container.setHeight(height + "px");
+    captionPanel.setHeight(height + "px");
   }
 
   @Override
   public void setWidth(int width) {
-    this.container.setWidth(width + "px");
+    captionPanel.setWidth(width + "px");
   }
 }
