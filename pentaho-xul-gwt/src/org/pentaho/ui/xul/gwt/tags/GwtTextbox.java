@@ -113,6 +113,8 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     }
     if(this.getWidth() > 0){
       textBox.setWidth(this.getWidth()+"px");
+    } else {
+      textBox.setWidth("100%");
     }
     if(this.getHeight() > 0){
       textBox.setHeight(this.getHeight()+"px");
