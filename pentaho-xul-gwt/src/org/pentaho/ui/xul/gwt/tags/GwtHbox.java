@@ -41,7 +41,11 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
   }
   
   public void adoptAttributes(XulComponent component) {
-
+    super.adoptAttributes(component);
+    setFlex(component.getFlex());
+    setHeight(component.getHeight());
+    setWidth(component.getWidth());
+    
   }
 
   @Override
