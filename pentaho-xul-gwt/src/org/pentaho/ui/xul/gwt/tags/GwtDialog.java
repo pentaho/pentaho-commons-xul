@@ -347,7 +347,11 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     contentPanel.setStyleName("dialog-content");//$NON-NLS-1$
     contentPanel.setWidth("100%");//$NON-NLS-1$
     
-    panel.add(contentPanel);
+    SimplePanel sp = new SimplePanel();
+    //sp.getElement().getStyle().setProperty("padding", "5px");
+    sp.getElement().setClassName("gwt-Dialog");
+    sp.add(contentPanel);
+    panel.add(sp);
     panel.setCellWidth(contentPanel, "100%");//$NON-NLS-1$
     panel.setStyleName("dialog");//$NON-NLS-1$
     // render dialog contents

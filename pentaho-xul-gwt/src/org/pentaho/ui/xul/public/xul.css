@@ -197,3 +197,6 @@
   background-color: #ccc;
   cursor:none;
 }
+.gwt-Dialog {
+  	padding: 5px;
+}

@@ -31,12 +31,14 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
   public GwtGroupBox() {
     super(ELEMENT_NAME);
     this.orientation = Orient.VERTICAL;
-    captionPanel = new CaptionPanel();
-    managedObject = captionPanel;  
+    managedObject = captionPanel = new CaptionPanel();
+    captionPanel.getElement().getStyle().setProperty("padding", "0px");
+    captionPanel.getElement().getStyle().setProperty("margin", "0px");
+    
     container = new VerticalPanel();
     SimplePanel sp = new SimplePanel();
     sp.getElement().getStyle().setProperty("padding", "4px");
-    sp.setWidth("100%");
+    sp.setWidth("99%");
     sp.add(container);
     ((VerticalPanel) container).setStyleName("vbox");
     ((CaptionPanel) managedObject).add(sp);
@@ -47,12 +49,12 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     if(!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
       captionPanel.setWidth(srcEle.getAttribute("width") + "px");
     } else {
-      captionPanel.setWidth("100%"); 
+      captionPanel.setWidth("99%"); 
     }
     if(!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
       captionPanel.setHeight(srcEle.getAttribute("height") + "px");
     } else {
-      captionPanel.setHeight("100%");
+      captionPanel.setHeight("99%");
     }
     
   }
