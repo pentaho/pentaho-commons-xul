@@ -66,6 +66,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     });*/
   }
   
+  @Override
   public void addChild(Element ele) {
     super.addChild(ele);
 
@@ -102,6 +103,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     }
   }
 
+  @Override
   public void layout() {
     for (int i = 0; i < tabPanel.getWidgetCount(); i++) {
       tabPanel.remove(i);
@@ -119,6 +121,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     initialized = true;
     tabPanel.addSelectionHandler(new SelectionHandler<Integer>(){
 
+      @Override
       public void onSelection(SelectionEvent<Integer> event) {
           if(event != null && event.getSelectedItem() >= 0) {
             try {
