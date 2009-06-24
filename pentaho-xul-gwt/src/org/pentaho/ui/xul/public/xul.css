@@ -200,3 +200,46 @@
 .gwt-Dialog {
   	padding: 5px;
 }
+
+.gwt-TabPanel {
+  margin-top: 1px;
+}
+
+.headerTabPanel {
+   margin-top: 0px;
+   margin-left: 0px;
+   width: 100%;
+   color: #cccccc;
+ }
+
+ .headerTabDeckPanel {
+     background-color: white;
+ }
+
+.gwt-TabPanelBottom {
+  background-color: #E8E8E8;
+}
+
+.gwt-TabBar {
+  padding-top: 1px;
+  border-bottom: 1px solid #878787;
+  background-color: #fff;
+}
+
+.gwt-TabBarItem {
+  padding: 1px;
+  cursor: pointer;
+  background-color: #e8e8e8;
+  border-bottom: 1px solid white;
+  margin-right: 1px;
+}
+
+.gwt-TabBarItem-selected {
+  padding: 4px;
+  font-weight: bold;
+  cursor: default;
+
+  background-color: #878787;
+  border-bottom: 2px solid #87ffff;
+  margin-right: 2px;
+}

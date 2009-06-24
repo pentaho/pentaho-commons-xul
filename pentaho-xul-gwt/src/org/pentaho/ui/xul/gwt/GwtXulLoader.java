@@ -39,6 +39,11 @@ import org.pentaho.ui.xul.gwt.tags.GwtRows;
 import org.pentaho.ui.xul.gwt.tags.GwtScript;
 import org.pentaho.ui.xul.gwt.tags.GwtScrollbox;
 import org.pentaho.ui.xul.gwt.tags.GwtSpacer;
+import org.pentaho.ui.xul.gwt.tags.GwtTab;
+import org.pentaho.ui.xul.gwt.tags.GwtTabPanel;
+import org.pentaho.ui.xul.gwt.tags.GwtTabPanels;
+import org.pentaho.ui.xul.gwt.tags.GwtTabbox;
+import org.pentaho.ui.xul.gwt.tags.GwtTabs;
 import org.pentaho.ui.xul.gwt.tags.GwtTextbox;
 import org.pentaho.ui.xul.gwt.tags.GwtToolbar;
 import org.pentaho.ui.xul.gwt.tags.GwtToolbarbutton;
@@ -126,6 +131,11 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     GwtGrid.register();
     GwtFileDialog.register();
     GwtFileUpload.register();
+    GwtTab.register();
+    GwtTabs.register();
+    GwtTabbox.register();
+    GwtTabPanels.register();
+    GwtTabPanel.register();
   }
   
   /* (non-Javadoc)
