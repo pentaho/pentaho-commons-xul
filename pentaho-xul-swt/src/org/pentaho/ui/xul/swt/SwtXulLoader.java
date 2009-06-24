@@ -68,6 +68,7 @@ public class SwtXulLoader extends AbstractXulLoader{
     parser.registerHandler("IMAGE", "org.pentaho.ui.xul.swt.tags.SwtImage");
     parser.registerHandler("FILEDIALOG", "org.pentaho.ui.xul.swt.tags.SwtFileDialog");
     parser.registerHandler("SPLITTER", "org.pentaho.ui.xul.swt.tags.SwtSplitter");
+    parser.registerHandler("OVERLAY", "org.pentaho.ui.xul.swt.tags.SwtOverlay");
     
   }
 
@@ -90,14 +91,14 @@ public class SwtXulLoader extends AbstractXulLoader{
     XulComponent maybeWindow = domC.getDocumentRoot().getRootElement();
     if ( maybeWindow instanceof SwtWindow){
       SwtWindow window = (SwtWindow) maybeWindow;
-      window.notifyListeners(XulRoot.EVENT_ON_LOAD);
+//      window.notifyListeners(XulRoot.EVENT_ON_LOAD);
       defaultParent = window;
     }
     
     XulComponent maybeDialog = domC.getDocumentRoot().getRootElement();
     if ( maybeWindow instanceof SwtDialog){
       SwtDialog dialog = (SwtDialog) maybeDialog;
-      dialog.notifyListeners(XulRoot.EVENT_ON_LOAD);
+//      dialog.notifyListeners(XulRoot.EVENT_ON_LOAD);
       defaultParent = dialog;
     }
 

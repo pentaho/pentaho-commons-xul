@@ -64,6 +64,13 @@ public class SwtElement extends AbstractXulComponent {
   @Override
   public void removeChild(Element ele) {
     super.removeChild(ele);
+    if (ele instanceof XulComponent) {
+      Widget thisWidget = (Widget) ((XulComponent)ele).getManagedObject();
+      if (thisWidget != null && !thisWidget.isDisposed()) {
+        thisWidget.dispose();
+      }
+    }
+    
     if (initialized) {
       layout();
     }
@@ -108,6 +115,7 @@ public class SwtElement extends AbstractXulComponent {
     }
 
     Composite container = (Composite) getManagedObject();
+    
 
     // Total all flex values.
     // If every child has a flex value, then the GridLayout's columns
