@@ -68,7 +68,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     });*/
   }
   
-  @Override
   public void addChild(Element ele) {
     super.addChild(ele);
 
@@ -105,7 +104,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     }
   }
 
-  @Override
   public void layout() {
     for (int i = 0; i < tabPanel.getWidgetCount(); i++) {
       tabPanel.remove(i);
