@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
 import org.pentaho.gwt.widgets.client.dialogs.PromptDialogBox;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
@@ -42,6 +43,7 @@ import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellEditorCallback;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -50,6 +52,7 @@ import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupListener;
@@ -1003,8 +1006,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       
       hPanel.add(labelWrapper);
       hPanel.setCellWidth(labelWrapper, "100%");
-      
-      Button btn = new Button("...");
+      ImageButton btn = new ImageButton(GWT.getModuleBaseURL() + "/images/open_new.png", GWT.getModuleBaseURL() + "/images/open_new.png", "", 25, 15);
       btn.getElement().getStyle().setProperty("margin", "0px");
       
       hPanel.add(btn);
