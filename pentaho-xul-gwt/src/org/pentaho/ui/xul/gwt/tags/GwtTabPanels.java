@@ -6,6 +6,7 @@ import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtDomElement;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
@@ -50,7 +51,7 @@ public class GwtTabPanels extends AbstractGwtXulContainer implements XulTabpanel
   public void layout() {
     initialized = true;
     if (getParent() != null) {
-      ((AbstractXulComponent)getParent()).layout();
+      ((AbstractGwtXulComponent)getParent()).layout();
     }
   }
 }
