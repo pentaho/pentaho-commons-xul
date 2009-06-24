@@ -12,6 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -58,7 +60,7 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
 
   private String buttonlabelextra2;
 
-  private HashMap<SwingDialog.BUTTONS, XulButton> buttons = new HashMap<SwingDialog.BUTTONS, XulButton>();
+  private LinkedHashMap<SwingDialog.BUTTONS, XulButton> buttons = new LinkedHashMap<SwingDialog.BUTTONS, XulButton>();
 
   private String ondialogaccept;
 
@@ -431,13 +433,13 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     Box buttonPanel = Box.createHorizontalBox();
 
     if (this.buttonAlignment == BUTTON_ALIGN.RIGHT || this.buttonAlignment == BUTTON_ALIGN.END
-        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER) {
+        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER
+        || this.buttonAlignment == null) {
       buttonPanel.add(Box.createHorizontalGlue());
     }
 
     ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
     for (int i = 0; i < buttonKeyList.size(); i++) {
-    //for (int i = buttonKeyList.size() - 1; i >= 0; i--) {
       buttonPanel.add(Box.createHorizontalStrut(5));
       buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
       this.addChild(this.buttons.get(buttonKeyList.get(i)));
