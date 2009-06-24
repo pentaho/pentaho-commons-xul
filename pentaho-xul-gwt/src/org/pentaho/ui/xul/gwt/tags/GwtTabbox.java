@@ -13,8 +13,6 @@ import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.ui.SourcesTabEvents;
-import com.google.gwt.user.client.ui.TabListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -121,7 +119,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     initialized = true;
     tabPanel.addSelectionHandler(new SelectionHandler<Integer>(){
 
-      @Override
       public void onSelection(SelectionEvent<Integer> event) {
           if(event != null && event.getSelectedItem() >= 0) {
             try {
