@@ -97,8 +97,11 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     super.init(srcEle, container);
     setBinding(srcEle.getAttribute("pen:binding"));
     setOnCommand(srcEle.getAttribute("oncommand"));
-    if(StringUtils.isEmpty(srcEle.getAttribute("width"))) {
+    if(!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
       setWidth(Integer.parseInt(srcEle.getAttribute("width")));  
+    }
+    if(!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
+      setHeight(Integer.parseInt(srcEle.getAttribute("height")));  
     }
   }
   
@@ -362,6 +365,10 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     listbox.setWidth(width + "px");
   }
 
+  @Override
+  public void setHeight(int height) {
+    listbox.setHeight(height + "px");
+  }
   private int getIndexForItem(Object obj) {
     int index = -1;
     if(obj != null){
