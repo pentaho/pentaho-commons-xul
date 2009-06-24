@@ -60,6 +60,19 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
        container.showWidget(selectedIndex);
      }
   }
+  
+  @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    this.container.remove((Widget) ((XulComponent)ele).getManagedObject());
+    
+    // sync with selectedIndex
+    if (this.container.getVisibleWidget() != selectedIndex 
+        && selectedIndex < container.getWidgetCount()) {
+      container.showWidget(selectedIndex);
+    }    
+    
+  }
 
   public int getSelectedIndex() {
     return container.getVisibleWidget();

@@ -9,7 +9,10 @@ import java.util.List;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.containers.XulDialog;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
+import org.pentaho.ui.xul.gwt.tags.GwtDialog;
 import org.pentaho.ui.xul.gwt.tags.GwtWindow;
 
 import com.google.gwt.user.client.ui.DialogBox;
@@ -36,10 +39,10 @@ public class GwtXulRunner { // implements XulRunner {
   public void initialize() throws XulException{
     //get first Element, should be a JFrame and show it.
     XulComponent c = containers.get(0).getDocumentRoot().getRootElement();
-    if(c instanceof XulWindow == false){
+    if(c instanceof XulWindow == false && c instanceof XulDialog == false){
       return;
     }
-    XulWindow rootEle = (XulWindow) containers.get(0).getDocumentRoot().getRootElement();
+    XulRoot rootEle = (XulRoot) containers.get(0).getDocumentRoot().getRootElement();
     System.out.println("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
@@ -51,6 +54,8 @@ public class GwtXulRunner { // implements XulRunner {
     
     if(rootEle instanceof GwtWindow){
       rootFrame = (Panel) ((GwtWindow)rootEle).getManagedObject();
+    } else if (rootEle instanceof GwtDialog) {
+      // do nothing
     } else {
       throw new XulException("Root element not a Frame");
     }

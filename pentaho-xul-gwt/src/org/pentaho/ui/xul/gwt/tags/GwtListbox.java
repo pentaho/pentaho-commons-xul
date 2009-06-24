@@ -19,11 +19,13 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.util.Orient;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, ChangeListener {
+public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, ChangeHandler {
 
   static final String ELEMENT_NAME = "listbox"; //$NON-NLS-1$
   private int selectedIndex = -1;
@@ -55,7 +57,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   public GwtListbox() {
     super(ELEMENT_NAME);
     managedObject = listBox = new ListBox();
-    listBox.addChangeListener(this);
+    listBox.addChangeHandler(this);
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -124,10 +126,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     this.onselect = onchange;
   }
 
-  public void onChange(Widget sender) {
-    Document doc = getDocument();
-    Element rootElement = doc.getRootElement();
-    XulWindow window = (XulWindow) rootElement;
+  public void onChange(ChangeEvent changeEvent) {
     try {
       if(onselect != null && onselect.length() > 0) {
         this.getXulDomContainer().invoke(onselect, new Object[] {new Integer(listBox.getSelectedIndex())});
@@ -135,13 +134,15 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     } catch (XulException e) {
       e.printStackTrace();
     }
-    
     this.setSelectedIndex(listBox.getSelectedIndex());
-    
   }
 
   public Object getSelectedItem() {
-    return getItem(listBox.getSelectedIndex());
+    if (listBox.getSelectedIndex() != -1) {
+      return getItem(listBox.getSelectedIndex());
+    } else {
+      return null;
+    }
   }
 
   private Object getItem(int index) {
@@ -163,18 +164,33 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   }
 
   private int getItemIndex(Object item) {
-    GwtListitem listitem = (GwtListitem) item;
-    for (int i = 0; i < listBox.getItemCount(); i++) {
-      GwtListitem currItem = (GwtListitem) getItem(i);
-      if (currItem.getLabel().equals(listitem.getLabel())) {
-        return i;
+    if (item instanceof GwtListitem) {
+      GwtListitem listitem = (GwtListitem) item;
+      for (int i = 0; i < listBox.getItemCount(); i++) {
+        GwtListitem currItem = (GwtListitem) getItem(i);
+        if (currItem.getLabel().equals(listitem.getLabel())) {
+          return i;
+        }
       }
+    } else {
+      for (int i = 0; i < listBox.getItemCount(); i++) {
+        GwtListitem currItem = (GwtListitem) getItem(i);
+        if (currItem.getLabel().equals(item.toString())) {
+          return i;
+        }
+      }
+      
     }
     return -1;
   }
 
   public void setSelectedItem(Object item) {
-    listBox.setSelectedIndex(getItemIndex(item));
+    if (item == null) {
+      listBox.setSelectedIndex(-1);
+    } else {
+      listBox.setSelectedIndex(getItemIndex(item));
+    }
+    onChange(null);
   }
 
   public void setSelectedItems(Object[] items) {
@@ -193,12 +209,27 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   }
 
   public void addItem(Object item) {
+    
     // these need to stay in sync with the dom!
-    throw new UnsupportedOperationException();
+    
+    try {
+      GwtListitem itemobj = (GwtListitem) container.getDocumentRoot().createElement("listitem");
+      itemobj.setLabel((String)item);
+      this.addChild(itemobj);
+      if (listBox != null) {
+        listBox.addItem((String)item, "" + listBox.getItemCount());
+      }
+
+    } catch (XulException e) {
+      // TODO: log or pass exception
+    }
   }
 
   public void removeItems() {
-    throw new UnsupportedOperationException();
+    listBox.clear();
+    for(XulComponent c : this.getChildNodes()){
+      this.removeChild(c);
+    }
   }
 
   public int getRowCount() {
@@ -231,6 +262,12 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     return (Collection<T>) boundElements;
   }
 
+  @Override
+  public void removeChild(Element element) {
+    super.removeChild(element);
+    layout();
+  }
+  
   public <T> void setElements(Collection<T> elements) {
     boundElements = elements;
 

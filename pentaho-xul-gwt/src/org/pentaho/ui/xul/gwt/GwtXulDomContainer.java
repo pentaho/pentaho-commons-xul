@@ -284,6 +284,7 @@ public class GwtXulDomContainer implements XulDomContainer {
                 }
               } else {
                 sourceContainer.addChild(overlayChild);
+                ((AbstractGwtXulComponent)overlayChild).layout();
               }
             }
             

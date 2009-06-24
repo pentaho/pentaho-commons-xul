@@ -386,7 +386,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
             centerButtonPanel.add(widget);
           } else if ("left".equals(align)) {//$NON-NLS-1$
             leftButtonPanel.add(widget);
-          } else if ("right".equals(align)) {//$NON-NLS-1$
+          } else {
+            // default to right
             rightButtonPanel.add(widget);
           }
         }        
@@ -395,7 +396,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
           centerButtonPanel.add(widget);
         } else if ("left".equals(buttonalign)) {//$NON-NLS-1$
           leftButtonPanel.add(widget);
-        } else if ("right".equals(buttonalign)) {//$NON-NLS-1$
+        } else {
+          // default to right
           rightButtonPanel.add(widget);
         }
       }

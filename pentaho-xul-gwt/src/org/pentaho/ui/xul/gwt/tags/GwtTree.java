@@ -690,8 +690,26 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   }
 
   public Object[][] getValues() {
-    // TODO Auto-generated method stub
-    return null;
+    
+    Object[][] data = new Object[getRootChildren().getChildNodes().size()][getColumns().getColumnCount()];
+    
+    for (XulComponent component : getRootChildren().getChildNodes()) {
+      XulTreeItem item = (XulTreeItem)component;
+      for (XulComponent childComp : item.getChildNodes()) {
+        XulTreeRow row = (XulTreeRow)childComp;
+        for (int i = 0; i < getColumns().getColumnCount(); i++) {
+          XulTreeCell cell = row.getCell(i);
+          if (cell == null) {
+            System.out.println("CELL NULL" + i);
+          } else if (cell.getValue() == null) {
+            System.out.println("CELL VAL NULL " + i);
+          } else {
+            System.out.println("" + cell.getValue() + " TYPE? " + cell.getValue().getClass());
+          }
+        }
+      }
+    }
+    return data;
   }
 
   public boolean isEditable() {
