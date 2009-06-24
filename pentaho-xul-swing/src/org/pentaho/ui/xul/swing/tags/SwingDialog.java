@@ -58,7 +58,7 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
 
   private String buttonlabelextra2;
 
-  private TreeMap<SwingDialog.BUTTONS, XulButton> buttons = new TreeMap<SwingDialog.BUTTONS, XulButton>();
+  private HashMap<SwingDialog.BUTTONS, XulButton> buttons = new HashMap<SwingDialog.BUTTONS, XulButton>();
 
   private String ondialogaccept;
 
