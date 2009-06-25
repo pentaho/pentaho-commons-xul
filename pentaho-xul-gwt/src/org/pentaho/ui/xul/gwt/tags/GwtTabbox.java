@@ -124,7 +124,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
 
     tabPanel.addBeforeSelectionHandler( new BeforeSelectionHandler<Integer>(){
 
-      @Override
       public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
         if(event != null && event.getItem() >= 0) {
           try {
