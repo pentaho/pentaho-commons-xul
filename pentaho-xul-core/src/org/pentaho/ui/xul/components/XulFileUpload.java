@@ -10,5 +10,7 @@ public interface XulFileUpload  extends XulComponent {
   public void setOnUploadFailure(String method);
   public String getOnUploadSuccess();
   public String getOnUploadFailure();
-  
+  public String getSeletedFile();
+  public void setSelectedFile(String name);
+  public void submit();
 }
