@@ -42,7 +42,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   private XulDomContainer xulContainer;
   private String bgColor = null;
   private SimplePanel glasspane = new SimplePanel();
-  private static int dialogPos = 1100;
+  static int dialogPos = 1100;
   private List<XulButton> dialogButtons = new ArrayList<XulButton>();
   
   public GwtDialog() {

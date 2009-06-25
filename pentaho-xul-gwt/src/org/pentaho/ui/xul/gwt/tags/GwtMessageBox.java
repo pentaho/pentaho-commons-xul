@@ -50,10 +50,19 @@ public class GwtMessageBox extends AbstractGwtXulComponent implements XulMessage
   }
 
   public int open() {
-    final boolean IS_HTML = false;
+    boolean IS_HTML = false;
     final boolean AUTO_HIDE = false;
     final boolean MODAL = true;
-    new MessageDialogBox(title, message, IS_HTML, AUTO_HIDE, MODAL).show();
+    String msg = message;
+    if (msg.indexOf("\n") >= 0) {
+      msg = "<div align=\"left\"/>" + message.replaceAll("\n", "<br>") + "</div>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      IS_HTML = true;
+    }
+    MessageDialogBox mb = new MessageDialogBox(title, msg, IS_HTML, AUTO_HIDE, MODAL);
+    mb.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos + 1));//$NON-NLS-1$
+    mb.center();
+    mb.show();
+    
     return 0;
   }
 
