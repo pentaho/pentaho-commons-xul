@@ -98,6 +98,7 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
 
   private String ID;
   private XulComponent parent = null;
+  private Box buttonPanel = Box.createHorizontalBox();
   
 
   /**
@@ -188,6 +189,12 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
 
   public void setButtons(String buttons) {
     btns = buttons;
+    if(buttonsProcessed){
+      buttonsProcessed = false;
+      this.layout();
+      populateButtonPanel();
+    }
+    
   }
 
   public void setOndialogaccept(String command) {
@@ -257,6 +264,8 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     //setting initialized = false prevents layout from looping
     this.initialized = false;
     if(!buttonsProcessed){
+
+      this.buttons.clear();
       if(this.btns != null){
         String[] tempButtons = btns.split(",");
     
@@ -335,6 +344,50 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     
     
     this.onload = onload;
+  }
+
+  private void populateButtonPanel(){
+
+    buttonPanel.removeAll();
+    if (this.buttonAlignment == BUTTON_ALIGN.RIGHT || this.buttonAlignment == BUTTON_ALIGN.END
+        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER
+        || this.buttonAlignment == null) {
+      buttonPanel.add(Box.createHorizontalGlue());
+    }
+
+    ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
+    for (int i = 0; i < buttonKeyList.size(); i++) {
+      buttonPanel.add(Box.createHorizontalStrut(5));
+      buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
+      this.addChild(this.buttons.get(buttonKeyList.get(i)));
+    }
+
+    buttonPanel.add(Box.createHorizontalStrut(5));
+
+    if (this.buttonAlignment == BUTTON_ALIGN.START || this.buttonAlignment == BUTTON_ALIGN.LEFT
+        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER) {
+      buttonPanel.add(Box.createHorizontalGlue());
+    }
+    
+
+    if (buttons.containsKey(SwingDialog.BUTTONS.ACCEPT)) {
+      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setLabel(this.getButtonlabelaccept());
+      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setOnclick(this.getOndialogaccept());
+    }
+    if (buttons.containsKey(SwingDialog.BUTTONS.CANCEL)) {
+      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setLabel(this.getButtonlabelcancel());
+      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
+    }
+
+    // FIXME
+    if (buttons.containsKey(SwingDialog.BUTTONS.EXTRA1)) {
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setLabel(this.getButtonlabelextra1());
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setOnclick(this.getOndialogextra1());
+    }
+    if (buttons.containsKey(SwingDialog.BUTTONS.EXTRA2)) {
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setLabel(this.getButtonlabelextra2());
+      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setOnclick(this.getOndialogextra2());
+    }
   }
   
   private Component centerComp;
@@ -430,51 +483,12 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
       mainPanel.add(headerPanel, BorderLayout.NORTH);
     }
 
-    Box buttonPanel = Box.createHorizontalBox();
-
-    if (this.buttonAlignment == BUTTON_ALIGN.RIGHT || this.buttonAlignment == BUTTON_ALIGN.END
-        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER
-        || this.buttonAlignment == null) {
-      buttonPanel.add(Box.createHorizontalGlue());
-    }
-
-    ArrayList<BUTTONS> buttonKeyList = new ArrayList<BUTTONS>(buttons.keySet());
-    for (int i = 0; i < buttonKeyList.size(); i++) {
-      buttonPanel.add(Box.createHorizontalStrut(5));
-      buttonPanel.add((JButton) this.buttons.get(buttonKeyList.get(i)).getManagedObject());
-      this.addChild(this.buttons.get(buttonKeyList.get(i)));
-    }
-
-    buttonPanel.add(Box.createHorizontalStrut(5));
-
-    if (this.buttonAlignment == BUTTON_ALIGN.START || this.buttonAlignment == BUTTON_ALIGN.LEFT
-        || this.buttonAlignment == BUTTON_ALIGN.MIDDLE || this.buttonAlignment == BUTTON_ALIGN.CENTER) {
-      buttonPanel.add(Box.createHorizontalGlue());
-    }
-
+    populateButtonPanel();
     mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     dialog.setSize(new Dimension(getWidth(), getHeight()));
     dialog.setPreferredSize(new Dimension(getWidth(), getHeight()));
     dialog.setMinimumSize(new Dimension(getWidth(), getHeight()));
 
-    if (buttons.containsKey(SwingDialog.BUTTONS.ACCEPT)) {
-      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setLabel(this.getButtonlabelaccept());
-      this.buttons.get(SwingDialog.BUTTONS.ACCEPT).setOnclick(this.getOndialogaccept());
-    }
-    if (buttons.containsKey(SwingDialog.BUTTONS.CANCEL)) {
-      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setLabel(this.getButtonlabelcancel());
-      this.buttons.get(SwingDialog.BUTTONS.CANCEL).setOnclick(this.getOndialogcancel());
-    }
-
-    // FIXME
-    if (buttons.containsKey(SwingDialog.BUTTONS.EXTRA1)) {
-      this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setLabel(this.getButtonlabelextra1());
-      this.buttons.get(SwingDialog.BUTTONS.EXTRA1).setOnclick(this.getOndialogextra1());
-    }
-    if (buttons.containsKey(SwingDialog.BUTTONS.EXTRA2)) {
-      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setLabel(this.getButtonlabelextra2());
-      this.buttons.get(SwingDialog.BUTTONS.EXTRA2).setOnclick(this.getOndialogextra2());
-    }
     
     if(this.getBgcolor() != null){
       mainPanel.setBackground(Color.decode(this.getBgcolor()));
