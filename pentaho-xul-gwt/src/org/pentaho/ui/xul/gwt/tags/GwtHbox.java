@@ -43,7 +43,6 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
   public void adoptAttributes(XulComponent component) {
     super.adoptAttributes(component);
     setPadding(component.getPadding());
-    
   }
 
   @Override

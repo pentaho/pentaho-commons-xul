@@ -35,7 +35,8 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
   public void adoptAttributes(XulComponent component) {
     super.adoptAttributes(component);
     setPadding(component.getPadding());
-    
+    this.resetContainer();
+    this.layout();
   }
 
   @Override
