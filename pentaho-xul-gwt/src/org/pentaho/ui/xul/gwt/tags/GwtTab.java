@@ -12,6 +12,7 @@ public class GwtTab extends AbstractGwtXulContainer implements XulTab {
   private String label;
   private boolean disabled = false;
   private String onclick;
+  private String onBeforeSelect;
   private XulTabbox tabbox;
 
   static final String ELEMENT_NAME = "tab"; //$NON-NLS-1$
@@ -34,6 +35,7 @@ public class GwtTab extends AbstractGwtXulContainer implements XulTab {
     super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
     setOnclick(srcEle.getAttribute("onclick"));
+    setOnBeforeSelect(srcEle.getAttribute("pen:onbeforeselect"));
   }
   public boolean isDisabled() {
     return disabled;
@@ -75,6 +77,20 @@ public class GwtTab extends AbstractGwtXulContainer implements XulTab {
   }
   @Override
   public void layout() {
+  }
+
+  /**
+   * @param onBeforeSelect the onBeforeSelect to set
+   */
+  public void setOnBeforeSelect(String onBeforeSelect) {
+    this.onBeforeSelect = onBeforeSelect;
+  }
+
+  /**
+   * @return the onBeforeSelect
+   */
+  public String getOnBeforeSelect() {
+    return onBeforeSelect;
   }
 
 }

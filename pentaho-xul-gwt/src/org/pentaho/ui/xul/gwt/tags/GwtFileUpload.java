@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -10,7 +9,6 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -18,13 +16,13 @@ import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUpload{
-  private String uploadSuccessMethod, uploadFailureMethod, buttonLabelUpload;
+  private String uploadSuccessMethod, uploadFailureMethod;
   public final static String ERROR = ".ERROR_";  
   private FormPanel uploadForm = null;
   private FileUpload upload = null; 
+  private VerticalPanel uploadPanel;
   private VerticalPanel mainPanel;
   private String action;
   private static final String ELEMENT_NAME = "pen:fileupload"; //$NON-NLS-1$
@@ -56,9 +54,6 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     if (!StringUtils.isEmpty(srcEle.getAttribute("onuploadfailure"))) {
       setOnUploadFailure(srcEle.getAttribute("onuploadfailure"));
     }
-    if (!StringUtils.isEmpty(srcEle.getAttribute("buttonlabelupload"))) {
-      setButtonLabelUpload(srcEle.getAttribute("buttonlabelupload"));
-    }    
     
     uploadForm = new FormPanel();
     uploadForm.setAction(getAction());
@@ -76,7 +71,9 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     upload.setVisible(true);
     upload.setHeight(getHeight() + "px");
     upload.setWidth(getWidth() + "px");
-    panel.add(upload);
+    uploadPanel = new VerticalPanel();
+    uploadPanel.add(upload);
+    panel.add(uploadPanel);
     mainPanel.add(uploadForm);
     if(getHeight() >= 0) {
       mainPanel.setHeight(getHeight() + "px");
@@ -84,17 +81,6 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     if(getWidth() >= 0) {
       mainPanel.setWidth(getWidth() + "px");
     }
-    
-    // Add a 'Upload' button.
-    RoundedButton uploadSubmitButton = new RoundedButton(getButtonLabelUpload());
-    panel.setSpacing(5);
-    panel.add(uploadSubmitButton);
-
-    uploadSubmitButton.addClickListener(new ClickListener() {
-      public void onClick(Widget sender) {
-        uploadForm.submit();
-      }
-    });
 
     uploadForm.addFormHandler(new FormHandler() {
       public void onSubmit(FormSubmitEvent event) {
@@ -161,11 +147,24 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
   public void setOnUploadSuccess(String method) {
     this.uploadSuccessMethod = method;    
   }
-  public String getButtonLabelUpload() {
-    return buttonLabelUpload;
+
+  public String getSeletedFile() {
+    return upload.getFilename();
   }
 
-  public void setButtonLabelUpload(String buttonLabelUpload) {
-    this.buttonLabelUpload = buttonLabelUpload;
+  public void setSelectedFile(String name) {
+    if(name == null || name.length() <=0) {
+      uploadPanel.remove(upload);
+      upload = new FileUpload();
+      upload.setName("uploadFormElement"); //$NON-NLS-1$
+      upload.setVisible(true);
+      upload.setHeight(getHeight() + "px"); //$NON-NLS-1$
+      upload.setWidth(getWidth() + "px"); //$NON-NLS-1$
+      uploadPanel.add(upload);
+      firePropertyChange("selectedFile", getSeletedFile(), name); //$NON-NLS-1$
+    }
+  }
+  public void submit() {
+    uploadForm.submit();
   }
 }

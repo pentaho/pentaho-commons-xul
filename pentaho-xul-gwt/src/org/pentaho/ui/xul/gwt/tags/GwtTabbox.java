@@ -9,8 +9,12 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
+import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.util.Orient;
 
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.TabPanel;
@@ -117,6 +121,29 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     }
     setSelectedIndex(selectedIndex);
     initialized = true;
+
+    tabPanel.addBeforeSelectionHandler( new BeforeSelectionHandler<Integer>(){
+
+      @Override
+      public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
+        if(event != null && event.getItem() >= 0) {
+          try {
+            final String onBeforeSelectMethod = ((GwtTab)tabs.getTabByIndex(event.getItem())).getOnBeforeSelect();
+            Object returnValue = GwtTabbox.this.getXulDomContainer().invoke(onBeforeSelectMethod, new Object[] {event.getItem()});
+            if(returnValue != null && returnValue instanceof Boolean) {
+              Boolean value = (Boolean) returnValue;
+              if(!value) {
+                event.cancel();
+              }
+            }
+          } catch (XulException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+      
+    });
+    
     tabPanel.addSelectionHandler(new SelectionHandler<Integer>(){
 
       public void onSelection(SelectionEvent<Integer> event) {

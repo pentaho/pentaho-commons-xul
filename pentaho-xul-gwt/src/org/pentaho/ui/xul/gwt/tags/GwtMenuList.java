@@ -42,7 +42,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       }
     });
   }
-  
+  private int selectedIndex = -1;
   private Label label;
   private CustomListBox listbox;
   private String bindingProperty;
@@ -207,7 +207,10 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   public void setSelectedIndex(int idx) {
+    int previousValue = selectedIndex;
+    selectedIndex = idx;
     listbox.setSelectedIndex(idx);
+    firePropertyChange("selectedIndex", previousValue, idx);
   }
 
   public void setSelectedItem(T t) {
@@ -250,7 +253,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       
   }
 
-  private int selectedIndex = -1;
+  
   private void fireSelectedEvents(){
     
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (String) getSelectedItem());
