@@ -16,6 +16,7 @@ import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
+import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 
@@ -179,19 +180,21 @@ public class GwtXulDomContainer implements XulDomContainer {
       methodName = methodName.substring(0,methodName.indexOf("("));
       
       EventHandlerWrapper wrapper = this.handlerWrapers.get(this.handlers.get(eventID));
-      
+
+      GwtBindingMethod m = GwtBindingContext.typeController.findMethod(this.handlers.get(eventID), methodName);
       if(args.length > 0){
-//        Class[] classes = new Class[args.length];
-//        
-//        for(int i=0; i<args.length; i++){
-//          classes[i] = unBoxPrimative(args[i].getClass());
-//        }
-        //Add in parameter support
-        wrapper.execute(methodName, args);
-        return null;
+        try{
+          return m.invoke(this.handlers.get(eventID), args);
+        } catch (Exception e){
+          throw new XulException("Error invoking method: " + method, e);
+        }
       } else {
-        wrapper.execute(methodName, new Object[]{});
-        return null;
+
+        try{
+          return m.invoke(this.handlers.get(eventID), new Object[]{});
+        } catch (Exception e){
+          throw new XulException("Error invoking method: " + method, e);
+        }
       }
     } catch (Exception e) {
       throw new XulException("Error invoking method: " + method, e);

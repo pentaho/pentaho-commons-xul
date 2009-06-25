@@ -184,6 +184,13 @@ public class TypeControllerGenerator extends Generator {
     sourceWriter.println("return wrappedTypes.get((obj.getClass().getName()+\"_set\"+propertyName).toLowerCase());");
     sourceWriter.outdent();
     sourceWriter.println("}");
+    
+    sourceWriter.println("public GwtBindingMethod findMethod(Object obj, String propertyName){");
+    sourceWriter.indent();
+    
+    sourceWriter.println("return wrappedTypes.get((obj.getClass().getName()+\"_\"+propertyName).toLowerCase());");
+    sourceWriter.outdent();
+    sourceWriter.println("}");
   }
   
 
