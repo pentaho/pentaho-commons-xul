@@ -200,5 +200,13 @@
 .gwt-Dialog {
   	padding: 5px;
 }
+fieldset {
+ border:1px solid black
+}
 
-
+legend {
+  padding: 0.2em 0.5em;
+  color:black;
+  font-size:90%;
+  text-align:right;
+}
