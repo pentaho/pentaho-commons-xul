@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.gwt.widgets.GwtTabWidget;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
@@ -47,27 +48,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
   public GwtTabbox(Orient orient) {
     super(ELEMENT_NAME);
     managedObject = tabPanel = new TabPanel();
-
-/*    tabpanel.addTabListener(new TabListener() {
-
-      @Override
-      public boolean onBeforeTabSelected(SourcesTabEvents sender, int tabIndex) {
-        // TODO Auto-generated method stub
-        return false;
-      }
-
-      @Override
-      public void onTabSelected(SourcesTabEvents sender, int tabIndex) {
-        final String onClickMethod = tabs.getTabByIndex(tabIndex).getOnclick();
-        try {
-          setSelectedIndex(tabIndex);
-          GwtTabbox.this.getXulDomContainer().invoke(onClickMethod, new Object[] {});
-        } catch (XulException e) {
-          e.printStackTrace();
-        }
-      }
-
-    });*/
   }
   
   public void addChild(Element ele) {
@@ -117,7 +97,8 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
         //no panel for tab
         continue;
       }
-      tabPanel.add((Widget) panel.getManagedObject(), tabs.getTabByIndex(i).getLabel());
+      GwtTabWidget widget = new GwtTabWidget(tabs.getTabByIndex(i).getLabel(), "",  tabPanel, ((Widget) panel.getManagedObject()));
+      tabPanel.add((Widget) panel.getManagedObject(), widget);
     }
     setSelectedIndex(selectedIndex);
     initialized = true;
