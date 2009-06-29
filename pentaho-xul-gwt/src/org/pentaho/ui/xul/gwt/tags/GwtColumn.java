@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulColumn;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
@@ -22,21 +21,8 @@ public class GwtColumn extends AbstractGwtXulContainer implements XulColumn {
     super("column"); //$NON-NLS-1$
     this.managedObject = "empty";
   }
-  
 
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
-  }
+  public void layout(){
 
-
-  public void addComponentAt(XulComponent component, int idx) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void removeComponent(XulComponent component) {
-    // TODO Auto-generated method stub
-    
   }
 }

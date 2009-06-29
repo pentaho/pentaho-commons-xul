@@ -47,4 +47,8 @@ public class GwtRows extends AbstractGwtXulContainer implements XulRows {
     
   }
 
+  public void layout(){
+
+  }
+
 }

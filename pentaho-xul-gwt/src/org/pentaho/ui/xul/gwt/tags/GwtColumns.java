@@ -46,5 +46,9 @@ public class GwtColumns extends AbstractGwtXulContainer implements XulColumns {
     // TODO Auto-generated method stub
     
   }
+  
+  public void layout(){
+
+  }
 
 }
