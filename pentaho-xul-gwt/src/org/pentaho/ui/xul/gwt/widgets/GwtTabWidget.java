@@ -37,7 +37,7 @@ public class GwtTabWidget extends HorizontalPanel implements MouseListener {
 
     setLabelText(text);
     setLabelTooltip(tooltip);
-    textLabel.addStyleName("xulTabWidgetLabel");
+    textLabel.setStyleName("xulTabWidgetLabel");
     textLabel.setWordWrap(false);
     textLabel.addMouseListener(this);
     tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {

@@ -221,8 +221,8 @@ legend {
   margin-top: 4px;
 }
 
- .get-TabBar .xulTabWidgetLabel {
-  font-size: 10px
+ .gwt-TabBar .xulTabWidgetLabel {
+	font: normal 14px tahoma, arial, helvetica;
  }
 .gwt-TabBar .xulTabWidget-selected {
   background-image: url(images/dialog_tab_right.png);
@@ -272,4 +272,7 @@ legend {
   height: 24px;
   margin-top: 4px;
   width: 6px;
+}
+.gwt-FileUpload {
+
 }
