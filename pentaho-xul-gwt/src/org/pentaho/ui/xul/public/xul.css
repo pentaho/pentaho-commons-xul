@@ -210,3 +210,66 @@ legend {
   font-size:90%;
   text-align:right;
 }
+
+.gwt-TabBar .xulTabWidget {
+  background-image: url(images/dialog_tab_right.png);
+  background-position: 100% 0px;
+  margin-right: 2px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+}
+
+ .get-TabBar .xulTabWidgetLabel {
+  font-size: 10px
+ }
+.gwt-TabBar .xulTabWidget-selected {
+  background-image: url(images/dialog_tab_right.png);
+  background-position: 100% -42px;
+  margin-right: 2px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+}
+
+.gwt-TabBar .xulTabWidget-hover {
+  background-image: url(images/dialog_tab_right.png);
+  background-position: 100% -84px;
+  margin-right: 2px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+}
+
+.gwt-TabBar .xulTabWidgetCap {
+  background-image: url(images/dialog_tab_left.png);
+  background-position: 100% 0px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+  width: 6px;  
+}
+
+.gwt-TabBar .xulTabWidgetCap-selected {
+  background-image: url(images/dialog_tab_left.png);
+  background-position: 100% -42px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+  width: 6px;
+}
+
+.gwt-TabBar .xulTabWidgetCap-hover {
+  background-image: url(images/dialog_tab_left.png);
+  background-position: 100% -84px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+  width: 6px;
+}
