@@ -201,7 +201,8 @@
   	padding: 5px;
 }
 fieldset {
- border:1px solid #777777
+ border:1px solid #777777;
+ padding-right: 1px;
 }
 
 legend {
