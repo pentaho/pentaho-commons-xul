@@ -32,18 +32,15 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     super(ELEMENT_NAME);
     this.orientation = Orient.VERTICAL;
     managedObject = captionPanel = new CaptionPanel();
-    captionPanel.getElement().getStyle().setProperty("padding", "0px");
-    captionPanel.getElement().getStyle().setProperty("margin", "0px");
-    
     container = new VerticalPanel();
     container.setWidth("100%");
-    SimplePanel sp = new SimplePanel();
-    sp.getElement().getStyle().setProperty("padding", "4px");
-    sp.getElement().getStyle().setProperty("margin", "0px");
-    sp.setWidth("100%");
-    sp.add(container);
+    VerticalPanel vp = new VerticalPanel();
+    vp.getElement().getStyle().setProperty("padding", "4px");
+    vp.getElement().getStyle().setProperty("margin", "0px");
+    vp.setWidth("100%");
+    vp.add(container);
     ((VerticalPanel) container).setStyleName("vbox");
-    ((CaptionPanel) managedObject).add(sp);
+    ((CaptionPanel) managedObject).add(vp);
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
