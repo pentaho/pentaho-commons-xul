@@ -36,6 +36,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     captionPanel.getElement().getStyle().setProperty("margin", "0px");
     
     container = new VerticalPanel();
+    container.setWidth("100%");
     SimplePanel sp = new SimplePanel();
     sp.getElement().getStyle().setProperty("padding", "4px");
     sp.getElement().getStyle().setProperty("margin", "0px");
