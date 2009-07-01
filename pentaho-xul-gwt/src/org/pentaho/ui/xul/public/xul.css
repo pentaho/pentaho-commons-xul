@@ -223,6 +223,7 @@ legend {
 
  .gwt-TabBar .xulTabWidgetLabel {
 	font: normal 14px tahoma, arial, helvetica;
+	margin-top: -5px;
  }
 .gwt-TabBar .xulTabWidget-selected {
   background-image: url(images/dialog_tab_right.png);
@@ -231,7 +232,7 @@ legend {
   cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 .gwt-TabBar .xulTabWidget-hover {
