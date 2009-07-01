@@ -102,8 +102,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     }
     setSelectedIndex(selectedIndex);
     initialized = true;
-    tabPanel.setStylePrimaryName("xulTabPanel");
-    tabPanel.getTabBar().setStylePrimaryName("xulTabBar");
+
     tabPanel.addBeforeSelectionHandler( new BeforeSelectionHandler<Integer>(){
 
       public void onBeforeSelection(BeforeSelectionEvent<Integer> event) {
