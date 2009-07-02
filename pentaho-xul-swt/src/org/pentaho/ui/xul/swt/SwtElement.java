@@ -65,9 +65,12 @@ public class SwtElement extends AbstractXulComponent {
   public void removeChild(Element ele) {
     super.removeChild(ele);
     if (ele instanceof XulComponent) {
-      Widget thisWidget = (Widget) ((XulComponent)ele).getManagedObject();
-      if (thisWidget != null && !thisWidget.isDisposed()) {
-        thisWidget.dispose();
+      XulComponent comp = (XulComponent)ele;
+      if (comp.getManagedObject() instanceof Widget) {
+        Widget thisWidget = (Widget) comp.getManagedObject();
+        if (thisWidget != null && !thisWidget.isDisposed()) {
+          thisWidget.dispose();
+        }
       }
     }
     
