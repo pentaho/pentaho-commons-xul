@@ -19,7 +19,6 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
 
   static final String ELEMENT_NAME = "groupbox"; //$NON-NLS-1$
   private CaptionPanel captionPanel; 
-  private VerticalPanel mainPanel;
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -32,10 +31,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
   public GwtGroupBox() {
     super(ELEMENT_NAME);
     this.orientation = Orient.VERTICAL;
-    managedObject = mainPanel = new VerticalPanel();
-    mainPanel.getElement().getStyle().setProperty("padding", "4px");
-    mainPanel.getElement().getStyle().setProperty("margin", "0px");
-    captionPanel = new CaptionPanel();
+    managedObject = captionPanel = new CaptionPanel();
     captionPanel.getElement().getStyle().setProperty("padding", "0px");
     captionPanel.getElement().getStyle().setProperty("margin", "0px");
     
@@ -44,11 +40,10 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     SimplePanel sp = new SimplePanel();
     sp.getElement().getStyle().setProperty("padding", "4px");
     sp.getElement().getStyle().setProperty("margin", "0px");
-    sp.setWidth("100%");
+    sp.setWidth("97%");
     sp.add(container);
     ((VerticalPanel) container).setStyleName("vbox");
-    captionPanel.add(sp);
-    ((VerticalPanel) managedObject).add(captionPanel);
+    ((CaptionPanel) managedObject).add(sp);
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -56,12 +51,12 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     if(!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
       captionPanel.setWidth(srcEle.getAttribute("width") + "px");
     } else {
-      captionPanel.setWidth("100%"); 
+      captionPanel.setWidth("97%"); 
     }
     if(!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
       captionPanel.setHeight(srcEle.getAttribute("height") + "px");
     } else {
-      captionPanel.setHeight("100%");
+      captionPanel.setHeight("97%");
     }
     
   }
