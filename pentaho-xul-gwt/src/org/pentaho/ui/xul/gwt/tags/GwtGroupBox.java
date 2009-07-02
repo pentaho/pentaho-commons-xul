@@ -40,7 +40,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     SimplePanel sp = new SimplePanel();
     sp.getElement().getStyle().setProperty("padding", "4px");
     sp.getElement().getStyle().setProperty("margin", "0px");
-    sp.setWidth("97%");
+    sp.setWidth("95%");
     sp.add(container);
     ((VerticalPanel) container).setStyleName("vbox");
     ((CaptionPanel) managedObject).add(sp);
@@ -51,12 +51,12 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     if(!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
       captionPanel.setWidth(srcEle.getAttribute("width") + "px");
     } else {
-      captionPanel.setWidth("97%"); 
+      captionPanel.setWidth("95%"); 
     }
     if(!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
       captionPanel.setHeight(srcEle.getAttribute("height") + "px");
     } else {
-      captionPanel.setHeight("97%");
+      captionPanel.setHeight("100%");
     }
     
   }
