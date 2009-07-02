@@ -212,7 +212,7 @@ legend {
   text-align:right;
 }
 
-.gwt-TabBar .xulTabWidget {
+.xulTabBar .xulTabWidget {
   background-image: url(images/dialog_tab_right.png);
   background-position: 100% 0px;
   margin-right: 2px;
@@ -222,11 +222,11 @@ legend {
   margin-top: 4px;
 }
 
- .gwt-TabBar .xulTabWidgetLabel {
+.xulTabBar .xulTabWidgetLabel {
 	font: normal 14px tahoma, arial, helvetica;
 	margin-top: -5px;
  }
-.gwt-TabBar .xulTabWidget-selected {
+.xulTabBar .xulTabWidget-selected {
   background-image: url(images/dialog_tab_right.png);
   background-position: 100% -42px;
   margin-right: 2px;
@@ -236,7 +236,7 @@ legend {
   margin-top: 3px;
 }
 
-.gwt-TabBar .xulTabWidget-hover {
+.xulTabBar .xulTabWidget-hover {
   background-image: url(images/dialog_tab_right.png);
   background-position: 100% -84px;
   margin-right: 2px;
@@ -246,7 +246,7 @@ legend {
   margin-top: 4px;
 }
 
-.gwt-TabBar .xulTabWidgetCap {
+.xulTabBar .xulTabWidgetCap {
   background-image: url(images/dialog_tab_left.png);
   background-position: 100% 0px;
   cursor: pointer;
@@ -256,7 +256,7 @@ legend {
   width: 6px;  
 }
 
-.gwt-TabBar .xulTabWidgetCap-selected {
+.xulTabBar .xulTabWidgetCap-selected {
   background-image: url(images/dialog_tab_left.png);
   background-position: 100% -42px;
   cursor: pointer;
@@ -266,7 +266,7 @@ legend {
   width: 6px;
 }
 
-.gwt-TabBar .xulTabWidgetCap-hover {
+.xulTabBar .xulTabWidgetCap-hover {
   background-image: url(images/dialog_tab_left.png);
   background-position: 100% -84px;
   cursor: pointer;
@@ -275,6 +275,61 @@ legend {
   margin-top: 4px;
   width: 6px;
 }
+
+.xulTabPanel .gwt-TabPanelBottom {
+  background-color: #e2e2e2;
+  border-left: 1px solid #8d8d8d;
+  border-bottom: 1px solid #8d8d8d;
+  border-right: 1px solid #8d8d8d;
+  border-top: none;
+  padding: 3px 7px 3px 4px;
+}
+
+.xulTabBar {
+  background-image: url(images/dialog_tab_bg.png);
+  background-repeat: repeat-x;
+  height: 29px;
+  background-color: #e2e2e2;
+  border-bottom:none;
+  padding-top:0px;
+
+}
+
+.xulTabBar .gwt-TabBarFirst {
+}
+
+.xulTabBar .gwt-TabBarRest {
+}
+
+.xulTabBar .gwt-TabBarItem {
+  background-color: #e2e2e2;
+  border-bottom: 1px solid #8d8d8d;
+  margin-right: 2px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+  border-right:none;
+  border-top:none;
+  border-botton:1px solid black;
+  padding:0px;
+}
+
+.xulTabBar .gwt-TabBarItem-selected {
+  background-color: #e2e2e2;
+  color: black;
+  border-bottom:none;
+  border-right:none;
+  border-top:none;  
+  margin-right: 2px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin-top: 4px;
+  font-weight:normal;
+  padding:0px;
+}
+
 .gwt-FileUpload {
 
 }
