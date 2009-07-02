@@ -19,6 +19,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
 
   static final String ELEMENT_NAME = "groupbox"; //$NON-NLS-1$
   private CaptionPanel captionPanel; 
+  private VerticalPanel mainPanel;
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -31,16 +32,23 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
   public GwtGroupBox() {
     super(ELEMENT_NAME);
     this.orientation = Orient.VERTICAL;
-    managedObject = captionPanel = new CaptionPanel();
+    managedObject = mainPanel = new VerticalPanel();
+    mainPanel.getElement().getStyle().setProperty("padding", "4px");
+    mainPanel.getElement().getStyle().setProperty("margin", "0px");
+    captionPanel = new CaptionPanel();
+    captionPanel.getElement().getStyle().setProperty("padding", "0px");
+    captionPanel.getElement().getStyle().setProperty("margin", "0px");
+    
     container = new VerticalPanel();
     container.setWidth("100%");
-    VerticalPanel vp = new VerticalPanel();
-    vp.getElement().getStyle().setProperty("padding", "4px");
-    vp.getElement().getStyle().setProperty("margin", "0px");
-    vp.setWidth("100%");
-    vp.add(container);
+    SimplePanel sp = new SimplePanel();
+    sp.getElement().getStyle().setProperty("padding", "4px");
+    sp.getElement().getStyle().setProperty("margin", "0px");
+    sp.setWidth("100%");
+    sp.add(container);
     ((VerticalPanel) container).setStyleName("vbox");
-    ((CaptionPanel) managedObject).add(vp);
+    captionPanel.add(sp);
+    ((VerticalPanel) managedObject).add(captionPanel);
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
