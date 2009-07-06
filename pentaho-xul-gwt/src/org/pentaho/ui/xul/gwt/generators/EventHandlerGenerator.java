@@ -15,6 +15,7 @@ import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
+@Deprecated
 public class EventHandlerGenerator extends Generator {
 
   private String typeName;

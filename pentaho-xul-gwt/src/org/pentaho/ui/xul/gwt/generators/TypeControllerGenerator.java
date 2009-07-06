@@ -4,9 +4,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.pentaho.ui.xul.XulEventSource;
-import org.pentaho.ui.xul.XulException;
-
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -16,7 +13,6 @@ import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameter;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.core.ext.typeinfo.JType;
-import com.google.gwt.core.ext.typeinfo.NotFoundException;
 import com.google.gwt.core.ext.typeinfo.TypeOracle;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
@@ -24,8 +20,6 @@ import com.google.gwt.user.rebind.SourceWriter;
 public class TypeControllerGenerator extends Generator {
 
   private TypeOracle typeOracle;
-
-  private String typeName;
 
   private String packageName;
 
@@ -89,7 +83,6 @@ public class TypeControllerGenerator extends Generator {
         sType+="[]";
       }
 
-      System.out.println("array: "+sType);
     } else if(type.isGenericType() != null || type.getQualifiedSourceName().contains("extends")){
       if(type.isGenericType() != null && type.getQualifiedSourceName().contains("extends")){
         sType = type.isGenericType().getQualifiedSourceName();
@@ -149,14 +142,9 @@ public class TypeControllerGenerator extends Generator {
     sourceWriter.println("public " + className + "() { "); 
     sourceWriter.indent(); 
     sourceWriter.println("super();");
-    sourceWriter.println("populateMap0();"); 
     
-
     sourceWriter.outdent(); 
     sourceWriter.println("}"); 
-    //write out the map of wrapped classes
-    populateMapWtihWrappers(sourceWriter);
-
 
   }
   
@@ -165,11 +153,11 @@ public class TypeControllerGenerator extends Generator {
     sourceWriter.indent();
     
 
-    sourceWriter.println("GwtBindingMethod retVal = wrappedTypes.get((obj.getClass().getName()+\"_get\"+propertyName).toLowerCase());");
+    sourceWriter.println("GwtBindingMethod retVal = findMethod(obj.getClass().getName(),\"get\"+propertyName.substring(0,1).toUpperCase()+propertyName.substring(1));");
 
     sourceWriter.println("if(retVal == null){");
     sourceWriter.indent();
-    sourceWriter.println("retVal = wrappedTypes.get((obj.getClass().getName()+\"_is\"+propertyName).toLowerCase());");
+    sourceWriter.println("retVal = findMethod(obj.getClass().getName(),\"is\"+propertyName.substring(0,1).toUpperCase()+propertyName.substring(1));");
     sourceWriter.outdent();
     sourceWriter.println("}");
 
@@ -181,72 +169,102 @@ public class TypeControllerGenerator extends Generator {
     sourceWriter.println("public GwtBindingMethod findSetMethod(Object obj, String propertyName){");
     sourceWriter.indent();
     
-    sourceWriter.println("return wrappedTypes.get((obj.getClass().getName()+\"_set\"+propertyName).toLowerCase());");
+    sourceWriter.println("return findMethod(obj.getClass().getName(),\"set\"+propertyName.substring(0,1).toUpperCase()+propertyName.substring(1));");
     sourceWriter.outdent();
     sourceWriter.println("}");
     
     sourceWriter.println("public GwtBindingMethod findMethod(Object obj, String propertyName){");
     sourceWriter.indent();
     
-    sourceWriter.println("return wrappedTypes.get((obj.getClass().getName()+\"_\"+propertyName).toLowerCase());");
+    sourceWriter.println("return findMethod(obj.getClass().getName(), propertyName);");
     sourceWriter.outdent();
     sourceWriter.println("}");
+    
+    createFindMethod(sourceWriter);
   }
   
-
-  private void populateMapWtihWrappers(SourceWriter sourceWriter){
+  private void createFindMethod(SourceWriter sourceWriter){
+    
+    // We create more than one findMethod as the body of one method would be too large. This is the int that we increment to add to the name
+    // i.e. findMethod0()  
     int methodNum = 0;
+    
+    // This int keeps track of how many methods are generated. When it gets to 200 we create a new findMethodX() and chain it to the previous.
     int methodCount = 0;
-    int totalClassCount = 0;
-    sourceWriter.println("public void populateMap"+methodNum+"(){ "); 
+    
+    sourceWriter.println("private GwtBindingMethod findMethod(String obj, String methodName){ "); 
     sourceWriter.indent();
-    sourceWriter.println("GwtBindingMethod newMethod = null;");
-    for(JClassType type : implementingTypes){
-      System.out.println("-------------------------");
-      String keyRoot = generateTypeKey(type);
 
-      System.out.println("generating type: "+type.getQualifiedSourceName());
-      if(type.isAbstract()){
-        System.out.println("abstract");
-        continue;
+    sourceWriter.println("GwtBindingMethod newMethod;");
+    
+
+    // dummy first condition, rest are "else if". Keeps us from having conditional logic.
+    sourceWriter.println("if(obj.equals( \"dummyClass\")){ }");
+    
+    for(JClassType type : implementingTypes){
+    
+      // close last method, chain it to a new one.
+      if(methodCount > 200){
+        sourceWriter.println("return findMethod"+(methodNum) +"(obj, methodName);"); 
+        sourceWriter.println("}"); 
+        
+        sourceWriter.println("private GwtBindingMethod findMethod"+(methodNum++)+"(String obj, String methodName){ "); 
+        sourceWriter.println("GwtBindingMethod newMethod;");
+        // dummy first condition, rest are "else if". Keeps us from having conditional logic.
+        sourceWriter.println("if(obj.equals( \"dummyClass\")){ }");
+        
+        methodCount = 0;
       }
+      
+      String keyRoot = generateTypeKey(type);
+      
+//      if(type.isAbstract()){
+//        System.out.println("abstract");
+//        continue;
+//      }
+      
+      sourceWriter.println("else if(obj.equals(\""+type.getQualifiedSourceName()+"\")){ ");
       try{
         
         JClassType loopType = type;
         JClassType eventSourceType = typeOracle.getType("org.pentaho.ui.xul.XulEventSource");
+        sourceWriter.indent();
+      
+        // Loop over class heirarchy and generate methods for every object that is declared a XulEventSource
         while(loopType.getSuperclass() != null && loopType.getSimpleSourceName().equals("Object") == false && loopType.isAssignableTo(eventSourceType)){
-
           String superName = generateTypeKey(loopType);
 
-          System.out.println("    generating inner type: "+superName);
-          totalClassCount++;
+          // dummy first condition, rest are "else if". Keeps us from having conditional logic.
+          sourceWriter.println("if(methodName.equals(\"abcdefg\")){} ");
+          
           for(JMethod m : loopType.getMethods()){
+            methodCount++;
             if(!m.isPublic()){
               continue;
             }
-            methodCount++;
-            if(methodCount > 100){
-              methodNum++;
-              sourceWriter.println("populateMap"+methodNum+"();");
-              sourceWriter.outdent();
-              sourceWriter.println("};");
-              sourceWriter.println("public void populateMap"+methodNum+"(){ "); 
-              sourceWriter.indent();
-              sourceWriter.println("GwtBindingMethod newMethod = null;");
-              methodCount = 0;
-            }
-            //System.out.println("        generating inner type method: "+m.getName());
+            
+            sourceWriter.println("else if(methodName.equals(\""+m.getName()+"\")){ ");
+            sourceWriter.indent();
             
             String methodName = m.getName();
             
-            // check to see if a superclass implements the same method
-            if(generatedMethods.contains((superName+"_"+methodName).toLowerCase())){
+            // check to see if we've already processed this classes' method. Point to that class instead.
+            if(generatedMethods.contains((superName+"_"+methodName).toLowerCase()) && type != loopType){
               
-              sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), wrappedTypes.get(\""+superName+"_"+methodName+"\".toLowerCase()));");
+              sourceWriter.println("return findMethod(\""+superName+"\", methodName);");
+              
             } else {
+              // See if it's already been created and cached. If so, return that.
+              sourceWriter.println("if(wrappedTypes.get((\""+keyRoot+"_"+methodName+"\").toLowerCase()) != null){");
+              sourceWriter.indent();
+              sourceWriter.println("return wrappedTypes.get((\""+keyRoot+"_"+methodName+"\").toLowerCase());");
+              sourceWriter.outdent();
+              sourceWriter.println("} else {");
+              sourceWriter.indent();
+              
+              // Not cached, create a new instance and put it in the cache.
               sourceWriter.println("newMethod = new GwtBindingMethod(){");
-            
-  
+              
               sourceWriter.println("public Object invoke(Object obj, Object[] args) throws XulException { ");
               sourceWriter.indent();
               sourceWriter.println("try{");
@@ -270,20 +288,37 @@ public class TypeControllerGenerator extends Generator {
                 sourceWriter.println("return "+boxReturnType(m)+" target."+methodName+"("+argList+");");
               }
     
-              sourceWriter.println("}catch(Exception e){ throw new XulException(\"error with "+type.getQualifiedSourceName()+"\"+e.getMessage());}");
+              sourceWriter.println("}catch(Exception e){ e.printStackTrace(); throw new XulException(\"error with "+type.getQualifiedSourceName()+"\"+e.getMessage());}");
               sourceWriter.println("}");
     
               sourceWriter.outdent();
               sourceWriter.println("};");
+              
+              // Add it to the HashMap cache as type and decendant type if available.
+              
               sourceWriter.println("wrappedTypes.put((\""+keyRoot+"_"+methodName+"\").toLowerCase(), newMethod);");
               sourceWriter.println("wrappedTypes.put((\""+superName+"_"+methodName+"\").toLowerCase(), newMethod);");
               generatedMethods.add((keyRoot+"_"+methodName).toLowerCase());
               generatedMethods.add((superName+"_"+methodName).toLowerCase());
+
+              sourceWriter.println("return newMethod;");
+
+              sourceWriter.outdent();
+              sourceWriter.println("}");
             }
+            sourceWriter.outdent();
+            
+            sourceWriter.println("}");
             
           }
+          
+          // go up a level in the heirarchy and check again.
           loopType = loopType.getSuperclass();
-        }
+        }          
+        sourceWriter.outdent();
+        sourceWriter.println("}");
+        
+        
       } catch (Exception e) {
 
         // record to logger that Map generation threw an exception 
@@ -294,8 +329,10 @@ public class TypeControllerGenerator extends Generator {
     }
     
     sourceWriter.outdent();
+    
+    // This is the end of the line, if not found return null.
+    sourceWriter.println("return null;");
     sourceWriter.println("}");
-    System.out.println("Done generating wrappers: "+totalClassCount+" classes created in the map");
   }
 
   private String generateTypeKey(JClassType type){
@@ -314,19 +351,5 @@ public class TypeControllerGenerator extends Generator {
     return "";
   }
 
-  private String boxPrimative(JType type){
-     
-    //Check for Generic Types type.isGenericType() doesn't seem to be working
-    if(type.isGenericType() != null || type.getQualifiedSourceName().contains("extends")){
-      return "java.lang.Object";
-    } else if(type.isPrimitive() != null){
-      JPrimitiveType primative = type.isPrimitive();
-      return primative.getQualifiedBoxedSourceName();
-    } else {
-      return type.getQualifiedSourceName();
-    }
-  }
   
 }
-
-  

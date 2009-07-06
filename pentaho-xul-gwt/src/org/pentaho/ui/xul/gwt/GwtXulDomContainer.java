@@ -49,22 +49,17 @@ public class GwtXulDomContainer implements XulDomContainer {
   
   Map<String, XulEventHandler> eventHandlers = new HashMap<String, XulEventHandler>();
  
-  //The following does not work outside of "hosted mode" 
   public void addEventHandler(XulEventHandler handler) {
-
-    //ref: http://google-web-toolkit.googlecode.com/svn/javadoc/1.5/com/google/gwt/core/client/GWT.html#create(java.lang.Class)
-    //ref: http://groups.google.com/group/Google-Web-Toolkit/browse_thread/thread/cf36c64ff48b3e19
-    //ref: http://code.google.com/p/google-web-toolkit/issues/detail?id=2243
-//    EventHandlerWrapper wrapper = GWT.create(handler.getClass());
-//    
-//    
-//    handler.setXulDomContainer(this);
-//    wrapper.setHandler(handler);
-//    this.handlerWrapers.put(handler, wrapper);
-//    this.handlers.put(handler.getName(), handler);
-    throw new UnsupportedOperationException("this method is not supported at this time.");
+    handler.setXulDomContainer(this);
+    this.handlers.put(handler.getName(), handler);
   }
   
+  /**
+   * 
+   * @deprecated Use {@link #addEventHandler(XulEventHandler)}. This work-around is no longer needed.
+   * @param wrapper
+   */
+  @Deprecated
   public void addEventHandler(EventHandlerWrapper wrapper){
     
     XulEventHandler handler = wrapper.getHandler();

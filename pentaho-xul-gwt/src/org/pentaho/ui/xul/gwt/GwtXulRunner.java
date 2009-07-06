@@ -43,7 +43,6 @@ public class GwtXulRunner { // implements XulRunner {
       return;
     }
     XulRoot rootEle = (XulRoot) containers.get(0).getDocumentRoot().getRootElement();
-    System.out.println("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
       String onloads[] = onLoad.split(",");

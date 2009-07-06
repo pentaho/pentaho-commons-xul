@@ -176,8 +176,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     
 //    if(flexLayout)
 //      gc.fill = GridBagConstraints.BOTH;
-
-    System.out.println("ORIENTATION of " + getId() + " (" + getName() + ") : " + this.getOrientation());
     
     List<XulComponent> nodes = this.getChildNodes();
     
@@ -219,7 +217,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       }
       Widget component = (Widget) wrappedWidget;
       if(component != null){
-        System.out.println("adding: "+comp.getName());
         container.add(component);
       }
       if(flexLayout && component != null){
@@ -401,7 +398,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setWidth(int width) {
     this.width = width;  
-    System.out.println(this.getName()+" width: "+this.width);
   }
   
 
