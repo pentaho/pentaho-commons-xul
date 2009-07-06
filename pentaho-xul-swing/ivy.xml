@@ -14,11 +14,10 @@
     </publications>
     
     <dependencies defaultconf="default->default">
-    	<dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" changing="true" />
+    	<dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" transitive="true"  changing="true" />
         
         <!--  Testing dependencies -->
         <dependency org="junit"          name="junit"          rev="4.4"   conf="test->default"/>
-        <dependency org="jaxen" name="jaxen" rev="1.1" transitive="false" conf="test->default" />
 
     </dependencies>
 </ivy-module>
