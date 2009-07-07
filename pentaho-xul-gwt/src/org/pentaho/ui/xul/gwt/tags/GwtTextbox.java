@@ -79,7 +79,9 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   public void setValue(String text){
       String prevVal = this.value;
       this.value = text;
-      textBox.setText(text);
+      if(textBox.getText().equals(text) == false){
+        textBox.setText(text);
+      }
       this.firePropertyChange("value", prevVal, text);
   }
   
@@ -135,6 +137,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       }
       
     });
+    
   }
 
   public int getMaxlength() {
