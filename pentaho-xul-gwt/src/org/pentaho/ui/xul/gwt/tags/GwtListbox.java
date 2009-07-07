@@ -12,6 +12,7 @@ import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
@@ -320,6 +321,8 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     if (component.getAttributeValue("selectedindex") != null) {//$NON-NLS-1$
       setSelectedIndex(Integer.parseInt(component.getAttributeValue("selectedindex")));//$NON-NLS-1$
     }
+    layout();
+    ((AbstractGwtXulComponent) this.getParent()).layout();
   }
 
   public String getBinding() {

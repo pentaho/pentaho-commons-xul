@@ -233,6 +233,8 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     if(component.getAttributeValue("disabled") != null){
       setDisabled("true".equals(component.getAttributeValue("disabled")));
     }
+    layout();
+    ((AbstractGwtXulComponent) this.getParent()).layout();
   }
 
   void setRows(Integer rows) {
