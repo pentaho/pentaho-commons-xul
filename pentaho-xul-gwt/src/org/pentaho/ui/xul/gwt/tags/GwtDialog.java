@@ -353,6 +353,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     sp.add(contentPanel);
     panel.add(sp);
     panel.setCellWidth(contentPanel, "100%");//$NON-NLS-1$
+    panel.setCellHeight(contentPanel, "100%");//$NON-NLS-1$
     panel.setStyleName("dialog");//$NON-NLS-1$
     // render dialog contents
     container = contentPanel;
