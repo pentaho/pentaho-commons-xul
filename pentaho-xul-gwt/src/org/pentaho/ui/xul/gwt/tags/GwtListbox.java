@@ -65,12 +65,11 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     this.container = container;
     setBinding(srcEle.getAttribute("pen:binding")); //$NON-NLS-1$
     setRows(2);
+    if (srcEle.hasAttribute("width") && srcEle.getAttribute("width").trim().length() > 0) { //$NON-NLS-1$ //$NON-NLS-2$
+      setWidth(Integer.parseInt(srcEle.getAttribute("width"))); //$NON-NLS-1$
+    }
     if (srcEle.hasAttribute("rows") && srcEle.getAttribute("rows").trim().length() > 0) { //$NON-NLS-1$ //$NON-NLS-2$
-      try {
         setRows(Integer.parseInt(srcEle.getAttribute("rows"))); //$NON-NLS-1$
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
     }
     setOnselect(srcEle.getAttribute("onselect"));
   }
@@ -116,6 +115,13 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
         listBox.addItem(item.getLabel(), "" + i);
       }
     }
+    if(getHeight() > 0) {
+      listBox.setHeight(getHeight() + "px");
+    }
+    if(getWidth() > 0) {
+      listBox.setWidth(getWidth() + "px");
+    }
+    
   }
 
   public String getOnselect() {
@@ -344,6 +350,9 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     }
   }
   
-  
+  public void setWidth(int width) {
+    super.setWidth(width);
+    listBox.setWidth(width + "px");
+  }  
 
 }
