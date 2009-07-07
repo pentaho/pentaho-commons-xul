@@ -122,6 +122,7 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
 
       public void componentResized(ComponentEvent arg0) {
         container.getGraphics().drawImage(ico.getImage(), 0, 0, container);
+        container.repaint();
 
       }
 

@@ -49,6 +49,7 @@ public class SwingElement extends AbstractXulComponent {
 
   public SwingElement(String tagName) {
     super(tagName);
+    container.setOpaque(false);
   }
 
   public void resetContainer() {
