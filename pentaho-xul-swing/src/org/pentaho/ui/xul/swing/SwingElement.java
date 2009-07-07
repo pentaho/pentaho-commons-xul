@@ -49,7 +49,6 @@ public class SwingElement extends AbstractXulComponent {
 
   public SwingElement(String tagName) {
     super(tagName);
-    container.setOpaque(false);
   }
 
   public void resetContainer() {
@@ -81,6 +80,7 @@ public class SwingElement extends AbstractXulComponent {
       if (comp instanceof XulSplitter) {
         JPanel prevContainer = container;
         container = new ScrollablePanel(new GridBagLayout());
+        container.setOpaque(false);
 
         final JSplitPane splitter = new JSplitPane(
             (this.getOrientation() == Orient.VERTICAL) ? JSplitPane.VERTICAL_SPLIT : JSplitPane.HORIZONTAL_SPLIT,
