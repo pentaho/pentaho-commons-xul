@@ -283,7 +283,7 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
   }
 
   public void setVisible(boolean visible) {
-    if(this.visible = visible) {
+    if(this.visible == visible) {
       return;
     }
     super.setVisible(visible);
