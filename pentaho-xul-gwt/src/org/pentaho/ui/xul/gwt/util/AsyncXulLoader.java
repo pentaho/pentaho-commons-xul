@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.gwt.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.pentaho.gwt.widgets.client.utils.i18n.IResourceBundleLoadCallback;
 import org.pentaho.gwt.widgets.client.utils.i18n.ResourceBundle;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -19,6 +22,8 @@ import com.google.gwt.xml.client.XMLParser;
 
 public class AsyncXulLoader implements IResourceBundleLoadCallback {
 
+  private static Map<String, String> overlayCache = new HashMap<String, String>();
+  
   private ResourceBundle messageBundle;
 
   private String xulSrc;
@@ -30,6 +35,7 @@ public class AsyncXulLoader implements IResourceBundleLoadCallback {
   private boolean loadingOverlay = false;
   private boolean removingOverlay = false;
   private boolean fromSource = false;
+  private boolean caching = false;
 
   private GwtXulDomContainer container;
   public static final String PROPERTIES_EXTENSION = ".properties"; //$NON-NLS-1$
@@ -50,6 +56,22 @@ public class AsyncXulLoader implements IResourceBundleLoadCallback {
       IXulLoaderCallback callback) {
     AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback, true, false);
     loader.init();
+  }
+  
+  
+  public static void loadOverlayFromUrl(String location, String bundle, GwtXulDomContainer container,
+      IXulLoaderCallback callback, boolean cache) {
+    if (cache) {
+      if (overlayCache.containsKey(location)) {
+        AsyncXulLoader loader = new AsyncXulLoader(overlayCache.get(location), bundle, container, callback, true, true);
+        loader.init();
+        return;
+      }
+    }
+    // if not cached, load as normal
+    AsyncXulLoader loader = new AsyncXulLoader(location, bundle, container, callback, true, false, cache);
+    loader.init();
+  
   }
 
   public static void removeOverlayFromUrl(String location, String bundle, GwtXulDomContainer container,
@@ -90,6 +112,18 @@ public class AsyncXulLoader implements IResourceBundleLoadCallback {
     } else {
       this.removingOverlay = true;
     }
+  }
+  
+  private AsyncXulLoader(String source, String bundle, GwtXulDomContainer container, IXulLoaderCallback callback,
+      boolean loadOverlay, boolean fromSource, boolean caching) {
+    this(source, bundle, callback, fromSource);
+    this.container = container;
+    if (loadOverlay) {
+      this.loadingOverlay = true;
+    } else {
+      this.removingOverlay = true;
+    }
+    this.caching = true;
   }
 
   private void init() {
@@ -143,6 +177,9 @@ public class AsyncXulLoader implements IResourceBundleLoadCallback {
           }
 
           public void onResponseReceived(Request request, Response response) {
+            if (caching) {
+              overlayCache.put(xulSrc, response.getText());
+            }
             if (AsyncXulLoader.this.loadingOverlay) {
               loadOverlay(response.getText());
             } else if (AsyncXulLoader.this.removingOverlay) {
