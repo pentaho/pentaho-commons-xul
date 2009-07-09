@@ -333,7 +333,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
       
     };
     dialog.setWidth(getWidth()+"px");//$NON-NLS-1$
-    dialog.setHeight(getHeight()+"px");//$NON-NLS-1$
+    dialog.setHeight("100%");//$NON-NLS-1$
+   // dialog.setHeight(getHeight()+"px");//$NON-NLS-1$
     
     dialog.setText(getTitle());
 
@@ -351,8 +352,8 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     sp.getElement().setClassName("gwt-Dialog");
     sp.add(contentPanel);
     panel.add(sp);
-    panel.setCellWidth(contentPanel, "100%");//$NON-NLS-1$
-    panel.setCellHeight(contentPanel, "100%");//$NON-NLS-1$
+    panel.setCellWidth(sp, "100%");//$NON-NLS-1$
+    panel.setCellHeight(sp, "100%");//$NON-NLS-1$
     panel.setStyleName("dialog");//$NON-NLS-1$
     // render dialog contents
     container = contentPanel;
@@ -427,8 +428,10 @@ public class GwtDialog extends AbstractGwtXulContainer implements XulDialog {
     }
     
     panel.setSpacing(1);
-    panel.setHeight("100%");//$NON-NLS-1$
-    panel.setWidth("100%");//$NON-NLS-1$
+
+    panel.setWidth(getWidth()+"px");//$NON-NLS-1$
+    panel.setHeight(getHeight()+"px");//$NON-NLS-1$
+    
     dialog.add(panel);
 
     // Notify GlassPane listeners
