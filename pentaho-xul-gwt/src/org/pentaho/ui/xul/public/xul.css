@@ -212,38 +212,36 @@ legend {
   text-align:right;
 }
 
+
 .xulTabBar .xulTabWidget {
   background-image: url(images/dialog_tab_right.png);
   background-position: 100% 0px;
-  margin-right: 2px;
   cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 4px;
+  margin: 4px 2px 0px 0px;
 }
 
 .xulTabBar .xulTabWidgetLabel {
 	font: normal 14px tahoma, arial, helvetica;
-	margin-top: -5px;
+    margin: 0px 0px 0px 0px;	
  }
 .xulTabBar .xulTabWidget-selected {
   background-image: url(images/dialog_tab_right.png);
   background-position: 100% -42px;
-  margin-right: 2px;
   cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 3px;
+  margin: 4px 2px 0px 0px;
 }
 
 .xulTabBar .xulTabWidget-hover {
   background-image: url(images/dialog_tab_right.png);
   background-position: 100% -84px;
-  margin-right: 2px;
   cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 4px;
+  margin: 4px 2px 0px 0px;
 }
 
 .xulTabBar .xulTabWidgetCap {
@@ -252,7 +250,7 @@ legend {
   cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 4px;
+  margin: 4px 0px 0px 0px;
   width: 6px;  
 }
 
@@ -262,7 +260,7 @@ legend {
   cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 4px;
+  margin: 4px 0px 0px 0px;
   width: 6px;
 }
 
@@ -272,16 +270,16 @@ legend {
   cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 4px;
+  margin: 4px 0px 0px 0px;
   width: 6px;
 }
 
 .xulTabPanel .gwt-TabPanelBottom {
   background-color: #e2e2e2;
-  border-left: 1px solid #8d8d8d;
-  border-bottom: 1px solid #8d8d8d;
-  border-right: 1px solid #8d8d8d;
-  border-top: none;
+  border-top:none;
+  border-right:1px solid #8d8d8d;
+  border-left:1px solid #8d8d8d;
+  border-bottom:1px solid #8d8d8d;
   padding: 3px 7px 3px 4px;
 }
 
@@ -289,43 +287,34 @@ legend {
   background-image: url(images/dialog_tab_bg.png);
   background-repeat: repeat-x;
   height: 29px;
-  background-color: #e2e2e2;
-  border-bottom:none;
-  padding-top:0px;
-
 }
 
 .xulTabBar .gwt-TabBarFirst {
+  background-color: none;
 }
 
 .xulTabBar .gwt-TabBarRest {
+  background-color: none;
 }
 
 .xulTabBar .gwt-TabBarItem {
   background-color: #e2e2e2;
-  border-bottom: 1px solid #8d8d8d;
+  border: none none 1px solid #8d8d8d none;
   margin-right: 2px;
-  cursor: pointer;
   cursor: hand;
   height: 24px;
-  margin-top: 4px;
-  border-right:none;
-  border-top:none;
-  border-botton:1px solid black;
+  margin: 4px 0px 0px 0px;
+  border: none none 1px solid black none;
   padding:0px;
 }
 
 .xulTabBar .gwt-TabBarItem-selected {
   background-color: #e2e2e2;
   color: black;
-  border-bottom:none;
-  border-right:none;
-  border-top:none;  
-  margin-right: 2px;
+  border: none;
   cursor: pointer;
-  cursor: hand;
   height: 24px;
-  margin-top: 4px;
+  margin: 4px 0px 0px 0px;
   font-weight:normal;
   padding:0px;
 }
