@@ -4,6 +4,7 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -47,7 +48,16 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
     this.domContainer = domContainer;
     this.orientation = Orient.VERTICAL;
 
-    container = new ScrollablePanel(new GridBagLayout());
+    container = new ScrollablePanel(new GridBagLayout()){
+
+      @Override
+      public void paintComponent(Graphics g) {
+        if(backgroundImage != null){
+          g.drawImage(backgroundImage, 0, 0, container);
+        }
+      }
+      
+    };
     container.setOpaque(false);
     managedObject = container;
 
@@ -110,27 +120,7 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
       return;
     }
     final ImageIcon ico = new ImageIcon(url);
-
-    container.addComponentListener(new ComponentListener() {
-
-      public void componentHidden(ComponentEvent arg0) {
-
-      }
-
-      public void componentMoved(ComponentEvent arg0) {
-      }
-
-      public void componentResized(ComponentEvent arg0) {
-        container.getGraphics().drawImage(ico.getImage(), 0, 0, container);
-        container.repaint();
-
-      }
-
-      public void componentShown(ComponentEvent arg0) {
-
-      }
-
-    });
+    backgroundImage = ico.getImage();
 
   }
 }
