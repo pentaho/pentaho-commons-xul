@@ -4,16 +4,14 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulCheckbox;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.Widget;
 
 public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox {
   
@@ -42,8 +40,19 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     setLabel(srcEle.getAttribute("label"));
     setChecked("true".equals(srcEle.getAttribute("checked")));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
-    String command = srcEle.getAttribute("command");
-    setCommand(command);
+    checkBox.addClickHandler(new ClickHandler() {
+      public void onClick(ClickEvent event) {
+        try{
+          setChecked(checkBox.getValue());
+          if(command != null && command.length() > 0) {
+            GwtCheckbox.this.getXulDomContainer().invoke(command, new Object[]{});
+          }
+        } catch(XulException e){
+          e.printStackTrace();
+        }
+      }
+    });
+    setCommand(srcEle.getAttribute("command"));
     if(srcEle.getAttribute("pen:class") != null && srcEle.getAttribute("pen:class").length() > 0){
       setClass(srcEle.getAttribute("pen:class"));
     }
@@ -53,14 +62,13 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
    * @see org.pentaho.ui.xul.components.XulCheckbox#getSelected()
    */
   public boolean getSelected() {
-    // TODO Auto-generated method stub
-    return checkBox.isChecked();
+    return checkBox.getValue();
   }
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.components.XulCheckbox#setSelected(boolean)
    */
   public void setSelected(boolean selected) {
-    checkBox.setChecked(selected);
+    checkBox.setValue(selected);
   }
   
 
@@ -77,7 +85,7 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   }
 
   public boolean isChecked() {
-    return checkBox.isChecked();
+    return checkBox.getValue();
 
   }
 
@@ -87,8 +95,8 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
 
   public void setChecked(boolean checked) {
    boolean previousVal = this.checked;
-   if(checked != checkBox.isChecked()) {
-     checkBox.setChecked(checked); 
+   if(checked != checkBox.getValue()) {
+     checkBox.setValue(checked); 
    }
    this.checked = checked;
    this.firePropertyChange("checked", previousVal, checked);
@@ -98,19 +106,8 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     checkBox.setEnabled(!dis);
   }
 
-  public void setCommand(final String method) {
-    checkBox.addClickListener(new ClickListener(){
-      public void onClick(Widget sender) {
-        try{
-          if(method != null) {
-            GwtCheckbox.this.getXulDomContainer().invoke(method, new Object[]{});
-          }
-          setChecked(checkBox.isChecked());
-        } catch(XulException e){
-          e.printStackTrace();
-        }
-      }
-    });
+  public void setCommand(final String command) {
+    this.command = command;
   }
   
   public String getCommand(){
