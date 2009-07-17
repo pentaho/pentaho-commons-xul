@@ -33,13 +33,6 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     super(ELEMENT_NAME);
     managedObject = checkBox = new CheckBox();
     checkBox.setStylePrimaryName("checkbox");
-  }
-  
-  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    super.init(srcEle, container);
-    setLabel(srcEle.getAttribute("label"));
-    setChecked("true".equals(srcEle.getAttribute("checked")));
-    setDisabled("true".equals(srcEle.getAttribute("disabled")));
     checkBox.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         try{
@@ -52,6 +45,13 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
         }
       }
     });
+  }
+  
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
+    setLabel(srcEle.getAttribute("label"));
+    setChecked("true".equals(srcEle.getAttribute("checked")));
+    setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setCommand(srcEle.getAttribute("command"));
     if(srcEle.getAttribute("pen:class") != null && srcEle.getAttribute("pen:class").length() > 0){
       setClass(srcEle.getAttribute("pen:class"));
