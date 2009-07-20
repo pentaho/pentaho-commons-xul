@@ -32,6 +32,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   private XulComponent parent;
   private Shell parentObject = null;
   private boolean scrollable = false;
+  private String acceptLabel = "OK";
 
   public SwtMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("messagebox");
@@ -264,5 +265,11 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
       return (Shell) getParent().getManagedObject();
     }
   }
+
+  public void setAcceptLabel(String label) {
+    this.acceptLabel = label;  
+  }
+  
+  
 
 }

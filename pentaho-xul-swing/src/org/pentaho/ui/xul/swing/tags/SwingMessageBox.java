@@ -31,6 +31,8 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
   private Object icon = new Integer(JOptionPane.INFORMATION_MESSAGE);
   private boolean scrollable = false;
   private XulComponent parent;
+  
+  private String acceptLabel = "OK";
 
   public SwingMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("messagebox");
@@ -107,5 +109,11 @@ public class SwingMessageBox extends SwingElement implements XulMessageBox {
       return (Component) this.parent.getManagedObject();
     }
   }
+
+  public void setAcceptLabel(String label) {
+    this.acceptLabel = label;
+  }
+  
+  
 
 }
