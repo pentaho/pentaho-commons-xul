@@ -11,6 +11,10 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.XulDialogCallback;
 
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -46,7 +50,23 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
 
   public GwtPromptBox() {
     super(ELEMENT_NAME);
-    textbox.setWidth("100%");
+    textbox.setWidth("90%");
+    textbox.addKeyDownHandler(new KeyDownHandler(){
+      public void onKeyDown(KeyDownEvent event) {
+        final int keyCode = event.getNativeKeyCode();
+        
+        switch(keyCode){
+          case KeyCodes.KEY_ENTER:
+            notifyListenersOnAccept();
+            break;
+          case KeyCodes.KEY_ESCAPE:
+            notifyListenersOnCancel();
+            break;
+        }
+        
+      }
+    });
+    
     //setup default width and height in case user does not specify
     setHeight(150);
     setWidth(275);
@@ -54,24 +74,32 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
     acceptBtn.addClickListener(new ClickListener(){
       
       public void onClick(Widget sender) {
-        hide();
-        for(XulDialogCallback<String> callback : callbacks){
-          callback.onClose(GwtPromptBox.this, XulDialogCallback.Status.ACCEPT, textbox.getText());
-        }
+        notifyListenersOnAccept();
       }
     });
 
     cancelBtn.addClickListener(new ClickListener(){
       
       public void onClick(Widget sender) {
-        hide();
-        for(XulDialogCallback<String> callback : callbacks){
-          callback.onClose(GwtPromptBox.this, XulDialogCallback.Status.CANCEL, null);
-        }
+        notifyListenersOnCancel();
       }
     });
   }
   
+  
+  private void notifyListenersOnAccept(){
+    hide();
+    for(XulDialogCallback<String> callback : callbacks){
+      callback.onClose(GwtPromptBox.this, XulDialogCallback.Status.ACCEPT, textbox.getText());
+    }
+  }
+  
+  private void notifyListenersOnCancel(){
+    hide();
+    for(XulDialogCallback<String> callback : callbacks){
+      callback.onClose(GwtPromptBox.this, XulDialogCallback.Status.CANCEL, null);
+    }
+  }
 
   @Override
   public Panel getButtonPanel() {
@@ -93,6 +121,7 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
     Label lbl = new Label(getMessage());
     vp.add(lbl);
     vp.add(textbox);
+    vp.setCellHorizontalAlignment(textbox, vp.ALIGN_CENTER);
 
     return vp;
   }
@@ -119,6 +148,13 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
 
   public void setValue(String value) {
     this.textbox.setValue(value);
+  }
+
+  @Override
+  public int open() {
+    super.show();
+    textbox.setFocus(true);
+    return 0;
   }
   
   
