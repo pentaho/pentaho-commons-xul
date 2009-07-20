@@ -3,19 +3,14 @@ package org.pentaho.ui.xul.gwt.tags;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.SSLEngineResult.Status;
 
 import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.ui.xul.components.XulPromptBox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
-import org.pentaho.ui.xul.gwt.util.GenericDialog;
 import org.pentaho.ui.xul.util.XulDialogCallback;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
