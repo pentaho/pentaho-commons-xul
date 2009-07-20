@@ -168,7 +168,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       if(comp.getManagedObject() == null){
         continue;
       }
-      if(comp.getFlex() > 0){
+      if(comp.getFlex() > 0 && comp.isVisible()){
         flexLayout = true;
         totalFlex += comp.getFlex();
       }
@@ -212,7 +212,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       XulComponent comp = nodes.get(i);
     
       Object wrappedWidget = comp.getManagedObject();
-      if(wrappedWidget == null || !(wrappedWidget instanceof Widget)){
+      if(wrappedWidget == null || !(wrappedWidget instanceof Widget) || comp.isVisible() == false){
         continue;
       }
       Widget component = (Widget) wrappedWidget;
@@ -249,11 +249,21 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         } else {
           component.setWidth("100%");
         }
+        if(comp.getHeight() > 0){
+          component.setHeight(comp.getHeight()+"px");
+        } else {
+          component.setHeight("100%");
+        }
       } else {                                      //HBox 
         if(comp.getHeight() > 0){
           component.setHeight(comp.getHeight()+"px");
         } else {
           component.setHeight("100%");
+        }
+        if(comp.getWidth() > 0){
+          component.setWidth(comp.getWidth()+"px");
+        } else {
+          component.setWidth("100%");
         }
       }
     

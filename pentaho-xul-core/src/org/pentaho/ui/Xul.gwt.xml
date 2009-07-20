@@ -25,6 +25,7 @@
         <include name="**/util/Align*"/>
         <include name="**/util/TextType*"/>
         <include name="**/util/TreeCell*"/>
+        <include name="**/util/XulDialogCallback*"/>
         <include name="**/util/AbstractXulDialogController*"/>
         <include name="**/util/DialogController*"/>
       </source>

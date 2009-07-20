@@ -98,5 +98,7 @@ public interface XulMessageBox extends XulComponent {
   public void setWidth(int width);
   
   public void setModalParent(Object parent);
+  
+  public void setAcceptLabel(String label);
 
 }

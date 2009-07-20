@@ -1,13 +1,26 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.gwt.widgets.client.dialogs.MessageDialogBox;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.util.GenericDialog;
+import org.pentaho.ui.xul.util.XulDialogCallback;
 
-public class GwtMessageBox extends AbstractGwtXulComponent implements XulMessageBox {
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
+public class GwtMessageBox extends GenericDialog implements XulMessageBox {
 
   private static final String OK = "OK"; //$NON-NLS-1$
 
@@ -20,6 +33,10 @@ public class GwtMessageBox extends AbstractGwtXulComponent implements XulMessage
   private Object[] buttons = defaultButtons;
 
   static final String ELEMENT_NAME = "messagebox"; //$NON-NLS-1$
+  
+  private String acceptLabel = "OK";
+  
+  private RoundedButton acceptBtn = new RoundedButton();
 
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
@@ -31,8 +48,44 @@ public class GwtMessageBox extends AbstractGwtXulComponent implements XulMessage
 
   public GwtMessageBox() {
     super(ELEMENT_NAME);
+    //setup default width and height in case user does not specify
+    setHeight(125);
+    setWidth(250);
+    
+    acceptBtn.addClickListener(new ClickListener(){
+      public void onClick(Widget sender) {
+        hide();
+      }
+    });
+  }
+  
+  protected GwtMessageBox(String elementName){
+    super(elementName);
   }
 
+  @Override
+  public Panel getButtonPanel() {
+    HorizontalPanel hp = new HorizontalPanel();
+    acceptBtn.setText(this.acceptLabel);
+    hp.add(acceptBtn);
+    hp.setCellWidth(acceptBtn, "100%");
+    hp.setCellHorizontalAlignment(acceptBtn, hp.ALIGN_CENTER);
+    return hp;
+  }
+
+  @Override
+  public Panel getDialogContents() {
+
+    VerticalPanel vp = new VerticalPanel();
+    Label lbl = new Label(message);
+    vp.add(lbl);
+    vp.setCellHorizontalAlignment(lbl, vp.ALIGN_CENTER);
+    vp.setCellVerticalAlignment(lbl, vp.ALIGN_MIDDLE);
+    vp.setSize("200px", "125px");
+
+    return vp;
+  }
+  
   public Object[] getButtons() {
     return buttons;
   }
@@ -50,19 +103,7 @@ public class GwtMessageBox extends AbstractGwtXulComponent implements XulMessage
   }
 
   public int open() {
-    boolean IS_HTML = false;
-    final boolean AUTO_HIDE = false;
-    final boolean MODAL = true;
-    String msg = message;
-    if (msg.indexOf("\n") >= 0) {
-      msg = "<div align=\"left\"/>" + message.replaceAll("\n", "<br>") + "</div>"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      IS_HTML = true;
-    }
-    MessageDialogBox mb = new MessageDialogBox(title, msg, IS_HTML, AUTO_HIDE, MODAL);
-    mb.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos + 1));//$NON-NLS-1$
-    mb.center();
-    mb.show();
-    
+    show();
     return 0;
   }
 
@@ -86,9 +127,9 @@ public class GwtMessageBox extends AbstractGwtXulComponent implements XulMessage
   public void setScrollable(final boolean scroll) {
     // not implemented
   }
-
-  public void setTitle(final String title) {
-    this.title = title;
+  
+  public void setAcceptLabel(String lbl){
+    this.acceptLabel = lbl;
   }
 
 }
