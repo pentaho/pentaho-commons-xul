@@ -391,6 +391,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     });
   }
 
+  /**
+   * @deprecated This will be replaced by an agnostic listener pattern in the next version of Xul
+   * @param event
+   */
+  @Deprecated
   public void notifyListeners(int event) {
     if (!dialog.getShell().isDisposed()) {
       dialog.getShell().notifyListeners(event, new Event());

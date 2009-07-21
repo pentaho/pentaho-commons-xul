@@ -114,6 +114,11 @@ public class SwtWindow extends AbstractSwtXulContainer implements XulWindow {
 
   }
 
+  /**
+   * @deprecated This will be replaced by an agnostic listener pattern in the next version of Xul
+   * @param event
+   */
+  @Deprecated
   public void notifyListeners(int event) {
     if (!shell.isDisposed()) {
       shell.notifyListeners(event, new Event());

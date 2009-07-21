@@ -87,18 +87,19 @@ public class SwtXulLoader extends AbstractXulLoader{
     XulDomContainer domC = super.loadXul(xulDocument);
     
     // SWT has no notion of an "onload" event, so we must simulate it...
+    // This needs to be replaced by an agnostic listener pattern.
     
     XulComponent maybeWindow = domC.getDocumentRoot().getRootElement();
     if ( maybeWindow instanceof SwtWindow){
       SwtWindow window = (SwtWindow) maybeWindow;
-//      window.notifyListeners(XulRoot.EVENT_ON_LOAD);
+      window.notifyListeners(XulRoot.EVENT_ON_LOAD);
       defaultParent = window;
     }
     
     XulComponent maybeDialog = domC.getDocumentRoot().getRootElement();
     if ( maybeWindow instanceof SwtDialog){
       SwtDialog dialog = (SwtDialog) maybeDialog;
-//      dialog.notifyListeners(XulRoot.EVENT_ON_LOAD);
+      dialog.notifyListeners(XulRoot.EVENT_ON_LOAD);
       defaultParent = dialog;
     }
 
