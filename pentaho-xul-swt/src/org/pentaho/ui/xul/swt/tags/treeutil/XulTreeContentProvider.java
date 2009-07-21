@@ -18,7 +18,7 @@ public class XulTreeContentProvider implements ITreeContentProvider {
   }
 
   public Object getParent(Object item) {
-    return ((XulTreeItem) item).getParent().getParent();
+    return ((XulTreeItem) item).getParent() != null ? ((XulTreeItem) item).getParent().getParent() : null;
   }
 
   public boolean hasChildren(Object item) {
