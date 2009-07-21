@@ -212,7 +212,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       XulComponent comp = nodes.get(i);
     
       Object wrappedWidget = comp.getManagedObject();
-      if(wrappedWidget == null || !(wrappedWidget instanceof Widget) || comp.isVisible() == false){
+      if(wrappedWidget == null || !(wrappedWidget instanceof Widget)){
         continue;
       }
       Widget component = (Widget) wrappedWidget;
