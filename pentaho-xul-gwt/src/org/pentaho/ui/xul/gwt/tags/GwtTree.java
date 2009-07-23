@@ -1006,7 +1006,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       
       hPanel.add(labelWrapper);
       hPanel.setCellWidth(labelWrapper, "100%");
-      ImageButton btn = new ImageButton(GWT.getModuleBaseURL() + "/images/open_new.png", GWT.getModuleBaseURL() + "/images/open_new.png", "", 25, 15);
+      ImageButton btn = new ImageButton(GWT.getModuleBaseURL() + "/images/open_new.png", GWT.getModuleBaseURL() + "/images/open_new.png", "", 29, 24);
       btn.getElement().getStyle().setProperty("margin", "0px");
       
       hPanel.add(btn);
