@@ -42,7 +42,6 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   private XulDomContainer xulContainer;
   private String bgColor = null;
   private SimplePanel glasspane = new SimplePanel();
-  public static int dialogPos = 1100;
   private List<XulButton> dialogButtons = new ArrayList<XulButton>();
   
   public GwtDialog() {
@@ -148,10 +147,6 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   public Panel getDialogContents() {
 
     VerticalPanel contentPanel = new VerticalPanel();
-    contentPanel.setHeight("100%");//$NON-NLS-1$
-    contentPanel.setWidth("100%");//$NON-NLS-1$
-    contentPanel.setStyleName("dialog-content");//$NON-NLS-1$
-    contentPanel.setWidth("100%");//$NON-NLS-1$
     container = contentPanel;
     
     return contentPanel;

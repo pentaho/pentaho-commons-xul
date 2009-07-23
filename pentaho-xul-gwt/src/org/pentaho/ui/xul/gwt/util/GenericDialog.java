@@ -23,6 +23,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
   public static final int ACCEPT = 1;
   public static final int EXTRA1 = 2;
   public static final int EXTRA2 = 3;
+  private static int dialogPos = 1100;
   
   public GenericDialog(String tagName){
     super(tagName);
@@ -43,6 +44,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
         GlassPane.getInstance().hide();
       }
     };
+    dialog.add(contents);
     
   }
   
@@ -54,15 +56,33 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     dialog.setText(title);
 
     contents.clear();
-    Panel p = getDialogContents();
-    p.setSize("100%", "100%");
-    contents.add(p);
-    contents.setCellHeight(p, "100%");
 
-    p = getButtonPanel();
-    p.setWidth("100%");
+    // implement the buttons
+    VerticalPanel panel = new VerticalPanel();
     
 
+    Panel p = getDialogContents();
+    p.setSize("100%", "100%");
+
+    p.setStyleName("dialog-content");//$NON-NLS-1$    
+
+    SimplePanel sp = new SimplePanel();
+    //sp.getElement().getStyle().setProperty("padding", "5px");
+    sp.getElement().setClassName("gwt-Dialog");
+    sp.add(p);
+    panel.add(sp);
+    panel.setCellWidth(sp, "100%");//$NON-NLS-1$
+    panel.setCellHeight(sp, "100%");//$NON-NLS-1$
+    panel.setStyleName("dialog");//$NON-NLS-1$
+    contents.add(panel);
+//    contents.setCellHeight(panel, "100%");
+    
+    if(getBgcolor() != null) {
+      p.getElement().getStyle().setProperty("backgroundColor", getBgcolor());
+    }
+    
+    
+    p = this.getButtonPanel();
     HorizontalPanel buttonPanelWrapper = new HorizontalPanel();
     buttonPanelWrapper.setStyleName("dialog-button-panel");//$NON-NLS-1$
     buttonPanelWrapper.add(p);
@@ -70,14 +90,14 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     buttonPanelWrapper.setCellWidth(p, "100%");
     contents.add(buttonPanelWrapper);
     
-    contents.setSpacing(3);
-    contents.setSize("100%", "100%");
+    contents.setSpacing(1);
 
+    contents.setWidth("100%");//$NON-NLS-1$
+    contents.setHeight("100%");//$NON-NLS-1$
     
-    dialog.setWidget(contents);
-    
-    dialog.setWidth(getWidth()+"px");
-    dialog.setHeight(getHeight()+"px");
+
+    dialog.setWidth(getWidth()+"px");//$NON-NLS-1$
+    dialog.setHeight(getHeight()+"px");//$NON-NLS-1$
     dialog.center();
     dialog.show();
 
@@ -87,8 +107,8 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     // Notify GlassPane listeners
     GlassPane.getInstance().show();
     
-    glasspane.getElement().getStyle().setProperty("zIndex",  ""+(GwtDialog.dialogPos));//$NON-NLS-1$
-    dialog.getElement().getStyle().setProperty("zIndex",  ""+(++GwtDialog.dialogPos));//$NON-NLS-1$
+    glasspane.getElement().getStyle().setProperty("zIndex",  ""+(GenericDialog.dialogPos));//$NON-NLS-1$
+    dialog.getElement().getStyle().setProperty("zIndex",  ""+(++GenericDialog.dialogPos));//$NON-NLS-1$
     
   }
   
