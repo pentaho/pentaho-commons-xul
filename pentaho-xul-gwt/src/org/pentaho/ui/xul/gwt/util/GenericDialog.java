@@ -74,6 +74,8 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     panel.setCellWidth(sp, "100%");//$NON-NLS-1$
     panel.setCellHeight(sp, "100%");//$NON-NLS-1$
     panel.setStyleName("dialog");//$NON-NLS-1$
+    panel.setWidth("100%");   //$NON-NLS-1$
+    panel.setHeight("100%");  //$NON-NLS-1$
     contents.add(panel);
 //    contents.setCellHeight(panel, "100%");
     
