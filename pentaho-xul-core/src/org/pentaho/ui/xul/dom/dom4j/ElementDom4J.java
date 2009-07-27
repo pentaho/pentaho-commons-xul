@@ -60,7 +60,11 @@ public class ElementDom4J implements Element{
   public Document getDocument() {
     try{
       //org.dom4j.Document doc = element.getDocument();
-      XulElementDom4J o = (XulElementDom4J) element.getDocument().getRootElement();
+      org.dom4j.Document doc = element.getDocument();
+      if(doc == null){
+        return null;
+      }
+      XulElementDom4J o = (XulElementDom4J) doc.getRootElement();
       return ((XulRoot) o.getXulElement()).getXulDomContainer().getDocumentRoot();
       //if(doc == null){
       //  throw new XulDomException("Element Document is null, getDocument most likely called during parse time");
