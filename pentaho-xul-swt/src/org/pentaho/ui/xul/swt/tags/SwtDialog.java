@@ -172,9 +172,6 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   public void setButtons(String buttonList) {
     buttons = buttonList.split(",");
-    if(this.initialized){
-      setButtons();
-    }
   }
 
   public void setOndialogaccept(String command) {
@@ -342,6 +339,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   @Override
   public void layout() {
+    setButtons();
     super.layout();
 
     for (XulComponent comp : getChildNodes()) {
@@ -382,6 +380,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   public void setOnload(final String method) {
     this.onload = method;
+    
+    
+    // @TODO This whole listener pattern needs to be replaced with a generic solution 
+     
     dialog.getShell().addListener(XulRoot.EVENT_ON_LOAD, new Listener() {
       public void handleEvent(Event e) {
         if(!StringUtils.isEmpty(method)){
