@@ -11,14 +11,6 @@
   padding: 3px 0px 3px 0px;
 }
 
-.dialog > tbody > tr > td > div{
-  padding: 3px;
-}
-
-.dialog-content > tbody > tr > td{
-  padding: 3px;
-}
-
 .dialog-button-panel{
   border-top: 1px solid #777;
 }
@@ -198,7 +190,7 @@
   cursor:none;
 }
 .gwt-Dialog {
-  	padding: 5px;
+  width:100%;
 }
 fieldset {
  border:1px solid #777777;
