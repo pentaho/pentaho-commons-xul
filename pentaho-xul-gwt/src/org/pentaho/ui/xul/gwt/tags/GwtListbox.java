@@ -57,10 +57,21 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   public GwtListbox() {
     super(ELEMENT_NAME);
-    managedObject = listBox = new ListBox();
+    managedObject = listBox = new ListBox(){
+
+      @Override
+      public void setHeight(String height) {
+        // if the user has specified a number of rows to display, setting 100% will over-write this. Block that here
+        if(GwtListbox.this.getRows() > 0 && height.equals("100%")){
+          return;
+        }
+        super.setHeight(height);
+      }
+      
+    };
     listBox.addChangeHandler(this);
   }
-
+  
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     this.container = container;
