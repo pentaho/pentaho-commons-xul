@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="topWindow"
+  height="500" width="400"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:pen="http://www.pentaho.org/2008/xul"
+  >
+  <groupbox id="firstGroupbox">
+    <caption label="Experience the magic"/>
+    <label value="overlays rock"/>
+  </groupbox>
+  <separator/>
+    <groupbox id="secondGroupbox">
+      <caption label="Do that again!"/>
+      <label value="here's another one"/>
+    </groupbox>
+    
+    <hbox>
+      <button label="test1"/>
+      <separator/>
+      <button label="test2"/>
+    </hbox>
+</window>

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+  <menubar id="menu" orient="vertical"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional">
+   
+    <menu id="home-menu">
+	    <menuitem id="home-menu-menuitem" label="{home}" command="/pentaho/Home"/>
+   	</menu>
+   	
+    <menu id="navigate-menu" label="{navigate}">
+      <menupopup id="navigate-popup">
+	    <menuitem id="new-report-menuitem" label="New Report" command="javascript:popPage('/pentaho/adhoc/waqr.html')"/>
+	    <menuitem id="new-pivot-menuitem" label="New Analysis View" command="javascript:popPage('/pentaho/NewAnalysisView')"/>
+	    <menuitem id="navigate-menuitem" label="{solutions}" command="/pentaho/Navigate"/>
+	    <menuitem id="usercontent-menuitem" label="{file-cache}" command="/pentaho/UserContent"/>
+      </menupopup>
+    </menu>
+
+    <menu id="admin-menu">
+	    <menuitem id="admin-menu-menuitem"  label="{admin}" command="/pentaho/Admin"/>
+   	</menu>
+
+    <menu id="logout-menu">
+	    <menuitem id="logout-menu-menuitem"  label="{logout}" command="/pentaho/Logout"/>
+   	</menu>
+
+    <menu id="about-menu" label="{about}">
+      <menupopup id="about-popup">
+		<menuitem id="pentaho-menuitem" label="{pentaho.org}" command="javascript:popPage('http://www.pentaho.org')"/>
+		<menuitem id="demos-menuitem" label="{demos}" command="javascript:popPage('http://www.pentaho.com/products/demos/')"/>
+		<menuitem id="downloads-menuitem" label="{downloads}" command="javascript:popPage('http://www.pentaho.org/download')"/>
+		<menuitem id="forums-menuitem" label="{forums}" command="javascript:popPage('http://www.pentaho.org/forums')"/>
+		<menuitem id="about-menuitem" label="{about}" command="javascript:modalWin('About')"/>
+      </menupopup>
+    </menu>
+
+  </menubar>
+

@@ -1,0 +1,315 @@
+.hbox{
+
+}
+.hbox > tbody > tr > td{
+  padding: 0px 3px 0px 3px;
+}
+.vbox{
+
+}
+.vbox > tbody > tr > td{  
+  padding: 3px 0px 3px 0px;
+}
+
+.dialog-button-panel{
+  border-top: 1px solid #777;
+}
+
+.dialog-button-panel > tbody > tr > td{
+  padding: 4px 0px 0px 0px;
+}
+
+.checkbox label{
+	padding-left:3px;
+}
+
+.image-button-over{
+	cursor:pointer;
+}
+
+
+.gwt-Tree {
+  background: white;
+}
+
+.gwt-Tree .gwt-TreeItem {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+  background-color: #DDDDDD;
+  cursor: pointer;
+  cursor: hand;
+}
+
+/*=========================  TOOLBAR  =========================*/
+.toolbar{
+  width:100%;
+  background-image: none;
+  height:100%;  
+  vertical-align: middle;
+  background-color: #d8d8d8;
+  border-top: none;
+  border-left: none;
+  border-left: none;  
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: #848484
+}
+
+
+
+/*=========================  TABLE  =========================*/
+.headerTable >tbody > tr > td{
+  padding:4px;
+}
+.gwt-ScrollTable {
+  border: 1px solid #848484;
+}
+
+.gwt-ScrollTable .headerWrapper {
+  background: #d2d2d2 repeat-x scroll left bottom;
+}
+
+.gwt-ScrollTable .footerWrapper {
+  background: #858585;
+  border-top: 1px solid #848484;
+}
+
+.gwt-ScrollTable .dataTable td {
+  overflow: hidden;
+  padding: 4px;
+  white-space: nowrap;
+}
+
+.gwt-ScrollTable .headerTable td {
+  font-weight: normal;
+  color: #000000;
+  border-right: 1px solid #848484;
+}
+
+.gwt-ScrollTable .headerTable-disabled td {
+  font-weight: normal;
+  color: #000000;
+  border-right: 0px;
+}
+
+.gwt-ScrollTable .dataTable tr {
+  background: white;
+}
+
+.gwt-ScrollTable .dataTable-disabled tr {
+  background: white;
+}
+
+.gwt-ScrollTable .dataTable td {
+  border-bottom: 1px solid #BEBEBE;
+  border-right: 1px solid #BEBEBE;
+}
+
+.gwt-ScrollTable .dataTable-disabled td {
+  border-bottom: 0px;
+}
+
+.gwt-ScrollTable .dataTable tr.hovering {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ScrollTable .dataTable-disabled tr.hovering {
+  cursor: default;
+}
+
+.gwt-ScrollTable .dataTable td.hovering {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.gwt-ScrollTable .dataTable-disabled td.hovering {
+  cursor: default;
+}
+
+.gwt-ScrollTable .dataTable tr.selected {
+  background: #BEBEBE none repeat scroll 0% 0%;
+}
+
+.gwt-ScrollTable .pagingOptions {
+  background: #e8e8e8 none repeat scroll 0% 0%;
+  border-right: 1px solid #848484;
+  border-top: 1px solid #848484;
+  padding: 1px 0px;
+}
+
+.gwt-ScrollTable .pagingOptions .errorLabel {
+  color: red;
+}
+
+.gwt-CellEditor {
+  background: white none repeat scroll 0% 0%;
+  border: 3px solid #BEBEBE;
+  padding: 4px;
+}
+
+.gwt-CellEditor td {
+  padding: 4px;
+}
+
+.glasspane{
+	position: absolute;
+  background-color: black;
+  opacity: 0.2;
+  filter:alpha(opacity=20);
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  z-index: 300;
+  margin: 0px;
+  padding: 0px;
+  display: none;
+}
+.xul-label{
+  white-space: nowrap;
+}
+
+.gwt-Button {
+  font-size: 0.85em;
+  background-color: #ddd;
+}
+.gwt-Button:down {
+  cursor:pointer;
+}
+.gwt-Button:hover {
+  background-color: #ffcc99;
+  cursor:hand;
+}
+.gwt-Button:disabled {
+  color: #888;
+  background-color: #ccc;
+  cursor:none;
+}
+.gwt-Dialog {
+  width:100%;
+}
+fieldset {
+ border:1px solid #777777;
+ padding-right: 1px;
+}
+
+legend {
+  padding: 0.2em 0.5em;
+  color:black;
+  font-size:90%;
+  text-align:right;
+}
+
+
+.xulTabBar .xulTabWidget {
+  background-image: url(images/dialog_tab_right.png);
+  background-position: 100% 0px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin: 4px 2px 0px 0px;
+}
+
+.xulTabBar .xulTabWidgetLabel {
+	font: normal 14px tahoma, arial, helvetica;
+    margin: 0px 0px 0px 0px;	
+ }
+.xulTabBar .xulTabWidget-selected {
+  background-image: url(images/dialog_tab_right.png);
+  background-position: 100% -42px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin: 4px 2px 0px 0px;
+}
+
+.xulTabBar .xulTabWidget-hover {
+  background-image: url(images/dialog_tab_right.png);
+  background-position: 100% -84px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin: 4px 2px 0px 0px;
+}
+
+.xulTabBar .xulTabWidgetCap {
+  background-image: url(images/dialog_tab_left.png);
+  background-position: 100% 0px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin: 4px 0px 0px 0px;
+  width: 6px;  
+}
+
+.xulTabBar .xulTabWidgetCap-selected {
+  background-image: url(images/dialog_tab_left.png);
+  background-position: 100% -42px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin: 4px 0px 0px 0px;
+  width: 6px;
+}
+
+.xulTabBar .xulTabWidgetCap-hover {
+  background-image: url(images/dialog_tab_left.png);
+  background-position: 100% -84px;
+  cursor: pointer;
+  cursor: hand;
+  height: 24px;
+  margin: 4px 0px 0px 0px;
+  width: 6px;
+}
+
+.xulTabPanel .gwt-TabPanelBottom {
+  background-color: #e2e2e2;
+  border-top:none;
+  border-right:1px solid #8d8d8d;
+  border-left:1px solid #8d8d8d;
+  border-bottom:1px solid #8d8d8d;
+  padding: 3px 7px 3px 4px;
+}
+
+.xulTabBar {
+  background-image: url(images/dialog_tab_bg.png);
+  background-repeat: repeat-x;
+  height: 29px;
+}
+
+.xulTabBar .gwt-TabBarFirst {
+  background-color: none;
+}
+
+.xulTabBar .gwt-TabBarRest {
+  background-color: none;
+}
+
+.xulTabBar .gwt-TabBarItem {
+  background-color: #e2e2e2;
+  border: none none 1px solid #8d8d8d none;
+  margin-right: 2px;
+  cursor: hand;
+  height: 24px;
+  margin: 4px 0px 0px 0px;
+  border: none none 1px solid black none;
+  padding:0px;
+}
+
+.xulTabBar .gwt-TabBarItem-selected {
+  background-color: #e2e2e2;
+  color: black;
+  border: none;
+  cursor: pointer;
+  height: 24px;
+  margin: 4px 0px 0px 0px;
+  font-weight:normal;
+  padding:0px;
+}
+.gwt-FileUpload {
+
+}

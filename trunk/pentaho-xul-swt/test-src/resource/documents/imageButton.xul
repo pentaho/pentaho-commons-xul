@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+<window id="label-test" title="Testing labels and layout for SWT, Swing"
+	orient="vertical"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	 xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
+
+	<script src="org.pentaho.ui.xul.samples.ButtonHandler" id="handler"/>
+	
+	<button id="plainButton" label="plain button" onclick="handler.doSimpleClick()"/>
+
+	<hbox>
+		<button id="firstButton" label="TOP" image="testImage.png" orient="vertical" dir="reverse" group="test" type="radio"/>
+		<button id="secondButton"  label="BOTTOM" image="testImage.png"  orient="vertical" dir="forward" group="test" type="radio"/>
+		<button label="RIGHT" image="testImage.png" orient="horizontal" dir="reverse" group="test" type="radio"/>
+		<button label="LEFT" image="testImage.png"  orient="horizontal" dir="forward" group="test" type="radio"/>
+	</hbox>
+
+</window>

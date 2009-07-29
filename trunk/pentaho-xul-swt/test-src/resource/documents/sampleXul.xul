@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<window width="400" height="275" title="Testing...">
+	<script src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
+	<script src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>
+	
+	<vbox>
+		<spacer size="20"/>
+		<groupbox>
+  			<caption label="Groupbox love in the house" />
+			<vbox>
+				<hbox>
+					<label value="What is your name?"/>
+					<textbox id="name"/>
+				</hbox>
+				<checkbox id="yell" label="Yell so I can hear it"/>
+				
+				<hbox>
+					<button label="Say Hi!" onclick="testHandler.sayHello()"/>
+					<button label="Say Hi2!" onclick="testHandler2.sayHello()"/>
+				</hbox>
+				<label value="   dfdfdfdf                                                                            " id="response" />
+			</vbox>
+		</groupbox>
+
+		
+	</vbox>
+</window>
