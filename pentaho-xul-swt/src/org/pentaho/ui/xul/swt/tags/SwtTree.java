@@ -11,6 +11,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -25,8 +26,13 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -40,6 +46,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -368,13 +375,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     int i = 0;
     for (XulComponent c : this.columns.getChildNodes()) {
       XulTreeCol col = (XulTreeCol) c;
+      final int colIdx = i;
 
       CellEditor editor;
       ColumnType type = col.getColumnType();
       switch (type) {
-      case TEXT:
-        editor = new TextCellEditor(table.getTable());
-        break;
       case CHECKBOX:
         editor = new CheckboxCellEditor(table.getTable());
         break;
@@ -384,11 +389,62 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         break;
       case EDITABLECOMBOBOX:
         editor = new ComboBoxCellEditor(table.getTable(), new String[] {});
+        
+        final CCombo editableControl = (CCombo) ((ComboBoxCellEditor) editor).getControl();
+        editableControl.addKeyListener(new KeyAdapter(){
+
+          @Override
+          public void keyReleased(KeyEvent arg0) {
+            super.keyReleased(arg0);
+
+            XulTreeCell cell = getCell(colIdx);
+            cell.setLabel(editableControl.getText());
+          }
+          
+        });
         break;
+      case TEXT:
       default:
         editor = new TextCellEditor(table.getTable());
+        
+        final Text textControl = (Text) ((TextCellEditor) editor).getControl();
+        textControl.addKeyListener(new KeyAdapter(){
+
+          @Override
+          public void keyReleased(KeyEvent arg0) {
+            super.keyReleased(arg0);
+
+            XulTreeCell cell = getCell(colIdx);
+            cell.setLabel(textControl.getText());
+          }
+          
+        });
         break;
       }
+      
+      // Create selection listener for comboboxes.
+      if(type == ColumnType.EDITABLECOMBOBOX || type == ColumnType.COMBOBOX){
+        final CCombo editableControl = (CCombo) ((ComboBoxCellEditor) editor).getControl();
+        editableControl.addSelectionListener(new SelectionAdapter(){
+          @Override
+          public void widgetDefaultSelected(SelectionEvent arg0) {
+            // TODO Auto-generated method stub
+            super.widgetDefaultSelected(arg0);
+          }
+  
+          @Override
+          public void widgetSelected(SelectionEvent arg0) {
+            super.widgetSelected(arg0);
+            
+            XulTreeCell cell = getCell(colIdx);
+            
+            cell.setSelectedIndex(editableControl.getSelectionIndex());
+          }
+          
+        });
+      }
+        
+      
       editors[i] = editor;
       names[i] = "" + i; //$NON-NLS-1$
       i++;
@@ -400,6 +456,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     
     createColumnTypesSnapshot();
 
+
+  }
+  
+  private XulTreeCell getCell(int colIdx){
+    return ((XulTreeItem) (table.getTable().getSelection()[0]).getData()).getRow().getCell(colIdx);
 
   }
 
@@ -739,18 +800,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           addTreeChild(o, row);
         }
 
-        for (XulComponent c : getRootChildren().getChildNodes()) {
-          System.out.println(((XulTreeCell) ((XulTreeItem) c).getChildNodes()
-              .get(0).getChildNodes().get(0)).getLabel());
-
-          for (XulComponent anotherc : c.getChildNodes().get(1).getChildNodes()) {
-            System.out.println("   "
-                + ((XulTreeCell) ((XulTreeItem) anotherc).getChildNodes()
-                    .get(0).getChildNodes().get(0)).getLabel());
-
-          }
-        }
-
       }
 
       update();
@@ -792,8 +841,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       Method childrenMethod = element.getClass().getMethod(property,
           new Class[] {});
 
-      Collection<T> children = (Collection<T>) childrenMethod.invoke(element,
-          new Object[] {});
+      Collection<T> children = (Collection<T>) childrenMethod.invoke(element, new Object[] {});
       XulTreeChildren treeChildren = null;
 
       if (children != null && children.size() > 0) {
@@ -819,7 +867,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           this.columns.getColumn(columnPos).getColumntypebinding());
       return (String) method.invoke(row, new Object[] {});
     } catch (Exception e) {
-      System.out.println("Could not extract column type from binding");
+      logger.debug("Could not extract column type from binding");
     }
     return "text"; // default //$NON-NLS-1$
   }
