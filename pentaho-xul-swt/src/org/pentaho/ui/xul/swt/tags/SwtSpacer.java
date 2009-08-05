@@ -26,13 +26,11 @@ public class SwtSpacer extends SwtElement implements XulSpacer{
     managedObject = strut;
   }
   public void setWidth(int size){
-    int y = strut.getSize().y;
-    System.out.println("Setting size to "+size+" : "+y);
+    int y = strut.getSize().y;    
     strut.setSize(size, y);
   }
   public void setHeight(int size){
     int x = strut.getSize().x;
-    System.out.println("Setting size to "+x+" : "+size);
     strut.setSize(x, size);
   }
   

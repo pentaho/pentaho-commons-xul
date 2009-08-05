@@ -54,7 +54,6 @@ public class SwtTreeChildren extends AbstractSwtXulContainer implements XulTreeC
             tree = (XulTree) c;
             break;
           }
-          System.out.println(c.getName());
           
           c = c.getParent();
         }
@@ -118,7 +117,6 @@ public class SwtTreeChildren extends AbstractSwtXulContainer implements XulTreeC
             tree = (XulTree) c;
             break;
           }
-          System.out.println(c.getName());
           
           c = c.getParent();
         }

@@ -47,7 +47,6 @@ public class BasicDialog extends TitleAreaDialog {
     // TODO This should be dependent on whether we want to set up the header or not...
     getTitleImageLabel().dispose();
     
-    System.out.println("createContents");
     return contentArea;
   }
   
@@ -62,7 +61,6 @@ public class BasicDialog extends TitleAreaDialog {
     Control c = super.createDialogArea(parent);
     //c.setBackground(c.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
     dialogArea = (Composite) c;
-    System.out.println("createDialogArea");
     return dialogArea;
   }
   

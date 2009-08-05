@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.util.Align;
@@ -8,6 +10,7 @@ public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
 
   protected Align alignment = Align.CENTER;
   protected boolean suppressLayout;
+  private static final Log logger = LogFactory.getLog(AbstractSwtXulContainer.class);
   
   public AbstractSwtXulContainer(String tagName){
     super(tagName);
@@ -21,7 +24,7 @@ public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
     try{
       this.alignment = Align.valueOf(align.toUpperCase());
     } catch(Exception e){
-      System.out.println("could not parse ["+align+"] as Align value");
+      logger.warn("could not parse ["+align+"] as Align value");
       
     }
   }
