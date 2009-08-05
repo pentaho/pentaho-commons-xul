@@ -27,6 +27,8 @@ public class GwtXulDomContainer implements XulDomContainer {
   Map<XulEventHandler, EventHandlerWrapper> handlerWrapers = new HashMap<XulEventHandler, EventHandlerWrapper>();
   GwtXulLoader loader;
   private List<Object> resourceBundles = new ArrayList<Object>();
+
+  private boolean initialized;
   
   protected GwtBindingContext bindings;
   
@@ -83,8 +85,13 @@ public class GwtXulDomContainer implements XulDomContainer {
   }
 
   public void initialize() {
-    // TODO Auto-generated method stub
+    this.initialized = true;
+  }
+  
+  
 
+  public boolean isInitialized() {
+    return initialized;
   }
 
   public void close() {

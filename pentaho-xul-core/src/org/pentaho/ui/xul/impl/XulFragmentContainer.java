@@ -91,4 +91,9 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
     //no implementation needed
   }
 
+  public boolean isInitialized() {
+    return true;
+  }
+
+  
 }

@@ -44,8 +44,9 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   
   protected BindingContext bindings;
   
-  
   private Object parentContext;
+  
+  private boolean initialized;
 
 	public AbstractXulDomContainer() {
     eventHandlers = new HashMap<String, XulEventHandler>();
@@ -142,8 +143,15 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
         }
       }
     }
+    initialized = true;
   }
   
+  
+  
+  public boolean isInitialized() {
+    return initialized;
+  }
+
   public Map<String, XulEventHandler> getEventHandlers(){
   	//if(this.eventHandlers.size() > 0){
   		return this.eventHandlers;

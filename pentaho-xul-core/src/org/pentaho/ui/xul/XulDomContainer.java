@@ -55,6 +55,8 @@ public interface XulDomContainer {
   public void removeBinding(Binding binding);
 
   public void initialize();
+  
+  public boolean isInitialized();
 
   public void close();
 
