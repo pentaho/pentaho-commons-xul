@@ -196,13 +196,13 @@ public class DefaultBinding implements Binding {
   public void bindForward() {
     setForwardListener(setupBinding(getSource(), getSourceAttr(), getTarget(), getTargetAttr(), Direction.FORWARD));
     sourceGetterMethod = getterMethods.pop();
-    logger.info("Forward binding established: " + source.get() + "." + sourceAttr + " ==> " + target.get() + "." + targetAttr);
+    logger.debug("Forward binding established: " + source.get() + "." + sourceAttr + " ==> " + target.get() + "." + targetAttr);
   }
 
   public void bindReverse() {
     setReverseListener(setupBinding(getTarget(), getTargetAttr(), getSource(), getSourceAttr(), Direction.BACK));
     targetGetterMethod = getterMethods.pop();
-    logger.info("Reverse binding established: " + source.get() + "." + sourceAttr + " <== " + target.get() + "." + targetAttr);
+    logger.debug("Reverse binding established: " + source.get() + "." + sourceAttr + " <== " + target.get() + "." + targetAttr);
   }
 
   protected PropertyChangeListener setupBinding(final Reference a, final String va, final Reference b, final String vb,
@@ -239,7 +239,7 @@ public class DefaultBinding implements Binding {
               DefaultBinding.this.destroyBindings();                      
               return;
             }
-            logger.info("Setting val: "+finalVal+" on: "+targetObject);
+            logger.debug("Setting val: "+finalVal+" on: "+targetObject);
             targetSetMethod.invoke(targetObject, finalVal);
           
           } catch (Exception e) {

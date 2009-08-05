@@ -53,7 +53,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
 	  
     XulRoot rootEle = (XulRoot) this.getDocumentRoot().getRootElement();
     
-    logger.info("onclose: "+ rootEle.getOnclose());
+    logger.debug("onclose: "+ rootEle.getOnclose());
     String onclose = rootEle.getOnclose();
     if(onclose != null){
 	    String[] oncloseCalls = onclose.split(",");
@@ -64,7 +64,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
 	    		if (result != null && 
 	    		    result instanceof Boolean && 
 	    		    !((Boolean)result).booleanValue()) {
-	    			logger.info("onclose " + close + " returned false, exiting close procedure");
+	    			logger.debug("onclose " + close + " returned false, exiting close procedure");
 	    			return;
 	    		}
 	    	} catch(XulException e){
@@ -89,7 +89,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
   	// make onunload event calls
   	//
   	
-    logger.info("onunload: "+ rootEle.getOnload());
+    logger.debug("onunload: "+ rootEle.getOnload());
     String onunload = rootEle.getOnunload();
     if(onunload != null){
       String[] unloadCalls = onunload.split(",");

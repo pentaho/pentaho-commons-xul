@@ -219,7 +219,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       }
     }
     for (String resource : resourceBundles) {
-      logger.info("Processing Resource Bundle: " + resource);
+      logger.debug("Processing Resource Bundle: " + resource);
       try {
         ResourceBundle res = ResourceBundle.getBundle(resource);
         if (res == null) {
@@ -270,7 +270,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       InputStream in = getClass().getClassLoader().getResourceAsStream(src);
 
       if (in != null) {
-        logger.info("Adding include src: " + src);
+        logger.debug("Adding include src: " + src);
         includedSources.add(src);
       } else {
         //try fully qualified name
@@ -278,7 +278,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         in = getClass().getClassLoader().getResourceAsStream(this.rootDir + src);
         if (in != null) {
           includedSources.add(src);
-          logger.info("Adding include src: " + src);
+          logger.debug("Adding include src: " + src);
         } else {
           logger.error("Could not resolve include: " + src);
         }
@@ -292,7 +292,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       if (root.getName().equals("overlay")) {
         processOverlay(root, ele.getDocument().getRootElement());
       } else if (ignoreRoot == null || ignoreRoot.equalsIgnoreCase("false")) {
-        logger.info("Including entire file: " + src);
+        logger.debug("Including entire file: " + src);
         List contentOfParent = ele.getParent().content();
         int index = contentOfParent.indexOf(ele);
         contentOfParent.set(index, root);
@@ -300,12 +300,12 @@ public abstract class AbstractXulLoader implements XulLoader {
         //process any overlay children
         List<Element> overlays = ele.elements();
         for (Element overlay : overlays) {
-          logger.info("Processing overlay within include");
+          logger.debug("Processing overlay within include");
 
           this.processOverlay(overlay.attributeValue("src"), srcDoc);
         }
       } else {
-        logger.info("Including children: " + src);
+        logger.debug("Including children: " + src);
         List contentOfParent = ele.getParent().content();
         int index = contentOfParent.indexOf(ele);
         contentOfParent.remove(index);
@@ -317,7 +317,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         //process any overlay children
         List<Element> overlays = ele.elements();
         for (Element overlay : overlays) {
-          logger.info("Processing overlay within include");
+          logger.debug("Processing overlay within include");
 
           this.processOverlay(overlay.attributeValue("src"), srcDoc);
         }
@@ -375,13 +375,13 @@ public abstract class AbstractXulLoader implements XulLoader {
     for (Object child : overlayEle.elements()) {
       Element overlay = (Element) child;
       String overlayId = overlay.attributeValue("ID");
-      logger.info("Processing overlay\nID: " + overlayId);
+      logger.debug("Processing overlay\nID: " + overlayId);
       Element sourceElement = srcEle.getDocument().elementByID(overlayId);
       if (sourceElement == null) {
         logger.error("Could not find corresponding element in src doc with id: " + overlayId);
         continue;
       }
-      logger.info("Found match in source doc:");
+      logger.debug("Found match in source doc:");
 
       String removeElement = overlay.attributeValue("removeelement");
       if (removeElement != null && removeElement.equalsIgnoreCase("true")) {
@@ -434,7 +434,7 @@ public abstract class AbstractXulLoader implements XulLoader {
           } else {
             sourceElement.elements().add(positionToInsert, pluckedElement);
           }
-          logger.info("processed overlay child: " + ((Element) overlayChild).getName() + " : "
+          logger.debug("processed overlay child: " + ((Element) overlayChild).getName() + " : "
               + pluckedElement.getName());
         }
       }
@@ -531,7 +531,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       for (Object childToParse : overlay.elements()) {
         Element childElement = (Element) childToParse;
         
-        logger.info("Processing overlay on element with id: " + overlayId);
+        logger.debug("Processing overlay on element with id: " + overlayId);
         parser.reset();
         parser.setContainer(container);
         XulComponent c = parser.parse(childElement, (XulContainer) sourceElement);
@@ -566,7 +566,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         }
         notifyOverlayDomReady(c);
         
-        logger.info("added child: " + c);
+        logger.debug("added child: " + c);
       }
       
       List attribs = overlay.attributes();
@@ -610,7 +610,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
         org.pentaho.ui.xul.dom.Element prevOverlayedEle = targetDocument.getElementById(childId);
         if (prevOverlayedEle == null) {
-          logger.info("Source Element from target document is null: " + childId);
+          logger.debug("Source Element from target document is null: " + childId);
           continue;
         }
 

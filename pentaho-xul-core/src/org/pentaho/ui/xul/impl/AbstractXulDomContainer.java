@@ -121,7 +121,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   
   public void initialize(){
     XulRoot rootEle = (XulRoot) this.getDocumentRoot().getRootElement();
-    logger.info("onload: "+ rootEle.getOnload());
+    logger.debug("onload: "+ rootEle.getOnload());
     String onLoad = rootEle.getOnload();
     if(onLoad != null){
       if(onLoad.indexOf(',') > 0){ //comma separated list of onload calls
