@@ -30,6 +30,12 @@ public class GwtTabWidget extends HorizontalPanel implements MouseListener {
     setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     panel.setStyleName("xulTabWidget"); //$NON-NLS-1$
     leftCap.setStyleName("xulTabWidgetCap"); //$NON-NLS-1$
+    Image leftCapImage = new Image(GWT.getModuleBaseURL() + "/images/space1x20.png");
+    leftCap.setSpacing(0);
+    leftCapImage.setWidth("5px"); //$NON-NLS-1$
+    leftCapImage.setHeight("24px"); //$NON-NLS-1$    
+    leftCap.add(leftCapImage);
+
     setLabelText(text);
     setLabelTooltip(tooltip);
     textLabel.setStyleName("xulTabWidgetLabel");
