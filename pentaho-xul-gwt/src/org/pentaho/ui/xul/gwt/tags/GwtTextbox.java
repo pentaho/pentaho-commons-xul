@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.gwt.tags;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
@@ -11,6 +12,11 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.TextType;
 
+import com.google.gwt.event.dom.client.BlurEvent;
+import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextArea;
@@ -22,7 +28,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   
   static final String ELEMENT_NAME = "textbox"; //$NON-NLS-1$
 
-  protected String max, min, oninput;
+  protected String max, min, oninput, onblur, oncommand;
   protected TextType type = TextType.NORMAL;
   protected boolean readonly;
   protected boolean multiline = false;
@@ -60,6 +66,8 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     setMultiline("true".equals(srcEle.getAttribute("multiline")));
     setRows(getInt(srcEle.getAttribute("rows")));
     setCols(getInt(srcEle.getAttribute("cols")));
+    setOnblur(srcEle.getAttribute("onblur"));
+    setOncommand(srcEle.getAttribute("oncommand"));
   }
   
   public Integer getInt(String val) {
@@ -125,19 +133,60 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     setupListeners();
   }
   
+  @SuppressWarnings("deprecation")
   private void setupListeners(){
     textBox.addKeyboardListener(new KeyboardListener(){
 
-      public void onKeyDown(Widget arg0, char arg1, int arg2) {}
+      public void onKeyDown(Widget sender, char keyCode, int modifiers) {
+        if(onblur != null && !onblur.equalsIgnoreCase("")){ //$NON-NLS-1$
+          if(keyCode == KeyboardListener.KEY_TAB){
+            Event.getCurrentEvent().cancelBubble(true);
+            Event.getCurrentEvent().preventDefault();
+            
+            try {
+              GwtTextbox.this.getXulDomContainer().invoke(GwtTextbox.this.getOnblur(), new Object[] {});
+            } catch (XulException e) {
+              e.printStackTrace();
+            }
+          }
+         }
+      }
 
-      public void onKeyPress(Widget arg0, char arg1, int arg2) {}
+      public void onKeyPress(Widget sender, char keyCode, int modifiers) {}
 
-      public void onKeyUp(Widget arg0, char arg1, int arg2) {
+      public void onKeyUp(Widget sender, char keyCode, int modifiers) {
         setValue(textBox.getText());
+        if(keyCode == KeyboardListener.KEY_ENTER){
+          if(!GwtTextbox.this.multiline){
+            try {
+              GwtTextbox.this.getXulDomContainer().invoke(GwtTextbox.this.getOncommand(), new Object[] {});
+            } catch (XulException e) {
+              e.printStackTrace();
+            }
+          }
+        }
       }
       
     });
     
+    textBox.addBlurHandler(new BlurHandler(){
+      public void onBlur(BlurEvent event) {
+        try {
+          GwtTextbox.this.getXulDomContainer().invoke(GwtTextbox.this.getOnblur(), new Object[] {});
+        } catch (XulException e) {
+          e.printStackTrace();
+        }
+      }      
+    });
+    
+  }
+
+  public void setOncommand(String method){
+    this.oncommand = method;
+  }
+  
+  public String getOncommand() {
+    return oncommand;
   }
 
   public int getMaxlength() {
@@ -188,13 +237,11 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
 
   public void selectAll() {
-    
-        // TODO Auto-generated method stub 
-      
+    // TODO Auto-generated method stub
   }
 
   public void setFocus() {
-    // TODO focus method impl
+    this.textBox.setFocus(true);
   }
 
   public void setMax(String max) {
@@ -207,6 +254,14 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 
   public void setOninput(String method) {
     this.oninput = method;
+  }
+  
+  public String getOnblur(){
+    return this.onblur;
+  }
+  
+  public void setOnblur(String method) {
+    this.onblur = method;
   }
 
   public void setReadonly(boolean readOnly) {
