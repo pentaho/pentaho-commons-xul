@@ -171,10 +171,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     
     textBox.addBlurHandler(new BlurHandler(){
       public void onBlur(BlurEvent event) {
-        try {
-          GwtTextbox.this.getXulDomContainer().invoke(GwtTextbox.this.getOnblur(), new Object[] {});
-        } catch (XulException e) {
-          e.printStackTrace();
+        if(onblur != null && !onblur.equalsIgnoreCase("")){ //$NON-NLS-1$
+          try {
+            GwtTextbox.this.getXulDomContainer().invoke(GwtTextbox.this.getOnblur(), new Object[] {});
+          } catch (XulException e) {
+            e.printStackTrace();
+          }
         }
       }      
     });
