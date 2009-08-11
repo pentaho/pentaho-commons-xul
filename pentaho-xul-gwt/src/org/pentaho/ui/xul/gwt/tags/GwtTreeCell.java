@@ -15,6 +15,11 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
 
   private Object value;
   private int selectedIndex;
+
+  // track that bindings have been added to this cell;
+  private boolean selIdxBindingsAdded;
+  private boolean valBindingsAdded;
+  private boolean labelBindingsAdded;
   
   public static void register() {
     GwtXulParser.registerHandler("treecell",
@@ -125,5 +130,29 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     this.disabled = disabled;
     super.setDisabled(disabled);
     this.firePropertyChange("disabled", prevVal, disabled);
+  }
+
+  public boolean selectedIndexBindingsAdded() {
+    return selIdxBindingsAdded;
+  }
+
+  public void setSelectedIndexBindingsAdded(boolean bindingsAdded) {
+    this.selIdxBindingsAdded = bindingsAdded;
+  }
+  
+  public boolean valueBindingsAdded(){
+    return valBindingsAdded;
+  }
+  
+  public void setValueBindingsAdded(boolean bindingsAdded){
+    valBindingsAdded = bindingsAdded;
+  }
+  
+  public void setLabelBindingsAdded(boolean bindingsAdded){
+    labelBindingsAdded = bindingsAdded;
+  }
+  
+  public boolean labelBindingsAdded(){
+    return labelBindingsAdded;
   }
 }

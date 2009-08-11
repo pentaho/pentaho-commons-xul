@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -142,9 +143,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     // time we call setup{Tree|Table}; because the widget is thrown away, we need to reconnect the new widget to the
     // simplePanel, which is the managedObject
     managedObject = simplePanel;
-    
-    this.registerCellEditor("custom-editor", new CustomEditor());
-    this.registerCellRenderer("custom-editor", new CustomRenderer());
     
   }
   
@@ -350,6 +348,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
     final GwtTreeCell cell = (GwtTreeCell) getRootChildren().getItem(y).getRow().getCell(x);
 
+    // If collection bound, bindings may need to be updated for runtime changes in column types.
+    if(this.elements != null){
+      try {
+        this.addBindings(column, cell, this.elements.toArray()[y]);
+      } catch (InvocationTargetException e) {
+        e.printStackTrace();
+      } catch (XulException e) {
+        e.printStackTrace();
+      }
+    }
+    
     if(StringUtils.isEmpty(colType) == false && colType.equalsIgnoreCase("dynamic")){
       Object row = elements.toArray()[y];
       colType = extractDynamicColType(row, x);
@@ -409,10 +418,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
           lb.addItem(label.toString());
         }
         lb.setSuppressLayout(false);
+        final String fColType = colType;
         lb.addChangeListener(new ChangeListener(){
   
           public void onChange(Widget arg0) {
-            if(column.getType().equalsIgnoreCase("editablecombobox")){
+            if(fColType.equalsIgnoreCase("editablecombobox")){
               cell.setLabel(lb.getValue());
             } else {
               cell.setSelectedIndex(lb.getSelectedIndex());
@@ -789,76 +799,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
 
               XulTreeCol column = ((XulTreeCol) col);
               final XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
-              for (InlineBindingExpression exp : column.getBindingExpressions()) {
 
-                String colType = column.getType();
-                if(StringUtils.isEmpty(colType) == false && colType.equalsIgnoreCase("dynamic")){
-                  colType = extractDynamicColType(o, x);
-                }
-
-                if(colType != null && (colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))){
-                  GwtBinding binding = new GwtBinding(o, column.getCombobinding(), cell, "value");
-                  binding.setBindingType(Binding.Type.ONE_WAY);
-                  domContainer.addBinding(binding);
-                  binding.fireSourceChanged();
-
-                  binding = new GwtBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
-                  binding.setConversion(new BindingConvertor<Object, Integer>(){
-
-                    @Override
-                    public Integer sourceToTarget(Object value) {
-                      int index = ((Vector) cell.getValue()).indexOf(value);
-                      return index > -1 ? index : 0;
-                    }
-
-                    @Override
-                    public Object targetToSource(Integer value) {
-                      return ((Vector)cell.getValue()).get(value);
-                    }
-
-                  });
-
-                  domContainer.addBinding(binding);
-                  binding.fireSourceChanged();
-
-                  if(colType.equalsIgnoreCase("editablecombobox")){
-                    binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
-                    if (!this.editable) {
-                      binding.setBindingType(Binding.Type.ONE_WAY);
-                    } else {
-                      binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
-                    }
-                    domContainer.addBinding(binding);
-                    binding.fireSourceChanged();
-                  }
-
-                } else if(colType != null && this.customEditors.containsKey(colType)){
-                  
-                  GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, "value");
-                  binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
-                  domContainer.addBinding(binding);
-                  binding.fireSourceChanged();
-                  
-                } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){
-                
-                  GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
-                  if(column.isEditable() == false){
-                    binding.setBindingType(Binding.Type.ONE_WAY);
-                  }
-                  domContainer.addBinding(binding);
-                  binding.fireSourceChanged();
-                } else {
-                  cell.setLabel(o.toString());
-                }
-              }
-
-              if(StringUtils.isEmpty(column.getDisabledbinding()) == false){
-                String prop = column.getDisabledbinding();
-                GwtBinding bind = new GwtBinding(o, column.getDisabledbinding(), cell, "disabled");
-                bind.setBindingType(Binding.Type.ONE_WAY);
-                domContainer.addBinding(bind);
-                bind.fireSourceChanged();
-              }
+              addBindings(column, (GwtTreeCell) cell, o);
 
               row.addCell(cell);
             }
@@ -984,6 +926,94 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     customRenderers.put(key, renderer);
     
   }
+  
+  private void addBindings(final XulTreeCol col, final GwtTreeCell cell, final Object o) throws InvocationTargetException, XulException{
+    for (InlineBindingExpression exp : col.getBindingExpressions()) {
+
+      String colType = col.getType();
+      if(StringUtils.isEmpty(colType) == false && colType.equalsIgnoreCase("dynamic")){
+        colType = extractDynamicColType(o, col.getParent().getChildNodes().indexOf(col));
+      }
+    
+      if(colType != null && (colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))){
+  
+        // Only add bindings if they haven't been already applied.
+        if(cell.valueBindingsAdded() == false){
+          GwtBinding binding = new GwtBinding(o, col.getCombobinding(), cell, "value");
+          binding.setBindingType(Binding.Type.ONE_WAY);
+          domContainer.addBinding(binding);
+          binding.fireSourceChanged();
+    
+          cell.setValueBindingsAdded(true);
+        }
+        if(cell.selectedIndexBindingsAdded() == false){
+
+          GwtBinding binding = new GwtBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
+          binding.setConversion(new BindingConvertor<Object, Integer>(){
+    
+            @Override
+            public Integer sourceToTarget(Object value) {
+              int index = ((Vector) cell.getValue()).indexOf(value);
+              return index > -1 ? index : 0;
+            }
+    
+            @Override
+            public Object targetToSource(Integer value) {
+              return ((Vector)cell.getValue()).get(value);
+            }
+    
+          });
+    
+          domContainer.addBinding(binding);
+          binding.fireSourceChanged();
+          cell.setSelectedIndexBindingsAdded(true);
+        }
+        
+        if(cell.labelBindingsAdded() == false && colType.equalsIgnoreCase("editablecombobox")){
+          GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+          if (!this.editable) {
+            binding.setBindingType(Binding.Type.ONE_WAY);
+          } else {
+            binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+          }
+          domContainer.addBinding(binding);
+          binding.fireSourceChanged();
+          cell.setLabelBindingsAdded(true);
+        }
+        
+  
+      } else if(colType != null && this.customEditors.containsKey(colType)){
+        
+        GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, "value");
+        binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(binding);
+        binding.fireSourceChanged();
+        
+        cell.setValueBindingsAdded(true);
+        
+      } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){
+      
+        GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        if(col.isEditable() == false){
+          binding.setBindingType(Binding.Type.ONE_WAY);
+        }
+        domContainer.addBinding(binding);
+        binding.fireSourceChanged();
+        cell.setLabelBindingsAdded(true);
+      } else {
+        cell.setLabel(o.toString());
+      }
+    }
+    
+    if(StringUtils.isEmpty(col.getDisabledbinding()) == false){
+      String prop = col.getDisabledbinding();
+      GwtBinding bind = new GwtBinding(o, col.getDisabledbinding(), cell, "disabled");
+      bind.setBindingType(Binding.Type.ONE_WAY);
+      domContainer.addBinding(bind);
+      bind.fireSourceChanged();
+    }
+
+  }
 
   public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorCallback{
     
@@ -1072,64 +1102,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       super.onBrowserEvent(event);
     }
     
-    
-  }
-  
-  private static class CustomRenderer implements TreeCellRenderer{
-
-    public Object getNativeComponent() {
-      return null;
-    }
-
-    public String getText(Object value) {
-      return "custom: "+value;
-    }
-
-    public boolean supportsNativeComponent() {
-      return false;
-    }
-  }
-  
-  private static class CustomEditor implements TreeCellEditor, PopupListener{
-    
-    PromptDialogBox dialog;
-    TreeCellEditorCallback callback;    
-    TextBox txt = new TextBox();
-
-    public CustomEditor(){
-      dialog = new PromptDialogBox("Enter Value", "Ok", "Cancel", true, false);
-      dialog.addPopupListener(this);
-      
-      HorizontalPanel panel = new HorizontalPanel();
-      panel.add(new Label("Enter Your Name"));
-      panel.add(txt);
-      dialog.setContent(panel);
-      
-    }
-    
-    public Object getValue() {
-      return txt.getText();
-    }
-
-    public void hide() {
-      // TODO Auto-generated method stub
-      
-    }
-
-    public void setValue(Object val) {
-      txt.setText(val.toString());
-      
-    }
-
-    public void show(int row, int col, Object boundObj, String columnBinding, TreeCellEditorCallback callback) {
-      this.callback = callback;
-      dialog.getElement().getStyle().setProperty("zIndex", "10000");
-      dialog.center();
-    }
-
-    public void onPopupClosed(PopupPanel sender, boolean autoClosed) {
-      this.callback.onCellEditorClosed(txt.getText());
-    }
     
   }
 
