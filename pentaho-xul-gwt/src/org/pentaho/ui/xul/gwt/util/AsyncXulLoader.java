@@ -40,6 +40,8 @@ public class AsyncXulLoader implements IResourceBundleLoadCallback {
   private GwtXulDomContainer container;
   public static final String PROPERTIES_EXTENSION = ".properties"; //$NON-NLS-1$
   public static final String SEPARATOR = "/"; //$NON-NLS-1$
+  
+  public static final String NS_KEY = "there.is.only.xul";
 
   public static void loadXulFromUrl(String location, String bundle, IXulLoaderCallback callback) {
     AsyncXulLoader loader = new AsyncXulLoader(location, bundle, callback);
@@ -254,6 +256,10 @@ public class AsyncXulLoader implements IResourceBundleLoadCallback {
   }
 
   private void generateXulContainer(String xulStr) {
+    if(xulStr == null || xulStr.indexOf(NS_KEY) < 0){
+      Window.alert("Error loading XUL Application. Your session may have timed out.");
+      return;
+    }
     try {
       final com.google.gwt.xml.client.Document gwtDoc = XMLParser.parse(xulStr);
 
