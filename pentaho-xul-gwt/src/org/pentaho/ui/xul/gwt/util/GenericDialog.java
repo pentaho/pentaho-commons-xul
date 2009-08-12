@@ -34,7 +34,9 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     glassPaneStyle.setProperty("height", "100%");
     glassPaneStyle.setProperty("display", "block");
     
-    
+  }
+  
+  private void createDialog(){
     dialog = new DialogBox(){
       @Override
       public void hide() {
@@ -53,6 +55,11 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
   }
   
   public void show(){
+    // Instantiation if delayed to prevent errors with the underlying GWT's not being able to calculate available size
+    // in the case that the GWT app has been loaded into an iframe that's not visible.
+    if(dialog == null){
+      createDialog();
+    }
     dialog.setText(title);
 
     contents.clear();

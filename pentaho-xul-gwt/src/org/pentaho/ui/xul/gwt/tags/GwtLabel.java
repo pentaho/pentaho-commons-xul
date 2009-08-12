@@ -12,6 +12,8 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.Widget;
 
 public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   
@@ -44,7 +46,43 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   public void layout(){
     label.setTitle(this.getTooltiptext());
     if(StringUtils.isEmpty(this.getTooltiptext()) == false){
-      label.addMouseListener(new ToolTip(this.getTooltiptext(), 1000));
+      
+      // ToolTip creation is wrapped in a passthrough listener. This delayed instantiation works around a problem with the
+      // underlying GWT widgets that throw errors positioning when the GWT app is loaded in a frame that's not visible.
+      label.addMouseListener(new MouseListener(){
+        ToolTip tt;
+        
+        private void verifyTTCreated(){
+          tt = new ToolTip(GwtLabel.this.getTooltiptext(), 1000);
+        }
+
+        public void onMouseDown(Widget sender, int x, int y) {
+          verifyTTCreated();
+          tt.onMouseDown(sender, x, y);
+        }
+
+        public void onMouseEnter(Widget sender) {
+          verifyTTCreated();
+          tt.onMouseEnter(sender);
+        }
+
+        public void onMouseLeave(Widget sender) {
+          verifyTTCreated();
+          tt.onMouseLeave(sender);
+        }
+
+        public void onMouseMove(Widget sender, int x, int y) {
+          verifyTTCreated();
+          tt.onMouseMove(sender, x, y);
+        }
+
+        public void onMouseUp(Widget sender, int x, int y) {
+          verifyTTCreated();
+          tt.onMouseUp(sender, x, y);
+        }
+        
+        
+      });
     }
   }
 
