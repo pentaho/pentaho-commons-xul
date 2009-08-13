@@ -40,6 +40,7 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellEditorCallback;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
@@ -99,10 +100,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   private Map<String, TreeCellRenderer> customRenderers = new HashMap<String, TreeCellRenderer>();
   
   
+  @Bindable
   public boolean isVisible() {
     return visible;
   }
 
+  @Bindable
   public void setVisible(boolean visible) {
     this.visible = visible;
     if(simplePanel != null) {
@@ -631,6 +634,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     return null;
   }
 
+  @Bindable
   public <T> Collection<T> getElements() {
     return this.elements;
   }
@@ -647,6 +651,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     return rootChildren;
   }
 
+  @Bindable
   public int getRows() {
     if (rootChildren == null) {
       return 0;
@@ -655,6 +660,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     }
   }
 
+  @Bindable
   public int[] getSelectedRows() {
     if(this.isHierarchical()){
       TreeItem item = tree.getSelectedItem();
@@ -725,6 +731,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     return data;
   }
 
+  @Bindable
   public boolean isEditable() {
     return editable;
   }
@@ -773,10 +780,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     
   }
 
+  @Bindable
   public void setEditable(boolean edit) {
     this.editable = edit;
   }
 
+  @Bindable
   public <T> void setElements(Collection<T> elements) {
 
     try{
@@ -912,6 +921,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
     layout();
   }
 
+  @Bindable
   public Object getSelectedItem() {
     // TODO Auto-generated method stub
     return null;

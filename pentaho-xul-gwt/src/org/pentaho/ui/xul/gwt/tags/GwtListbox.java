@@ -18,6 +18,7 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -86,10 +87,12 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     setOnselect(srcEle.getAttribute("onselect"));
   }
 
+  @Bindable
   public boolean isDisabled() {
     return disabled;
   }
 
+  @Bindable
   public void setDisabled(boolean disabled) {
     this.listBox.setEnabled(!disabled);
   }
@@ -154,7 +157,8 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     }
     this.setSelectedIndex(listBox.getSelectedIndex());
   }
-
+  
+  @Bindable
   public Object getSelectedItem() {
     if (listBox.getSelectedIndex() != -1) {
       return getItem(listBox.getSelectedIndex());
@@ -167,6 +171,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     return getChildNodes().get(Integer.parseInt(listBox.getValue(index)));
   }
 
+  @Bindable
   public Object[] getSelectedItems() {
     List<Object> items = new ArrayList<Object>();
     for (int i = 0; i < listBox.getItemCount(); i++) {
@@ -202,6 +207,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     return -1;
   }
 
+  @Bindable
   public void setSelectedItem(Object item) {
     if (item == null) {
       listBox.setSelectedIndex(-1);
@@ -211,6 +217,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     onChange(null);
   }
 
+  @Bindable
   public void setSelectedItems(Object[] items) {
 
     for (int i = 0; i < listBox.getItemCount(); i++) {
@@ -254,10 +261,12 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     return listBox.getItemCount();
   }
 
+  @Bindable
   public int getSelectedIndex() {
     return listBox.getSelectedIndex();
   }
 
+  @Bindable
   public int[] getSelectedIndices() {
     List<Integer> selectedIndices = new ArrayList<Integer>();
     for (int i = 0; i < listBox.getItemCount(); i++) {
@@ -272,10 +281,12 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     return indices;
   }
 
+  @Bindable
   public void setDisabled(String dis) {
     this.disabled = Boolean.parseBoolean(dis);
   }
 
+  @Bindable
   public <T> Collection<T> getElements() {
     return (Collection<T>) boundElements;
   }
@@ -286,6 +297,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     layout();
   }
   
+  @Bindable
   public <T> void setElements(Collection<T> elements) {
     boundElements = elements;
 
@@ -311,6 +323,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     }
   }
 
+  @Bindable
   public void setSelectedIndex(int index) {
     int oldValue = this.selectedIndex;
     this.selectedIndex = index;
@@ -320,6 +333,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     
   }
 
+  @Bindable
   public void setSelectedIndices(int[] indices) {
 
     // TODO Auto-generated method stub 

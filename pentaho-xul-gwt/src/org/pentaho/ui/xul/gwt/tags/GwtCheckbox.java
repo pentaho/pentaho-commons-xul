@@ -8,6 +8,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -61,12 +62,14 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.components.XulCheckbox#getSelected()
    */
+  @Bindable
   public boolean getSelected() {
     return checkBox.getValue();
   }
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.components.XulCheckbox#setSelected(boolean)
    */
+  @Bindable
   public void setSelected(boolean selected) {
     checkBox.setValue(selected);
   }
@@ -76,23 +79,28 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
     checkBox.setTitle(this.getTooltiptext());
   }
   
+  @Bindable
   public void setLabel(String label){
     checkBox.setText(label);
   }
 
+  @Bindable
   public String getLabel() {
     return checkBox.getText();
   }
 
+  @Bindable
   public boolean isChecked() {
     return checkBox.getValue();
 
   }
 
+  @Bindable
   public boolean isDisabled() {
     return !checkBox.isEnabled();
   }
 
+  @Bindable
   public void setChecked(boolean checked) {
    boolean previousVal = this.checked;
    if(checked != checkBox.getValue()) {
@@ -102,6 +110,7 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
    this.firePropertyChange("checked", previousVal, checked);
   }
 
+  @Bindable
   public void setDisabled(boolean dis) {
     checkBox.setEnabled(!dis);
   }

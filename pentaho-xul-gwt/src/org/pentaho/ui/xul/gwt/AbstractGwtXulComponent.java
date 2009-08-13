@@ -16,6 +16,7 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.util.Align;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
@@ -374,6 +375,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     return width;  
   }
 
+  @Bindable
   public boolean isDisabled() {
    return disabled;   
   }
@@ -382,6 +384,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     this.bgcolor = bgcolor;
   }
 
+  @Bindable
   public void setDisabled(boolean disabled) {
    this.disabled = disabled;   
   }
@@ -470,10 +473,12 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     changeSupport.firePropertyChange(attr, previousVal, newVal);
   }
   
+  @Bindable
   public boolean isVisible() {
     return this.visible;
   }
 
+  @Bindable
   public void setVisible(boolean visible) {
     this.visible = visible;
     

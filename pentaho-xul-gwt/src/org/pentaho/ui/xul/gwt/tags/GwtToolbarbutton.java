@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -69,6 +70,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     button.getCommand().execute();
   }
 
+  @Bindable
   public void setLabel(String label) {
     button.setText(label);
   }
@@ -89,14 +91,17 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     });
   }
 
+  @Bindable
   public String getLabel() {
     return button.getText();
   }
 
+  @Bindable
   public boolean isDisabled() {
     return ! button.isEnabled();
   }
 
+  @Bindable
   public void setDisabled(boolean dis) {
     button.setEnabled(!dis);
   }
@@ -109,6 +114,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     return group;
   }
 
+  @Bindable
   public String getImage() {
     return image;  
   }
@@ -121,6 +127,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     return type;
   }
 
+  @Bindable
   public boolean isSelected() {
     return false;  
   }
@@ -134,11 +141,13 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     //TODO: implement button group
   }
 
+  @Bindable
   public void setImage(String src) {
     this.image = src;
     button.setImage(new Image(src));
   }
 
+  @Bindable
   public void setDisabledImage(String src) {
     this.disabledImage = src;
     button.setDisabledImage(new Image(disabledImage));
@@ -148,10 +157,12 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     return disabledImage;
   }
 
+  @Bindable
   public void setSelected(String selected) {
     
   }
 
+  @Bindable
   public void setSelected(boolean selected) {
     if(button instanceof ToolbarToggleButton){
       ((ToolbarToggleButton) button).setSelected(selected,true);
@@ -160,6 +171,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     
   }
   
+  @Bindable
   public void setSelected(boolean selected, boolean fireEvent) {
     if(button instanceof ToolbarToggleButton){
       ((ToolbarToggleButton) button).setSelected(selected,fireEvent);
@@ -173,6 +185,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   }
 
   @Override
+  @Bindable
   public void setTooltiptext(String tooltip) {
     super.setTooltiptext(tooltip);
     if(button != null){
@@ -228,6 +241,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   }
 
   @Override
+  @Bindable
   public void setVisible(boolean visible) {
     super.setVisible(visible);
     button.setVisible(visible);

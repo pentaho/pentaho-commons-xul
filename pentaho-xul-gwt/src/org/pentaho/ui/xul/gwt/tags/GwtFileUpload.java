@@ -8,6 +8,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormHandler;
@@ -148,10 +149,12 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     this.uploadSuccessMethod = method;    
   }
 
+  @Bindable
   public String getSeletedFile() {
     return upload.getFilename();
   }
 
+  @Bindable
   public void setSelectedFile(String name) {
     if(name == null || name.length() <=0) {
       uploadPanel.remove(upload);

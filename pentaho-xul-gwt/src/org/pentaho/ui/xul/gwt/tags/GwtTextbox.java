@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtDomElement;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.TextType;
 
 import com.google.gwt.event.dom.client.BlurEvent;
@@ -80,10 +81,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     return null;
   }
   
+  @Bindable
   public String getValue(){
     return value;
   }
 
+  @Bindable
   public void setValue(String text){
       String prevVal = this.value;
       this.value = text;
@@ -195,10 +198,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     return 0;
   }
 
+  @Bindable
   public boolean isDisabled() {
     return !textBox.isEnabled();
   }
 
+  @Bindable
   public void setDisabled(boolean dis) {
     textBox.setEnabled(!dis);
   }

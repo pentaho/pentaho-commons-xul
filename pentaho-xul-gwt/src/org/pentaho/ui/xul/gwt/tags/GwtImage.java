@@ -8,6 +8,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
@@ -45,10 +46,12 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     }
   }
 
+  @Bindable
   public String getSrc() {
     return image.getUrl();
   }
 
+  @Bindable
   public void setSrc(String src) {
     if(src == null){
       image.setUrl(null);
@@ -57,6 +60,7 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     image.setUrl(GWT.getModuleBaseURL() + src);
   }
 
+  @Bindable
   public void setSrc(Object img) {
     if (img instanceof String) {
       setSrc((String) img);
@@ -82,6 +86,7 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   }
 
   @Override
+  @Bindable
   public void setTooltiptext(String tooltip) {
     super.setTooltiptext(tooltip);
     image.setTitle(this.getTooltiptext());

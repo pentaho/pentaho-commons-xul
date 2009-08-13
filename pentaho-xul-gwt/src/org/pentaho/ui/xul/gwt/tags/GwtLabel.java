@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
@@ -53,7 +54,9 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
         ToolTip tt;
         
         private void verifyTTCreated(){
-          tt = new ToolTip(GwtLabel.this.getTooltiptext(), 1000);
+          if(tt == null){
+            tt = new ToolTip(GwtLabel.this.getTooltiptext(), 1000);
+          }
         }
 
         public void onMouseDown(Widget sender, int x, int y) {
@@ -86,10 +89,12 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     }
   }
 
+  @Bindable
   public void setValue(String value){
     label.setText(value);
   }
   
+  @Bindable
   public String getValue(){
     return label.getText();
   }
@@ -117,6 +122,7 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   }
 
   @Override
+  @Bindable
   public void setTooltiptext(String tooltip) {
     super.setTooltiptext(tooltip);
     label.setTitle(this.getTooltiptext());

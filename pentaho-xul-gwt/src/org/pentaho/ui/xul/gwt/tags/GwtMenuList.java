@@ -22,6 +22,7 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -109,6 +110,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     return bindingProperty;
   }
 
+  @Bindable
   public Collection getElements() {
     List<Object> vals = new ArrayList<Object>();
     for(int i=0; i<listbox.getItems().size(); i++){
@@ -121,6 +123,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     return listbox.getSelectedIndex();
   }
 
+  @Bindable
   public String getSelectedItem() {
     ListItem selectedItem = listbox.getSelectedItem();
     
@@ -135,6 +138,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     this.bindingProperty = binding;
   }
 
+  @Bindable
   public void setElements(Collection<T> elements) {
 
     try{
@@ -206,6 +210,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     });  
   }
 
+  @Bindable
   public void setSelectedIndex(int idx) {
     int previousValue = selectedIndex;
     selectedIndex = idx;
@@ -349,10 +354,12 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     return editable;
   }
 
+  @Bindable
   public String getValue() {
     return getSelectedItem();
   }
 
+  @Bindable
   public void setValue(String value) {
     for(ListItem item : listbox.getItems()){
       if(item.getValue().equals(value)){

@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -46,12 +47,14 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
   }
 
   @Override
+  @Bindable
   public void setHeight(int height) {
     super.setHeight(height);
     container.setHeight(height+"px");
   }
 
   @Override
+  @Bindable
   public void setWidth(int width) {
     super.setWidth(width);
     container.setWidth(width+"px");

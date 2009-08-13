@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell {
 
@@ -40,11 +41,13 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     setValue(srcEle.getAttribute("value"));
   }
 
+  @Bindable
   public String getLabel() {
     return (getAttributeValue("label") != null && getAttributeValue("label").trim().length() > 0) ? getAttributeValue("label") : "";
   }
 
-  public int getSelectedIndex() {
+  @Bindable
+    public int getSelectedIndex() {
     return selectedIndex;
   }
 
@@ -53,26 +56,31 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     return null;
   }
 
+  @Bindable
   public Object getValue() {
     return this.value;
   }
 
+  @Bindable
   public boolean isEditable() {
     // TODO Auto-generated method stub
     return false;
   }
 
+  @Bindable
   public void setEditable(boolean edit) {
     // TODO Auto-generated method stub
     
   }
 
+  @Bindable
   public void setLabel(String label) {
     String prevVal = this.getAttributeValue("label");
     this.setAttribute("label", label);
     this.firePropertyChange("label", prevVal, label);
   }
 
+  @Bindable
   public void setSelectedIndex(int index) {
     int oldVal = this.selectedIndex;
     this.selectedIndex = index;
@@ -90,6 +98,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     
   }
 
+  @Bindable
   public void setValue(Object value) {
     Object previousVal = this.value;
     
@@ -120,11 +129,13 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
 
   private boolean disabled = false;
   @Override
+  @Bindable
   public boolean isDisabled() {
     return disabled;
   }
 
   @Override
+  @Bindable
   public void setDisabled(boolean disabled){
     boolean prevVal = this.disabled;
     this.disabled = disabled;

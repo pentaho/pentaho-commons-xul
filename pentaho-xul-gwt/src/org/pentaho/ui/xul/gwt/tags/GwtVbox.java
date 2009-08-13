@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -40,12 +41,14 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
   }
 
   @Override
+  @Bindable
   public void setHeight(int height) {
     super.setHeight(height);
     container.setHeight(height+"px");
   }
 
   @Override
+  @Bindable
   public void setWidth(int width) {
     super.setWidth(width);
     container.setWidth(width+"px");

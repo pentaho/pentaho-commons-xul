@@ -12,6 +12,7 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.gwt.widgets.GwtTabWidget;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
@@ -61,6 +62,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
 
   }
 
+  @Bindable
   public int getSelectedIndex() {
     return selectedIndex;
   }
@@ -77,6 +79,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     return tabs;
   }
 
+  @Bindable
   public void setSelectedIndex(int index) {
     int previousValue = selectedIndex;
     selectedIndex = index;

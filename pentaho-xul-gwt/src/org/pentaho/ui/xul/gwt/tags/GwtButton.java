@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.buttons.CustomButton;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper;
@@ -13,8 +14,13 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -141,14 +147,17 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     }
   }
 
+  @Bindable
   public String getLabel() {
     return (button != null) ? button.getText() : null;
   }
 
+  @Bindable
   public boolean isDisabled() {
     return disabled;
   }
 
+  @Bindable
   public void setDisabled(boolean dis) {
     this.disabled = dis;
     if (button != null) {
@@ -181,6 +190,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     return group;
   }
 
+  @Bindable
   public String getImage() {
     return image;
   }
@@ -193,6 +203,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     return type;
   }
 
+  @Bindable
   public boolean isSelected() {
     return false;
   }
@@ -206,6 +217,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     //TODO: implement button group
   }
 
+  @Bindable
   public void setImage(String src) {
     if(imageButton != null) {
       src = GWT.getModuleBaseURL() + src;
@@ -215,17 +227,20 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     }
   }
 
+  @Bindable
   public void setDisabledImage(String src) {
     src = GWT.getModuleBaseURL() + src;
     this.disabledImage = src;
     this.imageButton.setDisabledUrl(src);
   }
 
+  @Bindable
   public void setSelected(String selected) {
     button.setFocus(Boolean.parseBoolean(selected));
     //TODO: implement selected with button group;
   }
 
+  @Bindable
   public void setSelected(boolean selected) {
     if (button != null) {
       button.setFocus(selected);
@@ -243,6 +258,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   @Override
+  @Bindable
   public void setTooltiptext(String tooltip) {
     super.setTooltiptext(tooltip);
     if (button != null) {
