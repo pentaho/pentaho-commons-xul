@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.gwt.widgets.client.buttons.CustomButton;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper;
@@ -16,11 +15,11 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
@@ -119,8 +118,9 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
    */
   public void setOnclick(final String method) {
     this.onclick = method;
-    ClickListener listener = new ClickListener() {
-      public void onClick(Widget sender) {
+    
+    ClickHandler handler = new ClickHandler(){
+      public void onClick(ClickEvent event) {
         if(!GwtButton.this.disabled) {
           try {
             GwtButton.this.getXulDomContainer().invoke(method, new Object[] {});
@@ -131,12 +131,13 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
       }
     };
 
+
     if (button != null) {
-      button.addClickListener(listener);
+      button.addClickHandler(handler);
     } else if (imageButton != null) {
-      imageButton.addClickListener(listener);
+      imageButton.addClickHandler(handler);
     } else if (customButton != null) {
-      customButton.addClickListener(listener);
+      customButton.addClickHandler(handler);
     }
   }
 
