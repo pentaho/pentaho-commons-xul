@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 /**
  * Convenience class that defines common dialog controller functionality. <code>T</code> refers to the type of the value
@@ -36,6 +37,7 @@ public abstract class AbstractXulDialogController<T> extends AbstractXulEventHan
    */
   protected abstract T getDialogResult();
 
+  @Bindable
   public void showDialog() {
     getDialog().show();
   }
@@ -43,6 +45,7 @@ public abstract class AbstractXulDialogController<T> extends AbstractXulEventHan
   /**
    * Called when the accept button is clicked.
    */
+  @Bindable
   public void onDialogAccept() {
     hideDialog();
     for (DialogListener<T> listener : listeners) {
@@ -53,6 +56,7 @@ public abstract class AbstractXulDialogController<T> extends AbstractXulEventHan
   /**
    * Called when the cancel button is clicked.
    */
+  @Bindable
   public void onDialogCancel() {
     hideDialog();
     for (DialogListener<T> listener : listeners) {
@@ -68,6 +72,7 @@ public abstract class AbstractXulDialogController<T> extends AbstractXulEventHan
     listeners.remove(listener);
   }
 
+  @Bindable
   public void hideDialog() {
     getDialog().hide();
   }
