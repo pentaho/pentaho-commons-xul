@@ -73,6 +73,8 @@ import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
+import sun.text.CompactShortArray.Iterator;
+
 public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   // Tables and trees
@@ -144,7 +146,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     isHierarchical = (primaryColumn != null) || (isaContainer != null);
 
     if (isHierarchical) {
-      tree = new TreeViewer((Composite) parentComponent.getManagedObject());
+      int style = (this.selType == TableSelection.MULTIPLE) ? SWT.MULTI : SWT.None;
+      
+      tree = new TreeViewer((Composite) parentComponent.getManagedObject(), style);
       managedObject = tree;
     } else {
       table = new TableViewer((Composite) parentComponent.getManagedObject(),
@@ -178,13 +182,23 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         if (event.getSelection() instanceof IStructuredSelection) {
           IStructuredSelection selection = (IStructuredSelection) event
               .getSelection();
-          StringBuffer toShow = new StringBuffer();
 
-          XulTreeItem selectedItem = ((XulTreeItem) selection.getFirstElement());
-
-          setSelectedIndex(findSelectedIndex(new SearchBundle(),
-              getRootChildren(), selectedItem).curPos);
-
+          int[] selected = new int[selection.size()];
+          
+          int i=0;
+          for(Object o : selection.toArray()){
+            XulTreeItem selectedItem = (XulTreeItem) o;
+            selected[i++] = findSelectedIndex(new SearchBundle(),getRootChildren(), selectedItem).curPos;
+          }
+          
+          if(selected.length == 0){
+            setSelectedIndex(-1);
+          } else {
+            setSelectedIndex(selected[0]);
+          }
+          
+          setSelectedRows(selected);
+          
         }
       }
     });
