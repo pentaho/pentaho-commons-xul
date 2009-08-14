@@ -136,5 +136,9 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
   public boolean isHidden(){
     return dialog == null || !dialog.isVisible();
   }
-  
+
+  public boolean isVisible() {
+    return !isHidden();
+  }
+
 }
