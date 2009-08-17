@@ -31,8 +31,10 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
   public GwtHbox() {
     super(ELEMENT_NAME);
     this.orientation = Orient.HORIZONTAL;
-    managedObject = container = new HorizontalPanel();
-    ((HorizontalPanel) container).setStyleName("hbox");
+    HorizontalPanel hp;
+    managedObject = container = hp = new HorizontalPanel();
+    hp.setSpacing(3);
+    hp.setStyleName("hbox");
     
   }
   
