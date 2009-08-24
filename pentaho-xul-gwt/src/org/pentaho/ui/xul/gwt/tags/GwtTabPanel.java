@@ -34,6 +34,7 @@ public class GwtTabPanel  extends AbstractGwtXulContainer implements XulTabpanel
     super(ELEMENT_NAME);
     this.orientation = orient;
     verticalPanel = new VerticalPanel();
+    verticalPanel.setSpacing(3);
     managedObject =  container = verticalPanel; 
   }
   

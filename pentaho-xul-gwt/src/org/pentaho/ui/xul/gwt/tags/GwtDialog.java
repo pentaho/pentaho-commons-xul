@@ -147,6 +147,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   public Panel getDialogContents() {
 
     VerticalPanel contentPanel = new VerticalPanel();
+    contentPanel.setSpacing(3);
     container = contentPanel;
     
     return contentPanel;
