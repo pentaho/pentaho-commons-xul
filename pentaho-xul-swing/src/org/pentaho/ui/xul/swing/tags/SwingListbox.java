@@ -53,6 +53,9 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
     listBox.addListSelectionListener(this);
     managedObject = scrollPane;
     this.xulDomContainer = container;
+    
+    Dimension size = scrollPane.getPreferredSize();
+    scrollPane.setMinimumSize(size);
   }
   
   public Object getManagedObject(){
@@ -106,20 +109,9 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
         logger.info("added swingListitem to model");
       }
     }
-    this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
     if(this.selectedIndex > -1){
       this.listBox.setSelectedIndex(selectedIndex);
     }
-    
-    int width = this.listBox.getSize().width;
-    int height = this.listBox.getSize().height;
-    if(this.getWidth() > 0){
-      width = this.getWidth();
-    }
-    if(this.getHeight() > 0){
-      height = this.getHeight();
-    }
-    this.listBox.setSize(width, height);
     
     initialized = true;
   }

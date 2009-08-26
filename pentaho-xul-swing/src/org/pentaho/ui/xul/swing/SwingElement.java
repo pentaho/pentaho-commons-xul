@@ -4,6 +4,7 @@
 package org.pentaho.ui.xul.swing;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentEvent;
@@ -74,8 +75,7 @@ public class SwingElement extends AbstractXulComponent {
 
     for (int i = 0; i < getChildNodes().size(); i++) {
       XulComponent comp = (XulComponent) getChildNodes().get(i);
-    gc.fill = GridBagConstraints.BOTH;
-
+      gc.fill = GridBagConstraints.BOTH;
 
       if (comp instanceof XulSplitter) {
         JPanel prevContainer = container;
@@ -171,6 +171,23 @@ public class SwingElement extends AbstractXulComponent {
       }
 
       Component component = (Component) maybeComponent;
+      
+      if(comp.getWidth() > 0 || comp.getHeight() > 0){
+        Dimension minSize = component.getMinimumSize();
+        Dimension prefSize = component.getPreferredSize();
+        
+        if(comp.getWidth() > 0){
+          minSize.width = comp.getWidth();
+          prefSize.width = comp.getWidth();
+        }
+        if(comp.getHeight() > 0){
+          minSize.height = comp.getHeight();
+          prefSize.height = comp.getHeight();
+        }
+        component.setMinimumSize(minSize);
+        component.setPreferredSize(prefSize);
+      }
+      
       container.add(component, gc);
 
       if (i + 1 == getChildNodes().size() && !flexLayout) {

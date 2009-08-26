@@ -51,8 +51,6 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
           tree = (XulTree) c;
           break;
         }
-        System.out.println(c.getName());
-        
         c = c.getParent();
       }
     }
@@ -115,8 +113,6 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
           tree = (XulTree) c;
           break;
         }
-        System.out.println(c.getName());
-        
         c = c.getParent();
       }
     }

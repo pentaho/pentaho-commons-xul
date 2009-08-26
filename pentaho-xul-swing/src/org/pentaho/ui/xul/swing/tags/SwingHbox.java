@@ -45,7 +45,7 @@ public class SwingHbox extends AbstractSwingContainer implements XulHbox {
     container = new ScrollablePanel(new GridBagLayout());
     container.setOpaque(false);
     managedObject = container;
-
+    setPadding(2);
     resetContainer();
 
   }
@@ -68,7 +68,9 @@ public class SwingHbox extends AbstractSwingContainer implements XulHbox {
     gc.gridy = 0;
     gc.gridheight = GridBagConstraints.REMAINDER;
     gc.gridwidth = 1;
-    gc.insets = new Insets(2, 2, 2, 2);
+    
+    int pad = getPadding();
+    gc.insets = new Insets(pad, pad, pad, pad);
     gc.fill = GridBagConstraints.HORIZONTAL;
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weighty = 1;
@@ -87,6 +89,7 @@ public class SwingHbox extends AbstractSwingContainer implements XulHbox {
 
   @Override
   public void layout() {
+    resetContainer();
     if(getBgcolor() != null){
       container.setOpaque(true);
       container.setBackground(Color.decode(getBgcolor()));
@@ -136,4 +139,5 @@ public class SwingHbox extends AbstractSwingContainer implements XulHbox {
 
     });
   }
+  
 }

@@ -3,6 +3,7 @@
  */
 package org.pentaho.ui.xul.swing.tags;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JLabel;
@@ -28,10 +29,13 @@ public class SwingLabel extends SwingElement implements XulLabel{
     label = new JTextPane();
     label.setEditable(false);
     label.setFocusable(false);
-    //label.setLineWrap(true);
     label.setOpaque(false);
-    label.setMinimumSize(new Dimension(0,0));
+    label.setDisabledTextColor(Color.decode("#777777"));
+    
     managedObject = label;
+    Dimension size = label.getPreferredSize();
+    size.width = 100;
+    label.setMinimumSize(size);
   }
   
   public void layout(){

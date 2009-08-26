@@ -635,7 +635,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       Method method = row.getClass().getMethod(methodName.toString());
       return ((String) method.invoke(row, new Object[]{})).toUpperCase();
     } catch (Exception e){
-      System.out.println("Could not extract column type from binding");
+      logger.warn("Could not extract column type from binding");
     }
     return "text"; // default //$NON-NLS-1$
   }

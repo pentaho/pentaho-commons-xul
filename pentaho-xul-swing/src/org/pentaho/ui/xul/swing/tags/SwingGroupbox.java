@@ -36,6 +36,7 @@ public class SwingGroupbox extends AbstractSwingContainer implements XulGroupbox
     container = new ScrollablePanel(new GridBagLayout());
     container.setBorder(BorderFactory.createTitledBorder(""));
     managedObject = container;
+    setPadding(2);
 
   }
 
@@ -50,7 +51,8 @@ public class SwingGroupbox extends AbstractSwingContainer implements XulGroupbox
       gc.gridx = 0;
       gc.gridheight = 1;
       gc.gridwidth = GridBagConstraints.REMAINDER;
-      gc.insets = new Insets(2, 2, 2, 2);
+      int pad = getPadding();
+      gc.insets = new Insets(pad, pad, pad, pad);
       gc.fill = GridBagConstraints.HORIZONTAL;
       gc.anchor = GridBagConstraints.NORTHWEST;
       gc.weightx = 1;

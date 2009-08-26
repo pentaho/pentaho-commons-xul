@@ -80,7 +80,14 @@ public class SwingGrid extends AbstractSwingContainer implements XulGrid {
       }
 
       gc.gridy++;
-    }
+    }   
+    
+    // Add in an extra row at the bottom to push others up
+    gc.gridy++;
+    gc.weighty = 1;
+    gc.fill = gc.REMAINDER;
+    grid.add(Box.createGlue(), gc);
+    
     this.initialized = true;
   }
 

@@ -75,13 +75,10 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     model.removeAllElements();
 
     SwingMenuitem selectedItem = null;
-
-    System.out.println("Popup children size: "+popup.getChildNodes().size());
     
     //capture first child as default selection
     boolean firstChild = true;
     for (XulComponent item : popup.getChildNodes()) {
-      System.out.println("adding child");
       JMenuItem jmenuItem = (JMenuItem) ((SwingMenuitem) item).getManagedObject();
       SwingMenuitem tempItem = (SwingMenuitem) item;
       model.addElement(tempItem);

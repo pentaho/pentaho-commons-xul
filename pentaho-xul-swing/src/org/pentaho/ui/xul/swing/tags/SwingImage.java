@@ -32,6 +32,7 @@ public class SwingImage extends SwingElement implements XulImage{
   public SwingImage(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("image");
     panel = new JPanel(new BorderLayout());
+    panel.setOpaque(false);
     container = domContainer;
     this.managedObject = panel;
   }
@@ -94,6 +95,7 @@ public class SwingImage extends SwingElement implements XulImage{
       ico = new ImageIcon(ico.getImage().getScaledInstance(getWidth(), getHeight(), Image.SCALE_AREA_AVERAGING));
     }
     lbl = new JLabel(ico);
+    lbl.setOpaque(false);
     
     this.panel.add(lbl, BorderLayout.CENTER);
 

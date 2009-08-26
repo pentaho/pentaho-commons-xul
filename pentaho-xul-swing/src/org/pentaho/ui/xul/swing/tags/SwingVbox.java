@@ -60,7 +60,7 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
     };
     container.setOpaque(false);
     managedObject = container;
-
+    setPadding(2);
     resetContainer();
 
   }
@@ -74,7 +74,8 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
     gc.gridx = 0;
     gc.gridheight = 1;
     gc.gridwidth = GridBagConstraints.REMAINDER;
-    gc.insets = new Insets(2, 2, 2, 2);
+    int pad = getPadding();
+    gc.insets = new Insets(pad, pad, pad, pad);
     gc.fill = GridBagConstraints.HORIZONTAL;
     gc.anchor = GridBagConstraints.NORTHWEST;
     gc.weightx = 1;
