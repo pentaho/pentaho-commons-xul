@@ -1,15 +1,25 @@
 .hbox{
 
 }
-
 .vbox{
 
 }
 
+/* IE_6_FIX: these selectors do not work in IE6, replaced with explicit table padding for now.
+.hbox > tbody > tr > td{
+  padding: 0px 3px 0px 3px;
+}
+.vbox > tbody > tr > td{  
+  padding: 3px 0px 3px 0px;
+}
+.dialog-button-panel > tbody > tr > td{
+  padding: 4px 0px 0px 0px;
+}
+*/
+
 .dialog-button-panel{
   border-top: 1px solid #777;
 }
-
 
 .checkbox label{
 	padding-left:3px;
