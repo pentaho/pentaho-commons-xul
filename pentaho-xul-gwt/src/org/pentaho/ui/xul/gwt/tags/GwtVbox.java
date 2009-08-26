@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.util.GwtUIConst;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -30,7 +31,7 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
     this.orientation = Orient.VERTICAL;
     VerticalPanel vp;
     managedObject = container = vp = new VerticalPanel();
-    vp.setSpacing(3);
+    vp.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
     vp.setStyleName("vbox");
   }
 

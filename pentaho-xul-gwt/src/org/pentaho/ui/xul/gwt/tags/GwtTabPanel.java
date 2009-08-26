@@ -7,6 +7,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.util.GwtUIConst;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -34,7 +35,7 @@ public class GwtTabPanel  extends AbstractGwtXulContainer implements XulTabpanel
     super(ELEMENT_NAME);
     this.orientation = orient;
     verticalPanel = new VerticalPanel();
-    verticalPanel.setSpacing(3);
+    verticalPanel.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
     managedObject =  container = verticalPanel; 
   }
   

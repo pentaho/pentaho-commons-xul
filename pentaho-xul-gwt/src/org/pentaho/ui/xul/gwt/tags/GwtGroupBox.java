@@ -9,6 +9,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.util.GwtUIConst;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.CaptionPanel;
@@ -38,7 +39,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     VerticalPanel vp;
     container = vp = new VerticalPanel();
     container.setWidth("100%");
-    vp.setSpacing(3);
+    vp.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
     vp.setStyleName("vbox");
     
     SimplePanel sp = new SimplePanel();
