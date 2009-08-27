@@ -144,7 +144,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public void setImage(String src) {
     this.image = src;
-    button.setImage(new Image(src));
+    if(src != null && src.length() > 0){
+      button.setImage(new Image(src));
+    }
   }
 
   @Bindable
