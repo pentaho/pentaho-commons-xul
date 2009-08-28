@@ -16,10 +16,11 @@ import org.pentaho.ui.xul.util.ColumnType;
 public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
   private String binding;
-  private String type;
   private String columnTypeBinding;
   private String disabledBinding;
   private boolean editable;
+  private ColumnType type = ColumnType.TEXT;
+  private String colType;
 
 
   public static void register() {
@@ -76,7 +77,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public String getType() {
-    return type;
+    return colType;
   }
 
   public boolean isEditable() {
@@ -151,7 +152,12 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public void setType(String type) {
-    this.type = type;
+    this.colType = type;
+    try{
+      this.type = ColumnType.valueOf(type.toUpperCase());
+    } catch(Exception e){
+      this.type = ColumnType.CUSTOM;
+    }
   }
 
   public void adoptAttributes(XulComponent component) {
@@ -171,8 +177,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public ColumnType getColumnType() {
-    // TODO Auto-generated method stub
-    return null;
+    return type;
   }
 
   private String childrenBinding, comboBinding;

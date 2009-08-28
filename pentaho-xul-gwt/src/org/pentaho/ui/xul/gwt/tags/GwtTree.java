@@ -711,22 +711,34 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
   public Object[][] getValues() {
     
     Object[][] data = new Object[getRootChildren().getChildNodes().size()][getColumns().getColumnCount()];
-    
+    int y = 0;
     for (XulComponent component : getRootChildren().getChildNodes()) {
       XulTreeItem item = (XulTreeItem)component;
       for (XulComponent childComp : item.getChildNodes()) {
         XulTreeRow row = (XulTreeRow)childComp;
-        for (int i = 0; i < getColumns().getColumnCount(); i++) {
-          XulTreeCell cell = row.getCell(i);
-          if (cell == null) {
-            System.out.println("CELL NULL" + i);
-          } else if (cell.getValue() == null) {
-            System.out.println("CELL VAL NULL " + i);
-          } else {
-            System.out.println("" + cell.getValue() + " TYPE? " + cell.getValue().getClass());
+        for (int x = 0; x < getColumns().getColumnCount(); x++) {
+          XulTreeCell cell = row.getCell(x);
+          switch (columns.getColumn(x).getColumnType()) {
+            case CHECKBOX:
+              Boolean flag = (Boolean) cell.getValue();
+              if (flag == null) {
+                flag = Boolean.FALSE;
+              }
+              data[y][x] = flag;
+              break;
+            case COMBOBOX:
+              Vector values = (Vector) cell.getValue();
+              int idx = cell.getSelectedIndex();
+              data[y][x] = values.get(idx);
+              break;
+            default: //label
+              data[y][x] = cell.getLabel();
+              break;
           }
         }
+        y++;
       }
+
     }
     return data;
   }
