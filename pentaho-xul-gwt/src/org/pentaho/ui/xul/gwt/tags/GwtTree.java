@@ -40,6 +40,7 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.gwt.util.Resizable;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellEditorCallback;
@@ -72,7 +73,7 @@ import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
 import com.google.gwt.widgetideas.table.client.TableSelectionListener;
 import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
 
-public class GwtTree extends AbstractGwtXulContainer implements XulTree {
+public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable {
 
   /**
    * Cached elements.
@@ -1035,6 +1036,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree {
       bind.fireSourceChanged();
     }
 
+  }
+  
+  
+  public void onResize() {
+    if(table != null){
+      table.onResize();
+    }
   }
 
   public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorCallback{

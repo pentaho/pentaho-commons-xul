@@ -8,10 +8,14 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.util.Resizable;
 import org.pentaho.ui.xul.util.Orient;
 
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.NodeList;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.ResizableWidget;
 
 public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
 
@@ -82,9 +86,31 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     int previousVal = selectedIndex;
     if (index < container.getWidgetCount() && index >= 0) {
       container.showWidget(index);
+
+      Widget card = container.getWidget(index);
+      notifyOnShow(this);
     }
+    
     selectedIndex = index;
     this.firePropertyChange("selectedIndex", previousVal, index);
+  }
+  
+  /**
+   * Child XUL elements need to be notified of visibility changes if they implement Resizable.
+   * 
+   * This method is recursive.
+   * 
+   * @param ele
+   */
+  private void notifyOnShow(Element ele){
+    
+    
+    if(ele instanceof Resizable){
+      ((Resizable) ele).onResize();
+    }
+    for(Element e : ele.getChildNodes()){
+      notifyOnShow(e);
+    }
   }
 
   public void layout() {
