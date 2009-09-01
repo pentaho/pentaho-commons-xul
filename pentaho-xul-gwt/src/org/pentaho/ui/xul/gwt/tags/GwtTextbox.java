@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -63,7 +64,9 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     setValue(srcEle.getAttribute("value"));
-    setDisabled("true".equals(srcEle.getAttribute("disabled")));
+    if(StringUtils.isEmpty(srcEle.getAttribute("disabled")) == false){
+      setDisabled("true".equals(srcEle.getAttribute("disabled")));
+    }
     setMultiline("true".equals(srcEle.getAttribute("multiline")));
     setRows(getInt(srcEle.getAttribute("rows")));
     setCols(getInt(srcEle.getAttribute("cols")));
@@ -133,6 +136,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       textBox.setHeight(this.getHeight()+"px");
     }
     textBox.setText(getValue());
+    textBox.setEnabled(! this.isDisabled() );
     setupListeners();
   }
   
@@ -200,11 +204,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 
   @Bindable
   public boolean isDisabled() {
-    return !textBox.isEnabled();
+    return disabled;
   }
 
   @Bindable
   public void setDisabled(boolean dis) {
+    this.disabled = dis;
     textBox.setEnabled(!dis);
   }
 
@@ -289,13 +294,17 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   public void adoptAttributes(XulComponent component) {
     super.adoptAttributes(component);
 
-    setRows(getInt(component.getAttributeValue("rows")));
-    setCols(getInt(component.getAttributeValue("cols")));
+    if(StringUtils.isEmpty(component.getAttributeValue("rows")) == false){
+      setRows(getInt(component.getAttributeValue("rows")));
+    }
+    if(StringUtils.isEmpty(component.getAttributeValue("cols")) == false){
+      setCols(getInt(component.getAttributeValue("cols")));
+    }
 
-    if(component.getAttributeValue("value") != null){
+    if(StringUtils.isEmpty(component.getAttributeValue("value")) == false){
       setValue(component.getAttributeValue("value"));
     }
-    if(component.getAttributeValue("disabled") != null){
+    if(StringUtils.isEmpty(component.getAttributeValue("disabled")) == false){
       setDisabled("true".equals(component.getAttributeValue("disabled")));
     }
     layout();
