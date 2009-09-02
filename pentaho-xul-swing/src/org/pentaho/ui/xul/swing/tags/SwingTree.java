@@ -446,48 +446,12 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     initialized = true;
 
     table.addComponentListener(new ComponentListener() {
-      boolean loaded = false;
-
-      public void componentHidden(ComponentEvent arg0) {
-      }
-
-      public void componentMoved(ComponentEvent e) {
-      }
-
-      public void componentShown(ComponentEvent e) {
-      }
-
+      public void componentHidden(ComponentEvent arg0) {}
+      public void componentMoved(ComponentEvent e) {}
+      public void componentShown(ComponentEvent e) {}
       public void componentResized(ComponentEvent e) {
-//        if (loaded) {
-//          return;
-//        }
-        Rectangle size = table.getBounds();
-        int newWidth = size.width;
-        if (SwingTree.this.rows > -1) {
-          int minHeight = table.getRowHeight() * rows;
-          scrollpane.getViewport().setMinimumSize(new Dimension(scrollpane.getWidth(), minHeight - 100));
-        }
-        int newHeight = size.height;
-
-        for (int i = 0; i < table.getColumnCount(); i++) {
-          int newColWidth = 50; //reasonable default size
-          if(totalFlex > 0){
-            int flex = SwingTree.this.columns.getColumn(table.getColumnModel().getColumn(i).getModelIndex()).getFlex();
-            newColWidth = (int) (newWidth * ((double) flex / totalFlex));
-          } else {
-            newColWidth = (int) (newWidth * ((double) 1/ table.getColumnCount()));
-            
-          }
-
-          table.getColumnModel().getColumn(i).setWidth(newColWidth);
-          table.getColumnModel().getColumn(i).setPreferredWidth(newColWidth);
-
-          table.getColumnModel().getColumn(i).setMinWidth(newColWidth);
-        }
-        loaded = true;
-
+        calcColumnWidths();
       }
-
     });
 
     //Property change on selections
@@ -505,6 +469,33 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     this.setDisabled(this.isDisabled());
   }
+  
+  private void calcColumnWidths() {
+    Rectangle size = table.getBounds();
+    int newWidth = size.width;
+    if (SwingTree.this.rows > -1) {
+      int minHeight = table.getRowHeight() * rows;
+      scrollpane.getViewport().setMinimumSize(new Dimension(scrollpane.getWidth(), minHeight - 100));
+    }
+    for (int i = 0; i < table.getColumnCount(); i++) {
+      int newColWidth = 50; //reasonable default size
+      if(totalFlex > 0){
+        int flex = SwingTree.this.columns.getColumn(table.getColumnModel().getColumn(i).getModelIndex()).getFlex();
+        if (flex != 0) {
+        	newColWidth = (int) (newWidth * ((double) flex / totalFlex));
+        }
+      } else {
+        newColWidth = (int) (newWidth * ((double) 1/ table.getColumnCount()));
+        
+      }
+
+      table.getColumnModel().getColumn(i).setWidth(newColWidth);
+      table.getColumnModel().getColumn(i).setPreferredWidth(newColWidth);
+
+      table.getColumnModel().getColumn(i).setMinWidth(newColWidth);
+    }
+  }
+  
   private TreeModel treeModel;
 
   private void setupTree(){
@@ -615,6 +606,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     if(table != null){
       table.setModel(new XulTableModel(this));
       updateColumnModel();
+      calcColumnWidths();
       table.updateUI();
     } else {
       setupTree();
@@ -1107,7 +1099,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                     domContainer.addBinding(binding);
                     binding.fireSourceChanged();
                   }
-                } else if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox") && column.getCombobinding() != null){
+                } else if((colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))
+                					&& column.getCombobinding() != null) 
+                {
                   DefaultBinding binding = new DefaultBinding(o, column.getCombobinding(), cell, "value");
                   binding.setBindingType(Binding.Type.ONE_WAY);
                   domContainer.addBinding(binding);

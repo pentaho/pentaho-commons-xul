@@ -275,7 +275,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       } else {
         //try fully qualified name
         src = ele.attributeValue("src");
-        in = getClass().getClassLoader().getResourceAsStream(this.rootDir + src);
+        in = getClass().getClassLoader().getResourceAsStream(src);
         if (in != null) {
           includedSources.add(src);
           logger.debug("Adding include src: " + src);
