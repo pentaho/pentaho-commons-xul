@@ -183,8 +183,8 @@ public class SwtTreeTest {
     tree3.setElements(peeps);
 
     Object[][] sampleData = new Object[2][5];
-    sampleData[0] = new Object[]{Boolean.FALSE,"Wil","Narcossee","","Feeling it"};
-    sampleData[1] = new Object[]{Boolean.FALSE,"Mike","St Cloud","","Weary"};
+    sampleData[0] = new Object[]{Boolean.TRUE,"Wil","Narcossee","Blogger","Feeling it"};
+    sampleData[1] = new Object[]{Boolean.FALSE,"Mike","St Cloud","Add clicker","Weary"};
     
     Object[][] vals = tree3.getValues();
     for(int i=0; i < sampleData.length; i++){

@@ -726,9 +726,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
                   && colType.equals("dynamic")) {
                 colType = extractDynamicColType(o, x);
               }
-
-              if (colType.equalsIgnoreCase("combobox")
-                  || colType.equalsIgnoreCase("editablecombobox")
+              Object bob = null;
+              if ((colType.equalsIgnoreCase("combobox")
+                  || colType.equalsIgnoreCase("editablecombobox"))
                   && column.getCombobinding() != null) {
                 DefaultBinding binding = new DefaultBinding(o, column
                     .getCombobinding(), cell, "value");
@@ -766,11 +766,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
                   domContainer.addBinding(binding);
                 }
 
-              } else if (colType.equalsIgnoreCase("combobox")) {
-                DefaultBinding binding = new DefaultBinding(o, column
-                    .getCombobinding(), cell, "value");
-                domContainer.addBinding(binding);
-                binding.fireSourceChanged();
               } else if (colType.equalsIgnoreCase("checkbox")) {
                 if (StringUtils.isNotEmpty(exp.getModelAttr())) {
                   DefaultBinding binding = new DefaultBinding(o, exp
