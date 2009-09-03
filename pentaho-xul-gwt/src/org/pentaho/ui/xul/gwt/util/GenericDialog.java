@@ -1,6 +1,8 @@
 package org.pentaho.ui.xul.gwt.util;
 
 import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+import org.pentaho.gwt.widgets.client.utils.Rectangle;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.tags.GwtDialog;
 
@@ -24,6 +26,9 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
   public static final int EXTRA1 = 2;
   public static final int EXTRA2 = 3;
   private static int dialogPos = 1100;
+  
+  // requested height is adjusted by this value.
+  private static final int HEADER_HEIGHT = 32;
   
   public GenericDialog(String tagName){
     super(tagName);
@@ -73,18 +78,13 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
 
     p.setStyleName("dialog-content");//$NON-NLS-1$    
 
-    SimplePanel sp = new SimplePanel();
-    //sp.getElement().getStyle().setProperty("padding", "5px");
-    sp.getElement().setClassName("gwt-Dialog");
-    sp.add(p);
-    panel.add(sp);
-    panel.setCellWidth(sp, "100%");//$NON-NLS-1$
-    panel.setCellHeight(sp, "100%");//$NON-NLS-1$
+    panel.add(p);
+    panel.setCellHeight(p, "100%");
     panel.setStyleName("dialog");//$NON-NLS-1$
     panel.setWidth("100%");   //$NON-NLS-1$
     panel.setHeight("100%");  //$NON-NLS-1$
     contents.add(panel);
-//    contents.setCellHeight(panel, "100%");
+    contents.setCellHeight(panel, "100%");
     
     if(getBgcolor() != null) {
       p.getElement().getStyle().setProperty("backgroundColor", getBgcolor());
@@ -103,10 +103,15 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
 
     contents.setWidth("100%");//$NON-NLS-1$
     contents.setHeight("100%");//$NON-NLS-1$
-    
 
-    dialog.setWidth(getWidth()+"px");//$NON-NLS-1$
-    dialog.setHeight(getHeight()+"px");//$NON-NLS-1$
+ 
+    if(getWidth() > 0){
+      contents.setWidth(getWidth() + "px");//$NON-NLS-1$
+    }
+    if(getHeight() > 0){
+      int offsetHeight = getHeight() - HEADER_HEIGHT;
+      contents.setHeight(offsetHeight + "px");//$NON-NLS-1$
+    }
     dialog.center();
     dialog.show();
 
