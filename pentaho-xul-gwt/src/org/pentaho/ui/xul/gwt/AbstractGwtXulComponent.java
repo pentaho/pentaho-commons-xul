@@ -25,6 +25,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.NamedNodeMap;
@@ -333,6 +334,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public void setId(String id) {
     this.setAttribute("id", id);
     this.id = id;
+    if (managedObject != null && managedObject instanceof UIObject) {
+      ((UIObject)managedObject).getElement().setId(id);
+    }
   }
 
   public int getFlex() {
