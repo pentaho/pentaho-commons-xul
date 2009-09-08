@@ -43,13 +43,17 @@ public class SwingXulRunner implements XulRunner {
     
     try{
       //call the onLoads
-      EventQueue.invokeAndWait(new Runnable(){
-  
-        public void run() {
-          containers.get(0).initialize();
-        }
-  
-      });
+      if(EventQueue.isDispatchThread() == false){
+    
+        EventQueue.invokeAndWait(new Runnable(){
+          public void run() {
+            containers.get(0).initialize();
+          }
+        });
+        
+      } else {
+        containers.get(0).initialize();
+      }
     } catch(InvocationTargetException e){
       throw new XulException("Error initializing application",e);
     } catch(InterruptedException e){
