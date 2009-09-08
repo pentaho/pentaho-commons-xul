@@ -1261,7 +1261,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       try{
         childrenMethod = elements.getClass().getMethod(property, new Class[]{});
       } catch(NoSuchMethodException e){
-        logger.error(e);
+        // Since this tree is built recursively, when at a leaf it will throw this exception.
+        logger.debug(e);
         return null;
       }
       
