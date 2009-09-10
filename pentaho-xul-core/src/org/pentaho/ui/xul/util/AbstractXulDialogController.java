@@ -53,6 +53,13 @@ public abstract class AbstractXulDialogController<T> extends AbstractXulEventHan
     }
   }
 
+  @Bindable
+  public void onDialogReady() {
+    for (DialogListener<T> listener : listeners) {
+      listener.onDialogReady();
+    }
+  }
+  
   /**
    * Called when the cancel button is clicked.
    */

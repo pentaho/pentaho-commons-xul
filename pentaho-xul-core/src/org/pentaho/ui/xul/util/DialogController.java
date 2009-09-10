@@ -29,5 +29,7 @@ public interface DialogController<T> {
     void onDialogAccept(T returnValue);
 
     void onDialogCancel();
+    
+    void onDialogReady();
   }
 }
