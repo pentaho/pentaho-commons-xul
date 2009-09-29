@@ -137,6 +137,8 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
       listBox.setWidth(getWidth() + "px");
     }
     
+    setSelectedIndex(getSelectedIndex());
+    
   }
 
   public String getOnselect() {
