@@ -163,6 +163,12 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     if(this.container != null){
       this.container.clear();
     }
+
+    Object w = getManagedObject();
+    if(w instanceof Widget){
+      ((Widget)w).getElement().setId(this.getId());
+    }
+    
     double totalFlex = 0.0;
     
     for(XulComponent comp : this.getChildNodes()) {
@@ -218,6 +224,8 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         continue;
       }
       Widget component = (Widget) wrappedWidget;
+      component.getElement().setId(comp.getId());
+      
       if(component != null){
         container.add(component);
       }

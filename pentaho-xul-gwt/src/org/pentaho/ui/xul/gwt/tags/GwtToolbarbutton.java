@@ -145,7 +145,10 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   public void setImage(String src) {
     this.image = src;
     if(src != null && src.length() > 0){
-      button.setImage(new Image(src));
+      Image i = new Image(src);
+      // WebDriver support.. give the image a direct id we can use as a hook
+      i.getElement().setId(this.getId().concat("_img"));
+      button.setImage(i);
     }
   }
 
