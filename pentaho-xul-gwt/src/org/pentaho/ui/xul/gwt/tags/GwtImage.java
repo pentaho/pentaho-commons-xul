@@ -29,7 +29,8 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
 
   public GwtImage() {
     super(ELEMENT_NAME);
-    managedObject = image = new Image();
+    image = new Image();
+    setManagedObject(image);
     image.setStyleName("xul-image"); //$NON-NLS-1$
   }
 

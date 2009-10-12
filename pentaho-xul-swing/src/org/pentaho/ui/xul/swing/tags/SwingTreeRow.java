@@ -17,12 +17,12 @@ public class SwingTreeRow extends AbstractSwingContainer implements XulTreeRow {
 
   public SwingTreeRow(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treerow");
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public SwingTreeRow(XulComponent parent) {
     super("treerow");
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public void addCell(XulTreeCell cell) {

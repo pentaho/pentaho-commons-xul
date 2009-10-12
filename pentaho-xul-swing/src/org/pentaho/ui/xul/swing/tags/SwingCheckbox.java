@@ -44,7 +44,7 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
       }
     });
     
-    managedObject = checkBox;
+    setManagedObject(checkBox);
   }
   
   /* (non-Javadoc)

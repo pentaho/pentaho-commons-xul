@@ -22,7 +22,7 @@ public class GwtColumns extends AbstractGwtXulContainer implements XulColumns {
   
   public GwtColumns() {
     super("columns"); //$NON-NLS-1$
-    this.managedObject = "empty";
+    setManagedObject("empty");
   }
   
   public void addColumn(XulColumn column) {

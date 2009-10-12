@@ -32,7 +32,7 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
     dropdown = new Menu((Shell) parent.getParent().getManagedObject(), SWT.DROP_DOWN);
     header.setMenu(dropdown);
     
-    managedObject = menu;
+    setManagedObject(menu);
     this.parent = parent;
   }
  

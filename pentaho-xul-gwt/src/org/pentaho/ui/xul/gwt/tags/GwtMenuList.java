@@ -70,7 +70,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     };
     listbox = new CustomListBox();
     wrapper.add(listbox);
-    managedObject = wrapper;
+    setManagedObject(wrapper);
     
     listbox.addChangeListener(new ChangeListener(){
 

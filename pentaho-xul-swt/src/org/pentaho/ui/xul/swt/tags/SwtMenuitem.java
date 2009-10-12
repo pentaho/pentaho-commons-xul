@@ -16,7 +16,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   
   public SwtMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menuitem");
-    managedObject = "empty";
+    setManagedObject("empty");
     
   }
 

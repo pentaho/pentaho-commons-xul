@@ -41,7 +41,7 @@ public class GwtBox extends AbstractGwtXulContainer implements XulBox {
     } else {
       box = new VerticalPanel();
     }
-    managedObject = box;
+    setManagedObject(box);
   }
   
   public void setOrient(String orient) {

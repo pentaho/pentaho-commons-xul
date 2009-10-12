@@ -86,7 +86,7 @@ public class SwingScale extends SwingElement implements XulScale{
   public void layout() {
     int orient = (orientation == Orient.VERTICAL)? JSlider.VERTICAL: JSlider.HORIZONTAL;
     slider = new JSlider(orient, this.min, this.max, Math.max(min, this.value));
-    this.managedObject = slider;
+    setManagedObject(slider);
     
     slider.setMajorTickSpacing(this.pageIncrement);
 //    slider.setExtent(this.pageIncrement);

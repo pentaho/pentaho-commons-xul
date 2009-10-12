@@ -23,12 +23,12 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
     
     public SwtTreeCell(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treecell");
-      managedObject = "empty";
+      setManagedObject("empty");
     }
 
     public SwtTreeCell(XulComponent parent) {
       super("treecell");
-      managedObject = "empty";
+      setManagedObject("empty");
     }
 
     public void setSelectedIndex(int index) {

@@ -30,7 +30,7 @@ public class SwingRadio extends SwingElement implements XulRadio{
   public SwingRadio(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("radio");
     radioButton = new JRadioButton();
-    managedObject = radioButton;
+    setManagedObject(radioButton);
     
     //wrong type of event to listen to.. this one fires even on mouse over. use itemlistener
 //    radioButton.addChangeListener(new ChangeListener(){

@@ -21,7 +21,7 @@ public class SwtRadio extends SwtElement implements XulRadio{
   public SwtRadio(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("radio");
     radioButton = new Button((Composite) parent.getManagedObject(), SWT.RADIO);
-    managedObject = radioButton;
+    setManagedObject(radioButton);
     
     
     

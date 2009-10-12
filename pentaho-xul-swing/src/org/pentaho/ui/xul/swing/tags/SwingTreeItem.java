@@ -22,7 +22,7 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
 
   public SwingTreeItem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treeitem");
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public SwingTreeItem(XulTreeRow row) {
@@ -36,12 +36,12 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
 
     super.addChild(row);
     this.row = row;
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public SwingTreeItem(XulTreeChildren parent) {
     super("treeitem");
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public XulTreeRow getRow() {

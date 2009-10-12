@@ -149,12 +149,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       int style = (this.selType == TableSelection.MULTIPLE) ? SWT.MULTI : SWT.None;
       
       tree = new TreeViewer((Composite) parentComponent.getManagedObject(), style);
-      managedObject = tree;
+      setManagedObject(tree);
     } else {
       table = new TableViewer((Composite) parentComponent.getManagedObject(),
           SWT.MULTI | SWT.H_SCROLL
           | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.BORDER);
-      managedObject = table;
+      setManagedObject(table);
     }
     if (isHierarchical) {
       setupTree();

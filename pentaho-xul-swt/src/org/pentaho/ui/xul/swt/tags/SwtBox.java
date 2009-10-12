@@ -23,7 +23,7 @@ public class SwtBox extends AbstractSwtXulContainer implements XulBox {
     super(tagName);
     box = createNewComposite((Composite) parent.getManagedObject());
     setOrient(orient.toString());
-    managedObject = box;
+    setManagedObject(box);
 
   }
 

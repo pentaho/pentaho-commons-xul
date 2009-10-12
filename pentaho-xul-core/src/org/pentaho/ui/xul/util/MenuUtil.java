@@ -95,14 +95,12 @@ public class MenuUtil {
 			  menuItem.setLabel( customization.getLabel() );
 			  menuItem.setCommand( customization.getCommand() );
 			  menuItem.setId( customization.getId() );
-			  menuItem.setID( customization.getId() );
 			  // if we are adding this to a menubar we need to add a menu as well
 			  if( parent instanceof XulMenubar ) {
 				  XulMenu menu = (XulMenu) xulLoader.createElement("menu"); //$NON-NLS-1$
 				  menu.setLabel( customization.getLabel() );
 				  menu.addChild( menuItem );
 				  menu.setId( customization.getId()+"-menu" ); //$NON-NLS-1$
-				  menu.setID( customization.getId()+"-menu" ); //$NON-NLS-1$
 				  component = menu;
 			  } else {
 				  component = menuItem;
@@ -113,11 +111,9 @@ public class MenuUtil {
 			  component = menu;
 			  menu.setLabel( customization.getLabel() );
 			  menu.setId( customization.getId()+"-menu" ); //$NON-NLS-1$
-			  menu.setID( customization.getId()+"-menu" ); //$NON-NLS-1$
 			  XulMenupopup menuPopup = (XulMenupopup) xulLoader.createElement("menupopup"); //$NON-NLS-1$
 			  menu.addChild( menuPopup );
 			  menuPopup.setId( customization.getId() );
-			  menuPopup.setID( customization.getId() );
 		  }
 		  return component;
 	  }

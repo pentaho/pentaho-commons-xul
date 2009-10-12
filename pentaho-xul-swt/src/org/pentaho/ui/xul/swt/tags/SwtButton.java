@@ -34,7 +34,7 @@ public class SwtButton extends SwtElement implements XulButton {
   public SwtButton(Button button) {
     super("button");
     this.button = button;
-    managedObject = button;
+    setManagedObject(this.button);
   }
 
   public SwtButton(Element self, XulComponent parent, XulDomContainer container, String tagName) {
@@ -42,12 +42,12 @@ public class SwtButton extends SwtElement implements XulButton {
     this.parent = parent;
     this.domContainer = container;
     button = createNewButton((Composite)parent.getManagedObject());
-    managedObject = button;
+    setManagedObject(button);
   }
   
   public void setButton(Button button){
     this.button = button;
-    managedObject = button;
+    setManagedObject(button);
   }
   
   protected Button createNewButton(Composite parent) {

@@ -57,7 +57,7 @@ public class SwtWindow extends AbstractSwtXulContainer implements XulWindow {
     // Otherwise, you're on your own...
     shell = (possibleParent != null) ? new Shell(possibleParent, SWT.SHELL_TRIM) : new Shell(SWT.SHELL_TRIM);
     shell.setLayout(new GridLayout());
-    managedObject = shell;
+    setManagedObject(shell);
     xulDomContainer = container;
 
   }

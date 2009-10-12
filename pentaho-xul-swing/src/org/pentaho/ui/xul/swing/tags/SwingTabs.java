@@ -11,7 +11,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingTabs extends AbstractSwingContainer implements XulTabs{
 	public SwingTabs(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("tabs");
-		this.managedObject = "empty";
+		setManagedObject("empty");
 	}
 	
 	public SwingTab getTabByIndex(int index){

@@ -27,7 +27,7 @@ public class GwtSpacer extends AbstractGwtXulComponent implements XulSpacer {
   public GwtSpacer() {
     super(ELEMENT_NAME);
     panel = new SimplePanel();
-    this.managedObject = panel;
+    setManagedObject(panel);
   }
   
   public void setWidth(int size){

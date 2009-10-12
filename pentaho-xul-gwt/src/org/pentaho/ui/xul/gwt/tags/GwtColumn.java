@@ -19,7 +19,7 @@ public class GwtColumn extends AbstractGwtXulContainer implements XulColumn {
   
   public GwtColumn() {
     super("column"); //$NON-NLS-1$
-    this.managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public void layout(){

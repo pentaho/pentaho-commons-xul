@@ -15,7 +15,7 @@ public class SwtTab extends SwtElement implements XulTab{
   private XulTabbox tabbox;
   public SwtTab(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tab");
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public boolean isDisabled() {

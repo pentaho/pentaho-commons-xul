@@ -14,7 +14,11 @@
     </publications>
     
     <dependencies defaultconf="default->default">
-    	<dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" changing="true" />
+    	<!--  <dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" changing="true" />  -->
+    	<dependency org="dom4j"              name="dom4j"              rev="1.6.1">
+        <exclude org="xml-apis" name="xml-apis" />
+      </dependency>
+    	
         
         <!--  Testing dependencies -->
         <dependency org="junit"          name="junit"          rev="4.4"   conf="test->default"/>

@@ -16,7 +16,7 @@ public class SwingRow extends AbstractSwingContainer implements XulColumns, XulR
   public SwingRow(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("row");
 
-		this.managedObject = "empty";
+		setManagedObject("empty");
 	}
   
   @Override

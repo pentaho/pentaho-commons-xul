@@ -21,7 +21,7 @@ public class SwtTabpanel extends AbstractSwtXulContainer implements XulTabpanel{
 
     this.orient = Orient.VERTICAL;
     panel = new Composite((Composite) ((SwtTabpanels)parent).getTabbox().getManagedObject(), SWT.NONE);
-    managedObject = panel;
+    setManagedObject(panel);
     
   }
   

@@ -64,11 +64,11 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   
   public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("textbox");
-    managedObject = null;
+    setManagedObject(null);
   }
 
   public String getValue() {
-    if (managedObject != null) {
+    if (getManagedObject() != null) {
       return textComp.getText();
     } else {
       logger.error("Attempt to get Textbox's value before it's instantiated");
@@ -81,7 +81,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     if(textComp != null && textComp.getText().equals(text)){
       return;
     }
-    if (managedObject != null) {
+    if (getManagedObject() != null) {
       textComp.setText(text);
     }
     this.value = text;
@@ -104,7 +104,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   public void setDisabled(boolean dis) {
     boolean oldValue = this.disabled;
     this.disabled = dis;
-    if (managedObject != null) {
+    if (getManagedObject() != null) {
       textComp.setEnabled(!dis);
     }
     this.changeSupport.firePropertyChange("disabled", oldValue, dis);
@@ -158,12 +158,12 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   }
 
   public Object getTextControl() {
-    return managedObject;
+    return getManagedObject();
   }
 
   @Override
   public Object getManagedObject() {
-    if (managedObject == null) {
+    if (getManagedObject() == null) {
       switch (this.type) {
         case PASSWORD:
           JPasswordField pass = new JPasswordField((value != null) ? value : "");
@@ -171,7 +171,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
           pass.setMinimumSize(new Dimension(pass.getPreferredSize().width, pass.getPreferredSize().height));
           pass.setEditable(!readonly);
           textComp = pass;
-          managedObject = pass;
+          setManagedObject(pass);
           break;
         case NUMERIC:
         default: //regular text
@@ -179,7 +179,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
             textArea = new JTextArea((value != null) ? value : "");
             scrollPane = new JScrollPane(textArea);
             textComp = textArea;
-            managedObject = scrollPane;
+            setManagedObject(scrollPane);
             textArea.setEditable(!readonly);
             this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
             //this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -189,7 +189,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
             textField.setMinimumSize(new Dimension(textField.getPreferredSize().width,
                 textField.getPreferredSize().height));
             textField.setEditable(!readonly);
-            managedObject = textField;
+            setManagedObject(textField);
             textComp = textField;
           }
 
@@ -231,7 +231,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
       //	     });
     }
 
-    return managedObject;
+    return getManagedObject();
 
   }
 

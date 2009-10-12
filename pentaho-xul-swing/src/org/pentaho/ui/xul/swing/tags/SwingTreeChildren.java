@@ -21,7 +21,7 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
   public SwingTreeChildren(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treechildren");
     
-    managedObject = "empty";
+    setManagedObject("empty");
 
   }
 

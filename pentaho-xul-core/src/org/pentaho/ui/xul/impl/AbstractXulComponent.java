@@ -28,7 +28,7 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   private static final Log logger = LogFactory.getLog(AbstractXulComponent.class);
 
-  protected Object managedObject;
+  private Object managedObject;
 
   protected Element element;
 
@@ -79,21 +79,16 @@ public abstract class AbstractXulComponent implements XulComponent {
   public Object getManagedObject() {
     return managedObject;
   }
+  
+  public void setManagedObject(Object managed){
+    managedObject = managed;
+  }
 
   public String getId() {
     return id;
   }
 
   public void setId(String id) {
-    this.setAttribute("ID", id);
-    this.id = id;
-  }
-
-  public String getID() {
-    return id;
-  }
-
-  public void setID(String id) {
     this.setAttribute("ID", id);
     this.id = id;
   }

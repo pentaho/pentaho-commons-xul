@@ -47,7 +47,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   public GwtDialog() {
     super("dialog");
     
-    this.managedObject = null;
+    setManagedObject(null);
     this.orientation = Orient.VERTICAL;
   }
   

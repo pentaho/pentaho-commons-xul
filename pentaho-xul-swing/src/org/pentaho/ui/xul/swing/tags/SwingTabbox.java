@@ -28,7 +28,7 @@ public class SwingTabbox extends AbstractSwingContainer implements XulTabbox {
   public SwingTabbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabbox");
     tabpane = new JTabbedPane();
-    this.managedObject = tabpane;
+    setManagedObject(tabpane);
   }
 
   @Override

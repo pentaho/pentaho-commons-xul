@@ -38,12 +38,13 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
 
   public GwtFileUpload() {
     super(ELEMENT_NAME);
-    this.managedObject = new VerticalPanel();;
+    setManagedObject(new VerticalPanel());
   }
 
   @SuppressWarnings("deprecation")
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    managedObject = mainPanel = new VerticalPanel();
+    mainPanel = new VerticalPanel();
+    setManagedObject(mainPanel);
 
     super.init(srcEle, container);
     if (!StringUtils.isEmpty(srcEle.getAttribute("action"))) {

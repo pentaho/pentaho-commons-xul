@@ -231,11 +231,6 @@ public abstract class XulDialogAdapter implements XulDialog {
     return 0;
   }
 
-  public String getID() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
   public String getId() {
     // TODO Auto-generated method stub
     return null;
@@ -292,11 +287,6 @@ public abstract class XulDialogAdapter implements XulDialog {
   }
 
   public void setHeight(int height) {
-    // TODO Auto-generated method stub
-
-  }
-
-  public void setID(String id) {
     // TODO Auto-generated method stub
 
   }

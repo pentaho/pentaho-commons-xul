@@ -18,7 +18,7 @@ public class SwingCaption extends SwingElement implements XulCaption{
 
   public SwingCaption(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("caption");
-    managedObject = caption;
+    setManagedObject(caption);
   }
   
   public String getLabel(){
@@ -27,7 +27,7 @@ public class SwingCaption extends SwingElement implements XulCaption{
   
   public void setLabel(String caption){
     this.caption = caption;
-    managedObject = caption;
+    setManagedObject(caption);
   }
 
   public void layout(){

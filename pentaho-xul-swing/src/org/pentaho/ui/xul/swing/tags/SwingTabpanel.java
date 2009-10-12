@@ -27,7 +27,7 @@ public class SwingTabpanel extends AbstractSwingContainer implements XulTabpanel
     
     container = new JPanel(new GridBagLayout());
 
-    managedObject = container;
+    setManagedObject(container);
     
     resetContainer();
     

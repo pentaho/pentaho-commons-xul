@@ -7,19 +7,17 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
-import org.pentaho.ui.xul.XulEventSourceAdapter;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.stereotype.Bindable;
-import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.util.Align;
-import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -40,7 +38,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected XulDomContainer xulDomContainer;
   protected Panel container;
   protected Orient orientation;
-  protected Object managedObject;
+  private Object managedObject;
   protected int flex = 0;
   protected String id;
   protected boolean flexLayout = false;
@@ -165,9 +163,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
 
     Object w = getManagedObject();
-    if(w instanceof Widget){
-      ((Widget)w).getElement().setId(this.getId());
-    }
     
     double totalFlex = 0.0;
     
@@ -332,7 +327,20 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
   
   public Object getManagedObject() {
+    if (managedObject == null)
+      return managedObject;
+    
+    if((!StringUtils.isEmpty(getId()) && (managedObject instanceof UIObject))){
+      UIObject u = (UIObject)managedObject;
+      if(u.getElement()!=null){
+        ((UIObject)managedObject).getElement().setId(this.getId());
+      }
+    }
     return managedObject;
+  }
+
+  public void setManagedObject(Object managed) {
+    managedObject = managed;
   }
 
   public String getId() {
@@ -367,10 +375,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     return height;
   }
 
-  public String getID() {
-   return this.id;   
-  }
-
   public String getOnblur() {
     return onblur;  
   }
@@ -403,10 +407,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setHeight(int height) {
     this.height = height;  
-  }
-
-  public void setID(String id) {
-    this.id = id;  
   }
 
   public void setOnblur(String method) {

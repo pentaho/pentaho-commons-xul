@@ -38,7 +38,8 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
 
   public GwtDeck(Orient orient) {
     super(ELEMENT_NAME);
-    managedObject = container = new DeckPanel();
+    container = new DeckPanel();
+    setManagedObject(container);
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {

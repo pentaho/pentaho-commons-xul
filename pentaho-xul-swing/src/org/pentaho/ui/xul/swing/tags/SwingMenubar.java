@@ -22,7 +22,7 @@ public class SwingMenubar extends AbstractSwingContainer implements XulMenubar {
 
     menuBar = new JMenuBar();
     menuBar.setMinimumSize(new Dimension(20, 20));
-    managedObject = menuBar;
+    setManagedObject(menuBar);
 
   }
 

@@ -32,7 +32,7 @@ private String binding;
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     listBox = new List((Composite)parent.getManagedObject(), SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
-    managedObject = listBox;
+    setManagedObject(listBox);
   }
 
   public boolean isDisabled() {

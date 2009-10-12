@@ -27,7 +27,7 @@ public class HtmlWindow extends AbstractHtmlContainer implements XulWindow {
 	
 	  public HtmlWindow(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		    super( tagName );
-		    managedObject = "window";
+		    setManagedObject("window");
 		    this.domContainer = domContainer;
 	  }
 

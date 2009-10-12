@@ -74,7 +74,7 @@ public class SwingButton extends SwingElement implements XulButton{
   
   public SwingButton(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("button");
-    this.managedObject = new JButton();
+    setManagedObject(new JButton());
     this.domContainer = domContainer;
   }
   
@@ -84,14 +84,14 @@ public class SwingButton extends SwingElement implements XulButton{
 
   protected AbstractButton getButton()
   {
-    return (AbstractButton) managedObject;
+    return (AbstractButton) getManagedObject();
   }  
   
   @Override
   public void onDomReady() {
     if(this.group != null && getDocument() != null && getDocument().getRootElement() instanceof SwingRoot){
       buttonGroup = ((SwingRoot) SwingButton.this.getDocument().getRootElement()).getButtonGroup(group);
-      AbstractButton button = (AbstractButton) managedObject;
+      AbstractButton button = (AbstractButton) getManagedObject();
       buttonGroup.add(button);
       if(buttonGroup.getButtonCount() == 1){
         //first button in, TODO: remove once selected="true" attribute supported
@@ -106,7 +106,7 @@ public class SwingButton extends SwingElement implements XulButton{
     {
       throw new NullPointerException();
     }
-    this.managedObject = button;
+    setManagedObject(button);
   }
 
   public void setLabel(String label){

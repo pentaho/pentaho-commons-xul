@@ -35,7 +35,7 @@ public class SwingDeck extends AbstractSwingContainer implements XulDeck {
     cardLayout = new CardLayout();
     container = new JPanel(cardLayout);
     setSelectedIndex(0);
-    managedObject = container;
+    setManagedObject(container);
   }
 
   @Override

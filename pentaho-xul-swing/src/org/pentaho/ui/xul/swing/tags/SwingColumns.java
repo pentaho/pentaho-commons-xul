@@ -17,7 +17,7 @@ public class SwingColumns extends AbstractSwingContainer implements XulColumns {
   public SwingColumns(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("columns");
 
-		this.managedObject = "empty";
+		setManagedObject("empty");
 	}
 
   @Override

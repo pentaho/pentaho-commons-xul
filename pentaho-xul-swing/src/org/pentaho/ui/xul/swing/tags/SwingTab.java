@@ -20,7 +20,7 @@ public class SwingTab extends SwingElement implements XulTab{
 	private XulTabbox tabbox;
 	public SwingTab(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("tab");
-		managedObject = "empty";
+		setManagedObject("empty");
 	}
 
 	public boolean isDisabled() {

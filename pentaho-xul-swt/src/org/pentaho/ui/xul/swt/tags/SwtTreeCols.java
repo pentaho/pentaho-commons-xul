@@ -17,7 +17,7 @@ public class SwtTreeCols extends AbstractSwtXulContainer implements XulTreeCols 
       super("treecols");
       table = (XulTree) parent;
 
-      managedObject = "empty";
+      setManagedObject("empty");
     }
 
     public void addColumn(XulTreeCol column) {

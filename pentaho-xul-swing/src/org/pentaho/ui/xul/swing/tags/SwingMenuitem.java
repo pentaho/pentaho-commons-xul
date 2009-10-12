@@ -26,7 +26,7 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
     super("menuitem");
     
     menuitem = new JMenuItem();
-    managedObject = menuitem;
+    setManagedObject(menuitem);
     
   }
 

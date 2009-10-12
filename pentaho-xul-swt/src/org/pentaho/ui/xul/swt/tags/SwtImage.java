@@ -26,7 +26,7 @@ public class SwtImage extends SwtElement implements XulImage{
     this.parent = parent;
     label = new Label(((Composite) parent.getManagedObject()), SWT.NONE);
    
-    managedObject = label;
+    setManagedObject(label);
   }
 
   public String getSrc() {

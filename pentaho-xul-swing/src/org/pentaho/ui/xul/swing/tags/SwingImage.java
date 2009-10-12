@@ -34,7 +34,7 @@ public class SwingImage extends SwingElement implements XulImage{
     panel = new JPanel(new BorderLayout());
     panel.setOpaque(false);
     container = domContainer;
-    this.managedObject = panel;
+    setManagedObject(panel);
   }
   public String getSrc() {
     return src;  

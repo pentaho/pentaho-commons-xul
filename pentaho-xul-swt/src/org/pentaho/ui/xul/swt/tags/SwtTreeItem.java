@@ -23,7 +23,7 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
 
     public SwtTreeItem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treeitem");
-      managedObject = "empty";
+      setManagedObject("empty");
     }
 
     public SwtTreeItem(XulTreeRow row) {
@@ -37,12 +37,12 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
 
       super.addChild(row);
       this.row = row;
-      managedObject = "empty";
+      setManagedObject("empty");
     }
 
     public SwtTreeItem(XulTreeChildren parent) {
       super("treeitem");
-      managedObject = "empty";
+      setManagedObject("empty");
     }
 
     public XulTreeRow getRow() {

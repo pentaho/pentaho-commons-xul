@@ -54,7 +54,8 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public GwtButton() {
     super(ELEMENT_NAME);
     //programatic creation doesn't call init() create here for them
-    managedObject = button = new RoundedButton();
+    button = new RoundedButton();
+    setManagedObject(button);
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -74,19 +75,20 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
           new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
           srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient"))));
       }
-      managedObject = customButton;
+      setManagedObject(customButton);
       button = null;
     } else if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
       //we create a button by default, remove it here
       button = null;
       imageButton = new ImageButton();
       SimplePanel sp = new SimplePanel();
-      managedObject = sp;
+      setManagedObject(sp);
       sp.add(imageButton);
       imageButton.setHeight("");
       imageButton.setWidth("");
     } else {
-      managedObject = button = new RoundedButton();
+      button = new RoundedButton();
+      setManagedObject(button);
     }
 
     super.init(srcEle, container);

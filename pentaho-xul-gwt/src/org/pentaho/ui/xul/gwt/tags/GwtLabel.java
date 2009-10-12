@@ -33,7 +33,8 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   
   public GwtLabel() {
     super(ELEMENT_NAME);
-    managedObject = label = new Label();
+    label = new Label();
+    setManagedObject(label);
     label.setStyleName("xul-label");
     label.setWordWrap(true);
   }

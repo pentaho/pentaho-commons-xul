@@ -32,7 +32,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     super(tagName);
     parentComposite = (Composite)parent.getManagedObject();
     textBox = createNewText();
-    managedObject = textBox;
+    setManagedObject(textBox);
   }
   
   public Text createNewText(){
@@ -144,9 +144,9 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
       setValue(text);
       setReadonly(readOnly);
       setType(type);
-      managedObject = textBox;
+      setManagedObject(textBox);
     }
-    return managedObject;
+    return super.getManagedObject();
   }
 
   public boolean isReadonly() {

@@ -60,7 +60,8 @@ public class GwtGrid  extends AbstractGwtXulContainer implements XulGrid {
       sp = new ScrollPanel(grid);
       SimplePanel div = new SimplePanel();
       div.add(sp);
-      managedObject = container = div;
+      container = div;
+      setManagedObject(container);
     }
 
     if(getFlex() > 0) {

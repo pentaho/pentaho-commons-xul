@@ -14,7 +14,7 @@ static final String ELEMENT_NAME = "menupopup"; //$NON-NLS-1$
 
   public GwtMenupopup() {
     super(ELEMENT_NAME);
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public static void register() {

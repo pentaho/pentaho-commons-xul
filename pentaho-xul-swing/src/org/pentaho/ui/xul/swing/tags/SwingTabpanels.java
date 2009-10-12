@@ -12,7 +12,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingTabpanels extends AbstractSwingContainer implements XulTabpanels {
   public SwingTabpanels(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabpanels");
-    this.managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public XulTabpanel getTabpanelByIndex(int index) {

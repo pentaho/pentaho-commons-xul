@@ -26,13 +26,13 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
   public SwingTreeCell(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treecell");
     label = new JLabel();
-    managedObject = label;
+    setManagedObject(label);
   }
 
   public SwingTreeCell(XulComponent parent) {
     super("treecell");
     label = new JLabel();
-    managedObject = label;
+    setManagedObject(label);
   }
 
   public void setSelectedIndex(int index) {

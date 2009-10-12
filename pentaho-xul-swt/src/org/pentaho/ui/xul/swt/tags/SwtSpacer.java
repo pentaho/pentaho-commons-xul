@@ -23,7 +23,7 @@ public class SwtSpacer extends SwtElement implements XulSpacer{
     super("spacer");
     strut = new Label((Composite) parent.getManagedObject(), SWT.NONE);
     strut.setSize(5,5);
-    managedObject = strut;
+    setManagedObject(strut);
   }
   public void setWidth(int size){
     int y = strut.getSize().y;    

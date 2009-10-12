@@ -48,7 +48,8 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
 
   public GwtTabbox(Orient orient) {
     super(ELEMENT_NAME);
-    managedObject = tabPanel = new TabPanel();
+    tabPanel = new TabPanel();
+    setManagedObject(tabPanel);
   }
   
   public void addChild(Element ele) {

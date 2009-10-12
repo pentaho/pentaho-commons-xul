@@ -17,11 +17,12 @@ public class SwingSeparator extends SwingElement implements XulSeparator{
     super("separator");
     
     Orient parentOrientation = ((XulContainer) parent).getOrientation();
-    this.managedObject = new JSeparator( 
+    JSeparator j = new JSeparator( 
         (parentOrientation == Orient.VERTICAL)
         ? SwingConstants.HORIZONTAL 
         : SwingConstants.VERTICAL
     );
+    setManagedObject(j);
   }
 }
 

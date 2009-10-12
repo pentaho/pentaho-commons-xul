@@ -126,7 +126,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     c.setLayoutData(gd);
 
-    managedObject = c;
+    setManagedObject(c);
   }
   
   public Shell getShell(){
@@ -325,7 +325,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     });
     
     
-    managedObject = dialog.getMainArea();
+    setManagedObject(dialog.getMainArea());
     
   }
 

@@ -118,7 +118,7 @@ public class SwingElement extends AbstractXulComponent {
 
           prevContainer.add(Box.createGlue(), gc);
         }
-        managedObject = splitter;
+        setManagedObject(splitter);
       }
 
       Object maybeComponent = comp.getManagedObject();

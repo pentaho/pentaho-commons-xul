@@ -36,25 +36,15 @@ public class SwtScript extends SwtElement implements XulScript {
     }
   }
 
-  @Override
-  /**
-   *  Can't be guaranteed the order that these attributes 
-   *  will be set, so register in both cases
-   */
-  public void setID(String id) {
+  public void setId(String id) {
     super.setId(id);
     if (this.getId() != null && className != null){
-    	try{
-    		windowContainer.addEventHandler(getId(), className);
-    	} catch(XulException e){
-    		logger.error("Error adding event handler",e);
-    	}
+      try{
+        windowContainer.addEventHandler(getId(), className);
+      } catch(XulException e){
+        logger.error("Error adding event handler",e);
+      }
     }
-  }
-  
-  @Deprecated
-  public void setId(String id) {
-    this.setID(id);
   }
 
 }

@@ -55,7 +55,8 @@ public class GwtWindow extends AbstractGwtXulContainer implements XulWindow {
     } else {
       frame = new VerticalPanel();
     }
-    managedObject = container = frame;
+    container = frame;
+    setManagedObject(container);
   }
   
   public void setOrient(String orient) {

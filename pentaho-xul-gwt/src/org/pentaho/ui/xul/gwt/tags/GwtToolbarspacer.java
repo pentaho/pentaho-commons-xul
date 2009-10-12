@@ -17,7 +17,7 @@ public class GwtToolbarspacer extends AbstractGwtXulContainer implements XulTool
   
   public GwtToolbarspacer(){
     super("toolbarspacer");
-    this.managedObject = panel;
+    setManagedObject(panel);
     //Do not change. GWT widgets Toolbar keys off this to know that the panel is suposed to act as a spacer
     panel.setStyleName("spacer");
   }

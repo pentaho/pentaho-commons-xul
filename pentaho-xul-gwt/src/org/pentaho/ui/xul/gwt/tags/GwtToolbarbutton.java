@@ -48,7 +48,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     } else {
       button = new ToolbarButton(new Image());
     };
-    managedObject = button;
+    setManagedObject(button);
     
     setLabel(srcEle.getAttribute("label"));
     setOnclick(srcEle.getAttribute("onclick"));

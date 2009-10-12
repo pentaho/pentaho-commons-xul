@@ -33,7 +33,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
 
     public SwtTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treecol");
-      managedObject = "empty";
+      setManagedObject("empty");
     }
 
     public void autoSize() {

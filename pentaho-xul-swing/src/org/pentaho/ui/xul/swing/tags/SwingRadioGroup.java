@@ -36,7 +36,7 @@ public class SwingRadioGroup extends AbstractSwingContainer implements XulRadioG
 
 		container = new JPanel(new GridBagLayout());
 
-		managedObject = container;
+		setManagedObject(container);
 
 		resetContainer();
 	}

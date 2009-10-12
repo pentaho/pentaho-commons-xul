@@ -58,7 +58,7 @@ public class SwingStatusbarpanel extends SwingElement implements XulStatusbarpan
     label = new JLabel();
     //label.setPreferredSize(new Dimension(50,15));
     label.setFont(new Font("Dialog", Font.PLAIN, 11));
-    this.managedObject = panel;
+    setManagedObject(panel);
   }
   
   public void setLabel(String label){

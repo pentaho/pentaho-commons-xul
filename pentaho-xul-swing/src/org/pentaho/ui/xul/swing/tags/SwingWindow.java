@@ -84,7 +84,7 @@ public class SwingWindow extends AbstractSwingContainer implements XulWindow, Sw
     
     container = new JPanel(new GridBagLayout());
     //container.setBorder(BorderFactory.createLineBorder(Color.green));
-    managedObject = container;
+    setManagedObject(container);
 
     clipboard = Toolkit.getDefaultToolkit( ).getSystemClipboard( );
     
@@ -99,7 +99,7 @@ public class SwingWindow extends AbstractSwingContainer implements XulWindow, Sw
     	}
     });
     
-    managedObject = frame;
+    setManagedObject(frame);
   }
 
 

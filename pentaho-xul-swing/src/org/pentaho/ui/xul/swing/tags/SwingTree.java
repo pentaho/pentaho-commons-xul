@@ -399,7 +399,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       scrollpane = new JScrollPane(tree);
     }
 
-    this.managedObject = scrollpane.getViewport();
+    setManagedObject(scrollpane.getViewport());
   }
 
   int numOfListeners = 0;

@@ -51,7 +51,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
     scrollPane = new JScrollPane(listBox);
     listBox.setBorder(BorderFactory.createLineBorder(Color.gray));
     listBox.addListSelectionListener(this);
-    managedObject = scrollPane;
+    setManagedObject(scrollPane);
     this.xulDomContainer = container;
     
     Dimension size = scrollPane.getPreferredSize();
@@ -59,7 +59,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   }
   
   public Object getManagedObject(){
-    return this.managedObject;
+    return super.getManagedObject();
   }
 
   public boolean isDisabled() {

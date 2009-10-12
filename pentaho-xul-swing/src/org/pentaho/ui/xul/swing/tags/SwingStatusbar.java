@@ -30,7 +30,7 @@ public class SwingStatusbar extends AbstractSwingContainer implements XulStatusb
     container.setBackground(Color.decode("#EFEFEF"));
     container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.gray));
 
-    managedObject = container;
+    setManagedObject(container);
 
     resetContainer();
 

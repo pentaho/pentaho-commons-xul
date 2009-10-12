@@ -13,7 +13,7 @@ public class SwingDialogheader extends SwingElement implements XulDialogheader{
 
 	public SwingDialogheader(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("dialogheader");
-    managedObject = "empty"; // enclosing containers should not try to attach this as a child
+    setManagedObject("empty"); // enclosing containers should not try to attach this as a child
     
   }
 	

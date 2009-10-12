@@ -28,7 +28,7 @@ public class SwingListitem extends SwingElement implements XulListitem{
   
   public void setLabel(String label){
     this.label = label;
-    managedObject = this.label;
+    setManagedObject(this.label);
   }
   
   public String toString(){

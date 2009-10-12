@@ -32,7 +32,8 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   
   public GwtCheckbox() {
     super(ELEMENT_NAME);
-    managedObject = checkBox = new CheckBox();
+    checkBox = new CheckBox();
+    setManagedObject(checkBox);
     checkBox.setStylePrimaryName("checkbox");
     checkBox.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {

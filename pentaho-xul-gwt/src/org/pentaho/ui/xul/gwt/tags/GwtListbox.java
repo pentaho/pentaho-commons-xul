@@ -58,7 +58,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   public GwtListbox() {
     super(ELEMENT_NAME);
-    managedObject = listBox = new ListBox(){
+    listBox = new ListBox(){
 
       @Override
       public void setHeight(String height) {
@@ -70,6 +70,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
       }
       
     };
+    setManagedObject(listBox);
     listBox.addChangeHandler(this);
   }
   

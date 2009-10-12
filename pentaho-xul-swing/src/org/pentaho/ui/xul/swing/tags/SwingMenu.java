@@ -25,7 +25,7 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
     super("menu");
     
     menu = new JMenu();
-    managedObject = menu;
+    setManagedObject(menu);
     
   }
   

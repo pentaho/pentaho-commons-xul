@@ -59,7 +59,7 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
       
     };
     container.setOpaque(false);
-    managedObject = container;
+    setManagedObject(container);
     setPadding(2);
     resetContainer();
 

@@ -48,7 +48,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     this.xulDomContainer = domContainer;
 
     combobox = new JComboBox(new DefaultComboBoxModel());
-    managedObject = combobox;
+    setManagedObject(combobox);
 
     combobox.addItemListener(new ItemListener() {
 

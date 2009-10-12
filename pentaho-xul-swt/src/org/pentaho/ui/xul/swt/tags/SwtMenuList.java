@@ -75,7 +75,7 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
       combobox = new Combo((Composite)parent.getManagedObject(), SWT.DROP_DOWN | SWT.READ_ONLY);
     }
 
-    managedObject = combobox;
+    setManagedObject(combobox);
 
     combobox.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
 

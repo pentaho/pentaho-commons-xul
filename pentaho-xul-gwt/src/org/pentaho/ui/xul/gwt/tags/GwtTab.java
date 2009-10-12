@@ -28,7 +28,7 @@ public class GwtTab extends AbstractGwtXulContainer implements XulTab {
 
   public GwtTab() {
     super(ELEMENT_NAME);
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {

@@ -32,7 +32,7 @@ public class SwtDeck extends AbstractSwtXulContainer implements XulDeck {
     box.setLayout(layout);
     setSelectedIndex(0);
 
-    managedObject = box;
+    setManagedObject(box);
 
   }
 

@@ -32,7 +32,8 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   
   public GwtMenuitem() {
     super(ELEMENT_NAME);
-    managedObject = menuitem = new MenuItem("blank", (Command) null);
+    menuitem = new MenuItem("blank", (Command) null);
+    setManagedObject(menuitem);
   }
   
   public GwtMenuitem(XulMenupopup popup){

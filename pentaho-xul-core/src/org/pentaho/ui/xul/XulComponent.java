@@ -22,6 +22,9 @@ public interface XulComponent extends Element, XulEventSource {
    */
   public Object getManagedObject();
   
+
+  public void setManagedObject(Object managed);
+  
   /**
    * The name is the tag name that this component corresponds to 
    * in XUL XML.
@@ -29,18 +32,6 @@ public interface XulComponent extends Element, XulEventSource {
    * @return the XUL tag name. 
    */
   public String getName();
-  
-  /**
-   * Every element in XUL can have a unique id
-   * @param id sets the component's id
-   */
-  public void setID(String id);
-  
-  /**
-   * 
-   * @return the id for this component. 
-   */
-  public String getID();
   
   /**
    * Every element in XUL can have a unique id

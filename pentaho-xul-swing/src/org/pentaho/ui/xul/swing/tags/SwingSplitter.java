@@ -10,7 +10,7 @@ public class SwingSplitter extends SwingElement implements XulSplitter{
 
   public SwingSplitter(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("splitter");
-    managedObject = "empty";
+    setManagedObject("empty");
   }
 }
 

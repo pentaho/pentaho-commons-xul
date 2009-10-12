@@ -46,6 +46,6 @@ public class SwtSplitter extends SwtElement implements XulSplitter{
     });
 
     
-    this.managedObject = "empty";
+    setManagedObject("empty");
   }
 } 

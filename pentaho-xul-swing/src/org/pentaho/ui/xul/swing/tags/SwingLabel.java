@@ -32,7 +32,7 @@ public class SwingLabel extends SwingElement implements XulLabel{
     label.setOpaque(false);
     label.setDisabledTextColor(Color.decode("#777777"));
     
-    managedObject = label;
+    setManagedObject(label);
     Dimension size = label.getPreferredSize();
     size.width = 100;
     label.setMinimumSize(size);

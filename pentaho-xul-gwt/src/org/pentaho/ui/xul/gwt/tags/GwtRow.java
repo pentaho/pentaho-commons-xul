@@ -19,7 +19,7 @@ public class GwtRow extends AbstractGwtXulContainer implements XulRow {
   
   public GwtRow() {
     super("row"); //$NON-NLS-1$
-    this.managedObject = "empty";
+    setManagedObject("empty");
   }
   
   public void layout(){

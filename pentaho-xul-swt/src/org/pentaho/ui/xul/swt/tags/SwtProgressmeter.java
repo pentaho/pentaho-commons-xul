@@ -96,7 +96,7 @@ public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
     progressmeter.setSelection(initialValue);
     progressmeter.setMinimum(initialMinimum);
     progressmeter.setMaximum(initialMaximum);
-    managedObject = progressmeter;
+    setManagedObject(progressmeter);
   }
 
 }

@@ -22,7 +22,7 @@ public class GwtTabs extends AbstractGwtXulContainer implements XulTabs {
 
   public GwtTabs() {
     super(ELEMENT_NAME);
-    managedObject = "empty";
+    setManagedObject("empty");
   }
  
   public XulTab getTabByIndex(int index) {

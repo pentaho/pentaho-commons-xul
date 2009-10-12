@@ -35,7 +35,7 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
   
   public GwtToolbar(){
     super("toolbar");
-    managedObject = toolbar;
+    setManagedObject(toolbar);
   }
   
   public String getToolbarName() {

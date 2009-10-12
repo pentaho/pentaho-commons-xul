@@ -15,7 +15,7 @@ public class SwtTabpanels extends AbstractSwtXulContainer implements XulTabpanel
   public SwtTabpanels(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabpanels");
     tabbox = (XulTabbox)parent;
-    this.managedObject = "empty";
+    setManagedObject("empty");
   }
   
   protected XulTabbox getTabbox(){

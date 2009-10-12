@@ -12,7 +12,7 @@ public class SwingMenuseparator extends SwingElement implements XulMenuseparator
   
   public SwingMenuseparator(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menuseparator");
-    this.managedObject = "Separator";
+    setManagedObject("Separator");
   }
 
 }

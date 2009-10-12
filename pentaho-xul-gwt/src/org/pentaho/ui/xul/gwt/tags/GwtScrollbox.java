@@ -47,7 +47,7 @@ public class GwtScrollbox extends AbstractGwtXulContainer implements XulScrollbo
         panel.getElement().getStyle().setProperty("overflow-y", "visible");
       }
     }
-    this.managedObject = panel;
+    setManagedObject(panel);
   }
   
  

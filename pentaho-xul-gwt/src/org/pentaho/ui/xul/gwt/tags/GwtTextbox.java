@@ -56,7 +56,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     // Firefox 2 and sometimes 3 fails to render cursors in Textboxes if they're contained in absolutely
     // positioned div's, such as when they're in dialogs. The workaround is to wrap the <input> in a div
     // with overflow: auto;
-    managedObject = textBox;
+    setManagedObject(textBox);
       
     // textBox.setPreferredSize(new Dimension(150,18));
   }
@@ -109,12 +109,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     }
     switch(this.type) {
       case PASSWORD:
-          managedObject = textBox = new PasswordTextBox();
+          textBox = new PasswordTextBox();
         break;        
       case NUMERIC:
       default: //regular text  
         if (multiline) {
-          managedObject = textBox = new TextArea();
+          textBox = new TextArea();
           
           if(cols != null && cols > -1){
             ((TextArea)textBox).setCharacterWidth(cols);
@@ -123,10 +123,11 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
           
         } else {
           //managedObject = textBox = new TextBox();
-          managedObject = textBox;
+          // managedObject = textBox;
         }
         break;
     }
+    setManagedObject(textBox);
     if(this.getWidth() > 0){
       textBox.setWidth(this.getWidth()+"px");
     } else {
@@ -233,7 +234,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
 
   public Object getTextControl() {
-   return this.managedObject;   
+   return getManagedObject();   
   }
 
   public String getType() {

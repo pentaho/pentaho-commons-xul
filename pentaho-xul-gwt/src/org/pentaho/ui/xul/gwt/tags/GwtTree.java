@@ -146,7 +146,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     // managedObject is neither a native GWT tree nor a table since the entire native GWT object is thrown away each 
     // time we call setup{Tree|Table}; because the widget is thrown away, we need to reconnect the new widget to the
     // simplePanel, which is the managedObject
-    managedObject = simplePanel;
+    setManagedObject(simplePanel);
     
   }
   

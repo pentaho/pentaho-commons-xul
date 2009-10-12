@@ -18,7 +18,7 @@ public class SwingProgressmeter extends SwingElement implements XulProgressmeter
   public SwingProgressmeter(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("progressmeter"); //$NON-NLS-1$
     progressmeter = new JProgressBar();
-    this.managedObject = progressmeter;
+    setManagedObject(progressmeter);
   }
 
   public int getMaximum() {

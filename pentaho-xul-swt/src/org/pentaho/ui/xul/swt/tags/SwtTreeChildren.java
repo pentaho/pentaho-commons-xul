@@ -17,7 +17,7 @@ public class SwtTreeChildren extends AbstractSwtXulContainer implements XulTreeC
     public SwtTreeChildren(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treechildren");
       
-      managedObject = "empty";
+      setManagedObject("empty");
 
     }
 
@@ -25,7 +25,7 @@ public class SwtTreeChildren extends AbstractSwtXulContainer implements XulTreeC
     public SwtTreeChildren( XulComponent parent) {
       super("treechildren");
       
-      managedObject = "empty";
+      setManagedObject("empty");
 
     }
     public void addItem(XulTreeItem item) {

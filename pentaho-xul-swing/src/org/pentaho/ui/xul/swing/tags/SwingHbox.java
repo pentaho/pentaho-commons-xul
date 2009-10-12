@@ -44,7 +44,7 @@ public class SwingHbox extends AbstractSwingContainer implements XulHbox {
     this.domContainer = domContainer;
     container = new ScrollablePanel(new GridBagLayout());
     container.setOpaque(false);
-    managedObject = container;
+    setManagedObject(container);
     setPadding(2);
     resetContainer();
 

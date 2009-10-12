@@ -33,7 +33,8 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     super(ELEMENT_NAME);
     this.orientation = Orient.HORIZONTAL;
     HorizontalPanel hp;
-    managedObject = container = hp = new HorizontalPanel();
+    container = hp = new HorizontalPanel();
+    setManagedObject(container);
     hp.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
     hp.setStyleName("hbox");
     

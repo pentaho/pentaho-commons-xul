@@ -36,7 +36,8 @@ public class GwtTabPanel  extends AbstractGwtXulContainer implements XulTabpanel
     this.orientation = orient;
     verticalPanel = new VerticalPanel();
     verticalPanel.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
-    managedObject =  container = verticalPanel; 
+    container = verticalPanel;
+    setManagedObject(container);
   }
   
   public void resetContainer(){

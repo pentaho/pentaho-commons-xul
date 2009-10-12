@@ -25,7 +25,7 @@ public class GwtCaption extends AbstractGwtXulComponent implements XulCaption {
 
   public GwtCaption() {
     super(ELEMENT_NAME);
-    managedObject = caption;
+    setManagedObject(caption);
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -40,7 +40,8 @@ public class GwtCaption extends AbstractGwtXulComponent implements XulCaption {
   }
   
   public void setLabel(String caption) {
-    managedObject = this.caption = caption;
+    this.caption = caption;
+    setManagedObject(this.caption);
   }
 
   public void layout() {

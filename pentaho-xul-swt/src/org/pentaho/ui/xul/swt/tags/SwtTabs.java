@@ -11,7 +11,7 @@ import org.pentaho.ui.xul.swt.SwtElement;
 public class SwtTabs  extends AbstractSwtXulContainer implements XulTabs{
   public SwtTabs(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabs");
-    this.managedObject = "empty";
+    setManagedObject("empty");
   }
   
   public XulTab getTabByIndex(int index){

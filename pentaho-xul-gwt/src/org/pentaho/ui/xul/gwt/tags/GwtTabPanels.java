@@ -33,7 +33,7 @@ public class GwtTabPanels extends AbstractGwtXulContainer implements XulTabpanel
 
   public GwtTabPanels(Orient orient) {
     super(ELEMENT_NAME);
-    managedObject = "empty";
+    setManagedObject("empty");
   }
   
   public XulTabpanel getTabpanelByIndex(int index) {
