@@ -47,7 +47,9 @@ public class SwingImage extends SwingElement implements XulImage{
     // Then try to see if we can get the fully qualified file
     if (url == null) {
       try {
-        url = new File(src).toURL();
+        File f = new File(src);
+        if (f.exists())
+        url = f.toURL();
       } catch (MalformedURLException e) {
         // do nothing and let the null url get caught below.
       }
