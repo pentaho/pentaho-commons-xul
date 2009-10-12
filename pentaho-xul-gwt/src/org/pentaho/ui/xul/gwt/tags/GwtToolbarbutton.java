@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarToggleButton;
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -16,6 +17,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.xml.client.NamedNodeMap;
 import com.google.gwt.xml.client.Node;
@@ -64,7 +66,20 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     
   }
   
-  
+  @Override
+  public Object getManagedObject() {
+    
+    // HACK: ToolbarButtons are not Widget descendants... 
+    
+    Object m = super.getManagedObject();
+    if (m == null)
+      return m;
+    
+    if((!StringUtils.isEmpty(getId()) && (m instanceof ToolbarButton))){
+      ((ToolbarButton)m).setId(this.getId());
+    }
+    return m;
+  }
 
   public void doClick() {
     button.getCommand().execute();
@@ -147,7 +162,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     if(src != null && src.length() > 0){
       Image i = new Image(src);
       // WebDriver support.. give the image a direct id we can use as a hook
-      i.getElement().setId(this.getId().concat("_img"));
+      if (!StringUtils.isEmpty(this.getId())){
+        i.getElement().setId(this.getId().concat("_img"));
+      }
       button.setImage(i);
     }
   }
