@@ -1031,7 +1031,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     } else {
       table.clearSelection();
       for (int row : rows) {
-        table.changeSelection(row, -1, false, false);
+        table.changeSelection(row, -1, false, true);
       }
     }
   }
