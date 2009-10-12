@@ -35,8 +35,8 @@ public class XulWindowContainerTest {
   
   @Test
   public final void testFrag() throws Exception {
-    container.getDocumentRoot().loadFragment("all-box", "resource/documents/fragmenttest.xul");
-    assertNotNull(container.getDocumentRoot().getElementById("database-options-box"));
+    XulDomContainer container2 = container.loadFragment("resource/documents/fragmenttest.xul");
+    assertNotNull(container2.getDocumentRoot().getElementById("database-options-box"));
   }
 
   @Test
