@@ -163,7 +163,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
 
   @Override
   public Object getManagedObject() {
-    if (getManagedObject() == null) {
+    if (super.getManagedObject() == null) {
       switch (this.type) {
         case PASSWORD:
           JPasswordField pass = new JPasswordField((value != null) ? value : "");
@@ -231,7 +231,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
       //	     });
     }
 
-    return getManagedObject();
+    return super.getManagedObject();
 
   }
 
