@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
+import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.util.ColumnType;
 
 public class XulTableColumnLabelProvider implements ITableLabelProvider {
@@ -104,6 +105,18 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
   }
 
   private boolean isSelected(Object row, int col) {
-    return (Boolean) ((XulTreeItem) row).getRow().getCell(col).getValue();
+    XulTreeRow r = ((XulTreeItem) row).getRow();
+    if(r == null || r.getChildNodes().size() < col){
+      return false;
+    }
+    XulTreeCell c = r.getCell(col);
+    if(c == null){
+      return false;
+    }
+    Object val = c.getValue();
+    if(val == null || val instanceof Boolean == false){
+      return false;
+    }
+    return (Boolean) c.getValue();
   }
 }
