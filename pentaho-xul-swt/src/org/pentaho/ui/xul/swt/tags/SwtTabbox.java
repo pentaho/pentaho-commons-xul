@@ -67,8 +67,14 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
 
   @Override
   public void layout() {
-    for(int i=0; i<tabs.getChildNodes().size(); i++){
+
+    TabItem[] t = tabFolder.getItems();
+    
+    for(int i=0; i<t.length; i++){
+      t[i].dispose();
+    }
       
+    for(int i=0; i<tabs.getChildNodes().size(); i++){
       TabItem item = new TabItem (tabFolder, SWT.NONE);
       item.setText (tabs.getTabByIndex(i).getLabel());
 
