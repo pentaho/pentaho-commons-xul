@@ -73,8 +73,6 @@ import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
-import sun.text.CompactShortArray.Iterator;
-
 public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   // Tables and trees
