@@ -23,7 +23,7 @@ public class SwtListitem extends SwtElement implements XulListitem {
 
   public void setLabel( String text ) {
     label=text;
-    ((XulListbox)parent).addItem(label);
+    ((XulListbox) getParent()).addItem(label);
   }
 
   public String getLabel() {
