@@ -196,8 +196,8 @@ private String binding;
         e.printStackTrace();
       }
 //      SwtListitem item = new SwtListitem(null, this, container, null);
-      item.setLabel(extractLabel(t));
       this.addChild(item);
+      item.setLabel(extractLabel(t));
     }
     layout();
   }
