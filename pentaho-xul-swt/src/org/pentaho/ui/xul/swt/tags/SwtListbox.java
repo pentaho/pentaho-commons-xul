@@ -1,8 +1,9 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.util.Arrays;
+import java.beans.Expression;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -13,10 +14,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
-import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
@@ -27,10 +28,12 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   private String selType;
   private int rowsToDisplay = 0;
   String onSelect = null;
+  private XulDomContainer container;
 
 private String binding;
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
+    this.container = container;
     listBox = new List((Composite)parent.getManagedObject(), SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
     setManagedObject(listBox);
   }
@@ -181,8 +184,22 @@ private String binding;
   }
 
   public <T> void setElements(Collection<T> elements) {
-    // implement binding support.
-      
+    logger.info("SetElements on listbox called: collection has "+elements.size()+" rows");
+    
+    listBox.removeAll();
+    for (T t : elements) {
+      SwtListitem item = null;
+      try {
+        item = (SwtListitem) container.getDocumentRoot().createElement("listitem");
+      } catch (XulException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+//      SwtListitem item = new SwtListitem(null, this, container, null);
+      item.setLabel(extractLabel(t));
+      this.addChild(item);
+    }
+    layout();
   }
 
   public void setSelectedIndices(int[] indices) {
@@ -196,4 +213,19 @@ private String binding;
   public String getBinding() {
     return binding;
   }
+  
+  private <T> String extractLabel(T t) {
+    String attribute = getBinding();
+    if (StringUtils.isEmpty(attribute)) {
+      return t.toString();
+    } else {
+      String getter = "get" + (String.valueOf(attribute.charAt(0)).toUpperCase()) + attribute.substring(1);
+      try {
+        return new Expression(t, getter, null).getValue().toString();
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
 }
