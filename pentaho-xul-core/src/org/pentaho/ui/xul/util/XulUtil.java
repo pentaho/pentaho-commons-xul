@@ -17,7 +17,11 @@ public final class XulUtil {
 		Map <String, String> map = new HashMap <String, String>();
 		for (int i = 0; i < attMap.size(); i++) {
 			Attribute node = attMap.get(i);
-			map.put(node.getName(), node.getValue());
+			String name = node.getName();
+			if(name.equals("ID")){
+			  name = "id";
+			}
+			map.put(name, node.getValue());
 		}
 		return map;
 		
