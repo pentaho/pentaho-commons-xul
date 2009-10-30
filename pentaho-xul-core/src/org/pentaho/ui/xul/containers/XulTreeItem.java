@@ -18,5 +18,8 @@ public interface XulTreeItem extends XulContainer {
   
   public void remove();
   
+  public void setImage(String src);
+  public String getImage();
+  
   
 }

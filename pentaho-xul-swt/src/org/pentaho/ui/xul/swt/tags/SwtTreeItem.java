@@ -2,6 +2,9 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -20,9 +23,12 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
 
     private XulTreeRow row;
     private XulTreeChildren treeChildren; //Hierachical tree
+    private String image;
+    private XulDomContainer domContainer;
 
     public SwtTreeItem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treeitem");
+      this.domContainer = domContainer;
       setManagedObject("empty");
     }
 
@@ -111,4 +117,13 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
       
       initialized = true;
     }
+
+    public String getImage() {
+      return image;
+    }
+
+    public void setImage(String src) {
+      this.image = this.domContainer.getXulLoader().getRootDir()+src;
+    }
+    
   }
