@@ -803,8 +803,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       } else {// tree
 
         for (T o : elements) {
-          XulTreeRow row = this.getRootChildren().addNewRow();
-          addTreeChild(o, row);
+          SwtTreeItem item = new SwtTreeItem(this.getRootChildren());
+          item.setXulDomContainer(this.domContainer);
+          
+          SwtTreeRow newRow = new SwtTreeRow(item);
+          item.setRow(newRow);
+          this.getRootChildren().addChild(item);
+          
+          addTreeChild(o, newRow);
         }
 
       }
@@ -841,23 +847,45 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       row.addCell(cell);
 
       // find children
-      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0))
-          .getChildrenbinding();
-      property = "get"
-          + (property.substring(0, 1).toUpperCase() + property.substring(1));
+      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+      property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+      
       Method childrenMethod = element.getClass().getMethod(property,
           new Class[] {});
+      Method imageMethod;
+      String imageSrc = null;
+      
+      property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getImagebinding();
+      
+      if(property != null){
+        property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+        imageMethod = element.getClass().getMethod(property);
+        imageSrc = (String) imageMethod.invoke(element);
 
+        ((XulTreeItem) row.getParent()).setImage(imageSrc);
+        
+      }
+      
       Collection<T> children = (Collection<T>) childrenMethod.invoke(element, new Object[] {});
+      
       XulTreeChildren treeChildren = null;
-
+      
       if (children != null && children.size() > 0) {
         treeChildren = (XulTreeChildren) getDocument().createElement(
             "treechildren");
         row.getParent().addChild(treeChildren);
       }
+
       for (T child : children) {
-        addTreeChild(child, treeChildren.addNewRow());
+
+        SwtTreeItem item = new SwtTreeItem(treeChildren);
+        item.setXulDomContainer(this.domContainer);
+        
+        SwtTreeRow newRow = new SwtTreeRow(item);
+        item.setRow(newRow);
+        treeChildren.addChild(item);
+        
+        addTreeChild(child, newRow);
       }
     } catch (Exception e) {
       logger.error("error adding elements", e);

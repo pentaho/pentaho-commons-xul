@@ -126,4 +126,8 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
       this.image = this.domContainer.getXulLoader().getRootDir()+src;
     }
     
+    public void setXulDomContainer(XulDomContainer container){
+      this.domContainer = container;
+    }
+    
   }

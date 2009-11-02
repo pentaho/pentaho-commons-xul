@@ -29,6 +29,7 @@ public class SwtTreeRow extends AbstractSwtXulContainer implements XulTreeRow {
     public SwtTreeRow(XulComponent parent) {
       super("treerow");
       setManagedObject("empty");
+      treeItem = (XulTreeItem) parent;
     }
 
     public void addCell(XulTreeCell cell) {

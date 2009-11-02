@@ -211,11 +211,11 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
       this.disabledBinding = property;
     }
 
-    public String getImage() {
+    public String getImagebinding() {
       return image;
     }
 
-    public void setImage(String img) {
+    public void setImagebinding(String img) {
       this.image = img;
     }
     
