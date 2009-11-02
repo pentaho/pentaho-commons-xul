@@ -110,4 +110,16 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
     
     initialized = true;
   }
+
+  public String getImage() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setImage(String src) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
 }
