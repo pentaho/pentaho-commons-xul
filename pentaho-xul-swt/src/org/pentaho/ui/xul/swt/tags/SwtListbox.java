@@ -34,7 +34,15 @@ private String binding;
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.container = container;
-    listBox = new List((Composite)parent.getManagedObject(), SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL);
+    
+    int style = SWT.BORDER | SWT.V_SCROLL;
+    if(self.getAttributeValue("seltype") != null && self.getAttributeValue("seltype").equals("multi")){
+      style |= SWT.MULTI; 
+    } else {
+      style |= SWT.SINGLE;
+    }
+    listBox = new List((Composite)parent.getManagedObject(), style);
+    
     setManagedObject(listBox);
   }
 
