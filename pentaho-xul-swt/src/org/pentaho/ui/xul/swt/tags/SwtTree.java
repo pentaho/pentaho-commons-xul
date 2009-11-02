@@ -673,6 +673,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   public void setSelectedRows(int[] rows) {
     if(this.isHierarchical){
+      System.out.println("selIdx: "+rows[0]);
       Object selected = getSelectedTreeItem(rows);
       changeSupport.firePropertyChange("selectedItem", null, selected);
     } else {
@@ -925,16 +926,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
       property = "get"+(property.substring(0,1).toUpperCase() + property.substring(1));
-      Method childrenMethod = null;
-      try{
-        childrenMethod = elements.toArray()[0].getClass().getMethod(property, new Class[]{});
-      } catch(NoSuchMethodException e){
-        // Since this tree is built recursively, when at a leaf it will throw this exception.
-        logger.debug(e);
-        return null;
-      }
       
-      FindSelectedItemTuple tuple = findSelectedItem(this.elements, childrenMethod, new FindSelectedItemTuple(vals[0]));
+      int selectedIdx = vals[0];
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(selectedIdx));
       return tuple != null ? tuple.selectedItem : null;
     } 
     return null;
@@ -954,18 +948,24 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
   
-  private FindSelectedItemTuple findSelectedItem(Object parent, Method childrenMethod, FindSelectedItemTuple tuple){
+  private FindSelectedItemTuple findSelectedItem(Object parent, String childrenMethodProperty, FindSelectedItemTuple tuple){
     if(tuple.curpos == tuple.selectedIndex){
       tuple.selectedItem = parent;
       return tuple;
     }
     Collection children = null;
+    Method childrenMethod = null;
     try{
-      if(childrenMethod.getDeclaringClass().isAssignableFrom(parent.getClass())){
-        children = (Collection) childrenMethod.invoke(parent, new Object[]{});
-      } else if(parent instanceof Collection){
+      childrenMethod = parent.getClass().getMethod(childrenMethodProperty, new Class[]{});
+    } catch(NoSuchMethodException e){
+      if(parent instanceof Collection){
         children = (Collection) parent;
       }
+    }
+    try{
+      if(childrenMethod != null){
+        children = (Collection) childrenMethod.invoke(parent, new Object[]{});
+      } 
     } catch(Exception e){
       logger.error(e);
       return null;
@@ -977,7 +977,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     
     for(Object child : children){
       tuple.curpos++;
-      findSelectedItem(child, childrenMethod, tuple);
+      findSelectedItem(child, childrenMethodProperty, tuple);
       if(tuple.selectedItem != null){
         return tuple;
       }
