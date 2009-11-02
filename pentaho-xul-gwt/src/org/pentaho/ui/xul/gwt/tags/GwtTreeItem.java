@@ -80,7 +80,18 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   }
 
   public void adoptAttributes(XulComponent component) {
+    // TODO Auto-generated method stub 
+  }
+
+  public String getImage() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setImage(String src) {
     // TODO Auto-generated method stub
     
   }
+  
+  
 }

@@ -213,4 +213,16 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   public void setDisabledbinding(String property) {
     this.disabledBinding = property;
   }
+
+  public String getImage() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setImage(String img) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
 }
