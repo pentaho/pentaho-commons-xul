@@ -206,12 +206,12 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
     this.disabledBinding = property;
   }
 
-  public String getImage() {
+  public String getImagebinding() {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public void setImage(String img) {
+  public void setImagebinding(String img) {
     // TODO Auto-generated method stub
     
   }
