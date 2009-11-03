@@ -657,6 +657,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     if (this.isHierarchical) {
       this.tree.setInput(this);
       this.tree.refresh();
+      if ("true".equals(getAttributeValue("expanded"))) {
+        tree.expandAll();
+      }
     } else {
 
       setupColumns();
