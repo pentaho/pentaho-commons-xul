@@ -312,9 +312,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     }
     
     Control[] controls = dialog.getMainArea().getChildren();
-    System.out.println("re-parenting: ");
     for(Control c : controls){
-      System.out.println(c.toString());
       c.setParent(newDialog.getMainArea());
     }
     setButtons(newDialog);
