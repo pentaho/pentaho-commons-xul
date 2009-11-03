@@ -10,6 +10,9 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditor;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
+import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -24,6 +27,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -47,6 +52,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -67,8 +73,10 @@ import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableContentProvider;
+import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeLabelProvider;
+import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeTextCellEditor;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
@@ -165,11 +173,30 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   private void setupTree() {
 
-    tree.setContentProvider(new XulTreeContentProvider(this));
+    tree.setCellEditors(new CellEditor[]{new XulTreeTextCellEditor(tree.getTree())});
+    tree.setCellModifier(new XulTreeColumnModifier(this));
+
     tree.setLabelProvider(new XulTreeLabelProvider(this));
+    tree.setContentProvider(new XulTreeContentProvider(this));
+
     tree.setInput(this);
     tree.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+    tree.setColumnProperties(new String[] { "0" });
+    //TreeViewerColumn tc = new TreeViewerColumn(tree, SWT.LEFT);
+    
+    
+    TreeViewerEditor.create(tree, new 
+        ColumnViewerEditorActivationStrategy(tree){
 
+          @Override
+          protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+            return super.isEditorActivationEvent(event);
+          }
+      
+    }, ColumnViewerEditor.DEFAULT);
+
+    
+    
     tree.addSelectionChangedListener(new ISelectionChangedListener() {
       public void selectionChanged(SelectionChangedEvent event) {
         // if the selection is empty clear the label
@@ -676,7 +703,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   public void setSelectedRows(int[] rows) {
     if(this.isHierarchical){
-      System.out.println("selIdx: "+rows[0]);
       Object selected = getSelectedTreeItem(rows);
       changeSupport.firePropertyChange("selectedItem", null, selected);
     } else {
@@ -844,7 +870,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         // Tree Bindings are one-way for now as you cannot edit tree nodes
         DefaultBinding binding = new DefaultBinding(element,
             exp.getModelAttr(), cell, exp.getXulCompAttr());
-        binding.setBindingType(Binding.Type.ONE_WAY);
+        if(this.isEditable()){
+          binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        } else {
+          binding.setBindingType(Binding.Type.ONE_WAY);
+        }
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
       }
