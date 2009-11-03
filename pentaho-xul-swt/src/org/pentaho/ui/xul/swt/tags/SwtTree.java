@@ -961,6 +961,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       property = "get"+(property.substring(0,1).toUpperCase() + property.substring(1));
       
       int selectedIdx = vals[0];
+      if (selectedIdx == -1) {
+        return null;
+      }
       FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(selectedIdx));
       return tuple != null ? tuple.selectedItem : null;
     } 
