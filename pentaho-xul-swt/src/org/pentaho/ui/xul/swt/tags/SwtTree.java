@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -34,6 +35,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -125,6 +128,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private TreeViewer tree;
   private int selectedIndex = -1;
 
+  protected boolean controlDown;
+
+  private int[] selectedRows;
+
   public SwtTree(Element self, XulComponent parent, XulDomContainer container,
       String tagName) {
     super(tagName);
@@ -195,7 +202,43 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       
     }, ColumnViewerEditor.DEFAULT);
 
+    tree.getTree().addKeyListener(new KeyAdapter() {
+      public void keyPressed(KeyEvent event) {
+        switch (event.keyCode) {
+          case SWT.CTRL:
+            SwtTree.this.controlDown = true;
+            break;
+          case SWT.ESC:
+            // End editing session
+            tree.getTree().deselectAll();
+            setSelectedRows(new int[]{});
+            break;
+          }
+      }
+
+      @Override
+      public void keyReleased(KeyEvent event) {
+        switch (event.keyCode) {
+          case SWT.CTRL:
+            SwtTree.this.controlDown = false;
+            break;
+        }
+      }
+      
+    });
     
+    // Add a focus listener to clear the contol down selector
+    tree.getTree().addFocusListener(new FocusListener(){
+
+      public void focusGained(FocusEvent arg0) {}
+
+      public void focusLost(FocusEvent arg0) {
+        if(tree.getCellEditors()[0].isActivated() == false){
+         SwtTree.this.controlDown = false;
+        }
+      }
+      
+    });
     
     tree.addSelectionChangedListener(new ISelectionChangedListener() {
       public void selectionChanged(SelectionChangedEvent event) {
@@ -221,8 +264,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           } else {
             setSelectedIndex(selected[0]);
           }
-          
-          setSelectedRows(selected);
+
+          if(SwtTree.this.controlDown && Arrays.equals(selected, selectedRows) && 
+              tree.getCellEditors()[0].isActivated() == false){
+            tree.getTree().deselectAll();
+            setSelectedRows(new int[]{});
+          } else {
+            setSelectedRows(selected);
+          }
           
         }
       }
@@ -704,12 +753,19 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   public void setSelectedRows(int[] rows) {
     if(this.isHierarchical){
       Object selected = getSelectedTreeItem(rows);
-      changeSupport.firePropertyChange("selectedItem", null, selected);
+      int prevSelected = -1;
+      if(selectedRows != null && selectedRows.length > 0){
+        prevSelected = selectedRows[0]; // single selection only for now
+      }
+      changeSupport.firePropertyChange("selectedItem", prevSelected, selected);
     } else {
       table.getTable().setSelection(rows);
     }
-    this.selectedIndex = rows[0];
-    changeSupport.firePropertyChange("selectedRows", null, rows);
+    if(rows.length > 0){
+      this.selectedIndex = rows[0]; // single selection only for now
+    }
+    changeSupport.firePropertyChange("selectedRows", this.selectedRows, rows);
+    this.selectedRows = rows;
 
   }
 
