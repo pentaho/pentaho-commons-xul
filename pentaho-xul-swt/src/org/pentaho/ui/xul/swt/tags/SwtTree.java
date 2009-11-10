@@ -966,7 +966,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
             "treechildren");
         row.getParent().addChild(treeChildren);
       }
-
+      if(children == null){
+        return;
+      }
       for (T child : children) {
 
         SwtTreeItem item = new SwtTreeItem(treeChildren);

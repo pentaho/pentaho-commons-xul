@@ -205,6 +205,9 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
       popup.removeChild(menuItem);
     }
 
+    if(tees == null){
+      return;
+    }
     for (T t : tees) {
       try{
         XulMenuitem item = (XulMenuitem) xulDomContainer.getDocumentRoot().createElement("menuitem");
