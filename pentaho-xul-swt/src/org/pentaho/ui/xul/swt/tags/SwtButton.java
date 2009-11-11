@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.io.InputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -7,6 +9,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulButton;
@@ -96,7 +99,18 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public void setImage(String src) {
     this.image = src;   
-    button.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src)));
+    Display d = ((Composite) parent.getManagedObject()).getDisplay();
+    if(d == null){
+      d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
+    }
+    
+    InputStream in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src);
+    if(in == null){
+      logger.warn("could not find image: "+src);
+      return;
+    }
+    button.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), in));
+    
   }
 
   public String getDir() {

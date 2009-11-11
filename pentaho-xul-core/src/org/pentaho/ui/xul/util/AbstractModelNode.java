@@ -16,7 +16,7 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
  * @param <T>
  *          type of children
  */
-public class AbstractModelNode<T> extends XulEventSourceAdapter implements
+public abstract class AbstractModelNode<T> extends XulEventSourceAdapter implements
     List<T>, Iterable<T> {
 
   protected List<T> children = new ArrayList<T>();
@@ -32,6 +32,9 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
   
   public AbstractModelNode(List<T> children) {
     Collections.copy(this.children, children);
+    for(T t : this.children){
+      onAdd(t);
+    }
   }
   
   public AbstractModelNode getParent(){
@@ -54,12 +57,16 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
 
   public boolean add(T child) {
     boolean retVal = this.children.add(child);
+    onAdd(child);
+    
     fireCollectionChanged();
     return retVal;
   }
 
   public T remove(int idx) {
     T t = children.remove(idx);
+    onRemove(t);
+    
     fireCollectionChanged();
     return t;
   }
@@ -69,6 +76,7 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
       throw new IllegalArgumentException("Child does not exist in collection");
     }
     boolean retVal = this.children.remove(child);
+    onRemove((T) child);
     fireCollectionChanged();
     return retVal;
   }
@@ -79,6 +87,7 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
           + ") is greater than collection length");
     }
     T retVal = this.children.remove(pos);
+    onRemove(retVal);
     fireCollectionChanged();
     return retVal;
   }
@@ -88,6 +97,9 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
   }
 
   public void clear() {
+    for(T t : this.children){
+      onRemove(t);
+    }
     this.children.clear();
     fireCollectionChanged();
   }
@@ -143,6 +155,9 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
   }
 
   public boolean addAll(Collection<? extends T> c) {
+    for(T t : c){
+      onRemove(t);
+    }
     return this.children.addAll(c);
   }
 
@@ -167,6 +182,9 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
 
   public boolean removeAll(Collection<?> c) {
     boolean retVal = this.children.removeAll(c);
+    for(Object t : c){
+      onRemove((T) t);
+    }
 
     fireCollectionChanged();
     return retVal;
@@ -193,10 +211,20 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
 
   public void add(int index, T element) {
     children.add(index, element);
+    onAdd(element);
+    fireCollectionChanged();
   }
 
   public boolean addAll(int index, Collection<? extends T> c) {
-    return children.addAll(index, c);
+
+    boolean retVal = children.addAll(index, c);
+    if(retVal){
+      for(T t : c){
+        onAdd(t);
+      }
+    }
+    fireCollectionChanged();
+    return retVal;
   }
 
   public T get(int index) {
@@ -230,6 +258,13 @@ public class AbstractModelNode<T> extends XulEventSourceAdapter implements
       newList.add(children.get(i));
     }
     return newList;
+  }
+  
+  public void onAdd(T child){
+    
+  }
+  public void onRemove(T child){
+    
   }
 
 }
