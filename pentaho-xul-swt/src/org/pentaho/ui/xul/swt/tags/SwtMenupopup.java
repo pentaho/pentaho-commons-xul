@@ -30,13 +30,16 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
     this.parent = parent;
     if(parent.getManagedObject() instanceof MenuItem){
       Shell shell = null;
-      if (domContainer.getOuterContext() != null){
-        shell = (Shell) domContainer.getOuterContext();
-      }
+ 
       // only build if a child of a top level menu, otherwise it will be build recursively by a parent
       if (shell == null){
         XulComponent p = parent;
+        
         while(p != null && p instanceof XulRoot == false){
+          if(p instanceof XulMenubar && p.getAttributeValue("parenttoouter") != null && p.getAttributeValue("parenttoouter").equals("true")){
+            shell = (Shell) domContainer.getOuterContext();
+            break;
+          }
           p = p.getParent();
         }
         if(p != null && p instanceof XulRoot){

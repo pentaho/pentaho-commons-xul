@@ -21,8 +21,11 @@ public class SwtMenubar extends AbstractSwtXulContainer implements XulMenubar {
   public SwtMenubar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menubar");
 
-    menuBar = new Menu ((Shell) parent.getManagedObject(), SWT.BAR);
-    ((Shell) parent.getManagedObject()).setMenuBar(menuBar);
+    String attr = self.getAttributeValue("parenttoouter");
+    Shell shell = (attr != null && attr.equals("true")) ? (Shell) domContainer.getOuterContext() : (Shell) parent.getManagedObject(); 
+    menuBar = new Menu (shell, SWT.BAR);
+    
+    shell.setMenuBar(menuBar);
     setManagedObject(menuBar);
     this.parent = parent;
   }
