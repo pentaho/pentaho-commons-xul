@@ -61,6 +61,7 @@ public class SwtXulLoader extends AbstractXulLoader{
     parser.registerHandler("MENULIST", "org.pentaho.ui.xul.swt.tags.SwtMenuList");
     parser.registerHandler("MENUPOPUP", "org.pentaho.ui.xul.swt.tags.SwtMenupopup");
     parser.registerHandler("MENUITEM", "org.pentaho.ui.xul.swt.tags.SwtMenuitem");
+    parser.registerHandler("MENUSEPARATOR", "org.pentaho.ui.xul.swt.tags.SwtMenuseparator");
     parser.registerHandler("MENU", "org.pentaho.ui.xul.swt.tags.SwtMenu");
     parser.registerHandler("MENUBAR", "org.pentaho.ui.xul.swt.tags.SwtMenubar");
     parser.registerHandler("RADIOGROUP", "org.pentaho.ui.xul.swt.tags.SwtRadioGroup");

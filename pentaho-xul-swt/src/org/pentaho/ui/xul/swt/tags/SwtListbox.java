@@ -30,7 +30,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   String onSelect = null;
   private XulDomContainer container;
 
-private String binding;
+  private String binding;
+  private Collection elements;
+
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.container = container;
@@ -194,6 +196,7 @@ private String binding;
   public <T> void setElements(Collection<T> elements) {
     logger.info("SetElements on listbox called: collection has "+elements.size()+" rows");
     
+    this.elements = elements;
     listBox.removeAll();
     for (T t : elements) {
       SwtListitem item = null;

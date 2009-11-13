@@ -2,6 +2,9 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -13,11 +16,15 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   private static final Log logger = LogFactory.getLog(SwtMenuitem.class);
   private String onCommand;
   private boolean disabled = false;
+  private MenuItem item;
   
   public SwtMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menuitem");
     setManagedObject("empty");
-    
+    if(parent.getManagedObject() != null){
+      item = new MenuItem((Menu) parent.getManagedObject(), SWT.PUSH);
+    }
+
   }
 
   private String acceltext = "";
@@ -60,6 +67,9 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   
   public void setLabel(String label) {
     this.label = label;
+    if(item != null){
+      item.setText(label);
+    }
   }
 
   public String getImage() {
