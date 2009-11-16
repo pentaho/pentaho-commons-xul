@@ -23,7 +23,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   public SwtMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menuitem");
     setManagedObject("empty");
-    if(parent.getManagedObject() != null){
+    if(parent.getManagedObject() != null && parent.getManagedObject() instanceof Menu){
       item = new MenuItem((Menu) parent.getManagedObject(), SWT.PUSH);
       item.addSelectionListener(new SelectionAdapter(){
         @Override
