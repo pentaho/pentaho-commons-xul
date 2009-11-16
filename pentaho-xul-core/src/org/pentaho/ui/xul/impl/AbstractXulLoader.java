@@ -9,9 +9,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -143,11 +147,22 @@ public abstract class AbstractXulLoader implements XulLoader {
 
     setRootDir(resource);
 
+    String resStr = resource.replace(".xul", "");
     ResourceBundle res;
     try {
-      res = ResourceBundle.getBundle(resource.replace(".xul", ""));
+      res = ResourceBundle.getBundle(resStr);
     } catch (MissingResourceException e) {
-      return loadXul(doc);
+      
+      URL url = null;
+      try{
+        url = new File(".").toURL();
+      } catch(MalformedURLException ex){}
+      URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
+      try{
+        res = ResourceBundle.getBundle(resStr, Locale.getDefault(), cls);
+      } catch(MissingResourceException ex){
+        return loadXul(doc);
+      }
     }
 
     return loadXul(resource, res);
@@ -176,7 +191,18 @@ public abstract class AbstractXulLoader implements XulLoader {
     try {
       res = ResourceBundle.getBundle(resource.replace(".xul", ""));
     } catch (MissingResourceException e) {
-      return loadXulFragment(doc);
+
+      URL url = null;
+      try{
+        url = new File(".").toURL();
+      } catch(MalformedURLException ex){}
+      URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
+      try{
+        res = ResourceBundle.getBundle(resource.replace(".xul", ""), Locale.getDefault(), cls);
+      } catch(MissingResourceException ex){
+        return loadXulFragment(doc);
+      }
+      
     }
     return loadXulFragment(resource, res);
   }
@@ -215,7 +241,17 @@ public abstract class AbstractXulLoader implements XulLoader {
         output = ResourceBundleTranslator.translate(output, res);
         resourceBundleList.add((ResourceBundle) res);  
       } catch (MissingResourceException e) {
-        continue;
+        URL url = null;
+        try{
+          url = new File(".").toURL();
+        } catch(MalformedURLException ex){}
+        URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
+        try{
+          resourceBundleList.add(ResourceBundle.getBundle(includeSrc.replace(".xul", ""), Locale.getDefault(), cls));
+        } catch(MissingResourceException ex){
+          continue;
+        }
+        
       } catch (IOException e) {
 
         throw new XulException(e);
@@ -231,7 +267,16 @@ public abstract class AbstractXulLoader implements XulLoader {
         output = ResourceBundleTranslator.translate(output, res);
         resourceBundleList.add((ResourceBundle) res);  
       } catch (MissingResourceException e) {
-        continue;
+        URL url = null;
+        try{
+          url = new File(".").toURL();
+        } catch(MalformedURLException ex){}
+        URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
+        try{
+          resourceBundleList.add(ResourceBundle.getBundle(resource, Locale.getDefault(), cls));
+        } catch(MissingResourceException ex){
+          continue;
+        }
       } catch (IOException e) {
 
         throw new XulException(e);
