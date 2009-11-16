@@ -48,7 +48,12 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
       return cell.getLabel() != null ? cell.getLabel() : cell.getLabel();
     case COMBOBOX:
     case EDITABLECOMBOBOX:
-      return "" + ((Vector) cell.getValue()).get(cell.getSelectedIndex());
+      Vector vec = (Vector) cell.getValue();
+      if(vec != null  && vec.size() > cell.getSelectedIndex()){
+        return "" + vec.get(cell.getSelectedIndex());
+      } else {
+        return "";
+      }
     case TEXT:
       return cell.getLabel() != null ? cell.getLabel() : "";
     default:

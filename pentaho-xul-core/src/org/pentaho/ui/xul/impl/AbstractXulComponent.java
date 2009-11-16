@@ -62,6 +62,8 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   protected Align alignment;
 
+  protected String context, popup;
+  
   public AbstractXulComponent(Element element) {
     this.element = element;
 
@@ -321,6 +323,24 @@ public abstract class AbstractXulComponent implements XulComponent {
       logger.error(e);
     }
   }
+
+  public String getContext() {
+    return context;
+  }
+
+  public String getPopup() {
+    return popup;
+  }
+
+  public void setContext(String id) {
+    this.context = id;
+  }
+
+  public void setPopup(String id) {
+    this.popup = id;
+  }
+  
+  
 
   
 }

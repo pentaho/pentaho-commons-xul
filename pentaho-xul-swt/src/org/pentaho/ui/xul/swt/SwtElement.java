@@ -4,11 +4,14 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
@@ -17,11 +20,14 @@ import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
+import org.pentaho.ui.xul.swt.tags.SwtButton;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwtElement extends AbstractXulComponent {
   private static final long serialVersionUID = -4407080035694005764L;
 
+  private static final Log logger = LogFactory.getLog(SwtElement.class);
+  
   // Per XUL spec, STRETCH is the default align value.
   private SwtAlign align = SwtAlign.STRETCH;
 
@@ -279,6 +285,22 @@ public class SwtElement extends AbstractXulComponent {
 
   public void adoptAttributes(XulComponent component) {
     throw new NotImplementedException();
+  }
+  
+
+  @Override
+  public void onDomReady() {
+    super.onDomReady();
+    if(this.context != null){
+      XulComponent pop = this.getDocument().getElementById(context);
+      if(pop == null){
+        logger.error("could not find popup menu ("+context+") to add to this component");
+      } else {
+        if(getManagedObject() instanceof Control){
+          ((Control) getManagedObject()).setMenu((Menu) pop.getManagedObject());
+        }
+      }
+    }
   }
 
 }

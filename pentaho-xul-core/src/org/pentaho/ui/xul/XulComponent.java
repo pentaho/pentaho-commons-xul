@@ -177,6 +177,20 @@ public interface XulComponent extends Element, XulEventSource {
    * @return String specifying the alignment [start, center, end].
    */
   public String getAlign();
+  
+  /**
+   * Sets the ID of the popup menu to show on context action (right-click, etc)
+   * @param id
+   */
+  public void setContext(String id);
+  public String getContext();
+  
+  /**
+   * Sets the ID of the popup menu to show when control is clicked. (drop-downs)
+   * @param id
+   */
+  public void setPopup(String id);
+  public String getPopup();
 
 
   

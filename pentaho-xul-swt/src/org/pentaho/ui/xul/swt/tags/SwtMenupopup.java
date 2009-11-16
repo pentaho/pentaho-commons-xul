@@ -28,34 +28,37 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
   public SwtMenupopup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menupopup");
     this.parent = parent;
-    if(parent.getManagedObject() instanceof MenuItem){
-      Shell shell = null;
- 
-      // only build if a child of a top level menu, otherwise it will be build recursively by a parent
-      if (shell == null){
-        XulComponent p = parent;
-        
-        while(p != null && p instanceof XulRoot == false){
-          if(p instanceof XulMenubar && p.getAttributeValue("parenttoouter") != null 
-              && p.getAttributeValue("parenttoouter").equals("true") 
-              && domContainer.getOuterContext() != null){
-            shell = (Shell) domContainer.getOuterContext();
-            break;
-          }
-          p = p.getParent();
+    Shell shell = null;
+    
+    // only build if a child of a top level menu, otherwise it will be build recursively by a parent
+    if (shell == null){
+      XulComponent p = parent;
+      
+      while(p != null && p instanceof XulRoot == false){
+        if(p instanceof XulMenubar && p.getAttributeValue("parenttoouter") != null 
+            && p.getAttributeValue("parenttoouter").equals("true") 
+            && domContainer.getOuterContext() != null){
+          shell = (Shell) domContainer.getOuterContext();
+          break;
         }
-        if(p != null && p instanceof XulRoot){
-          shell = (Shell) p.getManagedObject();
-        }
+        p = p.getParent();
       }
-
+      if(p != null && p instanceof XulRoot){
+        shell = (Shell) p.getManagedObject();
+      }
+    }
+    
+    if(parent.getManagedObject() instanceof MenuItem){
       Menu flyout = new Menu(shell, SWT.DROP_DOWN);
       ((MenuItem) parent.getManagedObject()).setMenu(flyout);
       menu = flyout;
       setManagedObject(flyout);
       
+    } else if(parent instanceof XulMenuList){
+      // not fully live, elements generated in parent layout
     } else {
-      
+      menu = new Menu(shell, SWT.POP_UP);
+      setManagedObject(menu);
     }
   }
 

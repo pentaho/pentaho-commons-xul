@@ -25,6 +25,15 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     setManagedObject("empty");
     if(parent.getManagedObject() != null){
       item = new MenuItem((Menu) parent.getManagedObject(), SWT.PUSH);
+      item.addSelectionListener(new SelectionAdapter(){
+        @Override
+        public void widgetSelected(SelectionEvent arg0) {
+          String command = SwtMenuitem.this.onCommand;
+          if(command != null){
+            invoke(command);
+          }
+        }
+      });
     }
 
   }
@@ -127,14 +136,6 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
 
   public void setCommand(final String command) {
     this.onCommand = command;
-    if(item != null){
-      item.addSelectionListener(new SelectionAdapter(){
-        @Override
-        public void widgetSelected(SelectionEvent arg0) {
-          invoke(command);
-        }
-      });
-    }
   }
   
   public String toString(){
