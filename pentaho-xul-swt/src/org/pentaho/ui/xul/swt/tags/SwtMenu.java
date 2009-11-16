@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.swt.tags;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.jface.bindings.keys.KeyStroke;
 import org.eclipse.swt.SWT;
@@ -113,12 +114,26 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
 
   public void setAcceltext(String accel) {
     this.accel = accel;
-    //menu.setAccelerator(KeyStroke.getKeyStroke(accel));
   }
 
   public void setAccesskey(String accessKey) {
     if(header != null){
-      header.setAccelerator(accessKey.charAt(0));
+      int mask = 0;
+      if(accessKey.indexOf("ctrl") > -1){
+        mask += SWT.CTRL;
+      }
+      if(accessKey.indexOf("shift") > -1){
+        mask += SWT.SHIFT;
+      }
+      if(accessKey.indexOf("alt") > -1){
+        mask += SWT.ALT;
+      }
+      String remainder = accessKey.replaceAll("ctrl", "").replaceAll("shift", "").replaceAll("alt", "").replaceAll("-","").trim();
+      if(remainder.length() == 1){
+        mask += remainder.charAt(0);
+      }
+      
+      header.setAccelerator(mask);
     }
   }
 

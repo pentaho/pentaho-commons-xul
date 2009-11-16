@@ -51,12 +51,41 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
 
   public void setAcceltext(String accel) {
     this.acceltext = accel;
+    setText();
+  }
+  
+  private void setText(){
+    if(item != null){
+      String text = "";
+      if(this.label != null){
+        text += this.label;
+      }
+      text += "\t"+acceltext;
+      item.setText(text);
+    }
   }
 
   public void setAccesskey(String accessKey) {
-    this.accesskey = accessKey;
+    
+    if(item != null){
+      int mask = 0;
+      if(accessKey.indexOf("ctrl") > -1){
+        mask += SWT.CTRL;
+      }
+      if(accessKey.indexOf("shift") > -1){
+        mask += SWT.SHIFT;
+      }
+      if(accessKey.indexOf("alt") > -1){
+        mask += SWT.ALT;
+      }
+      String remainder = accessKey.replaceAll("ctrl", "").replaceAll("shift", "").replaceAll("alt", "").replaceAll("-", "").trim();
+      if(remainder.length() == 1){
+        mask += remainder.toUpperCase().charAt(0);
+      }
+      
+      item.setAccelerator(mask);
+    }
   }
-
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
   }
@@ -67,9 +96,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   
   public void setLabel(String label) {
     this.label = label;
-    if(item != null){
-      item.setText(label);
-    }
+    setText();
   }
 
   public String getImage() {
