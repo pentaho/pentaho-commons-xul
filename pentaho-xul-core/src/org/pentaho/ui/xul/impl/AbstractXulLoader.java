@@ -1,6 +1,9 @@
 package org.pentaho.ui.xul.impl;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -136,7 +139,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException {
 
-    Document doc = getDocFromClasspath(resource);
+    Document doc = findDocument(resource);
 
     setRootDir(resource);
 
@@ -153,7 +156,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public XulDomContainer loadXul(String resource, Object bundle) throws XulException {
 
-    final Document doc = getDocFromClasspath(resource);
+    final Document doc = findDocument(resource);
 
     setRootDir(resource);
     mainBundle = (ResourceBundle) bundle;
@@ -165,7 +168,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public XulDomContainer loadXulFragment(String resource) throws IllegalArgumentException, XulException {
 
-    Document doc = getDocFromClasspath(resource);
+    Document doc = findDocument(resource);
 
     setRootDir(resource);
 
@@ -346,7 +349,18 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
-  protected Document getDocFromClasspath(String src) throws XulException {
+  protected Document findDocument(String src) throws XulException{
+    Document doc = getDocFromClasspath(src);
+    if(doc == null){
+      doc = getDocFromFile(src);
+    }
+    if(doc == null){
+      throw new XulException("Can not locate Xul document [" + src + "]");
+    }
+    return doc;
+  }
+  
+  protected Document getDocFromClasspath(String src) throws XulException{
     InputStream in = getClass().getClassLoader().getResourceAsStream(this.getRootDir() + src);
     if (in != null) {
       Document doc = getDocFromInputStream(in);
@@ -357,14 +371,43 @@ public abstract class AbstractXulLoader implements XulLoader {
       if (in != null) {
         return getDocFromInputStream(in);
       } else {
-        throw new XulException("Can no locate Xul document [" + src + "]");
+        return null;
+        //throw new XulException("Can no locate Xul document [" + src + "]");
       }
     }
   }
 
+  protected Document getDocFromFile(String src) throws XulException{
+
+    File f = new File(this.getRootDir() + src);
+    if (f.exists()) {
+      
+      Document doc;
+      try {
+        doc = getDocFromInputStream(new FileInputStream(f));
+        return doc;
+      } catch (FileNotFoundException ignored) {}
+    } else {
+      //try fully qualified name
+      f = new File(src);
+      if (f.exists()) {
+
+        Document doc;
+        try {
+          doc = getDocFromInputStream(new FileInputStream(f));
+          return doc;
+        } catch (FileNotFoundException ignored) {}
+      } else {
+        return null;
+        //throw new XulException("Can no locate Xul document [" + src + "]");
+      }
+    }
+    return null;
+  }
+  
   protected void processOverlay(String overlaySrc, Document doc) {
     try {
-      final Document overlayDoc = getDocFromClasspath(overlaySrc);
+      final Document overlayDoc = findDocument(overlaySrc);
       processOverlay(overlayDoc.getRootElement(), doc.getRootElement());
     } catch (Exception e) {
       logger.error("Could not load include overlay document: " + overlaySrc, e);
@@ -598,7 +641,7 @@ public abstract class AbstractXulLoader implements XulLoader {
   public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)
       throws XulException {
 
-    final Document doc = getDocFromClasspath(overlaySrc);
+    final Document doc = findDocument(overlaySrc);
 
     Element overlayRoot = doc.getRootElement();
 
