@@ -3,6 +3,8 @@ package org.pentaho.ui.xul.swt.tags;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.pentaho.ui.xul.XulComponent;
@@ -125,7 +127,14 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
 
   public void setCommand(final String command) {
     this.onCommand = command;
-    
+    if(item != null){
+      item.addSelectionListener(new SelectionAdapter(){
+        @Override
+        public void widgetSelected(SelectionEvent arg0) {
+          invoke(command);
+        }
+      });
+    }
   }
   
   public String toString(){

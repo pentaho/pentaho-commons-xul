@@ -36,7 +36,9 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
         XulComponent p = parent;
         
         while(p != null && p instanceof XulRoot == false){
-          if(p instanceof XulMenubar && p.getAttributeValue("parenttoouter") != null && p.getAttributeValue("parenttoouter").equals("true")){
+          if(p instanceof XulMenubar && p.getAttributeValue("parenttoouter") != null 
+              && p.getAttributeValue("parenttoouter").equals("true") 
+              && domContainer.getOuterContext() != null){
             shell = (Shell) domContainer.getOuterContext();
             break;
           }
