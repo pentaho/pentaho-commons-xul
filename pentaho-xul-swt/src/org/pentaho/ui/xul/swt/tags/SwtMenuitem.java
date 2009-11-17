@@ -99,10 +99,13 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   }
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
+    if (item != null) {
+      item.setEnabled(!disabled);
+    }
   }
 
   public void setDisabled(String disabled) {
-    this.disabled = Boolean.parseBoolean(disabled);
+    setDisabled(Boolean.parseBoolean(disabled));
   }
   
   public void setLabel(String label) {
