@@ -24,7 +24,11 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     super("menuitem");
     setManagedObject("empty");
     if(parent.getManagedObject() != null && parent.getManagedObject() instanceof Menu){
-      item = new MenuItem((Menu) parent.getManagedObject(), SWT.PUSH);
+      int style = SWT.PUSH;
+      if(self.getAttributeValue("type").equals("checkbox")){
+        style = SWT.CHECK;
+      }
+      item = new MenuItem((Menu) parent.getManagedObject(), style);
       item.addSelectionListener(new SelectionAdapter(){
         @Override
         public void widgetSelected(SelectionEvent arg0) {
@@ -34,6 +38,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
           }
         }
       });
+      
     }
 
   }
@@ -118,11 +123,14 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   }
 
   public boolean isSelected() {
-    return selected;
+    return (item != null)? item.getSelection() : selected;
   }
   
   public void setSelected(String selected){
     this.selected = Boolean.parseBoolean(selected);
+    if(item != null){
+      item.setSelection(this.selected);
+    }
   }
   
   public void setSelected(boolean val){
