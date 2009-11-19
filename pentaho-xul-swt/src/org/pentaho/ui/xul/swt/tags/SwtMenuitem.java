@@ -28,7 +28,31 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
       if(self.getAttributeValue("type") != null && self.getAttributeValue("type").equals("checkbox")){
         style = SWT.CHECK;
       }
+
       item = new MenuItem((Menu) parent.getManagedObject(), style);
+      
+      item.addSelectionListener(new SelectionAdapter(){
+        @Override
+        public void widgetSelected(SelectionEvent arg0) {
+          String command = SwtMenuitem.this.onCommand;
+          if(command != null){
+            invoke(command);
+          }
+        }
+      });
+      
+    }
+
+  }
+  
+  public SwtMenuitem(XulComponent parent, XulDomContainer domContainer, String tagName, int pos) {
+    super("menuitem");
+    setManagedObject("empty");
+    if(parent.getManagedObject() != null && parent.getManagedObject() instanceof Menu){
+      int style = SWT.PUSH;
+      
+      item = new MenuItem((Menu) parent.getManagedObject(), style, pos);
+      
       item.addSelectionListener(new SelectionAdapter(){
         @Override
         public void widgetSelected(SelectionEvent arg0) {

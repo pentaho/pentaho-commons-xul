@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuList;
+import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.components.XulMenuseparator;
 import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.containers.XulMenubar;
@@ -32,9 +33,11 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
   private Shell shell;
   
   private XulComponent parent;
+  private XulDomContainer domContainer;
   
   public SwtMenu(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menu");
+    this.domContainer = domContainer;
     if (domContainer.getOuterContext() != null){
       shell = (Shell) domContainer.getOuterContext();
     }
@@ -147,6 +150,18 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
     if(header != null){
       header.setText(label);
     }
+  }
+  
+  public XulMenuitem createNewMenuitem(){
+    return createNewMenuitemAtPos(this.getChildNodes().size());
+  }
+  
+  public XulMenuitem createNewMenuitemAtPos(int pos){
+    if(pos > getChildNodes().size()){
+      pos = getChildNodes().size();
+    }
+    
+    return new SwtMenuitem(this, domContainer, "menuitem", pos);
   }
 
 }
