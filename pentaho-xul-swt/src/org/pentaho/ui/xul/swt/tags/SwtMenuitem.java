@@ -40,6 +40,8 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
           }
         }
       });
+
+      setManagedObject(item);
       
     }
 
@@ -62,7 +64,8 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
           }
         }
       });
-      
+
+      setManagedObject(item);
     }
 
   }
