@@ -1402,5 +1402,19 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public void registerCellRenderer(String key, TreeCellRenderer renderer) {
     
   }
+
+  public void collapseAll() {
+    if (this.isHierarchical){
+      // TODO: Not yet implemented
+    }
+    
+  }
+
+  public void expandAll() {
+    if (this.isHierarchical){
+      this.setExpanded(true);
+    }
+    
+  }
   
 }
