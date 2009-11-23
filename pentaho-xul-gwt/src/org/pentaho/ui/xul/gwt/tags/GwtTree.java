@@ -1135,4 +1135,18 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     
   }
 
+  public void collapseAll() {
+    if (this.isHierarchical()){
+      //TODO: Not yet implemented
+    }
+    
+  }
+
+  public void expandAll() {
+    if (this.isHierarchical()){
+       //TODO: not implemented yet
+    }
+    
+  }
+
 }
