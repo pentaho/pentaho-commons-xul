@@ -1,8 +1,12 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +35,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ControlAdapter;
@@ -252,11 +257,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
               .getSelection();
 
           int[] selected = new int[selection.size()];
+          List selectedItems = new ArrayList();
           
           int i=0;
           for(Object o : selection.toArray()){
             XulTreeItem selectedItem = (XulTreeItem) o;
-            selected[i++] = findSelectedIndex(new SearchBundle(),getRootChildren(), selectedItem).curPos;
+            SearchBundle b = findSelectedIndex(new SearchBundle(),getRootChildren(), selectedItem);
+            selected[i++] = b.curPos;
+            selectedItems.add(b.selectedItem);
           }
           
           if(selected.length == 0){
@@ -265,13 +273,17 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
             setSelectedIndex(selected[0]);
           }
 
+          int[] selectedRows = null;
           if(SwtTree.this.controlDown && Arrays.equals(selected, selectedRows) && 
               tree.getCellEditors()[0].isActivated() == false){
             tree.getTree().deselectAll();
-            setSelectedRows(new int[]{});
+            selectedRows = new int[]{};
           } else {
-            setSelectedRows(selected);
+            selectedRows = selected;
           }
+
+          changeSupport.firePropertyChange("selectedRows",null, selectedRows);
+          changeSupport.firePropertyChange("selectedItems", null, selectedItems);
           
         }
       }
@@ -282,6 +294,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private class SearchBundle {
     int curPos;
     boolean found;
+    Object selectedItem;
   }
 
   private SearchBundle findSelectedIndex(SearchBundle bundle,
@@ -289,6 +302,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     for (XulComponent c : children.getChildNodes()) {
       if (c == selectedItem) {
         bundle.found = true;
+        if(elements != null){
+          bundle.selectedItem = findSelectedTreeItem(bundle.curPos);
+        }
         return bundle;
       }
       bundle.curPos++;
@@ -301,6 +317,27 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
     }
     return bundle;
+  }
+  
+  private Object findSelectedTreeItem(int pos){
+
+    if(this.isHierarchical && this.elements != null){
+
+      if(elements == null || elements.size() == 0){
+        return null;
+      }
+
+      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+      property = "get"+(property.substring(0,1).toUpperCase() + property.substring(1));
+      
+      if (pos == -1) {
+        return null;
+      }
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(pos));
+      return tuple != null ? tuple.selectedItem : null;
+    } 
+    return null;
+
   }
 
 
@@ -316,10 +353,26 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     table.addSelectionChangedListener(new ISelectionChangedListener() {
       public void selectionChanged(SelectionChangedEvent event) {
+        
         IStructuredSelection selection = (IStructuredSelection) event
             .getSelection();
+        
         setSelectedIndex(getRootChildren().getChildNodes().indexOf(
             selection.getFirstElement()));
+        
+        int[] selectedRows = new int[selection.size()];
+        
+        int i=0;
+        for(Iterator it = selection.iterator(); it.hasNext();){
+          Object sel = it.next();
+          selectedRows[i] = getRootChildren().getChildNodes().indexOf(sel);
+          i++;
+        }
+
+        changeSupport.firePropertyChange("selectedRows",null, selectedRows);
+        Collection selectedItems = findSelectedTableRows(selectedRows);
+        changeSupport.firePropertyChange("selectedItems", null, selectedItems);
+        
       }
     });
 
@@ -340,6 +393,19 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     table.getTable().setEnabled(! this.disabled);
     table.refresh();
 
+  }
+  
+  private Collection findSelectedTableRows(int[] selectedRows){
+    if(elements == null){
+      return Collections.emptyList();
+    }
+    List selectedItems = new ArrayList();
+    for(int i=0; i<selectedRows.length; i++){
+      if(selectedRows[i] >= 0 &&  selectedRows[i] < elements.size()){
+        selectedItems.add(elements.toArray()[selectedRows[i]]);
+      }
+    }
+    return selectedItems;
   }
 
   private void resizeColumns(){
@@ -384,9 +450,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     
     changeSupport.firePropertyChange("selectedRows", null, new int[] { idx });
     if (this.onSelect != null) {
-
       invoke(this.onSelect, new Object[] { new Integer(idx) });
-
     }
   }
   
@@ -715,6 +779,45 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     } else {
       return new int[] {};
     }
+  }
+  
+  public Collection getSelectedItems(){
+    if(elements == null){
+      return null;
+    }
+
+    
+    if(isHierarchical()){
+
+      List selectedItems = new ArrayList();
+      IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+      
+      int i=0;
+      for(Object o : selection.toArray()){
+        XulTreeItem selectedItem = (XulTreeItem) o;
+        SearchBundle b = findSelectedIndex(new SearchBundle(),getRootChildren(), selectedItem);
+        selectedItems.add(b.selectedItem);
+      }
+      return selectedItems;
+    } else {
+
+      IStructuredSelection selection = (IStructuredSelection) table.getSelection();
+      
+      setSelectedIndex(getRootChildren().getChildNodes().indexOf(
+          selection.getFirstElement()));
+      
+      int[] selectedRows = new int[selection.size()];
+      
+      int i=0;
+      for(Iterator it = selection.iterator(); it.hasNext();){
+        Object sel = it.next();
+        selectedRows[i] = getRootChildren().getChildNodes().indexOf(sel);
+        i++;
+      }
+
+      return findSelectedTableRows(selectedRows);
+    }
+    
   }
 
   public void addTreeRow(XulTreeRow row) {
