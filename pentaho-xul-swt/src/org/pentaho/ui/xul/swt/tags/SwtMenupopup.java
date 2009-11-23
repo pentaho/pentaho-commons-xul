@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuList;
+import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.containers.XulMenubar;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulRoot;
@@ -25,10 +26,13 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
   Menu menu = null;
   Combo menulist = null;
   XulComponent parent;
+  private XulDomContainer domContainer;
+  
   public SwtMenupopup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menupopup");
     this.parent = parent;
     Shell shell = null;
+    this.domContainer = domContainer;
     
     // only build if a child of a top level menu, otherwise it will be build recursively by a parent
     if (shell == null){
@@ -70,7 +74,18 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
     return parent;
   }
   
+
+  public XulMenuitem createNewMenuitem(){
+    return createNewMenuitemAtPos(this.getChildNodes().size());
+  }
   
+  public XulMenuitem createNewMenuitemAtPos(int pos){
+    if(pos > getChildNodes().size()){
+      pos = getChildNodes().size();
+    }
+    
+    return new SwtMenuitem(this, domContainer, "menuitem", pos);
+  }
 }
 
   

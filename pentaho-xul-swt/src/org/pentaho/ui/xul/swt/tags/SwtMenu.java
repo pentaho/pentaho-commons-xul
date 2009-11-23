@@ -152,17 +152,6 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
     }
   }
   
-  public XulMenuitem createNewMenuitem(){
-    return createNewMenuitemAtPos(this.getChildNodes().size());
-  }
-  
-  public XulMenuitem createNewMenuitemAtPos(int pos){
-    if(pos > getChildNodes().size()){
-      pos = getChildNodes().size();
-    }
-    
-    return new SwtMenuitem(this, domContainer, "menuitem", pos);
-  }
 
 }
 
