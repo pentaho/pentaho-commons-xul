@@ -1191,6 +1191,18 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     // TODO Auto-generated method stub
     
   }
+
+  public void collapseAll() {
+    if (this.isHierarchical){
+      tree.collapseAll();
+    }
+  }
+
+  public void expandAll() {
+    if (this.isHierarchical){
+      tree.expandAll();
+    }
+  }
   
   
   
