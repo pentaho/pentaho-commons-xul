@@ -118,7 +118,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       }
     });
     
-    Composite c = new Composite((Composite) dialog.getMainDialogArea(), SWT.BORDER);
+    Composite c = new Composite((Composite) dialog.getMainDialogArea(), SWT.NONE);
     
     GridData gd = new GridData(GridData.FILL_BOTH);
     gd.grabExcessVerticalSpace = true;

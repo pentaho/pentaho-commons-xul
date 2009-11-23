@@ -25,7 +25,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   
   public SwtTabbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabbox");
-    tabFolder = new TabFolder ((Composite) parent.getManagedObject(), SWT.BORDER);
+    tabFolder = new TabFolder ((Composite) parent.getManagedObject(), SWT.NONE);
     setManagedObject(tabFolder);
   }
   
