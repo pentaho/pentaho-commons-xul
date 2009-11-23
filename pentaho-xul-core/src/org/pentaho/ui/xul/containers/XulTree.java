@@ -78,4 +78,7 @@ public interface XulTree extends XulContainer {
   
   void registerCellEditor(String key, TreeCellEditor editor);
   void registerCellRenderer(String key, TreeCellRenderer renderer);
+  
+  void expandAll();
+  void collapseAll();
 }
