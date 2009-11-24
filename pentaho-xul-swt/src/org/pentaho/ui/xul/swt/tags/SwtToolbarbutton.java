@@ -174,6 +174,13 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void setTooltiptext(String tooltip) {
+    super.setTooltiptext(tooltip);
+    button.setToolTipText(tooltip);
+  }
+  
   
   
 }
