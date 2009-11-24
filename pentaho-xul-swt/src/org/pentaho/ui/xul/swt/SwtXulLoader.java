@@ -71,6 +71,12 @@ public class SwtXulLoader extends AbstractXulLoader{
     parser.registerHandler("SPLITTER", "org.pentaho.ui.xul.swt.tags.SwtSplitter");
     parser.registerHandler("OVERLAY", "org.pentaho.ui.xul.swt.tags.SwtOverlay");
     
+
+    parser.registerHandler("TOOLBAR", "org.pentaho.ui.xul.swt.tags.SwtToolbar");
+
+    parser.registerHandler("TOOLBARSPACER", "org.pentaho.ui.xul.swt.tags.SwtToolbarspacer");
+    parser.registerHandler("TOOLBARBUTTON", "org.pentaho.ui.xul.swt.tags.SwtToolbarbutton");
+    
   }
 
   public XulLoader getNewInstance() throws XulException {
