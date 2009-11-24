@@ -285,6 +285,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           changeSupport.firePropertyChange("selectedRows",null, selectedRows);
           changeSupport.firePropertyChange("selectedItems", null, selectedItems);
           
+          //Single selection binding. 
+          Object selectedItem = (selectedItems.size() > 0) ? selectedItems.get(0) : null;
+          changeSupport.firePropertyChange("selectedItem", null, selectedItem);
+          
         }
       }
     });
@@ -372,6 +376,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         changeSupport.firePropertyChange("selectedRows",null, selectedRows);
         Collection selectedItems = findSelectedTableRows(selectedRows);
         changeSupport.firePropertyChange("selectedItems", null, selectedItems);
+        
+        //Single selection binding. 
+        Object selectedItem = (selectedItems.size() > 0) ? selectedItems.toArray()[0] : null;
+        changeSupport.firePropertyChange("selectedItem", null, selectedItem);
+        
         
       }
     });
