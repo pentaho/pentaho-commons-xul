@@ -287,6 +287,12 @@ public class SwtElement extends AbstractXulComponent {
     throw new NotImplementedException();
   }
   
+  public void setMenu(Menu menu){
+    //the generic impl... override if you need a more sophisticated handling of the popupmenu
+    if(getManagedObject() instanceof Control){
+      ((Control) getManagedObject()).setMenu(menu);
+    }
+  }
 
   @Override
   public void onDomReady() {
@@ -296,9 +302,7 @@ public class SwtElement extends AbstractXulComponent {
       if(pop == null){
         logger.error("could not find popup menu ("+context+") to add to this component");
       } else {
-        if(getManagedObject() instanceof Control){
-          ((Control) getManagedObject()).setMenu((Menu) pop.getManagedObject());
-        }
+        setMenu((Menu) pop.getManagedObject());
       }
     }
   }
