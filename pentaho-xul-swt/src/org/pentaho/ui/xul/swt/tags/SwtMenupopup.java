@@ -48,7 +48,7 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
         p = p.getParent();
       }
       if(p != null && p instanceof XulRoot){
-        shell = (Shell) p.getManagedObject();
+        shell = (Shell) ((XulRoot) p).getRootObject();
       }
     }
     
