@@ -81,4 +81,8 @@ public interface XulTree extends XulContainer {
   
   void expandAll();
   void collapseAll();
+  
+  <T> Collection <T> getSelectedItems();
+  <T> void setSelectedItems(Collection<T> items);
+  
 }
