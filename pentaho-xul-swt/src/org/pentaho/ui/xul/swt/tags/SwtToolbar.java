@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolBar;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -15,7 +16,17 @@ public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
   public SwtToolbar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("toolbar");
     
-    toolbar = new ToolBar((Composite) parent.getManagedObject(), SWT.HORIZONTAL);
+    String attr = self.getAttributeValue("parenttoouter");
+    Object shell = (attr != null && attr.equals("true") && domContainer.getOuterContext() != null) 
+      ? domContainer.getOuterContext() 
+      : null; 
+    if(shell != null && shell instanceof Shell){
+      toolbar = new ToolBar((Shell) shell, SWT.HORIZONTAL);
+    } else if(shell != null && shell instanceof Composite){
+      toolbar = new ToolBar((Composite) shell, SWT.HORIZONTAL);
+    } else {
+      toolbar = new ToolBar((Composite) parent.getManagedObject(), SWT.HORIZONTAL);
+    }
     setManagedObject(toolbar);
   }
 
