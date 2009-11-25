@@ -52,7 +52,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected boolean visible = true;
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
   protected String alignment;
-  protected String context, popup;
+  protected String context, popup, menu;
   
   
   public AbstractGwtXulComponent(String name) {
@@ -596,4 +596,11 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     this.popup = id;
   }
   
+  public void setMenu(String id) {
+    this.menu = id;
+  }
+  
+  public String getMenu(){
+    return this.menu;
+  }
 }
