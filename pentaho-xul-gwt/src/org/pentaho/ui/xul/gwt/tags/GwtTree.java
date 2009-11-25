@@ -1149,4 +1149,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     
   }
 
+  public <T> Collection<T> getSelectedItems() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public <T> void setSelectedItems(Collection<T> items) {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

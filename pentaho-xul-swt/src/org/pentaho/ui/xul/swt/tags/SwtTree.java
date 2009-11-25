@@ -829,6 +829,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   public void clearSelection() {
   }
 
+  public <T> void setSelectedItems(Collection<T> items) {
+    //  TODO: Going to need this in the near future..
+  }
+
   public void setSelectedRows(int[] rows) {
     if (this.isHierarchical) {
       Object selected = getSelectedTreeItem(rows);
