@@ -186,11 +186,18 @@ public interface XulComponent extends Element, XulEventSource {
   public String getContext();
   
   /**
-   * Sets the ID of the popup menu to show when control is clicked. (drop-downs)
+   * Sets the ID of the popup menu to show when control is right-clicked. (drop-downs)
    * @param id
    */
   public void setPopup(String id);
   public String getPopup();
+  
+  /**
+   * Sets the ID of the menu to show when the control is clicked
+   * @param id
+   */
+  public void setMenu(String id);
+  public String getMenu();
 
 
   

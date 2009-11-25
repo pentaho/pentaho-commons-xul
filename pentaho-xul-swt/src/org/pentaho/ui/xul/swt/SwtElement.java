@@ -7,6 +7,9 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -287,7 +290,25 @@ public class SwtElement extends AbstractXulComponent {
     throw new NotImplementedException();
   }
   
-  public void setMenu(Menu menu){
+  public void setMenu(final Menu menu){
+    //the generic impl... override if you need a more sophisticated handling of the menu
+    if(getManagedObject() instanceof Control){
+      final Control c = (Control) getManagedObject();
+      c.addMouseListener(new MouseAdapter(){
+
+        @Override
+        public void mouseDown(MouseEvent evt) {
+          Control source = (Control) evt.getSource();
+          Point pt = source.getDisplay().map(source, null, new Point(evt.x, evt.y));
+          menu.setLocation(pt.x, pt.y);
+          menu.setVisible(true);
+        }
+        
+      });
+    }
+  }
+  
+  public void setPopup(Menu menu){
     //the generic impl... override if you need a more sophisticated handling of the popupmenu
     if(getManagedObject() instanceof Control){
       ((Control) getManagedObject()).setMenu(menu);
@@ -299,6 +320,16 @@ public class SwtElement extends AbstractXulComponent {
     super.onDomReady();
     if(this.context != null){
       XulComponent pop = this.getDocument().getElementById(context);
+      if(pop == null){
+        logger.error("could not find popup menu ("+context+") to add to this component");
+      } else {
+        setPopup((Menu) pop.getManagedObject());
+      }
+    }
+    
+
+    if(this.menu != null){
+      XulComponent pop = this.getDocument().getElementById(menu);
       if(pop == null){
         logger.error("could not find popup menu ("+context+") to add to this component");
       } else {
