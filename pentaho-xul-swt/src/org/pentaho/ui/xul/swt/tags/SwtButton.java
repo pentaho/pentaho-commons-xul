@@ -10,6 +10,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulButton;
@@ -80,7 +81,6 @@ public class SwtButton extends SwtElement implements XulButton {
         invoke(method);
       }
     });
-
   }
 
   public String getLabel() {
@@ -159,4 +159,5 @@ public class SwtButton extends SwtElement implements XulButton {
   public void doClick() {
     button.setSelection(true);
   }
+  
 }

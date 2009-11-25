@@ -74,7 +74,7 @@ public class SwtXulLoader extends AbstractXulLoader{
 
     parser.registerHandler("TOOLBAR", "org.pentaho.ui.xul.swt.tags.SwtToolbar");
 
-    parser.registerHandler("TOOLBARSPACER", "org.pentaho.ui.xul.swt.tags.SwtToolbarspacer");
+    parser.registerHandler("TOOLBARSEPARATOR", "org.pentaho.ui.xul.swt.tags.SwtToolbarseparator");
     parser.registerHandler("TOOLBARBUTTON", "org.pentaho.ui.xul.swt.tags.SwtToolbarbutton");
     
   }
