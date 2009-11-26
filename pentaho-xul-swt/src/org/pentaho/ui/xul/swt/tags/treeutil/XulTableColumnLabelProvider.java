@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags.treeutil;
 
+import java.io.InputStream;
 import java.util.Vector;
 
 import org.eclipse.jface.resource.JFaceResources;
@@ -16,6 +17,7 @@ import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
+import org.pentaho.ui.xul.swt.tags.SwtTreeItem;
 import org.pentaho.ui.xul.util.ColumnType;
 
 public class XulTableColumnLabelProvider implements ITableLabelProvider {
@@ -76,17 +78,33 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
   }
 
   public Image getColumnImage(Object row, int col) {
-    if (tree.getColumns().getColumn(col).getColumnType() != ColumnType.CHECKBOX) {
-      return null;
+    if (tree.getColumns().getColumn(col).getColumnType() == ColumnType.CHECKBOX) {
+      if (isSelected(row, col)) {
+        return JFaceResources.getImageRegistry().getDescriptor(CHECKED)
+            .createImage();
+      } else {
+        return JFaceResources.getImageRegistry().getDescriptor(UNCHECKED)
+            .createImage();
+      }
     }
-
-    if (isSelected(row, col)) {
-      return JFaceResources.getImageRegistry().getDescriptor(CHECKED)
-          .createImage();
-    } else {
-      return JFaceResources.getImageRegistry().getDescriptor(UNCHECKED)
-          .createImage();
+    
+    if (tree.getColumns().getColumn(col).getImagebinding() != null){
+      String src = ((SwtTreeItem)row).getImage();
+      if (src!=null){
+        InputStream in = null;
+        try{
+          if(src != null){
+            in = this.getClass().getClassLoader().getResourceAsStream(src);
+          }
+          return src == null || in == null ? null : new Image(((TableViewer) tree.getManagedObject()).getTable().getDisplay(), in);
+        } finally{
+          try{
+            in.close();
+          } catch(Exception ignored){}
+        }
+      }
     }
+    return null;
   }
 
   private Image makeImage(Shell shell, boolean type) {

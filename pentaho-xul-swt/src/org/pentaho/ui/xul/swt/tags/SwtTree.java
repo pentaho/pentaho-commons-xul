@@ -12,9 +12,6 @@ import java.util.Vector;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -42,6 +39,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -958,6 +956,20 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
               bind.fireSourceChanged();
             }
 
+            Method imageMethod;
+            String imageSrc = null;
+            
+            String property = ((XulTreeCol) this.getColumns().getChildNodes().get(x)).getImagebinding();
+
+            if (property != null) {
+              property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+              imageMethod = o.getClass().getMethod(property);
+              imageSrc = (String) imageMethod.invoke(o);
+              SwtTreeItem item = (SwtTreeItem)row.getParent();
+              item.setXulDomContainer(this.domContainer);
+              ((XulTreeItem) row.getParent()).setImage(imageSrc);
+            }
+
             row.addCell(cell);
           }
         }
@@ -1173,12 +1185,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   @Override
-  public void setMenu(Menu m) {
+  public void setPopup(Menu m) {
+    final Control control;
     if (isHierarchical()){
-      tree.getControl().setMenu(m);
+      control = tree.getControl();
     }else{
-      table.getControl().setMenu(m);
+      control = table.getControl();
     }
+    control.setMenu(m);
   }
 
 }
