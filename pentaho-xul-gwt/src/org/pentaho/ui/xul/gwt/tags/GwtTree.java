@@ -236,6 +236,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         
         if(pos > -1 && GwtTree.this.suppressEvents == false && prevSelectionPos != pos){
           GwtTree.this.changeSupport.firePropertyChange("selectedRows",null,new int[]{pos});
+          GwtTree.this.changeSupport.firePropertyChange("absoluteSelectedRows",null,new int[]{pos});
         }
         prevSelectionPos = pos;
 
@@ -687,6 +688,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
   }
  
+  @Bindable
+  public int[] getAbsoluteSelectedRows() {
+    return getSelectedRows();
+  }
+  
   private int[] selectedRows;
   public void setSelectedRows(int[] rows) {
     if (table == null) {
@@ -702,6 +708,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
     if(this.suppressEvents == false && Arrays.equals(selectedRows, prevSelected) == false){
       this.changeSupport.firePropertyChange("selectedRows", prevSelected, rows);
+      this.changeSupport.firePropertyChange("absoluteSelectedRows", prevSelected, rows);
     }
   }
 

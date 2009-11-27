@@ -59,6 +59,7 @@ import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnLabelProvider;
@@ -264,6 +265,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           }
 
           changeSupport.firePropertyChange("selectedRows", null, selectedRows);
+          changeSupport.firePropertyChange("absoluteSelectedRows", null, selectedRows);
           changeSupport.firePropertyChange("selectedItems", null, selectedItems);
 
           //Single selection binding. 
@@ -352,6 +354,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         }
 
         changeSupport.firePropertyChange("selectedRows", null, selectedRows);
+        changeSupport.firePropertyChange("absoluteSelectedRows", null, selectedRows);
         Collection selectedItems = findSelectedTableRows(selectedRows);
         changeSupport.firePropertyChange("selectedItems", null, selectedItems);
 
@@ -431,6 +434,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     this.selectedIndex = idx;
 
     changeSupport.firePropertyChange("selectedRows", null, new int[] { idx });
+    changeSupport.firePropertyChange("absoluteSelectedRows", null, new int[] { idx });
+
     if (this.onSelect != null) {
       invoke(this.onSelect, new Object[] { new Integer(idx) });
     }
@@ -757,6 +762,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
 
+  public int[] getAbsoluteSelectedRows() {
+    return getSelectedRows();
+  }
+  
   public Collection getSelectedItems() {
     if (elements == null) {
       return null;
@@ -846,6 +855,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       this.selectedIndex = rows[0]; // single selection only for now
     }
     changeSupport.firePropertyChange("selectedRows", this.selectedRows, rows);
+    changeSupport.firePropertyChange("absoluteSelectedRows", this.selectedRows, rows);
     this.selectedRows = rows;
 
   }
@@ -869,6 +879,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     if (elements == null) {
       update();
       changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
+      changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
       return;
     }
     try {
@@ -993,6 +1004,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       // treat as a selection change
       changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
+      changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
     } catch (XulException e) {
       logger.error("error adding elements", e);
     } catch (Exception e) {

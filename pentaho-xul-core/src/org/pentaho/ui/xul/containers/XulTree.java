@@ -56,6 +56,8 @@ public interface XulTree extends XulContainer {
 
   int[] getSelectedRows();
 
+  int[] getAbsoluteSelectedRows();
+
   void setSelectedRows(int[] rows);
 
   void addTreeRow(XulTreeRow row);
