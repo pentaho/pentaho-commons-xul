@@ -688,7 +688,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
   }
  
-  @Bindable
   public int[] getAbsoluteSelectedRows() {
     return getSelectedRows();
   }
