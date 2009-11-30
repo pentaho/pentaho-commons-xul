@@ -1,16 +1,17 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
@@ -24,6 +25,7 @@ import org.pentaho.ui.xul.swt.custom.BasicDialog;
 public class SwtMessageBox extends SwtElement implements XulMessageBox {
 
   protected BasicDialog messageBox;
+  protected List<Button> buttonList = new ArrayList<Button>();
   private String message;
   private String title;
   private DialogButton[] defaultButtons = new DialogButton[]{DialogButton.ACCEPT};
@@ -33,7 +35,8 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   private Shell parentObject = null;
   private boolean scrollable = false;
   private String acceptLabel = "OK";
-
+  private int buttonAlignment = SWT.CENTER;
+  
   public SwtMessageBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("messagebox");
     this.parent = parent;
@@ -85,14 +88,10 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   /**
    * We do this so we can pick up new buttons or icons if they choose to reuse their SWTMessageBox
    */
-  private Shell dialog;
-  private void createNewMessageBox(){
+  protected Shell dialog;
+  
+  protected void createNewMessageBox(){
     Shell shell = getParentObject();
-    
-//    messageBox = new MessageBox(shell, getBitwiseStyle());
-//    messageBox.setMessage(getMessage());
-//    messageBox.setText(getTitle());
-    
     
     dialog = new Shell(shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM | SWT.RESIZE);
     dialog.setText(getTitle());
@@ -103,10 +102,6 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
       dialog.setSize(300, 175);
     }
     
-//    messageBox = new BasicDialog(shell);
-//    messageBox.setTitle(getTitle());
-//    messageBox.setWidth(350);
-//    messageBox.setHeight(200);
     Composite c = new Composite(dialog, SWT.None);//(Composite) messageBox.getMainDialogArea();
     c.setLayout(new GridLayout());
     
@@ -138,7 +133,6 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
       gd.horizontalAlignment = GridData.FILL;
       txt.setLayoutData(gd);
     }
-    
     setButtons(c);
     c.layout();
     c.redraw();
@@ -147,17 +141,22 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   }
 
   public void setDefaultButtons(BasicDialog d){
-    
   }
 
-  private Composite buttonArea;
+  protected Composite buttonArea;
+  
   public void setButtons(Composite c){
     buttonArea = new Composite(c, SWT.None);
     
     GridData gd = new GridData();
     gd.grabExcessHorizontalSpace =  true;
-    gd.horizontalAlignment = GridData.CENTER;
-    gd.verticalAlignment = GridData.CENTER;
+    if (buttonAlignment == SWT.CENTER){
+      gd.horizontalAlignment = GridData.CENTER;
+      gd.verticalAlignment = GridData.CENTER;
+    }else{ //right align
+      gd.horizontalAlignment = GridData.END;
+      gd.verticalAlignment = GridData.END;
+    }
     buttonArea.setLayoutData(gd);
     buttonArea.setLayout(new RowLayout());
     
@@ -169,6 +168,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
         DialogButton thisButton = DialogButton.valueOf(buttonName.trim().toUpperCase());
       
         Button btn = new Button(buttonArea, SWT.PUSH);
+        buttonList.add(btn);
         btn.setText(thisButton.getLabel());
         btn.setData(thisButton.getId());
       }
@@ -177,6 +177,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
         Button btn = new Button(buttonArea, SWT.PUSH);
         btn.setText(thisButton.getLabel());
         btn.setData(thisButton.getId());
+        buttonList.add(btn);
         final int code = thisButton.getId();
         btn.addSelectionListener(new SelectionAdapter(){
           public void widgetSelected(SelectionEvent arg0) {
@@ -189,8 +190,6 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
         }
       }
     }
-
-    
     buttonArea.layout();
     buttonArea.redraw();
     dialog.layout();
@@ -256,7 +255,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
     parentObject = (Shell) parent;
   }
   
-  private Shell getParentObject(){
+  protected Shell getParentObject(){
     if(parentObject != null){
       return parentObject;
     } else if (getParent() instanceof SwtDialog){
@@ -269,7 +268,9 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   public void setAcceptLabel(String label) {
     this.acceptLabel = label;  
   }
-  
-  
 
+  public void setButtonAlignment(int buttonAlignment) {
+    this.buttonAlignment = buttonAlignment;
+  }
+  
 }
