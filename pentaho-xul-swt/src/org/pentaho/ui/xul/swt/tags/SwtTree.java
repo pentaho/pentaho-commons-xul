@@ -527,35 +527,35 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         case EDITABLECOMBOBOX:
           editor = new ComboBoxCellEditor(table.getTable(), new String[] {});
 
-          final CCombo editableControl = (CCombo) ((ComboBoxCellEditor) editor).getControl();
-          editableControl.addKeyListener(new KeyAdapter() {
-
-            @Override
-            public void keyReleased(KeyEvent arg0) {
-              super.keyReleased(arg0);
-
-              XulTreeCell cell = getCell(colIdx);
-              cell.setLabel(editableControl.getText());
-            }
-
-          });
+//          final CCombo editableControl = (CCombo) ((ComboBoxCellEditor) editor).getControl();
+//          editableControl.addKeyListener(new KeyAdapter() {
+//
+//            @Override
+//            public void keyReleased(KeyEvent arg0) {
+//              super.keyReleased(arg0);
+//
+//              XulTreeCell cell = getCell(colIdx);
+//              cell.setLabel(editableControl.getText());
+//            }
+//
+//          });
           break;
         case TEXT:
         default:
           editor = new TextCellEditor(table.getTable());
 
-          final Text textControl = (Text) ((TextCellEditor) editor).getControl();
-          textControl.addKeyListener(new KeyAdapter() {
-
-            @Override
-            public void keyReleased(KeyEvent arg0) {
-              super.keyReleased(arg0);
-
-              XulTreeCell cell = getCell(colIdx);
-              cell.setLabel(textControl.getText());
-            }
-
-          });
+//          final Text textControl = (Text) ((TextCellEditor) editor).getControl();
+//          textControl.addKeyListener(new KeyAdapter() {
+//
+//            @Override
+//            public void keyReleased(KeyEvent arg0) {
+//              super.keyReleased(arg0);
+//
+//              XulTreeCell cell = getCell(colIdx);
+//              cell.setLabel(textControl.getText());
+//            }
+//
+//          });
           break;
       }
 
