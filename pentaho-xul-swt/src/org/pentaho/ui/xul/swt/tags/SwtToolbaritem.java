@@ -41,8 +41,6 @@ public class SwtToolbaritem extends AbstractSwtXulContainer implements XulToolba
       Control control = (Control) c.getManagedObject();
       control.pack();
       item.setControl(control);
-      FormLayout data = new FormLayout();
-      control.setLayoutData(data);
       item.setWidth(control.getSize().x);
     }
     ((ToolBar) parent.getManagedObject()).pack();
