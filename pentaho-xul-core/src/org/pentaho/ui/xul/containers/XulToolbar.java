@@ -8,7 +8,7 @@ public interface XulToolbar extends XulContainer{
   
   void setMode(String mode);
 
-  ToolbarMode getMode();
+  String getMode();
   
   String getToolbarName();
   

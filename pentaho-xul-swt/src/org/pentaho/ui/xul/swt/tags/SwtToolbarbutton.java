@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulToolbarbutton;
+import org.pentaho.ui.xul.containers.XulToolbar;
+import org.pentaho.ui.xul.containers.XulToolbar.ToolbarMode;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
@@ -30,12 +32,13 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
   private XulDomContainer container;
   private String command;
   private static final Log logger = LogFactory.getLog(SwtToolbarbutton.class);
+  private XulToolbar parentToolbar;
   
   public SwtToolbarbutton(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("toolbarbutton");
     this.parent = parent;
     this.container = domContainer;
-    
+    this.parentToolbar = (XulToolbar) parent;
     
     button = new ToolItem((ToolBar) parent.getManagedObject(), SWT.PUSH | SWT.RIGHT);
     button.addSelectionListener(new SelectionAdapter(){
@@ -131,7 +134,9 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     
   }
   public void setImage(String src) {
-
+    if(!(parentToolbar.getMode().equals("ICONS")|| parentToolbar.getMode().equals("FULL"))){
+      return;
+    }
     this.image = src;   
     Display d = ((Composite) parent.getManagedObject()).getDisplay();
     if(d == null){
@@ -155,6 +160,9 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     }
   }
   public void setLabel(String label) {
+    if(parentToolbar.getMode().equals("ICONS")){
+      return;
+    }
     this.button.setText(label);
     
   }

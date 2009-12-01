@@ -33,8 +33,8 @@ public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
     setManagedObject(toolbar);
   }
 
-  public ToolbarMode getMode() {
-    return mode;
+  public String getMode() {
+    return mode.toString();
   }
 
   public String getToolbarName() {
