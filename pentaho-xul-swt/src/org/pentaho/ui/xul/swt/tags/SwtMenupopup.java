@@ -84,7 +84,9 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
       pos = getChildNodes().size();
     }
     
-    return new SwtMenuitem(this, domContainer, "menuitem", pos);
+    XulMenuitem item = new SwtMenuitem(this, domContainer, "menuitem", pos);
+    this.addChild(item);
+    return item;
   }
 }
 
