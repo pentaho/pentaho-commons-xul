@@ -28,10 +28,8 @@
       Collections.copy(this.children, children);
     }
     
-    public List<T> getChildren() {
-      // return Collections.unmodifiableList(children);
-
-      return children;
+    protected List<T> getChildren() {
+      return this;
     }
 
     protected void fireCollectionChanged() {
