@@ -7,7 +7,7 @@
   import java.util.List;
   import java.util.ListIterator;
 
-  import org.pentaho.ui.xul.XulEventSourceAdapter;
+import org.pentaho.ui.xul.XulEventSourceAdapter;
 
   /**
    * Base class for UI model objects that provides {@see java.util.List}
@@ -38,12 +38,14 @@
 
     public boolean add(T child) {
       boolean retVal = this.children.add(child);
+      onAdd(child);
       fireCollectionChanged();
       return retVal;
     }
 
     public T remove(int idx) {
       T t = children.remove(idx);
+      onRemove(t);
       fireCollectionChanged();
       return t;
     }
@@ -53,6 +55,9 @@
         throw new IllegalArgumentException("Child does not exist in collection");
       }
       boolean retVal = this.children.remove(child);
+      if(retVal) {
+        onRemove((T)child);
+      }
       fireCollectionChanged();
       return retVal;
     }
@@ -63,6 +68,7 @@
             + ") is greater than collection length");
       }
       T retVal = this.children.remove(pos);
+      onRemove(retVal);
       fireCollectionChanged();
       return retVal;
     }
@@ -72,6 +78,9 @@
     }
 
     public void clear() {
+      for(T t : this.children){
+        onRemove(t);
+      }
       this.children.clear();
       fireCollectionChanged();
     }
@@ -127,7 +136,14 @@
     }
 
     public boolean addAll(Collection<? extends T> c) {
-      return this.children.addAll(c);
+      boolean retVal = this.children.addAll(c);
+      if(retVal) {
+        for(T t : c){
+          onAdd(t);
+        }
+        fireCollectionChanged();
+      }
+      return retVal;
     }
 
     public boolean contains(Object o) {
@@ -151,6 +167,9 @@
 
     public boolean removeAll(Collection<?> c) {
       boolean retVal = this.children.removeAll(c);
+      for(Object t : c){
+        onRemove((T) t);
+      }
 
       fireCollectionChanged();
       return retVal;
@@ -177,10 +196,19 @@
 
     public void add(int index, T element) {
       children.add(index, element);
+      onAdd(element);
+      fireCollectionChanged();
     }
 
     public boolean addAll(int index, Collection<? extends T> c) {
-      return children.addAll(index, c);
+      boolean retVal = children.addAll(index, c);
+      if(retVal){
+        for(T t : c){
+          onAdd(t);
+        }
+      }
+      fireCollectionChanged();
+      return retVal;
     }
 
     public T get(int index) {
@@ -204,7 +232,9 @@
     }
 
     public T set(int index, T element) {
-      return children.set(index, element);
+      T retVal = children.set(index, element);
+      fireCollectionChanged();
+      return retVal;
     }
 
     public List<T> subList(int fromIndex, int toIndex) {
@@ -215,5 +245,12 @@
       }
       return newList;
     }
-
+    
+    public void onAdd(T child){
+      
+    }
+    public void onRemove(T child){
+      
+    }
+    
   }

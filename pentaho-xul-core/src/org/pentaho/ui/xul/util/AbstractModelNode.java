@@ -77,7 +77,9 @@ public abstract class AbstractModelNode<T> extends XulEventSourceAdapter impleme
       throw new IllegalArgumentException("Child does not exist in collection");
     }
     boolean retVal = this.children.remove(child);
-    onRemove((T) child);
+    if(retVal) {
+      onRemove((T) child);
+    }
     fireCollectionChanged();
     return retVal;
   }
@@ -156,10 +158,14 @@ public abstract class AbstractModelNode<T> extends XulEventSourceAdapter impleme
   }
 
   public boolean addAll(Collection<? extends T> c) {
-    for(T t : c){
-      onRemove(t);
+    boolean retVal = this.children.addAll(c);
+    if(retVal) {
+      for(T t : c){
+        onAdd(t);
+      }
+      fireCollectionChanged();
     }
-    return this.children.addAll(c);
+    return retVal;
   }
 
   public boolean contains(Object o) {
@@ -249,7 +255,9 @@ public abstract class AbstractModelNode<T> extends XulEventSourceAdapter impleme
   }
 
   public T set(int index, T element) {
-    return children.set(index, element);
+    T result = children.set(index, element);
+    fireCollectionChanged();
+    return result;
   }
 
   public List<T> subList(int fromIndex, int toIndex) {
