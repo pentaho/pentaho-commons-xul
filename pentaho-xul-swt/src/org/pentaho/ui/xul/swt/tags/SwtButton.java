@@ -5,11 +5,16 @@ import java.io.InputStream;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -33,6 +38,7 @@ public class SwtButton extends SwtElement implements XulButton {
   private boolean selected;
   private XulComponent parent;
   private XulDomContainer domContainer;
+  private Label imageButton;
   
 
   public SwtButton(Button button) {
@@ -45,8 +51,21 @@ public class SwtButton extends SwtElement implements XulButton {
     super(tagName);
     this.parent = parent;
     this.domContainer = container;
-    button = createNewButton((Composite)parent.getManagedObject());
-    setManagedObject(button);
+    
+    // Special creation path for image buttons with no text. We don't want them to appear with the 
+    // traditional button border.
+    if(self != null && self.getAttributeValue("image") != null && self.getAttributeValue("label") == null){
+      setManagedObject(createImageButton());
+    } else {
+      button = createNewButton((Composite)parent.getManagedObject());
+      setManagedObject(button);
+    }
+  }
+  
+  private Control createImageButton(){
+    imageButton = new Label(((Composite) parent.getManagedObject()), SWT.NONE);
+    return imageButton;
+    
   }
   
   public void setButton(Button button){
@@ -71,16 +90,33 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
-    if (!button.isDisposed()) button.setEnabled( !disabled );
+    if(button != null){
+      button.setEnabled( !disabled );
+    }
   }
 
   public void setOnclick(final String method) {
     this.onclick = method;
-    button.addSelectionListener(new SelectionAdapter(){
-      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        invoke(method);
-      }
-    });
+    if(button != null){
+      button.addSelectionListener(new SelectionAdapter(){
+        public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
+          invoke(method);
+        }
+      });
+    } else {  // Image Button implementation
+
+      imageButton.addMouseListener(new MouseAdapter(){
+        
+        @Override
+        public void mouseUp(MouseEvent arg0) {
+          if(disabled == false){
+            invoke(method);
+          }
+        }
+        
+      });
+      imageButton.setCursor(new Cursor(((Composite) parent.getManagedObject()).getDisplay(), SWT.CURSOR_HAND));
+    }
   }
 
   public String getLabel() {
@@ -109,7 +145,12 @@ public class SwtButton extends SwtElement implements XulButton {
       logger.warn("could not find image: "+src);
       return;
     }
-    button.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), in));
+    Image img = new Image(((Composite) parent.getManagedObject()).getDisplay(), in);
+    if(button != null){
+      button.setImage(img);
+    } else { //image button implementation
+      imageButton.setImage(img);
+    }
     
   }
 
