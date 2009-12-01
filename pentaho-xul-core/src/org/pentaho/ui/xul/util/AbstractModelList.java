@@ -28,7 +28,7 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
       Collections.copy(this.children, children);
     }
     
-    protected List<T> getChildren() {
+    public List<T> getChildren() {
       return this;
     }
 
