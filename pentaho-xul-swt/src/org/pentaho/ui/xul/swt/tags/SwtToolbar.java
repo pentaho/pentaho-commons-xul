@@ -13,6 +13,8 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
 
   ToolBar toolbar;
+  private ToolbarMode mode;
+  
   public SwtToolbar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("toolbar");
     
@@ -27,22 +29,21 @@ public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
     } else {
       toolbar = new ToolBar((Composite) parent.getManagedObject(), SWT.HORIZONTAL);
     }
+
     setManagedObject(toolbar);
   }
 
   public ToolbarMode getMode() {
-    // TODO Auto-generated method stub
-    return null;
+    return mode;
   }
 
   public String getToolbarName() {
     // TODO Auto-generated method stub
     return null;
   }
-
-  public void setMode(ToolbarMode mode) {
-    // TODO Auto-generated method stub
-    
+  
+  public void setMode(String mode) {
+    this.mode = ToolbarMode.valueOf(mode.toUpperCase());
   }
 
   public void setToolbarName(String name) {

@@ -6,7 +6,7 @@ public interface XulToolbar extends XulContainer{
   
   public enum ToolbarMode{ICONS, TEXT, FULL}
   
-  void setMode(ToolbarMode mode);
+  void setMode(String mode);
 
   ToolbarMode getMode();
   

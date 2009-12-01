@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.components.XulToolbarspacer;
 import org.pentaho.ui.xul.components.XulToolbarspring;
 import org.pentaho.ui.xul.containers.XulToolbar;
 import org.pentaho.ui.xul.containers.XulToolbarset;
+import org.pentaho.ui.xul.containers.XulToolbar.ToolbarMode;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
@@ -46,8 +47,8 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
     this.toolbarName = name;
   }
 
-  public void setMode(ToolbarMode mode) {
-    this.mode = mode;
+  public void setMode(String mode) {
+    ToolbarMode.valueOf(mode.toUpperCase());
   }
   
   public ToolbarMode getMode(){
