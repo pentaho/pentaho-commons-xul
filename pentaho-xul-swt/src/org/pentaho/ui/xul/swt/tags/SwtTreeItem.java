@@ -25,6 +25,7 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
     private XulTreeChildren treeChildren; //Hierachical tree
     private String image;
     private XulDomContainer domContainer;
+    private boolean expanded;
 
     public SwtTreeItem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treeitem");
@@ -129,5 +130,28 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
     public void setXulDomContainer(XulDomContainer container){
       this.domContainer = container;
     }
+
+    public boolean isExpanded() {
+      return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+      this.expanded = expanded;
+      if(this.initialized){
+        XulTree tree = null;
+        XulComponent parent = getParent();
+        while(parent != null){
+          if(parent instanceof XulTree){
+            tree = (XulTree) parent;
+            break;
+          }
+          parent = parent.getParent();
+        }
+        if(tree != null){
+          tree.setTreeItemExpanded(this, expanded);
+        }
+      }
+    }
+    
     
   }

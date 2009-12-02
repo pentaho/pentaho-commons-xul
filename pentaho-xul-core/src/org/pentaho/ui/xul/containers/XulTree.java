@@ -80,6 +80,9 @@ public interface XulTree extends XulContainer {
   
   void registerCellEditor(String key, TreeCellEditor editor);
   void registerCellRenderer(String key, TreeCellRenderer renderer);
+
+  void setTreeItemExpanded(XulTreeItem item, boolean expanded);
+  void setBoundObjectExpanded(Object o, boolean expanded);
   
   void expandAll();
   void collapseAll();

@@ -223,6 +223,18 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     // TODO Auto-generated method stub
     
   }
+
+  public String getExpandedBinding() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setExpandedBinding(String bind) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
   
   
 }

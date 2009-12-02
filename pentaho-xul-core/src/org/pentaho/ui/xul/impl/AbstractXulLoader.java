@@ -390,7 +390,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       SAXReader rdr = new SAXReader();
       return rdr.read(new StringReader(upperedIdDoc));
     } catch (Exception e) {
-      throw new XulException(e);
+      return null;
     }
   }
 

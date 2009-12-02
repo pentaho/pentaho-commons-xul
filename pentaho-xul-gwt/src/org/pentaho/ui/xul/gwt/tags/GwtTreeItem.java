@@ -92,6 +92,16 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     // TODO Auto-generated method stub
     
   }
+
+  public boolean isExpanded() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public void setExpanded(boolean expanded) {
+    // TODO Auto-generated method stub
+    
+  }
   
   
 }

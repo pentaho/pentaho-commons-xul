@@ -21,5 +21,7 @@ public interface XulTreeItem extends XulContainer {
   public void setImage(String src);
   public String getImage();
   
+  public void setExpanded(boolean expanded);
+  public boolean isExpanded();
   
 }

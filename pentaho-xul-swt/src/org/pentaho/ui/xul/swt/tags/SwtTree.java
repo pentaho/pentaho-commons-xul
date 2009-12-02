@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -1032,7 +1033,19 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
       }
-
+      
+      String expBind = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getExpandedBinding();
+      if(expBind != null){
+        DefaultBinding binding = new DefaultBinding(element, expBind, row.getParent(), "expanded");
+        if (this.isEditable()) {
+          binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        } else {
+          binding.setBindingType(Binding.Type.ONE_WAY);
+        }
+        domContainer.addBinding(binding);
+        binding.fireSourceChanged();
+      }
+      
       row.addCell(cell);
 
       // find children
@@ -1197,6 +1210,87 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
 
+
+  private static class FindBoundItemTuple {
+    Object item = null;
+    XulComponent treeItem;
+    public FindBoundItemTuple(Object item) {
+      this.item = item;
+    }
+  }
+
+  private FindBoundItemTuple findBoundItem(Object obj, XulComponent parent, String childrenMethodProperty,
+      FindBoundItemTuple tuple) {
+    if (obj.equals(tuple.item)) {
+      tuple.treeItem = parent;
+      return tuple;
+    }
+    
+    Collection children = null;
+    Method childrenMethod = null;
+    try {
+      childrenMethod = obj.getClass().getMethod(childrenMethodProperty, new Class[] {});
+    } catch (NoSuchMethodException e) {
+      if (parent instanceof Collection) {
+        children = (Collection) obj;
+      }
+    }
+    try {
+      if (childrenMethod != null) {
+        children = (Collection) childrenMethod.invoke(obj, new Object[] {});
+      }
+    } catch (Exception e) {
+      logger.error(e);
+      return null;
+    }
+
+    if (children == null || children.size() == 0) {
+      return null;
+    }
+
+    XulTreeChildren xulChildren = null;
+    for(XulComponent c : parent.getChildNodes()){
+      if(c instanceof XulTreeChildren){
+        xulChildren = (XulTreeChildren) c;
+      }
+    }
+    Object[] childrenArry = children.toArray();
+    for (int i=0; i< children.size(); i++) {
+      Object child = childrenArry[i];
+      
+      findBoundItem(child, xulChildren.getChildNodes().get(i), childrenMethodProperty, tuple);
+      if (tuple.treeItem != null) {
+        return tuple;
+      }
+    }
+    return null;
+  }
+  
+  
+  
+  public void setBoundObjectExpanded(Object o, boolean expanded){
+    FindBoundItemTuple tuple = new FindBoundItemTuple(o);
+    
+
+    String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+    property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+
+    
+    findBoundItem(this.elements, this, property, tuple);
+    if(tuple.treeItem != null){
+      setTreeItemExpanded((XulTreeItem) tuple.treeItem, expanded);
+    }
+    
+  }
+
+  public void setTreeItemExpanded(XulTreeItem item, boolean expanded){
+    if (this.isHierarchical) {
+      
+      tree.setExpandedState(item, expanded);
+      
+    }
+  }
+  
   @Override
   public void setPopup(Menu m) {
     final Control control;

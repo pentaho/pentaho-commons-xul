@@ -1425,6 +1425,17 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   }
 
+  public void setBoundObjectExpanded(Object o, boolean expanded) {
+
+    throw new UnsupportedOperationException("not implemented");
+  }
+
+  public void setTreeItemExpanded(XulTreeItem item, boolean expanded) {
+
+    throw new UnsupportedOperationException("not implemented");    
+  }
+  
+  
   public void collapseAll() {
     if (this.isHierarchical) {
       // TODO: Not yet implemented

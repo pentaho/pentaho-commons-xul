@@ -31,7 +31,9 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     private String columnTypeBinding;
     private String disabledBinding;
     private String image;
-
+    private boolean expanded;
+    private String expandedBinding;
+    
     public SwtTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treecol");
       setManagedObject("empty");
@@ -218,5 +220,16 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     public void setImagebinding(String img) {
       this.image = img;
     }
+
+    public String getExpandedBinding() {
+      return expandedBinding;
+    }
+
+    public void setExpandedBinding(String bind) {
+      this.expandedBinding = bind;
+      
+    }
+    
+    
     
   }
