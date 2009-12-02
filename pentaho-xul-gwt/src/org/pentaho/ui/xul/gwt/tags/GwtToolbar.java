@@ -48,7 +48,7 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
   }
 
   public void setMode(String mode) {
-    ToolbarMode.valueOf(mode.toUpperCase());
+    this.mode = ToolbarMode.valueOf(mode.toUpperCase());
   }
   
   public String getMode(){
