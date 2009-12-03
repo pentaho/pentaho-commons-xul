@@ -31,6 +31,7 @@ public class SwtButton extends SwtElement implements XulButton {
   private String label;
   private boolean disabled;
   private String image;
+  private String disabledImage;
   private Direction dir;
   private Type type;
   private String group;
@@ -51,6 +52,9 @@ public class SwtButton extends SwtElement implements XulButton {
     super(tagName);
     this.parent = parent;
     this.domContainer = container;
+    
+    // Extract custom parameters
+    disabledImage = self.getAttributeValue("disabledimage"); //$NON-NLS-1$
     
     // Special creation path for image buttons with no text. We don't want them to appear with the 
     // traditional button border.
@@ -92,6 +96,16 @@ public class SwtButton extends SwtElement implements XulButton {
     this.disabled = disabled;
     if(button != null){
       button.setEnabled( !disabled );
+    } 
+
+    if(this.disabled) {
+      if(disabledImage != null) {
+        displayImage(disabledImage);
+      }
+    } else {
+      if(image != null) {
+        displayImage(image);
+      }
     }
   }
 
@@ -130,28 +144,19 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public String getImage() {
     return this.image;
-      
+  }
+  
+  public String getDisabledImage() {
+    return this.disabledImage;
   }
 
   public void setImage(String src) {
-    this.image = src;   
-    Display d = ((Composite) parent.getManagedObject()).getDisplay();
-    if(d == null){
-      d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
-    }
-    
-    InputStream in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src);
-    if(in == null){
-      logger.warn("could not find image: "+src);
-      return;
-    }
-    Image img = new Image(((Composite) parent.getManagedObject()).getDisplay(), in);
-    if(button != null){
-      button.setImage(img);
-    } else { //image button implementation
-      imageButton.setImage(img);
-    }
-    
+    this.image = src;
+    displayImage(src);
+  }
+  
+  public void setDisabledImage(String src) {
+    this.disabledImage = src;   
   }
 
   public String getDir() {
@@ -199,6 +204,25 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public void doClick() {
     button.setSelection(true);
+  }
+  
+  protected void displayImage(String src) {
+    Display d = ((Composite) parent.getManagedObject()).getDisplay();
+    if(d == null){
+      d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
+    }
+    
+    InputStream in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src);
+    if(in == null){
+      logger.warn("could not find image: "+src);
+      return;
+    }
+    Image img = new Image(((Composite) parent.getManagedObject()).getDisplay(), in);
+    if(button != null){
+      button.setImage(img);
+    } else { //image button implementation
+      imageButton.setImage(img);
+    }
   }
   
 }
