@@ -54,7 +54,9 @@ public class SwtButton extends SwtElement implements XulButton {
     this.domContainer = container;
     
     // Extract custom parameters
-    disabledImage = self.getAttributeValue("disabledimage"); //$NON-NLS-1$
+    if(self != null) {
+      disabledImage = self.getAttributeValue("disabledimage"); //$NON-NLS-1$
+    }
     
     // Special creation path for image buttons with no text. We don't want them to appear with the 
     // traditional button border.
