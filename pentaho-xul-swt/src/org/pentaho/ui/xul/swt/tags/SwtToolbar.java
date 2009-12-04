@@ -13,7 +13,7 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
 
   ToolBar toolbar;
-  private ToolbarMode mode;
+  private ToolbarMode mode = ToolbarMode.FULL;
   
   public SwtToolbar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("toolbar");
