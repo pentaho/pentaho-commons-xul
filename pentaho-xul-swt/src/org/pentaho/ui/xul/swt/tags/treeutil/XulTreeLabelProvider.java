@@ -1,16 +1,16 @@
 package org.pentaho.ui.xul.swt.tags.treeutil;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
-import org.pentaho.ui.xul.swt.tags.SwtButton;
 
 public class XulTreeLabelProvider implements ILabelProvider {
 
@@ -26,13 +26,26 @@ public class XulTreeLabelProvider implements ILabelProvider {
       if(src != null){
         in = this.getClass().getClassLoader().getResourceAsStream(src);
       }
-    
-      return src == null || in == null ? null : new Image(((TreeViewer) tree.getManagedObject()).getTree().getDisplay(), in);
+      Image img = null;
+      if(in == null){
+        File f = new File(src);
+        if(f.exists()){
+          in = new FileInputStream(f);
+          new Image(((TreeViewer) tree.getManagedObject()).getTree().getDisplay(), in);
+        }
+      } else {
+        new Image(((TreeViewer) tree.getManagedObject()).getTree().getDisplay(), in);
+      }
+      return img; 
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     } finally{
       try{
         in.close();
       } catch(Exception ignored){}
     }
+    return null;
   }
 
   public String getText(Object item) {
