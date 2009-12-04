@@ -45,7 +45,7 @@ public class SwtWindow extends AbstractSwtXulContainer implements XulWindow {
     orient = Orient.VERTICAL;
     
     // First, check to see if an outer context was passed before parser started...  
-    if (container.getOuterContext() != null){
+    if (container.getOuterContext() != null && container.getOuterContext() instanceof Shell){
       possibleParent = (Shell) container.getOuterContext();
     }
     
