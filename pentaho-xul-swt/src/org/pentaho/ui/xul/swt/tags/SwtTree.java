@@ -174,7 +174,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     tree.setCellEditors(new CellEditor[] { new XulTreeTextCellEditor(tree.getTree()) });
     tree.setCellModifier(new XulTreeColumnModifier(this));
 
-    tree.setLabelProvider(new XulTreeLabelProvider(this));
+    tree.setLabelProvider(new XulTreeLabelProvider(this, this.domContainer));
     tree.setContentProvider(new XulTreeContentProvider(this));
 
     tree.setInput(this);
