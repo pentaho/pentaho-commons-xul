@@ -1109,8 +1109,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   public Object getSelectedItem() {
-    // TODO Auto-generated method stub
+    Collection c = getSelectedItems();
+    if(c != null && c.size() > 0){
+      return c.toArray()[0];
+    }
     return null;
+    
   }
 
   private Object getSelectedTreeItem(int[] currentSelection) {
