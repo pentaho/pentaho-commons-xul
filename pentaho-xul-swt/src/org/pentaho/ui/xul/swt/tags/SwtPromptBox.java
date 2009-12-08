@@ -74,18 +74,18 @@ public final class SwtPromptBox extends SwtMessageBox implements XulPromptBox {
     
     setButtons(c);
     
-    for (final Button button : buttonList) {
-      button.addSelectionListener(new SelectionAdapter(){
-        public void widgetSelected(SelectionEvent arg0) {
-          notifyListeners((Integer)button.getData());
-          dialog.close();
-        }
-      });    
-    }
-
     c.layout();
     c.redraw();
     shell.redraw();
+  }
+  
+  protected void addButtonListeners(final Button btn, final int code) {
+  	btn.addSelectionListener(new SelectionAdapter(){
+      public void widgetSelected(SelectionEvent arg0) {
+        notifyListeners(code);
+        dialog.close();
+      }
+    });
   }
 
   public void addDialogCallback(XulDialogCallback callback) {

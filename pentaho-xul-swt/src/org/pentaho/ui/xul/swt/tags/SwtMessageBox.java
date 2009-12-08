@@ -179,12 +179,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
         btn.setData(thisButton.getId());
         buttonList.add(btn);
         final int code = thisButton.getId();
-        btn.addSelectionListener(new SelectionAdapter(){
-          public void widgetSelected(SelectionEvent arg0) {
-            retVal = code;
-            dialog.close();
-          }
-        });
+        addButtonListeners(btn, code);
         if(buttons.length == 1){
           dialog.setDefaultButton(btn);
         }
@@ -194,6 +189,15 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
     buttonArea.redraw();
     dialog.layout();
     dialog.redraw();
+  }
+  
+  protected void addButtonListeners(final Button btn, final int code) {
+    btn.addSelectionListener(new SelectionAdapter(){
+      public void widgetSelected(SelectionEvent arg0) {
+        retVal = code;
+        dialog.close();
+      }
+    });
   }
   
   public Object getIcon() {
