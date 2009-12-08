@@ -575,5 +575,9 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
   public void setResizable(Boolean resizable) {
     this.resizable = resizable;
   }
+  
+  public void setAppicon(String icon) {
+    // TODO Auto-generated method stub 
+  }
 
 }

@@ -58,6 +58,4 @@ public interface XulWindow extends XulRoot{
    */
   public void cut() throws XulException;
   
-  public void setAppicon(String icon);
-  
 }

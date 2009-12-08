@@ -22,6 +22,8 @@ public interface XulRoot extends XulContainer{
    * @return the title
    */
   public String getTitle();
+  
+  public void setAppicon(String icon);
 
   /**
    * Creates a reference to the DOM container that will be managing this window and its events.

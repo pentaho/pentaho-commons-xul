@@ -498,6 +498,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
    throw new RuntimeException("Not Yet Implemented");
   }
   
-  
+  public void setAppicon(String icon) {
+    // TODO Auto-generated method stub 
+  }
   
 }

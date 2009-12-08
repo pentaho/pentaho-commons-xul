@@ -439,5 +439,9 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   public String getBgcolor() {
     return this.bgColor;
   }
+
+  public void setAppicon(String icon) {
+    // TODO Auto-generated method stub 
+  }
   
 }
