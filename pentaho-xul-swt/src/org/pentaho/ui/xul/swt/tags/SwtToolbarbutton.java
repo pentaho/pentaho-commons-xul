@@ -26,6 +26,7 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulToolbarbutton{
 
   private ToolItem button;
+  private boolean disabled;
   private String image;
   private String downImage;
   private XulComponent parent;
@@ -189,6 +190,16 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     button.setToolTipText(tooltip);
   }
   
+  public void setDisabled(boolean disabled) {
+    this.disabled = disabled;
+    if(button != null){
+      button.setEnabled( !disabled );
+    } 
+  }
   
+  public boolean isDisabled() {
+    return disabled;
+  }
+
   
 }
