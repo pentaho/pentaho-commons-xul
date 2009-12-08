@@ -199,6 +199,12 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
       }
     }
   }
+  
+  @Override
+  public void setDisabled(boolean disabled) {
+    super.setDisabled(disabled);
+    combobox.setEnabled(!disabled);
+  }
 
   public void setElements(Collection<T> tees) {
     for (XulComponent menuItem : popup.getChildNodes()) {
