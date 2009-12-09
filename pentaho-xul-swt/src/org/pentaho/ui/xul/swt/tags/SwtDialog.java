@@ -14,6 +14,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulDialogheader;
@@ -22,7 +23,6 @@ import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.DialogButton;
-import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.custom.BasicDialog;
 import org.pentaho.ui.xul.util.Orient;
 
@@ -250,16 +250,20 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     for (String buttonName : buttons) {
       DialogButton thisButton = DialogButton.valueOf(buttonName.trim().toUpperCase());
-      Button button = d.createButton(thisButton, false);
       
       SwtButton swtButton = null;
       SwtButton existingButton = (this.getDocument() != null) ? (SwtButton) this.getElementById(this.getId()+"_" + buttonName.trim().toLowerCase()) : null;
       if(this.getId() != null && existingButton != null){
         //existing button, just needs a new Widget parent
         swtButton = existingButton;
-        swtButton.setButton(button);
+        Widget w = (Widget)existingButton.getManagedObject(); 
+        if ((w==null)|| (w.isDisposed())){
+          Button button = d.createButton(thisButton, false);
+          swtButton.setButton(button);
+        }
       } else {
         //new button needed
+        Button button = d.createButton(thisButton, false);
         swtButton = new SwtButton(button);
         swtButton.setId(this.getId()+"_" + buttonName.trim().toLowerCase());
         this.addChild(swtButton);
