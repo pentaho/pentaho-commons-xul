@@ -197,10 +197,14 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
 
   public void show() {
+    show(false);
+  }
+  
+  public void show(boolean force) {
 
     //createDialog();
     
-    if(buttonsCreated == false){
+    if((force) || (!buttonsCreated)){
       setButtons();
     }
     
