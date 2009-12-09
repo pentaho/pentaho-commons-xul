@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -12,11 +14,13 @@ import org.eclipse.swt.graphics.Image;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
+import org.pentaho.ui.xul.util.XulUtil;
 
 public class XulTreeLabelProvider implements ILabelProvider {
 
   private XulTree tree;
   private XulDomContainer domContainer;
+  private static Log logger = LogFactory.getLog(XulTreeLabelProvider.class);
   
   public XulTreeLabelProvider(XulTree tree, XulDomContainer aDomContainer){
     this.tree = tree;
@@ -25,31 +29,12 @@ public class XulTreeLabelProvider implements ILabelProvider {
   
   public Image getImage(Object item) {
     String src = ((XulTreeItem) item).getImage();
-    InputStream in = null;
     try{
-      if(src != null){
-        in = this.getClass().getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src);
-      }
-      Image img = null;
-      if(in == null){
-      	if(src != null) {
-	        File f = new File(src);
-	        if(f.exists()){
-	          in = new FileInputStream(f);
-	          img = new Image(((TreeViewer) tree.getManagedObject()).getTree().getDisplay(), in);
-	        }
-      	}
-      } else {
-        img = new Image(((TreeViewer) tree.getManagedObject()).getTree().getDisplay(), in);
-      }
-      return img; 
-    } catch (FileNotFoundException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    } finally{
-      try{
-        in.close();
-      } catch(Exception ignored){}
+      InputStream in = XulUtil.loadResourceAsStream(src, domContainer);
+
+      return new Image(((TreeViewer) tree.getManagedObject()).getTree().getDisplay(), in);
+    } catch (FileNotFoundException e){
+      logger.error(e);
     }
     return null;
   }

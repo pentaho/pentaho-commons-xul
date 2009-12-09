@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.dom4j.Attribute;
+import org.pentaho.ui.xul.XulDomContainer;
 
 
 public final class XulUtil {
@@ -51,6 +55,34 @@ public final class XulUtil {
   public static String formatResourceName(String name){
     return name.replace(".xul", "-"+Locale.getDefault().toString()+".xul"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     
+  }
+  
+
+  public static InputStream loadResourceAsStream(String src, XulDomContainer domContainer) throws FileNotFoundException{
+    if(src == null || src.equals(".")){
+      return null;
+    }
+    InputStream in = null;
+    try{
+      in = XulUtil.class.getClassLoader().getResourceAsStream(domContainer.getXulLoader().getRootDir()+src);
+      if(in == null){
+        if(src != null) {
+          File f = new File(src);
+          if(f.exists()){
+            in = new FileInputStream(f);
+            return in;
+          }
+        }
+      }
+      if(in == null){
+        throw new FileNotFoundException("Could not locate resoruce: "+src);
+      }
+      return in; 
+    } finally{
+      try{
+        in.close();
+      } catch(Exception ignored){}
+    }
   }
 
 }

@@ -1,7 +1,12 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -11,7 +16,9 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulImage;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeLabelProvider;
 import org.pentaho.ui.xul.util.SwtSwingConversion;
+import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtImage extends SwtElement implements XulImage{
   
@@ -19,6 +26,7 @@ public class SwtImage extends SwtElement implements XulImage{
   private XulComponent parent;
   private Label label;
   private String src;
+  private static Log logger = LogFactory.getLog(SwtImage.class);
   
   public SwtImage(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -39,7 +47,14 @@ public class SwtImage extends SwtElement implements XulImage{
 
   public void setSrc(String src) {
     this.src = src;
-    label.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+src)));
+
+    try{
+      InputStream in = XulUtil.loadResourceAsStream(src, domContainer);
+      label.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), in));
+    } catch (FileNotFoundException e){
+      logger.error(e);
+    }
+    
   }
 
   public void setSrc(Object img) {
