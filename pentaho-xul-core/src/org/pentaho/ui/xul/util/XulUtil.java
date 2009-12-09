@@ -59,19 +59,17 @@ public final class XulUtil {
   
 
   public static InputStream loadResourceAsStream(String src, XulDomContainer domContainer) throws FileNotFoundException{
-    if(src == null || src.equals(".")){
+    if(src == null || src.equals("")){
       return null;
     }
     InputStream in = null;
     try{
       in = XulUtil.class.getClassLoader().getResourceAsStream(domContainer.getXulLoader().getRootDir()+src);
       if(in == null){
-        if(src != null) {
-          File f = new File(src);
-          if(f.exists()){
-            in = new FileInputStream(f);
-            return in;
-          }
+        File f = new File(src);
+        if(f.exists()){
+          in = new FileInputStream(f);
+          return in;
         }
       }
       if(in == null){
