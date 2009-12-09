@@ -197,7 +197,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
 
   public void show() {
-    show(false);
+    show(true);
   }
   
   public void show(boolean force) {
