@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.io.InputStream;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -7,10 +9,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
@@ -77,6 +81,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private boolean resizable = false;
   
   private boolean buttonsCreated = false;
+  
+  private String appIcon;
 
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
 
@@ -102,6 +108,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     String resizableStr = self.getAttributeValue("resizable");
     this.setResizable(resizableStr != null && resizableStr.equals("true"));
     createDialog();
+    
+    if(self != null) {
+      // Extract appIcon
+      setAppicon(self.getAttributeValue("appicon"));
+    }
   }
 
   private void createDialog() {
@@ -507,7 +518,27 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
   
   public void setAppicon(String icon) {
-    // TODO Auto-generated method stub 
+    this.appIcon = icon;
+    
+    if(appIcon == null) {
+      return;
+    }
+    
+    Display d = dialog.getShell().getDisplay();
+    if(d == null){
+      d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
+    }
+    
+    InputStream in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+appIcon);
+    if(in == null){
+      logger.warn("could not find image: "+appIcon);
+      return;
+    }
+    
+    Image img = new Image(dialog.getShell().getDisplay(), in);
+    if(img != null) {
+      dialog.getShell().setImage(img);
+    }
   }
   
 }
