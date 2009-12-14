@@ -27,6 +27,9 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.FocusEvent;
@@ -43,8 +46,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Widget;
+import org.eclipse.swt.widgets.TreeItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -59,8 +61,9 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
+import org.pentaho.ui.xul.dnd.DropEffectType;
+import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnLabelProvider;
@@ -144,7 +147,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   @Override
   public void layout() {
 
-    XulComponent primaryColumn = this.getElementByXPath("//treecol[@primary='true']");
+    XulComponent primaryColumn = this.getElementByXPath("treecols/treecol[@primary='true']");
     XulComponent isaContainer = this.getElementByXPath("treechildren/treeitem[@container='true']");
 
     isHierarchical = (primaryColumn != null) || (isaContainer != null);
@@ -155,6 +158,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       tree = new TreeViewer((Composite) parentComponent.getManagedObject(), style);
       setManagedObject(tree);
+      
     } else {
       table = new TableViewer((Composite) parentComponent.getManagedObject(), SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL
           | SWT.FULL_SELECTION | SWT.BORDER);
@@ -162,6 +166,17 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
     if (isHierarchical) {
       setupTree();
+      
+      if (getOndrag() != null) {
+        DropEffectType effect = DropEffectType.COPY;
+        if (getDrageffect() != null) {
+          effect = DropEffectType.valueOfIgnoreCase(getDrageffect());
+        }
+        super.enableDrag(effect);
+      }
+      if (getOndrop() != null) {
+        super.enableDrop();
+      }
     } else {
       setupTable();
     }
@@ -316,13 +331,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         return null;
       }
 
-      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
-      property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+      String method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
 
       if (pos == -1) {
         return null;
       }
-      FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(pos));
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, method, new FindSelectedItemTuple(pos));
       return tuple != null ? tuple.selectedItem : null;
     }
     return null;
@@ -972,11 +986,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
             Method imageMethod;
             String imageSrc = null;
             
-            String property = ((XulTreeCol) this.getColumns().getChildNodes().get(x)).getImagebinding();
+            String method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(x)).getImagebinding());
 
-            if (property != null) {
-              property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
-              imageMethod = o.getClass().getMethod(property);
+            if (method != null) {
+              imageMethod = o.getClass().getMethod(method);
               imageSrc = (String) imageMethod.invoke(o);
               SwtTreeItem item = (SwtTreeItem)row.getParent();
               item.setXulDomContainer(this.domContainer);
@@ -1049,22 +1062,17 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       row.addCell(cell);
 
       // find children
-      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
-      property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+      String method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
 
-      Method childrenMethod = element.getClass().getMethod(property, new Class[] {});
+      Method childrenMethod = element.getClass().getMethod(method, new Class[] {});
       Method imageMethod;
       String imageSrc = null;
 
-      property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getImagebinding();
-
-      if (property != null) {
-        property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
-        imageMethod = element.getClass().getMethod(property);
+      method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getImagebinding());
+      if (method != null) {
+        imageMethod = element.getClass().getMethod(method);
         imageSrc = (String) imageMethod.invoke(element);
-
         ((XulTreeItem) row.getParent()).setImage(imageSrc);
-
       }
 
       Collection<T> children = (Collection<T>) childrenMethod.invoke(element, new Object[] {});
@@ -1108,6 +1116,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     return "text"; // default //$NON-NLS-1$
   }
 
+  private static String toGetter(String property) {
+    if (property == null) {
+      return null;
+    }
+    return "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+  }
+  
   public Object getSelectedItem() {
     Collection c = getSelectedItems();
     if(c != null && c.size() > 0){
@@ -1125,8 +1140,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         return null;
       }
 
-      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
-      property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+      String property = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
 
       int selectedIdx = vals[0];
       if (selectedIdx == -1) {
@@ -1154,29 +1168,31 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
 
+  private void removeItemFromElements(Object item) {
+    String method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
+    removeItem(elements, method, item);
+  }
+  
+  private void removeItem(Object parent, String childrenMethodProperty, Object toRemove) {
+    Collection children = getChildCollection(parent, childrenMethodProperty);
+    Iterator iter = children.iterator();
+    while (iter.hasNext()) {
+      Object next = iter.next();
+      if (next == toRemove) {
+        iter.remove();
+        return;
+      }
+      removeItem(next, childrenMethodProperty, toRemove);
+    }
+  }
+  
   private FindSelectedItemTuple findSelectedItem(Object parent, String childrenMethodProperty,
       FindSelectedItemTuple tuple) {
     if (tuple.curpos == tuple.selectedIndex) {
       tuple.selectedItem = parent;
       return tuple;
     }
-    Collection children = null;
-    Method childrenMethod = null;
-    try {
-      childrenMethod = parent.getClass().getMethod(childrenMethodProperty, new Class[] {});
-    } catch (NoSuchMethodException e) {
-      if (parent instanceof Collection) {
-        children = (Collection) parent;
-      }
-    }
-    try {
-      if (childrenMethod != null) {
-        children = (Collection) childrenMethod.invoke(parent, new Object[] {});
-      }
-    } catch (Exception e) {
-      logger.error(e);
-      return null;
-    }
+    Collection children = getChildCollection(parent, childrenMethodProperty);
 
     if (children == null || children.size() == 0) {
       return null;
@@ -1223,19 +1239,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
 
-  private FindBoundItemTuple findBoundItem(Object obj, XulComponent parent, String childrenMethodProperty,
-      FindBoundItemTuple tuple) {
-    if (obj.equals(tuple.item)) {
-      tuple.treeItem = parent;
-      return tuple;
-    }
-    
+  private static Collection getChildCollection(Object obj, String childrenMethodProperty) {
     Collection children = null;
     Method childrenMethod = null;
     try {
       childrenMethod = obj.getClass().getMethod(childrenMethodProperty, new Class[] {});
     } catch (NoSuchMethodException e) {
-      if (parent instanceof Collection) {
+      if (obj instanceof Collection) {
         children = (Collection) obj;
       }
     }
@@ -1247,22 +1257,32 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       logger.error(e);
       return null;
     }
-
+    
+    return children;
+  }
+  
+  private static XulTreeChildren getTreeChildren(XulComponent parent) {
+    for(XulComponent c : parent.getChildNodes()) {
+      if (c instanceof XulTreeChildren) {
+        return (XulTreeChildren) c;
+      }
+    }
+    return null;
+  }
+  
+  private FindBoundItemTuple findBoundItem(Object obj, XulComponent parent, String childrenMethodProperty, FindBoundItemTuple tuple) {
+    if (obj.equals(tuple.item)) {
+      tuple.treeItem = parent;
+      return tuple;
+    }
+    Collection children = getChildCollection(obj, childrenMethodProperty);
     if (children == null || children.size() == 0) {
       return null;
     }
-
-    XulTreeChildren xulChildren = null;
-    for(XulComponent c : parent.getChildNodes()){
-      if(c instanceof XulTreeChildren){
-        xulChildren = (XulTreeChildren) c;
-      }
-    }
+    XulTreeChildren xulChildren = getTreeChildren(parent);
     Object[] childrenArry = children.toArray();
     for (int i=0; i< children.size(); i++) {
-      Object child = childrenArry[i];
-      
-      findBoundItem(child, xulChildren.getChildNodes().get(i), childrenMethodProperty, tuple);
+      findBoundItem(childrenArry[i], xulChildren.getChildNodes().get(i), childrenMethodProperty, tuple);
       if (tuple.treeItem != null) {
         return tuple;
       }
@@ -1270,28 +1290,18 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     return null;
   }
   
-  
-  
-  public void setBoundObjectExpanded(Object o, boolean expanded){
+  public void setBoundObjectExpanded(Object o, boolean expanded) {
     FindBoundItemTuple tuple = new FindBoundItemTuple(o);
-    
-
-    String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
-    property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
-
-    
+    String property = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
     findBoundItem(this.elements, this, property, tuple);
-    if(tuple.treeItem != null){
+    if(tuple.treeItem != null) {
       setTreeItemExpanded((XulTreeItem) tuple.treeItem, expanded);
     }
-    
   }
 
   public void setTreeItemExpanded(XulTreeItem item, boolean expanded){
     if (this.isHierarchical) {
-      
       tree.setExpandedState(item, expanded);
-      
     }
   }
   
@@ -1304,6 +1314,173 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       control = table.getControl();
     }
     control.setMenu(m);
+  }
+
+  protected Control getDndObject() {
+    return (Control)tree.getControl();
+  }
+
+  protected List<Object> cachedDndItems;
+  
+  @Override
+  protected List<Object> getSwtDragData() {
+    
+    if (!isHierarchical) {
+      throw new UnsupportedOperationException("dnd not implemented for xul tree in table mode.");
+    }
+    
+    // if bound, return a list of bound objects, otherwise return strings.
+    // note, all of these elements must be serializable.
+    if (elements != null) {
+      cachedDndItems = (List<Object>)getSelectedItems();
+    } else {
+      IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+      List<Object> list = new ArrayList<Object>();
+      int i = 0;
+      for (Object o : selection.toArray()) {
+        list.add(((XulTreeItem)o).getRow().getCell(0).getLabel());
+      }
+      cachedDndItems = list;
+    }
+    return cachedDndItems;
+  }
+  
+  @Override
+  protected void resolveDndParentAndIndex(DropEvent xulEvent) {
+    
+    if (!isHierarchical) {
+      throw new UnsupportedOperationException("dnd not implemented for xul tree in table mode.");
+    }
+
+    TreeItem parent = null;
+    int index = -1;
+    DropTargetEvent event = (DropTargetEvent)xulEvent.getNativeEvent();
+    if (event.item != null) {
+      TreeItem item = (TreeItem) event.item;
+      Point pt = tree.getControl().getDisplay().map(null, tree.getControl(), event.x, event.y);
+      Rectangle bounds = item.getBounds();
+      parent = item.getParentItem();
+      
+      if (parent != null) {
+        TreeItem[] items = parent.getItems();
+        index = 0;
+        for (int i = 0; i < items.length; i++) {
+          if (items[i] == item) {
+            index = i;
+            break;
+          }
+        }
+        if (pt.y < bounds.y + bounds.height / 3) {
+          // HANDLE parent, index
+        } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
+          // HANDLE parent, index + 1
+          index++;
+        } else {
+          parent = item;
+          index = 0;
+        }
+  
+      } else {
+        TreeItem[] items = tree.getTree().getItems();
+        index = 0;
+        for (int i = 0; i < items.length; i++) {
+          if (items[i] == item) {
+            index = i;
+            break;
+          }
+        }
+        if (pt.y < bounds.y + bounds.height / 3) {
+          // HANDLE null, index
+        } else  if (pt.y > bounds.y + 2 * bounds.height / 3) {
+          index++;
+        } else {
+          // item is parent
+          parent = item;
+          index = 0;
+        }
+      }
+    } else {
+      // ASSUME END OF LIST, null, 0
+    }
+
+    Object parentObj = null;
+    if (parent != null) {
+      if (elements != null) {
+        // swt -> xul -> element
+        SearchBundle b = findSelectedIndex(new SearchBundle(), getRootChildren(), (XulTreeItem)parent.getData());
+        parentObj = b.selectedItem;
+      } else {
+        parentObj = parent.getText();
+      }
+    }
+    
+    xulEvent.setDropParent(parentObj);
+    xulEvent.setDropIndex(index);
+    
+  }
+  
+  @Override
+  protected void onSwtDragDropAccepted(DropEvent xulEvent) {
+    List results = xulEvent.getDataTransfer().getData();
+    if (elements != null) {
+      // place the new elements in the new location
+      Collection insertInto = elements;
+      if (xulEvent.getDropParent() != null) {
+        String method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
+        insertInto = getChildCollection(xulEvent.getDropParent(), method);
+      }
+      if (insertInto instanceof List) {
+        List list = (List)insertInto;
+        if (xulEvent.getDropIndex() == -1) {
+          for (Object o : results) {
+            list.add(o);
+          }
+        } else {
+          for (int i = results.size() - 1; i >= 0; i--) {
+            list.add(xulEvent.getDropIndex(), results.get(i));
+          }
+        }
+      }
+      // todo, can i trigger this through another mechanism?
+      setElements(elements);
+    } else {
+      // non-binding path
+      // TODO: add necessary xul dom
+    }
+  }
+
+  @Override
+  protected void onSwtDragFinished(DragSourceEvent event, DropEffectType effect) {
+    if (effect == DropEffectType.MOVE) {
+      // ISelection sel = tree.getSelection();
+      if (elements != null) {
+        // remove cachedDndItems from the tree.. traverse 
+        for (Object item : cachedDndItems) {
+          removeItemFromElements(item);
+        }
+        cachedDndItems = null;
+        setElements(elements);
+      } else {
+        tree.remove(tree.getSelection());
+      }
+    }
+  }
+  
+  protected void onSwtDragOver(DropTargetEvent event) {
+    event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+    if (event.item != null) {
+      TreeItem item = (TreeItem) event.item;
+      Point pt = tree.getControl().getDisplay().map(null, tree.getControl(), event.x, event.y);
+      Rectangle bounds = item.getBounds();
+      if (pt.y < bounds.y + bounds.height / 3) {
+        event.feedback |= DND.FEEDBACK_INSERT_BEFORE;
+      } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
+        event.feedback |= DND.FEEDBACK_INSERT_AFTER;
+      } else {
+        event.feedback |= DND.FEEDBACK_SELECT;
+      }
+    }
+
   }
 
 }

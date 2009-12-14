@@ -53,7 +53,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
   protected String alignment;
   protected String context, popup, menu;
-  
+  protected String ondrag;
+  protected String drageffect;
+  protected String ondrop;
   
   public AbstractGwtXulComponent(String name) {
     super(name);
@@ -603,4 +605,29 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public String getMenu(){
     return this.menu;
   }
+  
+  public void setOndrag(String ondrag) {
+    this.ondrag = ondrag;
+  }
+
+  public String getOndrag() {
+    return ondrag;
+  }
+  
+  public void setOndrop(String ondrop) {
+    this.ondrop = ondrop;
+  }
+  
+  public String getOndrop() {
+    return ondrop;
+  }
+
+  public void setDrageffect(String drageffect) {
+    this.drageffect = drageffect;
+  }
+
+  public String getDrageffect() {
+    return drageffect;
+  }
+
 }

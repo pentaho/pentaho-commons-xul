@@ -2,11 +2,29 @@ package org.pentaho.ui.xul.swt;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.ByteArrayTransfer;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.DropTargetListener;
+import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
@@ -18,12 +36,18 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulDeck;
 import org.pentaho.ui.xul.containers.XulDialog;
+import org.pentaho.ui.xul.containers.XulRoot;
+import org.pentaho.ui.xul.dnd.DataTransfer;
+import org.pentaho.ui.xul.dnd.DropEffectType;
+import org.pentaho.ui.xul.dnd.DropEvent;
+import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
-import org.pentaho.ui.xul.swt.tags.SwtButton;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwtElement extends AbstractXulComponent {
@@ -345,6 +369,319 @@ public class SwtElement extends AbstractXulComponent {
       ((Control) getManagedObject()).setVisible(visible);
     }
   }
-    
+  
+  /**
+   * this class is used internally as a way to keep track of
+   * the xultype, which is currently not exposed in the api but
+   * could be used for grouping of drag and drop groups of widgets.
+   */
+  private static class XulSwtDndType implements Serializable {
 
+    public String xultype;
+    public Object value;
+    
+    public XulSwtDndType() {}
+    
+    public XulSwtDndType(String xultype, Object value) {
+      this.xultype = xultype;
+      this.value = value;
+    }
+  }
+    
+  /**
+   * this class is used for transferring strings and xul bound objects
+   * between swt xul elements.  all elements being transported
+   * are serialized and then deserialized.
+   */
+  private static class SwtDndTypeTransfer extends ByteArrayTransfer {
+    
+    private static final String TYPENAME = "xul-transfer"; //$NON-NLS-1$
+    private static final int TYPEID = registerType(TYPENAME);
+    private static SwtDndTypeTransfer _instance = new SwtDndTypeTransfer();
+    private SwtDndTypeTransfer() {}
+     
+     public static SwtDndTypeTransfer getInstance () {
+      return _instance;
+     }
+     
+     protected String[] getTypeNames(){
+       return new String[]{TYPENAME};
+     }
+     
+     protected int[] getTypeIds(){
+       return new int[] {TYPEID};
+     }
+
+     protected boolean validate(Object object) {
+       return object instanceof XulSwtDndType;
+     }
+     
+     public void javaToNative(Object object, TransferData transferData) {
+       if (object == null || !(object instanceof XulSwtDndType[])) return;
+      
+       if (isSupportedType(transferData)) {
+         XulSwtDndType[] myTypes = (XulSwtDndType[]) object; 
+         try {
+           ByteArrayOutputStream out = new ByteArrayOutputStream();
+           ObjectOutputStream writeOut = new ObjectOutputStream(out);
+           writeOut.writeInt(myTypes.length);
+           for (int i = 0; i < myTypes.length;  i++) {
+             writeOut.writeObject(myTypes[i]);
+           }
+           byte[] buffer = out.toByteArray();
+           writeOut.close();
+           super.javaToNative(buffer, transferData);
+         } catch (IOException e) {
+           e.printStackTrace();
+         }
+       }
+     }
+     
+     public Object nativeToJava(TransferData transferData){ 
+      if (isSupportedType(transferData)) {
+        byte[] buffer = (byte[])super.nativeToJava(transferData);
+        if (buffer == null) {
+          return null;
+        }
+        try {
+          ObjectInputStream readIn = new ObjectInputStream(new ByteArrayInputStream(buffer));
+          int c = readIn.readInt();
+          XulSwtDndType[] myData = new XulSwtDndType[c];
+          for (int i = 0; i < c; i++) {
+            myData[i] = (XulSwtDndType)readIn.readObject();
+          }
+          readIn.close();
+          return myData;
+        } catch (Exception ex) {
+          ex.printStackTrace();
+          return null;
+        }
+      }
+      return null;
+     }
+  }
+  
+  /**
+   * this call enables drag behavior for this element, it must be called by
+   * the component after the managed swt object has been created
+   */
+  protected void enableDrag(final DropEffectType effect) { //, final String xultype) {
+    DragSource source = new DragSource(getDndObject(), lookupEffect(effect));
+    Transfer[] types = new Transfer[] {SwtDndTypeTransfer.getInstance()};
+    source.setTransfer(types);
+    
+    source.addDragListener(new DragSourceListener() {
+      public void dragFinished(DragSourceEvent nativeEvent) {
+        if (nativeEvent.doit) {
+          onSwtDragFinished(nativeEvent, lookupXulEffect(nativeEvent.detail));
+        }
+      }
+      public void dragSetData(DragSourceEvent nativeEvent) {
+        if (SwtDndTypeTransfer.getInstance().isSupportedType(nativeEvent.dataType)) {
+          // either strings or bindings, depending on whether elements are set
+          List<Object> obj = getSwtDragData();
+          XulSwtDndType types[] = new XulSwtDndType[obj.size()];
+          for (int i = 0; i < obj.size(); i++) {
+            // note, the "xultype" concept is currently disabled and not exposed in the 
+            // public API.  The idea here was to allow the drag and drop
+            // components to specify their groupings in a single panel.
+            
+            types[i] = new XulSwtDndType("xultype", obj.get(i));  //$NON-NLS-1$
+          }
+          nativeEvent.data = types;
+        }
+      }
+      public void dragStart(DragSourceEvent nativeEvent) {
+        DropEvent event = new DropEvent();
+        DataTransfer dt = new DataTransfer();
+        event.setDataTransfer(dt);
+        dt.setData(getSwtDragData());
+        event.setAccepted(true);
+        final String method = getOndrop();
+        if (method != null) {
+          try{
+            Document doc = getDocument();
+            XulRoot window = (XulRoot) doc.getRootElement();
+            final XulDomContainer con = window.getXulDomContainer();
+            con.invoke(method, new Object[]{event});
+          } catch (XulException e){
+            logger.error("Error calling ondrop event: "+ method,e); //$NON-NLS-1$
+          }
+        }
+        
+        if (!event.isAccepted()) {
+          nativeEvent.doit = false;
+        }
+        
+      }
+    });
+  }
+
+  /**
+   * the native dnd object may not be the managed object, so allow
+   * the child component to define it, defaulting to managed object
+   * 
+   * @return dnd object
+   */
+  protected Control getDndObject() {
+    return (Control)getManagedObject();
+  }
+  
+  /**
+   * called once the drag is finished
+   * 
+   * @param nativeEvent swt event
+   * @param effect drop effect, used to detemine if removing is necessary
+   */
+  protected void onSwtDragFinished(DragSourceEvent nativeEvent, DropEffectType effect) {
+    throw new UnsupportedOperationException("unsupported element type: " + getClass()); //$NON-NLS-1$
+  }
+  
+  /**
+   * called to get drag data
+   * 
+   * @return list of draggable data, must be serializable
+   */
+  protected List<Object> getSwtDragData() {
+    throw new UnsupportedOperationException("unsupported element type: " + getClass()); //$NON-NLS-1$
+  }
+  
+  /**
+   * this call enables drop behavior for this element.
+   * it must be called by the component after the managed swt 
+   * object has been created
+   */
+  protected void enableDrop() { // final String xultype) {
+    
+    DropTarget target = new DropTarget(getDndObject(), DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_DEFAULT);
+    
+    target.setTransfer(new Transfer[] {SwtDndTypeTransfer.getInstance()});
+    
+    target.addDropListener(new DropTargetListener() {
+      public void dragEnter(DropTargetEvent arg0) {
+        arg0.detail = arg0.operations;
+      }
+      public void dragLeave(DropTargetEvent arg0) {}
+      public void dragOperationChanged(DropTargetEvent arg0) {}
+      public void dragOver(DropTargetEvent event) {
+        onSwtDragOver(event);
+      }
+      public void drop(DropTargetEvent nativeEvent) {
+        DropEvent event = new DropEvent();
+        DataTransfer dataTransfer = new DataTransfer();
+        XulSwtDndType types[] = (XulSwtDndType[])nativeEvent.data;
+        try {
+          if (types != null) { // && types[0].xultype.equals(xultype)) {
+            List<Object> objs = new ArrayList<Object>();
+            for (int i = 0; i < types.length; i++) {
+              objs.add(types[i].value);
+            }
+            dataTransfer.setData(objs);
+            dataTransfer.setDropEffect(lookupXulEffect(nativeEvent.detail));
+          } else {
+            nativeEvent.detail = DND.DROP_NONE;
+            return;
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        event.setDataTransfer(dataTransfer);
+        event.setAccepted(true);
+        event.setNativeEvent(nativeEvent);
+        
+        resolveDndParentAndIndex(event);
+        
+        final String method = getOndrop();
+        if (method != null) {
+          try{
+            Document doc = getDocument();
+            XulRoot window = (XulRoot) doc.getRootElement();
+            final XulDomContainer con = window.getXulDomContainer();
+            con.invoke(method, new Object[]{event});
+          } catch (XulException e){
+            logger.error("Error calling ondrop event: "+ method,e); //$NON-NLS-1$
+          }
+        }
+
+        if (!event.isAccepted()) {
+          nativeEvent.detail = DND.DROP_NONE;
+          return;
+        }
+        
+        onSwtDragDropAccepted(event);
+      }
+
+      public void dropAccept(DropTargetEvent arg0) {}
+      
+    });
+  }
+    
+  /**
+   * used by child classes on a drop event
+   * to determine the parent and index of the drop.
+   * 
+   * Currently only used by SwtTree in hierarchial mode.
+   * 
+   * @param event
+   */
+  protected void resolveDndParentAndIndex(DropEvent event) {
+    // not necessary, but is used by tree and list to specify the parent and index
+  }
+  
+  /**
+   * used by child classes on the drag over event in swt
+   * 
+   * @param nativeEvent the native swt event
+   */
+  protected void onSwtDragOver(DropTargetEvent nativeEvent) {
+    // not necessary, but used by tree and list to control types of DND behavior
+   }
+  
+  /**
+   * this method is called once the drop has been accepted
+   * @param event the drop event
+   */
+  protected void onSwtDragDropAccepted(DropEvent event) {
+    throw new UnsupportedOperationException("unsupported element type: " + getClass()); //$NON-NLS-1$
+  }
+  
+  /**
+   * Maps a xul effect to SWT effect
+   * 
+   * @param effect xul effect
+   * @return swt effect
+   */
+  private int lookupEffect(DropEffectType effect) {
+    switch(effect) {
+      case NONE:
+        return DND.DROP_NONE;
+      case MOVE:
+        return DND.DROP_MOVE;
+      case LINK:
+        return DND.DROP_LINK;
+      case COPY:
+      default:
+        return DND.DROP_COPY;
+    }
+  }
+
+  /**
+   * maps a swt effect to a xul effect
+   * 
+   * @param effect swt effect
+   * @return xul effect
+   */
+  private DropEffectType lookupXulEffect(int effect) {
+    switch(effect) {
+      case DND.DROP_NONE:
+        return DropEffectType.NONE;
+      case DND.DROP_MOVE:
+        return DropEffectType.MOVE;
+      case DND.DROP_LINK:
+        return DropEffectType.LINK;
+      case DND.DROP_COPY:
+      default:
+        return DropEffectType.COPY;
+    }
+  }
 }

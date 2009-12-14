@@ -1,6 +1,8 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -8,6 +10,8 @@ import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
+import org.pentaho.ui.xul.dnd.DataTransfer;
+import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.TextType;
@@ -224,4 +228,22 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   public void setMax(String max) {
     this.max = Integer.parseInt(max);  
   }
+  
+  @Override
+  protected void onSwtDragDropAccepted(DropEvent event) {
+    String text = "";
+    for (int i = 0; i < event.getDataTransfer().getData().size(); i++) {
+      if (i != 0) {
+        text += ", ";
+      }
+      text += event.getDataTransfer().getData().get(i).toString();
+    }
+    textBox.setText(text);
+  }
+  
+  public void setOndrop(String ondrop) {
+    super.setOndrop(ondrop);
+    super.enableDrop();
+  }
+
 }

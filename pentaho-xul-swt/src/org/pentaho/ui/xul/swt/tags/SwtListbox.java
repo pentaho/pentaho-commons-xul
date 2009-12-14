@@ -1,12 +1,14 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import java.beans.Expression;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -16,6 +18,8 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
+import org.pentaho.ui.xul.dnd.DropEffectType;
+import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
@@ -78,7 +82,6 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
     }
   }
 
-  
   public String getSeltype() {
     return selType;
   }
@@ -239,4 +242,88 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
     }
   }
 
+  //
+  // SwtListbox supports drag bindings, but not drop bindings
+  //
+  
+  @Override
+  protected java.util.List<Object> getSwtDragData() {
+    java.util.List<Object> list = new ArrayList<Object>();
+    if (elements != null && elements instanceof java.util.List) {
+      int[] indices = listBox.getSelectionIndices();
+      for (int i = 0; i < indices.length; i++) {
+        list.add(((java.util.List)elements).get(indices[i]));
+      }
+    } else {
+      for (String str: listBox.getSelection()) {
+        list.add(str);
+      }
+    }
+    return list;
+  }
+  
+  @Override
+  protected void onSwtDragFinished(DragSourceEvent event, DropEffectType effect) {
+    if (effect == DropEffectType.MOVE) {
+      if (elements != null) {
+        throw new UnsupportedOperationException("Bindings not yet supported in drag with move");
+      } else {
+
+        // remove both from xul and from list
+        int[] indices = listBox.getSelectionIndices();
+        for (int i = indices.length - 1; i >= 0; i--) {
+          removeChild(getChildNodes().get(indices[i]));
+        }
+        listBox.remove(indices);
+        // need to link to bindings
+      }
+    }
+  }
+  
+  @Override
+  protected void onSwtDragDropAccepted(DropEvent event) {
+    if (elements != null) {
+      throw new UnsupportedOperationException("Bindings not yet supported on drop");
+    } else {
+      java.util.List<Object> data = event.getDataTransfer().getData();
+      for (int i = 0; i < data.size(); i++) { 
+        SwtListitem item = null;
+        try {
+          item = (SwtListitem) container.getDocumentRoot().createElement("listitem");
+        } catch (XulException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+        this.addChild(item);
+        item.setLabel(data.get(i).toString());
+      }
+      layout();
+    }
+  }
+
+  public void setOndrop(String ondrop) {
+    super.setOndrop(ondrop);
+    super.enableDrop();
+  }
+  
+  public void setOndrag(String ondrag) {
+    super.setOndrag(ondrag);
+    // TODO: once listBox is initialized lazily, we also need to move this
+    // this exact logic is in setDrageffect because both need to be set for 
+    // enable dragging 
+    if (getDrageffect() != null) {
+      super.enableDrag(DropEffectType.valueOfIgnoreCase(getDrageffect()));
+    }
+  }
+  
+  public void setDrageffect(String drageffect) {
+    super.setDrageffect(drageffect);
+    // TODO: once listBox is initialized lazily, we also need to move this
+    // this exact logic is in setOndrag because both need to be set for 
+    // enable dragging 
+    if (getOndrag() != null) {
+      super.enableDrag(DropEffectType.valueOfIgnoreCase(getDrageffect()));
+    }
+  }
+  
 }

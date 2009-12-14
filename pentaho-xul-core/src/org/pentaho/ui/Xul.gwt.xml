@@ -16,6 +16,7 @@
         <include name="**/binding/BindingContext.java"/>
         <include name="**/binding/BindingFactory.java"/>
         <include name="**/dom/*"/>
+        <include name="**/dnd/*"/>
         <exclude name="**/dom/DocumentFactory*"/>
         <include name="**/impl/XulEventHandler*"/>
         <include name="**/impl/AbstractXulEventHandler*"/>

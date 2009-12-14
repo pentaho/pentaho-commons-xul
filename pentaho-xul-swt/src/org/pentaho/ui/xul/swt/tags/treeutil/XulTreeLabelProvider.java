@@ -42,7 +42,12 @@ public class XulTreeLabelProvider implements ILabelProvider {
   }
 
   public String getText(Object item) {
-    return ((XulTreeItem) item).getRow().getCell(0).getLabel();
+    XulTreeItem treeitem = (XulTreeItem)item;
+    if (treeitem != null && treeitem.getRow() != null && treeitem.getRow().getCell(0) != null) {
+      return treeitem.getRow().getCell(0).getLabel();
+    } else {
+      return null;
+    }
   }
 
   public void addListener(ILabelProviderListener arg0) {

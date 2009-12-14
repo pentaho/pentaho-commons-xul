@@ -197,8 +197,33 @@ public interface XulComponent extends Element, XulEventSource {
    * @param id
    */
   public void setMenu(String id);
+  
   public String getMenu();
 
+  /**
+   * Sets the ondrag event handler, also notifies the element that it should be draggable
+   * 
+   * @param ondrag the controller method to call.
+   */
+  public void setOndrag(String ondrag);
+  public String getOndrag();
 
+  /**
+   * Sets the drageffect value for dnd (move and copy currently supported)
+   * When specified, this should use the pen: syntax
+   * 
+   * @param drageffect move or copy
+   */
+  public void setDrageffect(String drageffect);
+  public String getDrageffect();
+
+  /**
+   * Sets the ondrop event handler, also notifies the element that it should accept drop
+   * events.
+   * 
+   * @param ondrop the controller method to call.
+   */
+  public void setOndrop(String ondrop);
+  public String getOndrop();
   
 }

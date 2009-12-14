@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+<window id="label-test" title="Testing labels and layout for SWT, Swing"
+  orient="horizontal"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:pen="http://www.pentaho.org/2008/xul"
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="650" width="650"
+   onload="dndHandler.initialize()"
+   >
+
+    <listbox id="listbox" rows="5" disabled="false" seltype="multi" selectedindex="1" binding="label" ondrag="dndHandler.onDrag()" pen:drageffect="copy">
+      <listitem label="Native(JDBC)" id="listItem0" />
+      <listitem label="ODBC" id="listItem1" />
+      <listitem label="JNDI" id="listItem2"/>
+    </listbox>
+
+    <tree id="myTree" flex="1" hidecolumnpicker="false" seltype="multiple" class="tree" rows="5" ondrop="dndHandler.onTreeDrop()" ondrag="dndHandler.onDrag()" pen:drageffect="move">  
+     <treecols id="myTree2-treeCols">  
+       <treecol id="myTree2-treeCol0" primary="true" flex="2" label="Column A" persist="width" expandedBinding="expanded" ordinal="1" 
+       pen:binding="name" pen:childrenbinding="children"/>  
+     </treecols>  
+     <treechildren>
+
+       <treeitem>  
+         <treerow>  
+           <treecell label="1"/>  
+         </treerow>
+         <treechildren>  
+           <treeitem>  
+             <treerow>  
+               <treecell label="1a"/>  
+             </treerow>
+           </treeitem>
+           <treeitem>
+             <treerow>  
+               <treecell label="1b"/>  
+             </treerow>  
+           </treeitem>  
+         </treechildren>  
+           
+       </treeitem>  
+
+       <treeitem container="true" open="true">
+         <treerow>  
+           <treecell label="2"/>  
+         </treerow>  
+         <treechildren>  
+           <treeitem>  
+             <treerow>  
+               <treecell label="2a"/>  
+             </treerow>  
+           </treeitem>  
+         </treechildren>  
+       </treeitem>
+
+     </treechildren>  
+   </tree>  
+</window>
