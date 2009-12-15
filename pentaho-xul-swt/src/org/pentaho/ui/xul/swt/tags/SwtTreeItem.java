@@ -56,11 +56,6 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
       return row;
     }
 
-    public XulTree getTree() {
-      // TODO Auto-generated method stub
-      return null;
-    }
-
     public boolean isContainer() {
       // TODO Auto-generated method stub
       return false;
@@ -125,6 +120,26 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
 
     public void setImage(String src) {
       this.image = src;
+
+      if(this.initialized){
+        XulTree tree = getTree();
+        if(tree != null){
+          tree.update();
+        }
+      }
+    }
+    
+    public XulTree getTree(){
+      XulTree tree = null;
+      XulComponent parent = getParent();
+      while(parent != null){
+        if(parent instanceof XulTree){
+          tree = (XulTree) parent;
+          break;
+        }
+        parent = parent.getParent();
+      }
+      return tree;
     }
     
     public void setXulDomContainer(XulDomContainer container){
@@ -138,15 +153,7 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
     public void setExpanded(boolean expanded) {
       this.expanded = expanded;
       if(this.initialized){
-        XulTree tree = null;
-        XulComponent parent = getParent();
-        while(parent != null){
-          if(parent instanceof XulTree){
-            tree = (XulTree) parent;
-            break;
-          }
-          parent = parent.getParent();
-        }
+        XulTree tree = getTree();
         if(tree != null){
           tree.setTreeItemExpanded(this, expanded);
         }
