@@ -47,7 +47,7 @@ public abstract class AbstractModelNode<T> extends XulEventSourceAdapter impleme
   }
 
   
-  public List<T> getChildren() {
+  private List<T> getChildren() {
     // return Collections.unmodifiableList(children);
 
     return this;
