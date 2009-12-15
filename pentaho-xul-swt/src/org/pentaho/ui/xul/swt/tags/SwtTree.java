@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -836,6 +837,15 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       this.tree.refresh();
       if ("true".equals(getAttributeValue("expanded"))) {
         tree.expandAll();
+      } else if(expandBindings.size() > 0){
+        for(DefaultBinding expBind : expandBindings){
+          try {
+            expBind.fireSourceChanged();
+          } catch (Exception e) {
+            logger.error(e);
+          }
+        }
+        expandBindings.clear();
       }
     } else {
 
@@ -1026,6 +1036,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
 
+  private List<DefaultBinding> expandBindings = new ArrayList<DefaultBinding>();
+  
   private <T> void addTreeChild(T element, XulTreeRow row) {
     try {
       XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
@@ -1046,16 +1058,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         binding.fireSourceChanged();
       }
       
-      String expBind = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getExpandedBinding();
+      String expBind = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getExpandedbinding();
       if(expBind != null){
         DefaultBinding binding = new DefaultBinding(element, expBind, row.getParent(), "expanded");
-        if (this.isEditable()) {
-          binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
-        } else {
-          binding.setBindingType(Binding.Type.ONE_WAY);
-        }
+        binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
-        binding.fireSourceChanged();
+        expandBindings.add(binding);
       }
       
       row.addCell(cell);

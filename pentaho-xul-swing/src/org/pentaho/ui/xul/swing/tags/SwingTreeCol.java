@@ -216,12 +216,12 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
     
   }
 
-  public String getExpandedBinding() {
+  public String getExpandedbinding() {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public void setExpandedBinding(String bind) {
+  public void setExpandedbinding(String bind) {
     // TODO Auto-generated method stub
     
   }

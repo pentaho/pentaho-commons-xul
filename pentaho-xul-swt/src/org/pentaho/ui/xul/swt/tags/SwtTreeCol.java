@@ -221,15 +221,12 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
       this.image = img;
     }
 
-    public String getExpandedBinding() {
+    public String getExpandedbinding() {
       return expandedBinding;
     }
 
-    public void setExpandedBinding(String bind) {
+    public void setExpandedbinding(String bind) {
       this.expandedBinding = bind;
-      
     }
-    
-    
     
   }

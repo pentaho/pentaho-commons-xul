@@ -13,8 +13,12 @@ public class XulTreeContentProvider implements ITreeContentProvider {
   }
   
   public Object[] getChildren(Object item) {
-    return ((XulTreeItem) item).getChildNodes().get(1).getChildNodes()
+    if(((XulTreeItem) item).getChildNodes().size() > 1){
+      return ((XulTreeItem) item).getChildNodes().get(1).getChildNodes()
         .toArray();
+    } else {
+      return null;
+    }
   }
 
   public Object getParent(Object item) {
