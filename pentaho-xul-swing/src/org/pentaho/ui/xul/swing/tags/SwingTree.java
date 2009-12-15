@@ -1252,7 +1252,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
       Method childrenMethod = element.getClass().getMethod(property, new Class[] {});
 
-      Collection<T> children = (Collection<T>) childrenMethod.invoke(element, new Object[] {});
+
+      Collection<T> children = null;
+      if(childrenMethod != null){
+        children = (Collection<T>) childrenMethod.invoke(element, new Object[] {});
+      } else if(element instanceof Collection ){
+        children = (Collection<T>) element;
+      }
+
       XulTreeChildren treeChildren = null;
 
       if (children != null && children.size() > 0) {
