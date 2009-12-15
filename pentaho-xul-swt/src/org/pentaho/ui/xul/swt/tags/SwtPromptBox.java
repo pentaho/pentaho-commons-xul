@@ -7,6 +7,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -18,7 +19,6 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulPromptBox;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swt.DialogButton;
 import org.pentaho.ui.xul.util.XulDialogCallback;
 
 public final class SwtPromptBox extends SwtMessageBox implements XulPromptBox {
@@ -46,6 +46,10 @@ public final class SwtPromptBox extends SwtMessageBox implements XulPromptBox {
     } else {
       dialog.setSize(300, 175);
     }
+    
+    int x = shell.getLocation().x + (shell.getSize().x - dialog.getSize().x)/2;
+    int y = shell.getLocation().y + (shell.getSize().y - dialog.getSize().y)/2;
+    dialog.setLocation(new Point(x,y));
     
     Composite c = new Composite(dialog, SWT.None);//(Composite) messageBox.getMainDialogArea();
     c.setLayout(new GridLayout());
