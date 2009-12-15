@@ -23,7 +23,7 @@ import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
 
-public class SwtDndTest {
+public class SwtDndHarness {
 
   public static class ListItem extends XulEventSourceAdapter implements Serializable {
     
