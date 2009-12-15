@@ -68,4 +68,10 @@ public class GwtDomDocument extends GwtDomElement implements Document {
     ((GwtXulDomContainer) this.container).addInitializedBinding(b);
     
   }
+
+  public void loadPerspective(String id) {
+    
+  }
+  
+  
 }
