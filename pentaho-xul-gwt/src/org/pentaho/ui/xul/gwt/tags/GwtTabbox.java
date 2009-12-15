@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.containers.XulTabbox;
@@ -177,6 +176,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
   }
   
   public void setOnclose(String command) {
-    throw new NotImplementedException("not implemented in Swing");
+    throw new RuntimeException("not implemented");
   }
 }
