@@ -605,7 +605,15 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public String getMenu(){
     return this.menu;
   }
-  
+
+  public int getSpacing() {
+    return 0;
+  }
+
+  public void setSpacing(int spacing) {
+    
+  }
+    
   public void setOndrag(String ondrag) {
     this.ondrag = ondrag;
   }
@@ -629,5 +637,4 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public String getDrageffect() {
     return drageffect;
   }
-
 }

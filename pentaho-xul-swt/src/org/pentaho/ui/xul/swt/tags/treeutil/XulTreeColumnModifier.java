@@ -77,7 +77,11 @@ public class XulTreeColumnModifier implements ICellModifier {
       }
       break;
     default:
-      cell.setLabel((String) value);
+      TextCellEditor editor = ((TextCellEditor) ((TreeViewer) tree.getManagedObject()).getCellEditors()[colIdx]);
+      if(editor.isActivated() == false){
+        cell.setLabel((String) value);
+      }
+//      cell.setLabel((String) value);
     }
     ((TreeViewer) tree.getManagedObject()).refresh();
   }

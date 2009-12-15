@@ -62,10 +62,12 @@ public final class XulUtil {
     if(src == null || src.equals("")){
       return null;
     }
-    InputStream in = null;
-    in = XulUtil.class.getClassLoader().getResourceAsStream(domContainer.getXulLoader().getRootDir()+src);
+    InputStream in = XulUtil.class.getClassLoader().getResourceAsStream(domContainer.getXulLoader().getRootDir()+src);
     if(in == null){
       File f = new File(src);
+      if(f.exists() == false){
+        f = new File(domContainer.getXulLoader().getRootDir()+src);
+      }
       if(f.exists()){
         in = new FileInputStream(f);
         return in;
@@ -75,6 +77,7 @@ public final class XulUtil {
       throw new FileNotFoundException("Could not locate resoruce: "+src);
     }
     return in; 
+   
   }
 
 }

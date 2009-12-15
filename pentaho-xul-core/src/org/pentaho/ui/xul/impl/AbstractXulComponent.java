@@ -49,6 +49,8 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected String bgcolor = null;
   
   protected int padding = -1;
+  
+  protected int spacing = -1;
 
   protected String onblur;
 
@@ -273,6 +275,13 @@ public abstract class AbstractXulComponent implements XulComponent {
     this.padding = padding;   
   }
   
+  public int getSpacing(){
+    return this.spacing;
+  }
+  
+  public void setSpacing(int spacing){
+    this.spacing = spacing;
+  }
 
   public String getInsertafter() {
     return this.insertafter;

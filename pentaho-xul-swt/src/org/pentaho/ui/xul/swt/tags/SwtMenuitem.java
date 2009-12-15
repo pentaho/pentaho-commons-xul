@@ -1,10 +1,16 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.pentaho.ui.xul.XulComponent;
@@ -12,6 +18,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtMenuitem extends SwtElement implements XulMenuitem{
   
@@ -19,29 +26,17 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   private String onCommand;
   private boolean disabled = false;
   private MenuItem item;
+  private XulDomContainer domContainer;
+  private XulComponent parent;
+  
   
   public SwtMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menuitem");
+    this.parent = parent;
     setManagedObject("empty");
+    this.domContainer = domContainer;
     if(parent.getManagedObject() != null && parent.getManagedObject() instanceof Menu){
-      int style = SWT.PUSH;
-      if(self.getAttributeValue("type") != null && self.getAttributeValue("type").equals("checkbox")){
-        style = SWT.CHECK;
-      }
-
-      item = new MenuItem((Menu) parent.getManagedObject(), style);
-      
-      item.addSelectionListener(new SelectionAdapter(){
-        @Override
-        public void widgetSelected(SelectionEvent arg0) {
-          String command = SwtMenuitem.this.onCommand;
-          if(command != null){
-            invoke(command);
-          }
-        }
-      });
-
-      setManagedObject(item);
+      createItem(self, parent, -1);
       
     }
 
@@ -49,25 +44,38 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   
   public SwtMenuitem(XulComponent parent, XulDomContainer domContainer, String tagName, int pos) {
     super("menuitem");
+    this.parent = parent;
     setManagedObject("empty");
+    this.domContainer = domContainer;
     if(parent.getManagedObject() != null && parent.getManagedObject() instanceof Menu){
-      int style = SWT.PUSH;
-      
-      item = new MenuItem((Menu) parent.getManagedObject(), style, pos);
-      
-      item.addSelectionListener(new SelectionAdapter(){
-        @Override
-        public void widgetSelected(SelectionEvent arg0) {
-          String command = SwtMenuitem.this.onCommand;
-          if(command != null){
-            invoke(command);
-          }
-        }
-      });
-
-      setManagedObject(item);
+     createItem(null, parent, pos);
     }
 
+  }
+  
+  private void createItem(Element self, XulComponent parent, int pos){
+    int style = SWT.PUSH;
+    if(self != null && self.getAttributeValue("type") != null && self.getAttributeValue("type").equals("checkbox")){
+      style = SWT.CHECK;
+    }
+
+    if(pos > -1){
+      item = new MenuItem((Menu) parent.getManagedObject(), style, pos);
+    } else {
+      item = new MenuItem((Menu) parent.getManagedObject(), style);
+    }
+    
+    item.addSelectionListener(new SelectionAdapter(){
+      @Override
+      public void widgetSelected(SelectionEvent arg0) {
+        String command = SwtMenuitem.this.onCommand;
+        if(command != null){
+          invoke(command);
+        }
+      }
+    });
+
+    setManagedObject(item);
   }
 
   private String acceltext = "";
@@ -166,6 +174,23 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
 
   public void setImage(String image) {
     this.image = image;
+    if(StringUtils.isNotEmpty(image)){
+      try {
+        InputStream in = XulUtil.loadResourceAsStream(image, domContainer);
+        Image img = new Image(item.getDisplay(), in);
+        
+        int pixelIndex = img.getImageData().palette.getPixel(new RGB(255, 255, 255));
+        
+        img.getImageData().transparentPixel = pixelIndex;
+        Image tempImage = new Image(item.getDisplay(), img.getImageData());
+        img.dispose();
+        img = tempImage;
+        item.setImage(img);
+
+      } catch (FileNotFoundException e) {
+        logger.warn(e);
+      }
+    }
   }
 
   public String getCommand() {
@@ -178,6 +203,17 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   
   public String toString(){
     return this.getLabel();
+  }
+  
+  public void reposition(int position){
+    int accel = item.getAccelerator();
+    item.dispose();
+    createItem(this, parent, position);
+    setDisabled(isDisabled());
+    this.setImage(getImage());
+    setSelected(isSelected());
+    item.setAccelerator(accel);
+    setAcceltext(getAcceltext());
   }
   
 }

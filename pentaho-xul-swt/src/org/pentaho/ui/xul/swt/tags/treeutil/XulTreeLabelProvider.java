@@ -29,8 +29,8 @@ public class XulTreeLabelProvider implements ILabelProvider {
   
   public Image getImage(Object item) {
     String src = ((XulTreeItem) item).getImage();
-    if(src == null) {
-    	return null;
+    if(src == null){
+      return null;
     }
     try{
       InputStream in = XulUtil.loadResourceAsStream(src, domContainer);

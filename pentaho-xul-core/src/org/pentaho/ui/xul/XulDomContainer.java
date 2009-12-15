@@ -105,4 +105,8 @@ public interface XulDomContainer {
   public void setResourceBundles(List<Object> resourceBundles);
 
   public List<Object> getResourceBundles();
+  
+  void loadPerspective(String id);
+  
+  void addPerspective(XulPerspective perspective);
 }

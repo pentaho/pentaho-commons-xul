@@ -88,6 +88,33 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
     this.addChild(item);
     return item;
   }
+
+  @Override
+  public void addChildAt(Element c, int pos) {
+    super.addChildAt(c, pos);
+    if(c instanceof SwtMenuitem){
+      ((SwtMenuitem) c).reposition(pos);
+    }
+  }
+//  
+//
+//  @Override
+//  public void addChild(Element c) {
+//    super.addChild(c);
+//    if(c instanceof SwtMenuitem){
+//      ((SwtMenuitem) c).reposition(getChildNodes().size()-1);
+//    }
+//  }
+
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+    if(menu != null){
+      this.menu.setVisible(visible);
+    }
+  }
+  
+  
 }
 
   

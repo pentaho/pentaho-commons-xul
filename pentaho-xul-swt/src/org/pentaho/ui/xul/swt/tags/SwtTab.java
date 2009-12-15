@@ -49,7 +49,10 @@ public class SwtTab extends SwtElement implements XulTab{
 
   public void setLabel(String label) {
     this.label = label;
-    
+    getTabbox();
+    if(tabbox != null){
+      ((SwtTabbox) tabbox).updateTabState();
+    }
   }
 
   public void setOnclick(String onClick) {

@@ -5,13 +5,11 @@ package org.pentaho.ui.xul.impl;
 
 import groovy.lang.GroovyClassLoader;
 
-import java.awt.EventQueue;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,11 +19,11 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
+import org.pentaho.ui.xul.XulOverlay;
+import org.pentaho.ui.xul.XulPerspective;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.binding.DefaultBinding;
-import org.pentaho.ui.xul.components.XulMessageBox;
-import org.pentaho.ui.xul.components.XulScript;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 
@@ -40,7 +38,9 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   protected XulLoader xulLoader;
   protected HashMap<String, XulEventHandler> eventHandlers;
   protected HashMap<String, XulDataModel> models;
-  private List<Object> resourceBundleList ;
+  protected Map<String, XulPerspective> perspectives = new HashMap<String, XulPerspective>();
+  private XulPerspective currentOverlay;
+  private List<Object> resourceBundleList;
   
   protected BindingContext bindings;
   
@@ -365,7 +365,36 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     this.resourceBundleList = resourceBundles;
     
   }
+
+  public void loadPerspective(String id) {
+    XulPerspective perspective = this.perspectives.get(id);
+    if(perspective != null){
+      for(XulEventHandler handler : perspective.getEventHandlers()){
+        this.addEventHandler(handler);
+      }
+      if(currentOverlay != null){
+        for(XulOverlay overlay : currentOverlay.getOverlays()){
+          try{
+            this.removeOverlay(overlay.getOverlayUri());
+          } catch(XulException e){
+            logger.error(e);
+          }
+        }
+      }
+      
+      for(XulOverlay overlay : perspective.getOverlays()){
+        try{
+          this.loadOverlay(overlay.getOverlayUri());
+        } catch(XulException e){
+          logger.error(e);
+        }
+      }
+      currentOverlay = perspective;
+    }
+  }
   
-  
+  public void addPerspective(XulPerspective perspective){
+    this.perspectives.put(perspective.getID(), perspective);
+  }
   
 }

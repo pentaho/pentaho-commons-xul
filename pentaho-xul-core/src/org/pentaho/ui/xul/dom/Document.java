@@ -25,4 +25,6 @@ public interface Document extends Element{
   public void addBinding(Binding bind);
   public void addInitializedBinding(Binding b);
   public void invokeLater(Runnable runnable);
+  
+  void loadPerspective(String id);
 }

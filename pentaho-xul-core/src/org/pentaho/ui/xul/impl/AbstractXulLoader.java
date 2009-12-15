@@ -176,6 +176,28 @@ public abstract class AbstractXulLoader implements XulLoader {
     setRootDir(resource);
     mainBundle = (ResourceBundle) bundle;
 
+
+    String resStr = resource.replace(".xul", "");
+    ResourceBundle res;
+    try {
+      res = ResourceBundle.getBundle(resStr);
+    } catch (MissingResourceException e) {
+      
+      URL url = null;
+      try{
+        url = new File(".").toURL();
+      } catch(MalformedURLException ex){}
+      URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
+      try{
+        res = ResourceBundle.getBundle(resStr, Locale.getDefault(), cls);
+      } catch(MissingResourceException ex){
+        return loadXul(doc);
+      }
+    }
+    if(res != null){
+      resourceBundleList.add(res);
+    }
+    
     resourceBundleList.add(mainBundle);  
     return this.loadXul(doc);
 
@@ -238,7 +260,6 @@ public abstract class AbstractXulLoader implements XulLoader {
     for (String includeSrc : includedSources) {
       try {
         ResourceBundle res = ResourceBundle.getBundle(includeSrc.replace(".xul", ""));
-        output = ResourceBundleTranslator.translate(output, res);
         resourceBundleList.add((ResourceBundle) res);  
       } catch (MissingResourceException e) {
         URL url = null;
@@ -252,9 +273,6 @@ public abstract class AbstractXulLoader implements XulLoader {
           continue;
         }
         
-      } catch (IOException e) {
-
-        throw new XulException(e);
       }
     }
     for (String resource : resourceBundles) {
@@ -264,7 +282,6 @@ public abstract class AbstractXulLoader implements XulLoader {
         if (res == null) {
           continue;
         }
-        output = ResourceBundleTranslator.translate(output, res);
         resourceBundleList.add((ResourceBundle) res);  
       } catch (MissingResourceException e) {
         URL url = null;
@@ -273,13 +290,18 @@ public abstract class AbstractXulLoader implements XulLoader {
         } catch(MalformedURLException ex){}
         URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
         try{
-          resourceBundleList.add(ResourceBundle.getBundle(resource, Locale.getDefault(), cls));
+          ResourceBundle res = ResourceBundle.getBundle(resource, Locale.getDefault(), cls);
+          resourceBundleList.add(res);
         } catch(MissingResourceException ex){
           continue;
         }
+      }
+    }
+    for(Object bundle : resourceBundleList){
+      try {
+        output = ResourceBundleTranslator.translate(output, (ResourceBundle) bundle);
       } catch (IOException e) {
-
-        throw new XulException(e);
+        e.printStackTrace();
       }
     }
     return output;
@@ -313,61 +335,81 @@ public abstract class AbstractXulLoader implements XulLoader {
       String resourceBundle = ele.attributeValue("resource");
       if (resourceBundle != null) {
         resourceBundles.add(resourceBundle);
+      } else {
+        resourceBundles.add(src.replace(".xul", ""));
       }
 
-      InputStream in = getClass().getClassLoader().getResourceAsStream(src);
-
-      if (in != null) {
-        logger.debug("Adding include src: " + src);
-        includedSources.add(src);
-      } else {
-        //try fully qualified name
-        src = ele.attributeValue("src");
+      InputStream in = null;
+      try{
         in = getClass().getClassLoader().getResourceAsStream(src);
+  
         if (in != null) {
-          includedSources.add(src);
           logger.debug("Adding include src: " + src);
+          includedSources.add(src);
         } else {
-          logger.error("Could not resolve include: " + src);
+          //try fully qualified name
+          src = ele.attributeValue("src");
+          in = getClass().getClassLoader().getResourceAsStream(src);
+          if (in != null) {
+            includedSources.add(src);
+            logger.debug("Adding include src: " + src);
+          } else {
+            File f = new File(this.getRootDir() + src);
+            if(f.exists()){
+              try {
+                in = new FileInputStream(f);
+                includedSources.add(src);
+              } catch (FileNotFoundException e) {
+                e.printStackTrace();
+              }
+            }
+          }
+  
         }
-
-      }
-
-      final Document doc = getDocFromInputStream(in);
-
-      Element root = doc.getRootElement();
-      String ignoreRoot = ele.attributeValue("ignoreroot");
-      if (root.getName().equals("overlay")) {
-        processOverlay(root, ele.getDocument().getRootElement());
-      } else if (ignoreRoot == null || ignoreRoot.equalsIgnoreCase("false")) {
-        logger.debug("Including entire file: " + src);
-        List contentOfParent = ele.getParent().content();
-        int index = contentOfParent.indexOf(ele);
-        contentOfParent.set(index, root);
-
-        //process any overlay children
-        List<Element> overlays = ele.elements();
-        for (Element overlay : overlays) {
-          logger.debug("Processing overlay within include");
-
-          this.processOverlay(overlay.attributeValue("src"), srcDoc);
+  
+        final Document doc = getDocFromInputStream(in);
+  
+        Element root = doc.getRootElement();
+        String ignoreRoot = ele.attributeValue("ignoreroot");
+        if (root.getName().equals("overlay")) {
+          processOverlay(root, ele.getDocument().getRootElement());
+        } else if (ignoreRoot == null || ignoreRoot.equalsIgnoreCase("false")) {
+          logger.debug("Including entire file: " + src);
+          List contentOfParent = ele.getParent().content();
+          int index = contentOfParent.indexOf(ele);
+          contentOfParent.set(index, root);
+  
+          //process any overlay children
+          List<Element> overlays = ele.elements();
+          for (Element overlay : overlays) {
+            logger.debug("Processing overlay within include");
+  
+            this.processOverlay(overlay.attributeValue("src"), srcDoc);
+          }
+        } else {
+          logger.debug("Including children: " + src);
+          List contentOfParent = ele.getParent().content();
+          int index = contentOfParent.indexOf(ele);
+          contentOfParent.remove(index);
+          List children = root.elements();
+          for (int i = children.size() - 1; i >= 0; i--) {
+            contentOfParent.add(index, children.get(i));
+          }
+  
+          //process any overlay children
+          List<Element> overlays = ele.elements();
+          for (Element overlay : overlays) {
+            logger.debug("Processing overlay within include");
+  
+            this.processOverlay(overlay.attributeValue("src"), srcDoc);
+          }
         }
-      } else {
-        logger.debug("Including children: " + src);
-        List contentOfParent = ele.getParent().content();
-        int index = contentOfParent.indexOf(ele);
-        contentOfParent.remove(index);
-        List children = root.elements();
-        for (int i = children.size() - 1; i >= 0; i--) {
-          contentOfParent.add(index, children.get(i));
-        }
-
-        //process any overlay children
-        List<Element> overlays = ele.elements();
-        for (Element overlay : overlays) {
-          logger.debug("Processing overlay within include");
-
-          this.processOverlay(overlay.attributeValue("src"), srcDoc);
+      } finally {
+        try {
+          if(in != null){
+            in.close();
+          }
+        } catch (IOException ignored) {
         }
       }
     }
@@ -535,7 +577,16 @@ public abstract class AbstractXulLoader implements XulLoader {
       //try fully qualified name
       in = getClass().getClassLoader().getResourceAsStream(src);
       if (in == null) {
-        logger.error("Cant find overlay source");
+        File f = new File(src);
+        if(f.exists()){
+          try {
+            in = new FileInputStream(f);
+          } catch (FileNotFoundException e) {
+            logger.error(e);
+          }
+        } else {
+          logger.error("Cant find overlay source");
+        }
       }
     }
     return in;

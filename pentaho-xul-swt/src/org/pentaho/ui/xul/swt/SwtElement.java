@@ -176,10 +176,29 @@ public class SwtElement extends AbstractXulComponent {
     switch (orient) {
       case HORIZONTAL:
         int columnCount = this.getChildNodes().size() + totalFlex;
-        container.setLayout(new GridLayout(columnCount, everyChildIsFlexing));
+        GridLayout layout = new GridLayout(columnCount, everyChildIsFlexing);
+        if(this.getPadding() > -1){
+          layout.marginWidth = this.getPadding(); 
+          layout.marginHeight = this.getPadding();
+        }
+        if(this.getSpacing() > -1){
+          layout.horizontalSpacing = this.getSpacing();
+          layout.verticalSpacing = this.getSpacing();
+        }
+        container.setLayout(layout);
+        
         break;
       case VERTICAL:
-        container.setLayout(new GridLayout());
+        layout = new GridLayout();
+        if(this.getPadding() > -1){
+          layout.marginWidth = this.getPadding(); 
+          layout.marginHeight = this.getPadding();
+        }
+        if(this.getSpacing() > -1){
+          layout.horizontalSpacing = this.getSpacing();
+          layout.verticalSpacing = this.getSpacing();
+        }
+        container.setLayout(layout);
         break;
     }
 
@@ -200,7 +219,6 @@ public class SwtElement extends AbstractXulComponent {
 
       // How many columns or rows should the control span? Use the flex value plus
       // 1 "point" for the child itself. 
-
       data.horizontalSpan = orient.equals(Orient.HORIZONTAL) ? swtChild.getFlex() + 1 : 1;
       data.verticalSpan = orient.equals(Orient.VERTICAL) ? swtChild.getFlex() + 1 : 1;
 
@@ -239,7 +257,7 @@ public class SwtElement extends AbstractXulComponent {
       if(swtChild.getHeight() > 0){
         data.heightHint = swtChild.getHeight();
       }
-
+      
       // And finally, deal with the align attribute...
       // Align is the PARENT'S attribute, and affects the 
       // opposite direction of the orientation.
@@ -369,6 +387,7 @@ public class SwtElement extends AbstractXulComponent {
       ((Control) getManagedObject()).setVisible(visible);
     }
   }
+  
   
   /**
    * this class is used internally as a way to keep track of

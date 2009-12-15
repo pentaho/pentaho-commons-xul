@@ -84,5 +84,8 @@ public class DocumentDom4J extends ElementDom4J implements Document {
     container.invokeLater(runnable);
   }
 
+  public void loadPerspective(String id){
+    container.loadPerspective(id);
+  }
   
 }

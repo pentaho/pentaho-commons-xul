@@ -24,6 +24,7 @@ public class SwtCheckbox extends SwtButton implements XulCheckbox {
   protected Button createNewButton(Composite parent) {
     return new Button(parent, SWT.CHECK);
   }
+  
   public boolean isChecked() {
     return button.getSelection();
   }

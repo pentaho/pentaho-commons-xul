@@ -105,4 +105,18 @@ public class SwingTabbox extends AbstractSwingContainer implements XulTabbox {
   public void addTabpanel(int idx) {
     throw new NotImplementedException("addTabpanel(int) not implemented in Swing");
   }
+
+  public void setClosable(boolean flag) {
+    throw new NotImplementedException("not implemented in Swing");
+  }
+
+  public boolean isClosable() {
+    throw new NotImplementedException("not implemented in Swing");
+  }
+
+  public void setOnclose(String command) {
+    throw new NotImplementedException("not implemented in Swing");
+  }
+  
+  
 }

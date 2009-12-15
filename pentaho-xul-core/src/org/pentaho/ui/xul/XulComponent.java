@@ -137,6 +137,10 @@ public interface XulComponent extends Element, XulEventSource {
   public void setPadding(int padding);
   public int getPadding();
   
+  public void setSpacing(int spacing);
+  public int getSpacing();
+  
+  
   public void adoptAttributes(XulComponent component);
   
 

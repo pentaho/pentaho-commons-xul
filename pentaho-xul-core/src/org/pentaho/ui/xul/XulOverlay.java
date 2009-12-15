@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul;
 
+import java.util.List;
+
 public interface XulOverlay {
   
   /**
@@ -32,5 +34,5 @@ public interface XulOverlay {
    * @return Overlay URI
    */
   public String getOverlayUri();
-
+  
 }

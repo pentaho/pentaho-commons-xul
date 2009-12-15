@@ -151,6 +151,12 @@ public class SwtMenu extends AbstractSwtXulContainer implements XulMenu {
       header.setText(label);
     }
   }
+
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+    header.setEnabled(visible);
+  }
   
 
 }

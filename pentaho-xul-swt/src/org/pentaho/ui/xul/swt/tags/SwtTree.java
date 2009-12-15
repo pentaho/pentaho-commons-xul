@@ -141,7 +141,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     // transitioned to onDomReady() instantiation this should work.
 
     domContainer = container;
-
   }
 
   @Override
