@@ -14,10 +14,10 @@
       <listitem label="JNDI" id="listItem2"/>
     </listbox>
 
-    <tree id="myTree" flex="1" hidecolumnpicker="false" seltype="multiple" class="tree" rows="5" ondrop="dndHandler.onTreeDrop()" ondrag="dndHandler.onDrag()" pen:drageffect="move">  
+    <tree id="myTree" flex="1" hidecolumnpicker="false" seltype="multiple" class="tree" rows="5" ondrop="dndHandler.onTreeDrop()" ondrag="dndHandler.onDrag()" pen:drageffect="move" editable="true">  
      <treecols id="myTree2-treeCols">  
        <treecol id="myTree2-treeCol0" primary="true" flex="2" label="Column A" persist="width" expandedBinding="expanded" ordinal="1" 
-       pen:binding="name" pen:childrenbinding="children"/>  
+       pen:binding="name" pen:childrenbinding="children" editable="true"/>  
      </treecols>  
      <treechildren>
 

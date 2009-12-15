@@ -497,7 +497,7 @@ public class SwtElement extends AbstractXulComponent {
         event.setDataTransfer(dt);
         dt.setData(getSwtDragData());
         event.setAccepted(true);
-        final String method = getOndrop();
+        final String method = getOndrag();
         if (method != null) {
           try{
             Document doc = getDocument();

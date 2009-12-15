@@ -1175,6 +1175,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   private void removeItem(Object parent, String childrenMethodProperty, Object toRemove) {
     Collection children = getChildCollection(parent, childrenMethodProperty);
+    if (children == null) {
+      return;
+    }
     Iterator iter = children.iterator();
     while (iter.hasNext()) {
       Object next = iter.next();

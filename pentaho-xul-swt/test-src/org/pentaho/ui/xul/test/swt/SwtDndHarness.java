@@ -14,10 +14,8 @@ import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingFactory;
 import org.pentaho.ui.xul.binding.DefaultBindingFactory;
-import org.pentaho.ui.xul.components.XulTextbox;
-import org.pentaho.ui.xul.containers.XulListbox;
+ import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.containers.XulTree;
-import org.pentaho.ui.xul.dnd.DropEffectType;
 import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
@@ -64,7 +62,7 @@ public class SwtDndHarness {
     }
     
     public void setName(String name) {
-      throw new UnsupportedOperationException("who?");
+      this.name = name;
     }
     
     public String toString() {
