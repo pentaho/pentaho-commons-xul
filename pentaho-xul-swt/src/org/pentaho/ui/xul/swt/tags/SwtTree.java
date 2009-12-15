@@ -1070,16 +1070,20 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       // find children
       String method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
+      Method childrenMethod = null;
+      
+      try{
+        childrenMethod = element.getClass().getMethod(method, new Class[] {});
+      } catch(NoSuchMethodException e){
+        logger.info("Could not find children binding method for object: "+element.getClass().getSimpleName());
+      }
 
-      Method childrenMethod = element.getClass().getMethod(method, new Class[] {});
-      Method imageMethod;
-      String imageSrc = null;
-
-      method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getImagebinding());
+      method = ((XulTreeCol)this.getColumns().getChildNodes().get(0)).getImagebinding();
       if (method != null) {
         DefaultBinding binding = new DefaultBinding(element, method, row.getParent(), "image");
         binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
+        binding.fireSourceChanged();
       }
 
       Collection<T> children = null;
