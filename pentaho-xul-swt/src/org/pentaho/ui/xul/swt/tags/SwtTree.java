@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -861,9 +862,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   public void clearSelection() {
   }
 
-  public <T> void setSelectedItems(Collection<T> items) {
-    //  TODO: Going to need this in the near future..
-  }
 
   public void setSelectedRows(int[] rows) {
     if (this.isHierarchical) {
@@ -872,6 +870,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       if (selectedRows != null && selectedRows.length > 0) {
         prevSelected = selectedRows[0]; // single selection only for now
       }
+      
+//      tree.setSelection(new StructuredSelection(getSelectedTreeItems(rows)));
       changeSupport.firePropertyChange("selectedItem", prevSelected, selected);
     } else {
       table.getTable().setSelection(rows);
@@ -1058,6 +1058,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         binding.fireSourceChanged();
       }
       
+      
       String expBind = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getExpandedbinding();
       if(expBind != null){
         DefaultBinding binding = new DefaultBinding(element, expBind, row.getParent(), "expanded");
@@ -1148,6 +1149,28 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     
   }
 
+//  private List<Object> getSelectedTreeItems(int[] currentSelection) {
+//    if (this.isHierarchical && this.elements != null) {
+//
+//      int[] vals = currentSelection;
+//      if (vals == null || vals.length == 0 || elements == null || elements.size() == 0) {
+//        return null;
+//      }
+//
+//      String property = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
+//
+//      List<Object> selection = new ArrayList<Object>();
+//      for(int pos : currentSelection){
+//        FindBoundItemTuple tuple = new FindBoundItemTuple(pos);
+//        findBoundItem(this.elements, this, property, tuple);
+//        
+//        selection.add(tuple.treeItem);
+//      }
+//      return selection;
+//    }
+//    return null;
+//  }
+  
   private Object getSelectedTreeItem(int[] currentSelection) {
     if (this.isHierarchical && this.elements != null) {
 
@@ -1500,6 +1523,91 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
     }
 
+  }
+  
+
+  public <T> void setSelectedItems(Collection<T> items) {
+    int[] selIndexes= new int[items.size()];
+    
+    if (this.isHierarchical && this.elements != null) {
+
+      List<Object> selection = new ArrayList<Object>();
+
+      String property = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
+      for(T t : items){
+        FindBoundItemTuple tuple = new FindBoundItemTuple(t);
+        findBoundItem(this.elements, this, property, tuple);
+        
+        selection.add(tuple.treeItem);
+      }
+      tree.setSelection(new StructuredSelection(selection));
+      
+    } else {
+      int pos = 0;
+      for(T t : items){
+        selIndexes[pos++] = findIndexOfItem(t);
+      }
+      this.setSelectedRows(selIndexes);
+    }
+  }
+  
+  public int findIndexOfItem(Object o){
+
+    String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+    property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+    Method childrenMethod = null;
+    try {
+      childrenMethod = elements.getClass().getMethod(property, new Class[] {});
+    } catch (NoSuchMethodException e) {
+      // Since this tree is built recursively, when at a leaf it will throw this exception.
+      logger.debug(e);
+    }
+
+    FindSelectedIndexTuple tuple = findSelectedItem(this.elements, childrenMethod, new FindSelectedIndexTuple(o));
+    return tuple.selectedIndex;
+  }
+  
+
+  private static class FindSelectedIndexTuple {
+    Object selectedItem = null;
+    Object currentItem = null; // ignores first element (root)
+    int curpos = -1; // ignores first element (root)
+    int selectedIndex = -1;
+
+    public FindSelectedIndexTuple(Object selectedItem) {
+      this.selectedItem = selectedItem;
+    }
+  }
+
+  private FindSelectedIndexTuple findSelectedItem(Object parent, Method childrenMethod, FindSelectedIndexTuple tuple) {
+    if (tuple.selectedItem == parent) {
+      tuple.selectedIndex = tuple.curpos;
+      return tuple;
+    }
+    Collection children = null;
+    if(childrenMethod != null){
+      try {
+        children = (Collection) childrenMethod.invoke(parent, new Object[] {});
+      } catch (Exception e) {
+        logger.error(e);
+        return tuple;
+      }
+    } else if(parent instanceof List){
+      children = (List) parent;
+    }
+
+    if (children == null || children.size() == 0) {
+      return null;
+    }
+
+    for (Object child : children) {
+      tuple.curpos++;
+      findSelectedItem(child, childrenMethod, tuple);
+      if (tuple.selectedIndex > -1) {
+        return tuple;
+      }
+    }
+    return tuple;
   }
 
 }
