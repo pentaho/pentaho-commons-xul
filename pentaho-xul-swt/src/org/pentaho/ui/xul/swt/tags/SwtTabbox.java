@@ -184,7 +184,10 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
       style = SWT.Close;
     }
     CTabItem item = new CTabItem (tabFolder, style);
-    item.setText (tabs.getTabByIndex(idx).getLabel());
+    String lbl = tabs.getTabByIndex(idx).getLabel();
+    if(lbl != null){
+      item.setText(lbl);
+    }
     
     //may have been added after panel
     addTabpanel(idx);
