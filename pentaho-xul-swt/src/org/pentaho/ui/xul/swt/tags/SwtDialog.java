@@ -186,6 +186,9 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   public void setButtons(String buttonList) {
     buttons = buttonList.split(",");
+    if(buttonsCreated){
+      setButtons(dialog);
+    }
   }
 
   public void setOndialogaccept(String command) {
