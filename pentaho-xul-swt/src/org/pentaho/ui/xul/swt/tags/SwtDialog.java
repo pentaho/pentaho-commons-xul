@@ -322,6 +322,53 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       }
       
     }
+    
+    boolean preserveAccept = false;
+    boolean preserveCancel = false;
+    boolean preserveExtra1 = false; 
+    boolean preserveExtra2 = false;
+    for(String btn : buttons){
+      if(btn.equals("accept")){
+        preserveAccept = true;
+      }
+      if(btn.equals("cancel")){
+        preserveCancel = true;
+      }
+      if(btn.equals("extra1")){
+        preserveExtra1 = true;
+      }
+      if(btn.equals("extra2")){
+        preserveExtra2 = true;
+      }
+    }
+    if(preserveAccept == false){
+      SwtButton existingButton = (this.getDocument() != null) ? (SwtButton) this.getElementById(this.getId()+"_accept".toLowerCase()) : null;
+      if(existingButton != null){
+        this.removeChild(existingButton);
+      }
+    }
+
+    if(preserveCancel == false){
+      SwtButton existingButton = (this.getDocument() != null) ? (SwtButton) this.getElementById(this.getId()+"_cancel".toLowerCase()) : null;
+      if(existingButton != null){
+        this.removeChild(existingButton);
+      }
+    }
+
+    if(preserveExtra1 == false){
+      SwtButton existingButton = (this.getDocument() != null) ? (SwtButton) this.getElementById(this.getId()+"_extra1".toLowerCase()) : null;
+      if(existingButton != null){
+        this.removeChild(existingButton);
+      }
+    }
+
+    if(preserveExtra2 == false){
+      SwtButton existingButton = (this.getDocument() != null) ? (SwtButton) this.getElementById(this.getId()+"_extra2".toLowerCase()) : null;
+      if(existingButton != null){
+        this.removeChild(existingButton);
+      }
+    }
+    
   }
 
   public void hide() {
