@@ -1176,4 +1176,16 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     
   }
 
+  public boolean isHiddenrootnode() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public void setHiddenrootnode(boolean hidden) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  
+  
 }

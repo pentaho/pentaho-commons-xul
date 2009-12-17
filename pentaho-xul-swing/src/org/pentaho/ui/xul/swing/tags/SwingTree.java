@@ -1279,6 +1279,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     return this.elements;
   }
 
+  private void fireSelectedItem() {
+    this.changeSupport.firePropertyChange("selectedItem", null, getSelectedItem());
+  }
+
   public Object getSelectedItem() {
     if (this.isHierarchical && this.elements != null) {
 
@@ -1302,10 +1306,6 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       return tuple != null ? tuple.selectedItem : null;
     }
     return null;
-  }
-
-  private void fireSelectedItem() {
-    this.changeSupport.firePropertyChange("selectedItem", null, getSelectedItem());
   }
 
   private static class FindSelectedItemTuple {
@@ -1463,8 +1463,81 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public <T> void setSelectedItems(Collection<T> items) {
-    // TODO Auto-generated method stub
+    int[] selIndexes= new int[items.size()];
+    
+    if (this.isHierarchical && this.elements != null) {
+      int pos = 0;
+      for(T t : items){
+        selIndexes[pos++] = findIndexOfItem(t);
+      }
+    }
+    this.setSelectedRows(selIndexes);
+  }
+  
+  public int findIndexOfItem(Object o){
 
+    String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+    property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
+    Method childrenMethod = null;
+    try {
+      childrenMethod = elements.getClass().getMethod(property, new Class[] {});
+    } catch (NoSuchMethodException e) {
+      // Since this tree is built recursively, when at a leaf it will throw this exception.
+      logger.debug(e);
+    }
+
+    FindSelectedIndexTuple tuple = findSelectedItem(this.elements, childrenMethod, new FindSelectedIndexTuple(o));
+    return tuple.selectedIndex;
+  }
+  
+
+  private static class FindSelectedIndexTuple {
+    Object selectedItem = null;
+    Object currentItem = null; // ignores first element (root)
+    int curpos = -1; // ignores first element (root)
+    int selectedIndex = -1;
+
+    public FindSelectedIndexTuple(Object selectedItem) {
+      this.selectedItem = selectedItem;
+    }
   }
 
+  private FindSelectedIndexTuple findSelectedItem(Object parent, Method childrenMethod, FindSelectedIndexTuple tuple) {
+    if (tuple.selectedItem == tuple.currentItem) {
+      tuple.selectedItem = parent;
+      return tuple;
+    }
+    Collection children = null;
+    try {
+      children = (Collection) childrenMethod.invoke(parent, new Object[] {});
+    } catch (Exception e) {
+      logger.error(e);
+      return null;
+    }
+
+    if (children == null || children.size() == 0) {
+      return null;
+    }
+
+    for (Object child : children) {
+      tuple.curpos++;
+      findSelectedItem(child, childrenMethod, tuple);
+      if (tuple.selectedIndex > -1) {
+        return tuple;
+      }
+    }
+    return null;
+  }
+
+  public boolean isHiddenrootnode() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public void setHiddenrootnode(boolean hidden) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  
 }

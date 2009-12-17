@@ -90,4 +90,7 @@ public interface XulTree extends XulContainer {
   <T> Collection <T> getSelectedItems();
   <T> void setSelectedItems(Collection<T> items);
   
+  void setHiddenrootnode(boolean hidden);
+  boolean isHiddenrootnode();
+  
 }

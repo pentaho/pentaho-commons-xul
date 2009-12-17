@@ -131,6 +131,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   private int[] selectedRows;
 
+  private boolean hiddenRoot = true;
+  
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.parentComponent = parent;
@@ -1009,8 +1011,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           }
         }
       } else {// tree
-
-        for (T o : elements) {
+        if(isHiddenrootnode() == false){ 
           SwtTreeItem item = new SwtTreeItem(this.getRootChildren());
           item.setXulDomContainer(this.domContainer);
 
@@ -1018,7 +1019,19 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           item.setRow(newRow);
           this.getRootChildren().addChild(item);
 
-          addTreeChild(o, newRow);
+          addTreeChild(elements, newRow);
+          
+        } else {
+          for (T o : elements) {
+            SwtTreeItem item = new SwtTreeItem(this.getRootChildren());
+            item.setXulDomContainer(this.domContainer);
+  
+            SwtTreeRow newRow = new SwtTreeRow(item);
+            item.setRow(newRow);
+            this.getRootChildren().addChild(item);
+  
+            addTreeChild(o, newRow);
+          }
         }
 
       }
@@ -1076,7 +1089,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       try{
         childrenMethod = element.getClass().getMethod(method, new Class[] {});
       } catch(NoSuchMethodException e){
-        logger.info("Could not find children binding method for object: "+element.getClass().getSimpleName());
+        logger.debug("Could not find children binding method for object: "+element.getClass().getSimpleName());
       }
 
       method = ((XulTreeCol)this.getColumns().getChildNodes().get(0)).getImagebinding();
@@ -1609,5 +1622,15 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
     return tuple;
   }
+
+  public boolean isHiddenrootnode() {
+    return hiddenRoot;
+  }
+
+  public void setHiddenrootnode(boolean hidden) {
+    this.hiddenRoot = hidden;
+  }
+  
+  
 
 }
