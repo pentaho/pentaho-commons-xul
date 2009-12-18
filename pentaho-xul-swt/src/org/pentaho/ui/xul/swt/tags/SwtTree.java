@@ -338,7 +338,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       if (pos == -1) {
         return null;
       }
-      FindSelectedItemTuple tuple = findSelectedItem(this.elements, method, new FindSelectedItemTuple(pos));
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, method, new FindSelectedItemTuple(pos, this.isHiddenrootnode()));
       return tuple != null ? tuple.selectedItem : null;
     }
     return null;
@@ -1197,7 +1197,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       if (selectedIdx == -1) {
         return null;
       }
-      FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(selectedIdx));
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(selectedIdx, this.isHiddenrootnode()));
       return tuple != null ? tuple.selectedItem : null;
     }
     return null;
@@ -1214,8 +1214,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     int selectedIndex;
 
-    public FindSelectedItemTuple(int selectedIndex) {
+    public FindSelectedItemTuple(int selectedIndex, boolean rootHidden) {
       this.selectedIndex = selectedIndex;
+      if(rootHidden == false){
+        curpos = 0;
+      }
     }
   }
 
