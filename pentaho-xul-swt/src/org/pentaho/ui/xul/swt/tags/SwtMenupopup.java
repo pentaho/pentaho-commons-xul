@@ -113,7 +113,16 @@ public class SwtMenupopup extends AbstractSwtXulContainer implements XulMenupopu
       this.menu.setVisible(visible);
     }
   }
-  
+
+  @Override
+  public void setDisabled(boolean disabled) {
+    super.setDisabled(disabled);
+    if(menu != null){
+      for(MenuItem item : menu.getItems()){
+        item.setEnabled( ! disabled);
+      }
+    }
+  }
   
 }
 
