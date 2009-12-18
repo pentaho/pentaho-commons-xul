@@ -3,12 +3,13 @@ package org.pentaho.ui.xul.swt.custom;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.swt.DialogButton;
 
@@ -71,6 +72,16 @@ public class BasicDialog extends TitleAreaDialog {
   @Override
   protected void createButtonsForButtonBar(Composite parent) {
     buttonArea = parent;
+    buttonArea.setLayout(new GridLayout());
+    
+    Label spacer = new Label(buttonArea, SWT.None);
+    
+    spacer.setSize(new Point(10, 10));
+    GridData data = new GridData();
+    data.grabExcessHorizontalSpace = true;
+    data.grabExcessVerticalSpace = false;
+    spacer.setLayoutData(data);
+    
   }
   
   public Button createButton(DialogButton dialogButton, boolean defaultButton){
