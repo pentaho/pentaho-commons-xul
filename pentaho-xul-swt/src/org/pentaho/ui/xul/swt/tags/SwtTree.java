@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1630,7 +1629,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   public void setHiddenrootnode(boolean hidden) {
     this.hiddenRoot = hidden;
   }
-  
   
 
 }

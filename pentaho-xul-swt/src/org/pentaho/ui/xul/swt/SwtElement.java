@@ -384,7 +384,15 @@ public class SwtElement extends AbstractXulComponent {
   public void setVisible(boolean visible) {
     super.setVisible(visible);
     if(getManagedObject() instanceof Control){
-      ((Control) getManagedObject()).setVisible(visible);
+      Control control = (Control) getManagedObject(); 
+      Object data = control.getLayoutData();
+      if(data instanceof GridData){
+        ((GridData) data).exclude = !visible;
+      }
+      control.setLayoutData(data);
+      control.setVisible(visible);
+      control.getParent().layout(true);
+      control.getParent().pack();
     }
   }
   
@@ -703,4 +711,15 @@ public class SwtElement extends AbstractXulComponent {
         return DropEffectType.COPY;
     }
   }
+
+  @Override
+  public void setTooltiptext(String tooltip) {
+    super.setTooltiptext(tooltip);
+    if(getManagedObject() instanceof Control){
+      ((Control) getManagedObject()).setToolTipText(tooltip);
+    }
+  }
+  
+  
+  
 }

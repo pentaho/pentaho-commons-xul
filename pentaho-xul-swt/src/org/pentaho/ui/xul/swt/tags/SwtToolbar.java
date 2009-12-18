@@ -50,6 +50,12 @@ public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
     // TODO Auto-generated method stub
     
   }
+
+  @Override
+  public void layout() {
+  }
+  
+  
   
   
 }
