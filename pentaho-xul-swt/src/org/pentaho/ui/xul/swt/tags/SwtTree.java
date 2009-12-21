@@ -1074,13 +1074,21 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         binding.fireSourceChanged();
       }
       
-      
-      String expBind = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getExpandedbinding();
+      XulTreeCol column = (XulTreeCol) this.getColumns().getChildNodes().get(0);
+      String expBind = column.getExpandedbinding();
       if(expBind != null){
         DefaultBinding binding = new DefaultBinding(element, expBind, row.getParent(), "expanded");
         binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
         expandBindings.add(binding);
+      }
+
+      if (column.getDisabledbinding() != null) {
+        String prop = column.getDisabledbinding();
+        DefaultBinding bind = new DefaultBinding(element, column.getDisabledbinding(), row.getParent(), "disabled");
+        bind.setBindingType(Binding.Type.ONE_WAY);
+        domContainer.addBinding(bind);
+        bind.fireSourceChanged();
       }
       
       row.addCell(cell);
