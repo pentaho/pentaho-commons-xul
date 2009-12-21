@@ -839,7 +839,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       this.tree.refresh();
       if ("true".equals(getAttributeValue("expanded"))) {
         tree.expandAll();
-      } else if(expandBindings.size() > 0){
+      } else if(expandBindings.size() > 0 && this.suppressEvents == false){
         for(DefaultBinding expBind : expandBindings){
           try {
             expBind.fireSourceChanged();
@@ -1009,8 +1009,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
             row.addCell(cell);
           }
         }
-      } else {// tree
-        if(isHiddenrootnode() == false){ 
+      } else {// tree 
+        suppressEvents = true;
+        if(isHiddenrootnode() == false){
           SwtTreeItem item = new SwtTreeItem(this.getRootChildren());
           item.setXulDomContainer(this.domContainer);
 
@@ -1031,7 +1032,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
             addTreeChild(o, newRow);
           }
-        }
+        } 
+        suppressEvents = false;
 
       }
 
@@ -1041,6 +1043,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       // treat as a selection change
       changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
       changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
+      changeSupport.firePropertyChange("selectedItems", null, Collections.EMPTY_LIST);
+      changeSupport.firePropertyChange("selectedItem", "", null);
     } catch (XulException e) {
       logger.error("error adding elements", e);
     } catch (Exception e) {
