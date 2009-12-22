@@ -21,7 +21,7 @@ public class XulTreeColumnModifier implements ICellModifier {
   }
   
   public boolean canModify(Object arg0, String property) {
-    return tree.getColumns().getColumn(Integer.parseInt(property)).isEditable();
+    return ((XulTreeItem) arg0).isDisabled() == false && tree.getColumns().getColumn(Integer.parseInt(property)).isEditable();
   }
 
   public Object getValue(Object arg0, String property) {
@@ -78,9 +78,6 @@ public class XulTreeColumnModifier implements ICellModifier {
       break;
     default:
       TextCellEditor editor = ((TextCellEditor) ((TreeViewer) tree.getManagedObject()).getCellEditors()[colIdx]);
-//      if(editor.isActivated() == false){
-//        cell.setLabel((String) value);
-//      }
       cell.setLabel((String) value);
     }
     ((TreeViewer) tree.getManagedObject()).refresh();

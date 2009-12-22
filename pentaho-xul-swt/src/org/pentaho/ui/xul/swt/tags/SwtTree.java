@@ -1053,6 +1053,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   private List<DefaultBinding> expandBindings = new ArrayList<DefaultBinding>();
+
+  private TreeLabelBindingConvertor treeLabelConvertor = new TreeLabelBindingConvertor(this);
   
   private <T> void addTreeChild(T element, XulTreeRow row) {
     try {
@@ -1065,6 +1067,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
         // Tree Bindings are one-way for now as you cannot edit tree nodes
         DefaultBinding binding = new DefaultBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        binding.setConversion(treeLabelConvertor);
         if (this.isEditable()) {
           binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
         } else {
@@ -1645,5 +1648,24 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     this.hiddenRoot = hidden;
   }
   
+  private static class TreeLabelBindingConvertor extends BindingConvertor<String, String>{
+
+    private SwtTree tree;
+    public TreeLabelBindingConvertor(SwtTree tree){
+      this.tree = tree;
+    }
+    
+    @Override
+    public String sourceToTarget(String value) {
+      return value;
+    }
+
+    @Override
+    public String targetToSource(String value) {
+      tree.update();
+      return value;
+    }
+        
+  }
 
 }
