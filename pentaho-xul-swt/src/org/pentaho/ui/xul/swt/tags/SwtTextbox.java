@@ -55,7 +55,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
       public void keyPressed(KeyEvent arg0) { oldValue = box.getText();}
       public void keyReleased(KeyEvent arg0) {
         if(!oldValue.equals(box.getText())){
-          changeSupport.firePropertyChange("value", "", getValue());
+          changeSupport.firePropertyChange("value", null, getValue());
         }
       }
     });
