@@ -48,6 +48,11 @@ public class SwtButton extends SwtElement implements XulButton {
   public SwtButton(Button button) {
     super("button");
     this.button = button;
+    button.addSelectionListener(new SelectionAdapter(){
+      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
+        invoke(onclick);
+      }
+    });
     setManagedObject(this.button);
   }
 
@@ -73,17 +78,41 @@ public class SwtButton extends SwtElement implements XulButton {
   
   private Control createImageButton(){
     imageButton = new Label(((Composite) parent.getManagedObject()), SWT.NONE);
+    imageButton.addMouseListener(new MouseAdapter(){
+      
+      @Override
+      public void mouseUp(MouseEvent arg0) {
+        if(disabled == false){
+          invoke(onclick);
+        }
+      }
+      
+    });
+    imageButton.setCursor(new Cursor(((Composite) parent.getManagedObject()).getDisplay(), SWT.CURSOR_HAND));
+    
     return imageButton;
     
   }
   
   public void setButton(Button button){
     this.button = button;
+    button.addSelectionListener(new SelectionAdapter(){
+      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
+        invoke(onclick);
+      }
+    });
     setManagedObject(button);
+    setVisible(isVisible());
   }
   
   protected Button createNewButton(Composite parent) {
-    return new Button(parent, SWT.NONE);
+    Button button = new Button(parent, SWT.NONE);
+    button.addSelectionListener(new SelectionAdapter(){
+      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
+        invoke(onclick);
+      }
+    });
+    return button;
   }
 
   
@@ -118,26 +147,7 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public void setOnclick(final String method) {
     this.onclick = method;
-    if(button != null){
-      button.addSelectionListener(new SelectionAdapter(){
-        public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-          invoke(method);
-        }
-      });
-    } else {  // Image Button implementation
 
-      imageButton.addMouseListener(new MouseAdapter(){
-        
-        @Override
-        public void mouseUp(MouseEvent arg0) {
-          if(disabled == false){
-            invoke(method);
-          }
-        }
-        
-      });
-      imageButton.setCursor(new Cursor(((Composite) parent.getManagedObject()).getDisplay(), SWT.CURSOR_HAND));
-    }
   }
 
   public String getLabel() {

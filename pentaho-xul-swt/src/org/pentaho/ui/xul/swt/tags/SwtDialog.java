@@ -281,13 +281,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       } else {
         //new button needed
         Button button = d.createButton(thisButton, false);
-        swtButton = new SwtButton(button){
-          @Override
-          public void setVisible(boolean visible) {
-            super.setVisible(visible);
-            d.getShell().layout(true);
-          }
-        };
+        swtButton = new SwtButton(button);
         swtButton.setId(this.getId()+"_" + buttonName.trim().toLowerCase());
         this.addChild(swtButton);
           
