@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -25,6 +26,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -70,6 +72,7 @@ import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableContentProvider;
+import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeCellLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeLabelProvider;
@@ -188,17 +191,24 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   private void setupTree() {
 
+    TreeViewerColumn treeCol = new TreeViewerColumn(tree, SWT.LEFT);
+    treeCol.getColumn().setWidth(200);
+    treeCol.getColumn().setMoveable(true);
+    treeCol.getColumn().setText("Column 3");
+    treeCol.setLabelProvider(new XulTreeCellLabelProvider(this, this.domContainer));
+    ColumnViewerToolTipSupport.enableFor(tree);
+
     tree.setCellEditors(new CellEditor[] { new XulTreeTextCellEditor(tree.getTree()) });
     tree.setCellModifier(new XulTreeColumnModifier(this));
 
-    tree.setLabelProvider(new XulTreeLabelProvider(this, this.domContainer));
+    //tree.setLabelProvider(new XulTreeLabelProvider(this, this.domContainer));
     tree.setContentProvider(new XulTreeContentProvider(this));
 
     tree.setInput(this);
     tree.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
     tree.setColumnProperties(new String[] { "0" });
-    //TreeViewerColumn tc = new TreeViewerColumn(tree, SWT.LEFT);
-
+    
+        
     TreeViewerEditor.create(tree, new ColumnViewerEditorActivationStrategy(tree) {
 
       @Override
