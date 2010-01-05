@@ -133,6 +133,16 @@ public class SwtElement extends AbstractXulComponent {
   public Orient getOrientation() {
     return Orient.valueOf(getOrient());
   }
+  
+  @Override
+  public int getPadding() {
+    return (super.getPadding() > -1) ? super.getPadding() : 2;
+  }
+
+  @Override
+  public int getSpacing() {
+    return (super.getSpacing() > -1) ? super.getSpacing() : 2;
+  }
 
   @Override
   /**
@@ -391,8 +401,11 @@ public class SwtElement extends AbstractXulComponent {
       }
       control.setLayoutData(data);
       control.setVisible(visible);
-      control.getParent().layout(true);
+      if(! visible){
+        control.setSize(new Point(0,0));
+      }
       control.getParent().pack();
+      control.getParent().layout(true);
     }
   }
   
@@ -719,7 +732,5 @@ public class SwtElement extends AbstractXulComponent {
       ((Control) getManagedObject()).setToolTipText(tooltip);
     }
   }
-  
-  
-  
+
 }
