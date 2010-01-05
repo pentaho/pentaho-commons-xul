@@ -93,4 +93,7 @@ public interface XulTree extends XulContainer {
   void setHiddenrootnode(boolean hidden);
   boolean isHiddenrootnode();
   
+  void setCommand(String command);
+  String getCommand();
+  
 }

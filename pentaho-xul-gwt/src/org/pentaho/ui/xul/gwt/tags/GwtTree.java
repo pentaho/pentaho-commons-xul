@@ -96,6 +96,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private boolean suppressEvents = false;
   private boolean editable = false;
   private boolean visible = true;
+  private String command;
   
   private Map<String, TreeCellEditor> customEditors = new HashMap<String, TreeCellEditor>();
   private Map<String, TreeCellRenderer> customRenderers = new HashMap<String, TreeCellRenderer>();
@@ -1186,6 +1187,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     
   }
 
-  
+  public String getCommand() {
+    return command;
+  }
+
+  public void setCommand(String command) {
+    this.command = command;
+  }
   
 }

@@ -19,6 +19,8 @@ import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -134,6 +136,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private int[] selectedRows;
 
   private boolean hiddenRoot = true;
+  
+  private String command;
   
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -255,6 +259,16 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         }
       }
 
+    });
+    
+    tree.addDoubleClickListener(new IDoubleClickListener(){
+
+      public void doubleClick(DoubleClickEvent arg0) {
+        if(command != null){
+          invoke(command);
+        }
+      }
+      
     });
 
     tree.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -1658,6 +1672,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     this.hiddenRoot = hidden;
   }
   
+  public String getCommand() {
+    return command;
+  }
+
+  public void setCommand(String command) {
+    this.command = command;
+  }
+
   private static class TreeLabelBindingConvertor extends BindingConvertor<String, String>{
 
     private SwtTree tree;
@@ -1677,5 +1699,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
         
   }
+  
+  
 
 }

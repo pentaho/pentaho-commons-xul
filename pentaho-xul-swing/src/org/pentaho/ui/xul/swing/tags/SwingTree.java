@@ -122,6 +122,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   private SELECTION_MODE selType = SELECTION_MODE.SINGLE;
 
   private XulDomContainer domContainer;
+  
+  private String command;
 
   public SwingTree(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tree");
@@ -1539,5 +1541,12 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     
   }
 
+  public String getCommand() {
+    return command;
+  }
+
+  public void setCommand(String command) {
+    this.command = command;
+  }
   
 }
