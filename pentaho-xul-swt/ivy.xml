@@ -9,6 +9,7 @@
         <!--  external dependencies -->
     <dependency org="org.eclipse" name="jface" rev="3.3.0-I20070606-0010" transitive="false" />
    
+    <dependency org="org.eclipse.core" name="commands" rev="3.3.0-I20070605-0010" transitive="false" />
    
 		
         <!--  internal dependencies -->
@@ -16,6 +17,9 @@
       <dependency org="pentaho" name="pentaho-bi-platform-api" rev="${project.revision}" changing="true"/>
     -->
     <dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" changing="true" />    
+        
+    <dependency org="pentaho-library" name="libcss" rev="${project.revision}" changing="true" />    
+        
         
         <!--  testing dependencies -->
     <dependency org="junit" name="junit" rev="4.4" conf="test->default" />
