@@ -9,6 +9,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -36,6 +38,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
 
   private String binding;
   private Collection elements;
+  private String command;
 
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -324,6 +327,19 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
     if (getOndrag() != null) {
       super.enableDrag(DropEffectType.valueOfIgnoreCase(getDrageffect()));
     }
+  }
+
+  public String getCommand() {
+    return command;
+  }
+
+  public void setCommand(final String command) {
+    this.command = command;
+    listBox.addMouseListener(new MouseAdapter(){
+      public void mouseDoubleClick(MouseEvent arg0) {
+        invoke(command);
+      }
+    });
   }
   
 }

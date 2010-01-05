@@ -2,6 +2,8 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.Expression;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,6 +40,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   private JScrollPane scrollPane;
   private static final Log logger = LogFactory.getLog(SwingListbox.class);
   private XulDomContainer xulDomContainer;
+  private String command;
 
   private String binding;
 
@@ -51,6 +54,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
     scrollPane = new JScrollPane(listBox);
     listBox.setBorder(BorderFactory.createLineBorder(Color.gray));
     listBox.addListSelectionListener(this);
+    
     setManagedObject(scrollPane);
     this.xulDomContainer = container;
     
@@ -255,4 +259,19 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
     }
   }
 
+  public String getCommand() {
+    return command;
+  }
+
+  public void setCommand(final String command) {
+    this.command = command;
+    listBox.addMouseListener(new MouseAdapter(){
+      public void mouseClicked(MouseEvent event) {
+        if(event.getClickCount() == 2){
+          invoke(command);
+        }
+      }
+    });
+  }
+  
 }

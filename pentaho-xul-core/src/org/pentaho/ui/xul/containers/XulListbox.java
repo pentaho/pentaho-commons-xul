@@ -150,6 +150,15 @@ public interface XulListbox extends XulContainer {
   public String getOnselect();
   
   /**
+   * Sets the name of the method to be invoked when a user double-clicks an item in the list.
+   * 
+   * @param command
+   */
+  public void setCommand(String command);
+  
+  public String getCommand();
+  
+  /**
    * Helper method returning the zero based index of selected item.
    * @return The selected item's index.
    */

@@ -9,8 +9,6 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulListbox;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
@@ -23,9 +21,12 @@ import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Widget;
 
 public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, ChangeHandler {
 
@@ -42,7 +43,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   private Collection boundElements;
   
-  private ListBox listBox;
+  private XulListBox listBox;
 
   private boolean disabled = false;
 
@@ -55,21 +56,12 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   private String binding;
   
   private XulDomContainer container;
+  
+  private String command;
 
   public GwtListbox() {
     super(ELEMENT_NAME);
-    listBox = new ListBox(){
-
-      @Override
-      public void setHeight(String height) {
-        // if the user has specified a number of rows to display, setting 100% will over-write this. Block that here
-        if(GwtListbox.this.getRows() > 0 && height.equals("100%")){
-          return;
-        }
-        super.setHeight(height);
-      }
-      
-    };
+    listBox = new XulListBox();
     setManagedObject(listBox);
     listBox.addChangeHandler(this);
   }
@@ -384,6 +376,38 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   public void setWidth(int width) {
     super.setWidth(width);
     listBox.setWidth(width + "px");
+  }
+
+  public String getCommand() {
+    return command;
+  }
+
+  public void setCommand(final String command) {
+    this.command = command;
+    listBox.addDoubleClickHandler(new DoubleClickHandler(){
+
+      public void onDoubleClick(DoubleClickEvent event) {
+        invoke(command);
+      }
+      
+    });
   }  
+  
+  
+  public class XulListBox extends ListBox{
+
+    @Override
+    public void setHeight(String height) {
+      // if the user has specified a number of rows to display, setting 100% will over-write this. Block that here
+      if(GwtListbox.this.getRows() > 0 && height.equals("100%")){
+        return;
+      }
+      super.setHeight(height);
+    }
+
+    public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
+      return addDomHandler(handler, DoubleClickEvent.getType());
+    }
+  }
 
 }
