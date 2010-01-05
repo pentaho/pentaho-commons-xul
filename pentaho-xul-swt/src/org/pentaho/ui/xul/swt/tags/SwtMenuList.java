@@ -54,6 +54,8 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   private SwtMenuitem selectedItem = null;
 
   private boolean editable = false;
+  
+  private String command;
 
   private XulComponent parent;
   public SwtMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
@@ -87,6 +89,10 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
             , combobox.getSelectionIndex());
 
         previousSelectedItem = (T) combobox.getItem(combobox.getSelectionIndex());
+        
+        if(SwtMenuList.this.command != null){
+          invoke(SwtMenuList.this.command, new Object[] {});
+        }
 
       }
 
@@ -145,33 +151,7 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   }
 
   public void setOncommand(final String command) {
-    combobox.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter(){
-
-      public void widgetSelected(SelectionEvent e) {
-
-        /*
-         * This actionlistener is fired at parse time when elements are added.
-         * We'll ignore that call by checking a variable set to true post parse time
-         */
-        if (!loaded) {
-          return;
-        }
-        Document doc = getDocument();
-        XulRoot window = (XulRoot) doc.getRootElement();
-        final XulDomContainer con = window.getXulDomContainer();
-
-        SwingUtilities.invokeLater(new Runnable() {
-          public void run() {
-            try {
-              con.invoke(command, new Object[] {});
-            } catch (XulException e) {
-              logger.error("Error calling oncommand event", e);
-            }
-          }
-        });
-        
-      }
-    });
+    this.command = command;
   }
 
   public Collection<T> getElements() {
