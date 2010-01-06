@@ -14,7 +14,7 @@ import org.pentaho.ui.xul.XulContainer;
  * @author nbaker
  *
  */
-public interface XulGroupbox extends XulContainer{
+public interface XulGroupbox extends XulContainer, XulCaptionedPanel{
   
   /**
    * Set the title on the top of the groupbox (optional).
