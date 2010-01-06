@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.DND;
@@ -65,7 +66,7 @@ public class SwtElement extends AbstractXulComponent {
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
   private boolean disabled;
-
+  
   public SwtElement(String tagName) {
     super(tagName);
   }
@@ -219,11 +220,16 @@ public class SwtElement extends AbstractXulComponent {
       // some children have no object they are managing... skip these kids!
 
       Object mo = swtChild.getManagedObject();
-      if (mo == null || !(mo instanceof Control) || swtChild instanceof XulDialog){
+      if (mo == null || !(mo instanceof Control || mo instanceof Viewer) || swtChild instanceof XulDialog){
         continue;
       }
 
-      Control c = (Control) swtChild.getManagedObject();
+      Control c = null;
+      if(mo instanceof Control){
+        c = (Control) mo;
+      } else if(mo instanceof Viewer){
+        c = ((Viewer) mo).getControl();
+      }
 
       GridData data = new GridData();
 
