@@ -83,7 +83,14 @@ public class SwtXulLoader extends AbstractXulLoader{
     parser.registerHandler("PROMPTBOX", "org.pentaho.ui.xul.swt.tags.SwtPromptBox");
     parser.registerHandler("CONFIRMBOX", "org.pentaho.ui.xul.swt.tags.SwtConfirmBox");
     parser.registerHandler("EDITPANEL", "org.pentaho.ui.xul.swt.tags.SwtEditpanel");
-    
+    parser.registerHandler("BROWSER", "org.pentaho.ui.xul.swt.tags.SwtBrowser");
+
+
+    parser.registerHandler("GRID", "org.pentaho.ui.xul.swt.tags.SwtGrid");
+    parser.registerHandler("COLUMNS", "org.pentaho.ui.xul.swt.tags.SwtColumns");
+    parser.registerHandler("COLUMN", "org.pentaho.ui.xul.swt.tags.SwtColumn");
+    parser.registerHandler("ROWS", "org.pentaho.ui.xul.swt.tags.SwtRows");
+    parser.registerHandler("ROW", "org.pentaho.ui.xul.swt.tags.SwtRow");
   }
 
   public XulLoader getNewInstance() throws XulException {

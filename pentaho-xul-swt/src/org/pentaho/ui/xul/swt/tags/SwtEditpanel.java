@@ -4,13 +4,14 @@ package org.pentaho.ui.xul.swt.tags;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.custom.ViewForm;
-import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.PaintEvent;
+import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -61,6 +62,15 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     layout.marginHeight = 0;
     
     topForm = new ViewForm(mainComposite, SWT.NONE);
+    topForm.addPaintListener(new PaintListener(){
+
+      public void paintControl(PaintEvent arg0) {
+        GC gc = arg0.gc;
+        gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+        gc.drawLine(0, topForm.getBounds().height-1, topForm.getBounds().width, topForm.getBounds().height-1);
+      }
+      
+    });
     body = new Composite(mainComposite, SWT.None);
     
     data = new GridData();
@@ -99,6 +109,7 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
         toolbar = (XulToolbar) comp;
         ((Control) comp.getManagedObject()).setParent(topForm);
         topForm.setTopCenter((Control) comp.getManagedObject());
+        
       } else if(comp instanceof XulCaption){
         if(lbl == null){
           lbl = new CLabel(topForm, SWT.None);
@@ -110,7 +121,15 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
           lbl.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_BACKGROUND));
 
           lbl.setBackground(inactiveGradient, gradPercent);
-          
+          lbl.addPaintListener(new PaintListener(){
+
+            public void paintControl(PaintEvent arg0) {
+              GC gc = arg0.gc;
+              gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+              gc.drawLine(0, topForm.getBounds().height-1, topForm.getBounds().width, topForm.getBounds().height-1);
+            }
+            
+          });
         }
         lbl.setText(((XulCaption) comp).getLabel());
         topForm.setTopLeft(lbl);
@@ -121,7 +140,7 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
       
     }
     if(isCollapsible() && btn == null){
-      ToolBar bar = new ToolBar(topForm, SWT.FLAT | SWT.HORIZONTAL);
+      final ToolBar bar = new ToolBar(topForm, SWT.FLAT | SWT.HORIZONTAL);
       btn = new ToolItem(bar, SWT.PUSH);
       btn.setText("_");
       btn.addSelectionListener(new SelectionListener(){
@@ -129,6 +148,15 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
         public void widgetSelected(SelectionEvent se) {
           collapse();
         }
+      });
+      bar.addPaintListener(new PaintListener(){
+
+        public void paintControl(PaintEvent arg0) {
+          GC gc = arg0.gc;
+          gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+          gc.drawLine(0, bar.getBounds().height-1, topForm.getBounds().width, bar.getBounds().height-1);
+        }
+        
       });
  
       topForm.setTopRight(bar);
