@@ -181,6 +181,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
 
   public void setSelectedIndex(int index) {
+    if(index > listBox.getItemCount()){
+      return;
+    }
     if (listBox.isDisposed()){
       // TODO log error .. 
     }
