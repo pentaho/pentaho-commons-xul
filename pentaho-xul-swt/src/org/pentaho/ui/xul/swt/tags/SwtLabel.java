@@ -25,6 +25,9 @@ public class SwtLabel extends SwtElement implements XulLabel {
    * @param text
    */
   public void setValue( String text ) {
+  	if(text == null) {
+  		text = "";
+  	}
     label.setText(text);
     if(getParent() != null){
       label.getShell().layout(true);
