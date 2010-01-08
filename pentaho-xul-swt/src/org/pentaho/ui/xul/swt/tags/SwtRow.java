@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulColumns;
@@ -27,5 +29,31 @@ public class SwtRow extends AbstractSwtXulContainer implements XulColumns, XulRo
   public void layout(){
 
   }
+  
+  public Composite getGrid(){
+    if(getParent() != null && getParent().getParent() != null){
+      return (Composite) getParent().getParent().getManagedObject();
+    }
+    return null;
+  }
+
+  @Override
+  public void addChild(Element e) {
+    super.addChild(e);
+    if(getGrid() != null){
+      ((Control) ((XulComponent) e).getManagedObject()).setParent(getGrid());
+    }
+  }
+
+  @Override
+  public void addChildAt(Element c, int pos) {
+    // TODO Auto-generated method stub
+    super.addChildAt(c, pos);
+    if(getGrid() instanceof Composite){
+      ((Control) ((XulComponent) c).getManagedObject()).setParent(getGrid());
+    }
+  }
+  
+  
 
 }

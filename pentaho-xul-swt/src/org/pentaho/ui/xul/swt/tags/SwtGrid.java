@@ -38,7 +38,11 @@ public class SwtGrid extends AbstractSwtXulContainer implements XulGrid {
   public SwtGrid(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("grid");
 
-    setManagedObject(new Composite((Composite) parent.getManagedObject(), SWT.NONE));
+		int style = SWT.None;
+		if(self.getAttributeValue("border") != null){
+		  style = SWT.BORDER;
+		}
+    setManagedObject(new Composite((Composite) parent.getManagedObject(), style));
 	}
   
   @Override
@@ -125,7 +129,7 @@ public class SwtGrid extends AbstractSwtXulContainer implements XulGrid {
         // How many columns or rows should the control span? Use the flex value plus
         // 1 "point" for the child itself. 
   
-        data.horizontalSpan = orient.equals(Orient.HORIZONTAL) ? swtChild.getFlex() + 1 : 1;
+        data.horizontalSpan = cols.getChildNodes().get(row.getChildNodes().indexOf(cell)).getFlex() + 1;
         data.verticalSpan = row.getFlex() + 1;
   
         if(row.getFlex() >= 1){

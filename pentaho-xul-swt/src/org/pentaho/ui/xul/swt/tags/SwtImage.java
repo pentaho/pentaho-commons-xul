@@ -10,7 +10,10 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -73,6 +76,14 @@ public class SwtImage extends SwtElement implements XulImage{
         )
     );
   }
+  
+
+  @Override
+  public void setVisible(boolean visible) {
+    label.setVisible(visible);
+    label.getParent().layout(true);
+  }
+  
   
 }
 
