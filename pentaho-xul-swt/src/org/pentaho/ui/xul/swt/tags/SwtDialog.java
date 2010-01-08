@@ -553,6 +553,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
           return;
         }
       }
+      Image img = new Image(dialog.getShell().getDisplay(), in);
+      if(img != null) {
+        dialog.getShell().setImage(img);
+      }
     } finally {
       try{
         if(in != null){
@@ -561,10 +565,6 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       } catch(IOException ignored){}
     }
     
-    Image img = new Image(dialog.getShell().getDisplay(), in);
-    if(img != null) {
-      dialog.getShell().setImage(img);
-    }
   }
   
 }
