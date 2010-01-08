@@ -123,7 +123,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true);
     dialog = newDialog;
-    
+    dialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
     dialog.getShell().addListener(SWT.Close, new Listener() {
       public void handleEvent(Event event) {
         event.doit = false;
@@ -186,7 +186,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
 
   public void setButtons(String buttonList) {
-    buttons = buttonList.split(",");
+    if(buttonList.equals("")){
+      buttons = null;
+    } else {
+      buttons = buttonList.split(",");
+    }
     if(buttonsCreated){
       setButtons(dialog);
     }
@@ -263,10 +267,17 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   public void setButtons(final BasicDialog d){
     
     if (buttons == null){
+      d.getButtonArea().setVisible(false);
+      d.getButtonArea().getParent().setVisible(false);
+      ((GridData) d.getButtonArea().getParent().getLayoutData()).exclude = true;
+      d.getShell().layout(true);
       return;
     }
     
     for (String buttonName : buttons) {
+      if(StringUtils.isEmpty(buttonName)){
+        return;
+      }
       DialogButton thisButton = DialogButton.valueOf(buttonName.trim().toUpperCase());
       
       SwtButton swtButton = null;

@@ -14,7 +14,7 @@ public class SwtRadioGroup extends SwtBox implements XulRadioGroup {
   private ButtonGroup buttonGroup = new ButtonGroup();
 
   public SwtRadioGroup(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super(parent, tagName, Orient.VERTICAL);
+    super(parent, tagName, domContainer, Orient.VERTICAL);
   }
 
   @Override

@@ -10,7 +10,7 @@ public class SwtVbox extends SwtBox implements XulVbox {
   private static final long serialVersionUID = 1151231071964721100L;
 
   public SwtVbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
-    super(parent, tagName, Orient.VERTICAL);
+    super(parent, tagName, container, Orient.VERTICAL);
   }
 
 }

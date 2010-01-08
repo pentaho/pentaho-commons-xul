@@ -63,6 +63,7 @@ public class SwtWindow extends AbstractSwtXulContainer implements XulWindow {
     }
     
     shell.setLayout(new GridLayout());
+    shell.setBackgroundMode(SWT.INHERIT_DEFAULT);
     setManagedObject(shell);
     xulDomContainer = container;
 

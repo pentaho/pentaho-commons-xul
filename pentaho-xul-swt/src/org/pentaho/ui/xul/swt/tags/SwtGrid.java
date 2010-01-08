@@ -42,7 +42,10 @@ public class SwtGrid extends AbstractSwtXulContainer implements XulGrid {
 		if(self.getAttributeValue("border") != null){
 		  style = SWT.BORDER;
 		}
-    setManagedObject(new Composite((Composite) parent.getManagedObject(), style));
+
+		Composite box = new Composite((Composite) parent.getManagedObject(), style);
+		box.setBackgroundMode(SWT.INHERIT_DEFAULT);
+    setManagedObject(box);
 	}
   
   @Override

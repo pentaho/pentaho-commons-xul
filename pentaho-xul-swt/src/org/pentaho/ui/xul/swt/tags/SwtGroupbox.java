@@ -15,7 +15,7 @@ public class SwtGroupbox extends SwtBox implements XulGroupbox {
 
   public SwtGroupbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     // XUL groupbox defaults to VERTICAL orientation
-    super(parent, tagName, Orient.VERTICAL);
+    super(parent, tagName, container, Orient.VERTICAL);
   }
 
   @Override
