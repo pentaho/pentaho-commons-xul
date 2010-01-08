@@ -78,7 +78,6 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
         int pos = textBox.getCaretPosition();
         textBox.setText(text);
         textBox.setSelection(pos);
-        System.out.println(textBox.getText());
       }
     } else {
       int i=0;
