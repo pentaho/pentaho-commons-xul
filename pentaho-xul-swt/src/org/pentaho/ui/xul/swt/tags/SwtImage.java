@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.swt.tags;
 
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
@@ -48,11 +49,18 @@ public class SwtImage extends SwtElement implements XulImage{
   public void setSrc(String src) {
     this.src = src;
 
+    InputStream in = null;
     try{
-      InputStream in = XulUtil.loadResourceAsStream(src, domContainer);
+      in = XulUtil.loadResourceAsStream(src, domContainer);
       label.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), in));
     } catch (FileNotFoundException e){
       logger.error(e);
+    } finally {
+      try{
+        if(in != null){
+          in.close();
+        }
+      } catch(IOException ignored){}
     }
     
   }

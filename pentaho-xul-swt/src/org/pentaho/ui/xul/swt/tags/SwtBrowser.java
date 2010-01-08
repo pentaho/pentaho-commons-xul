@@ -27,7 +27,7 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   private boolean showToolbar = true;
   private Text location;
   private ToolBar toolbar;
-  private String src;
+  private String src = "about:blank";
   private String home;
   private Composite toolbarPanel;
 

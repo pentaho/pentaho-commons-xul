@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
@@ -175,8 +176,9 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   public void setImage(String image) {
     this.image = image;
     if(StringUtils.isNotEmpty(image)){
+      InputStream in = null;
       try {
-        InputStream in = XulUtil.loadResourceAsStream(image, domContainer);
+        in = XulUtil.loadResourceAsStream(image, domContainer);
         Image img = new Image(item.getDisplay(), in);
         
         int pixelIndex = img.getImageData().palette.getPixel(new RGB(255, 255, 255));
@@ -189,6 +191,12 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
 
       } catch (FileNotFoundException e) {
         logger.warn(e);
+      } finally {
+        try{
+          if(in != null){
+            in.close();
+          }
+        } catch(IOException ignored){}
       }
     }
   }

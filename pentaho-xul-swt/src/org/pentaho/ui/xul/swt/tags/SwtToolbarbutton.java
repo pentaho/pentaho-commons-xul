@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swt.tags;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
@@ -143,13 +144,20 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     }
     
 
+    InputStream in = null;
     try{
-      InputStream in = XulUtil.loadResourceAsStream(img, container);
+      in = XulUtil.loadResourceAsStream(img, container);
       
       button.setHotImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), in));
         
     } catch (FileNotFoundException e){
       logger.error(e);
+    } finally {
+      try{
+        if(in != null){
+          in.close();
+        }
+      } catch(IOException ignored){}
     }
     
   }
@@ -224,13 +232,20 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
 
+    InputStream in = null;
     try{
-      InputStream in = XulUtil.loadResourceAsStream(src, container);
+      in = XulUtil.loadResourceAsStream(src, container);
       
       button.setImage(new Image(d, in));
         
     } catch (FileNotFoundException e){
       logger.error(e);
+    } finally {
+      try{
+        if(in != null){
+          in.close();
+        }
+      } catch(IOException ignored){}
     }
     
     

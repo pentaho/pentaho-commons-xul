@@ -489,8 +489,9 @@ public class SwtElement extends AbstractXulComponent {
         if (buffer == null) {
           return null;
         }
+        ObjectInputStream readIn = null;
         try {
-          ObjectInputStream readIn = new ObjectInputStream(new ByteArrayInputStream(buffer));
+          readIn = new ObjectInputStream(new ByteArrayInputStream(buffer));
           int c = readIn.readInt();
           XulSwtDndType[] myData = new XulSwtDndType[c];
           for (int i = 0; i < c; i++) {
@@ -501,6 +502,12 @@ public class SwtElement extends AbstractXulComponent {
         } catch (Exception ex) {
           ex.printStackTrace();
           return null;
+        } finally {
+          if(readIn != null){
+            try{
+              readIn.close();
+            } catch (IOException ignored){}
+          }
         }
       }
       return null;

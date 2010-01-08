@@ -1,11 +1,11 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulButton;
@@ -229,8 +228,9 @@ public class SwtButton extends SwtElement implements XulButton {
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
 
+    InputStream in = null;
     try{
-      InputStream in = XulUtil.loadResourceAsStream(src, domContainer);
+      in = XulUtil.loadResourceAsStream(src, domContainer);
       Image img = new Image(d, in);
       
       if(button != null){
@@ -240,6 +240,12 @@ public class SwtButton extends SwtElement implements XulButton {
       }
     } catch (FileNotFoundException e){
       logger.error(e);
+    } finally {
+      try{
+        if(in != null){
+          in.close();
+        }
+      } catch(IOException ignored){}
     }
     
   }

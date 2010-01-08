@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swt.tags;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang.StringUtils;
@@ -538,17 +539,26 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
     
-    InputStream in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+appIcon);
-    if(in == null){
-      File f = new File(icon);
-      if(f.exists()){
-        try {
-          in = new FileInputStream(f);
-        } catch (FileNotFoundException e) {}
-      } else {
-        logger.warn("could not find image: "+appIcon);
-        return;
+    InputStream in = null;
+    try{
+      in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+appIcon);
+      if(in == null){
+        File f = new File(icon);
+        if(f.exists()){
+          try {
+            in = new FileInputStream(f);
+          } catch (FileNotFoundException e) {}
+        } else {
+          logger.warn("could not find image: "+appIcon);
+          return;
+        }
       }
+    } finally {
+      try{
+        if(in != null){
+          in.close();
+        }
+      } catch(IOException ignored){}
     }
     
     Image img = new Image(dialog.getShell().getDisplay(), in);

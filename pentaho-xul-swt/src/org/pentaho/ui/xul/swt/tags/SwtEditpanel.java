@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.swt.tags;
 
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.swt.SWT;
@@ -179,12 +180,24 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
       final ToolBar bar = new ToolBar(buttonPanel, SWT.FLAT | SWT.HORIZONTAL);
       btn = new ToolItem(bar, SWT.PUSH);
       
-      InputStream in = SwtEditpanel.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/swt/tags/images/16x16_right.png");
-      this.rightImg = new Image(bar.getDisplay(), in);
-      in = SwtEditpanel.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/swt/tags/images/16x16_left.png");
-      this.leftImg = new Image(bar.getDisplay(), in);
-      
-      btn.setImage(rightImg);
+      InputStream in = null;
+      InputStream in2 = null;
+      try{
+        in= SwtEditpanel.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/swt/tags/images/16x16_right.png");
+        this.rightImg = new Image(bar.getDisplay(), in);
+        in = SwtEditpanel.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/swt/tags/images/16x16_left.png");
+        this.leftImg = new Image(bar.getDisplay(), in);
+        btn.setImage(rightImg);
+      } finally {
+        try{
+          if(in != null){
+            in.close();
+          }
+          if(in2 != null){
+            in.close();
+          }
+        } catch(IOException ignored){}
+      }
     
       
       btn.addSelectionListener(new SelectionListener(){
