@@ -10,6 +10,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
@@ -66,6 +69,9 @@ public class SwtElement extends AbstractXulComponent {
   protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
 
   private boolean disabled;
+  
+  private static Map<String, Object> dndObjects = new WeakHashMap<String, Object>();
+  private static Map<String, SwtElement> dndSources = new WeakHashMap<String, SwtElement>();
   
   public SwtElement(String tagName) {
     super(tagName);
@@ -423,14 +429,26 @@ public class SwtElement extends AbstractXulComponent {
    */
   private static class XulSwtDndType implements Serializable {
 
-    public String xultype;
-    public Object value;
+    private static final long serialVersionUID = 7356053006903234787L;
     
-    public XulSwtDndType() {}
+    String xultype;
+    Object value;
     
-    public XulSwtDndType(String xultype, Object value) {
+    XulSwtDndType(String xultype, Object value, SwtElement xulSource) {
       this.xultype = xultype;
-      this.value = value;
+      
+      UUID uuid = UUID.randomUUID();
+      dndObjects.put(uuid.toString(), value);
+      dndSources.put(uuid.toString(), xulSource);
+      this.value = uuid.toString();
+    }
+    
+    Object getValue() {
+      return dndObjects.get(this.value);
+    }
+    
+    SwtElement getXulSource() {
+      return dndSources.get(this.value);
     }
   }
     
@@ -525,9 +543,9 @@ public class SwtElement extends AbstractXulComponent {
     
     source.addDragListener(new DragSourceListener() {
       public void dragFinished(DragSourceEvent nativeEvent) {
-        if (nativeEvent.doit) {
-          onSwtDragFinished(nativeEvent, lookupXulEffect(nativeEvent.detail));
-        }
+//        if (nativeEvent.doit) {
+//          onSwtDragFinished(nativeEvent, lookupXulEffect(nativeEvent.detail));
+//        }
       }
       public void dragSetData(DragSourceEvent nativeEvent) {
         if (SwtDndTypeTransfer.getInstance().isSupportedType(nativeEvent.dataType)) {
@@ -539,7 +557,7 @@ public class SwtElement extends AbstractXulComponent {
             // public API.  The idea here was to allow the drag and drop
             // components to specify their groupings in a single panel.
             
-            types[i] = new XulSwtDndType("xultype", obj.get(i));  //$NON-NLS-1$
+            types[i] = new XulSwtDndType("xultype", obj.get(i), SwtElement.this);  //$NON-NLS-1$
           }
           nativeEvent.data = types;
         }
@@ -586,7 +604,7 @@ public class SwtElement extends AbstractXulComponent {
    * @param nativeEvent swt event
    * @param effect drop effect, used to detemine if removing is necessary
    */
-  protected void onSwtDragFinished(DragSourceEvent nativeEvent, DropEffectType effect) {
+  protected void onSwtDragFinished(DropEffectType effect) {
     throw new UnsupportedOperationException("unsupported element type: " + getClass()); //$NON-NLS-1$
   }
   
@@ -623,11 +641,16 @@ public class SwtElement extends AbstractXulComponent {
         DropEvent event = new DropEvent();
         DataTransfer dataTransfer = new DataTransfer();
         XulSwtDndType types[] = (XulSwtDndType[])nativeEvent.data;
+        SwtElement xulDndSource = null;
         try {
           if (types != null) { // && types[0].xultype.equals(xultype)) {
             List<Object> objs = new ArrayList<Object>();
             for (int i = 0; i < types.length; i++) {
-              objs.add(types[i].value);
+              if (i == 0) {
+                xulDndSource = types[i].getXulSource();
+              }
+              objs.add(types[i].getValue());
+              
             }
             dataTransfer.setData(objs);
             dataTransfer.setDropEffect(lookupXulEffect(nativeEvent.detail));
@@ -660,8 +683,16 @@ public class SwtElement extends AbstractXulComponent {
           nativeEvent.detail = DND.DROP_NONE;
           return;
         }
+
+        // remove the item from the list
+        if (xulDndSource == null) {
+          throw new RuntimeException("DND Source is null");
+        }
+        xulDndSource.onSwtDragFinished(lookupXulEffect(nativeEvent.detail));
         
         onSwtDragDropAccepted(event);
+        
+
       }
 
       public void dropAccept(DropTargetEvent arg0) {}

@@ -1546,7 +1546,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   @Override
-  protected void onSwtDragFinished(DragSourceEvent event, DropEffectType effect) {
+  protected void onSwtDragFinished(DropEffectType effect) {
     if (effect == DropEffectType.MOVE) {
       // ISelection sel = tree.getSelection();
       if (elements != null) {
