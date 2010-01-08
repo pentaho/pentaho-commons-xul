@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.swt.tags.treeutil;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
@@ -35,11 +36,18 @@ public class XulTreeCellLabelProvider extends ColumnLabelProvider{
     if(src == null){
       return null;
     }
+    InputStream in = null;
     try{
-      InputStream in = XulUtil.loadResourceAsStream(src, domContainer);
+      in = XulUtil.loadResourceAsStream(src, domContainer);
       return new Image(((TreeViewer) tree.getManagedObject()).getTree().getDisplay(), in);
     } catch (FileNotFoundException e){
       logger.error(e);
+    } finally {
+      if(in != null){
+        try {
+          in.close();
+        } catch (IOException ignored) {}
+      }
     }
     return null;
   }
