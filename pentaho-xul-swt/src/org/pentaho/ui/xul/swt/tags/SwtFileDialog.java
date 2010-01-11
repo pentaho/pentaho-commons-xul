@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulFileDialog;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 
@@ -86,7 +87,7 @@ public class SwtFileDialog extends SwtElement implements XulFileDialog{
   }
   
   private RETURN_CODE showOpen(){
-    fc = new FileDialog((Shell) domContainer.getDocumentRoot().getRootElement().getManagedObject(), SWT.OPEN);
+    fc = new FileDialog((Shell) ((XulRoot)domContainer.getDocumentRoot().getRootElement()).getRootObject(), SWT.OPEN);
     if(fileHint != null){
       fc.setFileName(fileHint.getAbsolutePath());
     }
