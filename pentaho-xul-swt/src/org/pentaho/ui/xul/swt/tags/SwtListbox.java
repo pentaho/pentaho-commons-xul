@@ -12,6 +12,7 @@ import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -40,6 +41,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   private Collection elements;
   private String command;
 
+  private int[] curSelectedIndices = null;
+  private int curSelectedIndex = -1;
+  
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.container = container;
@@ -51,6 +55,21 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
       style |= SWT.SINGLE;
     }
     listBox = new List((Composite)parent.getManagedObject(), style);
+    
+    listBox.addSelectionListener(new SelectionAdapter(){
+
+      @Override
+      public void widgetSelected(SelectionEvent arg0) {
+        int[] indices = listBox.getSelectionIndices();
+        SwtListbox.this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
+        curSelectedIndices = indices;
+    
+        
+        SwtListbox.this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndex, getSelectedIndex());
+        curSelectedIndex = getSelectedIndex();
+      }
+      
+    });
     
     setManagedObject(listBox);
   }
