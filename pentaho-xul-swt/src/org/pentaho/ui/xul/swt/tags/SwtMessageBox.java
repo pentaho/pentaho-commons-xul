@@ -160,31 +160,36 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
     buttonArea.setLayoutData(gd);
     buttonArea.setLayout(new RowLayout());
     
+    
     if (buttons == null){
       return;
     }
+    
+    DialogButton[] buttonsToUse = new DialogButton[buttons.length];
+    
+    // If we only have strings, create DialogButtons, then process EXACTLY the same way.  
     if(buttons instanceof String[]){
-      for (String buttonName :  (String[]) buttons) {
-        DialogButton thisButton = DialogButton.valueOf(buttonName.trim().toUpperCase());
-      
-        Button btn = new Button(buttonArea, SWT.PUSH);
-        buttonList.add(btn);
-        btn.setText(thisButton.getLabel());
-        btn.setData(thisButton.getId());
+      for (int i = 0; i < buttons.length; i++) {
+        String buttonName = ((String)buttons[i]).trim().toUpperCase();
+        DialogButton thisButton = DialogButton.valueOf(buttonName);
+        buttonsToUse[i] = thisButton;
       }
-    } else {
-      for (DialogButton thisButton:  (DialogButton[]) buttons) {
-        Button btn = new Button(buttonArea, SWT.PUSH);
-        btn.setText(thisButton.getLabel());
-        btn.setData(thisButton.getId());
-        buttonList.add(btn);
-        final int code = thisButton.getId();
-        addButtonListeners(btn, code);
-        if(buttons.length == 1){
-          dialog.setDefaultButton(btn);
-        }
+    } else{
+      buttonsToUse = (DialogButton[])buttons;
+    }
+
+    for (DialogButton thisButton:  buttonsToUse) {
+      Button btn = new Button(buttonArea, SWT.PUSH);
+      btn.setText(thisButton.getLabel());
+      btn.setData(thisButton.getId());
+      buttonList.add(btn);
+      final int code = thisButton.getId();
+      addButtonListeners(btn, code);
+      if(buttonsToUse.length == 1){
+        dialog.setDefaultButton(btn);
       }
     }
+
     buttonArea.layout();
     buttonArea.redraw();
     dialog.layout();
