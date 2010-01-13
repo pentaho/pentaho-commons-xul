@@ -372,7 +372,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private void setupTable() {
     table.setContentProvider(new XulTableContentProvider(this));
 
-    table.setLabelProvider(new XulTableColumnLabelProvider(this));
+    table.setLabelProvider(new XulTableColumnLabelProvider(this, domContainer));
     table.setCellModifier(new XulTableColumnModifier(this));
     Table baseTable = table.getTable();
     baseTable.setLayoutData(new GridData(GridData.FILL_BOTH));
