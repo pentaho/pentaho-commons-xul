@@ -1,9 +1,13 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.Box;
 import javax.swing.JPanel;
@@ -11,6 +15,7 @@ import javax.swing.JPanel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -25,6 +30,7 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtAlign;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.util.XulUtil;
 
 /**
  * User: nbaker
@@ -34,18 +40,22 @@ public class SwtGrid extends AbstractSwtXulContainer implements XulGrid {
   private static final Log logger = LogFactory.getLog(SwtGrid.class);
   private SwtRows rows;
   private SwtColumns cols;
+  private String background;
+  private Composite grid;
+  private XulDomContainer domContainer;
 
   public SwtGrid(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("grid");
 
+		this.domContainer = domContainer;
 		int style = SWT.None;
 		if(self.getAttributeValue("border") != null){
 		  style = SWT.BORDER;
 		}
 
-		Composite box = new Composite((Composite) parent.getManagedObject(), style);
-		box.setBackgroundMode(SWT.INHERIT_DEFAULT);
-    setManagedObject(box);
+		grid = new Composite((Composite) parent.getManagedObject(), style);
+		grid.setBackgroundMode(SWT.INHERIT_DEFAULT);
+    setManagedObject(grid);
 	}
   
   @Override
@@ -190,5 +200,17 @@ public class SwtGrid extends AbstractSwtXulContainer implements XulGrid {
    */
   public void update() {
     layout();
+  }
+  
+
+  public String getBgcolor() {
+    return bgcolor;
+  }
+
+  public void setBgcolor(String bgcolor) {
+    this.bgcolor = bgcolor;
+    Color c = Color.decode(bgcolor);
+    grid.setBackground(new org.eclipse.swt.graphics.Color(grid.getDisplay(), c.getRed(), c.getGreen(), c.getBlue() ));
+    grid.setBackgroundMode(SWT.INHERIT_DEFAULT);
   }
 }

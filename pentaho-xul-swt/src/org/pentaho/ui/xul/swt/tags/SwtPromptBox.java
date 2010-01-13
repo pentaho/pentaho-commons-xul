@@ -4,93 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulPromptBox;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.XulDialogCallback;
 
-public final class SwtPromptBox extends SwtMessageBox implements XulPromptBox {
+public final class SwtPromptBox extends SwtElement implements XulPromptBox {
 
-  private Text textbox;
   private String defaultValue = null;
 
   private List<XulDialogCallback<String>> callbacks = new ArrayList<XulDialogCallback<String>>();
   
   static final String ELEMENT_NAME = "promptbox"; //$NON-NLS-1$
+  
+  private String acceptText = "OK";
+  private String cancelText = "Cancel";
+  private String title, message;
+  private Shell parentObject;
+  private XulComponent parent;
+  private InputDialog dlg;
 
   public SwtPromptBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super(self, parent, domContainer, tagName);
-    this.setButtonAlignment(SWT.RIGHT);
+    super("promptbox");
+    this.parent = parent;
   }
 
-  protected void createNewMessageBox(){
-    Shell shell = getParentObject();
-    
-    dialog = new Shell(shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM | SWT.RESIZE);
-    dialog.setText(getTitle());
-    dialog.setLayout(new GridLayout());
-    if(getWidth() > 0 && getHeight() > 0){
-      dialog.setSize(getWidth(), getHeight());
-    } else {
-      dialog.setSize(300, 175);
-    }
-    
-    int x = shell.getLocation().x + (shell.getSize().x - dialog.getSize().x)/2;
-    int y = shell.getLocation().y + (shell.getSize().y - dialog.getSize().y)/2;
-    dialog.setLocation(new Point(x,y));
-    
-    Composite c = new Composite(dialog, SWT.None);//(Composite) messageBox.getMainDialogArea();
-    c.setLayout(new GridLayout());
-    
-    GridData gd = new GridData();
-    gd.grabExcessHorizontalSpace = true;
-    gd.grabExcessVerticalSpace = true;
-    gd.verticalAlignment = GridData.FILL;
-    gd.horizontalAlignment = GridData.FILL;
-    c.setLayoutData(gd);
-    
-    Label txt = new Label(c, SWT.WRAP);
-    txt.setText(getMessage());
-    
-    gd = new GridData();
-    gd.grabExcessHorizontalSpace = true;
-    gd.horizontalAlignment = GridData.FILL;
-    txt.setLayoutData(gd);
-
-    textbox = new Text(c, SWT.BORDER);
-    textbox.setText(defaultValue!=null?defaultValue:"");
-    gd = new GridData();
-    gd.grabExcessVerticalSpace = true;
-    gd.horizontalAlignment = GridData.FILL;
-    textbox.setLayoutData(gd);
-    
-    setButtons(c);
-    
-    c.layout();
-    c.redraw();
-    shell.redraw();
-  }
-  
-  protected void addButtonListeners(final Button btn, final int code) {
-  	btn.addSelectionListener(new SelectionAdapter(){
-      public void widgetSelected(SelectionEvent arg0) {
-        notifyListeners(code);
-        dialog.close();
-      }
-    });
-  }
 
   public void addDialogCallback(XulDialogCallback callback) {
     this.callbacks.add(callback);
@@ -99,7 +47,17 @@ public final class SwtPromptBox extends SwtMessageBox implements XulPromptBox {
   public void removeDialogCallback(XulDialogCallback callback) {
     this.callbacks.remove(callback);
   }
-
+  
+  protected Shell getParentObject(){
+    if(parentObject != null){
+      return parentObject;
+    } else if (getParent() instanceof SwtDialog){
+      return ((SwtDialog)getParent()).getShell();
+    }else{
+      return (Shell) getParent().getManagedObject();
+    }
+  }
+  
   private void notifyListeners(Integer code){
     XulDialogCallback.Status status = XulDialogCallback.Status.CANCEL;
     
@@ -119,12 +77,12 @@ public final class SwtPromptBox extends SwtMessageBox implements XulPromptBox {
     }
     
     for(XulDialogCallback<String> callback : callbacks){
-      callback.onClose(SwtPromptBox.this, status, textbox.getText());
+      callback.onClose(SwtPromptBox.this, status, dlg.getValue());
     }
   }
   
   public String getValue() {
-    return this.textbox.getText();
+    return dlg.getValue();
   }
 
   public void setValue(String value) {
@@ -132,7 +90,72 @@ public final class SwtPromptBox extends SwtMessageBox implements XulPromptBox {
   }
 
   public void setCancelLabel(String label) {
-    // TODO Auto-generated method stub
+    this.cancelText = label;
   }
 
+  public Object[] getButtons() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public Object getIcon() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public int open() {
+    dlg = new InputDialog(getParentObject(), title, message, defaultValue, new IInputValidator(){
+
+      public String isValid(String arg0) {
+        return null;
+      }
+      
+    });
+    int retVal = dlg.open();
+    notifyListeners(retVal);
+    return retVal;
+  }
+
+  public void setAcceptLabel(String label) {
+    this.acceptText = label;
+    
+  }
+
+  public void setButtons(Object[] buttons) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setIcon(Object icon) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+
+  public void setModalParent(Object parent) {
+    parentObject = (Shell) parent;
+  }
+  
+
+  public void setScrollable(boolean scroll) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  
 }

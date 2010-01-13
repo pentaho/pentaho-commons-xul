@@ -68,5 +68,8 @@ public interface XulTreeCol extends XulComponent {
   public String getExpandedbinding();
   public void setExpandedbinding(String bind);
   
+  public String getTooltipbinding();
+  public void setTooltipbinding(String bind);
+  
 
 }

@@ -25,6 +25,7 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   private String columnTypeBinding;
   private String disabledBinding;
   private String colType;
+  private String tooltipBinding;
 
   public SwingTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
 		super("treecol");
@@ -225,6 +226,15 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
     // TODO Auto-generated method stub
     
   }
+
+  public String getTooltipbinding() {
+    return tooltipBinding;
+  }
+
+  public void setTooltipbinding(String bind) {
+    this.tooltipBinding = bind;      
+  }
+  
   
   
 }

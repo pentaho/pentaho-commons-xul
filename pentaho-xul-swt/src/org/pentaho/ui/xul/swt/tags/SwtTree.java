@@ -1118,6 +1118,15 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         bind.fireSourceChanged();
       }
       
+
+      if (column.getTooltipbinding() != null) {
+        String prop = column.getTooltipbinding();
+        DefaultBinding bind = new DefaultBinding(element, column.getTooltipbinding(), row.getParent(), "tooltiptext");
+        bind.setBindingType(Binding.Type.ONE_WAY);
+        domContainer.addBinding(bind);
+        bind.fireSourceChanged();
+      }
+      
       row.addCell(cell);
 
       // find children

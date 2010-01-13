@@ -429,18 +429,18 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     // @TODO This whole listener pattern needs to be replaced with a generic solution 
      
-    dialog.getShell().addListener(XulRoot.EVENT_ON_LOAD, new Listener() {
-      public void handleEvent(Event e) {
-        if(!StringUtils.isEmpty(method)){
-          
-          // only call this if the application is ready. Otherwise it's being handled in the main of the 
-          // program
-          if(SwtDialog.this.domContainer.isInitialized()){
-            invoke(method);
-          }
-        }
-      }
-    });
+//    dialog.getShell().addListener(XulRoot.EVENT_ON_LOAD, new Listener() {
+//      public void handleEvent(Event e) {
+//        if(!StringUtils.isEmpty(method)){
+//          
+//          // only call this if the application is ready. Otherwise it's being handled in the main of the 
+//          // program
+//          if(SwtDialog.this.domContainer.isInitialized()){
+//            invoke(method);
+//          }
+//        }
+//      }
+//    });
   }
 
   /**

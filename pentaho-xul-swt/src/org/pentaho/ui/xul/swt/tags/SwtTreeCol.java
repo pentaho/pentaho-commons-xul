@@ -33,6 +33,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     private String image;
     private boolean expanded;
     private String expandedBinding;
+    private String tooltipBinding;
     
     public SwtTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treecol");
@@ -228,5 +229,15 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     public void setExpandedbinding(String bind) {
       this.expandedBinding = bind;
     }
+
+    public String getTooltipbinding() {
+      return tooltipBinding;
+    }
+
+    public void setTooltipbinding(String bind) {
+      this.tooltipBinding = bind;      
+    }
+    
+    
     
   }

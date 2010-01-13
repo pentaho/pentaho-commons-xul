@@ -378,6 +378,20 @@ public abstract class AbstractXulLoader implements XulLoader {
           List contentOfParent = ele.getParent().content();
           int index = contentOfParent.indexOf(ele);
           contentOfParent.set(index, root);
+          
+          
+          if(root.getName().equals("dialog")){
+            String newOnload = root.attributeValue("onload");
+            if(newOnload != null){
+              String existingOnload = srcDoc.getRootElement().attributeValue("onload");
+              String finalOnload = "";
+              if(existingOnload != null){
+                finalOnload = existingOnload + ", ";
+              }
+              finalOnload += newOnload;
+              srcDoc.getRootElement().setAttributeValue("onload", finalOnload);
+            }
+          }
   
           //process any overlay children
           List<Element> overlays = ele.elements();
@@ -393,7 +407,21 @@ public abstract class AbstractXulLoader implements XulLoader {
           contentOfParent.remove(index);
           List children = root.elements();
           for (int i = children.size() - 1; i >= 0; i--) {
-            contentOfParent.add(index, children.get(i));
+            Element child = (Element) children.get(i);
+            contentOfParent.add(index, child);
+
+            if(child.getName().equals("dialog")){
+              String newOnload = child.attributeValue("onload");
+              if(newOnload != null){
+                String existingOnload = srcDoc.getRootElement().attributeValue("onload");
+                String finalOnload = "";
+                if(existingOnload != null){
+                  finalOnload = existingOnload + ", ";
+                }
+                finalOnload += newOnload;
+                srcDoc.getRootElement().setAttributeValue("onload", finalOnload);
+              }
+            }
           }
   
           //process any overlay children
@@ -532,7 +560,18 @@ public abstract class AbstractXulLoader implements XulLoader {
         for (Object overlayChild : overlay.elements()) {
           Element pluckedElement = (Element) overlay.content().remove(overlay.content().indexOf(overlayChild));
           
-          
+          if(pluckedElement.getName().equals("dialog")){
+            String newOnload = pluckedElement.attributeValue("onload");
+            if(newOnload != null){
+              String existingOnload = targetDocument.getRootElement().attributeValue("onload");
+              String finalOnload = "";
+              if(existingOnload != null){
+                finalOnload = existingOnload + ", ";
+              }
+              finalOnload += newOnload;
+              targetDocument.getRootElement().setAttributeValue("onload", finalOnload);
+            }
+          }
 
           String insertBefore = pluckedElement.attributeValue("insertbefore");
           String insertAfter = pluckedElement.attributeValue("insertafter");

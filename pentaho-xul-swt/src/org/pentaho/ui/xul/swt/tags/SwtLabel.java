@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.swt.tags;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulLabel;
@@ -13,12 +14,20 @@ public class SwtLabel extends SwtElement implements XulLabel {
   private static final long serialVersionUID = 5202737172518086153L;
   
   private boolean disabled;
-  CLabel label;
+  CLabel cLabel;
+  Label label;
   
   public SwtLabel(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
-    label = new CLabel((Composite)parent.getManagedObject(), SWT.WRAP);
-    setManagedObject(label);
+    
+    String multi = self.getAttributeValue("multiline");
+    if(multi != null && multi.equals("true")){
+      label = new Label((Composite)parent.getManagedObject(), SWT.WRAP);
+      setManagedObject(label);
+    } else {
+      cLabel = new CLabel((Composite)parent.getManagedObject(), SWT.NONE);
+      setManagedObject(cLabel);
+    }
   }
 
   /**
@@ -29,14 +38,18 @@ public class SwtLabel extends SwtElement implements XulLabel {
   	if(text == null) {
   		text = "";
   	}
-    label.setText(text);
-    if(getParent() != null){
-      label.getShell().layout(true);
-    }
+  	if(label != null){
+      label.setText(text);
+      if(getParent() != null){
+        label.getShell().layout(true);
+      }
+  	} else {
+  	  cLabel.setText(text);
+  	}
   }
   
   public String getValue() {
-    return label.getText();
+    return (label != null) ? label.getText() : cLabel.getText();
   }
  
   /**
@@ -51,7 +64,13 @@ public class SwtLabel extends SwtElement implements XulLabel {
 
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
-    if (!label.isDisposed()) label.setEnabled( !disabled );
+    if(label != null){
+      if (!label.isDisposed()){
+        label.setEnabled( !disabled );
+      }
+    } else {
+      cLabel.setEnabled( ! disabled);
+    }
   }
 
 }

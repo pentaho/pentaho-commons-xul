@@ -413,10 +413,6 @@ public class SwtElement extends AbstractXulComponent {
       }
       control.setLayoutData(data);
       control.setVisible(visible);
-      if(! visible){
-        control.setSize(new Point(0,0));
-      }
-      control.getParent().pack();
       control.getParent().layout(true);
     }
   }

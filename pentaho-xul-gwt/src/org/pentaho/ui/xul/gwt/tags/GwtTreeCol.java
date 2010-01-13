@@ -21,6 +21,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private boolean editable;
   private ColumnType type = ColumnType.TEXT;
   private String colType;
+  private String tooltipBinding;
 
 
   public static void register() {
@@ -233,6 +234,15 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     // TODO Auto-generated method stub
     
   }
+
+  public String getTooltipbinding() {
+    return tooltipBinding;
+  }
+
+  public void setTooltipbinding(String bind) {
+    this.tooltipBinding = bind;      
+  }
+  
   
   
   
