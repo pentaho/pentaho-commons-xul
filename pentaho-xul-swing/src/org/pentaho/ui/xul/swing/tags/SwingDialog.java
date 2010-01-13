@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
+import org.apache.commons.lang.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulButton;
@@ -271,6 +272,10 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
         String[] tempButtons = btns.split(",");
     
         for (int i = 0; i < tempButtons.length;  i++) {
+
+          if(StringUtils.isEmpty(tempButtons[i].trim())){
+            continue;
+          }
           SwingButton btn = new SwingButton(null, this, this.domContainer, "button");
           addChild(btn);
           this.buttons.put(SwingDialog.BUTTONS.valueOf(tempButtons[i].trim().toUpperCase()), btn);
