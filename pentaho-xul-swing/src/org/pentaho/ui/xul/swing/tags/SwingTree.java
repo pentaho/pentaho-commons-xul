@@ -1302,16 +1302,16 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
       property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
-      Method childrenMethod = null;
-      try {
-        childrenMethod = elements.getClass().getMethod(property, new Class[] {});
-      } catch (NoSuchMethodException e) {
-        // Since this tree is built recursively, when at a leaf it will throw this exception.
-        logger.debug(e);
-        return null;
-      }
+//      Method childrenMethod = null;
+//      try {
+//        childrenMethod = elements.getClass().getMethod(property, new Class[] {});
+//      } catch (NoSuchMethodException e) {
+//        // Since this tree is built recursively, when at a leaf it will throw this exception.
+//        logger.debug(e);
+//        return null;
+//      }
 
-      FindSelectedItemTuple tuple = findSelectedItem(this.elements, childrenMethod, new FindSelectedItemTuple(vals[0]));
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(vals[0]));
       return tuple != null ? tuple.selectedItem : null;
     }
     return null;
@@ -1327,18 +1327,40 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     }
   }
 
-  private FindSelectedItemTuple findSelectedItem(Object parent, Method childrenMethod, FindSelectedItemTuple tuple) {
+//  private FindSelectedItemTuple findSelectedItem(Object parent, Method childrenMethod, FindSelectedItemTuple tuple) {
+//    if (tuple.curpos == tuple.selectedIndex) {
+//      tuple.selectedItem = parent;
+//      return tuple;
+//    }
+//    Collection children = null;
+//    try {
+//      children = (Collection) childrenMethod.invoke(parent, new Object[] {});
+//    } catch (Exception e) {
+//      logger.error(e);
+//      return null;
+//    }
+//
+//    if (children == null || children.size() == 0) {
+//      return null;
+//    }
+//
+//    for (Object child : children) {
+//      tuple.curpos++;
+//      findSelectedItem(child, childrenMethod, tuple);
+//      if (tuple.selectedItem != null) {
+//        return tuple;
+//      }
+//    }
+//    return null;
+//  }
+  
+  private FindSelectedItemTuple findSelectedItem(Object parent, String childrenMethodProperty,
+      FindSelectedItemTuple tuple) {
     if (tuple.curpos == tuple.selectedIndex) {
       tuple.selectedItem = parent;
       return tuple;
     }
-    Collection children = null;
-    try {
-      children = (Collection) childrenMethod.invoke(parent, new Object[] {});
-    } catch (Exception e) {
-      logger.error(e);
-      return null;
-    }
+    Collection children = getChildCollection(parent, childrenMethodProperty);
 
     if (children == null || children.size() == 0) {
       return null;
@@ -1346,7 +1368,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     for (Object child : children) {
       tuple.curpos++;
-      findSelectedItem(child, childrenMethod, tuple);
+      findSelectedItem(child, childrenMethodProperty, tuple);
       if (tuple.selectedItem != null) {
         return tuple;
       }
@@ -1354,6 +1376,30 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     return null;
   }
 
+
+  private static Collection getChildCollection(Object obj, String childrenMethodProperty) {
+    Collection children = null;
+    Method childrenMethod = null;
+    try {
+      childrenMethod = obj.getClass().getMethod(childrenMethodProperty, new Class[] {});
+    } catch (NoSuchMethodException e) {
+      if (obj instanceof Collection) {
+        children = (Collection) obj;
+      }
+    }
+    try {
+      if (childrenMethod != null) {
+        children = (Collection) childrenMethod.invoke(obj, new Object[] {});
+      }
+    } catch (Exception e) {
+      logger.error(e);
+      return null;
+    }
+    
+    return children;
+  }
+  
+  
   public void setExpanded(boolean expanded) {
     this.expanded = expanded;
     if (this.tree != null) {
