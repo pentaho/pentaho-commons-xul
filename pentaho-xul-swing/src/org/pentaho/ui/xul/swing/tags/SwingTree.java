@@ -1252,7 +1252,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       // find children
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
       property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
-      Method childrenMethod = element.getClass().getMethod(property, new Class[] {});
+      
+      Method childrenMethod = null;
+      
+      try{
+        childrenMethod = element.getClass().getMethod(property, new Class[] {});
+      } catch(NoSuchMethodException e){
+        logger.debug("Could not find children binding method for object: "+element.getClass().getSimpleName());
+      }
 
 
       Collection<T> children = null;
