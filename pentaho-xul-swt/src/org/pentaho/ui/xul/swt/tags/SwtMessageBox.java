@@ -24,7 +24,7 @@ import org.pentaho.ui.xul.swt.custom.BasicDialog;
 
 public class SwtMessageBox extends SwtElement implements XulMessageBox {
 
-  protected BasicDialog messageBox;
+  //protected BasicDialog messageBox;
   protected List<Button> buttonList = new ArrayList<Button>();
   private String message;
   private String title;
@@ -185,9 +185,13 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
       buttonList.add(btn);
       final int code = thisButton.getId();
       addButtonListeners(btn, code);
-      if(buttonsToUse.length == 1){
+      
+      //TODO Should this eventually be an option on the messasgebox that the 
+      // programmer can set? 
+      if(thisButton.equals(DialogButton.ACCEPT)){
         dialog.setDefaultButton(btn);
       }
+      
     }
 
     buttonArea.layout();
