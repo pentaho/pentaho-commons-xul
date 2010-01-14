@@ -6,15 +6,11 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulPromptBox;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.XulDialogCallback;
@@ -51,12 +47,11 @@ public final class SwtPromptBox extends SwtElement implements XulPromptBox {
   protected Shell getParentObject(){
     if(parentObject != null){
       return parentObject;
-    } else if (getParent() instanceof SwtDialog){
-      return ((SwtDialog)getParent()).getShell();
-    } else if(this.parent != null){
-      return (Shell) this.parent.getManagedObject();
+    } else if (getParent() instanceof XulRoot){
+      return (Shell)((XulRoot)getParent()).getRootObject();
     } else {
-      return (Shell) getParent().getManagedObject();
+      XulRoot root = (XulRoot) parent;
+      return (Shell)root.getRootObject();
     }
   }
   
