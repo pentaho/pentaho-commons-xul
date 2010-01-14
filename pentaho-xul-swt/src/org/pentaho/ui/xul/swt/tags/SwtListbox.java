@@ -170,7 +170,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
 
     // If there's a bound collection return the model object.
     int selIdx = getSelectedIndex();
-    if(elements != null && selIdx > 0 && selIdx < elements.size()){
+    if(elements != null && selIdx >= 0 && selIdx < elements.size()){
       return elements.toArray()[selIdx];
     }
     // otherwise return String value
