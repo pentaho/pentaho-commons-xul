@@ -53,7 +53,9 @@ public final class SwtPromptBox extends SwtElement implements XulPromptBox {
       return parentObject;
     } else if (getParent() instanceof SwtDialog){
       return ((SwtDialog)getParent()).getShell();
-    }else{
+    } else if(this.parent != null){
+      return (Shell) this.parent.getManagedObject();
+    } else {
       return (Shell) getParent().getManagedObject();
     }
   }
@@ -112,6 +114,8 @@ public final class SwtPromptBox extends SwtElement implements XulPromptBox {
   }
 
   public int open() {
+    
+    
     dlg = new InputDialog(getParentObject(), title, message, defaultValue, new IInputValidator(){
 
       public String isValid(String arg0) {
