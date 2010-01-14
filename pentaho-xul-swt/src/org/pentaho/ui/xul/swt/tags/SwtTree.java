@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -175,20 +176,21 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
     if (isHierarchical) {
       setupTree();
-      
-      if (getOndrag() != null) {
-        DropEffectType effect = DropEffectType.COPY;
-        if (getDrageffect() != null) {
-          effect = DropEffectType.valueOfIgnoreCase(getDrageffect());
-        }
-        super.enableDrag(effect);
-      }
-      if (getOndrop() != null) {
-        super.enableDrop();
-      }
     } else {
       setupTable();
     }
+    
+    if (getOndrag() != null) {
+      DropEffectType effect = DropEffectType.COPY;
+      if (getDrageffect() != null) {
+        effect = DropEffectType.valueOfIgnoreCase(getDrageffect());
+      }
+      super.enableDrag(effect);
+    }
+    if (getOndrop() != null) {
+      super.enableDrop();
+    }
+    
     this.initialized = true;
 
   }
@@ -1422,7 +1424,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   protected Control getDndObject() {
-    return (Control)tree.getControl();
+    Control control;
+    if(isHierarchical()) {
+      control = (Control)tree.getControl();
+    } else {
+      control = (Control)table.getControl();
+    }
+    return control;
   }
 
   protected List<Object> cachedDndItems;
@@ -1430,16 +1438,18 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   @Override
   protected List<Object> getSwtDragData() {
     
-    if (!isHierarchical) {
-      throw new UnsupportedOperationException("dnd not implemented for xul tree in table mode.");
-    }
-    
     // if bound, return a list of bound objects, otherwise return strings.
     // note, all of these elements must be serializable.
     if (elements != null) {
       cachedDndItems = (List<Object>)getSelectedItems();
     } else {
-      IStructuredSelection selection = (IStructuredSelection) tree.getSelection();
+
+      IStructuredSelection selection;
+      if (!isHierarchical) {
+        selection = (IStructuredSelection) tree.getSelection();
+      } else {
+        selection = (IStructuredSelection) table.getSelection();
+      }
       List<Object> list = new ArrayList<Object>();
       int i = 0;
       for (Object o : selection.toArray()) {
