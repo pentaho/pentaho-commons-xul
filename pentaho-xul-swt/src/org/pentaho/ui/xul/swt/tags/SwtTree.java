@@ -1671,7 +1671,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         cachedDndItems = null;
         setElements(elements);
       } else {
-        tree.remove(tree.getSelection());
+        if(tree != null) {
+          tree.remove(tree.getSelection());
+        }
       }
     }
   }
