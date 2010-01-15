@@ -49,7 +49,7 @@ public class SwtTreeTest {
     XulRunner runner = new SwtXulRunner();
     runner.addContainer(container);
     runner.initialize();
-    runner.start();
+    //runner.start();
   }
 
   @After
