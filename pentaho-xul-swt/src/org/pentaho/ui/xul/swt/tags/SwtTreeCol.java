@@ -29,6 +29,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     private boolean expanded;
     private SortDirection sortDirection;
     private boolean sortActive = false;
+    private boolean sortable = false;
     private String expandedBinding;
     private String tooltipBinding;
     
@@ -234,7 +235,5 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     public void setTooltipbinding(String bind) {
       this.tooltipBinding = bind;      
     }
-    
-    
-    
+
   }

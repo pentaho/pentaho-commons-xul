@@ -72,6 +72,8 @@ import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.TableSelection;
+import org.pentaho.ui.xul.swt.tags.treeutil.TableColumnSorter;
+import org.pentaho.ui.xul.swt.tags.treeutil.TreeColumnSorter;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableContentProvider;
@@ -80,6 +82,7 @@ import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeTextCellEditor;
 import org.pentaho.ui.xul.util.ColumnType;
+import org.pentaho.ui.xul.util.SortDirection;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
@@ -140,7 +143,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private String command;
   
   private boolean preserveExpandedState;
+    
+  private boolean sortable = false;
+
+  private TableColumn sortColumn = null;
   
+  private SortDirection sortDirection = SortDirection.NATURAL;
+
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.parentComponent = parent;
@@ -199,6 +208,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private void setupTree() {
 
     TreeViewerColumn treeCol = new TreeViewerColumn(tree, SWT.LEFT);
+    
     treeCol.getColumn().setWidth(200);
     treeCol.getColumn().setMoveable(true);
     treeCol.getColumn().setText("Column 3");
@@ -321,7 +331,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         }
       }
     });
-
+    TreeColumnSorter sorter = new TreeColumnSorter(tree, treeCol.getColumn(), SortDirection.ASCENDING, sortable); 
   }
 
   private class SearchBundle {
@@ -422,10 +432,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       }
     });
-
+    TableColumnSorter sorter = new TableColumnSorter(table, sortColumn, sortDirection, sortable); 
     table.getTable().setEnabled(!this.disabled);
     table.refresh();
-
+    
   }
 
   private Collection findSelectedTableRows(int[] selectedRows) {
@@ -530,6 +540,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     if (columnsNeedUpdate()) {
 
+      sortColumn = null;
+      
       while (table.getTable().getColumnCount() > 0) {
         table.getTable().getColumn(0).dispose();
       }
@@ -537,8 +549,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       // Add Columns
       for (XulComponent col : this.columns.getChildNodes()) {
         TableColumn tc = new TableColumn(table.getTable(), SWT.LEFT);
-        String lbl = ((XulTreeCol) col).getLabel();
+        XulTreeCol column = (XulTreeCol) col;
+        String lbl = column.getLabel();
         tc.setText(lbl != null ? lbl : ""); //$NON-NLS-1$
+        // Only process the first column that is deemed sortActive...
+        if (column.isSortActive() && sortColumn == null){
+          sortColumn = tc;
+          sortDirection = SortDirection.valueOf(column.getSortDirection());
+        }
       }
 
       // Pack the columns
@@ -1824,6 +1842,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         
   }
   
-  
+  public boolean isSortable() {
+    return sortable;
+  }
+
+  public void setSortable(boolean sortable) {
+    this.sortable = sortable;
+  }
 
 }

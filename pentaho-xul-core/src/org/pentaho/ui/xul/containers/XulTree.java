@@ -99,4 +99,8 @@ public interface XulTree extends XulContainer {
   void setPreserveexpandedstate(boolean preserve);
   boolean isPreserveexpandedstate();
   
+  public void setSortable(boolean sort);
+  public boolean isSortable();
+
+  
 }
