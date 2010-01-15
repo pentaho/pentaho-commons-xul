@@ -18,7 +18,7 @@
     -->
     <dependency org="pentaho" name="pentaho-xul-core" rev="${project.revision}" changing="true" />    
         
-    <dependency org="pentaho-library" name="libcss" rev="${project.revision}" changing="true" />    
+    <dependency org="pentaho-library" name="libcss" rev="${dependency.libcss.revision}" changing="true" />    
         
         
         <!--  testing dependencies -->
