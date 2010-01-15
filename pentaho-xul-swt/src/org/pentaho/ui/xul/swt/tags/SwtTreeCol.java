@@ -1,23 +1,18 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.TableColumnModel;
 
-import org.eclipse.swt.widgets.Item;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Tree;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.binding.BindingUtil;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCol;
-import org.pentaho.ui.xul.containers.XulTreeCols;
-import org.pentaho.ui.xul.swt.ColumnWidget;
+import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.ColumnType;
-import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.util.SortDirection;
 
 public class SwtTreeCol extends SwtElement implements XulTreeCol {
 
@@ -32,6 +27,8 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     private String disabledBinding;
     private String image;
     private boolean expanded;
+    private SortDirection sortDirection;
+    private boolean sortActive = false;
     private String expandedBinding;
     private String tooltipBinding;
     
@@ -54,8 +51,11 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     }
 
     public String getSortDirection() {
-      // TODO Auto-generated method stub
-      return null;
+      return sortDirection.toString();
+    }
+    
+    public SortDirection getSortDir(){
+      return sortDirection;
     }
 
     public String getSrc() {
@@ -92,8 +92,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     }
 
     public boolean isSortActive() {
-      // TODO Auto-generated method stub
-      return false;
+      return sortActive;
     }
 
     public void setEditable(boolean edit) {
@@ -121,13 +120,11 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     }
 
     public void setSortActive(boolean sort) {
-      // TODO Auto-generated method stub
-      
+      sortActive = sort;
     }
 
     public void setSortDirection(String dir) {
-      // TODO Auto-generated method stub
-      
+      sortDirection = SortDirection.valueOf(dir);
     }
 
     public void setSrc(String srcUrl) {
