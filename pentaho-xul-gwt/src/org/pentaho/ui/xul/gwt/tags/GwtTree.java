@@ -1202,5 +1202,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   public void setPreserveexpandedstate(boolean preserve) {
     
   }
+
+  public boolean isSortable() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public void setSortable(boolean sort) {
+    // TODO Auto-generated method stub
+    
+  }
   
 }
