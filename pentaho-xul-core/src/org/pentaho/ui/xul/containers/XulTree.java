@@ -96,4 +96,7 @@ public interface XulTree extends XulContainer {
   void setCommand(String command);
   String getCommand();
   
+  void setPreserveexpandedstate(boolean preserve);
+  boolean isPreserveexpandedstate();
+  
 }

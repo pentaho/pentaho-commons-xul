@@ -24,4 +24,6 @@ public interface XulTreeItem extends XulContainer {
   public void setExpanded(boolean expanded);
   public boolean isExpanded();
   
+  public void setBoundObject(Object obj);
+  public Object getBoundObject();
 }

@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.swing.tags;
 
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -19,6 +22,7 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
 
   private XulTreeRow row;
   private XulTreeChildren treeChildren; //Hierachical tree
+  private Reference boundObjectRef;
 
   public SwingTreeItem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treeitem");
@@ -130,6 +134,16 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
     // TODO Auto-generated method stub
     
   }
+  
+
+  public Object getBoundObject() {
+    return boundObjectRef.get();
+  }
+
+  public void setBoundObject(Object obj) {
+    boundObjectRef = new WeakReference(obj);
+  }
+
   
   
 }

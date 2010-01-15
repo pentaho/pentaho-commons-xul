@@ -1194,5 +1194,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   public void setCommand(String command) {
     this.command = command;
   }
+
+  public boolean isPreserveexpandedstate() {
+    return false;
+  }
+
+  public void setPreserveexpandedstate(boolean preserve) {
+    
+  }
   
 }

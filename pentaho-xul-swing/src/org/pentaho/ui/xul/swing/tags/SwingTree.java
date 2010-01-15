@@ -1601,5 +1601,13 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public void setCommand(String command) {
     this.command = command;
   }
+
+  public boolean isPreserveexpandedstate() {
+    return false;
+  }
+
+  public void setPreserveexpandedstate(boolean preserve) {
+    
+  }
   
 }

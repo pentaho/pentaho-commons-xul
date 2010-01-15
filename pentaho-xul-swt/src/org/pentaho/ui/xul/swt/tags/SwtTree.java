@@ -28,13 +28,13 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -78,7 +78,6 @@ import org.pentaho.ui.xul.swt.tags.treeutil.XulTableContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeCellLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeContentProvider;
-import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeTextCellEditor;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TreeCellEditor;
@@ -139,6 +138,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private boolean hiddenRoot = true;
   
   private String command;
+  
+  private boolean preserveExpandedState;
   
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -336,7 +337,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       if (c == selectedItem) {
         bundle.found = true;
         if (elements != null) {
-          bundle.selectedItem = findSelectedTreeItem(bundle.curPos);
+          bundle.selectedItem = findBoundTreeItem(bundle.curPos);
         }
         return bundle;
       }
@@ -351,7 +352,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     return bundle;
   }
 
-  private Object findSelectedTreeItem(int pos) {
+  private Object findBoundTreeItem(int pos) {
 
     if (this.isHierarchical && this.elements != null) {
 
@@ -861,8 +862,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   public void update() {
     if (this.isHierarchical) {
-      this.tree.setInput(this);
+      Object[] expandedElements = tree.getExpandedElements();
       this.tree.refresh();
+      
       if ("true".equals(getAttributeValue("expanded"))) {
         tree.expandAll();
       } else if(expandBindings.size() > 0 && this.suppressEvents == false){
@@ -874,6 +876,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           }
         }
         expandBindings.clear();
+      } else if(this.suppressEvents == false) {
+        tree.setExpandedElements(expandedElements);
       }
     } else {
 
@@ -924,7 +928,84 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   private boolean suppressEvents = false;
 
+  private String childrenBinding;
+  
+  private String getChildrenBinding(){
+   if(childrenBinding == null){
+     childrenBinding = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+   }
+   return childrenBinding;
+  }
+  
+  int[] expandCache;
+  private void cacheExpandedState(){
+    Object[] expandedTreeItems = tree.getExpandedElements();
+    expandCache = new int[expandedTreeItems.length];
+    for(int i=0; i<expandedTreeItems.length; i++){
+      XulTreeItem item = (XulTreeItem) expandedTreeItems[i];
+
+      SearchBundle b = findSelectedIndex(new SearchBundle(), getRootChildren(), item);
+      
+      expandCache[i] = b.curPos;
+    }
+  }
+  
+  private void restoreExpandedState(){
+    for(int i=0; i<expandCache.length; i++){
+      tree.setExpandedState(findTreeItemForPos(expandCache[i]), true);
+    }
+  }
+  
+  private XulTreeItem findTreeItemForPos(int pos){
+    if(!isHierarchical()){
+      return (XulTreeItem) getTreeChildren(this).getChildNodes().get(pos);
+    } else {
+
+      FindTreeItemForPosTuple tuple = new FindTreeItemForPosTuple(pos, this);
+      findTreeItemAtPosFunc(tuple);
+      return tuple.treeItem;
+    }
+  }
+  
+  private void findTreeItemAtPosFunc(FindTreeItemForPosTuple bundle){
+    if(bundle.curPos == bundle.pos){
+      bundle.found = true;
+      bundle.treeItem = (XulTreeItem) bundle.curComponent;
+      return;
+    }
+      
+    XulTreeChildren children = getTreeChildren(bundle.curComponent);
+    if(children == null){
+      return;
+    }
+    for(XulComponent c : getTreeChildren(bundle.curComponent).getChildNodes()){
+      bundle.curPos++;
+      bundle.curComponent = c;
+      findTreeItemAtPosFunc(bundle);
+      if(bundle.found){
+        return;
+      }
+    }
+  }
+  
+  private static class FindTreeItemForPosTuple{
+    int pos;
+    int curPos = -1;
+    XulComponent curComponent;
+    XulTreeItem treeItem;
+    boolean found;
+    public FindTreeItemForPosTuple(int pos, XulComponent curComponent){
+      this.pos = pos;
+      this.curComponent = curComponent;
+    }
+  }
+  
   public <T> void setElements(Collection<T> elements) {
+
+    if (this.isHierarchical && isPreserveexpandedstate()) {
+      cacheExpandedState();
+    }
+    
     this.elements = elements;
     this.getRootChildren().removeAll();
 
@@ -934,11 +1015,16 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
       return;
     }
+
+    
     try {
 
       if (this.isHierarchical == false) {
         for (T o : elements) {
           XulTreeRow row = this.getRootChildren().addNewRow();
+          
+          // Give the Xul Element a reference back to the domain object
+          ((XulTreeItem) row.getParent()).setBoundObject(o);
 
           for (int x = 0; x < this.getColumns().getChildNodes().size(); x++) {
             XulComponent col = this.getColumns().getColumn(x);
@@ -1041,6 +1127,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           SwtTreeItem item = new SwtTreeItem(this.getRootChildren());
           item.setXulDomContainer(this.domContainer);
 
+          item.setBoundObject(elements);
+
           SwtTreeRow newRow = new SwtTreeRow(item);
           item.setRow(newRow);
           this.getRootChildren().addChild(item);
@@ -1051,6 +1139,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           for (T o : elements) {
             SwtTreeItem item = new SwtTreeItem(this.getRootChildren());
             item.setXulDomContainer(this.domContainer);
+            item.setBoundObject(o);
   
             SwtTreeRow newRow = new SwtTreeRow(item);
             item.setRow(newRow);
@@ -1064,6 +1153,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
 
       update();
+      if (this.isHierarchical && isPreserveexpandedstate()) {
+        restoreExpandedState();
+      }
       suppressEvents = false;
 
       // treat as a selection change
@@ -1172,6 +1264,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
         SwtTreeRow newRow = new SwtTreeRow(item);
         item.setRow(newRow);
+        item.setBoundObject(child);
         treeChildren.addChild(item);
 
         addTreeChild(child, newRow);
@@ -1379,11 +1472,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   private FindBoundItemTuple findBoundItem(Object obj, XulComponent parent, String childrenMethodProperty, FindBoundItemTuple tuple) {
     if (obj.equals(tuple.item)) {
+      System.out.println("Found match ("+obj.getClass().getSimpleName()+")");
       tuple.treeItem = parent;
       return tuple;
     }
     Collection children = getChildCollection(obj, childrenMethodProperty);
     if (children == null || children.size() == 0) {
+      System.out.println("Children of ("+obj.getClass().getSimpleName()+") is null");
       return null;
     }
     XulTreeChildren xulChildren = getTreeChildren(parent);
@@ -1699,6 +1794,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     this.command = command;
   }
 
+  public boolean isPreserveexpandedstate(){
+    return preserveExpandedState;
+  }
+  
+  public void setPreserveexpandedstate(boolean preserve){
+    this.preserveExpandedState = preserve;
+  }
+  
   private static class TreeLabelBindingConvertor extends BindingConvertor<String, String>{
 
     private SwtTree tree;

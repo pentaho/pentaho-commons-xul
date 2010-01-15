@@ -20,7 +20,8 @@ public class SwtLabel extends SwtElement implements XulLabel {
   public SwtLabel(Element self, XulComponent parent, XulDomContainer container, String tagName){
     super(tagName);
     
-    String multi = self.getAttributeValue("multiline");
+   
+    String multi = (self != null ) ? self.getAttributeValue("multiline") : null;
     if(multi != null && multi.equals("true")){
       label = new Label((Composite)parent.getManagedObject(), SWT.WRAP);
       setManagedObject(label);

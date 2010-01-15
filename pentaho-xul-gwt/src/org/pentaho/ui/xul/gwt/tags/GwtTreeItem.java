@@ -102,6 +102,18 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     // TODO Auto-generated method stub
     
   }
+
+  public Object getBoundObject() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void setBoundObject(Object obj) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
   
   
 }
