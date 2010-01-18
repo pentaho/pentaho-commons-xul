@@ -298,8 +298,13 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
           classes[i] = unBoxPrimative(args[i].getClass());
         }
         
-        Method m = evt.getClass().getMethod(methodName, classes);
-        return m.invoke(evt, args);
+        try{
+          Method m = evt.getClass().getMethod(methodName, classes);
+          return m.invoke(evt, args);
+        } catch(NoSuchMethodException e){
+          Method m = evt.getClass().getMethod(methodName, new Class[0]);
+          return m.invoke(evt, args);
+        }
       } else {
         Method m = evt.getClass().getMethod(methodName, new Class[0]);
         return m.invoke(evt, args);
