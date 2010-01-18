@@ -80,7 +80,6 @@ public class TableColumnSorter extends ViewerComparator {
       compareIndex = 0;
       break;
     }
-
     TableColumn[] columns = table.getColumns();
     for (int i = 0; i < columns.length; i++) {
       TableColumn theColumn = columns[i];
@@ -96,9 +95,18 @@ public class TableColumnSorter extends ViewerComparator {
   }
 
   protected int doCompare(Viewer v, Object e1, Object e2) {
-    ILabelProvider labelProvider = (ILabelProvider) viewer.getLabelProvider(columnIndex);
-    String t1 = labelProvider.getText(e1);
-    String t2 = labelProvider.getText(e2);
+    String t1 = "";
+    String t2 = "";
+    if (viewer.getLabelProvider() instanceof XulTableColumnLabelProvider){
+      XulTableColumnLabelProvider columnLabelProvider = (XulTableColumnLabelProvider)viewer.getLabelProvider();
+      t1 = columnLabelProvider.getColumnText(e1,columnIndex);
+      t2 = columnLabelProvider.getColumnText(e2,columnIndex);
+      
+    }else{
+      ILabelProvider labelProvider = (ILabelProvider) viewer.getLabelProvider(columnIndex);
+      t1 = labelProvider.getText(e1);
+      t2 = labelProvider.getText(e2);
+    }
     if (t1 == null) t1 = "";
     if (t2 == null) t2 = "";
     return t1.compareTo(t2);
