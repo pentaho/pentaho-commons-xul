@@ -109,6 +109,6 @@ public class TableColumnSorter extends ViewerComparator {
     }
     if (t1 == null) t1 = "";
     if (t2 == null) t2 = "";
-    return t1.compareTo(t2);
+    return t1.compareToIgnoreCase(t2);
   }
 }

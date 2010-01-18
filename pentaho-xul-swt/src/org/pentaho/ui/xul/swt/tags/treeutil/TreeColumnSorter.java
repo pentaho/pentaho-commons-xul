@@ -101,6 +101,6 @@ public class TreeColumnSorter extends ViewerComparator {
     String t2 = labelProvider.getText(e2);
     if (t1 == null) t1 = "";
     if (t2 == null) t2 = "";
-    return t1.compareTo(t2);
+    return t1.compareToIgnoreCase(t2);
   }
 }
