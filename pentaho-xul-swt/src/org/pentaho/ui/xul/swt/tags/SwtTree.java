@@ -1870,11 +1870,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     sortProperties.setSortable(sortable);
   }
 
-  public boolean isLinesVisible() {
+  public boolean isTreeLines() {
     return linesVisible;
   }
 
-  public void setLinesVisible(boolean visible) {
+  public void setTreeLines(boolean visible) {
     linesVisible = visible;
   }
 

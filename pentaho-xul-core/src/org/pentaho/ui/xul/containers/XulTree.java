@@ -102,7 +102,7 @@ public interface XulTree extends XulContainer {
   public void setSortable(boolean sort);
   public boolean isSortable();
 
-  public void setLinesVisible(boolean visible);
-  public boolean isLinesVisible();
+  public void setTreeLines(boolean visible);
+  public boolean isTreeLines();
   
 }
