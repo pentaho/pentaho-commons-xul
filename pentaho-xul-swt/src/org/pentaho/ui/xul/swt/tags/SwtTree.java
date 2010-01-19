@@ -21,14 +21,12 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.TreePath;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
@@ -74,6 +72,7 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.tags.treeutil.TableColumnSorter;
 import org.pentaho.ui.xul.swt.tags.treeutil.TreeColumnSorter;
+import org.pentaho.ui.xul.swt.tags.treeutil.XulSortProperties;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTableContentProvider;
@@ -143,12 +142,16 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private String command;
   
   private boolean preserveExpandedState;
-    
-  private boolean sortable = false;
-
-  private TableColumn sortColumn = null;
   
-  private SortDirection sortDirection = SortDirection.NATURAL;
+  private XulSortProperties sortProperties = new XulSortProperties();
+    
+  //private boolean sortable = false;
+
+  //private TableColumn sortColumn = null;
+  
+  //private SortDirection sortDirection = SortDirection.NATURAL;
+  
+  //private String sortMethod = null;
 
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -331,7 +334,23 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         }
       }
     });
-    TreeColumnSorter sorter = new TreeColumnSorter(tree, treeCol.getColumn(), SortDirection.ASCENDING, sortable); 
+    
+    sortProperties.setSortColumn(null);
+    sortProperties.setSortable(false);
+    
+    for (XulComponent col : this.columns.getChildNodes()) {
+      XulTreeCol xulCol = (XulTreeCol) col;
+      
+      // Only process the first column that is deemed sortActive,
+      // since only one column is allowed sortActive at a time
+      if (xulCol.isSortActive() && sortProperties.getSortColumn() == null){
+        sortProperties.setSortColumn(treeCol.getColumn());
+        sortProperties.setSortDirection(SortDirection.valueOf(xulCol.getSortDirection()));
+      }
+      sortProperties.setSortMethod(treeCol.getColumn(), toGetter(xulCol.getComparatorbinding()));
+    }
+
+    TreeColumnSorter sorter = new TreeColumnSorter(tree, sortProperties); 
   }
 
   private class SearchBundle {
@@ -386,6 +405,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     table.setContentProvider(new XulTableContentProvider(this));
 
     table.setLabelProvider(new XulTableColumnLabelProvider(this, domContainer));
+    
     table.setCellModifier(new XulTableColumnModifier(this));
     Table baseTable = table.getTable();
     baseTable.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -432,7 +452,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       }
     });
-    TableColumnSorter sorter = new TableColumnSorter(table, sortColumn, sortDirection, sortable); 
+    TableColumnSorter sorter = new TableColumnSorter(table, sortProperties); 
     table.getTable().setEnabled(!this.disabled);
     table.refresh();
     
@@ -540,7 +560,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     if (columnsNeedUpdate()) {
 
-      sortColumn = null;
+      sortProperties.setSortColumn(null);
       
       while (table.getTable().getColumnCount() > 0) {
         table.getTable().getColumn(0).dispose();
@@ -552,11 +572,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         XulTreeCol column = (XulTreeCol) col;
         String lbl = column.getLabel();
         tc.setText(lbl != null ? lbl : ""); //$NON-NLS-1$
-        // Only process the first column that is deemed sortActive...
-        if (column.isSortActive() && sortColumn == null){
-          sortColumn = tc;
-          sortDirection = SortDirection.valueOf(column.getSortDirection());
+        
+        // Only process the first column that is deemed sortActive,
+        // since only one column is allowed sortActive at a time
+        if (column.isSortActive() && sortProperties.getSortColumn() == null){
+          sortProperties.setSortColumn(tc);
+          sortProperties.setSortDirection(SortDirection.valueOf(column.getSortDirection()));
         }
+        sortProperties.setSortMethod(tc, toGetter(column.getComparatorbinding()));
       }
 
       // Pack the columns
@@ -1845,11 +1868,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
   
   public boolean isSortable() {
-    return sortable;
+    return sortProperties.isSortable();
   }
 
   public void setSortable(boolean sortable) {
-    this.sortable = sortable;
+    sortProperties.setSortable(sortable);
   }
 
 }

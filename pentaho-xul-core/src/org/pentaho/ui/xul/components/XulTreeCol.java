@@ -65,6 +65,9 @@ public interface XulTreeCol extends XulComponent {
   public String getImagebinding();
   public void setImagebinding(String img);
   
+  public String getComparatorbinding();
+  public void setComparatorbinding(String comp);
+
   public String getExpandedbinding();
   public void setExpandedbinding(String bind);
   

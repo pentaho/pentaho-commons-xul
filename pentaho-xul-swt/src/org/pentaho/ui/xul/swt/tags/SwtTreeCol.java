@@ -32,6 +32,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     private boolean sortable = false;
     private String expandedBinding;
     private String tooltipBinding;
+    private String comparatorBinding;
     
     public SwtTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treecol");
@@ -234,6 +235,14 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
 
     public void setTooltipbinding(String bind) {
       this.tooltipBinding = bind;      
+    }
+
+    public String getComparatorbinding() {
+      return comparatorBinding;
+    }
+
+    public void setComparatorbinding(String comp) {
+      comparatorBinding = comp;
     }
 
   }
