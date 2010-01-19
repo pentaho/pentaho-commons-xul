@@ -242,6 +242,14 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   public void setTooltipbinding(String bind) {
     this.tooltipBinding = bind;      
   }
+
+  public String getComparatorbinding() {
+    return null;
+  }
+
+  public void setComparatorbinding(String comp) {
+    
+  }
   
   
   

@@ -234,6 +234,14 @@ public class SwingTreeCol extends SwingElement implements XulTreeCol {
   public void setTooltipbinding(String bind) {
     this.tooltipBinding = bind;      
   }
+
+  public String getComparatorbinding() {
+    return null;
+  }
+
+  public void setComparatorbinding(String comp) {
+    
+  }
   
   
   
