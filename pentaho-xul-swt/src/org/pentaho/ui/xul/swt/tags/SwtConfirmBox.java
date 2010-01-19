@@ -27,6 +27,8 @@ public class SwtConfirmBox extends SwtMessageBox implements XulConfirmBox {
   private List<XulDialogCallback<String>> callbacks = new ArrayList<XulDialogCallback<String>>();
   
   static final String ELEMENT_NAME = "confirmbox"; //$NON-NLS-1$
+  
+  private String cancelLabel;
 
   public SwtConfirmBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super(self, parent, domContainer, tagName);
@@ -113,8 +115,15 @@ public class SwtConfirmBox extends SwtMessageBox implements XulConfirmBox {
   }
 
   public void setCancelLabel(String label) {
-    // TODO Auto-generated method stub
-    
+    this.cancelLabel = label;
   }
 
+  @Override
+  protected String getButtonText(DialogButton button) {
+    if(button == DialogButton.CANCEL && this.cancelLabel != null){
+      return cancelLabel;
+    }
+    return super.getButtonText(button);
+  }
+  
 }

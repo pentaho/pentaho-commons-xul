@@ -143,6 +143,15 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   public void setDefaultButtons(BasicDialog d){
   }
 
+  protected String getButtonText(DialogButton button){
+    switch(button){
+      case ACCEPT:
+        return (this.acceptLabel != null) ? this.acceptLabel : button.getLabel();
+      default:
+        return button.getLabel();
+    }
+  }
+  
   protected Composite buttonArea;
   
   public void setButtons(Composite c){
@@ -180,7 +189,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
 
     for (DialogButton thisButton:  buttonsToUse) {
       Button btn = new Button(buttonArea, SWT.PUSH);
-      btn.setText(thisButton.getLabel());
+      btn.setText(getButtonText(thisButton));
       btn.setData(thisButton.getId());
       buttonList.add(btn);
       final int code = thisButton.getId();
