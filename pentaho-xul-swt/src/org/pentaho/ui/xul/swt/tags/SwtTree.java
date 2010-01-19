@@ -437,7 +437,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     // Turn on the header and the lines
     baseTable.setHeaderVisible(true);
-    baseTable.setLinesVisible(true);
+    baseTable.setLinesVisible(isTreeLines());
     table.setInput(this);
 
     final Composite parentComposite = ((Composite) parentComponent.getManagedObject());
@@ -1075,7 +1075,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
               if (StringUtils.isEmpty(colType) == false && colType.equals("dynamic")) {
                 colType = extractDynamicColType(o, x);
               }
-              Object bob = null;
+           
               if ((colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))
                   && column.getCombobinding() != null) {
                 DefaultBinding binding = new DefaultBinding(o, column.getCombobinding(), cell, "value");
