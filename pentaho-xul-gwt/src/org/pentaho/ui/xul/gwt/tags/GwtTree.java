@@ -1212,5 +1212,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     // TODO Auto-generated method stub
     
   }
+
+  public boolean isLinesVisible() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+  public void setLinesVisible(boolean visible) {
+    // TODO Auto-generated method stub
+    
+  }
   
 }

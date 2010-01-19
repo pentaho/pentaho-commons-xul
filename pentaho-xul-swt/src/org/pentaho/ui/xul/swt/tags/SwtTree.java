@@ -143,15 +143,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   private boolean preserveExpandedState;
   
+  private boolean linesVisible = true;
+
   private XulSortProperties sortProperties = new XulSortProperties();
     
-  //private boolean sortable = false;
-
-  //private TableColumn sortColumn = null;
-  
-  //private SortDirection sortDirection = SortDirection.NATURAL;
-  
-  //private String sortMethod = null;
 
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -1873,6 +1868,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   public void setSortable(boolean sortable) {
     sortProperties.setSortable(sortable);
+  }
+
+  public boolean isLinesVisible() {
+    return linesVisible;
+  }
+
+  public void setLinesVisible(boolean visible) {
+    linesVisible = visible;
   }
 
 }
