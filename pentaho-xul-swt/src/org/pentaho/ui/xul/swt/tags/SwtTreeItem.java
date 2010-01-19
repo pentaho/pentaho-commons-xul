@@ -165,7 +165,10 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
   }
 
   public Object getBoundObject() {
-    return boundObjectRef.get();
+    if (boundObjectRef != null){
+      return boundObjectRef.get();
+    }
+    return null;
   }
 
   public void setBoundObject(Object obj) {
