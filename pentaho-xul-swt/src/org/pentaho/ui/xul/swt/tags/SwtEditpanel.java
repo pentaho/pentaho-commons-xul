@@ -32,6 +32,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpanel{
@@ -183,10 +184,11 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
       InputStream in = null;
       InputStream in2 = null;
       try{
-        in= SwtEditpanel.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/swt/tags/images/16x16_right.png");
-        this.rightImg = new Image(bar.getDisplay(), in);
-        in = SwtEditpanel.class.getClassLoader().getResourceAsStream("org/pentaho/ui/xul/swt/tags/images/16x16_left.png");
-        this.leftImg = new Image(bar.getDisplay(), in);
+        
+        this.rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_right.png", domContainer, bar.getDisplay());
+        
+        this.leftImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_left.png", domContainer, bar.getDisplay());
+        
         btn.setImage(rightImg);
       } finally {
         try{
