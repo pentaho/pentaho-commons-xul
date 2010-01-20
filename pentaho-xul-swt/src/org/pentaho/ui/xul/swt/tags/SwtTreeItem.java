@@ -162,6 +162,8 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
         tree.setTreeItemExpanded(this, expanded);
       }
     }
+    
+    changeSupport.firePropertyChange("expanded", null, expanded);
   }
 
   public Object getBoundObject() {

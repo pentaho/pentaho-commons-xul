@@ -23,10 +23,12 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.TreeViewerEditor;
@@ -272,11 +274,33 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     });
     
+    tree.addTreeListener(new ITreeViewerListener() {
+      public void treeCollapsed(TreeExpansionEvent arg0) {
+        if(arg0.getElement() instanceof XulTreeItem) {
+          XulTreeItem t = (XulTreeItem)arg0.getElement();
+          t.setExpanded(false);
+        }
+      }
+
+      public void treeExpanded(TreeExpansionEvent arg0) {
+        if(arg0.getElement() instanceof XulTreeItem) {
+          XulTreeItem t = (XulTreeItem)arg0.getElement();
+          t.setExpanded(true);
+        }
+      }
+    });
+    
     tree.addDoubleClickListener(new IDoubleClickListener(){
 
       public void doubleClick(DoubleClickEvent arg0) {
         if(command != null){
-          invoke(command);
+          if(elements != null) {
+            // Invoke with selected elements as parameter
+            invoke(command, new Object[]{getSelectedItems().toArray()});
+          } else {
+            // Invoke with selected indexes as parameter
+            invoke(command, new Object[]{getSelectedRows()});
+          }
         }
       }
       
@@ -400,7 +424,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     table.setContentProvider(new XulTableContentProvider(this));
 
     table.setLabelProvider(new XulTableColumnLabelProvider(this, domContainer));
-    
     table.setCellModifier(new XulTableColumnModifier(this));
     Table baseTable = table.getTable();
     baseTable.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -433,6 +456,22 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         changeSupport.firePropertyChange("selectedItem", null, selectedItem);
 
       }
+    });
+    
+    table.addDoubleClickListener(new IDoubleClickListener() {
+
+      public void doubleClick(DoubleClickEvent arg0) {
+        if(command != null){
+          if(elements != null) {
+            // Invoke with selected elements as parameter
+            invoke(command, new Object[]{getSelectedItems().toArray()});
+          } else {
+            // Invoke with selected indexes as parameter
+            invoke(command, new Object[]{getSelectedRows()});
+          }
+        }
+      }
+          
     });
 
     // Turn on the header and the lines
@@ -1235,7 +1274,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       String expBind = column.getExpandedbinding();
       if(expBind != null){
         DefaultBinding binding = new DefaultBinding(element, expBind, row.getParent(), "expanded");
-        binding.setBindingType(Binding.Type.ONE_WAY);
+        binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
         domContainer.addBinding(binding);
         expandBindings.add(binding);
       }
