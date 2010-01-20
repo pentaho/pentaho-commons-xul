@@ -14,6 +14,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTreeCell;
@@ -22,6 +23,7 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.swt.tags.SwtTreeItem;
 import org.pentaho.ui.xul.util.ColumnType;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class XulTableColumnLabelProvider implements ITableLabelProvider {
@@ -33,6 +35,7 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
   private XulDomContainer domContainer;
   private static Log logger = LogFactory.getLog(XulTableColumnLabelProvider.class);
 
+  private int imageIndex = 0;
 
   public XulTableColumnLabelProvider(XulTree tree, XulDomContainer aDomContainer) {
     this.tree = tree;
@@ -98,22 +101,8 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
     
     if (tree.getColumns().getColumn(col).getImagebinding() != null){
       String src = ((SwtTreeItem)row).getImage();
-      if (src!=null){
-        InputStream in = null;
-        try{
-          if(src != null){
-            in = XulUtil.loadResourceAsStream(src, domContainer);
-            // in = this.getClass().getClassLoader().getResourceAsStream(src);
-          }
-          return src == null || in == null ? null : new Image(((TableViewer) tree.getManagedObject()).getTable().getDisplay(), in);
-        } catch (Exception e){
-          logger.error(e);
-        } finally{
-          try{
-            in.close();
-          } catch(Exception ignored){}
-        }
-      }
+      Display display = ((TableViewer) tree.getManagedObject()).getTable().getDisplay();
+      return SwtXulUtil.getCachedImage(src, domContainer, display);
     }
     return null;
   }

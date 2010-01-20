@@ -96,7 +96,7 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
       }
       
       this.index = index;
-      this.changeSupport.firePropertyChange("value", oldValue, value);
+      this.changeSupport.firePropertyChange("value", oldValue, this.value);
     }
 
     public void setTreeRowParent(XulTreeRow row) {

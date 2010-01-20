@@ -33,6 +33,7 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.DialogButton;
 import org.pentaho.ui.xul.swt.custom.BasicDialog;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 
 public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
@@ -550,6 +551,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
     
+    Image img = SwtXulUtil.getCachedImage(this.domContainer.getXulLoader().getRootDir()+appIcon, domContainer, d);
+    /*
     InputStream in = null;
     try{
       in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+appIcon);
@@ -568,12 +571,17 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       if(img != null) {
         dialog.getShell().setImage(img);
       }
+
     } finally {
       try{
         if(in != null){
           in.close();
         }
       } catch(IOException ignored){}
+    }
+    */
+    if(img != null) {
+      dialog.getShell().setImage(img);
     }
     
   }

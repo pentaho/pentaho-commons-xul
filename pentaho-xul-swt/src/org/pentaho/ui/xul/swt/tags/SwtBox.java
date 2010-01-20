@@ -7,18 +7,22 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulBox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtBox extends AbstractSwtXulContainer implements XulBox {
@@ -51,22 +55,15 @@ public class SwtBox extends AbstractSwtXulContainer implements XulBox {
   }
 
   public void setBackground(String background) {
+    
     this.background = background;
-    InputStream in = null;
-    try{
-      in = XulUtil.loadResourceAsStream(background, container);
-      final Image img = new Image(box.getDisplay(), in);
+    Image backgroundImg = SwtXulUtil.getCachedImage(background, container, box.getDisplay());
+
+    if (backgroundImg != null){
       box.setBackgroundMode(SWT.INHERIT_DEFAULT);
-      box.setBackgroundImage(img);
-    } catch (FileNotFoundException e){
-      logger.error(e);
-    } finally {
-      try{
-        if(in != null){
-          in.close();
-        }
-      } catch(IOException ignored){}
+      box.setBackgroundImage(backgroundImg);
     }
+
   }
 
   public String getBgcolor() {

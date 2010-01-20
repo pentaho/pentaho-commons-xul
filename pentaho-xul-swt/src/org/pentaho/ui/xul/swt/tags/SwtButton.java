@@ -6,6 +6,8 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -23,6 +25,7 @@ import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Direction;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtButton extends SwtElement implements XulButton {
@@ -223,31 +226,20 @@ public class SwtButton extends SwtElement implements XulButton {
   }
   
   protected void displayImage(String src) {
+
     Display d = ((Composite) parent.getManagedObject()).getDisplay();
     if(d == null){
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
 
-    InputStream in = null;
-    try{
-      in = XulUtil.loadResourceAsStream(src, domContainer);
-      Image img = new Image(d, in);
-      
+    Image img = SwtXulUtil.getCachedImage(src, domContainer, d);
+    if (img != null){
       if(button != null){
         button.setImage(img);
       } else { //image button implementation
         imageButton.setImage(img);
       }
-    } catch (FileNotFoundException e){
-      logger.error(e);
-    } finally {
-      try{
-        if(in != null){
-          in.close();
-        }
-      } catch(IOException ignored){}
     }
-    
   }
   
 }

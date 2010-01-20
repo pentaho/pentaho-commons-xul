@@ -22,6 +22,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeLabelProvider;
 import org.pentaho.ui.xul.util.SwtSwingConversion;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtImage extends SwtElement implements XulImage{
@@ -51,21 +52,10 @@ public class SwtImage extends SwtElement implements XulImage{
 
   public void setSrc(String src) {
     this.src = src;
-
-    InputStream in = null;
-    try{
-      in = XulUtil.loadResourceAsStream(src, domContainer);
-      label.setImage(new Image(((Composite) parent.getManagedObject()).getDisplay(), in));
-    } catch (FileNotFoundException e){
-      logger.error(e);
-    } finally {
-      try{
-        if(in != null){
-          in.close();
-        }
-      } catch(IOException ignored){}
+    Image img = SwtXulUtil.getCachedImage(src, domContainer, ((Composite) parent.getManagedObject()).getDisplay());
+    if (img != null){
+      label.setImage(img);
     }
-    
   }
 
   public void setSrc(Object img) {
