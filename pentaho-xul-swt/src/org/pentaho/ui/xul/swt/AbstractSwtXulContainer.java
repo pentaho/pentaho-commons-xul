@@ -10,7 +10,7 @@ public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
 
   protected Align alignment = Align.CENTER;
   protected boolean suppressLayout;
-  private static final Log logger = LogFactory.getLog(AbstractSwtXulContainer.class);
+  protected static final Log logger = LogFactory.getLog(AbstractSwtXulContainer.class);
   
   public AbstractSwtXulContainer(String tagName){
     super(tagName);
