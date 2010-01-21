@@ -217,12 +217,18 @@ public class SwtButton extends SwtElement implements XulButton {
   }
 
   public void setSelected(boolean selected) {
-    this.selected = selected;  
-    button.setSelection(this.selected);
+    this.selected = selected;
+    if(button != null){
+      button.setSelection(this.selected);
+    }
   }
 
   public void doClick() {
-    button.setSelection(true);
+    if(button != null){
+      button.setSelection(true);
+    } else if(onclick != null){
+      invoke(onclick);
+    }
   }
   
   protected void displayImage(String src) {
