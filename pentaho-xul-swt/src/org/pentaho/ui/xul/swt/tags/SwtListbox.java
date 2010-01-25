@@ -266,7 +266,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
 
   public <T> Collection<T> getElements() {
-    return null;
+    return this.elements;
       
   }
 
