@@ -139,6 +139,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
       final org.dom4j.Document  doc = rdr.read(in);
       
       XulDomContainer container = this.xulLoader.loadXulFragment(doc);
+      in.close();
       return container;
     } catch(Exception e){
     	logger.error("Error Loading Xul Fragment",e);
