@@ -226,7 +226,10 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
           // TODO  log error... only strings supported...
         }
       }
-      listBox.setSelection((String[])items);
+      String[] sel = new String[items.length];
+      System.arraycopy(items, 0, sel, 0, items.length);
+      listBox.setSelection(sel);
+      
       // SWT doesn't seem to fire this event when the selection
       // is made via code, only with a mouse or keyboard action.
 
