@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TreeItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -1632,70 +1633,88 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   @Override
   protected void resolveDndParentAndIndex(DropEvent xulEvent) {
+    Object parentObj = null;
+    int index = -1;
     
     if (!isHierarchical) {
-      throw new UnsupportedOperationException("dnd not implemented for xul tree in table mode.");
-    }
+      DropTargetEvent event = (DropTargetEvent)xulEvent.getNativeEvent();
+      if (event.item != null) { 
+        TableItem item = (TableItem) event.item;
+        
+        if (item != null) {
+          if (elements != null) {
+            // swt -> xul -> element
+            if(item.getData() instanceof SwtTreeItem) {
+              SwtTreeItem treeItem = (SwtTreeItem)item.getData();
+              parentObj = treeItem.getBoundObject();
+            }
+          } else {
+            parentObj = item.getText();
+          }
+        }
 
-    TreeItem parent = null;
-    int index = -1;
-    DropTargetEvent event = (DropTargetEvent)xulEvent.getNativeEvent();
-    if (event.item != null) {
-      TreeItem item = (TreeItem) event.item;
-      Point pt = tree.getControl().getDisplay().map(null, tree.getControl(), event.x, event.y);
-      Rectangle bounds = item.getBounds();
-      parent = item.getParentItem();
-      
-      if (parent != null) {
-        TreeItem[] items = parent.getItems();
         index = 0;
-        for (int i = 0; i < items.length; i++) {
-          if (items[i] == item) {
-            index = i;
-            break;
-          }
-        }
-        if (pt.y < bounds.y + bounds.height / 3) {
-          // HANDLE parent, index
-        } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
-          // HANDLE parent, index + 1
-          index++;
-        } else {
-          parent = item;
-          index = 0;
-        }
-  
-      } else {
-        TreeItem[] items = tree.getTree().getItems();
-        index = 0;
-        for (int i = 0; i < items.length; i++) {
-          if (items[i] == item) {
-            index = i;
-            break;
-          }
-        }
-        if (pt.y < bounds.y + bounds.height / 3) {
-          // HANDLE null, index
-        } else  if (pt.y > bounds.y + 2 * bounds.height / 3) {
-          index++;
-        } else {
-          // item is parent
-          parent = item;
-          index = 0;
-        }
       }
     } else {
-      // ASSUME END OF LIST, null, 0
-    }
-
-    Object parentObj = null;
-    if (parent != null) {
-      if (elements != null) {
-        // swt -> xul -> element
-        SearchBundle b = findSelectedIndex(new SearchBundle(), getRootChildren(), (XulTreeItem)parent.getData());
-        parentObj = b.selectedItem;
+      TreeItem parent = null;
+      
+      DropTargetEvent event = (DropTargetEvent)xulEvent.getNativeEvent();
+      if (event.item != null) {
+        TreeItem item = (TreeItem) event.item;
+        Point pt = tree.getControl().getDisplay().map(null, tree.getControl(), event.x, event.y);
+        Rectangle bounds = item.getBounds();
+        parent = item.getParentItem();
+        
+        if (parent != null) {
+          TreeItem[] items = parent.getItems();
+          index = 0;
+          for (int i = 0; i < items.length; i++) {
+            if (items[i] == item) {
+              index = i;
+              break;
+            }
+          }
+          if (pt.y < bounds.y + bounds.height / 3) {
+            // HANDLE parent, index
+          } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
+            // HANDLE parent, index + 1
+            index++;
+          } else {
+            parent = item;
+            index = 0;
+          }
+    
+        } else {
+          TreeItem[] items = tree.getTree().getItems();
+          index = 0;
+          for (int i = 0; i < items.length; i++) {
+            if (items[i] == item) {
+              index = i;
+              break;
+            }
+          }
+          if (pt.y < bounds.y + bounds.height / 3) {
+            // HANDLE null, index
+          } else  if (pt.y > bounds.y + 2 * bounds.height / 3) {
+            index++;
+          } else {
+            // item is parent
+            parent = item;
+            index = 0;
+          }
+        }
       } else {
-        parentObj = parent.getText();
+        // ASSUME END OF LIST, null, 0
+      }
+
+      if (parent != null) {
+        if (elements != null) {
+          // swt -> xul -> element
+          SearchBundle b = findSelectedIndex(new SearchBundle(), getRootChildren(), (XulTreeItem)parent.getData());
+          parentObj = b.selectedItem;
+        } else {
+          parentObj = parent.getText();
+        }
       }
     }
     
@@ -1758,9 +1777,18 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   protected void onSwtDragOver(DropTargetEvent event) {
     event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
     if (event.item != null) {
-      TreeItem item = (TreeItem) event.item;
-      Point pt = tree.getControl().getDisplay().map(null, tree.getControl(), event.x, event.y);
-      Rectangle bounds = item.getBounds();
+      Rectangle bounds = null;
+      Point pt = null;
+      if(isHierarchical()) {
+        TreeItem item = (TreeItem) event.item;
+        pt = tree.getControl().getDisplay().map(null, tree.getControl(), event.x, event.y);
+        bounds = item.getBounds();
+      } else {
+        TableItem item = (TableItem) event.item;
+        pt = table.getControl().getDisplay().map(null, table.getControl(), event.x, event.y);
+        bounds = item.getBounds();
+      }
+      
       if (pt.y < bounds.y + bounds.height / 3) {
         event.feedback |= DND.FEEDBACK_INSERT_BEFORE;
       } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
