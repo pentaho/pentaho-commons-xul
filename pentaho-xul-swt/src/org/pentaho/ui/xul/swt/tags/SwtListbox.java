@@ -275,6 +275,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
     
     this.elements = elements;
     this.prevSelectedObject = null;
+    this.curSelectedIndex = -1;
+    this.curSelectedIndices = null;
+    
     listBox.removeAll();
     for (T t : elements) {
       SwtListitem item = null;
