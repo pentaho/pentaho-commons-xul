@@ -26,6 +26,8 @@ import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * @author nbaker
@@ -129,17 +131,21 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
         String[] loadCalls = onLoad.split(",");
         for(String load : loadCalls){
         	load = load.trim();
-          try{
-        		invoke(load, new Object[]{});
-        	} catch(XulException e){
-        		logger.error("Error calling onLoad event: "+load,e);
+        	if(StringUtils.isNotEmpty(load)){
+        	  try{
+          		invoke(load, new Object[]{});
+          	} catch(XulException e){
+          		logger.error("Error calling onLoad event: "+load,e);
+          	}
         	}
         }
       } else { //single onLoad event
-        try{
-          invoke(rootEle.getOnload(), new Object[]{});
-        } catch(XulException e){
-          logger.error("Error calling onLoad event: "+onLoad,e);
+        if(StringUtils.isNotEmpty(rootEle.getOnload())){
+          try{
+            invoke(rootEle.getOnload(), new Object[]{});
+          } catch(XulException e){
+            logger.error("Error calling onLoad event: "+onLoad,e);
+          }
         }
       }
     }
