@@ -73,6 +73,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
           Object newSelectedObject = getSelectedItem();
           SwtListbox.this.changeSupport.firePropertyChange("selectedItem", prevSelectedObject, newSelectedObject);
           prevSelectedObject = newSelectedObject;
+          
+          Object[] newSelectedObjectList = getSelectedItems();
+          SwtListbox.this.changeSupport.firePropertyChange("selectedItems", null, newSelectedObjectList);
         }
       }
       
@@ -178,6 +181,18 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
 
   public Object[] getSelectedItems() {
+    // If there's a bound collection return the model object.
+    int[] selIndices = getSelectedIndices();
+    if(elements != null && selIndices.length > 0){
+      Object[] returnArray = new Object[selIndices.length];
+      Object[] valueArray  = elements.toArray();
+      for(int i=0;i<selIndices.length;i++) {
+        returnArray[i] = valueArray[selIndices[i]];
+      }
+      return returnArray;
+    }
+    // otherwise return String value
+
     return listBox.getSelection();
   }
   
@@ -190,27 +205,22 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
 
   public void setSelectedItem(Object item) {
-    setSelectedItems(new String[] {(String)item});
+    setSelectedItems(new Object[] {item});
   }
 
   public void setSelectedItems(Object[] items) {
-    // If bound collection get idx and use that.
     if(elements != null){
-      int[] selIdxs = new int[items.length];
-      for(int i=0; i< items.length; i++){
-        Object[] eles = new Object[elements.size()];
-        inner:
-        for(int y=0; y<eles.length; y++){
-          if(eles[y] == items[i]){
-            selIdxs[i] = y;
-            break inner;
-          }
+      // If bound collection get idx and use that.
+      int[] indices = new int[items.length];
+      int pos = 0;
+      for(Object o : items){
+        int index = getIndex(o);
+        if(index >= 0) {
+          indices[pos++] = index;  
         }
       }
-      setSelectedIndices(selIdxs);
+      setSelectedIndices(indices);
     } else {
-      
-      
       for (Object object : items) {
         if (!(object instanceof String)){
           // TODO  log error... only strings supported...
@@ -225,6 +235,15 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
     }
   }
 
+  private int getIndex(Object o) {
+    Object[] elementArray = elements.toArray();
+    for(int i=0;i<elementArray.length;i++) {
+      if(elementArray[i] == o) {
+        return i;
+      }
+    }
+    return -1;
+  }
   public int getRowCount() {
     return (!listBox.isDisposed()) ? listBox.getItemCount() : 0;
   }
