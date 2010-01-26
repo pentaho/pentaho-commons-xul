@@ -274,27 +274,29 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
 
   public <T> void setElements(Collection<T> elements) {
-    logger.info("SetElements on listbox called: collection has "+elements.size()+" rows");
-    
-    this.elements = elements;
-    this.prevSelectedObject = null;
-    this.curSelectedIndex = -1;
-    this.curSelectedIndices = null;
-    
-    listBox.removeAll();
-    for (T t : elements) {
-      SwtListitem item = null;
-      try {
-        item = (SwtListitem) container.getDocumentRoot().createElement("listitem");
-      } catch (XulException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+    if(elements != null) {
+      logger.info("SetElements on listbox called: collection has "+elements.size()+" rows");
+      
+      this.elements = elements;
+      this.prevSelectedObject = null;
+      this.curSelectedIndex = -1;
+      this.curSelectedIndices = null;
+      
+      listBox.removeAll();
+      for (T t : elements) {
+        SwtListitem item = null;
+        try {
+          item = (SwtListitem) container.getDocumentRoot().createElement("listitem");
+        } catch (XulException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+  //      SwtListitem item = new SwtListitem(null, this, container, null);
+        this.addChild(item);
+        item.setLabel(extractLabel(t));
       }
-//      SwtListitem item = new SwtListitem(null, this, container, null);
-      this.addChild(item);
-      item.setLabel(extractLabel(t));
+      layout();
     }
-    layout();
   }
 
   public void setSelectedIndices(int[] indices) {
