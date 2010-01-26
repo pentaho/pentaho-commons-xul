@@ -43,5 +43,14 @@ public class SwtSplitter extends AbstractSwtXulContainer implements XulSplitter{
     sash.layout(true);
   }
 
+  @Override
+  public void setOrient(String orientation) {
+    super.setOrient(orientation);
+    if (sash != null){
+      int dir = (getOrientation() == Orient.VERTICAL) ? SWT.VERTICAL: SWT.HORIZONTAL;
+      sash.setOrientation(dir);
+    }
+  }
+
   
 } 

@@ -551,35 +551,36 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
     
-    Image img = SwtXulUtil.getCachedImage(this.domContainer.getXulLoader().getRootDir()+appIcon, domContainer, d);
-    /*
-    InputStream in = null;
-    try{
-      in = SwtButton.class.getClassLoader().getResourceAsStream(this.domContainer.getXulLoader().getRootDir()+appIcon);
+    // first look for the appIcon in XUL known paths ...
+    Image img = SwtXulUtil.getCachedImage(appIcon, domContainer, d);
+    
+    // try second method of finding the appIcon...
+    if (img==null){
+      InputStream in = null;
+      in = getClass().getResourceAsStream(appIcon);
       if(in == null){
-        File f = new File(icon);
-        if(f.exists()){
-          try {
-            in = new FileInputStream(f);
-          } catch (FileNotFoundException e) {}
-        } else {
-          logger.warn("could not find image: "+appIcon);
-          return;
-        }
-      }
-      Image img = new Image(dialog.getShell().getDisplay(), in);
-      if(img != null) {
-        dialog.getShell().setImage(img);
-      }
 
-    } finally {
-      try{
-        if(in != null){
-          in.close();
+        try{
+          File f = new File(icon);
+          if(f.exists()){
+            try {
+              in = new FileInputStream(f);
+            } catch (FileNotFoundException e) {}
+          } else {
+            logger.warn("could not find image: "+appIcon);
+            return;
+          }
+          img = new Image(dialog.getShell().getDisplay(), in);
+        } finally {
+          try{
+            if(in != null){
+              in.close();
+            }
+          } catch(IOException ignored){}
         }
-      } catch(IOException ignored){}
+
+      }
     }
-    */
     if(img != null) {
       dialog.getShell().setImage(img);
     }
