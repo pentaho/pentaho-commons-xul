@@ -121,6 +121,8 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     data.horizontalAlignment = SWT.FILL;
     data.grabExcessHorizontalSpace = true;
     data.verticalSpan = 10;
+    data.horizontalIndent = 3;
+    data.verticalIndent = 3;
     body.setLayoutData(data);
     
     data = new GridData();

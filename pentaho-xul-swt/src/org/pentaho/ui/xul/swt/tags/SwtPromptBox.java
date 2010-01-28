@@ -6,6 +6,8 @@ import java.util.List;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -13,20 +15,16 @@ import org.pentaho.ui.xul.components.XulPromptBox;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.swt.custom.MessageDialogBase;
 import org.pentaho.ui.xul.util.XulDialogCallback;
 
-public final class SwtPromptBox extends SwtElement implements XulPromptBox {
+public final class SwtPromptBox extends MessageDialogBase implements XulPromptBox {
 
   private String defaultValue = null;
 
-  private List<XulDialogCallback<String>> callbacks = new ArrayList<XulDialogCallback<String>>();
   
   static final String ELEMENT_NAME = "promptbox"; //$NON-NLS-1$
   
-  private String acceptText = "OK";
-  private String cancelText = "Cancel";
-  private String title, message;
-  private Shell parentObject;
   private XulComponent parent;
   private InputDialog dlg;
 
@@ -36,26 +34,36 @@ public final class SwtPromptBox extends SwtElement implements XulPromptBox {
   }
 
 
-  public void addDialogCallback(XulDialogCallback callback) {
-    this.callbacks.add(callback);
+
+  
+  public String getValue() {
+    return dlg.getValue();
   }
 
-  public void removeDialogCallback(XulDialogCallback callback) {
-    this.callbacks.remove(callback);
+  public void setValue(String value) {
+    defaultValue = value;
   }
-  
-  protected Shell getParentObject(){
-    if(parentObject != null){
-      return parentObject;
-    } else if (getParent() instanceof XulRoot){
-      return (Shell)((XulRoot)getParent()).getRootObject();
-    } else {
-      XulRoot root = (XulRoot) parent;
-      return (Shell)root.getRootObject();
-    }
+
+  public int open() {
+    
+    
+    dlg = new InputDialog(getParentObject(), title, message, defaultValue, new IInputValidator(){
+
+      public String isValid(String arg0) {
+        return null;
+      }
+      
+    });
+    int retVal = dlg.open();
+    notifyListeners(retVal);
+    return retVal;
   }
-  
-  private void notifyListeners(Integer code){
+
+
+
+
+  @Override
+  protected void notifyListeners(Integer code) {
     XulDialogCallback.Status status = XulDialogCallback.Status.CANCEL;
     
     switch (code){
@@ -77,84 +85,8 @@ public final class SwtPromptBox extends SwtElement implements XulPromptBox {
       callback.onClose(SwtPromptBox.this, status, dlg.getValue());
     }
   }
-  
-  public String getValue() {
-    return dlg.getValue();
-  }
 
-  public void setValue(String value) {
-    defaultValue = value;
-  }
-
-  public void setCancelLabel(String label) {
-    this.cancelText = label;
-  }
-
-  public Object[] getButtons() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public Object getIcon() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public int open() {
-    
-    
-    dlg = new InputDialog(getParentObject(), title, message, defaultValue, new IInputValidator(){
-
-      public String isValid(String arg0) {
-        return null;
-      }
-      
-    });
-    int retVal = dlg.open();
-    notifyListeners(retVal);
-    return retVal;
-  }
-
-  public void setAcceptLabel(String label) {
-    this.acceptText = label;
-    
-  }
-
-  public void setButtons(Object[] buttons) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setIcon(Object icon) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-
-  public void setModalParent(Object parent) {
-    parentObject = (Shell) parent;
-  }
   
 
-  public void setScrollable(boolean scroll) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
   
 }

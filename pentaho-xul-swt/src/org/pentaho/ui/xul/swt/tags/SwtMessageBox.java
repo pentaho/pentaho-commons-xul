@@ -12,6 +12,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
@@ -88,55 +89,13 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   /**
    * We do this so we can pick up new buttons or icons if they choose to reuse their SWTMessageBox
    */
-  protected Shell dialog;
+  protected MessageBox dialog;
   
   protected void createNewMessageBox(){
     Shell shell = getParentObject();
-    
-    dialog = new Shell(shell, SWT.APPLICATION_MODAL | SWT.DIALOG_TRIM | SWT.RESIZE);
+    dialog = new MessageBox(shell, SWT.OK);
     dialog.setText(getTitle());
-    dialog.setLayout(new GridLayout());
-    if(getWidth() > 0 && getHeight() > 0){
-      dialog.setSize(getWidth(), getHeight());
-    } else {
-      dialog.setSize(300, 175);
-    }
-    
-    Composite c = new Composite(dialog, SWT.None);//(Composite) messageBox.getMainDialogArea();
-    c.setLayout(new GridLayout());
-    
-    GridData gd = new GridData();
-    gd.grabExcessHorizontalSpace = true;
-    gd.grabExcessVerticalSpace = true;
-    gd.verticalAlignment = GridData.FILL;
-    gd.horizontalAlignment = GridData.FILL;
-    c.setLayoutData(gd);
-    
-    if(!scrollable){
-      Label txt = new Label(c, SWT.WRAP | SWT.CENTER);
-      txt.setText(getMessage());
-      
-      gd = new GridData();
-      gd.grabExcessHorizontalSpace = true;
-      gd.grabExcessVerticalSpace = true;
-      gd.verticalAlignment = GridData.CENTER;
-      gd.horizontalAlignment = GridData.FILL;
-      txt.setLayoutData(gd);
-    } else {
-      int style = SWT.MULTI|SWT.BORDER|SWT.WRAP|SWT.V_SCROLL ;
-      Text txt = new Text(c, style);
-      txt.setText(getMessage());
-      gd = new GridData();
-      gd.grabExcessHorizontalSpace = true;
-      gd.grabExcessVerticalSpace = true;
-      gd.verticalAlignment = GridData.FILL;
-      gd.horizontalAlignment = GridData.FILL;
-      txt.setLayoutData(gd);
-    }
-    setButtons(c);
-    c.layout();
-    c.redraw();
-    shell.redraw();
+    dialog.setMessage(getMessage());
     
   }
 
@@ -154,70 +113,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   
   protected Composite buttonArea;
   
-  public void setButtons(Composite c){
-    buttonArea = new Composite(c, SWT.None);
-    
-    GridData gd = new GridData();
-    gd.grabExcessHorizontalSpace =  true;
-    if (buttonAlignment == SWT.CENTER){
-      gd.horizontalAlignment = GridData.CENTER;
-      gd.verticalAlignment = GridData.CENTER;
-    }else{ //right align
-      gd.horizontalAlignment = GridData.END;
-      gd.verticalAlignment = GridData.END;
-    }
-    buttonArea.setLayoutData(gd);
-    buttonArea.setLayout(new RowLayout());
-    
-    
-    if (buttons == null){
-      return;
-    }
-    
-    DialogButton[] buttonsToUse = new DialogButton[buttons.length];
-    
-    // If we only have strings, create DialogButtons, then process EXACTLY the same way.  
-    if(buttons instanceof String[]){
-      for (int i = 0; i < buttons.length; i++) {
-        String buttonName = ((String)buttons[i]).trim().toUpperCase();
-        DialogButton thisButton = DialogButton.valueOf(buttonName);
-        buttonsToUse[i] = thisButton;
-      }
-    } else{
-      buttonsToUse = (DialogButton[])buttons;
-    }
-
-    for (DialogButton thisButton:  buttonsToUse) {
-      Button btn = new Button(buttonArea, SWT.PUSH);
-      btn.setText(getButtonText(thisButton));
-      btn.setData(thisButton.getId());
-      buttonList.add(btn);
-      final int code = thisButton.getId();
-      addButtonListeners(btn, code);
-      
-      //TODO Should this eventually be an option on the messasgebox that the 
-      // programmer can set? 
-      if(thisButton.equals(DialogButton.ACCEPT)){
-        dialog.setDefaultButton(btn);
-      }
-      
-    }
-
-    buttonArea.layout();
-    buttonArea.redraw();
-    dialog.layout();
-    dialog.redraw();
-  }
-  
-  protected void addButtonListeners(final Button btn, final int code) {
-    btn.addSelectionListener(new SelectionAdapter(){
-      public void widgetSelected(SelectionEvent arg0) {
-        retVal = code;
-        dialog.close();
-      }
-    });
-  }
-  
+ 
   public Object getIcon() {
     return icon;
   }
@@ -260,12 +156,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   
   public int open(){
     createNewMessageBox();
-    dialog.open();
-    while (!dialog.isDisposed()) {
-      if (!dialog.getDisplay().readAndDispatch()) {
-        dialog.getDisplay().sleep();
-      }
-    }
+    retVal = dialog.open();
     return retVal;
   }
 
