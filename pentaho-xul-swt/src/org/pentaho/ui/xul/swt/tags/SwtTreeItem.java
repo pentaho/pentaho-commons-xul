@@ -132,6 +132,20 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
       }
     }
   }
+  
+  
+
+  @Override
+  public void setTooltiptext(String tooltip) {
+    super.setTooltiptext(tooltip);
+    if (this.initialized) {
+      XulTree tree = getTree();
+      if (tree != null) {
+        tree.update();
+      }
+    }
+
+  }
 
   public XulTree getTree() {
     XulTree tree = null;
