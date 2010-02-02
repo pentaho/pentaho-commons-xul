@@ -68,7 +68,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   }
 
   public String getValue() {
-    if (getManagedObject() != null) {
+    if (textComp != null) {
       return textComp.getText();
     } else {
       logger.error("Attempt to get Textbox's value before it's instantiated");
@@ -81,7 +81,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     if(textComp != null && textComp.getText().equals(text)){
       return;
     }
-    if (getManagedObject() != null) {
+    if (textComp != null) {
       textComp.setText(text);
     }
     this.value = text;
@@ -104,7 +104,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   public void setDisabled(boolean dis) {
     boolean oldValue = this.disabled;
     this.disabled = dis;
-    if (getManagedObject() != null) {
+    if (textComp != null) {
       textComp.setEnabled(!dis);
     }
     this.changeSupport.firePropertyChange("disabled", oldValue, dis);
