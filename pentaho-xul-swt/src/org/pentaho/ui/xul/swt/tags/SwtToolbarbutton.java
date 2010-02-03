@@ -216,6 +216,12 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     button.setImage(new Image(d, in));
     
   }
+  
+  public void setImage(Image img){
+
+    button.setImage(img);
+  }
+  
   public void setImage(String src) {
     this.image = src;
     if(src == null){
