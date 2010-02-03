@@ -265,7 +265,9 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     if(parentToolbar.getMode().equals("ICONS")){
       return;
     }
-    this.button.setText(label);
+    if(label != null){
+      this.button.setText(label);
+    }
     
   }
   public void setOnclick(String method) {
