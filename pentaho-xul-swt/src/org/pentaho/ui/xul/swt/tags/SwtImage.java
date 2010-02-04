@@ -59,12 +59,16 @@ public class SwtImage extends SwtElement implements XulImage{
   }
 
   public void setSrc(Object img) {
-    label.setImage(
-      new Image(
-          ((Composite) parent.getManagedObject()).getDisplay(), 
-          SwtSwingConversion.convertToSWT((BufferedImage) img)
-        )
-    );
+  	if(img instanceof String) {
+  		setSrc((String) img);
+  	} else if (img instanceof BufferedImage) {
+	    label.setImage(
+	      new Image(
+	          ((Composite) parent.getManagedObject()).getDisplay(), 
+	          SwtSwingConversion.convertToSWT((BufferedImage) img)
+	        )
+	    );
+  	}
   }
   
 
