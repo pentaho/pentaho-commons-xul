@@ -107,7 +107,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   }
   
   private void setText(){
-    if(item != null){
+    if(item != null && item.isDisposed() == false){
       String text = "";
       if(this.label != null){
         text += this.label;
@@ -119,7 +119,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
 
   public void setAccesskey(String accessKey) {
     
-    if(item != null){
+    if(item != null && item.isDisposed() == false){
       int mask = 0;
       if(accessKey.indexOf("ctrl") > -1){
         mask += SWT.CTRL;
@@ -140,7 +140,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   }
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
-    if (item != null) {
+    if (item != null && item.isDisposed() == false) {
       item.setEnabled(!disabled);
     }
   }
@@ -159,12 +159,12 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   }
 
   public boolean isSelected() {
-    return (item != null)? item.getSelection() : selected;
+    return (item != null && item.isDisposed() == false)? item.getSelection() : selected;
   }
   
   public void setSelected(String selected){
     this.selected = Boolean.parseBoolean(selected);
-    if(item != null){
+    if(item != null && item.isDisposed() == false){
       item.setSelection(this.selected);
     }
   }
@@ -187,7 +187,10 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
         Image tempImage = new Image(item.getDisplay(), img.getImageData());
         img.dispose();
         img = tempImage;
-        item.setImage(img);
+        
+        if(item != null && item.isDisposed() == false){
+          item.setImage(img);
+        }
 
       } catch (FileNotFoundException e) {
         logger.warn(e);

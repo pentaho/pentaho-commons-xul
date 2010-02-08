@@ -91,7 +91,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
 
   public void setMenu(final Menu menu){
     //the generic impl... override if you need a more sophisticated handling of the menu
-    if(button != null){
+    if(button != null && button.isDisposed() == false){
       button.addSelectionListener(new SelectionAdapter(){
   
         
@@ -135,7 +135,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
   }
   public void setDownimage(String img) {
     this.downImage = img;
-    if(img == null || button == null){
+    if(img == null || button == null || button.isDisposed()){
       return;
     }
     Display d = ((Composite) parent.getManagedObject()).getDisplay();
@@ -213,13 +213,17 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     if(d == null){
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
-    button.setImage(new Image(d, in));
+    if(button != null  && button.isDisposed() == false){
+      button.setImage(new Image(d, in));
+    }
     
   }
   
   public void setImage(Image img){
 
-    button.setImage(img);
+    if(button != null  && button.isDisposed() == false){
+      button.setImage(img);
+    }
   }
   
   public void setImage(String src) {
@@ -227,7 +231,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     if(src == null){
       return;
     }
-    if(button == null){
+    if(button == null || button.isDisposed()){
       return;
     }
     if(!(parentToolbar.getMode().equals("ICONS")|| parentToolbar.getMode().equals("FULL"))){
@@ -258,7 +262,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
   }
   public void setLabel(String label) {
     this.label = label;
-    if(button == null){
+    if(button == null || button.isDisposed()){
       return;
     }
     
@@ -275,7 +279,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     
   }
   public void setSelected(boolean selected) {
-    if(button != null){
+    if(button != null  && button.isDisposed() == false){
       button.setSelection(selected);
     }
   }
@@ -300,7 +304,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
   @Override
   public void setTooltiptext(String tooltip) {
     super.setTooltiptext(tooltip);
-    if(button == null){
+    if(button == null || button.isDisposed()){
       return;
     }
     button.setToolTipText(tooltip);
@@ -308,7 +312,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
   
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
-    if(button != null){
+    if(button != null  && button.isDisposed() == false){
       button.setEnabled( !disabled );
     } 
   }
