@@ -88,10 +88,25 @@ public class SwtElement extends AbstractXulComponent {
       }
     }
 
+    XulComponent comp = (XulComponent) e;
+    Object mo = comp.getManagedObject();
+    if(mo != null){
+      if(mo instanceof Control){
+        if(((Control) mo) != getManagedObject() && getManagedObject() instanceof Composite){
+          ((Control) mo).setParent((Composite) getManagedObject());
+        }
+      } else if(mo instanceof Viewer){
+        if(((Viewer) mo).getControl() != getManagedObject() && getManagedObject() instanceof Composite){
+          ((Viewer) mo).getControl().setParent((Composite) getManagedObject());
+        }
+      }
+    }
+    
     if (initialized) {
       layout();
       ((XulComponent) e).onDomReady();
     }
+    
   }
   
   public void addChildAt(Element c, int pos) {
