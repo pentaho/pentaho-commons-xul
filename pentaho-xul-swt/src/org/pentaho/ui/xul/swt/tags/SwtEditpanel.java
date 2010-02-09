@@ -40,7 +40,6 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
   private Composite topForm;
   private CLabel lbl;
   private ToolItem btn;
-  private boolean collapsible;
   private Composite body;
   private Composite mainComposite;
   private XulToolbar toolbar;
@@ -50,6 +49,7 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
   private Composite toolbarPanel, buttonPanel, titlePanel;
   private Image rightImg, leftImg;
   private XulDomContainer domContainer;
+  private TYPE type;
   
   public SwtEditpanel(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -74,13 +74,11 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     
     topForm = new Composite(mainComposite, SWT.NONE);
     topForm.addPaintListener(new PaintListener(){
-
       public void paintControl(PaintEvent arg0) {
         GC gc = arg0.gc;
         gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
         gc.drawLine(0, topForm.getBounds().height-1, topForm.getBounds().width, topForm.getBounds().height-1);
       }
-      
     });
     
     layout = new GridLayout(2, false);
@@ -92,7 +90,7 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     
     GridData gData = new GridData();
     gData.grabExcessHorizontalSpace = true;
-    gData.grabExcessVerticalSpace = true;
+    gData.grabExcessVerticalSpace = false;
     gData.horizontalAlignment = SWT.FILL;
     gData.verticalAlignment = SWT.FILL;
     topForm.setLayoutData(gData);
@@ -142,10 +140,6 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
   }
 
   
-  public void setCollapsible(boolean collapsible) {
-    this.collapsible = collapsible;
-  }
-
   @Override
   public void layout() {
     for(XulComponent comp : getChildNodes()){
@@ -179,39 +173,39 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
       }
       
     }
-    if(isCollapsible() && btn == null){
+    if(type != null){
       final ToolBar bar = new ToolBar(buttonPanel, SWT.FLAT | SWT.HORIZONTAL);
       btn = new ToolItem(bar, SWT.PUSH);
-      
-      InputStream in = null;
-      InputStream in2 = null;
-      try{
+     
+    
+      if(type == TYPE.COLLAPSIBLE && btn == null){
         
         this.rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_right.png", domContainer, bar.getDisplay());
-        
         this.leftImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_left.png", domContainer, bar.getDisplay());
-        
-        btn.setImage(rightImg);
-      } finally {
-        try{
-          if(in != null){
-            in.close();
-          }
-          if(in2 != null){
-            in.close();
-          }
-        } catch(IOException ignored){}
-      }
-    
-      
-      btn.addSelectionListener(new SelectionListener(){
-        public void widgetDefaultSelected(SelectionEvent se) {}
-        public void widgetSelected(SelectionEvent se) {
-          collapse( !collapsed);
-        }
-      });
-      bar.addPaintListener(new PaintListener(){
 
+        btn.setImage(rightImg);
+        btn.addSelectionListener(new SelectionListener(){
+          public void widgetDefaultSelected(SelectionEvent se) {}
+          public void widgetSelected(SelectionEvent se) {
+            collapse( !collapsed);
+          }
+        });
+        
+      } else {
+        
+        Image rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/close.png", domContainer, bar.getDisplay());
+        btn.setImage(rightImg);
+        
+        btn.addSelectionListener(new SelectionListener(){
+          public void widgetDefaultSelected(SelectionEvent se) {}
+          public void widgetSelected(SelectionEvent se) {
+            close();
+          }
+        });
+        
+      }
+      bar.addPaintListener(new PaintListener(){
+        
         public void paintControl(PaintEvent arg0) {
           GC gc = arg0.gc;
           gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
@@ -219,16 +213,32 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
         }
         
       });
- 
+    } else {
+      buttonPanel.dispose();
+      ((GridData) titlePanel.getLayoutData()).horizontalSpan = 2;
+      topForm.layout(true);
+      topForm.pack();
     }
     setManagedObject(body);
     super.layout();
     setManagedObject(mainComposite);
   }
   
+  public void close(){
+    setVisible(false);
+  }
+  
+  @Override
+  public void setVisible(boolean visible) {
+    boolean prevVal = isVisible();
+    super.setVisible(visible);
+    changeSupport.firePropertyChange("visible", prevVal, visible);
+  }
+  
   public boolean isCollapsed(){
     return collapsed;
   }
+  
   public void collapse(boolean collapse){
     this.collapsed = collapse;
     body.setVisible(!collapsed);
@@ -253,16 +263,22 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     ((SwtElement) getParent()).layout();
   }
   
-  public boolean isCollapsible() {
-    return this.collapsible;
-  }
   
   public void setCaption(String caption) {
     if(lbl != null){
       lbl.setText(caption);
     }
   }
+  public String getType() {
+    return type.toString();
+  }
   
+  public void setType(String type) {
+    this.type = TYPE.valueOf(type.toUpperCase());
+  }
   
+  public void open() {
+    setVisible(true);  
+  }
   
 }

@@ -13,6 +13,9 @@ import org.pentaho.ui.xul.XulContainer;
  */
 
 public interface XulEditpanel extends XulContainer, XulCaptionedPanel {
-  void setCollapsible(boolean collapsible);
-  boolean isCollapsible();
+  enum TYPE{COLLAPSIBLE, CLOSABLE};
+  
+  void setType(String type);
+  String getType();
+  void open();
 }
