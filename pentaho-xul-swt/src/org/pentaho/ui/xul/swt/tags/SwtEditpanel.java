@@ -1,13 +1,11 @@
 package org.pentaho.ui.xul.swt.tags;
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.custom.ViewForm;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,6 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.pentaho.ui.xul.XulComponent;
@@ -33,13 +32,12 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.util.SwtXulUtil;
-import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpanel{
 
   private Composite topForm;
   private CLabel lbl;
-  private ToolItem btn;
+  private Label btn;
   private Composite body;
   private Composite mainComposite;
   private XulToolbar toolbar;
@@ -65,11 +63,11 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     data.grabExcessHorizontalSpace = true;
 
     GridLayout layout = new GridLayout();
-    mainComposite.setLayout(layout);
     layout.verticalSpacing = 0;
     layout.horizontalSpacing = 0;
     layout.marginWidth = 0;
     layout.marginHeight = 0;
+    mainComposite.setLayout(layout);
     
     
     topForm = new Composite(mainComposite, SWT.NONE);
@@ -111,6 +109,22 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     gData.grabExcessHorizontalSpace = false;
     buttonPanel.setLayoutData(gData);
     
+    
+    toolbarPanel = new Composite(mainComposite, SWT.NONE);
+    layout = new GridLayout();
+    layout.verticalSpacing = 0;
+    layout.horizontalSpacing = 0;
+    layout.marginWidth = 0;
+    layout.marginHeight = 0;
+    toolbarPanel.setLayout(layout);
+    
+    gData = new GridData();
+    gData.grabExcessHorizontalSpace = true;
+    gData.horizontalAlignment = SWT.FILL;
+    gData.horizontalIndent = 0;
+    gData.verticalIndent = 0;
+    toolbarPanel.setLayoutData(gData);
+    
     body = new Composite(mainComposite, SWT.None);
     
     data = new GridData();
@@ -142,10 +156,14 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
   
   @Override
   public void layout() {
+    boolean toolbarFound = false;
     for(XulComponent comp : getChildNodes()){
       if(comp instanceof XulToolbar){
         toolbar = (XulToolbar) comp;
+        toolbarFound = true;
+
         ((Control) comp.getManagedObject()).setParent(toolbarPanel);
+        toolbarPanel.layout(true);
         
       } else if(comp instanceof XulCaption){
         if(lbl == null){
@@ -168,51 +186,52 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
         }
         lbl.setText(((XulCaption) comp).getLabel());
         
-      } else {
+      } else if(comp.getManagedObject() instanceof Control){
         ((Control) comp.getManagedObject()).setParent(body);
+      } else if(comp.getManagedObject() instanceof Viewer){
+        ((Viewer) comp.getManagedObject()).getControl().setParent(body);
       }
       
     }
+    if(toolbarFound == false){
+
+      Object data = toolbarPanel.getLayoutData();
+      if(data instanceof GridData){
+        ((GridData) data).exclude = true;
+      }
+      toolbarPanel.setLayoutData(data);
+      toolbarPanel.setVisible(false);
+      toolbarPanel.getParent().layout(true);
+    }
     if(type != null){
-      final ToolBar bar = new ToolBar(buttonPanel, SWT.FLAT | SWT.HORIZONTAL);
-      btn = new ToolItem(bar, SWT.PUSH);
+      btn = new Label(buttonPanel, SWT.NONE);
      
     
       if(type == TYPE.COLLAPSIBLE && btn == null){
         
-        this.rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_right.png", domContainer, bar.getDisplay());
-        this.leftImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_left.png", domContainer, bar.getDisplay());
+        this.rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_right.png", domContainer, buttonPanel.getDisplay());
+        this.leftImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/16x16_left.png", domContainer, buttonPanel.getDisplay());
 
         btn.setImage(rightImg);
-        btn.addSelectionListener(new SelectionListener(){
-          public void widgetDefaultSelected(SelectionEvent se) {}
-          public void widgetSelected(SelectionEvent se) {
+        btn.addMouseListener(new MouseAdapter(){
+          @Override
+          public void mouseUp(MouseEvent arg0) {
             collapse( !collapsed);
           }
         });
         
       } else {
         
-        Image rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/close.png", domContainer, bar.getDisplay());
+        Image rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/close.png", domContainer, buttonPanel.getDisplay());
         btn.setImage(rightImg);
-        
-        btn.addSelectionListener(new SelectionListener(){
-          public void widgetDefaultSelected(SelectionEvent se) {}
-          public void widgetSelected(SelectionEvent se) {
+        btn.addMouseListener(new MouseAdapter(){
+          @Override
+          public void mouseUp(MouseEvent arg0) {
             close();
           }
         });
         
       }
-      bar.addPaintListener(new PaintListener(){
-        
-        public void paintControl(PaintEvent arg0) {
-          GC gc = arg0.gc;
-          gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
-          gc.drawLine(0, bar.getBounds().height-1, topForm.getBounds().width, bar.getBounds().height-1);
-        }
-        
-      });
     } else {
       buttonPanel.dispose();
       ((GridData) titlePanel.getLayoutData()).horizontalSpan = 2;
