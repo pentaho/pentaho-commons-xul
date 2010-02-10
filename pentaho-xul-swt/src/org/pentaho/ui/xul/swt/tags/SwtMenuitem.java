@@ -164,13 +164,14 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
   
   public void setSelected(String selected){
     this.selected = Boolean.parseBoolean(selected);
-    if(item != null && item.isDisposed() == false){
-      item.setSelection(this.selected);
-    }
+    setSelected(this.selected);
   }
   
   public void setSelected(boolean val){
     selected = val;
+    if(item != null && item.isDisposed() == false){
+      item.setSelection(this.selected);
+    }
   }
 
   public void setImage(String image) {
