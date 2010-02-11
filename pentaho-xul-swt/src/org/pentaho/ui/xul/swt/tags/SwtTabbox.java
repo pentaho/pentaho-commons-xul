@@ -53,9 +53,9 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
 
       @Override
       public void widgetSelected(SelectionEvent arg0) {
-        int sel = tabFolder.getSelectionIndex();
-        SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", selectedIndex, sel);
-        selectedIndex = sel;
+        int prevVal = selectedIndex;
+        selectedIndex = tabFolder.getSelectionIndex();
+        SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
       }
       
     });
@@ -106,6 +106,9 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   private void remove(int pos){
     this.tabs.removeChild(this.tabs.getChildNodes().get(pos));
     this.panels.removeChild(this.panels.getChildNodes().get(pos));
+    if(tabs.getChildNodes().size() == 0){ // last one doesn't fire selection event. Manually do that here
+      setSelectedIndex(-1);
+    }
   }
 
   @Override
@@ -137,15 +140,15 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   }
 
   public void setSelectedIndex(int index) {
+    int prevVal = selectedIndex;
+    selectedIndex = index;
+    SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
     if(tabFolder.getItemCount() > 0){ // component instantiated
       tabFolder.setSelection(selectedIndex);
       
       // Programatic set selectedIndex does not fire listener.
       int sel = tabFolder.getSelectionIndex();
-      SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", selectedIndex, index);
-      selectedIndex = index;
     }
-    selectedIndex = index;
   }
 
   @Override
@@ -213,6 +216,10 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
     
     //may have been added after panel
     addTabpanel(idx);
+    if(selectedIndex < 0){
+      selectedIndex = 0;
+    }
+    setSelectedIndex(selectedIndex);
   }
 
 

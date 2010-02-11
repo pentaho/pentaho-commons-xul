@@ -15,7 +15,7 @@ public class SwtTabs  extends AbstractSwtXulContainer implements XulTabs{
   }
   
   public XulTab getTabByIndex(int index){
-    return (SwtTab) this.getChildNodes().get(index);
+    return (index < 0 || index > getChildNodes().size()) ? null : (SwtTab) this.getChildNodes().get(index);
   }
   
   @Override
