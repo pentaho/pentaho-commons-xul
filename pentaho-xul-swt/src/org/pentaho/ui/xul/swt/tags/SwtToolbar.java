@@ -23,11 +23,11 @@ public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
       ? domContainer.getOuterContext() 
       : null; 
     if(shell != null && shell instanceof Shell){
-      toolbar = new ToolBar((Shell) shell, SWT.HORIZONTAL);
+      toolbar = new ToolBar((Shell) shell, SWT.HORIZONTAL | SWT.RIGHT);
     } else if(shell != null && shell instanceof Composite){
-      toolbar = new ToolBar((Composite) shell, SWT.HORIZONTAL);
+      toolbar = new ToolBar((Composite) shell, SWT.HORIZONTAL | SWT.RIGHT);
     } else {
-      toolbar = new ToolBar((Composite) parent.getManagedObject(), SWT.HORIZONTAL);
+      toolbar = new ToolBar((Composite) parent.getManagedObject(), SWT.HORIZONTAL | SWT.RIGHT);
     }
 
     setManagedObject(toolbar);

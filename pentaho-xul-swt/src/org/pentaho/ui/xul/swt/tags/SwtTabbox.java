@@ -5,6 +5,8 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Listener;
 import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -27,7 +29,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   private CTabFolder tabFolder;
   private SwtTabpanels panels;
   private SwtTabs tabs;
-  private int selectedIndex;
+  private int selectedIndex = -1;
   private boolean closable;
   private String onclose;
   private XulDomContainer domContainer;
@@ -46,6 +48,18 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
     tabFolder.setUnselectedImageVisible(true);
     tabFolder.setUnselectedCloseVisible(true);
     tabFolder.setBorderVisible(true);
+    
+    tabFolder.addSelectionListener(new SelectionAdapter(){
+
+      @Override
+      public void widgetSelected(SelectionEvent arg0) {
+        int sel = tabFolder.getSelectionIndex();
+        SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", selectedIndex, sel);
+        selectedIndex = sel;
+      }
+      
+    });
+    
     tabFolder.addCTabFolder2Listener(new CTabFolder2Listener(){
 
       public void close(CTabFolderEvent arg0) {
@@ -123,10 +137,15 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   }
 
   public void setSelectedIndex(int index) {
-    selectedIndex = index;
     if(tabFolder.getItemCount() > 0){ // component instantiated
       tabFolder.setSelection(selectedIndex);
+      
+      // Programatic set selectedIndex does not fire listener.
+      int sel = tabFolder.getSelectionIndex();
+      SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", selectedIndex, index);
+      selectedIndex = index;
     }
+    selectedIndex = index;
   }
 
   @Override
@@ -141,7 +160,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
     for(int i=0; i<tabs.getChildNodes().size(); i++){
       int style = SWT.None;
       if(isClosable()){
-        style = SWT.Close;
+        style = SWT.  Close;
       }
       CTabItem item = new CTabItem (tabFolder, style);
       item.setText (tabs.getTabByIndex(i).getLabel());
@@ -149,7 +168,10 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
       item.setControl ((Control) panels.getTabpanelByIndex(i).getManagedObject());
       tabFolder.getItem(i).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
     }
-    tabFolder.setSelection(selectedIndex);
+    if(selectedIndex < 0 && tabFolder.getItemCount() > 0){
+      selectedIndex = 0;
+    }
+    setSelectedIndex(selectedIndex);
   }
 
   public void setTabDisabledAt(boolean flag, int pos) {
@@ -158,7 +180,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   
   public void updateTabState(){
     for(int i=0; i<tabs.getChildNodes().size(); i++){
-      tabFolder.getItem(i).setText(tabs.getTabByIndex(i).getLabel());
+      tabFolder.getItem(i).setText(""+tabs.getTabByIndex(i).getLabel());
       tabFolder.getItem(i).getControl().setEnabled(! tabs.getTabByIndex(i).isDisabled());
     }
   }
