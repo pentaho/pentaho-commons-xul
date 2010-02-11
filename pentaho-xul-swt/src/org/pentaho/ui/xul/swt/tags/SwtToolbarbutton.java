@@ -185,8 +185,7 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     return this.image;
   }
   public String getLabel() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.label;
   }
   public String getOnclick() {
     return command;
