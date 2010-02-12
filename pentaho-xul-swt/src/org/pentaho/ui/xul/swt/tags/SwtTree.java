@@ -530,10 +530,19 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
       TableColumn c = table.getTable().getColumn(colIdx);
       int colFlex = ((XulTreeCol) col).getFlex();
+      int colWidth = ((XulTreeCol) col).getWidth();
       if (totalFlex == 0) {
-        c.setWidth(Math.round(width / getColumns().getColumnCount()));
+        if(colWidth > 0){
+          c.setWidth(colWidth);
+        } else {
+          c.setWidth(Math.round(width / getColumns().getColumnCount()));
+        }
       } else if (colFlex > 0) {
-        c.setWidth(Integer.parseInt("" + Math.round(width * (colFlex / totalFlex))));
+        if(colWidth > 0){
+          c.setWidth(colWidth);
+        } else {
+          c.setWidth(Integer.parseInt("" + Math.round(width * (colFlex / totalFlex))));
+        }
       }
       colIdx++;
     }
