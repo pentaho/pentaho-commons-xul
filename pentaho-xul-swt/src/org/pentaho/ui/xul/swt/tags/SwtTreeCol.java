@@ -33,6 +33,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     private String expandedBinding;
     private String tooltipBinding;
     private String comparatorBinding;
+    private int width = 0;
     
     public SwtTreeCol(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
       super("treecol");
@@ -70,8 +71,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     }
 
     public int getWidth() {
-      // TODO Auto-generated method stub
-      return 0;
+      return width;
     }
 
     public boolean isEditable() {
@@ -143,7 +143,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
     }
 
     public void setWidth(int width) {
-      // TODO Auto-generated method stub
+      this.width = width;
       
     }
 
