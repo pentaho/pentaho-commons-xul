@@ -131,8 +131,14 @@ public class SwtButton extends SwtElement implements XulButton {
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
     if(button != null){
+      if(button.isDisposed()) {
+        return;
+      }
       button.setEnabled( !disabled );
     } else {
+      if(imageButton.isDisposed()) {
+        return;
+      }
     	this.imageButton.setEnabled(!disabled);
     }
 
