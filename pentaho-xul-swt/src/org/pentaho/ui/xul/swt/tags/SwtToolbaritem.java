@@ -41,13 +41,11 @@ public class SwtToolbaritem extends AbstractSwtXulContainer implements XulToolba
       XulComponent c = getChildNodes().get(0);
       Control control = (Control) c.getManagedObject();
       control.pack();
-      item.setControl(control);
       item.setWidth(control.getSize().x);
+      item.setControl(control);
     }
     ((ToolBar) parent.getManagedObject()).pack();
   }
-  
-  
   
   
 }
