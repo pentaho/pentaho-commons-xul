@@ -71,13 +71,14 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
     
     
     topForm = new Composite(mainComposite, SWT.NONE);
-    topForm.addPaintListener(new PaintListener(){
-      public void paintControl(PaintEvent arg0) {
-        GC gc = arg0.gc;
-        gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
-        gc.drawLine(0, topForm.getBounds().height-1, topForm.getBounds().width, topForm.getBounds().height-1);
-      }
-    });
+//    topForm.addPaintListener(new PaintListener(){
+//      public void paintControl(PaintEvent arg0) {
+//        GC gc = arg0.gc;
+//        gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+//        gc.drawLine(0, topForm.getBounds().height-1, topForm.getBounds().width, topForm.getBounds().height-1);
+//      }
+//    });
+    topForm.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY));
     
     layout = new GridLayout(2, false);
     layout.verticalSpacing = 0;
@@ -168,21 +169,22 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
       } else if(comp instanceof XulCaption){
         if(lbl == null){
           lbl = new CLabel(titlePanel, SWT.None);
-          Color[] inactiveGradient = new Color[]{Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT),
-              Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND)
-              , null};
-          int[] gradPercent = new int[] {25,100};
-          //lbl.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
-          lbl.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_BACKGROUND));
-
-          lbl.setBackground(inactiveGradient, gradPercent);
-          lbl.addPaintListener(new PaintListener(){
-            public void paintControl(PaintEvent arg0) {
-              GC gc = arg0.gc;
-              gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
-              gc.drawLine(0, topForm.getBounds().height-1, topForm.getBounds().width, topForm.getBounds().height-1);
-            }
-          });
+          lbl.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+//          Color[] inactiveGradient = new Color[]{Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT),
+//              Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND)
+//              , null};
+//          int[] gradPercent = new int[] {25,100};
+//          //lbl.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_FOREGROUND));
+//          lbl.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_BACKGROUND));
+//
+//          lbl.setBackground(inactiveGradient, gradPercent);
+//          lbl.addPaintListener(new PaintListener(){
+//            public void paintControl(PaintEvent arg0) {
+//              GC gc = arg0.gc;
+//              gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW));
+//              gc.drawLine(0, topForm.getBounds().height-1, topForm.getBounds().width, topForm.getBounds().height-1);
+//            }
+//          });
         }
         lbl.setText(((XulCaption) comp).getLabel());
         
@@ -223,6 +225,7 @@ public class SwtEditpanel extends AbstractSwtXulContainer implements XulEditpane
       } else {
         
         Image rightImg = SwtXulUtil.getCachedImage("org/pentaho/ui/xul/swt/tags/images/close.png", domContainer, buttonPanel.getDisplay());
+        
         btn.setImage(rightImg);
         btn.addMouseListener(new MouseAdapter(){
           @Override
