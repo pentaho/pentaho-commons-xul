@@ -73,6 +73,11 @@ public final class XulUtil {
         return in;
       }
     }
+
+    if(in == null){
+      in = XulUtil.class.getClassLoader().getResourceAsStream(src);
+    }
+    
     if(in == null){
       throw new FileNotFoundException("Could not locate resoruce: "+src);
     }
