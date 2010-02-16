@@ -1037,7 +1037,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   private void restoreExpandedState(){
     for(int i=0; i<expandCache.length; i++){
-      tree.setExpandedState(findTreeItemForPos(expandCache[i]), true);
+      XulTreeItem item = findTreeItemForPos(expandCache[i]);
+      if(item != null){
+        tree.setExpandedState(item, true);
+      }
     }
   }
   
