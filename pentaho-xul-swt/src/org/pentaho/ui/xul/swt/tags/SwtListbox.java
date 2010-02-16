@@ -312,6 +312,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
   
   private <T> String extractLabel(T t) {
+    if(t == null){
+      return "";
+    }
     String attribute = getBinding();
     if (StringUtils.isEmpty(attribute)) {
       return t.toString();
