@@ -16,7 +16,7 @@ public class SwtToolbarspacer extends AbstractSwtXulContainer implements XulTool
 
   private ToolItem spacer;
   private ToolBar toolbar;
-  private final int MARGIN_VALUE = 2;
+  private final int MARGIN_VALUE = 3;
   public SwtToolbarspacer(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("toolbarspacer");
 

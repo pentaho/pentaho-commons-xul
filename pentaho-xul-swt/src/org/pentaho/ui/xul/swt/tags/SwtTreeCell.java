@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.beans.PropertyChangeListener;
 import java.util.Vector;
 
 import org.apache.commons.logging.Log;
@@ -101,5 +102,11 @@ public class SwtTreeCell extends SwtElement implements XulTreeCell {
 
     public void setTreeRowParent(XulTreeRow row) {
       
+    }
+    
+    // TODO: migrate into XulComponent
+    @Deprecated
+    public void addPropertyChangeListener(String prop, PropertyChangeListener listener){
+      changeSupport.addPropertyChangeListener(prop, listener);
     }
   }

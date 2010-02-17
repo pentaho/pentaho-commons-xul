@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -149,6 +151,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private boolean linesVisible = true;
 
   private XulSortProperties sortProperties = new XulSortProperties();
+  
+  private PropertyChangeListener cellChangeListener = new PropertyChangeListener(){
+    public void propertyChange(PropertyChangeEvent arg0) {
+      SwtTree.this.update();
+    }
+  };
     
 
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
@@ -1264,7 +1272,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   private <T> void addTreeChild(T element, XulTreeRow row) {
     try {
-      XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+      SwtTreeCell cell = (SwtTreeCell) getDocument().createElement("treecell");
 
       for (InlineBindingExpression exp : ((XulTreeCol) this.getColumns().getChildNodes().get(0))
           .getBindingExpressions()) {
@@ -1282,6 +1290,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
       }
+      
+      //TODO: migrate this into the XulComponent
+      cell.addPropertyChangeListener("label", cellChangeListener);
       
       XulTreeCol column = (XulTreeCol) this.getColumns().getChildNodes().get(0);
       String expBind = column.getExpandedbinding();
