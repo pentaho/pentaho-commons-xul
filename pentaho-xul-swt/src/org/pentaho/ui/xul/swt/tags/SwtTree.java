@@ -213,12 +213,36 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     this.initialized = true;
 
   }
+  
+  private void resizeTreeColumn(){
+    final Composite parentComposite = ((Composite) parentComponent.getManagedObject());
+    Rectangle area = parentComposite.getClientArea();
+    Point preferredSize = tree.getTree().computeSize(SWT.DEFAULT, SWT.DEFAULT);
+    int width = area.width - 2 * tree.getTree().getBorderWidth();
+    if (preferredSize.y > area.height + tree.getTree().getHeaderHeight()) {
+      // Subtract the scrollbar width from the total column width
+      // if a vertical scrollbar will be required
+      Point vBarSize = tree.getTree().getVerticalBar().getSize();
+      width -= vBarSize.x;
+    }
+    width -= 20;
+    
+    tree.getTree().getColumn(0).setWidth(width);
+    
+  }
 
   private void setupTree() {
 
+    final Composite parentComposite = ((Composite) parentComponent.getManagedObject());
+    parentComposite.addControlListener(new ControlAdapter() {
+      public void controlResized(ControlEvent e) {
+        resizeTreeColumn();
+
+      }
+    });
+    
     TreeViewerColumn treeCol = new TreeViewerColumn(tree, SWT.LEFT);
     
-    treeCol.getColumn().setWidth(200);
     treeCol.getColumn().setMoveable(true);
     treeCol.getColumn().setText("Column 3");
     treeCol.setLabelProvider(new XulTreeCellLabelProvider(this, this.domContainer));
@@ -972,6 +996,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       } else if(this.suppressEvents == false) {
         tree.setExpandedElements(expandedElements);
       }
+      resizeTreeColumn();
     } else {
 
       setupColumns();
