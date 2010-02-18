@@ -5,6 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -65,6 +69,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     START, CENTER, END, LEFT, RIGHT, MIDDLE
   };
 
+  private Map<String, SwtButton> activeDialogButtons = new HashMap<String, SwtButton>();
+  
   private String buttonlabelaccept;
 
   private String buttonlabelcancel;
@@ -187,13 +193,39 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
 
   public void setButtons(String buttonList) {
-    if(buttonList.equals("")){
+    if(buttonList.equals("")){ //$NON-NLS-1$
       buttons = null;
     } else {
-      buttons = buttonList.split(",");
+      List<String> newButtons = Arrays.asList(buttonList.split(",")); //$NON-NLS-1$
+      
+      // Cleanup new buttons
+      for(int i = 0; i < newButtons.size(); i++) {
+        newButtons.set(i, newButtons.get(i).trim().toUpperCase());
+      }
+
+      for(String existingButton : buttons) {
+        if(!newButtons.contains(existingButton.trim().toUpperCase())) {
+          removeButton(existingButton);
+        }
+      }
+      buttons = (String[])newButtons.toArray();
     }
     if(buttonsCreated){
       setButtons(dialog);
+    }
+  }
+  
+  protected void removeButton(String button) {
+    String bName = button.trim().toUpperCase();
+    
+    if(activeDialogButtons.containsKey(bName)) {
+      SwtButton b = activeDialogButtons.get(bName);
+      Button swtB = (Button)b.getManagedObject();
+      if(!swtB.isDisposed()) {
+        swtB.dispose();
+      }
+      removeChild(b);
+      activeDialogButtons.remove(bName);
     }
   }
 
@@ -334,6 +366,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
           break;
       }
       
+      activeDialogButtons.put(thisButton.toString().toUpperCase(), swtButton);
     }
     
   }
