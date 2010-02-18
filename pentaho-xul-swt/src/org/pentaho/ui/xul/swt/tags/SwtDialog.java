@@ -202,13 +202,14 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       for(int i = 0; i < newButtons.size(); i++) {
         newButtons.set(i, newButtons.get(i).trim().toUpperCase());
       }
+      String[] existingButtons = buttons;
+      buttons = (String[])newButtons.toArray();
 
-      for(String existingButton : buttons) {
+      for(String existingButton : existingButtons) {
         if(!newButtons.contains(existingButton.trim().toUpperCase())) {
           removeButton(existingButton);
         }
       }
-      buttons = (String[])newButtons.toArray();
     }
     if(buttonsCreated){
       setButtons(dialog);
@@ -266,6 +267,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     isDialogHidden = false;
 
     dialog.getShell().setText(title);
+    
+    // try to use parent shell icon if none specified
+    if(this.appIcon == null){
+      applyParentShellIcon();
+    }
 
     
     // Because the dialog is built after the create() method is called, we 
@@ -570,6 +576,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   public void setModal(Boolean modal) {
    throw new RuntimeException("Not Yet Implemented");
+  }
+  
+  public void applyParentShellIcon(){
+    
   }
   
   public void setAppicon(String icon) {
