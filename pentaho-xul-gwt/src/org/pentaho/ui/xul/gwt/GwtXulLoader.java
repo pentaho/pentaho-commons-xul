@@ -234,6 +234,14 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     throw new RuntimeException("not yet implemented");
     
   }
+  
+  
+
+  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
+      XulDomContainer container, Object resourceBundle) throws XulException {
+    throw new RuntimeException("not yet implemented");
+      
+  }
 
   public void register(String tagName, String className) {
     throw new RuntimeException("not yet implemented");

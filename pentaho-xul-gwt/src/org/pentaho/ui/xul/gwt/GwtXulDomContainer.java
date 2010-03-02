@@ -372,6 +372,10 @@ public class GwtXulDomContainer implements XulDomContainer {
     throw new RuntimeException("not yet implemented");
     
   }
+  
+  public void loadOverlay(String src, Object resourceBundle) throws XulException {
+    throw new RuntimeException("not yet implemented");
+  }
 
   public void removeBinding(Binding binding) {
     throw new RuntimeException("not yet implemented");
