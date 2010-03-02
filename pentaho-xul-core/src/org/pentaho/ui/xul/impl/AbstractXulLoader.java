@@ -633,9 +633,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
       XulDomContainer container) throws XulException {
-
-    InputStream in = getInputStreamForSrc(overlaySrc);
-    Document doc = null;
+    
     ResourceBundle res = null;
     try {
       res = ResourceBundle.getBundle(overlaySrc.replace(".xul", ""));
@@ -644,17 +642,31 @@ public abstract class AbstractXulLoader implements XulLoader {
         if(res == null){
           logger.error("could not find resource bundle, defaulting to main");
           res = mainBundle;
+        } else {
+          resourceBundleList.add((ResourceBundle) res);  
         }
+      } else {
+        resourceBundleList.add((ResourceBundle) res);  
       }
     } catch (MissingResourceException e) {
       logger.warn("no default resource bundle available: "+overlaySrc);
-    }
+    }    
+    this.processOverlay(overlaySrc, targetDocument, container, res);
+  }
+
+  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
+      XulDomContainer container, Object resourceBundle) throws XulException {
+
+    InputStream in = getInputStreamForSrc(overlaySrc);
+    Document doc = null;
+     
+    ResourceBundle res = (ResourceBundle) resourceBundle;
     
     String runningTranslatedOutput = getDocFromInputStream(in).asXML();     //TODO IOUtils this
-    if(res != null){
+    if(resourceBundle != null){
       try{
         runningTranslatedOutput = ResourceBundleTranslator.translate(runningTranslatedOutput, res);
-        resourceBundleList.add((ResourceBundle) res);  
+        
   
        } catch(IOException e){
         logger.error("Error loading resource bundle for overlay: "+overlaySrc, e);

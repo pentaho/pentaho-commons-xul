@@ -162,6 +162,13 @@ public class XulWindowContainer extends AbstractXulDomContainer {
     this.xulLoader.processOverlay(src, this.getDocumentRoot(), this);
   }
 
+  
+  
+  public void loadOverlay(String src, Object resourceBundle) throws XulException {
+    this.xulLoader.processOverlay(src, this.getDocumentRoot(), this, resourceBundle);
+    
+  }
+
   public void removeOverlay(String src) throws XulException {
     this.xulLoader.removeOverlay(src, this.getDocumentRoot(), this);
   }

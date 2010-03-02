@@ -91,4 +91,11 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
     //no implementation needed
   }
 
+  public void loadOverlay(String src, Object resourceBundle) throws XulException {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
+
 }

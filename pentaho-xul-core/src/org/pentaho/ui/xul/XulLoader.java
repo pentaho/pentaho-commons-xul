@@ -140,6 +140,9 @@ public interface XulLoader {
   
   public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)throws XulException;
   
+
+  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container, Object resourceBundle)throws XulException;
+  
   public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)throws XulException;
   
   

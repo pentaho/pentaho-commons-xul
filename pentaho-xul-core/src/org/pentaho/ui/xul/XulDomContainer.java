@@ -96,6 +96,8 @@ public interface XulDomContainer {
   
   public void loadOverlay(String src) throws XulException;
   
+  public void loadOverlay(String src, Object resourceBundle) throws XulException;
+  
   public void removeOverlay(String src) throws XulException;
 
   public void invokeLater(Runnable runnable);
