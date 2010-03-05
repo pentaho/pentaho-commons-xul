@@ -167,7 +167,11 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
       }
       CTabItem item = new CTabItem (tabFolder, style);
       item.setText (tabs.getTabByIndex(i).getLabel());
-
+      // There could be a chance the the tabs have been added but tab panel are still
+      // not there. In this case we need to break from this layout routine
+      if(panels.getChildNodes().size() <= i) {
+        break;
+      }
       item.setControl ((Control) panels.getTabpanelByIndex(i).getManagedObject());
       tabFolder.getItem(i).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
     }
@@ -215,7 +219,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
     }
     
     //may have been added after panel
-    addTabpanel(idx);
+    //addTabpanel(idx);
     if(selectedIndex < 0){
       selectedIndex = 0;
     }

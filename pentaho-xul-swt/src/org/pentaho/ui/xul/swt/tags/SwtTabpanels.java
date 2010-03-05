@@ -26,6 +26,13 @@ public class SwtTabpanels extends AbstractSwtXulContainer implements XulTabpanel
     return (XulTabpanel) this.getChildNodes().get(index);
   }
   
+  @Override
+  public void removeChild(Element ele) {
+    int idx = getChildNodes().indexOf(ele);
+    super.removeChild(ele);
+    ((XulTabbox) getParent()).removeTabpanel(idx);
+  }
+
 
   @Override
   public void addChild(Element c) {
@@ -36,6 +43,15 @@ public class SwtTabpanels extends AbstractSwtXulContainer implements XulTabpanel
   }
 
   
+  @Override
+  public void addChildAt(Element c, int pos) {
+    super.addChildAt(c, pos);
+    if(getParent() != null){
+      ((XulTabbox) getParent()).addTabpanel(pos);
+      ((SwtTabbox) getParent()).layout();
+    }
+  }
+
   @Override
   public void layout() {
   }

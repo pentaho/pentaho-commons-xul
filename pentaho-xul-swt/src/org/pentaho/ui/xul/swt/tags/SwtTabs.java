@@ -6,7 +6,6 @@ import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
-import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtTabs  extends AbstractSwtXulContainer implements XulTabs{
   public SwtTabs(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
@@ -41,4 +40,15 @@ public class SwtTabs  extends AbstractSwtXulContainer implements XulTabs{
   public int getTabCount() {
     return this.getChildNodes().size();
   }
+
+  @Override
+  public void addChildAt(Element c, int pos) {
+    super.addChildAt(c, pos);
+    if(getParent() != null){
+      ((XulTabbox) getParent()).addTab(pos);
+      ((SwtTabbox) getParent()).layout();
+    }
+    
+  }
+  
 }
