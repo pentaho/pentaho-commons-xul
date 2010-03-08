@@ -3,7 +3,6 @@
  */
 package org.pentaho.ui.xul;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -111,4 +110,8 @@ public interface XulDomContainer {
   void loadPerspective(String id);
   
   void addPerspective(XulPerspective perspective);
+  
+  // TODO: create wrapper. 
+  void registerClassLoader(Object loader);
+  
 }

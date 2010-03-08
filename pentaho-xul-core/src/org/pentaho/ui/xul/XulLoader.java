@@ -145,6 +145,9 @@ public interface XulLoader {
   
   public void removeOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument, XulDomContainer container)throws XulException;
   
-  
+
+  // TODO: create wrapper. 
+  void registerClassLoader(Object loader);
+  Object getResourceAsStream(String name);
   
 }

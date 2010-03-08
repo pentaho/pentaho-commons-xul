@@ -53,6 +53,11 @@ public abstract class AbstractXulLoader implements XulLoader {
   
   private List<Object> resourceBundleList  = new ArrayList<Object>();
 
+  private List<ClassLoader> classloaders = new ArrayList<ClassLoader>();
+  {
+    classloaders.add(this.getClass().getClassLoader());
+  }
+  
   public AbstractXulLoader() throws XulException {
 
     DocumentFactory.registerDOMClass(DocumentDom4J.class);
@@ -233,7 +238,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
     try {
 
-      InputStream in = getClass().getClassLoader().getResourceAsStream(resource);
+      InputStream in = getResourceAsStream(resource);
 
       resourceBundleList.add((ResourceBundle) bundle);  
       String localOutput = ResourceBundleTranslator.translate(in, (ResourceBundle) bundle);
@@ -341,7 +346,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
       InputStream in = null;
       try{
-        in = getClass().getClassLoader().getResourceAsStream(src);
+        in = getResourceAsStream(src);
   
         if (in != null) {
           logger.debug("Adding include src: " + src);
@@ -349,7 +354,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         } else {
           //try fully qualified name
           src = ele.attributeValue("src");
-          in = getClass().getClassLoader().getResourceAsStream(src);
+          in = getResourceAsStream(src);
           if (in != null) {
             includedSources.add(src);
             logger.debug("Adding include src: " + src);
@@ -476,13 +481,13 @@ public abstract class AbstractXulLoader implements XulLoader {
   }
   
   protected Document getDocFromClasspath(String src) throws XulException{
-    InputStream in = getClass().getClassLoader().getResourceAsStream(this.getRootDir() + src);
+    InputStream in = getResourceAsStream(this.getRootDir() + src);
     if (in != null) {
       Document doc = getDocFromInputStream(in);
       return doc;
     } else {
       //try fully qualified name
-      in = getClass().getClassLoader().getResourceAsStream(src);
+      in = getResourceAsStream(src);
       if (in != null) {
         return getDocFromInputStream(in);
       } else {
@@ -611,10 +616,10 @@ public abstract class AbstractXulLoader implements XulLoader {
   }
   
   private InputStream getInputStreamForSrc(String src){
-    InputStream in = getClass().getClassLoader().getResourceAsStream(this.getRootDir() + src);
+    InputStream in = getResourceAsStream(this.getRootDir() + src);
     if (in == null){
       //try fully qualified name
-      in = getClass().getClassLoader().getResourceAsStream(src);
+      in = getResourceAsStream(src);
       if (in == null) {
         File f = new File(src);
         if(f.exists()){
@@ -824,6 +829,23 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public boolean isRegistered(String elementName) {
     return this.parser.handlers.containsKey(elementName);
+  }
+  
+
+
+  public void registerClassLoader(Object loader) {
+    classloaders.add((ClassLoader) loader);
+    
+  }
+  
+  public InputStream getResourceAsStream(String name){
+    for(ClassLoader loader : classloaders){
+      InputStream str = loader.getResourceAsStream(name);
+      if(str != null){
+        return str;
+      }
+    }
+    return null;
   }
 
 }

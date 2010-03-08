@@ -7,6 +7,7 @@ import groovy.lang.GroovyClassLoader;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,11 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   private Object parentContext;
   
   private boolean initialized;
+  
+  private List<ClassLoader> classloaders = new ArrayList<ClassLoader>();
+  {
+    classloaders.add(this.getClass().getClassLoader());
+  }
 
 	public AbstractXulDomContainer() {
     eventHandlers = new HashMap<String, XulEventHandler>();
@@ -407,6 +413,17 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   
   public void addPerspective(XulPerspective perspective){
     this.perspectives.put(perspective.getID(), perspective);
+  }
+
+  public void registerClassLoader(Object loader) {
+    classloaders.add((ClassLoader) loader);
+    this.xulLoader.registerClassLoader(loader);
+    
+  }
+  
+
+  public Object getResourceAsStream(String name){
+    return this.xulLoader.getResourceAsStream(name);
   }
   
 }
