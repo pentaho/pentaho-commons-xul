@@ -62,7 +62,7 @@ public final class XulUtil {
     if(src == null || src.equals("")){
       return null;
     }
-    InputStream in = XulUtil.class.getClassLoader().getResourceAsStream(domContainer.getXulLoader().getRootDir()+src);
+    InputStream in = (InputStream) domContainer.getXulLoader().getResourceAsStream(domContainer.getXulLoader().getRootDir()+src);
     if(in == null){
       File f = new File(src);
       if(f.exists() == false){
@@ -75,7 +75,7 @@ public final class XulUtil {
     }
 
     if(in == null){
-      in = XulUtil.class.getClassLoader().getResourceAsStream(src);
+      in = (InputStream) domContainer.getXulLoader().getResourceAsStream(src);
     }
     
     if(in == null){
