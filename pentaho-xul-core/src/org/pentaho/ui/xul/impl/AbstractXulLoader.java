@@ -834,7 +834,9 @@ public abstract class AbstractXulLoader implements XulLoader {
 
 
   public void registerClassLoader(Object loader) {
-    classloaders.add((ClassLoader) loader);
+    if(classloaders.contains(loader) == false){
+      classloaders.add((ClassLoader) loader);
+    }
     
   }
   

@@ -416,7 +416,10 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   }
 
   public void registerClassLoader(Object loader) {
-    classloaders.add((ClassLoader) loader);
+    if(classloaders.contains(loader) == false){
+      classloaders.add((ClassLoader) loader);
+    }
+    
     this.xulLoader.registerClassLoader(loader);
     
   }
