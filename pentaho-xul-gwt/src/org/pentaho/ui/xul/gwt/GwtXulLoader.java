@@ -263,4 +263,18 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     throw new RuntimeException("not yet implemented");
     
   }
+
+  public Object getResourceAsStream(String name) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public void registerClassLoader(Object loader) {
+    // TODO Auto-generated method stub
+    
+  }
+  
+  
 }
+
+

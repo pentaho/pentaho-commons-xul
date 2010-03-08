@@ -408,6 +408,11 @@ public class GwtXulDomContainer implements XulDomContainer {
     // TODO Auto-generated method stub
     
   }
+
+  public void registerClassLoader(Object loader) {
+    // TODO Auto-generated method stub
+    
+  }
   
 
 }
