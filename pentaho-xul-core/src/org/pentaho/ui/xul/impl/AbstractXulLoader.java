@@ -641,9 +641,23 @@ public abstract class AbstractXulLoader implements XulLoader {
     
     ResourceBundle res = null;
     try {
-      res = ResourceBundle.getBundle(overlaySrc.replace(".xul", ""));
+      String baseName = overlaySrc.replace(".xul", "");
+      for(ClassLoader loader : classloaders){
+        res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
+        if(res != null){
+          break;
+        }
+      }
       if(res == null){
-        res = ResourceBundle.getBundle((this.getRootDir() + overlaySrc).replace(".xul", ""));
+        baseName = (this.getRootDir() + overlaySrc).replace(".xul", "");
+
+        for(ClassLoader loader : classloaders){
+          res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
+          if(res != null){
+            break;
+          }
+        }
+        
         if(res == null){
           logger.error("could not find resource bundle, defaulting to main");
           res = mainBundle;
