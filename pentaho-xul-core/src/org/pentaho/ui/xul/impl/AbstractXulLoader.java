@@ -465,6 +465,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       SAXReader rdr = new SAXReader();
       return rdr.read(new StringReader(upperedIdDoc));
     } catch (Exception e) {
+      e.printStackTrace();
       return null;
     }
   }
@@ -643,7 +644,11 @@ public abstract class AbstractXulLoader implements XulLoader {
     try {
       String baseName = overlaySrc.replace(".xul", "");
       for(ClassLoader loader : classloaders){
-        res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
+        try{
+          res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
+        } catch (MissingResourceException e) {
+          
+        }    
         if(res != null){
           break;
         }
@@ -652,10 +657,15 @@ public abstract class AbstractXulLoader implements XulLoader {
         baseName = (this.getRootDir() + overlaySrc).replace(".xul", "");
 
         for(ClassLoader loader : classloaders){
-          res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
-          if(res != null){
-            break;
-          }
+          try{
+            res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
+            if(res != null){
+              break;
+            }
+
+          } catch (MissingResourceException e) {
+            logger.warn("no default resource bundle available: "+overlaySrc);
+          }    
         }
         
         if(res == null){
