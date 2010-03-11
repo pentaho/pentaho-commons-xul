@@ -93,6 +93,8 @@ public class SwtXulLoader extends AbstractXulLoader{
     parser.registerHandler("ROWS", "org.pentaho.ui.xul.swt.tags.SwtRows");
     parser.registerHandler("ROW", "org.pentaho.ui.xul.swt.tags.SwtRow");
     parser.registerHandler("SCALE", "org.pentaho.ui.xul.swt.tags.SwtScale");
+    
+    parser.registerHandler("WAITBOX", "org.pentaho.ui.xul.swt.tags.SwtWaitBox");
   }
 
   public XulLoader getNewInstance() throws XulException {

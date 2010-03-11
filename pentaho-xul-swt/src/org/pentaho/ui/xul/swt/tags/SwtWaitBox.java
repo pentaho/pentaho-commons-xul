@@ -1,0 +1,150 @@
+package org.pentaho.ui.xul.swt.tags;
+
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.components.WaitBoxRunnable;
+import org.pentaho.ui.xul.components.XulWaitBox;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.custom.BasicDialog;
+
+public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox{
+
+  private Shell parentObject = null;
+  private BasicDialog dialog;
+  private WaitBoxRunnable runnable;
+  private Composite composite;
+  private Thread thread ;
+  private boolean canCancel;
+  private String message = "Please Wait...";
+  private String title = "Please Wait";
+  
+  public SwtWaitBox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
+    super(self, parent, container, tagName);
+    parent.addChild(this);
+
+    dialog = new BasicDialog(getParentObject(), true);
+    dialog.getShell().setSize(300, 150);
+    GridLayout gl = new GridLayout();
+    gl.verticalSpacing = 4;
+    dialog.getMainArea().setLayout(gl);
+    dialog.addShellListener(new ShellAdapter() {
+
+      @Override
+      public void shellClosed(ShellEvent arg0) {
+        stop();
+      }
+      
+    });
+    
+  }
+
+  @Override
+  public void layout() {
+  }
+
+  protected Shell getParentObject(){
+    if(parentObject != null){
+      return parentObject;
+    } else if (getParent() instanceof SwtDialog){
+      return ((SwtDialog)getParent()).getShell();
+    } else {
+      return (Shell) getParent().getManagedObject();
+    }
+  }
+  
+  public void setModalParent(Object parent) {
+    parentObject = (Shell) parent;
+  }
+  
+  public void start(){
+
+    dialog.setTitle(this.getTitle());
+    Label lbl = new Label(dialog.getMainArea(), SWT.NONE);
+    lbl.setText(this.getMessage());
+    GridData gd = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
+
+    lbl.setLayoutData(gd);
+    
+    progressmeter = createNewProgressmeter(dialog.getMainArea());
+
+    gd = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
+    gd.grabExcessHorizontalSpace = true;
+    gd.horizontalAlignment = gd.FILL;
+    
+    progressmeter.setLayoutData(gd);
+    progressmeter.setSize(150, progressmeter.getSize().y);
+    
+    if(canCancel){
+      Button button = new Button(dialog.getMainArea(), SWT.PUSH);
+      button.setText("Cancel");
+      button.addSelectionListener(new SelectionAdapter(){
+
+        @Override
+        public void widgetSelected(SelectionEvent arg0) {
+          SwtWaitBox.this.stop();
+        }
+        
+      });
+      button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+      dialog.getButtonArea().setVisible(false);
+      dialog.getButtonArea().getParent().setVisible(false);
+      ((GridData) dialog.getButtonArea().getParent().getLayoutData()).exclude = true;
+    }
+    
+
+    dialog.getShell().layout(true, true);
+    thread = new Thread(runnable);
+    thread.start();
+    dialog.open();
+  }
+
+  public void stop() {
+    runnable.cancel();
+    thread.interrupt();
+    Display.getDefault().asyncExec(new Runnable(){
+      public void run() {
+        dialog.close();
+      }
+    });
+  }
+
+  public void setRunnable(WaitBoxRunnable runnable) {
+    this.runnable = runnable;
+  }
+
+  public void setCanCancel(boolean canCancel) {
+    this.canCancel = canCancel; 
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  
+  
+
+  
+}

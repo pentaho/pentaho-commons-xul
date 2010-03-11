@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ProgressBar;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -15,7 +16,7 @@ public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
 
   private boolean indeterminate;
 
-  private XulComponent parent;
+  protected XulComponent parent;
 
   /**
    * SetX methods cannot be called until ProgressBar is created. Save them until then.
@@ -39,7 +40,12 @@ public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
   }
 
   protected ProgressBar createNewProgressmeter(Composite parent) {
-    return new ProgressBar(parent, isIndeterminate() ? SWT.INDETERMINATE : SWT.NONE);
+    ProgressBar progressmeter = new ProgressBar(parent, isIndeterminate() ? SWT.INDETERMINATE : SWT.NONE);
+
+    progressmeter.setSelection(initialValue);
+    progressmeter.setMinimum(initialMinimum);
+    progressmeter.setMaximum(initialMaximum);
+    return progressmeter;
   }
 
   public int getMaximum() {
@@ -59,7 +65,7 @@ public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
   }
 
   public void setIndeterminate(boolean indeterminate) {
-    // does nothing since this value set at construction time; (read-only property)
+    this.indeterminate = indeterminate; 
   }
 
   public void setMaximum(int value) {
@@ -82,20 +88,23 @@ public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
     indeterminate = MODE_INDETERMINATE.equals(mode);
   }
 
-  public void setValue(int value) {
-    if (null != progressmeter) {
-      progressmeter.setSelection(value);
-    } else {
-      initialValue = value;
-    }
+  public void setValue(final int value) {
+    Display.getDefault().asyncExec(new Runnable(){
+      public void run() {
+        if (null != progressmeter) {
+          progressmeter.setSelection(value);
+        } else {
+          initialValue = value;
+        }
+      }
+    });
+    
+    
   }
 
   @Override
   public void layout() {
     progressmeter = createNewProgressmeter((Composite) parent.getManagedObject());
-    progressmeter.setSelection(initialValue);
-    progressmeter.setMinimum(initialMinimum);
-    progressmeter.setMaximum(initialMaximum);
     setManagedObject(progressmeter);
   }
 
