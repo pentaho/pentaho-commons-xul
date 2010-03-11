@@ -230,15 +230,16 @@ public class DefaultBinding implements Binding {
         final PropertyChangeListener cThis = this;
         if (evt.getPropertyName().equalsIgnoreCase(va)) {
           try {
-            Object value = doConversions(evt.getNewValue(), dir);
-            final Object finalVal = evaluateExpressions(value);
-            
             Object targetObject = b.get();
             if(targetObject == null){
               logger.error("Binding target was Garbage Collected, removing propListener");
               DefaultBinding.this.destroyBindings();                      
               return;
             }
+            
+            Object value = doConversions(evt.getNewValue(), dir);
+            final Object finalVal = evaluateExpressions(value);
+            
             logger.debug("Setting val: "+finalVal+" on: "+targetObject);
             targetSetMethod.invoke(targetObject, finalVal);
           
