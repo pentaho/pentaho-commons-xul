@@ -13,4 +13,6 @@ public interface XulWaitBox  extends XulProgressmeter {
   public String getTitle();
   public void setMessage(String message);
   public String getMessage();
+  public void setDialogParent(Object parent);
+  public void setCancelLabel(String cancel);
 }
