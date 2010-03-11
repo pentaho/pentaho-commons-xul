@@ -22,31 +22,20 @@ import org.pentaho.ui.xul.swt.custom.BasicDialog;
 public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox{
 
   private Shell parentObject = null;
-  private BasicDialog dialog;
+  private Shell dialog;
   private WaitBoxRunnable runnable;
   private Composite composite;
   private Thread thread ;
   private boolean canCancel;
   private String message = "Please Wait...";
   private String title = "Please Wait";
+  private String cancelLabel = "Cancel";
   
   public SwtWaitBox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(self, parent, container, tagName);
     parent.addChild(this);
 
-    dialog = new BasicDialog(getParentObject(), true);
-    dialog.getShell().setSize(300, 150);
-    GridLayout gl = new GridLayout();
-    gl.verticalSpacing = 4;
-    dialog.getMainArea().setLayout(gl);
-    dialog.addShellListener(new ShellAdapter() {
-
-      @Override
-      public void shellClosed(ShellEvent arg0) {
-        stop();
-      }
-      
-    });
+   
     
   }
 
@@ -69,26 +58,44 @@ public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox{
   }
   
   public void start(){
+    dialog = new Shell(getParentObject(), SWT.DIALOG_TRIM | SWT.RESIZE);
+    dialog.getShell().setSize(300, 150);
+    GridLayout gl = new GridLayout();
+    gl.verticalSpacing = 4;
+    gl.marginLeft = 8;
+    gl.marginRight = 8;
 
-    dialog.setTitle(this.getTitle());
-    Label lbl = new Label(dialog.getMainArea(), SWT.NONE);
+    composite = dialog;
+    composite.setLayout(gl);
+    dialog.addShellListener(new ShellAdapter() {
+
+      @Override
+      public void shellClosed(ShellEvent arg0) {
+        stop();
+      }
+      
+    });
+    dialog.setText(this.getTitle());
+
+    
+    Label lbl = new Label(composite, SWT.WRAP | SWT.CENTER);
     lbl.setText(this.getMessage());
     GridData gd = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
 
     lbl.setLayoutData(gd);
     
-    progressmeter = createNewProgressmeter(dialog.getMainArea());
+    progressmeter = createNewProgressmeter(composite);
 
     gd = new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1);
     gd.grabExcessHorizontalSpace = true;
     gd.horizontalAlignment = gd.FILL;
     
     progressmeter.setLayoutData(gd);
-    progressmeter.setSize(150, progressmeter.getSize().y);
+    //progressmeter.setSize(150, progressmeter.getSize().y);
     
     if(canCancel){
-      Button button = new Button(dialog.getMainArea(), SWT.PUSH);
-      button.setText("Cancel");
+      Button button = new Button(composite, SWT.PUSH);
+      button.setText(cancelLabel);
       button.addSelectionListener(new SelectionAdapter(){
 
         @Override
@@ -98,13 +105,14 @@ public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox{
         
       });
       button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
-      dialog.getButtonArea().setVisible(false);
-      dialog.getButtonArea().getParent().setVisible(false);
-      ((GridData) dialog.getButtonArea().getParent().getLayoutData()).exclude = true;
+    } else {
+      lbl = new Label(composite, SWT.None);
+      
+      lbl.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
     }
     
 
-    dialog.getShell().layout(true, true);
+    dialog.layout(true, true);
     thread = new Thread(runnable);
     thread.start();
     dialog.open();
@@ -115,7 +123,9 @@ public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox{
     thread.interrupt();
     Display.getDefault().asyncExec(new Runnable(){
       public void run() {
-        dialog.close();
+        if(dialog.isDisposed() == false){
+          dialog.close();
+        }
       }
     });
   }
@@ -142,6 +152,14 @@ public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox{
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public void setDialogParent(Object parent) {
+    parentObject = (Shell) parent;
+  }
+  
+  public void setCancelLabel(String lbl){
+    this.cancelLabel = lbl;
   }
   
   
