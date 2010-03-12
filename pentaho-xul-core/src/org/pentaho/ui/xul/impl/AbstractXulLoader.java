@@ -105,6 +105,9 @@ public abstract class AbstractXulLoader implements XulLoader {
       parser.setContainer(container);
       parser.parseDocument(doc.getRootElement());
 
+      for(ClassLoader l : classloaders){
+        container.registerClassLoader(l);
+      }
       return container;
 
     } catch (Exception e) {
@@ -153,11 +156,16 @@ public abstract class AbstractXulLoader implements XulLoader {
     setRootDir(resource);
 
     String resStr = resource.replace(".xul", "");
-    ResourceBundle res;
-    try {
-      res = ResourceBundle.getBundle(resStr);
-    } catch (MissingResourceException e) {
-      
+    ResourceBundle res = null;
+    for(ClassLoader cl : classloaders){
+      try {
+        res = ResourceBundle.getBundle(resStr, Locale.getDefault(), cl);
+        if(res != null){
+          break;
+        }
+      } catch (MissingResourceException e) {}
+    }
+    if(res == null){
       URL url = null;
       try{
         url = new File(".").toURL();
