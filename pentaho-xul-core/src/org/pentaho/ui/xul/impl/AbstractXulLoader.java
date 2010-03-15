@@ -103,6 +103,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       container.setOuterContext(outerContext);
       container.setResourceBundles(this.resourceBundleList);
       parser.setContainer(container);
+      parser.setClassLoaders(classloaders);
       parser.parseDocument(doc.getRootElement());
 
       for(ClassLoader l : classloaders){
@@ -139,6 +140,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     container.setOuterContext(outerContext);
 
     parser.reset();
+    parser.setClassLoaders(classloaders);
     parser.setContainer(container);
     parser.parseDocument(document.getRootElement());
 
@@ -763,6 +765,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         sourceElement.getParent().removeChild(sourceElement);
       }
 
+      parser.setClassLoaders(classloaders);
       for (Object childToParse : overlay.elements()) {
         Element childElement = (Element) childToParse;
         

@@ -94,9 +94,17 @@ public class XulParser {
     Object handler = handlers.get("WINDOW");
 
    
-    Class<?> c;
+    Class<?> c = null;
     try {
-      c = Class.forName((String) handler);
+
+      for(ClassLoader loader : classloaders){
+        try{
+          c = loader.loadClass((String) handler);
+        } catch(ClassNotFoundException e){
+          
+        }
+      } 
+      
       Constructor<?> constructor = c
           .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
       XulWindow ele = (XulWindow) constructor.newInstance(null, null, xulDomContainer, "window");
@@ -159,9 +167,17 @@ public class XulParser {
     }
 
     String tagName = srcEle.getName();
-    Class<?> c;
+    Class<?> c = null;
     try {
-      c = Class.forName((String) handler);
+
+      for(ClassLoader loader : classloaders){
+        try{
+          c = loader.loadClass((String) handler);
+        } catch(ClassNotFoundException e){
+          
+        }
+      } 
+      
       Constructor<?> constructor = c
         .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
    
@@ -201,11 +217,17 @@ public class XulParser {
        throw new XulException(String.format("No handler available for input: %s", name));
      }
 
-     Class<?> c;
+     Class<?> c = null;
      try {
-       c = Class.forName((String) handler);
-       Constructor<?> constructor = c
-           .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
+       for(ClassLoader loader : classloaders){
+         try{
+           c = loader.loadClass((String) handler);
+         } catch(ClassNotFoundException e){
+           
+         }
+       } 
+       
+       Constructor<?> constructor = c.getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
       
        XulComponent ele = (XulComponent) constructor.newInstance(null, defaultParent, xulDomContainer, name);
        return ele;
@@ -234,6 +256,11 @@ public class XulParser {
     } catch (Exception e) {
       throw new XulException("Error getting Document instance", e);
     }
+  }
+  
+  private List<ClassLoader> classloaders;
+  public void setClassLoaders(List<ClassLoader> loaders){
+    this.classloaders = loaders;
   }
 
 }
