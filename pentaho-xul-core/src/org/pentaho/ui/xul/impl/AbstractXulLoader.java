@@ -272,8 +272,16 @@ public abstract class AbstractXulLoader implements XulLoader {
     String output = input;
     for (String includeSrc : includedSources) {
       try {
-        ResourceBundle res = ResourceBundle.getBundle(includeSrc.replace(".xul", ""));
-        resourceBundleList.add((ResourceBundle) res);  
+        ResourceBundle res = null;
+        for(ClassLoader loader : classloaders){ 
+          try{
+            res = ResourceBundle.getBundle(includeSrc.replace(".xul", ""), Locale.getDefault(), loader);
+            resourceBundleList.add((ResourceBundle) res);  
+            break;
+          } catch (MissingResourceException e) {
+            
+          }
+        }
       } catch (MissingResourceException e) {
         URL url = null;
         try{
