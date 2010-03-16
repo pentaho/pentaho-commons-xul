@@ -201,7 +201,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
 
 
   public void removeTabpanel(int idx) {
-    if(tabFolder.getItemCount() >= idx){
+    if(tabFolder.getItemCount() > idx){
       tabFolder.getItem(idx).dispose();
     }
   }
