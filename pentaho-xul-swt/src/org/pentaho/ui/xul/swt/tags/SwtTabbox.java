@@ -8,10 +8,9 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -21,7 +20,6 @@ import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
-import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
 
@@ -43,6 +41,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
     this.domContainer = domContainer; 
     
     tabFolder = new CTabFolder((Composite) parent.getManagedObject(), style);
+    tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
     
     tabFolder.setSimple(false);
     tabFolder.setUnselectedImageVisible(true);
