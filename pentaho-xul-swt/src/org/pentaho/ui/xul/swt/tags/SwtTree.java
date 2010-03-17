@@ -1214,6 +1214,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
                   }
                   domContainer.addBinding(binding);
                   binding.fireSourceChanged();
+                } else {
+                  cell.setLabel(o.toString());
                 }
               }
 
