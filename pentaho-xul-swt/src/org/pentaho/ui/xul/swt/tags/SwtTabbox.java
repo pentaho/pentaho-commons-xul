@@ -183,6 +183,10 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   public void setTabDisabledAt(boolean flag, int pos) {
     tabFolder.getItem(pos).getControl().setEnabled(!flag);
   }
+
+  public void setTabVisibleAt(boolean flag, int pos) {
+    tabFolder.getItem(pos).getControl().setVisible(!flag);
+  }
   
   public void updateTabState(){
     for(int i=0; i<tabs.getChildNodes().size(); i++){
