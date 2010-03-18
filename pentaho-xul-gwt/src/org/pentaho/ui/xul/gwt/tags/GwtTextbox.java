@@ -327,4 +327,8 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   Integer getCols() {
     return cols;
   }
+  
+  public void setCommand(String command) {
+    throw new RuntimeException("command not implemented on textbox");
+  }
 }

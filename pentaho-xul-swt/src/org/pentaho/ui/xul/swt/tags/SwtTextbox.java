@@ -6,6 +6,8 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -31,6 +33,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private int max;
   private int min;
   private String oldValue = "";
+  private String command;
   
   public SwtTextbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -52,14 +55,22 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     
     box.addKeyListener(new KeyListener(){
 
-      public void keyPressed(KeyEvent arg0) { oldValue = box.getText();}
+      public void keyPressed(KeyEvent arg0) { 
+        oldValue = box.getText();
+      }
       public void keyReleased(KeyEvent arg0) {
         if(!oldValue.equals(box.getText())){
           changeSupport.firePropertyChange("value", null, getValue());
         }
       }
     });
-
+    box.addListener(SWT.DefaultSelection, new Listener() {
+      public void handleEvent(Event e) {
+        if(command != null){
+          invoke(command);
+        }
+      }
+    });
   }
 
   /**
@@ -244,5 +255,11 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     super.setOndrop(ondrop);
     super.enableDrop();
   }
+
+  public void setCommand(String command) {
+    this.command = command;
+  }
+  
+  
 
 }

@@ -307,5 +307,11 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
       return StringUtils.isNumeric(str.replace(".", "").replace("-", "")) || str.equals("-") || str.equals(".");
     }
   }
+  
+
+  public void setCommand(String command) {
+    throw new RuntimeException("command not implemented on textbox");
+  }
+  
 
 }
