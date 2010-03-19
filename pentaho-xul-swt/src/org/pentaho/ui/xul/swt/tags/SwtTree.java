@@ -437,7 +437,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
     if (this.isHierarchical && this.elements != null) {
 
-      if (elements == null || elements.size() == 0) {
+      if (elements == null || (this.hiddenRoot && elements.size() == 0)) {
         return null;
       }
 
