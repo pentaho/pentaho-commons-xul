@@ -152,6 +152,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   private XulSortProperties sortProperties = new XulSortProperties();
   
+  private List<Binding> elementBindings = new ArrayList<Binding>();
+  
   private PropertyChangeListener cellChangeListener = new PropertyChangeListener(){
     public void propertyChange(PropertyChangeEvent arg0) {
       SwtTree.this.update();
@@ -979,7 +981,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   public void update() {
     if (this.isHierarchical) {
-      Object[] expandedElements = tree.getExpandedElements();
       this.tree.refresh();
       
       if ("true".equals(getAttributeValue("expanded"))) {
@@ -993,8 +994,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           }
         }
         expandBindings.clear();
-      } else if(this.suppressEvents == false) {
-        tree.setExpandedElements(expandedElements);
       }
       resizeTreeColumn();
     } else {
@@ -1121,11 +1120,22 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
   
+  private void destroyPreviousBindings(){
+
+    for(Binding bind : elementBindings){
+      bind.destroyBindings();
+    }
+    elementBindings.clear();
+    
+  }
+  
   public <T> void setElements(Collection<T> elements) {
 
     if (this.isHierarchical && isPreserveexpandedstate()) {
       cacheExpandedState();
     }
+    
+    destroyPreviousBindings();
     
     this.elements = elements;
     this.getRootChildren().removeAll();
@@ -1164,11 +1174,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
               if ((colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))
                   && column.getCombobinding() != null) {
                 DefaultBinding binding = new DefaultBinding(o, column.getCombobinding(), cell, "value");
+                elementBindings.add(binding);
                 binding.setBindingType(Binding.Type.ONE_WAY);
                 domContainer.addBinding(binding);
                 binding.fireSourceChanged();
 
                 binding = new DefaultBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
+                elementBindings.add(binding);
                 binding.setConversion(new BindingConvertor<Object, Integer>() {
 
                   @Override
@@ -1188,6 +1200,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
                 if (colType.equalsIgnoreCase("editablecombobox")) {
                   binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                  elementBindings.add(binding);
                   if (!this.editable) {
                     binding.setBindingType(Binding.Type.ONE_WAY);
                   } else {
@@ -1199,6 +1212,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
               } else if (colType.equalsIgnoreCase("checkbox")) {
                 if (StringUtils.isNotEmpty(exp.getModelAttr())) {
                   DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, "value");
+                  elementBindings.add(binding);
                   if (!column.isEditable()) {
                     binding.setBindingType(Binding.Type.ONE_WAY);
                   }
@@ -1209,6 +1223,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
                 if (StringUtils.isNotEmpty(exp.getModelAttr())) {
                   DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                  elementBindings.add(binding);
                   if (!column.isEditable()) {
                     binding.setBindingType(Binding.Type.ONE_WAY);
                   }
@@ -1223,6 +1238,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
             if (column.getDisabledbinding() != null) {
               String prop = column.getDisabledbinding();
               DefaultBinding bind = new DefaultBinding(o, column.getDisabledbinding(), cell, "disabled");
+              elementBindings.add(bind);
               bind.setBindingType(Binding.Type.ONE_WAY);
               domContainer.addBinding(bind);
               bind.fireSourceChanged();
@@ -1308,6 +1324,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
         // Tree Bindings are one-way for now as you cannot edit tree nodes
         DefaultBinding binding = new DefaultBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        elementBindings.add(binding);
         binding.setConversion(treeLabelConvertor);
         if (this.isEditable()) {
           binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
@@ -1325,6 +1342,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       String expBind = column.getExpandedbinding();
       if(expBind != null){
         DefaultBinding binding = new DefaultBinding(element, expBind, row.getParent(), "expanded");
+        elementBindings.add(binding);
         binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
         domContainer.addBinding(binding);
         expandBindings.add(binding);
@@ -1333,6 +1351,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       if (column.getDisabledbinding() != null) {
         String prop = column.getDisabledbinding();
         DefaultBinding bind = new DefaultBinding(element, column.getDisabledbinding(), row.getParent(), "disabled");
+        elementBindings.add(bind);
         bind.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(bind);
         bind.fireSourceChanged();
@@ -1342,6 +1361,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       if (column.getTooltipbinding() != null) {
         String prop = column.getTooltipbinding();
         DefaultBinding bind = new DefaultBinding(element, column.getTooltipbinding(), row.getParent(), "tooltiptext");
+        elementBindings.add(bind);
         bind.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(bind);
         bind.fireSourceChanged();
@@ -1362,6 +1382,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       method = ((XulTreeCol)this.getColumns().getChildNodes().get(0)).getImagebinding();
       if (method != null) {
         DefaultBinding binding = new DefaultBinding(element, method, row.getParent(), "image");
+        elementBindings.add(binding);
         binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
