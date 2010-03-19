@@ -66,8 +66,11 @@ public class SwtTab extends SwtElement implements XulTab{
   @Override
   public void setVisible(boolean visible) {
     super.setVisible(visible);
-    ((SwtTabbox) tabbox).setTabVisibleAt(visible, getParent().getChildNodes().indexOf(this));
-    
+    getTabbox();
+    if(tabbox != null) {
+      ((SwtTabbox) tabbox).setTabVisibleAt(visible, getParent().getChildNodes().indexOf(this));
+      ((SwtTabbox) tabbox).layout();
+    }
   }
   
   

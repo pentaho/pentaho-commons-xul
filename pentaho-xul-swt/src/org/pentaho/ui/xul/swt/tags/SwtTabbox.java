@@ -21,34 +21,39 @@ import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
-public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
+public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
 
-  
   private CTabFolder tabFolder;
+
   private SwtTabpanels panels;
+
   private SwtTabs tabs;
+
   private int selectedIndex = -1;
+
   private boolean closable;
+
   private String onclose;
+
   private XulDomContainer domContainer;
-  
+
   public SwtTabbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabbox");
     int style = SWT.MULTI;
-    if(self.getAttributeValue("closable") != null && self.getAttributeValue("closable").equals("true")){
+    if (self.getAttributeValue("closable") != null && self.getAttributeValue("closable").equals("true")) {
       style |= SWT.CLOSE;
     }
-    this.domContainer = domContainer; 
-    
+    this.domContainer = domContainer;
+
     tabFolder = new CTabFolder((Composite) parent.getManagedObject(), style);
     tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-    
+
     tabFolder.setSimple(false);
     tabFolder.setUnselectedImageVisible(true);
     tabFolder.setUnselectedCloseVisible(true);
     tabFolder.setBorderVisible(true);
-    
-    tabFolder.addSelectionListener(new SelectionAdapter(){
+
+    tabFolder.addSelectionListener(new SelectionAdapter() {
 
       @Override
       public void widgetSelected(SelectionEvent arg0) {
@@ -56,23 +61,23 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
         selectedIndex = tabFolder.getSelectionIndex();
         SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
       }
-      
+
     });
-    
-    tabFolder.addCTabFolder2Listener(new CTabFolder2Listener(){
+
+    tabFolder.addCTabFolder2Listener(new CTabFolder2Listener() {
 
       public void close(CTabFolderEvent arg0) {
-        if(onclose != null){
+        if (onclose != null) {
           try {
             int pos = 0;
-            for(int i=0; i<tabFolder.getItems().length; i++){
-              if(tabFolder.getItems()[i] == arg0.item){
+            for (int i = 0; i < tabFolder.getItems().length; i++) {
+              if (tabFolder.getItems()[i] == arg0.item) {
                 pos = i;
                 break;
               }
             }
-            Boolean returnVal = (Boolean) SwtTabbox.this.domContainer.invoke(onclose, new Object[]{pos});
-            if(returnVal == true){
+            Boolean returnVal = (Boolean) SwtTabbox.this.domContainer.invoke(onclose, new Object[] { pos });
+            if (returnVal == true) {
               remove(pos);
             } else {
               arg0.doit = false;
@@ -83,45 +88,50 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
         } else {
           remove(tabFolder.getSelectionIndex());
         }
-        
+
       }
-      public void maximize(CTabFolderEvent arg0) {}
-      public void minimize(CTabFolderEvent arg0) {}
-      public void restore(CTabFolderEvent arg0) {}
-      public void showList(CTabFolderEvent arg0) {}
+
+      public void maximize(CTabFolderEvent arg0) {
+      }
+
+      public void minimize(CTabFolderEvent arg0) {
+      }
+
+      public void restore(CTabFolderEvent arg0) {
+      }
+
+      public void showList(CTabFolderEvent arg0) {
+      }
     });
 
     // Set a small vertical gradient
     tabFolder.setSelectionBackground(new Color[] {
-            tabFolder.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW),
-            tabFolder.getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW),
-            }, 
-            new int[] { 55, },
-            true);
-    
+        tabFolder.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW),
+        tabFolder.getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW), }, new int[] { 55, }, true);
+
     setManagedObject(tabFolder);
   }
-  
-  private void remove(int pos){
+
+  private void remove(int pos) {
     this.tabs.removeChild(this.tabs.getChildNodes().get(pos));
     this.panels.removeChild(this.panels.getChildNodes().get(pos));
-    if(tabs.getChildNodes().size() == 0){ // last one doesn't fire selection event. Manually do that here
+    if (tabs.getChildNodes().size() == 0) { // last one doesn't fire selection event. Manually do that here
       setSelectedIndex(-1);
     }
   }
 
   @Override
   public void addChild(Element ele) {
-     super.addChild(ele);
-     
-     if(ele instanceof SwtTabs){
-       this.tabs = (SwtTabs) ele;
-     } else if(ele instanceof SwtTabpanels){
-       this.panels = (SwtTabpanels) ele;
-     }
-     
+    super.addChild(ele);
+
+    if (ele instanceof SwtTabs) {
+      this.tabs = (SwtTabs) ele;
+    } else if (ele instanceof SwtTabpanels) {
+      this.panels = (SwtTabpanels) ele;
+    }
+
   }
-  
+
   public int getSelectedIndex() {
     return tabFolder.getSelectionIndex();
   }
@@ -142,9 +152,9 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
     int prevVal = selectedIndex;
     selectedIndex = index;
     SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
-    if(tabFolder.getItemCount() > 0){ // component instantiated
+    if (tabFolder.getItemCount() > 0) { // component instantiated
       tabFolder.setSelection(selectedIndex);
-      
+
       // Programatic set selectedIndex does not fire listener.
       int sel = tabFolder.getSelectionIndex();
     }
@@ -154,27 +164,31 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   public void layout() {
 
     CTabItem[] t = tabFolder.getItems();
-    
-    for(int i=0; i<t.length; i++){
+
+    for (int i = 0; i < t.length; i++) {
       t[i].dispose();
     }
-      
-    for(int i=0; i<tabs.getChildNodes().size(); i++){
+
+    for (int i = 0; i < tabs.getChildNodes().size(); i++) {
       int style = SWT.None;
-      if(isClosable()){
-        style = SWT.  Close;
+      int tabIndex = 0;
+      if (isClosable()) {
+        style = SWT.Close;
       }
-      CTabItem item = new CTabItem (tabFolder, style);
-      item.setText (tabs.getTabByIndex(i).getLabel());
-      // There could be a chance the the tabs have been added but tab panel are still
-      // not there. In this case we need to break from this layout routine
-      if(panels.getChildNodes().size() <= i) {
-        break;
+      SwtTab tab = (SwtTab) tabs.getChildNodes().get(i);
+      if (tab.isVisible()) {
+        CTabItem item = new CTabItem(tabFolder, style);
+        item.setText(tabs.getTabByIndex(i).getLabel());
+        // There could be a chance that the tabs have been added but tab panel are still
+        // not there. In this case we need to break from this layout routine
+        if (panels.getChildNodes().size() <= i) {
+          break;
+        }
+        item.setControl((Control) panels.getTabpanelByIndex(i).getManagedObject());
+        tabFolder.getItem(tabIndex++).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
       }
-      item.setControl ((Control) panels.getTabpanelByIndex(i).getManagedObject());
-      tabFolder.getItem(i).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
     }
-    if(selectedIndex < 0 && tabFolder.getItemCount() > 0){
+    if (selectedIndex < 0 && tabFolder.getItemCount() > 0) {
       selectedIndex = 0;
     }
     setSelectedIndex(selectedIndex);
@@ -187,83 +201,72 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox{
   public void setTabVisibleAt(boolean flag, int pos) {
     tabFolder.getItem(pos).getControl().setVisible(flag);
   }
-  
-  public void updateTabState(){
-    for(int i=0; i<tabs.getChildNodes().size(); i++){
-      tabFolder.getItem(i).setText(""+tabs.getTabByIndex(i).getLabel());
-      tabFolder.getItem(i).getControl().setEnabled(! tabs.getTabByIndex(i).isDisabled());
+
+  public void updateTabState() {
+    for (int i = 0; i < tabs.getChildNodes().size(); i++) {
+      tabFolder.getItem(i).setText("" + tabs.getTabByIndex(i).getLabel());
+      tabFolder.getItem(i).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
     }
   }
-
 
   public void removeTab(int idx) {
-    if(tabFolder.getItemCount() >= idx){
+    if (tabFolder.getItemCount() >= idx) {
       tabFolder.getItem(idx).dispose();
     }
   }
-
 
   public void removeTabpanel(int idx) {
-    if(tabFolder.getItemCount() > idx){
+    if (tabFolder.getItemCount() > idx) {
       tabFolder.getItem(idx).dispose();
     }
   }
-
 
   public void addTab(int idx) {
     int style = SWT.None;
-    if(isClosable()){
+    if (isClosable()) {
       style = SWT.Close;
     }
-    CTabItem item = new CTabItem (tabFolder, style);
+    CTabItem item = new CTabItem(tabFolder, style);
     String lbl = tabs.getTabByIndex(idx).getLabel();
-    if(lbl != null){
+    if (lbl != null) {
       item.setText(lbl);
     }
-    
+
     //may have been added after panel
     //addTabpanel(idx);
-    if(selectedIndex < 0){
+    if (selectedIndex < 0) {
       selectedIndex = 0;
     }
     setSelectedIndex(selectedIndex);
   }
 
-
   public void addTabpanel(int idx) {
-    
+
     //not sure if the tab has been added first, ignore if not
-    if(tabFolder.getItemCount() <= idx || panels.getChildNodes().size() <= idx){
+    if (tabFolder.getItemCount() <= idx || panels.getChildNodes().size() <= idx) {
       return;
     }
     CTabItem item = tabFolder.getItem(idx);
     Control control = (Control) panels.getTabpanelByIndex(idx).getManagedObject();
-    if(control.getParent() != tabFolder){
+    if (control.getParent() != tabFolder) {
       control.setParent(tabFolder);
     }
     item.setControl(control);
     item.getControl().setEnabled(!tabs.getTabByIndex(idx).isDisabled());
-    
-  }
 
+  }
 
   public void setClosable(boolean flag) {
     this.closable = flag;
-    
-  }
 
+  }
 
   public boolean isClosable() {
     return this.closable;
   }
-  
-  public void setOnclose(String command){
+
+  public void setOnclose(String command) {
     this.onclose = command;
   }
-  
-  
-  
 
 }
-
-  
