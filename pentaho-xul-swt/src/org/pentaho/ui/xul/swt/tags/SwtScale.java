@@ -4,6 +4,8 @@ import javax.swing.JSlider;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Scale;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -28,6 +30,12 @@ public class SwtScale extends SwtElement implements XulScale {
   public void layout() {
     int orient = (getOrientation() == Orient.VERTICAL)? SWT.VERTICAL: SWT.HORIZONTAL;
     this.scale = new Scale((Composite) parentComposite, orient);
+    this.scale.addListener(SWT.Selection, new Listener() {
+      public void handleEvent(Event event) {
+        int perspectiveValue = scale.getMaximum() - scale.getSelection() + scale.getMinimum();
+        scale.setSelection(perspectiveValue);
+      }
+    });
     setManagedObject(scale);
     setMin(getMin());
     setMax(getMax());
@@ -93,10 +101,13 @@ public class SwtScale extends SwtElement implements XulScale {
   }
 
   public void setValue(int value) {
+    
+    int prevVal = this.value;
     this.value = value;
     if(scale != null){
       scale.setSelection(value);
-    }
+    }    
+    this.changeSupport.firePropertyChange("value", prevVal, value);
   }
 
   
