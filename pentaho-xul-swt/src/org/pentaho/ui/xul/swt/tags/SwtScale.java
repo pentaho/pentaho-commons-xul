@@ -28,8 +28,8 @@ public class SwtScale extends SwtElement implements XulScale {
   
   @Override
   public void layout() {
-    int orient = (getOrientation() == Orient.VERTICAL)? SWT.VERTICAL: SWT.HORIZONTAL;
-    this.scale = new Scale((Composite) parentComposite, orient);
+    int hvOrient = (getOrientation() == Orient.VERTICAL)? SWT.VERTICAL: SWT.HORIZONTAL;
+    this.scale = new Scale(parentComposite, hvOrient);
     this.scale.addListener(SWT.Selection, new Listener() {
       public void handleEvent(Event event) {
         int perspectiveValue = scale.getMaximum() - scale.getSelection() + scale.getMinimum();
