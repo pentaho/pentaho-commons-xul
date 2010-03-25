@@ -83,10 +83,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
       }
       pos++;
     }
-    
-    if(style == 0) {
-      style = SWT.OK;
-    }
+
     return style;
   }
   
