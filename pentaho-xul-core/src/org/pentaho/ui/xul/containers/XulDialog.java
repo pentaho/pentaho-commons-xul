@@ -56,4 +56,8 @@ public interface XulDialog extends XulRoot {
   public void setResizable(Boolean resizable);
   
   public void setModal(Boolean modal);
+  
+  public void setPack(boolean pack);
+  
+  public boolean isPack();
 }

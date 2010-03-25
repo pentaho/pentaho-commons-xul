@@ -96,6 +96,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private String appIcon;
 
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
+  
+  private boolean pack;
 
   public SwtDialog(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -294,6 +296,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       
     }
     dialog.resizeBounds();
+    
+    if(pack){
+      dialog.getShell().pack();
+    }
     
     // Timing is everything - fire the onLoad evetns so tht anyone who is trying to
     notifyListeners(XulRoot.EVENT_ON_LOAD);
@@ -629,5 +635,13 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     }
     
   }
+  public boolean isPack() {
+    return pack;
+  }
+
+  public void setPack(boolean pack) {
+    this.pack = pack;
+  }
+
   
 }

@@ -43,6 +43,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   private String bgColor = null;
   private SimplePanel glasspane = new SimplePanel();
   private List<XulButton> dialogButtons = new ArrayList<XulButton>();
+  private boolean pack;
   
   public GwtDialog() {
     super("dialog");
@@ -443,5 +444,13 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   public void setAppicon(String icon) {
     // TODO Auto-generated method stub 
   }
-  
+
+  public boolean isPack() {
+    return pack;
+  }
+
+  public void setPack(boolean pack) {
+    this.pack = pack;
+  }
+
 }

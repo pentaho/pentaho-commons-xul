@@ -86,6 +86,8 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
   private String btns;
 
   private BUTTON_ALIGN buttonAlignment;
+  
+  private boolean pack;
 
   private enum BUTTONS {
     ACCEPT, CANCEL, HELP, EXTRA1, EXTRA2
@@ -585,4 +587,13 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     // TODO Auto-generated method stub 
   }
 
+  public boolean isPack() {
+    return pack;
+  }
+
+  public void setPack(boolean pack) {
+    this.pack = pack;
+  }
+
+  
 }
