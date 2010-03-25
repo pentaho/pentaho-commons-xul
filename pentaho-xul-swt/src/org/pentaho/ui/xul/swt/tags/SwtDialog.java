@@ -15,6 +15,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
@@ -120,28 +122,46 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     // resizable one
     String resizableStr = self.getAttributeValue("resizable");
     this.setResizable(resizableStr != null && resizableStr.equals("true"));
-    createDialog();
-    
+
     if(self != null) {
       // Extract appIcon
       setAppicon(self.getAttributeValue("appicon"));
     }
+    
+    dialog = createDialog();
+    Composite c = createDialogComposite();
+    setManagedObject(c);
+    
   }
 
-  private void createDialog() {
+  private BasicDialog createDialog() {
     
-    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true);
-    dialog = newDialog;
-    dialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
-    dialog.getShell().addListener(SWT.Close, new Listener() {
-      public void handleEvent(Event event) {
-        event.doit = false;
-        if(dialog.getShell() != null && dialog.getShell().isDisposed() == false){
-          hide();
-        }
+    final BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true);
+    newDialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
+
+    newDialog.getShell().addDisposeListener(new DisposeListener(){
+
+      public void widgetDisposed(DisposeEvent arg0) {
+        hide();
       }
+      
     });
     
+    // Amazingly, NOT working. This could be something specific to GTK and the jface dialogs.
+//    newDialog.getShell().addListener( SWT.Close, new Listener() {
+//        public void handleEvent( Event event ) {
+//          event.doit = false;
+//          hide();
+//          
+//        }
+//    });
+    
+    setAppicon(this.appIcon);
+    return newDialog;
+  }
+  
+  private Composite createDialogComposite(){
+
     Composite c = new Composite((Composite) dialog.getMainDialogArea(), SWT.NONE);
     
     GridData gd = new GridData(GridData.FILL_BOTH);
@@ -150,7 +170,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     c.setLayoutData(gd);
 
-    setManagedObject(c);
+    return c;
   }
   
   public Shell getShell(){
@@ -389,11 +409,12 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     }
     returnCode = IDialogConstants.CLOSE_ID;
     
-    BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), getResizable());
+    BasicDialog newDialog = createDialog();
     Control[] controlz = newDialog.getMainArea().getChildren();
     for(Control c : controlz){
       c.dispose();
     }
+    
     
     Control[] controls = dialog.getMainArea().getChildren();
     for(Control c : controls){
@@ -408,12 +429,6 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     isDialogHidden = true;
 
     dialog = newDialog;
-    dialog.getShell().addListener(SWT.Close, new Listener() {
-      public void handleEvent(Event event) {
-        hide();
-        event.doit = false;
-      }
-    });
     
     
     setManagedObject(dialog.getMainArea());
@@ -591,7 +606,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   public void setAppicon(String icon) {
     this.appIcon = icon;
     
-    if(appIcon == null) {
+    if(appIcon == null || dialog == null) {
       return;
     }
     
@@ -630,7 +645,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
       }
     }
-    if(img != null) {
+    if(img != null && dialog != null) {
       dialog.getShell().setImage(img);
     }
     
