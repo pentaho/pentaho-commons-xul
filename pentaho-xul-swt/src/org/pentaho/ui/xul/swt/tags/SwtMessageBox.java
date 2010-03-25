@@ -93,7 +93,7 @@ public class SwtMessageBox extends SwtElement implements XulMessageBox {
   
   protected void createNewMessageBox(){
     Shell shell = getParentObject();
-    dialog = new MessageBox(shell, SWT.OK);
+    dialog = new MessageBox(shell, getBitwiseStyle());
     dialog.setText(getTitle());
     dialog.setMessage(getMessage());
     
