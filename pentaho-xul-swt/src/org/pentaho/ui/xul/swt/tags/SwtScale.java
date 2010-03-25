@@ -33,7 +33,7 @@ public class SwtScale extends SwtElement implements XulScale {
     this.scale.addListener(SWT.Selection, new Listener() {
       public void handleEvent(Event event) {
         int perspectiveValue = scale.getMaximum() - scale.getSelection() + scale.getMinimum();
-        scale.setSelection(perspectiveValue);
+        setValue(perspectiveValue);
       }
     });
     setManagedObject(scale);
