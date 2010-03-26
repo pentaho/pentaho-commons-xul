@@ -300,6 +300,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
 
   public void setSelectedIndices(int[] indices) {
+    listBox.deselectAll();
     listBox.select(indices);
   }
 
