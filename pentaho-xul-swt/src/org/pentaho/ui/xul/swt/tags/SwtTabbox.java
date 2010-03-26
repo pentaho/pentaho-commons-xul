@@ -36,6 +36,9 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
   private String onclose;
 
   private XulDomContainer domContainer;
+  
+  // used to prevent recursing. 
+  private boolean suppressRemoveEvents;
 
   public SwtTabbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tabbox");
@@ -113,11 +116,13 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
   }
 
   private void remove(int pos) {
+    suppressRemoveEvents = true;
     this.tabs.removeChild(this.tabs.getChildNodes().get(pos));
     this.panels.removeChild(this.panels.getChildNodes().get(pos));
     if (tabs.getChildNodes().size() == 0) { // last one doesn't fire selection event. Manually do that here
       setSelectedIndex(-1);
     }
+    suppressRemoveEvents = false;
   }
 
   @Override
@@ -210,12 +215,18 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
   }
 
   public void removeTab(int idx) {
+    if(suppressRemoveEvents){
+      return;
+    }
     if (tabFolder.getItemCount() >= idx) {
       tabFolder.getItem(idx).dispose();
     }
   }
 
   public void removeTabpanel(int idx) {
+    if(suppressRemoveEvents){
+      return;
+    }
     if (tabFolder.getItemCount() > idx) {
       tabFolder.getItem(idx).dispose();
     }
