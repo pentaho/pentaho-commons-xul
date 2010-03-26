@@ -3,6 +3,8 @@ package org.pentaho.ui.xul.swt.tags;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -22,11 +24,14 @@ public class SwtToolbaritem extends AbstractSwtXulContainer implements XulToolba
   private XulDomContainer container;
   private Composite panel;
   private ToolItem item;
+  private ToolBar toolbar;
+  private final int MARGIN_VALUE = 3;
   private static final Log logger = LogFactory.getLog(SwtToolbaritem.class);
   
   public SwtToolbaritem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("treeitem");
-  
+
+    toolbar = (ToolBar) parent.getManagedObject();
     this.parent = parent;
     this.container = domContainer;
 
@@ -47,5 +52,28 @@ public class SwtToolbaritem extends AbstractSwtXulContainer implements XulToolba
     ((ToolBar) parent.getManagedObject()).pack();
   }
   
+
   
+  public void setFlex(int flex){
+    super.setFlex(flex);
+
+    if(getFlex() > 0){
+      // only support one flexible spacer per toolbar for now.
+      toolbar.addControlListener(new ControlAdapter(){
+
+        @Override
+        public void controlResized(ControlEvent arg0) {
+          int totalWidth = toolbar.getBounds().width;
+          int childTotalWidth = 0;
+          for(ToolItem i : toolbar.getItems()){
+            if(i != item){
+              childTotalWidth += i.getBounds().width + MARGIN_VALUE;
+            }
+          }
+          item.setWidth(Math.max(0, totalWidth - childTotalWidth));
+        }
+        
+      });
+    }
+  }
 }
