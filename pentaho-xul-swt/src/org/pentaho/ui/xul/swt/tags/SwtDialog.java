@@ -100,6 +100,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
   
   private boolean pack;
+  
+  private boolean ignoreDisposeEvent;
 
   public SwtDialog(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -142,7 +144,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     newDialog.getShell().addDisposeListener(new DisposeListener(){
 
       public void widgetDisposed(DisposeEvent arg0) {
-        hide();
+        if(ignoreDisposeEvent == false ){
+          hide();
+        } else {
+          ignoreDisposeEvent = false;
+        }
       }
       
     });
@@ -425,7 +431,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     newDialog.getShell().layout();
     
+    // Causes a recursive call to hide from the dispose listener, flag it for ignore.
+    ignoreDisposeEvent = true;
     dialog.close();
+    
+    
     isDialogHidden = true;
 
     dialog = newDialog;
