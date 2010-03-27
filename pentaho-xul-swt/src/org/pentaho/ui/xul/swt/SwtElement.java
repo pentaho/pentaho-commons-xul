@@ -32,6 +32,7 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -88,9 +89,9 @@ public class SwtElement extends AbstractXulComponent {
       }
     }
 
+    XulComponent comp = (XulComponent) e;
+    Object mo = comp.getManagedObject();
     if(this instanceof XulRoot == false){
-      XulComponent comp = (XulComponent) e;
-      Object mo = comp.getManagedObject();
       if(mo != null){
         if(mo instanceof Control){
           if(((Control) mo) != getManagedObject() && getManagedObject() instanceof Composite){
@@ -103,8 +104,9 @@ public class SwtElement extends AbstractXulComponent {
         }
       }
     }
-    
-    if (initialized) {
+    // Only call a layout if one has already been done and the component being added will affect the UI
+    if (initialized && mo != null && mo instanceof String == false) {
+      
       layout();
       ((XulComponent) e).onDomReady();
     }
@@ -316,6 +318,9 @@ public class SwtElement extends AbstractXulComponent {
             data.grabExcessHorizontalSpace = true;
           }
         }
+      }
+      if(c.getLayoutData() instanceof FormData){
+        int z=0;
       }
       c.setLayoutData(data);
     }
