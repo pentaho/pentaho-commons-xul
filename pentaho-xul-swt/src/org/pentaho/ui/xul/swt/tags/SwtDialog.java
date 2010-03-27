@@ -141,26 +141,16 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     final BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true);
     newDialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
 
-    newDialog.getShell().addDisposeListener(new DisposeListener(){
-
-      public void widgetDisposed(DisposeEvent arg0) {
-        if(ignoreDisposeEvent == false ){
-          hide();
-        } else {
-          ignoreDisposeEvent = false;
+    newDialog.getShell().addListener(SWT.Dispose, new Listener() {
+        public void handleEvent( Event event ) {
+          if(ignoreDisposeEvent == false ){
+            hide();
+          } else {
+            ignoreDisposeEvent = false;
+          }
+          
         }
-      }
-      
     });
-    
-    // Amazingly, NOT working. This could be something specific to GTK and the jface dialogs.
-//    newDialog.getShell().addListener( SWT.Close, new Listener() {
-//        public void handleEvent( Event event ) {
-//          event.doit = false;
-//          hide();
-//          
-//        }
-//    });
     
     setAppicon(this.appIcon);
     return newDialog;
