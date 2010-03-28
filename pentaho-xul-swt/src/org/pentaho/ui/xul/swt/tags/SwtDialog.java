@@ -100,8 +100,6 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
   
   private boolean pack;
-  
-  private boolean ignoreDisposeEvent;
 
   public SwtDialog(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -135,22 +133,16 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     setManagedObject(c);
     
   }
-
+  
   private BasicDialog createDialog() {
     
-    final BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true);
+    final BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true){
+      @Override
+      protected void handleShellCloseEvent() {
+        hide();
+      }
+    };
     newDialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
-
-    newDialog.getShell().addListener(SWT.Dispose, new Listener() {
-        public void handleEvent( Event event ) {
-          if(ignoreDisposeEvent == false ){
-            hide();
-          } else {
-            ignoreDisposeEvent = false;
-          }
-          
-        }
-    });
     
     setAppicon(this.appIcon);
     return newDialog;
@@ -159,7 +151,6 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private Composite createDialogComposite(){
 
     Composite c = new Composite((Composite) dialog.getMainDialogArea(), SWT.NONE);
-    
     GridData gd = new GridData(GridData.FILL_BOTH);
     gd.grabExcessVerticalSpace = true;
     gd.grabExcessHorizontalSpace = true;
@@ -400,6 +391,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
 
   public void hide() {
+    //dialog.getShell().removeListener(SWT.Dispose, listener);    
     if(dialog.getMainArea().isDisposed()){
       return;
     }
@@ -421,10 +413,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     newDialog.getShell().layout();
     
-    // Causes a recursive call to hide from the dispose listener, flag it for ignore.
-    ignoreDisposeEvent = true;
     dialog.close();
-    
     
     isDialogHidden = true;
 
