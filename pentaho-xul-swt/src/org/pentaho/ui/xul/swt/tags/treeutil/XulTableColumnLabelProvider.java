@@ -91,11 +91,9 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
   public Image getColumnImage(Object row, int col) {
     if (tree.getColumns().getColumn(col).getColumnType() == ColumnType.CHECKBOX) {
       if (isSelected(row, col)) {
-        return JFaceResources.getImageRegistry().getDescriptor(CHECKED)
-            .createImage();
+        return JFaceResources.getImageRegistry().get(CHECKED);
       } else {
-        return JFaceResources.getImageRegistry().getDescriptor(UNCHECKED)
-            .createImage();
+        return JFaceResources.getImageRegistry().get(UNCHECKED);
       }
     }
     
