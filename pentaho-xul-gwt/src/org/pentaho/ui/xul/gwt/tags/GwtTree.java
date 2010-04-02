@@ -1222,5 +1222,18 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     // TODO Auto-generated method stub
     
   }
+  public void setNewitembinding(String binding){
+  }
+  
+  public String getNewitembinding(){
+    return null;
+  }
+  
+  public void setAutocreatenewrows(boolean auto){
+  }
+
+  public boolean getAutocreatenewrows(){
+    return false;
+  }
   
 }

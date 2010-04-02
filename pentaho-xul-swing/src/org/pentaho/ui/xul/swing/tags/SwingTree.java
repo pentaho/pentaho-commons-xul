@@ -124,6 +124,11 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   private XulDomContainer domContainer;
   
   private String command;
+  
+  private String newItemBinding;
+  
+  private boolean autoCreateNewRows;
+  
 
   public SwingTree(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tree");
@@ -1628,6 +1633,22 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public void setTreeLines(boolean visible) {
     // TODO Auto-generated method stub
     
+  }
+  
+  public void setNewitembinding(String binding){
+    newItemBinding = binding;
+  }
+  
+  public String getNewitembinding(){
+    return newItemBinding;
+  }
+  
+  public void setAutocreatenewrows(boolean auto){
+    this.autoCreateNewRows = auto;
+  }
+
+  public boolean getAutocreatenewrows(){
+    return autoCreateNewRows;
   }
   
 }

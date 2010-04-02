@@ -44,8 +44,12 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -153,6 +157,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private XulSortProperties sortProperties = new XulSortProperties();
   
   private List<Binding> elementBindings = new ArrayList<Binding>();
+  
+  private String newItemBinding;
+  
+  private boolean autoCreateNewRows;
   
   private PropertyChangeListener cellChangeListener = new PropertyChangeListener(){
     public void propertyChange(PropertyChangeEvent arg0) {
@@ -492,6 +500,70 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       }
     });
+
+    MouseAdapter lsMouseT = 
+      new MouseAdapter()
+      {
+        public void mouseDown(MouseEvent event)
+        {
+          if (event.button == 1)
+                {
+                    boolean shift = (event.stateMask & SWT.SHIFT) != 0;
+                    boolean control = (event.stateMask & SWT.CONTROL) != 0;
+                    if (!shift && !control)
+                    {
+                        Rectangle clientArea = table.getTable().getClientArea();
+                        Point pt = new Point(event.x, event.y);
+                        int index = table.getTable().getTopIndex();
+                        while (index < table.getTable().getItemCount())
+                        {
+                            boolean visible = false;
+                            final TableItem item = table.getTable().getItem(index);
+                            for (int i = 0; i < table.getTable().getColumnCount(); i++)
+                            {
+                                Rectangle rect = item.getBounds(i);
+                                if (!rect.contains(pt))
+                                {
+                                    if (i==table.getTable().getColumnCount()-1 && // last column 
+                                            pt.x>rect.x+rect.width && // to the right 
+                                            pt.y>=rect.y && pt.y<=rect.y+rect.height // same height as this visible item
+                                            )
+                                    {
+                                        return; // don't do anything when clicking to the right of the grid.
+                                    }
+                                } else {
+                                  return;
+                                }
+                                
+                                if (!visible && rect.intersects(clientArea))
+                                {
+                                    visible = true;
+                                }
+                            }
+                            if (!visible) return;
+                            index++;
+                        }
+                        insertRowAtLast();
+                    }
+                }
+            }
+        };
+
+    table.getTable().addMouseListener(lsMouseT);
+    
+    table.getTable().addTraverseListener(new TraverseListener(){
+
+      public void keyTraversed(TraverseEvent arg0) {
+        if(arg0.keyCode == SWT.ARROW_DOWN){
+          int[] rows = getSelectedRows();
+          if(rows != null && rows.length > 0 && rows[0] == table.getTable().getItemCount()-1){
+            insertRowAtLast();
+          }
+        }
+      }
+      
+    });
+    
     
     table.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -525,6 +597,15 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     table.getTable().setEnabled(!this.disabled);
     table.refresh();
     
+  }
+  
+  private void insertRowAtLast(){
+    if(this.elements != null && newItemBinding != null){  //Bound table.
+      invoke(newItemBinding);
+    } else if(autoCreateNewRows){
+      getRootChildren().addNewRow();
+      update();
+    }
   }
 
   private Collection findSelectedTableRows(int[] selectedRows) {
@@ -2015,5 +2096,20 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   public void setTreeLines(boolean visible) {
     linesVisible = visible;
   }
+  
+  public void setNewitembinding(String binding){
+    newItemBinding = binding;
+  }
+  
+  public String getNewitembinding(){
+    return newItemBinding;
+  }
+  
+  public void setAutocreatenewrows(boolean auto){
+    this.autoCreateNewRows = auto;
+  }
 
+  public boolean getAutocreatenewrows(){
+    return autoCreateNewRows;
+  }
 }
