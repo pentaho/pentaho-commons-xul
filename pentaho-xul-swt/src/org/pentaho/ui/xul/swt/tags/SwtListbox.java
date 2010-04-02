@@ -322,7 +322,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
     } else {
       String getter = "get" + (String.valueOf(attribute.charAt(0)).toUpperCase()) + attribute.substring(1);
       try {
-        return new Expression(t, getter, null).getValue().toString();
+        return ""+ (new Expression(t, getter, null).getValue());
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
