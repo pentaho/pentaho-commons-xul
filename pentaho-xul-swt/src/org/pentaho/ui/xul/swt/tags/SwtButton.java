@@ -1,13 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -26,7 +20,6 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Direction;
 import org.pentaho.ui.xul.util.SwtXulUtil;
-import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtButton extends SwtElement implements XulButton {
   private static final long serialVersionUID = -7218075117194366698L;
@@ -37,6 +30,7 @@ public class SwtButton extends SwtElement implements XulButton {
   private boolean disabled;
   private String image;
   private String disabledImage;
+  private String selectedImage;
   private Direction dir;
   private Type type;
   private String group;
@@ -68,6 +62,9 @@ public class SwtButton extends SwtElement implements XulButton {
       disabledImage = self.getAttributeValue("disabledimage"); //$NON-NLS-1$
     }
     
+    if (self != null) {
+      selectedImage = self.getAttributeValue("selectedimage"); //$NON-NLS-1$
+    }
     // Special creation path for image buttons with no text. We don't want them to appear with the 
     // traditional button border.
     if(self != null && self.getAttributeValue("image") != null && self.getAttributeValue("label") == null){
@@ -227,6 +224,17 @@ public class SwtButton extends SwtElement implements XulButton {
     if(button != null){
       button.setSelection(this.selected);
     }
+    
+    if(this.selected) {
+      if(selectedImage != null) {
+        displayImage(selectedImage);
+      }
+    } else {
+      if(image != null) {
+        displayImage(image);
+      }
+    }
+
   }
 
   public void doClick() {
