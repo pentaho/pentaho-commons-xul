@@ -1700,13 +1700,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   private FindBoundItemTuple findBoundItem(Object obj, XulComponent parent, String childrenMethodProperty, FindBoundItemTuple tuple) {
     if (obj.equals(tuple.item)) {
-      System.out.println("Found match ("+obj.getClass().getSimpleName()+")");
       tuple.treeItem = parent;
       return tuple;
     }
     Collection children = getChildCollection(obj, childrenMethodProperty);
     if (children == null || children.size() == 0) {
-      System.out.println("Children of ("+obj.getClass().getSimpleName()+") is null");
       return null;
     }
     XulTreeChildren xulChildren = getTreeChildren(parent);
