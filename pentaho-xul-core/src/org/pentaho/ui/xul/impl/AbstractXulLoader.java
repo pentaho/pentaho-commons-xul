@@ -682,12 +682,12 @@ public abstract class AbstractXulLoader implements XulLoader {
             }
 
           } catch (MissingResourceException e) {
-            logger.warn("no default resource bundle available: "+overlaySrc);
+            logger.debug("no default resource bundle available: "+overlaySrc);
           }    
         }
         
         if(res == null){
-          logger.error("could not find resource bundle, defaulting to main");
+          logger.debug("could not find resource bundle, defaulting to main");
           res = mainBundle;
         } else {
           resourceBundleList.add((ResourceBundle) res);  
