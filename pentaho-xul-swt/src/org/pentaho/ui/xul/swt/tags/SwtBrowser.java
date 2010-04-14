@@ -193,8 +193,7 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
     }
   }
   
-  
-  
-  
-  
+  public Browser getBrowser(){
+    return browser;
+  }
 }
