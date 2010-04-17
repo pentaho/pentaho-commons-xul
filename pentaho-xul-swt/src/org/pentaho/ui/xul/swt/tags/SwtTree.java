@@ -162,6 +162,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   
   private boolean autoCreateNewRows;
   
+  private boolean preserveSelection;
+  
+  private Collection currentSelectedItems = null;
+  
   private PropertyChangeListener cellChangeListener = new PropertyChangeListener(){
     public void propertyChange(PropertyChangeEvent arg0) {
       SwtTree.this.update();
@@ -172,7 +176,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   public SwtTree(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.parentComponent = parent;
-
+    
     // According to XUL spec, in order for a hierarchical tree to be rendered, a
     // primary column must be identified AND at least one treeitem must be
     // listed as a container.
@@ -388,6 +392,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           changeSupport.firePropertyChange("selectedRows", null, selectedRows);
           changeSupport.firePropertyChange("absoluteSelectedRows", null, selectedRows);
           changeSupport.firePropertyChange("selectedItems", null, selectedItems);
+          currentSelectedItems = selectedItems;
 
           //Single selection binding. 
           Object selectedItem = (selectedItems.size() > 0) ? selectedItems.get(0) : null;
@@ -1211,7 +1216,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
   
   public <T> void setElements(Collection<T> elements) {
-
+    
+    // If preserveselection is set to true in the xul file. We will honor that and save the selection before
+    // setting the elements. After the setElements is done we will set the current selected selection
     if (this.isHierarchical && isPreserveexpandedstate()) {
       cacheExpandedState();
     }
@@ -1375,6 +1382,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       update();
       if (this.isHierarchical && isPreserveexpandedstate()) {
         restoreExpandedState();
+      }
+      // Now since we are done with setting the elements, we will now see if preserveselection was set to be true
+      // then we will set the selected items to the currently saved one
+      if(isPreserveselection() && currentSelectedItems != null && currentSelectedItems.size()  > 0) {
+        setSelectedItems(currentSelectedItems);
       }
       suppressEvents = false;
 
@@ -2109,5 +2121,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   public boolean getAutocreatenewrows(){
     return autoCreateNewRows;
+  }
+
+  public boolean isPreserveselection() {
+    return preserveSelection;
+  }
+
+  public void setPreserveselection(boolean preserve) {
+    preserveSelection = preserve;
+    
   }
 }

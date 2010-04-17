@@ -1235,5 +1235,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   public boolean getAutocreatenewrows(){
     return false;
   }
+
+  public boolean isPreserveselection() {
+    // TODO This method is not fully implemented. We need to completely implement this in this class
+    return false;
+  }
+
+  public void setPreserveselection(boolean preserve) {
+    // TODO This method is not fully implemented. We need to completely implement this in this class
+    
+  }
   
 }

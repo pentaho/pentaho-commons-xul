@@ -104,7 +104,9 @@ public interface XulTree extends XulContainer {
 
   public void setTreeLines(boolean visible);
   public boolean isTreeLines();
-  
+
+  void setPreserveselection(boolean preserve);
+  boolean isPreserveselection();
 
   public void setNewitembinding(String binding);
   

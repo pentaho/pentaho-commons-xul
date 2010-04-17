@@ -1650,5 +1650,15 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   public boolean getAutocreatenewrows(){
     return autoCreateNewRows;
   }
+
+  public boolean isPreserveselection() {
+    // TODO This method is not fully implemented. We need to completely implement this in this class
+    return false;
+  }
+
+  public void setPreserveselection(boolean preserve) {
+    // TODO This method is not fully implemented. We need to completely implement this in this class
+    
+  }
   
 }
