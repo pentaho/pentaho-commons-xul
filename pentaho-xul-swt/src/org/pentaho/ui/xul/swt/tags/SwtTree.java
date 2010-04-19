@@ -53,8 +53,10 @@ import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -200,6 +202,46 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       style |= SWT.BORDER;
 
       tree = new TreeViewer((Composite) parentComponent.getManagedObject(), style);
+      Button b = new Button((Composite) parentComponent.getManagedObject(), SWT.PUSH);
+      b.addSelectionListener(new SelectionAdapter(){
+
+        @Override
+        public void widgetSelected(SelectionEvent arg0) {
+          
+        }
+        
+      });
+      
+//      tree.addMouseMoveListener(new MouseMoveListener()  {
+//        TreeItem fLastItem= null;
+//        public void mouseMove(MouseEvent e) {
+//          if (tree.equals(e.getSource())) {
+//            Object o= tree.getItem(new Point(e.x, e.y));
+//            if (o instanceof TreeItem) {
+//              if (!o.equals(fLastItem)) {
+//                fLastItem= (TreeItem)o;
+//                tree.setSelection(new TreeItem[] { fLastItem });
+//              } else if (e.y < tree.getItemHeight() / 4) {
+//                // Scroll up
+//                Point p= tree.toDisplay(e.x, e.y);
+//                Item item= treeViewer.scrollUp(p.x, p.y);
+//                if (item instanceof TreeItem) {
+//                  fLastItem= (TreeItem)item;
+//                  tree.setSelection(new TreeItem[] { fLastItem });
+//                }
+//              } else if (e.y > tree.getBounds().height - tree.getItemHeight() / 4) {
+//                // Scroll down
+//                Point p= tree.toDisplay(e.x, e.y);
+//                Item item= treeViewer.scrollDown(p.x, p.y);
+//                if (item instanceof TreeItem) {
+//                  fLastItem= (TreeItem)item;
+//                  tree.setSelection(new TreeItem[] { fLastItem });
+//                }
+//              }
+//            }
+//          }
+//        }
+//      });
       setManagedObject(tree);
       
     } else {
@@ -1219,8 +1261,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     
     // If preserveselection is set to true in the xul file. We will honor that and save the selection before
     // setting the elements. After the setElements is done we will set the current selected selection
-    if (this.isHierarchical && isPreserveexpandedstate()) {
-      cacheExpandedState();
+    int scrollPos = -1;
+    if (this.isHierarchical){
+      if(isPreserveexpandedstate()) {
+        cacheExpandedState();
+      }
+      scrollPos = tree.getTree().getVerticalBar().getSelection();
     }
     
     destroyPreviousBindings();
@@ -1380,8 +1426,18 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
 
       update();
-      if (this.isHierarchical && isPreserveexpandedstate()) {
-        restoreExpandedState();
+      if (this.isHierarchical){
+        if(isPreserveexpandedstate()) {
+          restoreExpandedState(); 
+        }
+        final int fScrollPos = scrollPos;
+        if(scrollPos > -1){
+//
+//          Point p= tree.getTree().toDisplay(0, fScrollPos);
+//          
+//          TreeItem item = (TreeItem) tree.getTree().getItem(p);
+//          tree.getTree().showItem(item);
+        }
       }
       // Now since we are done with setting the elements, we will now see if preserveselection was set to be true
       // then we will set the selected items to the currently saved one
@@ -1701,7 +1757,17 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     return children;
   }
   
-  private static XulTreeChildren getTreeChildren(XulComponent parent) {
+  private XulTreeChildren getTreeChildren(XulComponent parent) {
+    // Top node is an exception when showing root
+    if(parent == this && this.isHiddenrootnode() == false){
+      List<XulComponent> childNodes = this.getRootChildren().getChildNodes();
+      if(childNodes.size() > 0){
+        parent = childNodes.get(0);
+      } else {
+        return null;
+      }
+    }
+    
     for(XulComponent c : parent.getChildNodes()) {
       if (c instanceof XulTreeChildren) {
         return (XulTreeChildren) c;
@@ -1968,14 +2034,26 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     
     if (this.isHierarchical && this.elements != null) {
 
+      if(currentSelectedItems != null && currentSelectedItems.equals(items)){
+        return;
+      }
       List<Object> selection = new ArrayList<Object>();
 
       String property = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
       for(T t : items){
+        if(this.elements.contains(t)){
+          continue;
+        }
         FindBoundItemTuple tuple = new FindBoundItemTuple(t);
         findBoundItem(this.elements, this, property, tuple);
         
-        selection.add(tuple.treeItem);
+        XulComponent bItem = tuple.treeItem;
+        if(tuple.treeItem == this ){ //Selecting top-level handled specially.   
+          bItem = this.getRootChildren().getChildNodes().get(0);
+        }
+        if(bItem != null){
+          selection.add(bItem);
+        }
       }
       tree.setSelection(new StructuredSelection(selection));
       
