@@ -1443,14 +1443,16 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       // then we will set the selected items to the currently saved one
       if(isPreserveselection() && currentSelectedItems != null && currentSelectedItems.size()  > 0) {
         setSelectedItems(currentSelectedItems);
+        suppressEvents = false;
+      } else {
+        // treat as a selection change
+        suppressEvents = false;
+        changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
+        changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
+        changeSupport.firePropertyChange("selectedItems", null, Collections.EMPTY_LIST);
+        changeSupport.firePropertyChange("selectedItem", "", null);
       }
-      suppressEvents = false;
 
-      // treat as a selection change
-      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
-      changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
-      changeSupport.firePropertyChange("selectedItems", null, Collections.EMPTY_LIST);
-      changeSupport.firePropertyChange("selectedItem", "", null);
     } catch (XulException e) {
       logger.error("error adding elements", e);
     } catch (Exception e) {
@@ -2033,17 +2035,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     int[] selIndexes= new int[items.size()];
     
     if (this.isHierarchical && this.elements != null) {
-
-      if(currentSelectedItems != null && currentSelectedItems.equals(items)){
-        return;
-      }
       List<Object> selection = new ArrayList<Object>();
 
       String property = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
       for(T t : items){
-        if(this.elements.contains(t)){
-          continue;
-        }
         FindBoundItemTuple tuple = new FindBoundItemTuple(t);
         findBoundItem(this.elements, this, property, tuple);
         
