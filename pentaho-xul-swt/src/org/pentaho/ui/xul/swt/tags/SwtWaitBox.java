@@ -59,6 +59,9 @@ public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox{
   
   public void start(){
     dialog = new Shell(getParentObject(), SWT.DIALOG_TRIM | SWT.RESIZE);
+    if(getParentObject().getImage() != null){
+      dialog.setImage(getParentObject().getImage());
+    }
     dialog.getShell().setSize(300, 150);
     GridLayout gl = new GridLayout();
     gl.verticalSpacing = 4;

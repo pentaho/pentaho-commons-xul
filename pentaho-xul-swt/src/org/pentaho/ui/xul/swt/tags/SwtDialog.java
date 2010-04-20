@@ -144,7 +144,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     };
     newDialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
     
-    setAppicon(this.appIcon);
+    if(StringUtils.isNotEmpty(this.appIcon)){
+      setAppicon(this.appIcon);
+    } else if(possibleParent != null){
+      newDialog.getShell().setImage(((Shell) possibleParent).getImage());
+    }
     return newDialog;
   }
   
