@@ -1393,8 +1393,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         final int fScrollPos = scrollPos;
         if(scrollPos > -1){
           
-          TreeItem item = tree.getTree().getItem(new Point(5, fScrollPos));
-          tree.getTree().showItem(item);
+//          TreeItem item = tree.getTree().getItem(new Point(5, fScrollPos));
+//          tree.getTree().showItem(item);
         }
       }
       // Now since we are done with setting the elements, we will now see if preserveselection was set to be true
