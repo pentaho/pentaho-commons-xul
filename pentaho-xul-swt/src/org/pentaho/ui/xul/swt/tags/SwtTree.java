@@ -202,46 +202,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       style |= SWT.BORDER;
 
       tree = new TreeViewer((Composite) parentComponent.getManagedObject(), style);
-      Button b = new Button((Composite) parentComponent.getManagedObject(), SWT.PUSH);
-      b.addSelectionListener(new SelectionAdapter(){
-
-        @Override
-        public void widgetSelected(SelectionEvent arg0) {
-          
-        }
-        
-      });
-      
-//      tree.addMouseMoveListener(new MouseMoveListener()  {
-//        TreeItem fLastItem= null;
-//        public void mouseMove(MouseEvent e) {
-//          if (tree.equals(e.getSource())) {
-//            Object o= tree.getItem(new Point(e.x, e.y));
-//            if (o instanceof TreeItem) {
-//              if (!o.equals(fLastItem)) {
-//                fLastItem= (TreeItem)o;
-//                tree.setSelection(new TreeItem[] { fLastItem });
-//              } else if (e.y < tree.getItemHeight() / 4) {
-//                // Scroll up
-//                Point p= tree.toDisplay(e.x, e.y);
-//                Item item= treeViewer.scrollUp(p.x, p.y);
-//                if (item instanceof TreeItem) {
-//                  fLastItem= (TreeItem)item;
-//                  tree.setSelection(new TreeItem[] { fLastItem });
-//                }
-//              } else if (e.y > tree.getBounds().height - tree.getItemHeight() / 4) {
-//                // Scroll down
-//                Point p= tree.toDisplay(e.x, e.y);
-//                Item item= treeViewer.scrollDown(p.x, p.y);
-//                if (item instanceof TreeItem) {
-//                  fLastItem= (TreeItem)item;
-//                  tree.setSelection(new TreeItem[] { fLastItem });
-//                }
-//              }
-//            }
-//          }
-//        }
-//      });
       setManagedObject(tree);
       
     } else {
@@ -1432,11 +1392,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         }
         final int fScrollPos = scrollPos;
         if(scrollPos > -1){
-//
-//          Point p= tree.getTree().toDisplay(0, fScrollPos);
-//          
-//          TreeItem item = (TreeItem) tree.getTree().getItem(p);
-//          tree.getTree().showItem(item);
+          
+          TreeItem item = tree.getTree().getItem(new Point(5, fScrollPos));
+          tree.getTree().showItem(item);
         }
       }
       // Now since we are done with setting the elements, we will now see if preserveselection was set to be true
