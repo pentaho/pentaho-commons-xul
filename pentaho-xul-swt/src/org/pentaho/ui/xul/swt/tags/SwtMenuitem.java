@@ -130,6 +130,15 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
       if(accessKey.indexOf("alt") > -1){
         mask += SWT.ALT;
       }
+      if(accessKey.indexOf("pageup") > -1) {
+        mask += SWT.PAGE_UP;
+      }
+      if(accessKey.indexOf("pagedown") > -1) {
+        mask += SWT.PAGE_DOWN;
+      }
+      if(accessKey.indexOf("home") > -1) {
+        mask += SWT.HOME;
+      }
       String remainder = accessKey.replaceAll("ctrl", "").replaceAll("shift", "").replaceAll("alt", "").replaceAll("-", "").trim();
       if(remainder.length() == 1){
         mask += remainder.toUpperCase().charAt(0);
