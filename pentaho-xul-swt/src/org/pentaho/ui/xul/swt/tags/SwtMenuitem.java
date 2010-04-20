@@ -4,9 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.swing.KeyStroke;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.LegacyActionTools;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -142,6 +145,9 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
       String remainder = accessKey.replaceAll("ctrl", "").replaceAll("shift", "").replaceAll("alt", "").replaceAll("-", "").trim();
       if(remainder.length() == 1){
         mask += remainder.toUpperCase().charAt(0);
+      } else if (remainder.length() > 1 && remainder.startsWith("f")){
+        // function key
+        mask += LegacyActionTools.findKeyCode(remainder);        
       }
       
       item.setAccelerator(mask);

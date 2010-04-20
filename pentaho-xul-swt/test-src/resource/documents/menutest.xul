@@ -17,13 +17,14 @@
         <menuitem label="Cut" accesskey="t" command="mainController.cut()" />
         <menuitem label="Copy" accesskey="c" command="mainController.copy()" />
         <menuitem label="Paste" acceltext="P" accesskey="p" disabled="true" command="mainController.paste()" id="paseMenuItem" image="foo.png"/>
+        <menuitem lebel="Refresh" acceltext="CTRL-F10" accesskey="f10" command="mainController.refresh()" id="refreshMenuItem" />
       </menupopup>
     </menu>
     <menu id="file-menu" label="Help" accesskey="h">
       <menupopup id="help-popup">
         <menuitem label="Help Contents" accesskey="c" />
       </menupopup>
-    </menu>
+    </menu>    
   </menubar>
 
 </window>

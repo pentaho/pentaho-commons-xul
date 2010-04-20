@@ -14,8 +14,7 @@ public class SwtHarness {
   public static void main(String[] args){
     try{
       
-      InputStream in = SwtXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/menulist.xul");
-
+      InputStream in = SwtXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/menutest.xul");
       if(in == null){
         System.out.println("Input is null");
         System.exit(123);
