@@ -311,6 +311,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     if(pack){
       dialog.getShell().pack();
     }
+    dialog.getMainArea().layout(true, true);
     
     // Timing is everything - fire the onLoad evetns so tht anyone who is trying to
     notifyListeners(XulRoot.EVENT_ON_LOAD);
