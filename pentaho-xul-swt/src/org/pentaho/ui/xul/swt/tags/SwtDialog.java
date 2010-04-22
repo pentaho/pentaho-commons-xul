@@ -20,6 +20,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -391,6 +392,17 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       }
       
       activeDialogButtons.put(thisButton.toString().toUpperCase(), swtButton);
+    }
+    
+    int width = 75;
+    for(Map.Entry<String, SwtButton> entry : activeDialogButtons.entrySet()){
+      width = Math.max(width, entry.getValue().button.getBounds().width);
+    }
+    
+    GridData gd = new GridData();
+    gd.widthHint = width;
+    for(Map.Entry<String, SwtButton> entry : activeDialogButtons.entrySet()){
+      entry.getValue().button.setLayoutData(gd);
     }
     
   }
