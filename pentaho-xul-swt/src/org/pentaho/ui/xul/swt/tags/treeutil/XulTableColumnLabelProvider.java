@@ -33,7 +33,8 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
 
   private XulTree tree;
   private XulDomContainer domContainer;
-  private static Log logger = LogFactory.getLog(XulTableColumnLabelProvider.class);
+  private static Log logger = LogFactory
+      .getLog(XulTableColumnLabelProvider.class);
 
   private int imageIndex = 0;
 
@@ -41,10 +42,14 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
     this.tree = tree;
     this.domContainer = aDomContainer;
     if (JFaceResources.getImageRegistry().getDescriptor(CHECKED) == null) {
-      JFaceResources.getImageRegistry().put(UNCHECKED,
-          makeImage(((TableViewer) tree.getManagedObject()).getControl().getShell(), false));
-      JFaceResources.getImageRegistry().put(CHECKED,
-          makeImage(((TableViewer) tree.getManagedObject()).getControl().getShell(), true));
+      JFaceResources.getImageRegistry().put(
+          UNCHECKED,
+          makeImage(((TableViewer) tree.getManagedObject()).getControl()
+              .getShell(), false));
+      JFaceResources.getImageRegistry().put(
+          CHECKED,
+          makeImage(((TableViewer) tree.getManagedObject()).getControl()
+              .getShell(), true));
     }
   }
 
@@ -62,17 +67,27 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
     case COMBOBOX:
     case EDITABLECOMBOBOX:
       Vector vec = (Vector) cell.getValue();
-      if(vec != null  && vec.size() > cell.getSelectedIndex()){
+      if (vec != null && vec.size() > cell.getSelectedIndex()) {
         return "" + vec.get(cell.getSelectedIndex());
       } else {
         return "";
       }
     case TEXT:
       return cell.getLabel() != null ? cell.getLabel() : "";
+    case PASSWORD:
+      return String.format(getPasswordString(cell.getLabel().length()));
     default:
       return cell.getLabel() != null ? cell.getLabel() : "";
     }
 
+  }
+  
+  private String getPasswordString(int len){
+    StringBuilder b = new StringBuilder();
+    while(len-- > 0){
+      b.append('*');
+    }
+    return b.toString();
   }
 
   public void addListener(ILabelProviderListener ilabelproviderlistener) {
@@ -96,10 +111,11 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
         return JFaceResources.getImageRegistry().get(UNCHECKED);
       }
     }
-    
-    if (tree.getColumns().getColumn(col).getImagebinding() != null){
-      String src = ((SwtTreeItem)row).getImage();
-      Display display = ((TableViewer) tree.getManagedObject()).getTable().getDisplay();
+
+    if (tree.getColumns().getColumn(col).getImagebinding() != null) {
+      String src = ((SwtTreeItem) row).getImage();
+      Display display = ((TableViewer) tree.getManagedObject()).getTable()
+          .getDisplay();
       return SwtXulUtil.getCachedImage(src, domContainer, display);
     }
     return null;
@@ -127,15 +143,15 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
 
   private boolean isSelected(Object row, int col) {
     XulTreeRow r = ((XulTreeItem) row).getRow();
-    if(r == null || r.getChildNodes().size() < col){
+    if (r == null || r.getChildNodes().size() < col) {
       return false;
     }
     XulTreeCell c = r.getCell(col);
-    if(c == null){
+    if (c == null) {
       return false;
     }
     Object val = c.getValue();
-    if(val == null || val instanceof Boolean == false){
+    if (val == null || val instanceof Boolean == false) {
       return false;
     }
     return (Boolean) c.getValue();

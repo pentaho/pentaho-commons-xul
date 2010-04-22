@@ -45,6 +45,7 @@ public class XulTreeColumnModifier implements ICellModifier {
       ((ComboBoxCellEditor) ((TreeViewer) tree.getManagedObject()).getCellEditors()[colIdx]).setItems(items);
       return cell.getSelectedIndex();
     case TEXT:
+    case PASSWORD:
       ((TextCellEditor) ((TreeViewer) tree.getManagedObject()).getCellEditors()[colIdx]).getControl()
           .setEnabled(!cell.isDisabled());
 

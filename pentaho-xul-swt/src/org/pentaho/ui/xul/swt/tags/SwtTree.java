@@ -61,6 +61,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -791,6 +792,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 //            }
 //
 //          });
+          break;
+        case PASSWORD:
+          editor = new TextCellEditor(table.getTable());
+          ((Text) editor.getControl()).setEchoChar('*');
           break;
         case TEXT:
         default:

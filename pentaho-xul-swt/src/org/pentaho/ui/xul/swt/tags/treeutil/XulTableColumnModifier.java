@@ -43,6 +43,7 @@ public class XulTableColumnModifier implements ICellModifier {
       ((ComboBoxCellEditor) ((TableViewer) tree.getManagedObject()).getCellEditors()[colIdx]).setItems(items);
       return cell.getSelectedIndex();
     case TEXT:
+    case PASSWORD:
       ((TextCellEditor) ((TableViewer) tree.getManagedObject()).getCellEditors()[colIdx]).getControl()
           .setEnabled(!cell.isDisabled());
 
