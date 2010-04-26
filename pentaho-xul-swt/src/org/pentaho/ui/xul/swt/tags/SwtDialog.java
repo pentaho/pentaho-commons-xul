@@ -239,8 +239,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       if(!swtB.isDisposed()) {
         swtB.dispose();
       }
-      removeChild(b);
       activeDialogButtons.remove(bName);
+      removeChild(b);
     }
   }
 
