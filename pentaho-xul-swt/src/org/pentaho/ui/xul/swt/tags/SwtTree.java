@@ -1939,7 +1939,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         }
       }
       // todo, can i trigger this through another mechanism?
-      //setElements(elements);
+      setElements(elements);
     } else {
       // non-binding path
       // TODO: add necessary xul dom
@@ -1956,7 +1956,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           removeItemFromElements(item);
         }
         cachedDndItems = null;
-        //setElements(elements);
+        setElements(elements);
       } else {
         if(isHierarchical()) {
           tree.remove(tree.getSelection());
