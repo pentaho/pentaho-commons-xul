@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+
+<!--
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 2.1 of the License, or (at your option) any later version.
+  ~
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library; if not, write to the Free Software
+  ~ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  ~
+  ~ Copyright 2009 Pentaho Corporation.  All rights reserved.
+  -->
+
+<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:pen="http://www.pentaho.org/2008/xul"
+        id="contact_dialog"
+        title="Add Contact"
+        height="300" width="300"
+        buttons="accept, cancel"
+        buttonalign="right"
+        buttonlabelaccept="Ok"
+        buttonlabelcancel="Cancel"
+        ondialogaccept="controller.saveDialog()"
+        ondialogcancel="controller.cancelDialog()">
+
+    <groupbox orient="vertical">
+        <caption label="New Contact"/>
+        <label value="First Name"/>
+        <textbox id="firstNameTxt"/>
+        <label value="Last Name"/>
+        <textbox id="lastNameTxt"/>
+        <label value="Email"/>
+        <textbox id="emailTxt"/>
+    </groupbox>
+</dialog>

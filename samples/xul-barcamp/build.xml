@@ -1,0 +1,53 @@
+<!--
+  ~ This library is free software; you can redistribute it and/or
+  ~ modify it under the terms of the GNU Lesser General Public
+  ~ License as published by the Free Software Foundation; either
+  ~ version 2.1 of the License, or (at your option) any later version.
+  ~
+  ~ This library is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this library; if not, write to the Free Software
+  ~ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+  ~
+  ~ Copyright 2009 Pentaho Corporation.  All rights reserved.
+  -->
+
+<!--===========================================================================
+  
+  This build file will use the common_build.xml file as the default build
+  process and should only override the tasks that need to differ from
+  the common build file.
+  
+  See common_build.xml for more details
+============================================================================-->
+<project name="Shandor XUL | Barcamp Demo" basedir="." default="jar"
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <description>
+        This build file is used to create the Web project
+        and works with the common_build.xml file.
+    </description>
+
+    <!-- Define the default location of the gwt common build file -->
+    <property name="gwt.common.build.file" value="./gwt_common_build.xml"
+              description="This is the location of the standardized common_build.xml file"/>
+
+    <!-- Define the default location of the common build file -->
+    <property name="common.build.file" value="./common_build.xml"
+              description="This is the location of the standardized common_build.xml file"/>
+
+    <!-- Import the common_build.xml file which contains all the default tasks -->
+    <import file="${gwt.common.build.file}"/>
+
+    <!--
+      AS STATED ABOVE, THE ONLY TASKS THAT SHOULD EXIST IN THIS BUILD FILE ARE
+      THE TASKS THAT NEED TO DIFFER FROM THE DEFAULT IMPLEMENTATION OF THE TASKS
+      FOUND IN common_build.xml.
+    -->
+
+
+</project>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module relativePaths="false" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="gwt" name="GWT">
+      <configuration>
+        <setting name="additionalCompilerParameters" value="" />
+        <setting name="compilerMaxHeapSize" value="512" />
+        <setting name="compilerOutputPath" value="" />
+        <setting name="gwtScriptOutputStyle" value="DETAILED" />
+        <setting name="gwtSdkUrl" value="file:///opt/gwt-linux-1.5.3" />
+        <setting name="runGwtCompilerOnMake" value="true" />
+        <packaging>
+          <module name="org.pentaho.barcamp.GwtContactManager" path="/org.pentaho.barcamp.GwtContactManager" />
+        </packaging>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/nbaker/Documents/workspaces/shandor-xul/pentaho-database/lib-swt/linux/x86/swt.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/nbaker/Documents/workspaces/shandor-xul/pentaho-database/lib-swt/commands.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/nbaker/Documents/workspaces/shandor-xul/pentaho-database/lib-swt/common.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/nbaker/Documents/workspaces/shandor-xul/pentaho-database/lib-swt/jface.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar:///home/nbaker/Documents/workspaces/shandor-xul/pentaho-database/lib-swt/runtime.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="module" module-name="shandor-xul-core" />
+    <orderEntry type="module" module-name="shandor-xul-gwt" />
+    <orderEntry type="module" module-name="shandor-xul-swt" />
+    <orderEntry type="module" module-name="shandor-xul-swing" />
+    <orderEntry type="library" name="gwt-user" level="project" />
+  </component>
+</module>
+

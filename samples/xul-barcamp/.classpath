@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="lib" path="dev-lib/gwt-dev-1.7.1.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commands-3.3.0-I20070605-0010.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.2.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/gwt-servlet-1.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/jaxen-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jface-3.3.0-I20070606-0010.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-xul-core-TRUNK-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-xul-core-TRUNK-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-xul-gwt-TRUNK-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-xul-gwt-TRUNK-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-xul-swing-TRUNK-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/pentaho-xul-swt-TRUNK-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="codegen-lib/gwt-user-1.7.1.jar"/>
+	<classpathentry kind="lib" path="codegen-lib/gwtx-1.5-20081002.jar"/>
+	<classpathentry kind="lib" path="codegen-lib/pentaho-gwt-widgets-TRUNK-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="codegen-lib/pentaho-gwt-widgets-TRUNK-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="codegen-lib/gwt-dnd-2.5.6.jar"/>
+	<classpathentry kind="lib" path="codegen-lib/gwt-incubator-1-5_Sept_04.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
