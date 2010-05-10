@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.gwt.binding;
 
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
+import org.pentaho.ui.xul.binding.BindingExceptionHandler;
 import org.pentaho.ui.xul.binding.BindingFactory;
 import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.dom.Document;
@@ -11,6 +12,8 @@ public class GwtBindingFactory implements BindingFactory {
   private Document document;
   
   private Binding.Type type = Binding.Type.BI_DIRECTIONAL;
+  
+  private BindingExceptionHandler exceptionHandler;
 
   public GwtBindingFactory(Document document){
     this.document = document;
@@ -26,6 +29,7 @@ public class GwtBindingFactory implements BindingFactory {
   
   private Binding applyBinding(Binding b, BindingConvertor... converters) {
     b.setBindingType(type);
+    b.setExceptionHandler(exceptionHandler);
     if(converters != null && converters.length > 0){
       b.setConversion(converters[0]);
     }
@@ -62,5 +66,11 @@ public class GwtBindingFactory implements BindingFactory {
     Binding b = new GwtBinding(source, sourceAttr, target, targetAttr);
     return applyBinding(b, converters);
   }
+
+  public void setExceptionHandler(BindingExceptionHandler handler) {
+    this.exceptionHandler = handler;
+    
+  }
+  
   
 }

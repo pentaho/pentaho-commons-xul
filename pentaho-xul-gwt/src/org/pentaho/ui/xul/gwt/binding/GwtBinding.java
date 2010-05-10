@@ -14,6 +14,7 @@ import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.binding.BindingException;
+import org.pentaho.ui.xul.binding.BindingExceptionHandler;
 import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
 import org.pentaho.ui.xul.dom.Document;
 
@@ -43,6 +44,8 @@ public class GwtBinding implements Binding{
   protected boolean destroyed = false;
 
   protected Type bindingStrategy = Type.BI_DIRECTIONAL;
+  
+  protected BindingExceptionHandler exceptionHandler;
 
   public GwtBinding(){
     
@@ -186,7 +189,7 @@ public class GwtBinding implements Binding{
     } catch(Exception e){
       //TODO: re-implement IllegalAccessException.
       //cannot be in interface due to GWT incompatibility.
-      throw new XulException(e);
+      handleException(new BindingException(e));
     }
   }
 
@@ -205,13 +208,13 @@ public class GwtBinding implements Binding{
   protected PropertyChangeListener setupBinding(final Object a, final String va, final Object b, final String vb,
       final Direction dir) {
     if (a == null || va == null) {
-      throw new BindingException("source bean or property is null");
+      handleException(new BindingException("source bean or property is null"));
     }
     if (!(a instanceof XulEventSource)) {
-      throw new BindingException("Binding error, source object "+a+" not a XulEventSource instance");
+      handleException(new BindingException("Binding error, source object "+a+" not a XulEventSource instance"));
     }
     if (b == null || vb == null) {
-      throw new BindingException("target bean or property is null");
+      handleException(new BindingException("target bean or property is null"));
     }
     GwtBindingMethod sourceGetMethod = GwtBindingContext.typeController.findGetMethod(a, va);
 
@@ -252,9 +255,8 @@ public class GwtBinding implements Binding{
             
           
           } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
-            throw new BindingException("Error invoking setter method for property [" + targetAttr + "] on target [" + b + "] with arg [" + finalVal + "] which is of type [" + finalVal == null ? "null" : finalVal.getClass().getName() + "]", e);
+            handleException(new BindingException("Error invoking setter method for property [" + targetAttr + "] on target [" + b + "] with arg [" + finalVal + "] which is of type [" + finalVal == null ? "null" : finalVal.getClass().getName() + "]", e));
           }
         }
       }
@@ -326,6 +328,20 @@ public class GwtBinding implements Binding{
   public void setContext(BindingContext context) {
     this.context = context;
   }
+
+  public void setExceptionHandler(BindingExceptionHandler handler) {
+    this.exceptionHandler = handler;
+  }
+  
+  protected void handleException(BindingException exception) {
+    if(exceptionHandler != null){
+      exceptionHandler.handleException(exception);
+    } else {
+      throw exception;
+    }
+  }    
+  
+  
   
 }
 

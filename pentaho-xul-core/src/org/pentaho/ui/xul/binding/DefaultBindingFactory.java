@@ -7,6 +7,8 @@ public class DefaultBindingFactory implements BindingFactory {
   private Document document;
   
   private Binding.Type type = Binding.Type.BI_DIRECTIONAL;
+  
+  private BindingExceptionHandler exceptionHandler;
 
   public void setDocument(Document document) {
     this.document = document;
@@ -18,6 +20,7 @@ public class DefaultBindingFactory implements BindingFactory {
   
   private Binding applyBinding(Binding b, BindingConvertor... converters) {
     b.setBindingType(type);
+    b.setExceptionHandler(this.exceptionHandler);
     if(converters != null && converters.length > 0){
       b.setConversion(converters[0]);
     }
@@ -55,4 +58,9 @@ public class DefaultBindingFactory implements BindingFactory {
     return applyBinding(b, converters);
   }
 
+  public void setExceptionHandler(BindingExceptionHandler handler) {
+    this.exceptionHandler = handler;
+  }
+
+  
 }

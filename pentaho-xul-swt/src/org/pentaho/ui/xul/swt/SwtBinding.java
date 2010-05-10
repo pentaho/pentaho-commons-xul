@@ -40,13 +40,13 @@ public class SwtBinding extends DefaultBinding {
   protected PropertyChangeListener setupBinding(final Reference a, final String va, final Reference b, final String vb,
       final Direction dir) {
     if (a.get() == null || va == null) {
-      throw new BindingException("source bean or property is null");
+      handleException(new BindingException("source bean or property is null"));
     }
     if (!(a.get() instanceof XulEventSource)) {
-      throw new BindingException("Binding error, source object " + a.get() + " not a XulEventSource instance");
+      handleException(new BindingException("Binding error, source object " + a.get() + " not a XulEventSource instance"));
     }
     if (b.get() == null || vb == null) {
-      throw new BindingException("target bean or property is null");
+      handleException(new BindingException("target bean or property is null"));
     }
     Method sourceGetMethod = BindingUtil.findGetMethod(a.get(), va);
 
@@ -86,11 +86,11 @@ public class SwtBinding extends DefaultBinding {
                       }
                       targetSetMethod.invoke(targetObject, finalVal);
                     } catch (InvocationTargetException e) {
-                      throw new BindingException("Error invoking setter method [" + targetSetMethod.getName()
-                          + "] on target: " + target, e);
+                      handleException(new BindingException("Error invoking setter method [" + targetSetMethod.getName()
+                          + "] on target: " + target, e));
                     } catch (IllegalAccessException e) {
-                      throw new BindingException("Error invoking setter method [" + targetSetMethod.getName()
-                          + "] on target: " + target, e);
+                      handleException(new BindingException("Error invoking setter method [" + targetSetMethod.getName()
+                          + "] on target: " + target, e));
                     }
                   }
               });
@@ -100,16 +100,16 @@ public class SwtBinding extends DefaultBinding {
 
             Object targetObject = b.get();
             if (targetObject == null) {
-              logger.error("Binding target was Garbage Collected, removing propListener");
+              logger.debug("Binding target was Garbage Collected, removing propListener");
               destroyBindings();
               return;
             }
-            logger.info("Setting val: " + finalVal + " on: " + targetObject);
+            logger.debug("Setting val: " + finalVal + " on: " + targetObject);
             targetSetMethod.invoke(targetObject, finalVal);
 
           } catch (Exception e) {
-            throw new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "
-                + target.get(), e);
+            handleException(new BindingException("Error invoking setter method [" + targetSetMethod.getName() + "] on target: "
+                + target.get(), e));
           }
         }
       }

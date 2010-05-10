@@ -68,5 +68,7 @@ public interface Binding {
   BindingContext getContext();
 
   void setContext(BindingContext context);
+  
+  void setExceptionHandler(BindingExceptionHandler handler);
 
 }
