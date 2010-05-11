@@ -55,7 +55,14 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
   }
 
   public void setAccesskey(String accessKey) {
-    menuitem.setMnemonic(accessKey.charAt(0));
+    if (accessKey == null || accessKey.length() == 0)
+    {
+      menuitem.setMnemonic(0);
+    }
+    else
+    {
+      menuitem.setMnemonic(accessKey.charAt(0));
+    }
   }
 
   public void setDisabled(boolean disabled) {
@@ -106,4 +113,3 @@ public class SwingMenuitem extends SwingElement implements XulMenuitem{
 
 }
 
-  

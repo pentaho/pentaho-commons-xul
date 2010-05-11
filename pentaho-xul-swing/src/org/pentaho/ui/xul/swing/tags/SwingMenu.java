@@ -16,19 +16,19 @@ import org.pentaho.ui.xul.dom.Element;
 
 public class SwingMenu extends AbstractSwingContainer implements XulMenu {
 
-  
+
   private JMenu menu;
-  
+
   private String accel = null;
-  
+
   public SwingMenu(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menu");
-    
+
     menu = new JMenu();
     setManagedObject(menu);
-    
+
   }
-  
+
 
   public void layout() {
     for (Element comp : getChildNodes()) {
@@ -49,7 +49,7 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
     }
     initialized = true;
   }
-  
+
   public String getAcceltext() {
     return accel;
   }
@@ -57,7 +57,7 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
   public String getAccesskey() {
     return String.valueOf(menu.getText().charAt(menu.getDisplayedMnemonicIndex()));
   }
-  
+
   public boolean isDisabled() {
     return !menu.isEnabled();
   }
@@ -72,7 +72,14 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
   }
 
   public void setAccesskey(String accessKey) {
-    menu.setMnemonic(accessKey.charAt(0));
+    if (accessKey == null || accessKey.length() == 0)
+    {
+      menu.setMnemonic(0);
+    }
+    else
+    {
+      menu.setMnemonic(accessKey.charAt(0));
+    }
   }
 
   public void setDisabled(boolean disabled) {
@@ -89,4 +96,3 @@ public class SwingMenu extends AbstractSwingContainer implements XulMenu {
   }
 }
 
-  
