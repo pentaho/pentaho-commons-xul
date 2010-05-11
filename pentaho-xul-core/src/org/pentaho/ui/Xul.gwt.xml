@@ -12,6 +12,7 @@
         <include name="**/binding/Binding.java"/>
         <include name="**/binding/InlineBindingExpression.java"/>
         <include name="**/binding/BindingException.java"/>
+        <include name="**/binding/BindingExceptionHandler.java"/>
         <include name="**/binding/BindingConvertor.java"/>
         <include name="**/binding/BindingContext.java"/>
         <include name="**/binding/BindingFactory.java"/>
