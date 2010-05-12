@@ -56,7 +56,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Item;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -1777,14 +1779,26 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
   
   @Override
-  public void setPopup(Menu m) {
+  public void setPopup(final Menu menu) {
     final Control control;
     if (isHierarchical()){
       control = tree.getControl();
     }else{
       control = table.getControl();
     }
-    control.setMenu(m);
+//    control.setMenu(m);
+    control.addListener(SWT.MenuDetect, new Listener(){
+
+      public void handleEvent(Event evt) {
+
+        
+        Point pt = control.getDisplay().map(control, null, new Point(evt.x, evt.y));
+        menu.setLocation(evt.x, evt.y);
+        menu.setVisible(true);
+      }
+      
+    });
+
   }
 
   protected Control getDndObject() {
