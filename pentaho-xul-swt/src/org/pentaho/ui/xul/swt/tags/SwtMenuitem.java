@@ -124,28 +124,31 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     
     if(item != null && item.isDisposed() == false){
       int mask = 0;
-      if(accessKey.indexOf("ctrl") > -1){
+      if(accessKey.indexOf("ctrl") > -1){ //$NON-NLS-1$
         mask += SWT.CTRL;
       }
-      if(accessKey.indexOf("shift") > -1){
+      if(accessKey.indexOf("shift") > -1){ //$NON-NLS-1$
         mask += SWT.SHIFT;
       }
-      if(accessKey.indexOf("alt") > -1){
+      if(accessKey.indexOf("alt") > -1){ //$NON-NLS-1$
         mask += SWT.ALT;
       }
-      if(accessKey.indexOf("pageup") > -1) {
+      if(accessKey.indexOf("pageup") > -1) { //$NON-NLS-1$
         mask += SWT.PAGE_UP;
       }
-      if(accessKey.indexOf("pagedown") > -1) {
+      if(accessKey.indexOf("pagedown") > -1) { //$NON-NLS-1$
         mask += SWT.PAGE_DOWN;
       }
-      if(accessKey.indexOf("home") > -1) {
+      if(accessKey.indexOf("home") > -1) { //$NON-NLS-1$
         mask += SWT.HOME;
+      }
+      if (accessKey.indexOf("esc") > -1) { //$NON-NLS-1$
+        mask += SWT.ESC;
       }
       String remainder = accessKey.replaceAll("ctrl", "").replaceAll("shift", "").replaceAll("alt", "").replaceAll("-", "").trim();
       if(remainder.length() == 1){
         mask += remainder.toUpperCase().charAt(0);
-      } else if (remainder.length() > 1 && remainder.startsWith("f")){
+      } else if (remainder.length() > 1 && remainder.startsWith("f")){ //$NON-NLS-1$
         // function key
         mask += LegacyActionTools.findKeyCode(remainder);        
       }
