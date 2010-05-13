@@ -5,6 +5,8 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -52,17 +54,15 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     if (box == null){
       return;
     }
-    
-    box.addKeyListener(new KeyListener(){
+    box.addModifyListener(new ModifyListener(){
 
-      public void keyPressed(KeyEvent arg0) { 
-        oldValue = box.getText();
-      }
-      public void keyReleased(KeyEvent arg0) {
-        if(!oldValue.equals(box.getText())){
+      public void modifyText(ModifyEvent arg0) {
+        if(!oldValue.equals(getValue())){
           changeSupport.firePropertyChange("value", null, getValue());
+          oldValue = box.getText();
         }
       }
+      
     });
     box.addListener(SWT.DefaultSelection, new Listener() {
       public void handleEvent(Event e) {
