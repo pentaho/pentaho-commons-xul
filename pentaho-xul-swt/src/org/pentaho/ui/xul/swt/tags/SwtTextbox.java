@@ -80,7 +80,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     if(text == null){
       text = "";
     }
-    if(! this.text.equals(text) || 
+    if((this.text == null) || (! this.text.equals(text)) || 
         // the next check  needs to be here for the following scenario:
         // xul def has a default text value and isMultiLine - 
         // the textbox will be re-created, but the text isn't reset, 

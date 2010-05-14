@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.tags.SwtDialog;
 import org.pentaho.ui.xul.util.XulDialogCallback;
@@ -43,8 +44,8 @@ public class MessageDialogBase extends SwtElement {
   protected Shell getParentObject(){
     if(parentObject != null){
       return parentObject;
-    } else if (getParent() instanceof SwtDialog){
-      return ((SwtDialog)getParent()).getShell();
+    } else if (getParent() instanceof XulRoot){
+      return (Shell) ((XulRoot)getParent()).getRootObject();
     } else if(getParent() != null){
       return (Shell) getParent().getManagedObject();
     } else {
