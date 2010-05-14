@@ -77,7 +77,10 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
    * @param text
    */
   public void setValue( String text ) {
-    if((this.text == null) || (! this.text.equals(text)) || 
+    if(text == null){
+      text = "";
+    }
+    if(! this.text.equals(text) || 
         // the next check  needs to be here for the following scenario:
         // xul def has a default text value and isMultiLine - 
         // the textbox will be re-created, but the text isn't reset, 
@@ -85,13 +88,11 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
         // Run the getValue() test of the SwtTextboxTest for validation. 
         ((!textBox.isDisposed()) && (!text.equals(textBox.getText())))){
       this.text = text;
-      if ((!textBox.isDisposed()) && (text != null)){
+      if ((!textBox.isDisposed())){
         int pos = textBox.getCaretPosition();
         textBox.setText(text);
         textBox.setSelection(pos);
       }
-    } else {
-      int i=0;
     }
   }
   
