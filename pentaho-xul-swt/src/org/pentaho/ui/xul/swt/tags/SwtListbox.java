@@ -61,27 +61,32 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
 
       @Override
       public void widgetSelected(SelectionEvent arg0) {
-        int[] indices = listBox.getSelectionIndices();
-        SwtListbox.this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
-        curSelectedIndices = indices;
-    
-        
-        SwtListbox.this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndex, getSelectedIndex());
-        curSelectedIndex = getSelectedIndex();
-        
-        if(elements != null){
-          Object newSelectedObject = getSelectedItem();
-          SwtListbox.this.changeSupport.firePropertyChange("selectedItem", prevSelectedObject, newSelectedObject);
-          prevSelectedObject = newSelectedObject;
-          
-          Object[] newSelectedObjectList = getSelectedItems();
-          SwtListbox.this.changeSupport.firePropertyChange("selectedItems", null, newSelectedObjectList);
-        }
+        fireSelectedEvents();
       }
       
     });
     
     setManagedObject(listBox);
+  }
+  
+  private void fireSelectedEvents(){
+
+    int[] indices = listBox.getSelectionIndices();
+    SwtListbox.this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
+    curSelectedIndices = indices;
+
+    
+    SwtListbox.this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndex, getSelectedIndex());
+    curSelectedIndex = getSelectedIndex();
+    
+    if(elements != null){
+      Object newSelectedObject = getSelectedItem();
+      SwtListbox.this.changeSupport.firePropertyChange("selectedItem", prevSelectedObject, newSelectedObject);
+      prevSelectedObject = newSelectedObject;
+      
+      Object[] newSelectedObjectList = getSelectedItems();
+      SwtListbox.this.changeSupport.firePropertyChange("selectedItems", null, newSelectedObjectList);
+    }
   }
 
   public boolean isDisabled() {
@@ -302,6 +307,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   public void setSelectedIndices(int[] indices) {
     listBox.deselectAll();
     listBox.select(indices);
+    fireSelectedEvents();
   }
 
   public void setBinding(String binding) {
