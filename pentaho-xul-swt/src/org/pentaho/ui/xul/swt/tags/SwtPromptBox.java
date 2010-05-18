@@ -55,7 +55,11 @@ public final class SwtPromptBox extends MessageDialogBase implements XulPromptBo
       }
       
     });
-    Image parentImg = getParentObject().getImage();
+    
+    Image parentImg = null;
+    if(getParentObject() != null){
+    	parentImg = getParentObject().getImage();
+    }
     if(parentImg != null){
     	dlg.setDefaultImage(parentImg);
     }
