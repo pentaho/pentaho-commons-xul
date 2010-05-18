@@ -7,6 +7,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
@@ -54,6 +55,10 @@ public final class SwtPromptBox extends MessageDialogBase implements XulPromptBo
       }
       
     });
+    Image parentImg = getParentObject().getImage();
+    if(parentImg != null){
+    	dlg.setDefaultImage(parentImg);
+    }
     int retVal = dlg.open();
     notifyListeners(retVal);
     return retVal;
