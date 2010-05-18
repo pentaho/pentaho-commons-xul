@@ -20,6 +20,7 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -32,6 +33,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Widget;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.containers.XulRoot;
@@ -101,6 +103,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private static final Log logger = LogFactory.getLog(SwtDialog.class);
   
   private boolean pack;
+  
+  private XulSettingsManager settingsManager;
 
   public SwtDialog(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -113,8 +117,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     orient = Orient.VERTICAL;
     
     // If not, then try to use the API's parent parameter...
-    if ((possibleParent == null) && (parent != null) && parent.getManagedObject() instanceof Shell){
-      possibleParent = (Shell) parent.getManagedObject();
+    if (parent != null && parent instanceof XulRoot ){
+      possibleParent = (Shell) ((XulRoot) parent).getRootObject();
     }
     this.domContainer = container;
     this.setId(self.getAttributeValue("ID"));
@@ -132,6 +136,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     dialog = createDialog();
     Composite c = createDialogComposite();
     setManagedObject(c);
+    
+    settingsManager = container.getSettingsManager();
     
   }
   
@@ -285,15 +291,35 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
     dialog.getShell().setText(title);
     
-    // try to use parent shell icon if none specified
-    if(this.appIcon == null){
-      applyParentShellIcon();
+    int storedHeight = 0;
+    int storedWidth = 0;
+    int storedLeft = 0;
+    int storedTop = 0;
+    
+    if(settingsManager != null){
+      String sWidth = settingsManager.getSetting(getId()+".Width");
+      String sHeight = settingsManager.getSetting(getId()+".Height");
+      String sTop = settingsManager.getSetting(getId()+".Top");
+      String sLeft = settingsManager.getSetting(getId()+".Left");
+      if(sWidth != null && sHeight != null){
+        storedWidth = Integer.parseInt(sWidth);
+        storedHeight = Integer.parseInt(sHeight);
+      }
+      if(sTop != null && sLeft != null){
+        storedLeft = Integer.parseInt(sLeft);
+        storedTop = Integer.parseInt(sTop);
+      }
     }
 
     
     // Because the dialog is built after the create() method is called, we 
     // need to ask the shell to try to re-determine an appropriate size for this dialog..
-    if ((height > 0) && (width > 0)){
+    if(storedHeight > 0 && storedWidth> 0){
+
+      dialog.setHeight(storedHeight);
+      dialog.setWidth(storedWidth);
+    } else if ((height > 0) && (width > 0)){
+    
       
       // Don't allow the user to size the dialog smaller than is reasonable to 
       // layout the child components
@@ -319,6 +345,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     // Timing is everything - fire the onLoad evetns so tht anyone who is trying to
     notifyListeners(XulRoot.EVENT_ON_LOAD);
+    
+    if(storedTop > 0 && storedLeft > 0){
+      dialog.getShell().setLocation(new Point(storedLeft, storedTop));
+    }
+    
     returnCode = dialog.open();
     
   //  dialog.setBlockOnOpen(true);
@@ -415,6 +446,18 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     if(dialog.getMainArea().isDisposed()){
       return;
     }
+    if(settingsManager != null){
+      settingsManager.storeSetting(getId()+".Left", ""+dialog.getShell().getLocation().x);
+      settingsManager.storeSetting(getId()+".Top", ""+dialog.getShell().getLocation().y);
+      settingsManager.storeSetting(getId()+".Height", ""+dialog.getShell().getSize().y);
+      settingsManager.storeSetting(getId()+".Width", ""+dialog.getShell().getSize().x);
+      try {
+        settingsManager.save();
+      } catch (IOException e) {
+        logger.error(e);
+      }
+    }
+    
     returnCode = IDialogConstants.CLOSE_ID;
     
     BasicDialog newDialog = createDialog();

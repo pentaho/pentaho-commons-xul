@@ -13,6 +13,7 @@ import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.XulPerspective;
+import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
@@ -27,6 +28,7 @@ public class GwtXulDomContainer implements XulDomContainer {
   Map<String, XulEventHandler> handlers = new HashMap<String, XulEventHandler>();
   Map<XulEventHandler, EventHandlerWrapper> handlerWrapers = new HashMap<XulEventHandler, EventHandlerWrapper>();
   GwtXulLoader loader;
+  private XulSettingsManager settings;
   private List<Object> resourceBundles = new ArrayList<Object>();
 
   private boolean initialized;
@@ -413,6 +415,15 @@ public class GwtXulDomContainer implements XulDomContainer {
     // TODO Auto-generated method stub
     
   }
+
+  public XulSettingsManager getSettingsManager() {
+    return settings;
+  }
+
+  public void setSettingsManager(XulSettingsManager settings) {
+    this.settings = settings;
+  }
+  
   
 
 }

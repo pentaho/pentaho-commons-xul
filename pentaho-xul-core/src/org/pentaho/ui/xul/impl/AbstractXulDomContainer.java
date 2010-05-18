@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -22,12 +23,12 @@ import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
 import org.pentaho.ui.xul.XulOverlay;
 import org.pentaho.ui.xul.XulPerspective;
+import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -44,6 +45,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
   protected Map<String, XulPerspective> perspectives = new HashMap<String, XulPerspective>();
   private XulPerspective currentOverlay;
   private List<Object> resourceBundleList;
+  private XulSettingsManager settings;
   
   protected BindingContext bindings;
   
@@ -429,4 +431,11 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     return this.xulLoader.getResourceAsStream(name);
   }
   
+  public void setSettingsManager(XulSettingsManager settings){
+    this.settings = settings;
+  }
+  
+  public XulSettingsManager getSettingsManager(){
+    return settings;
+  }
 }

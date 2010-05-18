@@ -114,4 +114,8 @@ public interface XulDomContainer {
   // TODO: create wrapper. 
   void registerClassLoader(Object loader);
   
+  void setSettingsManager(XulSettingsManager settings);
+  
+  XulSettingsManager getSettingsManager();
+  
 }

@@ -15,7 +15,6 @@ public abstract class AbstractXulEventHandler extends XulEventSourceAdapter impl
   protected XulDomContainer xulDomContainer;
   protected Document document;
   protected String name;
-  protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
   
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.impl.XulEventHandler#getName()

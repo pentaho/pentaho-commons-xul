@@ -34,6 +34,7 @@ import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
+import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
@@ -54,6 +55,8 @@ public abstract class AbstractXulLoader implements XulLoader {
   private List<Object> resourceBundleList  = new ArrayList<Object>();
 
   private List<ClassLoader> classloaders = new ArrayList<ClassLoader>();
+  
+  private XulSettingsManager settings;
   {
     classloaders.add(this.getClass().getClassLoader());
   }
@@ -101,6 +104,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       
       XulDomContainer container = new XulWindowContainer(this);
       container.setOuterContext(outerContext);
+      container.setSettingsManager(settings);
       container.setResourceBundles(this.resourceBundleList);
       parser.setContainer(container);
       parser.setClassLoaders(classloaders);
@@ -138,6 +142,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     XulDomContainer container = new XulFragmentContainer(this);
     container.setResourceBundles(this.resourceBundleList);
     container.setOuterContext(outerContext);
+    container.setSettingsManager(settings);
 
     parser.reset();
     parser.setClassLoaders(classloaders);
@@ -893,4 +898,11 @@ public abstract class AbstractXulLoader implements XulLoader {
     return null;
   }
 
+  public void setSettingsManager(XulSettingsManager settings){
+    this.settings = settings;
+  }
+  
+  public XulSettingsManager getSettingsManager(){
+    return settings;
+  }
 }

@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulLoader;
+import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.gwt.service.XulLoaderService;
 import org.pentaho.ui.xul.gwt.service.XulLoaderServiceAsync;
 import org.pentaho.ui.xul.gwt.tags.GwtBox;
@@ -75,6 +76,7 @@ import com.google.gwt.xml.client.XMLParser;
 public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
 
   private GwtXulParser parser;
+  private XulSettingsManager settings;
   public static final XulLoaderServiceAsync SERVICE = (XulLoaderServiceAsync) GWT.create(XulLoaderService.class);
   static{
     ServiceDefTarget endpoint = (ServiceDefTarget) SERVICE;
@@ -149,6 +151,7 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
 
     Document document = (Document)xulDocument;
     GwtXulDomContainer container = new GwtXulDomContainer();
+    container.setSettingsManager(settings);
     container.setLoader(this);
     
     // We don't want to re-use the old parser as this will cause issues.
@@ -168,6 +171,7 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     document = XMLParser.parse(translated);
     
     GwtXulDomContainer container = new GwtXulDomContainer();
+    container.setSettingsManager(settings);
     container.setLoader(this);
     List<Object> resourceBundles = new ArrayList<Object>();
     resourceBundles.add(bundle);
@@ -186,6 +190,7 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
   public XulDomContainer loadXulFragment(Object xulDocument) throws IllegalArgumentException, XulException {
     Document document = (Document)xulDocument;
     GwtXulDomContainer container = new GwtXulDomContainer();
+    container.setSettingsManager(settings);
     container.setLoader(this);
     parser.setContainer(container);
     parser.parseDocument(document.getDocumentElement());
@@ -273,6 +278,17 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     // TODO Auto-generated method stub
     
   }
+
+  public XulSettingsManager getSettingsManager() {
+    return settings;
+  }
+
+  public void setSettingsManager(XulSettingsManager settings) {
+    this.settings = settings;
+    
+  }
+  
+  
   
   
 }
