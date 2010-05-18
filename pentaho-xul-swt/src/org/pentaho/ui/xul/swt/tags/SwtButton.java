@@ -67,7 +67,7 @@ public class SwtButton extends SwtElement implements XulButton {
     }
     // Special creation path for image buttons with no text. We don't want them to appear with the 
     // traditional button border.
-    if(self != null && self.getAttributeValue("image") != null && self.getAttributeValue("label") == null){
+    if(self != null && self.getAttributeValue("image") != null){
       setManagedObject(createImageButton());
     } else {
       button = createNewButton((Composite)parent.getManagedObject());
@@ -161,7 +161,12 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public void setLabel(String label) {
     this.label = label;
-    button.setText(label);
+    if(button != null){
+      button.setText(label);
+    } else {
+      imageButton.setText(label);
+    }
+    
   }
 
   public String getImage() {
