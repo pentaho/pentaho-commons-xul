@@ -222,6 +222,8 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
         int index = getIndex(o);
         if(index >= 0) {
           indices[pos++] = index;  
+        } else {
+          indices[pos++] = -1;
         }
       }
       setSelectedIndices(indices);
