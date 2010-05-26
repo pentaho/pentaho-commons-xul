@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import java.util.WeakHashMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
@@ -39,7 +41,7 @@ public class SwtButton extends SwtElement implements XulButton {
   private XulComponent parent;
   private XulDomContainer domContainer;
   private Label imageButton;
-  
+  private static WeakHashMap<Display, Cursor> cursorMap = new WeakHashMap<Display, Cursor>();
 
   public SwtButton(Button button) {
     super("button");
@@ -87,7 +89,13 @@ public class SwtButton extends SwtElement implements XulButton {
       }
       
     });
-    imageButton.setCursor(new Cursor(((Composite) parent.getManagedObject()).getDisplay(), SWT.CURSOR_HAND));
+    Display display = ((Composite) parent.getManagedObject()).getDisplay();
+    Cursor cursor = cursorMap.get(display);
+    if(cursor == null){
+      cursor = new Cursor(((Composite) parent.getManagedObject()).getDisplay(), SWT.CURSOR_HAND);
+      cursorMap.put(display, cursor);
+    }
+    imageButton.setCursor(cursor);
     
     return imageButton;
     
