@@ -30,6 +30,7 @@ import org.pentaho.ui.xul.containers.XulToolbar;
 import org.pentaho.ui.xul.containers.XulToolbar.ToolbarMode;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulToolbarbutton{
@@ -242,21 +243,8 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     }
 
     InputStream in = null;
-    try{
-      in = XulUtil.loadResourceAsStream(src, container);
-      
-      button.setImage(new Image(d, in));
-        
-    } catch (FileNotFoundException e){
-      logger.error(e);
-    } finally {
-      try{
-        if(in != null){
-          in.close();
-        }
-      } catch(IOException ignored){}
-    }
-    
+    Image img = SwtXulUtil.getCachedImage(src, container, d);
+    button.setImage(img);
     
   }
   public void setLabel(String label) {
