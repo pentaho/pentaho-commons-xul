@@ -238,7 +238,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
             ((VerticalPanel) container).setCellWidth(component, "100%");
   
             if(comp.getFlex() > 0){
-              component.setHeight("100%");
+              component.getElement().getStyle().setProperty("height", "100%");
             }
           } else {                                      //HBox 
             ((HorizontalPanel) container).setCellWidth(component, percentage);
@@ -258,15 +258,15 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
           component.setWidth("100%");
         }
         if(comp.getHeight() > 0){
-          component.setHeight(comp.getHeight()+"px");
+          component.getElement().getStyle().setProperty("height", comp.getHeight()+"px");
         } else {
-          component.setHeight("100%");
+          component.getElement().getStyle().setProperty("height", "100%");
         }
       } else {                                      //HBox 
         if(comp.getHeight() > 0){
-          component.setHeight(comp.getHeight()+"px");
+          component.getElement().getStyle().setProperty("height", comp.getHeight()+"px");
         } else {
-          component.setHeight("100%");
+          component.getElement().getStyle().setProperty("height", "100%");
         }
         if(comp.getWidth() > 0){
           component.setWidth(comp.getWidth()+"px");
