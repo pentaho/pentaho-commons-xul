@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.dom.Element;
@@ -40,7 +41,13 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     this();
     
   }
-  
+
+
+  @Override
+  public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
+    super.init(srcEle, container);
+    this.setLabel(srcEle.getAttribute("label"));
+  }
 
   public String getAcceltext() {
     return null;
