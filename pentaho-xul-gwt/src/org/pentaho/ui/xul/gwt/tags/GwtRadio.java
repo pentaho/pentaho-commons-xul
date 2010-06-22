@@ -59,6 +59,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
     
     super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
+    setValue(srcEle.getAttribute("value"));
     setChecked("true".equals(srcEle.getAttribute("checked")));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setCommand(srcEle.getAttribute("command"));
@@ -136,6 +137,9 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
 
     if(component.getAttributeValue("label") != null){
       setLabel(component.getAttributeValue("label"));
+    }
+    if(component.getAttributeValue("value") != null){
+      setValue(component.getAttributeValue("value"));
     }
     if(component.getAttributeValue("checked") != null){
       setChecked("true".equals(component.getAttributeValue("checked")));
