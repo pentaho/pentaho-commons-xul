@@ -103,14 +103,10 @@ public class SwingGrid extends AbstractSwingContainer implements XulGrid {
 
 
 
-        if(rowFlex > 0 && colFlex > 0 ){
-          gc.weightx = (colFlex / colFlexTotal);
-          gc.weighty = (rowFlex / rowTotalFlex);
-        }
-        else if (colFlex > 0) {
+        if (colFlex > 0) {
           gc.weightx = (colFlex / colFlexTotal);
         }
-        else if(rowFlex > 0){
+        if(rowFlex > 0){
           gc.weighty = (rowFlex / rowTotalFlex);
         }
         if(colAlignment == Align.STRETCH && xulComp.getFlex() > 0){
@@ -222,7 +218,6 @@ public class SwingGrid extends AbstractSwingContainer implements XulGrid {
           comp.setPreferredSize(comp.getMinimumSize());
         }
 
-        System.out.println("weighty: "+gc.weighty+" fill: "+gc.fill+ " gridheight: "+gc.gridheight);
         grid.add(comp, gc);
         gc.gridx++;
       }
