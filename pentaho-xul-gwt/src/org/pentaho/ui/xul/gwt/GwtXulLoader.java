@@ -26,6 +26,7 @@ import org.pentaho.ui.xul.gwt.tags.GwtFileDialog;
 import org.pentaho.ui.xul.gwt.tags.GwtFileUpload;
 import org.pentaho.ui.xul.gwt.tags.GwtGrid;
 import org.pentaho.ui.xul.gwt.tags.GwtGroupBox;
+import org.pentaho.ui.xul.gwt.tags.GwtRadioGroup;
 import org.pentaho.ui.xul.gwt.tags.GwtHbox;
 import org.pentaho.ui.xul.gwt.tags.GwtImage;
 import org.pentaho.ui.xul.gwt.tags.GwtLabel;
@@ -100,6 +101,7 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     GwtRadio.register();
     GwtDeck.register();
     GwtGroupBox.register();
+    GwtRadioGroup.register();
     GwtHbox.register();
     GwtImage.register();
     GwtLabel.register();

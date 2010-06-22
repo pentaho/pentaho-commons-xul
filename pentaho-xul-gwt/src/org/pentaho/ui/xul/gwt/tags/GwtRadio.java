@@ -19,6 +19,10 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   static final String ELEMENT_NAME = "radio"; //$NON-NLS-1$
   private String command;
   private boolean checked;
+  private String value;
+  public static GwtRadioGroup currentGroup;
+  public GwtRadioGroup radioGroup;
+  
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -32,7 +36,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   
   public GwtRadio() {
     super(ELEMENT_NAME);
-    radioButton = new RadioButton("radio");
+    radioButton = new RadioButton(currentGroup.getId());
     setManagedObject(radioButton);
     radioButton.setStylePrimaryName("radio");
     radioButton.addClickHandler(new ClickHandler() {
@@ -58,6 +62,8 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
     if(srcEle.getAttribute("pen:class") != null && srcEle.getAttribute("pen:class").length() > 0){
       setClass(srcEle.getAttribute("pen:class"));
     }
+    radioGroup = currentGroup;
+    currentGroup.registerRadio(this);
   }
   
   /* (non-Javadoc)
@@ -109,6 +115,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
    }
    this.checked = checked;
    this.firePropertyChange("checked", previousVal, checked);
+   this.radioGroup.fireValueChanged();
   }
 
   @Bindable
@@ -147,5 +154,13 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
     radioButton.setTitle(this.getTooltiptext());
   }
   
+  public String getValue() {
+    return value;
+  }
   
+  public void setValue(String aValue) {
+    String previousVal = this.value;
+    this.value = aValue;    
+    this.firePropertyChange("value", previousVal, aValue);
+  }    
 }

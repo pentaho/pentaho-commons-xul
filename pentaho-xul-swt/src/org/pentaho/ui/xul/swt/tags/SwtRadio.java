@@ -15,6 +15,7 @@ import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtRadio extends SwtElement implements XulRadio{
   
+  private String value;
   private Button radioButton;
   private static final Log logger = LogFactory.getLog(SwtRadio.class);
   
@@ -85,4 +86,14 @@ public class SwtRadio extends SwtElement implements XulRadio{
       }
     });
   }
+  
+  public String getValue() {
+    return value;
+  }
+  
+  public void setValue(String aValue) {
+    String previousVal = this.value;
+    this.value = aValue;  
+    this.changeSupport.firePropertyChange("value", previousVal, aValue);
+  }    
 }

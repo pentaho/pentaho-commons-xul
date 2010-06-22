@@ -24,6 +24,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
  */
 public class SwingRadio extends SwingElement implements XulRadio{
   
+  private String value;
   private JRadioButton radioButton;
   private static final Log logger = LogFactory.getLog(SwingRadio.class);
   
@@ -93,4 +94,14 @@ public class SwingRadio extends SwingElement implements XulRadio{
       }
     });
   }
+  
+  public String getValue() {
+    return value;
+  }
+  
+  public void setValue(String aValue) {
+    String previousVal = this.value;
+    this.value = aValue;  
+    this.changeSupport.firePropertyChange("value", previousVal, aValue);
+  }     
 }

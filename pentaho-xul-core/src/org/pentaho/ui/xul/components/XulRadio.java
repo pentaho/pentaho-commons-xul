@@ -68,4 +68,15 @@ public interface XulRadio extends XulComponent {
    */
   public void setCommand(final String method);
   
+  /**
+   * The value of the radio button.
+   *  
+   * @return the radio value.
+   */
+  public String getValue();
+  
+  /**
+   * Sets the value of the radio button.
+   */
+  public void setValue(String aValue);
 }
