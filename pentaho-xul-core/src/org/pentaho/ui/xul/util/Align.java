@@ -6,5 +6,5 @@ package org.pentaho.ui.xul.util;
  * @author NBaker
  */
 public enum Align {
-  START, CENTER, END;
+  START, CENTER, END, STRETCH;
 }

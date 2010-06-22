@@ -39,6 +39,7 @@ public class SwingLabel extends SwingElement implements XulLabel{
   }
   
   public void layout(){
+    
   }
 
   
