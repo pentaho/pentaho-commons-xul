@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class GwtRadioGroup extends AbstractGwtXulContainer implements XulRadioGroup {
 
-  static final String ELEMENT_NAME = "groupradio"; //$NON-NLS-1$
+  static final String ELEMENT_NAME = "radiogroup"; //$NON-NLS-1$
   private CaptionPanel captionPanel; 
   private List<GwtRadio> radios;
   
