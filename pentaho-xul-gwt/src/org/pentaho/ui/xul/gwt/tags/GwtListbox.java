@@ -233,7 +233,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     // these need to stay in sync with the dom!
     
     try {
-      GwtListitem itemobj = (GwtListitem) container.getDocumentRoot().createElement("listitem");
+      GwtListitem itemobj = (GwtListitem) getXulDomContainer().getDocumentRoot().createElement("listitem");
       itemobj.setLabel((String)item);
       this.addChild(itemobj);
       if (listBox != null) {
