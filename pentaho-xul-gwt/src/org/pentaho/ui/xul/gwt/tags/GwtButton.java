@@ -216,7 +216,16 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
   @Bindable
   public void setImage(String src) {
-    if(imageButton != null) {
+    if (imageButton == null) {
+      button = null;
+      imageButton = new ImageButton();
+      SimplePanel sp = new SimplePanel();
+      setManagedObject(sp);
+      sp.add(imageButton);
+      imageButton.setHeight("");
+      imageButton.setWidth("");
+    }    
+    if (imageButton != null) {
       src = GWT.getModuleBaseURL() + src;
       this.image = src;
       this.imageButton.setEnabledUrl(src);
