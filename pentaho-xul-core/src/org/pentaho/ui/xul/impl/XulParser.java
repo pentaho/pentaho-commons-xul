@@ -177,10 +177,15 @@ public class XulParser {
           
         }
       } 
-      
-      Constructor<?> constructor = c
-        .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
-   
+
+      if (c == null)
+      {
+        throw new ClassNotFoundException("Class " + handler + " was not found in the classpath.");
+      }
+      Constructor<?> constructor =
+          c.getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
+
+
       //create a generic element representation of the current Dom4J node
       Element domEle = DocumentFactory.createElement(srcEle.getName().toLowerCase());
       List<Attribute> attrs = srcEle.attributes();

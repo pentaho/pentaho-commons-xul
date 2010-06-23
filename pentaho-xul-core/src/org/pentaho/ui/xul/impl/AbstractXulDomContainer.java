@@ -80,7 +80,11 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
       InputStream in = getClass().getClassLoader().getResourceAsStream(
           location
       );
-      
+
+      if (in == null)
+      {
+        throw new NullPointerException("Error: Groovy script was not found: " + location);
+      }
       GroovyClassLoader gcl = new GroovyClassLoader();
       Class clazz = gcl.parseClass(in);
       Object script = clazz.newInstance();
