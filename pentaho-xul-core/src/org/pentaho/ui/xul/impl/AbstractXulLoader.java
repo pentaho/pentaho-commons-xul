@@ -55,23 +55,31 @@ public abstract class AbstractXulLoader implements XulLoader {
   private List<Object> resourceBundleList  = new ArrayList<Object>();
 
   private List<ClassLoader> classloaders = new ArrayList<ClassLoader>();
-  
+
+  private HashMap<String,ResourceBundle> cachedResourceBundles;
+
   private XulSettingsManager settings;
-  {
-    classloaders.add(this.getClass().getClassLoader());
-  }
-  
+  private Locale locale;
+
+  private List<String> includedSources = new ArrayList<String>();
+
+  private List<String> resourceBundles = new ArrayList<String>();
+  private URLClassLoader localDirClassLoader;
+
   public AbstractXulLoader() throws XulException {
 
+    classloaders.add(this.getClass().getClassLoader());
     DocumentFactory.registerDOMClass(DocumentDom4J.class);
     DocumentFactory.registerElementClass(ElementDom4J.class);
 
+    cachedResourceBundles = new HashMap<String,ResourceBundle> ();
     try {
       parser = new XulParser();
     } catch (Exception e) {
       throw new XulException("Error getting XulParser Instance, probably a DOM Factory problem: " + e.getMessage(), e);
     }
 
+    locale = Locale.getDefault();
   }
 
   /* (non-Javadoc)
@@ -80,7 +88,7 @@ public abstract class AbstractXulLoader implements XulLoader {
   public XulDomContainer loadXul(Object xulDocument) throws IllegalArgumentException, XulException {
     Document document = (Document)xulDocument;
     try {
-      xulDocument = preProcess((Document)xulDocument);
+      xulDocument = preProcess(document);
 
       String processedDoc = performIncludeTranslations(document.asXML());
       String localOutput = (mainBundle != null) ? ResourceBundleTranslator.translate(processedDoc, mainBundle)
@@ -156,37 +164,54 @@ public abstract class AbstractXulLoader implements XulLoader {
     return parser.getElement(elementName);
   }
 
-  public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException {
+  private ResourceBundle loadResourceBundle (final String resStr)
+  {
+    ResourceBundle res = cachedResourceBundles.get(resStr);
+    if (res == null)
+    {
+      for(final ClassLoader cl : classloaders){
+        try {
+          res = ResourceBundle.getBundle(resStr, locale, cl);
+          if(res != null){
+            break;
+          }
+        } catch (MissingResourceException e) {
+          // ignored ..
+        }
+      }
 
-    Document doc = findDocument(resource);
+      if(res == null){
+        try{
+          final URLClassLoader cls = getLocalDirClassLoader();
+          res = ResourceBundle.getBundle(resStr, locale, cls);
+        }
+        catch(MalformedURLException ex){
+          return null;
+        }
+        catch(MissingResourceException ex){
+          return null;
+        }
+      }
+      cachedResourceBundles.put(resStr, res);
+    }
+    return res;
+  }
+
+  public XulDomContainer loadXul(String resource) throws IllegalArgumentException, XulException {
 
     setRootDir(resource);
 
-    String resStr = resource.replace(".xul", "");
-    ResourceBundle res = null;
-    for(ClassLoader cl : classloaders){
-      try {
-        res = ResourceBundle.getBundle(resStr, Locale.getDefault(), cl);
-        if(res != null){
-          break;
-        }
-      } catch (MissingResourceException e) {}
+    final String resStr = resource.replace(".xul", "");
+    final ResourceBundle res = loadResourceBundle(resStr);
+    if (res == null)
+    {
+      final Document doc = findDocument(resource);
+      return loadXul(doc);
     }
-    if(res == null){
-      URL url = null;
-      try{
-        url = new File(".").toURL();
-      } catch(MalformedURLException ex){}
-      URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
-      try{
-        res = ResourceBundle.getBundle(resStr, Locale.getDefault(), cls);
-      } catch(MissingResourceException ex){
-        return loadXul(doc);
-      }
+    else
+    {
+      return loadXul(resource, res);
     }
-
-    return loadXul(resource, res);
-
   }
 
   public XulDomContainer loadXul(String resource, Object bundle) throws XulException {
@@ -196,26 +221,14 @@ public abstract class AbstractXulLoader implements XulLoader {
     setRootDir(resource);
     mainBundle = (ResourceBundle) bundle;
 
-
-    String resStr = resource.replace(".xul", "");
-    ResourceBundle res;
-    try {
-      res = ResourceBundle.getBundle(resStr);
-    } catch (MissingResourceException e) {
-      
-      URL url = null;
-      try{
-        url = new File(".").toURL();
-      } catch(MalformedURLException ex){}
-      URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
-      try{
-        res = ResourceBundle.getBundle(resStr, Locale.getDefault(), cls);
-      } catch(MissingResourceException ex){
-        return loadXul(doc);
-      }
-    }
+    final String resStr = resource.replace(".xul", "");
+    final ResourceBundle res = loadResourceBundle(resStr);
     if(res != null){
       resourceBundleList.add(res);
+    }
+    else
+    {
+      return loadXul(doc);
     }
     
     resourceBundleList.add(mainBundle);  
@@ -225,45 +238,46 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public XulDomContainer loadXulFragment(String resource) throws IllegalArgumentException, XulException {
 
-    Document doc = findDocument(resource);
-
     setRootDir(resource);
 
-    ResourceBundle res;
-    try {
-      res = ResourceBundle.getBundle(resource.replace(".xul", ""));
-    } catch (MissingResourceException e) {
-
-      URL url = null;
-      try{
-        url = new File(".").toURL();
-      } catch(MalformedURLException ex){}
-      URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
-      try{
-        res = ResourceBundle.getBundle(resource.replace(".xul", ""), Locale.getDefault(), cls);
-      } catch(MissingResourceException ex){
-        return loadXulFragment(doc);
-      }
-      
+    final String resStr = resource.replace(".xul", "");
+    final ResourceBundle res = loadResourceBundle(resStr);
+    if (res == null)
+    {
+      final Document doc = findDocument(resource);
+      return loadXulFragment(doc);
     }
+
     return loadXulFragment(resource, res);
   }
 
   public XulDomContainer loadXulFragment(String resource, Object bundle) throws XulException {
 
+    if (bundle instanceof ResourceBundle == false)
+    {
+      throw new XulException("Need a resource-bundle as bundle");
+    }
+    
     try {
 
-      InputStream in = getResourceAsStream(resource);
+      final InputStream in = getResourceAsStream(resource);
+      if (in == null)
+      {
+        throw new XulException("Given resource does not yield a valid document");
+      }
+      try {
+        resourceBundleList.add(bundle);
+        final String localOutput = ResourceBundleTranslator.translate(in, (ResourceBundle) bundle);
+        final SAXReader rdr = new SAXReader();
+        final Document doc = rdr.read(new StringReader(localOutput));
 
-      resourceBundleList.add((ResourceBundle) bundle);  
-      String localOutput = ResourceBundleTranslator.translate(in, (ResourceBundle) bundle);
+        setRootDir(resource);
 
-      SAXReader rdr = new SAXReader();
-      final Document doc = rdr.read(new StringReader(localOutput));
-
-      setRootDir(resource);
-
-      return this.loadXulFragment(doc);
+        return this.loadXulFragment(doc);
+      }
+      finally {
+        in.close();
+      }
     } catch (DocumentException e) {
       throw new XulException("Error parsing Xul Document", e);
     } catch (IOException e) {
@@ -271,61 +285,51 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
-  private List<String> includedSources = new ArrayList<String>();
 
-  private List<String> resourceBundles = new ArrayList<String>();
-
-  public String performIncludeTranslations(String input) throws XulException {
-    String output = input;
-    for (String includeSrc : includedSources) {
-      try {
-        ResourceBundle res = null;
-        for(ClassLoader loader : classloaders){ 
-          try{
-            res = ResourceBundle.getBundle(includeSrc.replace(".xul", ""), Locale.getDefault(), loader);
-            resourceBundleList.add((ResourceBundle) res);  
-            break;
-          } catch (MissingResourceException e) {
-            
-          }
-        }
-      } catch (MissingResourceException e) {
-        URL url = null;
+  public String performIncludeTranslations(final String input) throws XulException {
+    for (final String includeSrc : includedSources) {
+      final String resStr = includeSrc.replace(".xul", "");
+      final ResourceBundle res = loadResourceBundle(resStr);
+      if (res != null)
+      {
+        resourceBundleList.add(res);
+      }
+      else
+      {
         try{
-          url = new File(".").toURL();
-        } catch(MalformedURLException ex){}
-        URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
-        try{
-          resourceBundleList.add(ResourceBundle.getBundle(includeSrc.replace(".xul", ""), Locale.getDefault(), cls));
+          final URLClassLoader cls = getLocalDirClassLoader();
+          resourceBundleList.add(ResourceBundle.getBundle(resStr, locale, cls));
+        } catch(MalformedURLException ex){
+          // intentionally empty 
         } catch(MissingResourceException ex){
-          continue;
+          // intentionally empty
         }
         
       }
     }
-    for (String resource : resourceBundles) {
+
+    for (final String resource : resourceBundles) {
       logger.debug("Processing Resource Bundle: " + resource);
-      try {
-        ResourceBundle res = ResourceBundle.getBundle(resource);
-        if (res == null) {
-          continue;
-        }
-        resourceBundleList.add((ResourceBundle) res);  
-      } catch (MissingResourceException e) {
-        URL url = null;
+      final ResourceBundle res = loadResourceBundle(resource);
+      if (res != null)
+      {
+        resourceBundleList.add(res);
+      }
+      else
+      {
         try{
-          url = new File(".").toURL();
-        } catch(MalformedURLException ex){}
-        URLClassLoader cls = URLClassLoader.newInstance(new URL[]{url});
-        try{
-          ResourceBundle res = ResourceBundle.getBundle(resource, Locale.getDefault(), cls);
-          resourceBundleList.add(res);
+          final URLClassLoader cls = getLocalDirClassLoader();
+          resourceBundleList.add(ResourceBundle.getBundle(resource, locale, cls));
+        } catch(MalformedURLException ex){
+          // intentionally empty
         } catch(MissingResourceException ex){
-          continue;
+          // intentionally empty
         }
       }
     }
-    for(Object bundle : resourceBundleList){
+
+    String output = input;
+    for(final Object bundle : resourceBundleList){
       try {
         output = ResourceBundleTranslator.translate(output, (ResourceBundle) bundle);
       } catch (IOException e) {
@@ -333,6 +337,18 @@ public abstract class AbstractXulLoader implements XulLoader {
       }
     }
     return output;
+  }
+
+
+  private URLClassLoader getLocalDirClassLoader()
+      throws MalformedURLException
+  {
+    if (localDirClassLoader == null)
+    {
+      final URL url = new File(".").toURI().toURL();
+      localDirClassLoader = URLClassLoader.newInstance(new URL[]{url});
+    }
+    return localDirClassLoader;
   }
 
   public void register(String tagName, String className) {
@@ -663,46 +679,20 @@ public abstract class AbstractXulLoader implements XulLoader {
   public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
       XulDomContainer container) throws XulException {
     
-    ResourceBundle res = null;
-    try {
-      String baseName = overlaySrc.replace(".xul", "");
-      for(ClassLoader loader : classloaders){
-        try{
-          res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
-        } catch (MissingResourceException e) {
-          
-        }    
-        if(res != null){
-          break;
-        }
-      }
+    String baseName = overlaySrc.replace(".xul", "");
+    ResourceBundle res = loadResourceBundle(baseName);
+    if(res == null){
+      baseName = (this.getRootDir() + overlaySrc).replace(".xul", "");
+      res = loadResourceBundle(baseName);
       if(res == null){
-        baseName = (this.getRootDir() + overlaySrc).replace(".xul", "");
-
-        for(ClassLoader loader : classloaders){
-          try{
-            res = ResourceBundle.getBundle(baseName, Locale.getDefault(), loader);
-            if(res != null){
-              break;
-            }
-
-          } catch (MissingResourceException e) {
-            logger.debug("no default resource bundle available: "+overlaySrc);
-          }    
-        }
-        
-        if(res == null){
-          logger.debug("could not find resource bundle, defaulting to main");
-          res = mainBundle;
-        } else {
-          resourceBundleList.add((ResourceBundle) res);  
-        }
+        logger.debug("could not find resource bundle, defaulting to main");
+        res = mainBundle;
       } else {
-        resourceBundleList.add((ResourceBundle) res);  
+        resourceBundleList.add(res);
       }
-    } catch (MissingResourceException e) {
-      logger.warn("no default resource bundle available: "+overlaySrc);
-    }    
+    } else {
+      resourceBundleList.add(res);
+    }
     this.processOverlay(overlaySrc, targetDocument, container, res);
   }
 
