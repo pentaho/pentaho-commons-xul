@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.test;
 
+import java.util.Locale;
+
 import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
@@ -22,6 +24,7 @@ public class BindingsTest {
   @Before
   public void setup() throws Exception{
 
+    Locale.setDefault(Locale.US);
     container = new SwingXulLoader().loadXul("resource/documents/bindingsTest.xul");
     container.initialize();
     handler = (BindingEventHandler) container.getEventHandler("handler");

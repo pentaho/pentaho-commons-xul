@@ -4,6 +4,7 @@
 package org.pentaho.ui.xul.test.parser;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
@@ -64,8 +65,11 @@ public class TestSwingXulParser{
     parser.registerHandler("LISTBOX", "org.pentaho.ui.xul.swing.tags.SwingListbox");
     parser.registerHandler("LISTITEM", "org.pentaho.ui.xul.swing.tags.SwingListitem");
 
+    final ArrayList<ClassLoader> classLoaders = new ArrayList<ClassLoader>();
+    classLoaders.add(getClass().getClassLoader());
 
     container = new XulWindowContainer();
+    parser.setClassLoaders(classLoaders);
     parser.setContainer(container);
     parser.parseDocument(testDoc.getRootElement());
   }
