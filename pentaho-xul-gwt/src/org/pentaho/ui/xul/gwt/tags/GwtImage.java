@@ -12,6 +12,7 @@ import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Widget;
 
 public class GwtImage extends AbstractGwtXulComponent implements XulImage {
 
@@ -93,6 +94,16 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     image.setTitle(this.getTooltiptext());
   }
   
+  @Override
+  @Bindable
+  public void setVisible(boolean visible) {
+    image.setVisible(visible);
+  }
   
+  @Override
+  @Bindable
+  public boolean isVisible() {
+    return image.isVisible();
+  }
 
 }
