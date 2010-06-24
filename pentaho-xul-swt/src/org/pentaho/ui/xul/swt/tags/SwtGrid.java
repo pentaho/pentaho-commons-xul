@@ -168,20 +168,31 @@ public class SwtGrid extends AbstractSwtXulContainer implements XulGrid {
         // Align is the PARENT'S attribute, and affects the 
         // opposite direction of the orientation.
   
-        if (((XulComponent) swtChild).getAlign() != null) {
-          SwtAlign swtAlign = SwtAlign.valueOf(((XulContainer) swtChild).getAlign().toString());
-          
-          if (orient.equals(Orient.HORIZONTAL)) {
-  
-            if(swtChild.getHeight() < 0){
-              data.grabExcessVerticalSpace = true;
-            }
-            
-          } else { //Orient.VERTICAL
-  
-            if(swtChild.getWidth() < 0){
-              data.grabExcessHorizontalSpace = true;
-            }
+        if (swtChild.getFlex() <= 0 && swtChild.getAlign() != null) {
+          SwtAlign swtAlign = SwtAlign.valueOf(swtChild.getAlign().toString());
+          switch(swtAlign){
+            case START:
+              data.horizontalAlignment = GridData.BEGINNING;
+              break;
+            case END:
+              data.horizontalAlignment = GridData.END;
+              break;
+            case CENTER:
+              data.horizontalAlignment = GridData.CENTER;
+              break;
+          }
+        }
+
+        if (orient.equals(Orient.HORIZONTAL)) {
+
+          if(swtChild.getHeight() < 0){
+            data.grabExcessVerticalSpace = true;
+          }
+
+        } else { //Orient.VERTICAL
+
+          if(swtChild.getWidth() < 0){
+            data.grabExcessHorizontalSpace = true;
           }
         }
         c.setLayoutData(data);

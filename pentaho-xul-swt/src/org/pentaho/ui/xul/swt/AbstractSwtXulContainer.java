@@ -8,7 +8,7 @@ import org.pentaho.ui.xul.util.Align;
 
 public class AbstractSwtXulContainer extends SwtElement implements XulContainer{
 
-  protected Align alignment = Align.CENTER;
+  protected Align alignment = Align.START;
   protected boolean suppressLayout;
   protected static final Log logger = LogFactory.getLog(AbstractSwtXulContainer.class);
   
