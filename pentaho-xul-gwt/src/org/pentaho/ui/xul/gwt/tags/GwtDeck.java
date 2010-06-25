@@ -9,6 +9,7 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.util.Resizable;
+import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.dom.client.Node;
@@ -79,10 +80,12 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     
   }
 
+  @Bindable
   public int getSelectedIndex() {
     return container.getVisibleWidget();
   }
 
+  @Bindable
   public void setSelectedIndex(int index) {
     int previousVal = selectedIndex;
     if (index < container.getWidgetCount() && index >= 0) {
