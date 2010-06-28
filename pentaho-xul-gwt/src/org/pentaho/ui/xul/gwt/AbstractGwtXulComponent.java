@@ -7,12 +7,14 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.BindingProvider;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.stereotype.Bindable;
@@ -56,6 +58,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected String ondrag;
   protected String drageffect;
   protected String ondrop;
+  protected BindingProvider bindingProvider;
   
   public AbstractGwtXulComponent(String name) {
     super(name);
@@ -238,7 +241,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
             ((VerticalPanel) container).setCellWidth(component, "100%");
   
             if(comp.getFlex() > 0){
-              component.getElement().getStyle().setProperty("height", "100%");
+              component.getElement().getStyle().setProperty("height","100%");
             }
           } else {                                      //HBox 
             ((HorizontalPanel) container).setCellWidth(component, percentage);
@@ -250,28 +253,29 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
           }
         }
       }
+      Style style = component.getElement().getStyle();
       //By default 100%, respect hard-coded width
       if(this.getOrientation() == Orient.VERTICAL){ //VBox
         if(comp.getWidth() > 0){
-          component.setWidth(comp.getWidth()+"px");
+          style.setProperty("width", comp.getWidth()+"px");
         } else {
-          component.setWidth("100%");
+          style.setProperty("width", "100%");
         }
         if(comp.getHeight() > 0){
-          component.getElement().getStyle().setProperty("height", comp.getHeight()+"px");
+          style.setProperty("height", comp.getHeight()+"px");
         } else {
-          component.getElement().getStyle().setProperty("height", "100%");
+          style.setProperty("height", "100%");
         }
       } else {                                      //HBox 
         if(comp.getHeight() > 0){
-          component.getElement().getStyle().setProperty("height", comp.getHeight()+"px");
+          style.setProperty("height",comp.getHeight()+"px");
         } else {
-          component.getElement().getStyle().setProperty("height", "100%");
+          style.setProperty("height","100%");
         }
         if(comp.getWidth() > 0){
-          component.setWidth(comp.getWidth()+"px");
+          style.setProperty("width",comp.getWidth()+"px");
         } else {
-          component.setWidth("100%");
+          style.setProperty("width","100%");
         }
       }
     

@@ -311,7 +311,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
   
   private TreeItem createNode(XulTreeItem item){
-    TreeItem node = new TreeItem(item.getRow().getCell(0).getLabel());
+    TreeItem node = new TreeItem("empty");
+    if(item == null || item.getRow() == null || item.getRow().getChildNodes().size() == 0){
+      return node;
+    }
+    node.setText(item.getRow().getCell(0).getLabel());
     if(item.getChildNodes().size() > 1){
       //has children
       //TODO: make this more defensive
@@ -334,7 +338,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
     return "text"; // default //$NON-NLS-1$
   }
-  
+
+  private Binding createBinding(XulEventSource source, String prop1, XulEventSource target, String prop2){
+    if(bindingProvider != null){
+      return bindingProvider.getBinding(source, prop1, target, prop2);
+    }
+    return new GwtBinding(source, prop1, target, prop2);
+  }
+
   private Widget getColumnEditor(final int x, final int y){
     
 
@@ -369,12 +380,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         b.setDisabled(!column.isEditable());
         b.layout();
         b.setValue(val);
-        GwtBinding bind = new GwtBinding(cell, "label", b, "value");
+        Binding bind = createBinding(cell, "label", b, "value");
         bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
         domContainer.addBinding(bind);
         bind.fireSourceChanged();
 
-        bind = new GwtBinding(cell, "disabled", b, "disabled");
+        bind = createBinding(cell, "disabled", b, "disabled");
         bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
         domContainer.addBinding(bind);
         bind.fireSourceChanged();
@@ -436,14 +447,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         if(colType.equalsIgnoreCase("editablecombobox")){
           lb.setEditable(true);
           
-          GwtBinding bind = new GwtBinding(cell, "selectedIndex", glb, "selectedIndex");
+          Binding bind = createBinding(cell, "selectedIndex", glb, "selectedIndex");
           bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
           domContainer.addBinding(bind);
           if(cell.getLabel() == null){
             bind.fireSourceChanged();
           }
           
-          bind = new GwtBinding(cell, "label", glb, "value");
+          bind = createBinding(cell, "label", glb, "value");
           bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
           domContainer.addBinding(bind);
           bind.fireSourceChanged();
@@ -451,7 +462,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
           
         } else {
 
-          GwtBinding bind = new GwtBinding(cell, "selectedIndex", glb, "selectedIndex");
+          Binding bind = createBinding(cell, "selectedIndex", glb, "selectedIndex");
           bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
           domContainer.addBinding(bind);
           bind.fireSourceChanged();
@@ -857,7 +868,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
       
       for (InlineBindingExpression exp : ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getBindingExpressions()) {
-        GwtBinding binding = new GwtBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        Binding binding = createBinding((XulEventSource) element, exp.getModelAttr(), cell, exp.getXulCompAttr());
         binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
@@ -869,8 +880,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
       
       GwtBindingMethod childrenMethod = GwtBindingContext.typeController.findGetMethod(element, property);
+      Collection<T> children = null;
+      if(childrenMethod != null){
+        children = (Collection<T>) childrenMethod.invoke(element, new Object[] {});
+      } else if(element instanceof Collection ){
+        children = (Collection<T>) element;
+      }
       
-      Collection<T> children = (Collection<T>) childrenMethod.invoke(element, new Object[]{});
       XulTreeChildren treeChildren = null;
       
       if(children != null && children.size() > 0){
@@ -958,7 +974,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   
         // Only add bindings if they haven't been already applied.
         if(cell.valueBindingsAdded() == false){
-          GwtBinding binding = new GwtBinding(o, col.getCombobinding(), cell, "value");
+          Binding binding = createBinding((XulEventSource) o, col.getCombobinding(), cell, "value");
           binding.setBindingType(Binding.Type.ONE_WAY);
           domContainer.addBinding(binding);
           binding.fireSourceChanged();
@@ -967,7 +983,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         }
         if(cell.selectedIndexBindingsAdded() == false){
 
-          GwtBinding binding = new GwtBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
+          Binding binding = createBinding((XulEventSource) o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
           binding.setConversion(new BindingConvertor<Object, Integer>(){
     
             @Override
@@ -989,7 +1005,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         }
         
         if(cell.labelBindingsAdded() == false && colType.equalsIgnoreCase("editablecombobox")){
-          GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+          Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr());
           if (!this.editable) {
             binding.setBindingType(Binding.Type.ONE_WAY);
           } else {
@@ -1003,7 +1019,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   
       } else if(colType != null && this.customEditors.containsKey(colType)){
         
-        GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, "value");
+        Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, "value");
         binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
@@ -1012,7 +1028,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         
       } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){
       
-        GwtBinding binding = new GwtBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr());
         if(col.isEditable() == false){
           binding.setBindingType(Binding.Type.ONE_WAY);
         }
@@ -1026,7 +1042,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     
     if(StringUtils.isEmpty(col.getDisabledbinding()) == false){
       String prop = col.getDisabledbinding();
-      GwtBinding bind = new GwtBinding(o, col.getDisabledbinding(), cell, "disabled");
+      Binding bind = createBinding((XulEventSource) o, col.getDisabledbinding(), cell, "disabled");
       bind.setBindingType(Binding.Type.ONE_WAY);
       domContainer.addBinding(bind);
       bind.fireSourceChanged();
@@ -1156,11 +1172,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     
   }
 
+  @Bindable
   public <T> Collection<T> getSelectedItems() {
     // TODO Auto-generated method stub
     return null;
   }
 
+  @Bindable
   public <T> void setSelectedItems(Collection<T> items) {
     // TODO Auto-generated method stub
     

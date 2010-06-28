@@ -16,6 +16,8 @@
         <include name="**/binding/BindingConvertor.java"/>
         <include name="**/binding/BindingContext.java"/>
         <include name="**/binding/BindingFactory.java"/>
+        <include name="**/binding/BindingProvider.java"/>
+        <include name="**/binding/FactoryBasedBindingProvider.java"/>
         <include name="**/dom/*"/>
         <include name="**/dnd/*"/>
         <exclude name="**/dom/DocumentFactory*"/>
@@ -29,6 +31,8 @@
         <include name="**/util/TreeCell*"/>
         <include name="**/util/XulDialogCallback*"/>
         <include name="**/util/AbstractXulDialogController*"/>
+        <include name="**/util/AbstractModelList*"/>
+        <include name="**/util/AbstractModelNode*"/>
         <include name="**/util/DialogController*"/>
       </source>
 	

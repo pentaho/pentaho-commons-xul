@@ -5,6 +5,7 @@ package org.pentaho.ui.xul;
 
 import java.beans.PropertyChangeListener;
 
+import org.pentaho.ui.xul.binding.BindingProvider;
 import org.pentaho.ui.xul.dom.Element;
 
 /**
@@ -230,4 +231,5 @@ public interface XulComponent extends Element, XulEventSource {
   public void setOndrop(String ondrop);
   public String getOndrop();
   
+  public void setBindingProvider( BindingProvider bindingProvider);
 }

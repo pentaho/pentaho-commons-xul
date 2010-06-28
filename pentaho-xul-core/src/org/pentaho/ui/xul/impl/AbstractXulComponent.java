@@ -11,6 +11,7 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.BindingProvider;
 import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Attribute;
@@ -71,6 +72,8 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected String drageffect;
   
   protected String ondrop;
+
+  protected BindingProvider bindingProvider;
 
   public AbstractXulComponent(Element element) {
     this.element = element;
@@ -387,4 +390,7 @@ public abstract class AbstractXulComponent implements XulComponent {
     return drageffect;
   }
 
+  public void setBindingProvider( BindingProvider bindingProvider ) {
+    this.bindingProvider = bindingProvider;
+  }
 }
