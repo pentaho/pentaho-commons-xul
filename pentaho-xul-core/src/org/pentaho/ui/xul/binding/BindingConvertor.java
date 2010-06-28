@@ -1,67 +1,30 @@
 package org.pentaho.ui.xul.binding;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 public abstract class BindingConvertor<V, R> {
+  private static final long serialVersionUID = 1L;
+
   public enum Direction{FORWARD, BACK};
   
   public abstract R sourceToTarget(V value);
 
   public abstract V targetToSource(R value);
 
+  private static BindingConvertor<Integer, String> integer2String = new Integer2String();
+  private static BindingConvertor<Long, String> long2String = new Long2String();
+  private static BindingConvertor<String, String> string2String = new String2String();
+  private static BindingConvertor<Boolean, String> boolean2String = new Boolean2String();
+  
   public static BindingConvertor<Integer, String> integer2String() {
-    BindingConvertor<Integer, String> bc = new BindingConvertor<Integer, String>() {
-      @Override
-      public String sourceToTarget(Integer value) {
-        if (value != null) {
-          return value.toString();
-        } else {
-          return ""; //$NON-NLS-1$
-        }
-      }
-    
-      @Override
-      public Integer targetToSource(String value) {
-        if (value != null) {
-          try {
-            return Integer.valueOf(value);
-          } catch (NumberFormatException e) {            
-            return new Integer(0);
-          }
-        }
-        return new Integer(0);
-      }
-    };
-    return bc;
+    return integer2String;
   }
   
   public static BindingConvertor<Long, String> long2String() {
-    BindingConvertor<Long, String> bc = new BindingConvertor<Long, String>() {
-      @Override
-      public String sourceToTarget(Long value) {
-        if (value != null) {
-          return value.toString();
-        } else {
-          return ""; //$NON-NLS-1$
-        }
-      }
-    
-      @Override
-      public Long targetToSource(String value) {
-        if (value != null) {
-          try {            
-            return Long.valueOf(value); 
-          } catch (NumberFormatException e) {
-            return new Long(0);
-          }
-        }
-        return new Long(0);
-      }
-    };
-    return bc;
+    return long2String;
   }
   
   public static BindingConvertor<Date, String> date2String() {
@@ -69,43 +32,108 @@ public abstract class BindingConvertor<V, R> {
   }
   
   public static BindingConvertor<Date, String> date2String(final DateFormat format) {
-    BindingConvertor<Date, String> bc = new BindingConvertor<Date, String>() {
-      @Override
-      public String sourceToTarget(Date value) {
-        if (value == null) {
-          return "";
-        }
-        return format.format(value);
-      }
-    
-      @Override
-      public Date targetToSource(String value) {
-        try {
-          return format.parse(value);
-        } catch (ParseException e) {
-          return null;
-        }
-      }
-    };
-    return bc;
+    return new Date2String(format);
   }
   
   public static BindingConvertor<String, String> string2String() {
-    BindingConvertor<String, String> bc = new BindingConvertor<String, String>() {
-
-      @Override
-      public String sourceToTarget(String value) {
-        return value;
+    return string2String;
+  }
+  
+  public static BindingConvertor<Boolean, String> boolean2String() {
+    return boolean2String ;
+  }
+  
+  /*
+   * Canned BindingConverter Implementations here
+   */
+  static class Integer2String extends BindingConvertor<Integer, String> {
+    public String sourceToTarget(Integer value) {
+      if (value != null) {
+        return value.toString();
+      } else {
+        return ""; //$NON-NLS-1$
       }
-
-      @Override
-      public String targetToSource(String value) {
-        return value; 
+    }
+  
+    public Integer targetToSource(String value) {
+      if (value != null) {
+        try {
+          return Integer.valueOf(value);
+        } catch (NumberFormatException e) {            
+          return new Integer(0);
+        }
       }
-      
-    };
-    return bc;
+      return new Integer(0);
+    }
+  }
+
+  static class Long2String extends BindingConvertor<Long, String> {
+    public String sourceToTarget(Long value) {
+      if (value != null) {
+        return value.toString();
+      } else {
+        return ""; //$NON-NLS-1$
+      }
+    }
+  
+    public Long targetToSource(String value) {
+      if (value != null) {
+        try {            
+          return Long.valueOf(value); 
+        } catch (NumberFormatException e) {
+          return new Long(0);
+        }
+      }
+      return new Long(0);
+    }
+  }
+
+  static class Date2String extends BindingConvertor<Date, String> {
+    DateFormat format = null;
+    
+    public Date2String() {
+      format = new SimpleDateFormat("MM-dd-yyyy"); //$NON-NLS-1$
+    }
+    public Date2String(DateFormat format) {
+      this.format = format;
+    }
+    
+    public String sourceToTarget(Date value) {
+      if (value == null) {
+        return ""; //$NON-NLS-1$
+      }
+      return format.format(value);
+    }
+  
+    public Date targetToSource(String value) {
+      try {
+        return format.parse(value);
+      } catch (Exception e) {
+        return null;
+      }
+    }
+  }
+
+  static class String2String extends BindingConvertor<String, String> {
+    public String sourceToTarget(String value) {
+      return value;
+    }
+
+    public String targetToSource(String value) {
+      return value; 
+    }
+  }
+                                                                       
+  static class Boolean2String extends BindingConvertor<Boolean, String> {
+    public String sourceToTarget(Boolean value) {
+      return value.toString();
+    }
+
+    public Boolean targetToSource(String value) {
+      return Boolean.parseBoolean(value);
+    }
     
   }
+  
   
 }

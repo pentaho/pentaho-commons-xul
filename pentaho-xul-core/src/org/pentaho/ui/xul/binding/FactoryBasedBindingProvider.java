@@ -6,10 +6,10 @@ import org.pentaho.ui.xul.XulEventSource;
  * User: nbaker
  * Date: Jun 28, 2010
  */
-public abstract class FactortyBasedBindingProvider implements BindingProvider{
+public abstract class FactoryBasedBindingProvider implements BindingProvider{
 
   private BindingFactory bf;
-  public FactortyBasedBindingProvider(BindingFactory bf){
+  public FactoryBasedBindingProvider(BindingFactory bf){
     this.bf = bf;
   }
 

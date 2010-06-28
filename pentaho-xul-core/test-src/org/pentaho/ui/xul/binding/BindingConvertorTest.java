@@ -105,6 +105,11 @@ public class BindingConvertorTest {
     converted = bc.sourceToTarget(null);
     assertEquals("", converted);
     
+    format = new SimpleDateFormat("yyyy-MM-dd");
+    bc = BindingConvertor.date2String(format);
+    converted = bc.sourceToTarget(date);
+    assertEquals(format.format(date), converted);
+    
   }
   
   @Test
@@ -131,6 +136,18 @@ public class BindingConvertorTest {
     String target = "Howdy!";
     converted = bc.targetToSource(target);
     assertEquals(target, converted);
+  }
+  
+  @Test
+  public void testBoolean2String() throws Exception {
+    BindingConvertor<Boolean, String> bc = BindingConvertor.boolean2String();
+    assertEquals("true", bc.sourceToTarget(true));
+    assertEquals("false", bc.sourceToTarget(false));
+    
+    assertTrue(bc.targetToSource("true"));
+    assertFalse(bc.targetToSource("false"));
+    assertFalse(bc.targetToSource(null));
+    assertFalse(bc.targetToSource("anything"));
   }
   
 }
