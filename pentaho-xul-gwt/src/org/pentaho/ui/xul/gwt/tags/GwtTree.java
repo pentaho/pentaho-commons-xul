@@ -46,6 +46,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
@@ -410,6 +411,28 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         b.setText(val);
         return b;
       }
+    } else if (colType.equalsIgnoreCase("checkbox")) {
+      try {
+        GwtCheckbox checkBox = (GwtCheckbox) this.domContainer.getDocumentRoot().createElement("checkbox");
+        checkBox.setDisabled(!column.isEditable());
+        checkBox.layout();
+        checkBox.setChecked(Boolean.parseBoolean(val));
+        Binding bind = createBinding(cell, "value", checkBox, "checked");
+        bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(bind);
+        bind.fireSourceChanged();
+        
+        bind = createBinding(cell, "disabled", checkBox, "disabled");
+        bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(bind);
+        
+        return (Widget)checkBox.getManagedObject();
+      } catch (Exception e) {
+        final CheckBox cb = new CheckBox();
+        return cb;
+      }
+      
+      
     } else if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox")){
       try{
         final GwtMenuList glb = (GwtMenuList) this.domContainer.getDocumentRoot().createElement("menulist");
