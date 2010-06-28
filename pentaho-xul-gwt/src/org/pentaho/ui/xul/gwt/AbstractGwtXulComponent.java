@@ -641,4 +641,8 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public String getDrageffect() {
     return drageffect;
   }
+
+  public void setBindingProvider(BindingProvider provider){
+    this.bindingProvider = provider;
+  }
 }
