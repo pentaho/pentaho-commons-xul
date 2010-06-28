@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.binding;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.text.DateFormat;
@@ -117,6 +118,19 @@ public class BindingConvertorTest {
     converted = bc.targetToSource("234234234234324");
     assertEquals(null, converted);
     
+  }
+  
+  @Test
+  public void testString2String() throws Exception {
+    BindingConvertor<String, String> bc = BindingConvertor.string2String();
+    String source= "Hello Test!";
+    String converted = bc.sourceToTarget(source);
+    assertEquals(source, converted);
+
+    
+    String target = "Howdy!";
+    converted = bc.targetToSource(target);
+    assertEquals(target, converted);
   }
   
 }

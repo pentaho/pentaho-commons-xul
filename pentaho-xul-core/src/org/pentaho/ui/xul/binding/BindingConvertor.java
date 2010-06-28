@@ -5,8 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//import org.apache.commons.lang.StringUtils;
-
 public abstract class BindingConvertor<V, R> {
   public enum Direction{FORWARD, BACK};
   
@@ -90,6 +88,24 @@ public abstract class BindingConvertor<V, R> {
       }
     };
     return bc;
+  }
+  
+  public static BindingConvertor<String, String> string2String() {
+    BindingConvertor<String, String> bc = new BindingConvertor<String, String>() {
+
+      @Override
+      public String sourceToTarget(String value) {
+        return value;
+      }
+
+      @Override
+      public String targetToSource(String value) {
+        return value; 
+      }
+      
+    };
+    return bc;
+    
   }
   
 }
