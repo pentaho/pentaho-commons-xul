@@ -1048,12 +1048,24 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         binding.fireSourceChanged();
         
         cell.setValueBindingsAdded(true);
+      } else if(colType != null && colType.equalsIgnoreCase("checkbox")) {
+        Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, "value");
+        if(col.isEditable() == false){
+          binding.setBindingType(Binding.Type.ONE_WAY);
+        } else {
+          binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        }
+        domContainer.addBinding(binding);
+        binding.fireSourceChanged();
+  
+        cell.setValueBindingsAdded(true);
         
-      } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){
-      
+      } else if(o instanceof XulEventSource && StringUtils.isEmpty(exp.getModelAttr()) == false){        
         Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr());
         if(col.isEditable() == false){
           binding.setBindingType(Binding.Type.ONE_WAY);
+        } else {
+          binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
         }
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
