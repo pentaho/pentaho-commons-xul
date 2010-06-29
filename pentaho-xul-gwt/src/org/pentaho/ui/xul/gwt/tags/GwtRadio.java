@@ -36,7 +36,11 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   
   public GwtRadio() {
     super(ELEMENT_NAME);
-    radioButton = new RadioButton(currentGroup.getId());
+    String id = "foo";
+    if(currentGroup != null){
+      id = currentGroup.getId();
+    }
+    radioButton = new RadioButton(id);
     setManagedObject(radioButton);
     radioButton.setStylePrimaryName("radio");
     radioButton.addClickHandler(new ClickHandler() {
@@ -55,7 +59,9 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     radioGroup = currentGroup;
-    currentGroup.registerRadio(this);
+    if(currentGroup != null){
+      currentGroup.registerRadio(this);
+    }
     
     super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
@@ -117,7 +123,9 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
    }
    this.checked = checked;
    this.firePropertyChange("checked", previousVal, checked);
-   this.radioGroup.fireValueChanged();
+   if(this.radioGroup != null){
+     this.radioGroup.fireValueChanged();
+   }
   }
 
   @Bindable

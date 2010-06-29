@@ -27,13 +27,17 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
   }
   
   public GwtVbox() {
-    super(ELEMENT_NAME);
+    this(ELEMENT_NAME);
+  }
+  
+  public GwtVbox(String elementName) {
+    super(elementName);
     this.orientation = Orient.VERTICAL;
     VerticalPanel vp;
     container = vp = new VerticalPanel();
     setManagedObject(container);
     vp.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
-    vp.setStyleName("vbox");
+    vp.setStyleName("vbox");  //$NON-NLS-1$
   }
 
 
