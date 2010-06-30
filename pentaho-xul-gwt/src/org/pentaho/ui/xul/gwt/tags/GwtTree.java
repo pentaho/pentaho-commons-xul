@@ -1007,6 +1007,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         if(cell.selectedIndexBindingsAdded() == false){
 
           Binding binding = createBinding((XulEventSource) o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
+          binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
           binding.setConversion(new BindingConvertor<Object, Integer>(){
     
             @Override
