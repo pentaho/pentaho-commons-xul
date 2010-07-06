@@ -160,6 +160,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
       setReadonly(readOnly);
       setType(type);
       setManagedObject(textBox);
+      addKeyListener(textBox);
     }
     return super.getManagedObject();
   }
