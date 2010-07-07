@@ -87,6 +87,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   private JTree tree;
 
   private ListSelectionListener selectionListener;
+  private TreeSelectionListener treeSelectionListener;
 
   private JScrollPane scrollpane;
 
@@ -284,6 +285,18 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     if (table != null) {
       table.getSelectionModel().addListSelectionListener(selectionListener);
     }
+    
+    treeSelectionListener = new TreeSelectionListener() {
+      public void valueChanged(TreeSelectionEvent e) {
+        if (tree != null) {
+          invoke(select, new Object[] { tree.getSelectionRows()[0]});
+        }
+      }
+    };
+    
+    if (tree != null) {
+      tree.getSelectionModel().addTreeSelectionListener(treeSelectionListener);
+    }
   }
 
   private XulTreeCols columns;
@@ -377,6 +390,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     if (isHierarchical) {
       tree = new JTree();
+      if (treeSelectionListener != null) {
+        tree.getSelectionModel().addTreeSelectionListener(treeSelectionListener);
+      }
     } else {
       table = new JTable();
       if (selectionListener != null) {
