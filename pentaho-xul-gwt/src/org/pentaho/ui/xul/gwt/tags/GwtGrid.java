@@ -113,8 +113,11 @@ public class GwtGrid  extends AbstractGwtXulContainer implements XulGrid {
         if(!columnFlexLayout) {
           grid.getCellFormatter().setWidth(rowCount, colCount, component.getWidth() + "%"); //$NON-NLS-1$
         } else {
-          String percentage = Math.round((colList.get(colCount).getFlex()*100/colFlexTotal))+"%";//$NON-NLS-1$
-          grid.getCellFormatter().setWidth(rowCount, colCount, percentage); 
+          int pct = Math.round((colList.get(colCount).getFlex()*100/colFlexTotal));
+          String percentage = pct + "%";//$NON-NLS-1$
+          if (pct > 0) {
+            grid.getCellFormatter().setWidth(rowCount, colCount, percentage);
+          }
         }
       }
     }
