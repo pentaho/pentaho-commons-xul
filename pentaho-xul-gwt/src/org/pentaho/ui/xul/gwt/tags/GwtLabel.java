@@ -101,13 +101,17 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   }
 
   public boolean isDisabled() {
-    // style here?
-    return false;
+    return disabled;
 //    return !label.isEnabled();
   }
 
   public void setDisabled(boolean dis) {
-//    label.setEnabled(!dis);
+    if (dis) {
+      label.addStyleDependentName("disabled");
+    } else {
+      label.removeStyleDependentName("disabled");
+    }
+    this.disabled = dis;
   }
   
 

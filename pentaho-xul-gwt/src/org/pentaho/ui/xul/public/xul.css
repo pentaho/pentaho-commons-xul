@@ -180,6 +180,10 @@ html, body{
   white-space: nowrap;
 }
 
+.xul-label-disabled{
+	color: #999;
+}
+
 .gwt-Button {
   font-size: 0.85em;
   background-color: #ddd;
