@@ -10,6 +10,8 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.FileUpload;
 import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
@@ -73,6 +75,11 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     upload.setVisible(true);
     upload.setHeight(getHeight() + "px");
     upload.setWidth(getWidth() + "px");
+    upload.addChangeHandler(new ChangeHandler(){
+      public void onChange(ChangeEvent event) {
+        setSelectedFile(upload.getFilename());
+      }
+    });
     uploadPanel = new VerticalPanel();
     uploadPanel.add(upload);
     panel.add(uploadPanel);
@@ -165,8 +172,8 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
       upload.setHeight(getHeight() + "px"); //$NON-NLS-1$
       upload.setWidth(getWidth() + "px"); //$NON-NLS-1$
       uploadPanel.add(upload);
-      firePropertyChange("selectedFile", getSeletedFile(), name); //$NON-NLS-1$
     }
+    firePropertyChange("selectedFile", null, name); //$NON-NLS-1$
   }
   public void submit() {
     uploadForm.submit();
