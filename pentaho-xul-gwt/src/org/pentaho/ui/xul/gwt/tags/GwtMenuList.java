@@ -1,17 +1,14 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.listbox.ListItem;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
-import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulDomException;
-import org.pentaho.ui.xul.XulEventSource;
-import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.*;
 import org.pentaho.ui.xul.components.XulMenuList;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulRoot;
@@ -24,11 +21,9 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuList<T> {
 
@@ -36,13 +31,14 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private boolean editable;
 
   public static void register() {
-    GwtXulParser.registerHandler(ELEMENT_NAME, 
-    new GwtXulHandler() {
-      public Element newInstance() {
-        return new GwtMenuList();
-      }
-    });
+    GwtXulParser.registerHandler(ELEMENT_NAME,
+        new GwtXulHandler() {
+          public Element newInstance() {
+            return new GwtMenuList();
+          }
+        });
   }
+
   private int selectedIndex = -1;
   private Label label;
   private CustomListBox listbox;
@@ -53,28 +49,29 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private String previousSelectedItem = null;
   private String onCommand;
   private SimplePanel wrapper = null;
+
   public GwtMenuList() {
     super(ELEMENT_NAME);
     wrapper = new SimplePanel() {
 
       @Override
-      public void setHeight(String height) {
+      public void setHeight( String height ) {
       }
 
       @Override
-      public void setWidth(String width) {
+      public void setWidth( String width ) {
         super.setWidth(width);
         listbox.setWidth(width);
       }
-      
+
     };
     listbox = new CustomListBox();
     wrapper.add(listbox);
     setManagedObject(wrapper);
-    
-    listbox.addChangeListener(new ChangeListener(){
 
-      public void onChange(Widget arg0) {
+    listbox.addChangeListener(new ChangeListener() {
+
+      public void onChange( Widget arg0 ) {
 
         /*
          * This actionlistener is fired at parse time when elements are added.
@@ -86,26 +83,26 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
         fireSelectedEvents();
       }
-      
-    });  
+
+    });
   }
-  
-  public CustomListBox getNativeListBox(){
+
+  public CustomListBox getNativeListBox() {
     return this.listbox;
   }
-  
-  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+
+  public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
     super.init(srcEle, container);
     setBinding(srcEle.getAttribute("pen:binding"));
     setOnCommand(srcEle.getAttribute("oncommand"));
-    if(!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
-      setWidth(Integer.parseInt(srcEle.getAttribute("width")));  
+    if (!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
+      setWidth(Integer.parseInt(srcEle.getAttribute("width")));
     }
-    if(!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
-      setHeight(Integer.parseInt(srcEle.getAttribute("height")));  
+    if (!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
+      setHeight(Integer.parseInt(srcEle.getAttribute("height")));
     }
   }
-  
+
   public String getBinding() {
     return bindingProperty;
   }
@@ -113,12 +110,13 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   @Bindable
   public Collection getElements() {
     List<Object> vals = new ArrayList<Object>();
-    for(int i=0; i<listbox.getItems().size(); i++){
+    for (int i = 0; i < listbox.getItems().size(); i++) {
       vals.add(listbox.getItems().get(i).getValue());
     }
     return vals;
   }
 
+  @Bindable
   public int getSelectedIndex() {
     return listbox.getSelectedIndex();
   }
@@ -126,53 +124,55 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   @Bindable
   public String getSelectedItem() {
     ListItem selectedItem = listbox.getSelectedItem();
-    
+
     return (selectedItem == null) ? null : listbox.getSelectedItem().getValue().toString();
   }
 
-  public void replaceAllItems(Collection tees) throws XulDomException {
-    throw new RuntimeException("Not implemented");  
+  public void replaceAllItems( Collection tees ) throws XulDomException {
+    throw new RuntimeException("Not implemented");
   }
 
-  public void setBinding(String binding) {
+  public void setBinding( String binding ) {
     this.bindingProperty = binding;
   }
 
   @Bindable
-  public void setElements(Collection<T> elements) {
+  public void setElements( Collection<T> elements ) {
 
-    try{
+    try {
       suppressLayout = true;
       listbox.setSuppressLayout(true);
-      
+
       XulMenupopup popup = getPopupElement();
       for (XulComponent menuItem : popup.getChildNodes()) {
         popup.removeChild(menuItem);
       }
-      if(elements == null || elements.size() == 0){
+      if (elements == null || elements.size() == 0) {
         this.suppressLayout = false;
         layout();
         return;
       }
       for (T t : elements) {
         GwtMenuitem item = new GwtMenuitem(popup);
-  
+
         String attribute = getBinding();
         if (!StringUtils.isEmpty(attribute)) {
           item.setLabel(extractLabel(t));
+        } else {
+          item.setLabel(t.toString());
         }
         popup.addChild(item);
       }
-  
+
       this.suppressLayout = false;
-      
+
       listbox.setSuppressLayout(false);
       layout();
-    } catch(Exception e){
+    } catch (Exception e) {
       System.out.println(e.getMessage());
       e.printStackTrace();
     }
-      
+
   }
 
   public GwtMenupopup getPopupElement() {
@@ -183,11 +183,11 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     }
     throw new IllegalStateException("menulist is missing a menupopup child element");
   }
-  
-  public void setOncommand(final String command) {
-    this.listbox.addChangeListener(new ChangeListener(){
 
-      public void onChange(Widget arg0) {
+  public void setOncommand( final String command ) {
+    this.listbox.addChangeListener(new ChangeListener() {
+
+      public void onChange( Widget arg0 ) {
 
         /*
          * This actionlistener is fired at parse time when elements are added.
@@ -199,26 +199,27 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         Document doc = getDocument();
         XulRoot window = (XulRoot) doc.getRootElement();
         final XulDomContainer con = window.getXulDomContainer();
-        try{
-          con.invoke(command, new Object[] {});
-        } catch(XulException e){
-          Window.alert("MenuList onChange error: "+e.getMessage());
+        try {
+          con.invoke(command, new Object[]{});
+        } catch (XulException e) {
+          Window.alert("MenuList onChange error: " + e.getMessage());
         }
         fireSelectedEvents();
       }
-      
-    });  
+
+    });
   }
 
   @Bindable
-  public void setSelectedIndex(int idx) {
+  public void setSelectedIndex( int idx ) {
     int previousValue = selectedIndex;
     selectedIndex = idx;
     listbox.setSelectedIndex(idx);
     firePropertyChange("selectedIndex", previousValue, idx);
   }
 
-  public void setSelectedItem(T t) {
+  @Bindable
+  public void setSelectedItem( T t ) {
     //this is coming in as a string for us.
 //    int i=0;
 //    for(Object o : getElements()){
@@ -227,60 +228,60 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 //      }
 //      i++;
 //    }
-    int i=0;
-    for(Object o : getElements()){
-      if(((String) o).equals((String)t)){
+    int i = 0;
+    for (Object o : getElements()) {
+      if (((String) o).equals((String) t)) {
         setSelectedIndex(i);
       }
       i++;
     }
   }
 
-  private String extractLabel(T t) {
+  private String extractLabel( T t ) {
     String attribute = getBinding();
     if (StringUtils.isEmpty(attribute) || !(t instanceof XulEventSource)) {
       return t.toString();
     } else {
       try {
         GwtBindingMethod m = GwtBindingContext.typeController.findGetMethod(t, attribute);
-        if(m == null){
-          System.out.println("could not find getter method for "+t+"."+attribute);
+        if (m == null) {
+          System.out.println("could not find getter method for " + t + "." + attribute);
         }
         return m.invoke(t, new Object[]{}).toString();
-        
+
       } catch (Exception e) {
         throw new RuntimeException(e);
       }
     }
   }
 
-  public void adoptAttributes(XulComponent component) {
-      
+  public void adoptAttributes( XulComponent component ) {
+
   }
 
-  
-  private void fireSelectedEvents(){
-    
+
+  private void fireSelectedEvents() {
+
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (String) getSelectedItem());
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
     GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
     previousSelectedItem = (String) getSelectedItem();
-      
-      if(StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false && prevSelectedIndex != selectedIndex){
-        try {
-          GwtMenuList.this.getXulDomContainer().invoke(GwtMenuList.this.getOnCommand(), new Object[] {});
-        } catch (XulException e) {
-          e.printStackTrace();
-        }
+
+    if (StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false && prevSelectedIndex != selectedIndex) {
+      try {
+        GwtMenuList.this.getXulDomContainer().invoke(GwtMenuList.this.getOnCommand(), new Object[]{});
+      } catch (XulException e) {
+        e.printStackTrace();
       }
+    }
   }
 
   @Override
   public void layout() {
 
     inLayoutProcess = true;
-    if(suppressLayout){
+    if (suppressLayout) {
       inLayoutProcess = false;
       return;
     }
@@ -292,7 +293,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     this.listbox.removeAll();
 
     GwtMenuitem selectedItem = null;
-    
+
     //capture first child as default selection
     boolean firstChild = true;
     for (XulComponent item : popup.getChildNodes()) {
@@ -310,16 +311,16 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     if (selectedItem != null) {
       //if first setting it to the currently selected one will not fire event.
       //manually firing here
-      if(this.getSelectedItem().equals(selectedItem.getLabel())){
+      if (this.getSelectedItem().equals(selectedItem.getLabel())) {
         fireSelectedEvents();
       }
       setSelectedItem((T) selectedItem.getLabel());
     }
-    if(getSelectedIndex() > -1){
-      if(currentSelectedIndex < listbox.getItems().size()) {
+    if (getSelectedIndex() > -1) {
+      if (currentSelectedIndex < listbox.getItems().size()) {
         int index = getIndexForItem(currentSelectedItem);
-        if(index > 0) {
-         listbox.setSelectedIndex(currentSelectedIndex);
+        if (index > 0) {
+          listbox.setSelectedIndex(currentSelectedIndex);
         } else {
           listbox.setSelectedIndex(listbox.getSelectedIndex());
         }
@@ -331,25 +332,27 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   @Override
-  public void resetContainer(){
+  public void resetContainer() {
     this.layout();
   }
 
   public String getOnCommand() {
-  
+
     return onCommand;
   }
 
-  public void setOnCommand(String command) {
-  
+  public void setOnCommand( String command ) {
+
     this.onCommand = command;
   }
 
-  public void setEditable(boolean editable) {
+  @Bindable
+  public void setEditable( boolean editable ) {
     this.listbox.setEditable(editable);
     this.editable = editable;
   }
 
+  @Bindable
   public boolean getEditable() {
     return editable;
   }
@@ -360,31 +363,32 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   @Bindable
-  public void setValue(String value) {
-    for(ListItem item : listbox.getItems()){
-      if(item.getValue().equals(value)){
+  public void setValue( String value ) {
+    for (ListItem item : listbox.getItems()) {
+      if (item.getValue().equals(value)) {
         listbox.setSelectedItem(item);
         return;
       }
     }
     listbox.setValue(value);
   }
-  
+
   @Override
-  public void setWidth(int width) {
+  public void setWidth( int width ) {
     listbox.setWidth(width + "px");
   }
 
   @Override
-  public void setHeight(int height) {
+  public void setHeight( int height ) {
     listbox.setHeight(height + "px");
   }
-  private int getIndexForItem(Object obj) {
+
+  private int getIndexForItem( Object obj ) {
     int index = -1;
-    if(obj != null){
-      for(ListItem item:listbox.getItems()) {
+    if (obj != null) {
+      for (ListItem item : listbox.getItems()) {
         index++;
-        if(item.getValue() != null && item.getValue().equals(obj.toString())) {
+        if (item.getValue() != null && item.getValue().equals(obj.toString())) {
           return index;
         }
       }

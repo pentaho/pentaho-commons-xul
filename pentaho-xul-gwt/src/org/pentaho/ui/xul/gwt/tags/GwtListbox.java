@@ -56,7 +56,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   private String binding;
   
   private XulDomContainer container;
-  
+  private Object prevSelecteItem;
   private String command;
 
   public GwtListbox() {
@@ -70,7 +70,6 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     super.init(srcEle, container);
     this.container = container;
     setBinding(srcEle.getAttribute("pen:binding")); //$NON-NLS-1$
-    setRows(2);
     if (srcEle.hasAttribute("width") && srcEle.getAttribute("width").trim().length() > 0) { //$NON-NLS-1$ //$NON-NLS-2$
       setWidth(Integer.parseInt(srcEle.getAttribute("width"))); //$NON-NLS-1$
     }
@@ -163,6 +162,10 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   }
 
   private Object getItem(int index) {
+    if(this.boundElements != null){
+      //Bound situation, return domain object
+      return boundElements.toArray()[index];
+    }
     return getChildNodes().get(Integer.parseInt(listBox.getValue(index)));
   }
 
@@ -325,7 +328,10 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     this.listBox.setSelectedIndex(index);
     
     this.firePropertyChange("selectedIndex", oldValue, index);
-    
+    this.firePropertyChange("selectedItem", prevSelecteItem, getSelectedItem());
+    this.firePropertyChange("selectedItems", prevSelecteItem, new Object[]{getSelectedItem()});
+    prevSelecteItem = getSelectedItem();
+
   }
 
   @Bindable

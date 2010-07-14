@@ -2,7 +2,10 @@ package org.pentaho.ui.xul.gwt.tags;
 
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.TreeItem;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
@@ -11,9 +14,12 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.tags.util.TreeItemWidget;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem {
-
+  private boolean expanded;
+  private String image;
   public static void register() {
     GwtXulParser.registerHandler("treeitem",
     new GwtXulHandler() {
@@ -26,7 +32,12 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   public GwtTreeItem() {
     super("treeitem");
   }
-  
+
+  @Override
+  public void layout() {
+    super.layout();
+  }
+
   public XulTreeRow getRow() {
     List list = getElementsByTagName("treerow");
     if (list.size() > 0) {
@@ -36,10 +47,16 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   }
 
   public XulTree getTree() {
-    if (getParent() != null) { // tree children
-      return (XulTree)getParent().getParent();
+    XulTree tree = null;
+    XulComponent parent = getParent();
+    while (parent != null) {
+      if (parent instanceof XulTree) {
+        tree = (XulTree) parent;
+        break;
+      }
+      parent = parent.getParent();
     }
-    return null;
+    return tree;
   }
 
   public boolean isContainer() {
@@ -83,25 +100,34 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     // TODO Auto-generated method stub 
   }
 
+  @Bindable
   public String getImage() {
-    // TODO Auto-generated method stub
-    return null;
+    return image;
   }
 
+  @Bindable
   public void setImage(String src) {
-    // TODO Auto-generated method stub
-    
+    String oldSrc = this.image;
+    this.image = src;
+    firePropertyChange("image", oldSrc, src);
   }
 
+  @Bindable
   public boolean isExpanded() {
-    // TODO Auto-generated method stub
-    return false;
+    return expanded;
   }
 
+  @Bindable
   public void setExpanded(boolean expanded) {
-    // TODO Auto-generated method stub
-    
+    this.expanded = expanded;
+      XulTree tree = getTree();
+    if (tree != null) {
+      tree.setTreeItemExpanded(this, expanded);
+    }
+
+    changeSupport.firePropertyChange("expanded", null, expanded);
   }
+
 
   public Object getBoundObject() {
     // TODO Auto-generated method stub
@@ -112,8 +138,5 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     // TODO Auto-generated method stub
     
   }
-  
-  
-  
-  
+
 }

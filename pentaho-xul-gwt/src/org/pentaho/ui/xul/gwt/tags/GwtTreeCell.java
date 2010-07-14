@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.beans.PropertyChangeListener;
 import java.util.Vector;
 
 import org.pentaho.ui.xul.XulComponent;
@@ -165,5 +166,12 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   
   public boolean labelBindingsAdded(){
     return labelBindingsAdded;
+  }
+  
+
+  // TODO: migrate into XulComponent
+  @Deprecated
+  public void addPropertyChangeListener(String prop, PropertyChangeListener listener){
+    changeSupport.addPropertyChangeListener(prop, listener);
   }
 }

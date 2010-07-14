@@ -3,6 +3,7 @@ package org.pentaho.ui.xul.gwt.tags;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
@@ -22,6 +23,8 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private ColumnType type = ColumnType.TEXT;
   private String colType;
   private String tooltipBinding;
+  private String expandBinding;
+  private String imageBinding;
 
 
   public static void register() {
@@ -47,6 +50,12 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     setColumntypebinding(srcEle.getAttribute("pen:columntypebinding"));
     setDisabledbinding(srcEle.getAttribute("pen:disabledbinding"));
     setEditable("true".equalsIgnoreCase(srcEle.getAttribute("editable"))); //$NON-NLS-1$ //$NON-NLS-2$
+    if(StringUtils.isEmpty(srcEle.getAttribute("pen:expandedbinding")) == false){
+      setExpandedbinding(srcEle.getAttribute("pen:expandedbinding")); //$NON-NLS-1$ 
+    }
+    if(StringUtils.isEmpty(srcEle.getAttribute("pen:imagebinding")) == false){
+      setImagebinding(srcEle.getAttribute("pen:imagebinding")); //$NON-NLS-1$ 
+    }
   }
   
   public void autoSize() {
@@ -216,23 +225,19 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public String getImagebinding() {
-    // TODO Auto-generated method stub
-    return null;
+    return imageBinding;
   }
 
   public void setImagebinding(String img) {
-    // TODO Auto-generated method stub
-    
+    this.imageBinding = img;
   }
 
   public String getExpandedbinding() {
-    // TODO Auto-generated method stub
-    return null;
+    return expandBinding;
   }
 
   public void setExpandedbinding(String bind) {
-    // TODO Auto-generated method stub
-    
+    this.expandBinding = bind;
   }
 
   public String getTooltipbinding() {

@@ -125,10 +125,12 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
   @Override
   public void setHeight(int height) {
     captionPanel.setHeight(height + "px");
+    super.setHeight(height);
   }
 
   @Override
   public void setWidth(int width) {
     captionPanel.setWidth(width + "px");
+    super.setWidth(width);
   }
 }

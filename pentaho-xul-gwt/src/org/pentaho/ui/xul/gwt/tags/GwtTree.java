@@ -1,15 +1,19 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.gwt.user.client.ui.*;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
@@ -36,6 +40,7 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.gwt.tags.util.TreeItemWidget;
 import org.pentaho.ui.xul.gwt.util.Resizable;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.TreeCellEditor;
@@ -45,30 +50,17 @@ import org.pentaho.ui.xul.util.TreeCellRenderer;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ChangeListener;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.KeyboardListener;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Tree;
-import com.google.gwt.user.client.ui.TreeItem;
-import com.google.gwt.user.client.ui.TreeListener;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
 import com.google.gwt.widgetideas.table.client.TableSelectionListener;
 import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
-
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable {
 
   /**
    * Cached elements.
    */
-private Collection elements; 
+  private Collection elements; 
   
   public static void register() {
     GwtXulParser.registerHandler("tree", 
@@ -90,6 +82,15 @@ private Collection elements;
   
   private Map<String, TreeCellEditor> customEditors = new HashMap<String, TreeCellEditor>();
   private Map<String, TreeCellRenderer> customRenderers = new HashMap<String, TreeCellRenderer>();
+
+  private List<Binding> elementBindings = new ArrayList<Binding>();
+  private List<Binding> expandBindings = new ArrayList<Binding>();
+
+  private PropertyChangeListener cellChangeListener = new PropertyChangeListener(){
+    public void propertyChange( PropertyChangeEvent arg0) {
+      GwtTree.this.update();
+    }
+  };
   
   
   @Bindable
@@ -195,7 +196,6 @@ private Collection elements;
   }
 
   private int prevSelectionPos = -1;
-  
   private void setupTree(){
     if(tree == null){
       tree = new Tree();
@@ -229,6 +229,7 @@ private Collection elements;
         if(pos > -1 && GwtTree.this.suppressEvents == false && prevSelectionPos != pos){
           GwtTree.this.changeSupport.firePropertyChange("selectedRows",null,new int[]{pos});
           GwtTree.this.changeSupport.firePropertyChange("absoluteSelectedRows",null,new int[]{pos});
+          GwtTree.this.fireSelectedItems();
         }
         prevSelectionPos = pos;
 
@@ -257,17 +258,18 @@ private Collection elements;
     if(curItem == itemToFind){
       TreeCursor p = new TreeCursor(curPos, itemToFind, curPos);
       return p;
-    } else if(curItem.getChildIndex(itemToFind) > -1) {
-      curPos = curPos+1;
-      return new TreeCursor(curPos, itemToFind, curItem.getChildIndex(itemToFind)+curPos);
+//    } else if(curItem.getChildIndex(itemToFind) > -1) {
+//      curPos = curPos+1;
+//      return new TreeCursor(curPos+curItem.getChildIndex(itemToFind) , itemToFind, curPos+curItem.getChildIndex(itemToFind));
     } else {
-      for(int i=0; i<curItem.getChildCount(); i++){
-        TreeCursor p;
-        if((p = findPosition(curItem.getChild(i), itemToFind, curPos +i)).foundPosition > -1){
+      for(int i=1; i-1<curItem.getChildCount(); i++){
+        TreeCursor p = findPosition(curItem.getChild(i-1), itemToFind, curPos +1);
+        curPos = p.curPos;
+        if(p.foundPosition > -1){
           return p;
         }
       }
-        curPos += curItem.getChildCount() ;
+        //curPos += curItem.getChildCount() ;
       return new TreeCursor(curPos, itemToFind, -1);
     }
     
@@ -296,16 +298,22 @@ private Collection elements;
         data[i][j] = getColumnEditor(j,i);
       }
     }
-   
+
     table.populateTable(data);
   }
   
   private TreeItem createNode(XulTreeItem item){
     TreeItem node = new TreeItem("empty");
+    item.setManagedObject(node);
     if(item == null || item.getRow() == null || item.getRow().getChildNodes().size() == 0){
       return node;
     }
-    node.setText(item.getRow().getCell(0).getLabel());
+    TreeItemWidget tWidget = new TreeItemWidget();
+
+    tWidget.setLabel(item.getRow().getCell(0).getLabel());
+    tWidget.setImage(new Image(item.getImage()));
+    node.setWidget(tWidget);
+
     if(item.getChildNodes().size() > 1){
       //has children
       //TODO: make this more defensive
@@ -540,8 +548,7 @@ private Collection elements;
   
   private void setupTable(){
     String cols[] = new String[getColumns().getColumnCount()];
-    
-    // use base table from pentaho widgets library for now
+
     
     SelectionPolicy selectionPolicy = null;
     if ("single".equals(getSeltype())) {
@@ -549,12 +556,13 @@ private Collection elements;
     } else if ("multiple".equals(getSeltype())) {
       selectionPolicy = SelectionPolicy.MULTI_ROW;
     }
-    
+
     int[] widths = new int[cols.length];
     int totalFlex = 0;
     for (int i = 0; i < cols.length; i++) {
       totalFlex += getColumns().getColumn(i).getFlex();
     }
+    
     for (int i = 0; i < cols.length; i++) {
       cols[i] = getColumns().getColumn(i).getLabel();
       if(totalFlex > 0 && getWidth() > 0){
@@ -570,13 +578,13 @@ private Collection elements;
 	  table.setHeight(getHeight() + "px");
 	} else {
 		table.setHeight("100%");
-	}
+    }
 	if (getWidth() != 0) {
 	  table.setWidth(getWidth() + "px");
 	} else {
 		table.setWidth("100%");
 	}
-    
+
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
       }
@@ -618,6 +626,14 @@ private Collection elements;
     }
     if(this.isHierarchical()){
       populateTree();
+      for(Binding expBind : expandBindings){
+        try {
+          expBind.fireSourceChanged();
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+//        expandBindings.clear();
     } else {
       populateTable();
     };
@@ -819,6 +835,7 @@ private Collection elements;
       this.elements = elements;
       suppressEvents = true;
       this.getRootChildren().removeAll();
+      this.expandBindings.clear();
 
 
       if(elements == null || elements.size() == 0){
@@ -872,7 +889,7 @@ private Collection elements;
   
   private <T> void addTreeChild(T element, XulTreeRow row){
     try{
-      XulTreeCell cell = (XulTreeCell) getDocument().createElement("treecell");
+      GwtTreeCell cell = (GwtTreeCell) getDocument().createElement("treecell");
       
       for (InlineBindingExpression exp : ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getBindingExpressions()) {
         Binding binding = createBinding((XulEventSource) element, exp.getModelAttr(), cell, exp.getXulCompAttr());
@@ -881,6 +898,27 @@ private Collection elements;
         binding.fireSourceChanged();
       }
   
+      XulTreeCol column = (XulTreeCol) this.getColumns().getChildNodes().get(0);
+      String expBind = column.getExpandedbinding();
+      if(expBind != null){
+        Binding binding = createBinding((XulEventSource) element, expBind, row.getParent(), "expanded");
+        elementBindings.add(binding);
+        binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(binding);
+        expandBindings.add(binding);
+      }
+
+      String imgBind = column.getImagebinding();
+      if(imgBind != null){
+        Binding binding = createBinding((XulEventSource) element, imgBind, row.getParent(), "image");
+        elementBindings.add(binding);
+        binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(binding);
+        binding.fireSourceChanged();
+      }
+
+      cell.addPropertyChangeListener("label", cellChangeListener);
+
       row.addCell(cell);
       
       //find children
@@ -951,12 +989,6 @@ private Collection elements;
   public void adoptAttributes(XulComponent component) {
     super.adoptAttributes(component);
     layout();
-  }
-
-  @Bindable
-  public Object getSelectedItem() {
-    // TODO Auto-generated method stub
-    return null;
   }
 
   public void registerCellEditor(String key, TreeCellEditor editor){
@@ -1173,7 +1205,7 @@ private Collection elements;
   }
 
   public void setTreeItemExpanded(XulTreeItem item, boolean expanded) {
-    throw new UnsupportedOperationException("not implemented");    
+    ((TreeItem) item.getManagedObject()).setState(expanded);
   }
 
   public void collapseAll() {
@@ -1271,4 +1303,84 @@ private Collection elements;
     
   }
   
+
+  private void fireSelectedItems( ) {
+    Object selected = getSelectedItem();
+    this.changeSupport.firePropertyChange("selectedItem", null, selected);
+}
+
+  @Bindable
+  public Object getSelectedItem() {
+    if (this.isHierarchical && this.elements != null) {
+      int pos = -1;
+      int curPos = 0;
+      for(int i=0; i < tree.getItemCount(); i++){
+        TreeItem tItem = tree.getItem(i);
+        TreeCursor cursor = GwtTree.this.findPosition(tItem, tree.getSelectedItem(), curPos);
+        pos = cursor.foundPosition;
+        curPos = cursor.curPos+1;
+        if(pos > -1){
+          break;
+        }
+      }
+      int[] vals = new int[]{pos};
+
+      String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
+      FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(vals[0]));
+      return tuple != null ? tuple.selectedItem : null;
+    }
+    return null;
+  }
+
+  private static class FindSelectedItemTuple {
+    Object selectedItem = null;
+    int curpos = -1; // ignores first element (root)
+    int selectedIndex;
+
+    public FindSelectedItemTuple(int selectedIndex) {
+      this.selectedIndex = selectedIndex;
+    }
+  }
+
+
+  private FindSelectedItemTuple findSelectedItem(Object parent, String childrenMethodProperty,
+      FindSelectedItemTuple tuple) {
+    if (tuple.curpos == tuple.selectedIndex) {
+      tuple.selectedItem = parent;
+      return tuple;
+    }
+    Collection children = getChildCollection(parent, childrenMethodProperty);
+
+    if (children == null || children.size() == 0) {
+      return null;
+    }
+
+    for (Object child : children) {
+      tuple.curpos++;
+      findSelectedItem(child, childrenMethodProperty, tuple);
+      if (tuple.selectedItem != null) {
+        return tuple;
+      }
+    }
+    return null;
+  }
+
+
+  private static Collection getChildCollection(Object obj, String childrenMethodProperty) {
+    Collection children = null;
+    GwtBindingMethod childrenMethod = GwtBindingContext.typeController.findGetMethod(obj, childrenMethodProperty);
+
+    try {
+      if (childrenMethod != null) {
+        children = (Collection) childrenMethod.invoke(obj, new Object[] {});
+      } else if(obj instanceof Collection ){
+        children = (Collection) obj;
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+
+    return children;
+  }
 }
