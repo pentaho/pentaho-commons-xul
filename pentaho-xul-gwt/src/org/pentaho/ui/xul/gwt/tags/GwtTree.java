@@ -58,17 +58,17 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.client.ResizableWidgetCollection;
 import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
 import com.google.gwt.widgetideas.table.client.TableSelectionListener;
 import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
+
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable {
 
   /**
    * Cached elements.
    */
-  private Collection elements; 
+private Collection elements; 
   
   public static void register() {
     GwtXulParser.registerHandler("tree", 
@@ -195,6 +195,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   private int prevSelectionPos = -1;
+  
   private void setupTree(){
     if(tree == null){
       tree = new Tree();
@@ -292,23 +293,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     
     for (int i = 0; i < getRootChildren().getItemCount(); i++) {
       for (int j = 0; j < getColumns().getColumnCount(); j++) {
-        
-//        String label = getRootChildren().getItem(i).getRow().getCell(j).getLabel();
-//        if(label == null || label.equals("")){
-//          label = "&nbsp;";
-//        }
-        
         data[i][j] = getColumnEditor(j,i);
       }
     }
-    if (getHeight() != 0) {
-      table.setTableHeight(getHeight() + "px");
-    }
-    if (getWidth() != 0) {
-      table.setTableWidth(getWidth() + "px");
-    }
+   
     table.populateTable(data);
-    ResizableWidgetCollection.get().setResizeCheckingEnabled(false);
   }
   
   private TreeItem createNode(XulTreeItem item){
@@ -551,35 +540,43 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   
   private void setupTable(){
     String cols[] = new String[getColumns().getColumnCount()];
-    int len[] = new int[cols.length];
-    // for each column
     
+    // use base table from pentaho widgets library for now
     
+    SelectionPolicy selectionPolicy = null;
+    if ("single".equals(getSeltype())) {
+      selectionPolicy = SelectionPolicy.ONE_ROW;
+    } else if ("multiple".equals(getSeltype())) {
+      selectionPolicy = SelectionPolicy.MULTI_ROW;
+    }
+    
+    int[] widths = new int[cols.length];
     int totalFlex = 0;
     for (int i = 0; i < cols.length; i++) {
       totalFlex += getColumns().getColumn(i).getFlex();
     }
-    
     for (int i = 0; i < cols.length; i++) {
       cols[i] = getColumns().getColumn(i).getLabel();
       if(totalFlex > 0 && getWidth() > 0){
-        len[i] = (int) (getWidth() * ((double) getColumns().getColumn(i).getFlex() / totalFlex))  - 15;
+    	  widths[i] = (int) (getWidth() * ((double) getColumns().getColumn(i).getFlex() / totalFlex));
       } else if(getColumns().getColumn(i).getWidth() > 0){
-        len[i] = getColumns().getColumn(i).getWidth();
+    	  widths[i] = getColumns().getColumn(i).getWidth();
       }
     }
     
-    // use base table from pentaho widgets library for now
+    table = new BaseTable(cols, widths, new BaseColumnComparator[cols.length], selectionPolicy);
     
-    SelectionPolicy policy = null;
-    if ("single".equals(getSeltype())) {
-      policy = SelectionPolicy.ONE_ROW;
-    } else if ("multiple".equals(getSeltype())) {
-      policy = SelectionPolicy.MULTI_ROW;
-    }
+    if (getHeight() != 0) {
+	  table.setHeight(getHeight() + "px");
+	} else {
+		table.setHeight("100%");
+	}
+	if (getWidth() != 0) {
+	  table.setWidth(getWidth() + "px");
+	} else {
+		table.setWidth("100%");
+	}
     
-    table = new BaseTable(cols, len, new BaseColumnComparator[cols.length], policy);
-
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
       }
@@ -612,15 +609,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     });
 
     setWidgetInPanel(table);
-    
-    table.setTableWidth("100%"); //$NON-NLS-1$
-    table.setTableHeight("100%"); //$NON-NLS-1$
-    if (getWidth() > 0){
-      table.setTableWidth(getWidth()+"px"); //$NON-NLS-1$
-    }
-    if (getHeight() > 0) {
-      table.setTableHeight(getHeight()+"px"); //$NON-NLS-1$
-    }
     updateUI();
   }
   
@@ -633,9 +621,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     } else {
       populateTable();
     };
-//    if(this.suppressEvents == false){
-//      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
-//    }
   }
   
   public void afterLayout() {
@@ -780,7 +765,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public boolean isEnableColumnDrag() {
-    // TODO Auto-generated method stub
     return false;
   }
 
@@ -1086,11 +1070,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   }
   
-  
+
+  @Deprecated
   public void onResize() {
-    if(table != null){
-      table.onResize();
-    }
+//    if(table != null){
+//      table.onResize();
+//    }
   }
 
   public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorCallback{
@@ -1184,13 +1169,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public void setBoundObjectExpanded(Object o, boolean expanded) {
-
     throw new UnsupportedOperationException("not implemented");
-    
   }
 
   public void setTreeItemExpanded(XulTreeItem item, boolean expanded) {
-
     throw new UnsupportedOperationException("not implemented");    
   }
 

@@ -68,11 +68,18 @@ html, body{
 
 
 /*=========================  TABLE  =========================*/
+
+/*
+	All this stuff is already in the pentaho-gwt-widgets projects, where it belongs. I won't
+	remove it now cuz I'm unsure of the consequences, but keep in mind that if you need
+	to modify this, you'd better modify the pentaho-gwt-widgets->Widgets.css 
+*/
 .headerTable >tbody > tr > td{
   padding:4px;
 }
 .gwt-ScrollTable {
   border: 1px solid #848484;
+  overflow:hidden;
 }
 
 .gwt-ScrollTable .headerWrapper {
@@ -84,9 +91,13 @@ html, body{
   border-top: 1px solid #848484;
 }
 
+.gwt-ScrollTable .dataWrapper {
+    overflow-y: scroll !important;
+    overflow-x: hidden !important;
+}
+
 .gwt-ScrollTable .dataTable td {
   overflow: hidden;
-  padding: 2px;
   white-space: nowrap;
 }
 
