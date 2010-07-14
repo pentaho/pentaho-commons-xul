@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class TreeItemWidget extends FlexTable {
   Label label = new Label();
   public TreeItemWidget(){
+    this.setStylePrimaryName("tree-item-custom-widget");
     this.setWidget(0,1,label);
     this.getCellFormatter().setWidth(0,1,"100%");
   }

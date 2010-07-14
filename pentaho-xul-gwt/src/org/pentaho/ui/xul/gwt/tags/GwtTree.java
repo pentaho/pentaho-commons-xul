@@ -303,7 +303,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
   
   private TreeItem createNode(XulTreeItem item){
-    TreeItem node = new TreeItem("empty");
+    TreeItem node = new TreeItem("empty"){
+      @Override
+      public void setSelected( boolean selected ) {
+        super.setSelected(selected);
+        if(selected){
+          this.getWidget().addStyleDependentName("selected");
+        } else {
+          this.getWidget().removeStyleDependentName("selected");
+        }
+      }
+    };
     item.setManagedObject(node);
     if(item == null || item.getRow() == null || item.getRow().getChildNodes().size() == 0){
       return node;

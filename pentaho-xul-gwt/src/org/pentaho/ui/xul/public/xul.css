@@ -335,3 +335,8 @@ legend {
 .gwt-FileUpload {
 
 }
+
+.tree-item-custom-widget{}
+.tree-item-custom-widget-selected{
+  background-color: #DDD;
+}
