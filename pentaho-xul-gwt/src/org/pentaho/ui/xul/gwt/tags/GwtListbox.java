@@ -70,6 +70,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     super.init(srcEle, container);
     this.container = container;
     setBinding(srcEle.getAttribute("pen:binding")); //$NON-NLS-1$
+    setRows(2);
     if (srcEle.hasAttribute("width") && srcEle.getAttribute("width").trim().length() > 0) { //$NON-NLS-1$ //$NON-NLS-2$
       setWidth(Integer.parseInt(srcEle.getAttribute("width"))); //$NON-NLS-1$
     }
