@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.core.client.GWT;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarToggleButton;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
@@ -160,7 +161,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   public void setImage(String src) {
     this.image = src;
     if(src != null && src.length() > 0){
-      Image i = new Image(src);
+      Image i = new Image(GWT.getModuleBaseURL() + src);
       // WebDriver support.. give the image a direct id we can use as a hook
       if (!StringUtils.isEmpty(this.getId())){
         i.getElement().setId(this.getId().concat("_img"));
@@ -260,7 +261,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   public void setDownimagedisabled(String img) {
     this.downimagedisabled = img;
     if(img != null && img.length() > 0){
-      button.setDownImageDisabled(new Image(img));
+      button.setDownImageDisabled(new Image(GWT.getModuleBaseURL() + img));
     }
   }
 

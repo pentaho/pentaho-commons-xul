@@ -321,7 +321,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     TreeItemWidget tWidget = new TreeItemWidget();
 
     tWidget.setLabel(item.getRow().getCell(0).getLabel());
-    tWidget.setImage(new Image(item.getImage()));
+    tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
     node.setWidget(tWidget);
 
     if(item.getChildNodes().size() > 1){
