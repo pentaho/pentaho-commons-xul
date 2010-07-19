@@ -174,7 +174,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   public void setDisabledImage(String src) {
     this.disabledImage = src;
     if(src != null && src.length() > 0){
-      button.setDisabledImage(new Image(disabledImage));
+      button.setDisabledImage(new Image(GWT.getModuleBaseURL() + disabledImage));
     }
   }
   
