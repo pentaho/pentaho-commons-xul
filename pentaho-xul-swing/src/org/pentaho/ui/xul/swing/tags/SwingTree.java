@@ -59,10 +59,7 @@ import javax.swing.tree.TreeNode;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulDomException;
-import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.*;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.binding.DefaultBinding;
@@ -1143,7 +1140,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
               if (colType == null) {
                 if (StringUtils.isNotEmpty(exp.getModelAttr())) {
-                  DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                  Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                   if (!this.editable) {
                     binding.setBindingType(Binding.Type.ONE_WAY);
                   }
@@ -1151,12 +1148,12 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
                   binding.fireSourceChanged();
                 }
               } else if ((colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox")) && column.getCombobinding() != null) {
-                DefaultBinding binding = new DefaultBinding(o, column.getCombobinding(), cell, "value");
+                Binding binding = createBinding((XulEventSource) o, column.getCombobinding(), cell, "value");
                 binding.setBindingType(Binding.Type.ONE_WAY);
                 domContainer.addBinding(binding);
                 binding.fireSourceChanged();
 
-                binding = new DefaultBinding(o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
+                binding = createBinding((XulEventSource) o, ((XulTreeCol) col).getBinding(), cell, "selectedIndex");
                 binding.setConversion(new BindingConvertor<Object, Integer>() {
 
                   @Override
@@ -1176,7 +1173,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
                 if (colType.equalsIgnoreCase("editablecombobox")) {
 
-                  binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                  binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                   if (!this.editable) {
                     binding.setBindingType(Binding.Type.ONE_WAY);
                   } else {
@@ -1188,7 +1185,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
               } else if (colType.equalsIgnoreCase("checkbox")) {
 
                 if (StringUtils.isNotEmpty(exp.getModelAttr())) {
-                  DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, "value");
+                  Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, "value");
 
                   if (!this.editable) {
                     binding.setBindingType(Binding.Type.ONE_WAY);
@@ -1199,14 +1196,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
               } else if (colType != null && this.customEditors.containsKey(colType)) {
 
-                DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, "value");
+                Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, "value");
                 binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
                 domContainer.addBinding(binding);
                 binding.fireSourceChanged();
 
               } else {
                 if (StringUtils.isNotEmpty(exp.getModelAttr())) {
-                  DefaultBinding binding = new DefaultBinding(o, exp.getModelAttr(), cell, exp.getXulCompAttr());
+                  Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr());
                   if (!this.editable) {
                     binding.setBindingType(Binding.Type.ONE_WAY);
                   }
@@ -1218,7 +1215,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
             }
             if (column.getDisabledbinding() != null) {
               String prop = column.getDisabledbinding();
-              DefaultBinding bind = new DefaultBinding(o, column.getDisabledbinding(), cell, "disabled");
+              Binding bind = createBinding((XulEventSource) o, column.getDisabledbinding(), cell, "disabled");
               bind.setBindingType(Binding.Type.ONE_WAY);
               domContainer.addBinding(bind);
               bind.fireSourceChanged();
@@ -1262,7 +1259,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         logger.debug("applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + element + "]");
 
         // Tree Bindings are one-way for now as you cannot edit tree nodes
-        DefaultBinding binding = new DefaultBinding(element, exp.getModelAttr(), cell, exp.getXulCompAttr());
+        Binding binding = createBinding((XulEventSource) element, exp.getModelAttr(), cell, exp.getXulCompAttr());
         binding.setBindingType(Binding.Type.ONE_WAY);
         domContainer.addBinding(binding);
         binding.fireSourceChanged();
@@ -1676,5 +1673,12 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     // TODO This method is not fully implemented. We need to completely implement this in this class
     
   }
-  
+
+
+  private Binding createBinding(XulEventSource source, String prop1, XulEventSource target, String prop2){
+    if(bindingProvider != null){
+      return bindingProvider.getBinding(source, prop1, target, prop2);
+    }
+    return new DefaultBinding(source, prop1, target, prop2);
+  }
 }
