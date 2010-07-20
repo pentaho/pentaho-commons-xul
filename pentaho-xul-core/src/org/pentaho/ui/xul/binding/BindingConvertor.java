@@ -15,14 +15,21 @@ public abstract class BindingConvertor<V, R> {
   public abstract V targetToSource(R value);
 
   private static BindingConvertor<Integer, String> integer2String = new Integer2String();
+  private static BindingConvertor<String, Integer> string2Integer = new String2Integer();
   private static BindingConvertor<Long, String> long2String = new Long2String();
   private static BindingConvertor<String, String> string2String = new String2String();
   private static BindingConvertor<Boolean, String> boolean2String = new Boolean2String();
+  private static BindingConvertor<Double, String> double2String = new Double2String();
+  private static BindingConvertor<String, Double> string2Double = new String2Double();
   
   public static BindingConvertor<Integer, String> integer2String() {
     return integer2String;
   }
   
+  public static BindingConvertor<String, Integer> string2Integer() {
+    return string2Integer;
+  }
+
   public static BindingConvertor<Long, String> long2String() {
     return long2String;
   }
@@ -43,6 +50,14 @@ public abstract class BindingConvertor<V, R> {
     return boolean2String ;
   }
   
+  public static BindingConvertor<Double, String> double2String() {
+    return double2String;
+  }
+  
+  public static BindingConvertor<String, Double> string2Double() {
+    return string2Double;
+  }
+
   /*
    * Canned BindingConverter Implementations here
    */
@@ -64,6 +79,27 @@ public abstract class BindingConvertor<V, R> {
         }
       }
       return new Integer(0);
+    }
+  }
+
+  static class String2Integer extends BindingConvertor<String, Integer> {
+    public Integer sourceToTarget(String value) {
+      if (value != null) {
+        try {
+          return Integer.valueOf(value);
+        } catch (NumberFormatException e) {            
+          return new Integer(0);
+        }
+      }
+      return new Integer(0);
+    }
+  
+    public String targetToSource(Integer value) {
+      if (value != null) {
+        return value.toString();
+      } else {
+        return ""; //$NON-NLS-1$
+      }
     }
   }
 
@@ -135,5 +171,26 @@ public abstract class BindingConvertor<V, R> {
     
   }
   
+  static class String2Double extends BindingConvertor< String, Double> { 
+
+    public Double sourceToTarget(String toDouble) {
+      return Double.valueOf(toDouble);
+    }
+
+    public String targetToSource(Double toString) {
+      return toString.toString();
+    }
+  }
+  
+  static class Double2String extends BindingConvertor< Double, String> { 
+
+    public String sourceToTarget(Double toString) {
+      return toString.toString();
+    }
+
+    public Double targetToSource(String toDouble) {
+      return Double.valueOf(toDouble);
+    }
+  }
   
 }
