@@ -33,7 +33,8 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
     }
 
     public void setChildren(List<T> children) {
-      Collections.copy(this.children, children);
+      this.children.clear();
+      this.children.addAll(children);
       fireCollectionChanged();
     }
 
