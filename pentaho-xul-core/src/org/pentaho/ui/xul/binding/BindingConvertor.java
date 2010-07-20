@@ -174,22 +174,38 @@ public abstract class BindingConvertor<V, R> {
   static class String2Double extends BindingConvertor< String, Double> { 
 
     public Double sourceToTarget(String toDouble) {
-      return Double.valueOf(toDouble);
+      try{
+        return Double.valueOf(toDouble);
+      }catch(Exception e){
+        return new Double(0);
+      }
     }
 
     public String targetToSource(Double toString) {
-      return toString.toString();
+      if (toString != null){
+        return toString.toString();
+      }else{
+        return "";
+      }
     }
   }
   
   static class Double2String extends BindingConvertor< Double, String> { 
 
     public String sourceToTarget(Double toString) {
-      return toString.toString();
+      if (toString != null){
+        return toString.toString();
+      }else{
+        return "";
+      }
     }
 
     public Double targetToSource(String toDouble) {
-      return Double.valueOf(toDouble);
+      try{
+        return Double.valueOf(toDouble);
+      }catch(Exception e){
+        return new Double(0);
+      }
     }
   }
   
