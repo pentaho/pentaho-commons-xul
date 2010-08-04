@@ -21,11 +21,16 @@ public abstract class BindingConvertor<V, R> {
   private static BindingConvertor<Boolean, String> boolean2String = new Boolean2String();
   private static BindingConvertor<Double, String> double2String = new Double2String();
   private static BindingConvertor<String, Double> string2Double = new String2Double();
+  private static BindingConvertor<Integer, Boolean> integer2Boolean = new Integer2Boolean();
   
   public static BindingConvertor<Integer, String> integer2String() {
     return integer2String;
   }
   
+  public static BindingConvertor<Integer, Boolean> integer2Boolean() {
+    return integer2Boolean;
+  }
+
   public static BindingConvertor<String, Integer> string2Integer() {
     return string2Integer;
   }
@@ -207,6 +212,18 @@ public abstract class BindingConvertor<V, R> {
         return new Double(0);
       }
     }
+  }
+
+  static class Integer2Boolean extends BindingConvertor<Integer, Boolean> {
+    public Boolean sourceToTarget(Integer value) {
+      if (value == null) return false;
+      return value > 0;
+    }
+    public Integer targetToSource(Boolean value) {
+      if (value == null) return 0;
+      return value ? 1 : 0;
+    }
+    
   }
   
 }

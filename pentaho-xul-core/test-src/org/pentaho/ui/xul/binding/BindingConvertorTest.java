@@ -12,6 +12,7 @@ import org.junit.Test;
 
 public class BindingConvertorTest {
 
+  @SuppressWarnings("nls")
   @Test
   public void testInteger2String_source() throws Exception {
     BindingConvertor<Integer, String> bc = BindingConvertor.integer2String();
@@ -33,6 +34,7 @@ public class BindingConvertorTest {
     
   }
   
+  @SuppressWarnings("nls")
   @Test
   public void testInteger2String_target() throws Exception {
     BindingConvertor<Integer, String> bc = BindingConvertor.integer2String();
@@ -53,6 +55,7 @@ public class BindingConvertorTest {
   
   }
   
+  @SuppressWarnings("nls")
   @Test
   public void testLong2String_source() throws Exception {
     BindingConvertor<Long, String> bc = BindingConvertor.long2String();
@@ -74,6 +77,7 @@ public class BindingConvertorTest {
     
   }
   
+  @SuppressWarnings("nls")
   @Test
   public void testLong2String_target() throws Exception {
     BindingConvertor<Long, String> bc = BindingConvertor.long2String();
@@ -94,6 +98,7 @@ public class BindingConvertorTest {
   
   }
   
+  @SuppressWarnings("nls")
   @Test
   public void testDate2String_source() throws Exception {
     BindingConvertor<Date, String> bc = BindingConvertor.date2String();
@@ -112,6 +117,7 @@ public class BindingConvertorTest {
     
   }
   
+  @SuppressWarnings("nls")
   @Test
   public void testDate2String_target() throws Exception {
     BindingConvertor<Date, String> bc = BindingConvertor.date2String();
@@ -125,6 +131,7 @@ public class BindingConvertorTest {
     
   }
   
+  @SuppressWarnings("nls")
   @Test
   public void testString2String() throws Exception {
     BindingConvertor<String, String> bc = BindingConvertor.string2String();
@@ -138,6 +145,7 @@ public class BindingConvertorTest {
     assertEquals(target, converted);
   }
   
+  @SuppressWarnings("nls")
   @Test
   public void testBoolean2String() throws Exception {
     BindingConvertor<Boolean, String> bc = BindingConvertor.boolean2String();
@@ -148,6 +156,26 @@ public class BindingConvertorTest {
     assertFalse(bc.targetToSource("false"));
     assertFalse(bc.targetToSource(null));
     assertFalse(bc.targetToSource("anything"));
+  }
+  
+  @Test
+  public void testInteger2Boolean() throws Exception {
+    BindingConvertor<Integer, Boolean> bc = BindingConvertor.integer2Boolean();
+    assertTrue(bc.sourceToTarget(1));
+    assertTrue(bc.sourceToTarget(Integer.MAX_VALUE));
+    assertFalse(bc.sourceToTarget(0));
+    assertFalse(bc.sourceToTarget(Integer.MIN_VALUE));
+    
+    assertEquals(Integer.valueOf(1), bc.targetToSource(true));
+    assertEquals(Integer.valueOf(0), bc.targetToSource(false));    
+  }
+
+  @Test
+  public void testInteger2Boolean_Nulls() throws Exception {
+    BindingConvertor<Integer, Boolean> bc = BindingConvertor.integer2Boolean();
+    assertFalse(bc.sourceToTarget(null));
+    
+    assertEquals(Integer.valueOf(0), bc.targetToSource(null));    
   }
   
 }
