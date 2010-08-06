@@ -59,16 +59,18 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     radioGroup = currentGroup;
-    if(currentGroup != null){
-      currentGroup.registerRadio(this);
-    }
-    
     super.init(srcEle, container);
     setLabel(srcEle.getAttribute("label"));
     setValue(srcEle.getAttribute("value"));
     setChecked("true".equals(srcEle.getAttribute("checked")));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setCommand(srcEle.getAttribute("command"));
+
+    if(currentGroup != null){
+      currentGroup.registerRadio(this);
+    }
+    
+
     if(srcEle.getAttribute("pen:class") != null && srcEle.getAttribute("pen:class").length() > 0){
       setClass(srcEle.getAttribute("pen:class"));
     }
@@ -123,9 +125,9 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
    }
    this.checked = checked;
    this.firePropertyChange("checked", previousVal, checked);
-   if(this.radioGroup != null){
-     this.radioGroup.fireValueChanged();
-   }
+//   if(this.radioGroup != null){
+//     this.radioGroup.fireValueChanged();
+//   }
   }
 
   @Bindable
