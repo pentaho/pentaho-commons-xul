@@ -22,7 +22,8 @@ public abstract class BindingConvertor<V, R> {
   private static BindingConvertor<Double, String> double2String = new Double2String();
   private static BindingConvertor<String, Double> string2Double = new String2Double();
   private static BindingConvertor<Integer, Boolean> integer2Boolean = new Integer2Boolean();
-  
+  private static BindingConvertor<Object, Boolean> object2Boolean = new Object2Boolean();
+
   public static BindingConvertor<Integer, String> integer2String() {
     return integer2String;
   }
@@ -61,6 +62,14 @@ public abstract class BindingConvertor<V, R> {
   
   public static BindingConvertor<String, Double> string2Double() {
     return string2Double;
+  }
+
+  /**
+   * Converts an Object into a Boolean, false if the object is null, true otherwise
+   * @return
+   */
+  public static BindingConvertor<Object, Boolean> object2Boolean() {
+    return object2Boolean;
   }
 
   /*
@@ -225,5 +234,15 @@ public abstract class BindingConvertor<V, R> {
     }
     
   }
-  
+
+  static class Object2Boolean extends BindingConvertor<Object, Boolean> {
+    public Boolean sourceToTarget(Object value) {
+      return value != null;
+    }
+    public Object targetToSource(Boolean value) {
+      // can't logically construct this binding
+      return null;
+    }
+
+  }
 }

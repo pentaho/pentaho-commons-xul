@@ -29,11 +29,13 @@ public class GwtRadioGroup extends GwtVbox implements XulRadioGroup, PropertyCha
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer aContainer) {
     super.init(srcEle, aContainer);
+    setDisabled("true".equals(srcEle.getAttribute("disabled")));    
     GwtRadio.currentGroup = this;
   }
 
   public void registerRadio(GwtRadio aRadio) {
     aRadio.addPropertyChangeListener("checked", this); //$NON-NLS-1$
+    aRadio.setDisabled(isDisabled());
     this.radios.add(aRadio);
   }
 
@@ -81,5 +83,17 @@ public class GwtRadioGroup extends GwtVbox implements XulRadioGroup, PropertyCha
       setValue(radio.getValue());
     }
   }
-  
+
+
+  @Bindable
+  public void setDisabled(boolean disabled) {
+    boolean prev = isDisabled();
+    this.disabled = disabled;
+    for (GwtRadio radio : radios) {
+      radio.setDisabled(disabled);
+    }
+    super.setDisabled(disabled);
+    firePropertyChange("disabled", prev, disabled);
+  }
+
 }
