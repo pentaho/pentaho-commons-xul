@@ -317,9 +317,6 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     }
 
     layout();
-    if(elements.size() > 0) {
-      setSelectedIndex(0);
-    }
   }
 
   @Bindable
