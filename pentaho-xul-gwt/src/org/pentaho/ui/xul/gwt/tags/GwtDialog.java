@@ -40,7 +40,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   
   public GwtDialog() {
     super("dialog");
-    
+
     setManagedObject(null);
     this.orientation = Orient.VERTICAL;
   }
@@ -112,7 +112,9 @@ public class GwtDialog extends GenericDialog implements XulDialog {
             // default to right
             rightButtonPanel.add(widget);
           }
-        }        
+        } else {
+          rightButtonPanel.add(widget);
+        }
       } else {
         if ("center".equals(buttonalign)) { //$NON-NLS-1$
           centerButtonPanel.add(widget);
