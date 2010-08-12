@@ -39,6 +39,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     
     VerticalPanel vp;
     container = vp = new VerticalPanel();
+    vp.setHeight("100%");
     container.setWidth("100%");
     vp.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
     vp.setStyleName("vbox");
@@ -47,6 +48,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     sp.getElement().getStyle().setProperty("padding", "4px");
     sp.getElement().getStyle().setProperty("margin", "0px");
     sp.setWidth("95%");
+    sp.setHeight("100%");
     sp.add(container);
     ((VerticalPanel) container).setStyleName("vbox");
     ((CaptionPanel) getManagedObject()).add(sp);
