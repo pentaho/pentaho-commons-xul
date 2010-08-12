@@ -107,6 +107,21 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         e.printStackTrace();
       }
     }
+    if (hasAttribute(srcEle,"spacing")) {
+      try {
+        setSpacing(Integer.parseInt(srcEle.getAttribute("spacing")));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    
+    if (hasAttribute(srcEle,"padding")) {
+      try {
+        setPadding(Integer.parseInt(srcEle.getAttribute("padding")));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
     
     if (hasAttribute(srcEle,"visible")) {
       try {

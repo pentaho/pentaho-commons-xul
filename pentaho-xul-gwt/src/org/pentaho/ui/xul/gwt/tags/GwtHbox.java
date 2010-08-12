@@ -40,6 +40,13 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     
   }
   
+  @Override
+  @Bindable
+  public void setSpacing(int spacing) {
+    super.setSpacing(spacing);
+    ((HorizontalPanel) container).setSpacing(spacing);
+  }
+  
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     setAlign(srcEle.getAttribute("align"));
