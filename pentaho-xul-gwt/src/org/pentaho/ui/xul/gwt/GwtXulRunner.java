@@ -52,7 +52,7 @@ public class GwtXulRunner { // implements XulRunner {
     }
     
     if(rootEle instanceof GwtWindow){
-      rootFrame = (Panel) ((GwtWindow)rootEle).getManagedObject();
+      rootFrame = (Panel) ((GwtWindow)rootEle).getRootObject();
     } else if (rootEle instanceof GwtDialog) {
       // do nothing
     } else {

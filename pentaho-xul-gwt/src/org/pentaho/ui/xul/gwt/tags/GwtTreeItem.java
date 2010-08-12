@@ -20,6 +20,8 @@ import org.pentaho.ui.xul.stereotype.Bindable;
 public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem {
   private boolean expanded;
   private String image;
+  private Object obj;
+
   public static void register() {
     GwtXulParser.registerHandler("treeitem",
     new GwtXulHandler() {
@@ -130,13 +132,12 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
 
 
   public Object getBoundObject() {
-    // TODO Auto-generated method stub
-    return null;
+    return obj;
   }
 
   public void setBoundObject(Object obj) {
-    // TODO Auto-generated method stub
-    
+
+    this.obj = obj;
   }
 
 }

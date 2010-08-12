@@ -46,7 +46,7 @@ public class ExampleXulApp implements EntryPoint, IResourceBundleLoadCallback {
 //      wrapper.setHandler(instance);
 //      
 //      container.addEventHandler(wrapper);
-//      container.addEventHandler(new SampleEventHandler());
+      container.addEventHandler(new SampleDnDEventHandler());
 //      container.addEventHandler(new SampleEventHandler2());
       
       runner.addContainer(container);

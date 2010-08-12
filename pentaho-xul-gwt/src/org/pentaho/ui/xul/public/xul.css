@@ -336,7 +336,59 @@ legend {
 
 }
 
-.tree-item-custom-widget{}
+.tree-item-custom-widget{
+  border: 1px solid transparent;
+}
 .tree-item-custom-widget-selected{
   background-color: #DDD;
+}
+.tree-item-custom-widget-proxy{
+  opacity: 0.85;
+  filter: alpha(opacity=85);
+  background-color:#FCCECF;
+  z-index: 1500;
+}
+.tree-item-custom-widget-proxy-valid{
+  background-color: #D6FCD3;
+}
+
+.tree-item-custom-widget-drop-hover{
+  border: 1px solid #2096FC;
+
+  background-color: #8CD2FF;
+}
+.tree-drop-indicator{
+  height: 1px;
+  background-color: #2096FC;
+  margin-top: 1px;
+}
+
+.tree-drop-indicator-symbol{
+  position:absolute;
+  width: 100%;
+  z-index: 1500;
+  height:7px;
+  width:7px;
+  display:inline;
+  background-image: url("images/dnd-circle.png");
+  background-position: left center;
+  background-repeat: no-repeat;
+  float:left;
+  padding-left:7px;
+  padding-top:4px;
+}
+
+.scroll-panel{
+  position:relative;
+  overflow:auto;
+  height:100%;
+  width:100%;
+}
+
+.gwt-Tree > DIV > TABLE{
+  width: 100%;
+}
+
+.gwt-Tree > DIV > TABLE > TBODY > TR > TD:first-child{
+  width: 10px;
 }
