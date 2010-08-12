@@ -154,6 +154,8 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
       return;
     }
     // super.layout();
+    this.listBox.setHeight("100%");
+    this.listBox.setWidth("100%");
     listBox.clear();
     List<XulComponent> children = getChildNodes();
     for (int i = 0; i < children.size(); i++) {
