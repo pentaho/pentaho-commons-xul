@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags.util;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.*;
@@ -72,7 +73,7 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
 
 
   private void makeDraggable(){
-    dragIndicator = new Image("drop_invalid.png");
+    dragIndicator = new Image(GWT.getModuleBaseURL()+"drop_invalid.png");
     setWidget(0, 0, dragIndicator);
 
     this.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -102,10 +103,10 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
   public void setDropValid(boolean valid){
     if(valid){
       addStyleDependentName("proxy-valid");
-      dragIndicator.setUrl("drop_valid.png");
+      dragIndicator.setUrl(GWT.getModuleBaseURL()+"drop_valid.png");
     } else {
       removeStyleDependentName("proxy-valid");
-      dragIndicator.setUrl("drop_invalid.png");
+      dragIndicator.setUrl(GWT.getModuleBaseURL()+"drop_invalid.png");
     }
   }
 
