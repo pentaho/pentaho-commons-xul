@@ -551,6 +551,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
         }
 
+        Binding bind = createBinding(cell, "disabled", glb, "disabled");
+        bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(bind);
+        bind.fireSourceChanged();
+
         return lb;
       } catch(Exception e){
         System.out.println("error creating menulist, fallback");
@@ -1167,6 +1172,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       String prop = col.getDisabledbinding();
       Binding bind = createBinding((XulEventSource) o, col.getDisabledbinding(), cell, "disabled");
       bind.setBindingType(Binding.Type.ONE_WAY);
+      // the default string to string was causing issues, this is really a boolean to boolean, no conversion necessary
+      bind.setConversion(null);
       domContainer.addBinding(bind);
       bind.fireSourceChanged();
     }

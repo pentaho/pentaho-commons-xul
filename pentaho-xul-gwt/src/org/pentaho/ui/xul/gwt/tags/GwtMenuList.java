@@ -108,6 +108,13 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   @Bindable
+  @Override
+  public void setDisabled(boolean disabled) {
+    this.listbox.setEnabled(!disabled);
+    super.setDisabled(disabled);
+  }
+  
+  @Bindable
   public Collection getElements() {
     List<Object> vals = new ArrayList<Object>();
     for (int i = 0; i < listbox.getItems().size(); i++) {
