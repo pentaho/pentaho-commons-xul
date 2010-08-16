@@ -483,14 +483,37 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         final CustomListBox lb = glb.getNativeListBox();
 
         lb.setWidth("100%");
-
-        Vector vals = (Vector) cell.getValue();
-        lb.setSuppressLayout(true);
-        for(Object label : vals){
-          lb.addItem(label.toString());
-        }
-        lb.setSuppressLayout(false);
         final String fColType = colType;
+
+        // Binding to elements of listbox not giving us the behavior we want. Menulists select the first available
+        // item by default. We don't want anything selected by default in these cell editors
+        PropertyChangeListener listener = new PropertyChangeListener(){
+          public void propertyChange(PropertyChangeEvent evt) {
+
+            Vector vals = (Vector) cell.getValue();
+            lb.clear();
+            lb.setSuppressLayout(true);
+            for(Object label : vals){
+              lb.addItem(label.toString());
+            }
+            lb.setSuppressLayout(false);
+
+            int idx = cell.getSelectedIndex();
+            if(idx < 0){
+              idx = 0;
+            }
+            if(idx < vals.size()){
+              lb.setSelectedIndex(idx);
+            }
+
+            if(fColType.equalsIgnoreCase("editablecombobox")){
+              lb.setValue("");
+            }
+          }
+        };
+        listener.propertyChange(null);
+        cell.addPropertyChangeListener("value", listener);
+
         lb.addChangeListener(new ChangeListener(){
 
           public void onChange(Widget arg0) {
@@ -503,13 +526,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
         });
 
-        int idx = cell.getSelectedIndex();
-        if(idx < 0){
-          idx = 0;
-        }
-        if(idx < vals.size()){
-          lb.setSelectedIndex(idx);
-        }
         if(colType.equalsIgnoreCase("editablecombobox")){
           lb.setEditable(true);
 
@@ -886,6 +902,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         b.destroyBindings();
       }
       this.expandBindings.clear();
+
       for(TreeItemDropController d : this.dropHandlers){
         XulDragController.getInstance().unregisterDropController(d);
       }
@@ -1103,12 +1120,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         }
 
         if(cell.labelBindingsAdded() == false && colType.equalsIgnoreCase("editablecombobox")){
-          Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr());
-          if (!this.editable) {
-            binding.setBindingType(Binding.Type.ONE_WAY);
-          } else {
-            binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
-          }
+          Binding binding = createBinding((XulEventSource) o, exp.getModelAttr(), cell, "label");
+          binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
           domContainer.addBinding(binding);
           binding.fireSourceChanged();
           cell.setLabelBindingsAdded(true);
