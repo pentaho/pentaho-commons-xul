@@ -15,7 +15,7 @@ import org.pentaho.gwt.widgets.client.ui.Draggable;
 public class XulDragController extends PickupDragController {
 
   private Widget proxy;
-  private static XulDragController instance = new XulDragController();
+  private static XulDragController instance;
 
   public Widget getProxy() {
     return proxy;
@@ -25,13 +25,21 @@ public class XulDragController extends PickupDragController {
     this.proxy = proxy;
   }
 
-  private XulDragController() {
-    super(RootPanel.get(), false);
+  private XulDragController(AbsolutePanel panel) {
+    super(panel, false);
     setBehaviorDragProxy(true);
     setBehaviorDragStartSensitivity(5);
   }
 
   public static XulDragController getInstance(){
+    if(instance == null){
+      AbsolutePanel absPanel = new AbsolutePanel();
+      absPanel.setHeight("100%");
+      absPanel.setWidth("100%");
+      absPanel.getElement().getStyle().setProperty("position", "absolute");
+      RootPanel.get().add(absPanel);
+      instance = new XulDragController(absPanel);
+    }
     return instance;
   }
 
