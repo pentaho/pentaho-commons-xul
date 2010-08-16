@@ -330,7 +330,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     table.populateTable(data);
   }
 
-  private TreeItem createNode(XulTreeItem item){
+  private TreeItem createNode(final XulTreeItem item){
     TreeItem node = new TreeItem("empty"){
       @Override
       public void setSelected( boolean selected ) {
@@ -346,12 +346,19 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     if(item == null || item.getRow() == null || item.getRow().getChildNodes().size() == 0){
       return node;
     }
-    TreeItemWidget tWidget = new TreeItemWidget(item);
+    final TreeItemWidget tWidget = new TreeItemWidget(item);
+
+    PropertyChangeListener listener = new PropertyChangeListener(){
+      public void propertyChange(PropertyChangeEvent evt) {
+        if(item.getImage() != null){
+          tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+        }
+      }
+    };
+    ((GwtTreeItem) item).addPropertyChangeListener("image", listener);
+    listener.propertyChange(null);
 
     tWidget.setLabel(item.getRow().getCell(0).getLabel());
-    if(item.getImage() != null){
-      tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
-    }
     if(this.ondrop != null){
       TreeItemDropController controller = new TreeItemDropController(item, tWidget);
       XulDragController.getInstance().registerDropController(controller);

@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.Image;
@@ -140,4 +141,9 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     this.obj = obj;
   }
 
+  // TODO: migrate into XulComponent
+  @Deprecated
+  public void addPropertyChangeListener(String prop, PropertyChangeListener listener){
+    changeSupport.addPropertyChangeListener(prop, listener);
+  }
 }
