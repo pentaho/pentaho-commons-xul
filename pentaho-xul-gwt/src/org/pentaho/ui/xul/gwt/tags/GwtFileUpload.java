@@ -10,6 +10,7 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.FileUpload;
@@ -43,6 +44,16 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     setManagedObject(new VerticalPanel());
   }
 
+  private String buildActionUrl(String moduleBaseUrl, String action) {
+    String url = moduleBaseUrl;
+    while (action.indexOf("../") >= 0) {
+      url = url.substring(0, url.lastIndexOf("/"));
+      action = action.substring(3);
+    }
+    url += "/" + action;
+    return url;
+  }
+  
   @SuppressWarnings("deprecation")
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     mainPanel = new VerticalPanel();
@@ -50,7 +61,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
 
     super.init(srcEle, container);
     if (!StringUtils.isEmpty(srcEle.getAttribute("action"))) {
-      setAction(srcEle.getAttribute("action"));
+      setAction(buildActionUrl(GWT.getModuleBaseURL(), srcEle.getAttribute("action")));
     }
     if (!StringUtils.isEmpty(srcEle.getAttribute("onuploadsuccess"))) {
       setOnUploadSuccess(srcEle.getAttribute("onuploadsuccess"));
