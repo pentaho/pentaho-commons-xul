@@ -392,3 +392,12 @@ legend {
 .gwt-Tree > DIV > TABLE > TBODY > TR > TD:first-child{
   width: 10px;
 }
+
+.radio > tbody > tr > td:first-child {
+  width: 40%;
+  padding-left: 0px;
+}
+.radio > tbody > tr > td {
+  width: 60%;
+  padding-left: 3px;
+}

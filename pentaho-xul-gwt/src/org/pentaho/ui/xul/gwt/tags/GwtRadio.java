@@ -1,5 +1,10 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -10,8 +15,6 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.RadioButton;
 
 public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
@@ -22,7 +25,9 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   private String value;
   public static GwtRadioGroup currentGroup;
   public GwtRadioGroup radioGroup;
-  
+
+  private boolean customValue = false;
+
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -33,20 +38,34 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   }
   
   private RadioButton radioButton;
-  
+  private HorizontalPanel radioContainer;
+  private TextBox customValueTextBox;
+
   public GwtRadio() {
     super(ELEMENT_NAME);
+
+    radioContainer = new HorizontalPanel();
+    radioContainer.setSpacing(0);
+
+    customValueTextBox = new TextBox();
+    customValueTextBox.setEnabled(false);
+
     String id = "foo";
     if(currentGroup != null){
       id = currentGroup.getId();
     }
     radioButton = new RadioButton(id);
-    setManagedObject(radioButton);
-    radioButton.setStylePrimaryName("radio");
+    radioContainer.add(radioButton);
+
+    setManagedObject(radioContainer);
+    radioContainer.setStylePrimaryName("radio");
     radioButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         try{
           setChecked(radioButton.getValue());
+          if (isCustomValue() && isChecked()) {
+            customValueTextBox.setEnabled(true);
+          }
           if(command != null && command.length() > 0) {
             GwtRadio.this.getXulDomContainer().invoke(command, new Object[]{});
           }
@@ -65,6 +84,17 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
     setChecked("true".equals(srcEle.getAttribute("checked")));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setCommand(srcEle.getAttribute("command"));
+    setCustomValue("true".equals(srcEle.getAttribute("customValue")));
+
+    if (isCustomValue()) {
+      customValueTextBox.addKeyUpHandler(new KeyUpHandler() {
+        public void onKeyUp(KeyUpEvent event) {
+          setValue(customValueTextBox.getValue());
+        }
+      });
+      radioContainer.add(customValueTextBox);
+      customValueTextBox.setWidth("75%");
+    }
 
     if(currentGroup != null){
       currentGroup.registerRadio(this);
@@ -124,15 +154,15 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
      radioButton.setValue(checked); 
    }
    this.checked = checked;
-   this.firePropertyChange("checked", previousVal, checked);
-//   if(this.radioGroup != null){
-//     this.radioGroup.fireValueChanged();
-//   }
+   this.firePropertyChange("checked", null, checked);
   }
 
   @Bindable
   public void setDisabled(boolean dis) {
     radioButton.setEnabled(!dis);
+    if (isCustomValue()) {
+      customValueTextBox.setEnabled(!dis && isSelected());
+    }
   }
 
   public void setCommand(final String command) {
@@ -169,13 +199,34 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
     radioButton.setTitle(this.getTooltiptext());
   }
   
+  @Bindable
   public String getValue() {
     return value;
   }
-  
+
+  @Bindable
   public void setValue(String aValue) {
     String previousVal = this.value;
-    this.value = aValue;    
+    this.value = aValue;
+    if (isCustomValue() && isChecked()) {
+      customValueTextBox.setEnabled(true);
+    }
     this.firePropertyChange("value", previousVal, aValue);
-  }    
+  }
+
+  public boolean isCustomValue() {
+    return customValue;
+  }
+
+  public void setCustomValue(boolean customValue) {
+    this.customValue = customValue;
+  }
+
+  protected void disableCustomValueTextBox() {
+    if (isCustomValue() && !isSelected()) {
+      customValueTextBox.setEnabled(false);
+      customValueTextBox.setValue("");
+    }
+  }
+
 }

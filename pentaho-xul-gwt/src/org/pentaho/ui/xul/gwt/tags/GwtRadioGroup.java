@@ -34,6 +34,7 @@ public class GwtRadioGroup extends GwtVbox implements XulRadioGroup, PropertyCha
   }
 
   public void registerRadio(GwtRadio aRadio) {
+    aRadio.addPropertyChangeListener("value", this);
     aRadio.addPropertyChangeListener("checked", this); //$NON-NLS-1$
     aRadio.setDisabled(isDisabled());
     this.radios.add(aRadio);
@@ -48,14 +49,28 @@ public class GwtRadioGroup extends GwtVbox implements XulRadioGroup, PropertyCha
   public void setValue(String value) {
     String prev = this.value;
     this.value = value;
+    boolean found = false;
+    GwtRadio custom = null;
+
     if (prev == null || !prev.equals(value)) {      
       for (GwtRadio radio : this.radios) {
         if (radio.getValue().equals(value)) {
           radio.setChecked(true);
+          found = true;
         } else {
           radio.setChecked(false);
         }
+        if (radio.isCustomValue()) {
+          custom = radio;
+        }
       }
+
+      // handle the custom value radio ("other")
+      if (custom != null && !found) {
+        custom.setChecked(true);
+        custom.setValue(value);
+      }
+
       firePropertyChange("value", prev, value); //$NON-NLS-1$
     }
   }
@@ -75,10 +90,22 @@ public class GwtRadioGroup extends GwtVbox implements XulRadioGroup, PropertyCha
   }
 
   public void propertyChange(PropertyChangeEvent evt) {
-    Boolean checked = (Boolean)evt.getNewValue();
+    Boolean checked = null;
+    GwtRadio radio = (GwtRadio)evt.getSource();
+    if (evt.getPropertyName().equals("checked")) {
+      checked = (Boolean)evt.getNewValue();
+
+      if(!checked && radio.isCustomValue()) {
+        // a custom value radio is becomong unselected, make the other textbox disabled
+        radio.disableCustomValueTextBox();
+      }
+
+    } else if (evt.getPropertyName().equals("value")) {
+      checked = true;
+    }
+    
     // only care about the radio becoming selected, not the one being unselected
     if (checked) {
-      XulRadio radio = (XulRadio)evt.getSource();
       // let listeners know that the selected radio has changed
       setValue(radio.getValue());
     }
