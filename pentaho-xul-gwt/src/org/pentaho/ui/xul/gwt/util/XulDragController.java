@@ -43,6 +43,7 @@ public class XulDragController extends PickupDragController {
       panel.getElement().getStyle().setProperty("position", "absolute");
       panel.getElement().getStyle().setProperty("top", "0px");
       panel.getElement().getStyle().setProperty("left", "0px");
+      panel.getElement().getStyle().setProperty("display", "none");
       RootPanel.get().add(panel);
       instance = new XulDragController(panel);
       GlassPane.getInstance().addGlassPaneListener(new GlassPaneListener(){
