@@ -46,7 +46,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
 
   private String buildActionUrl(String moduleBaseUrl, String action) {
     String url = moduleBaseUrl;
-    while (action.indexOf("../") >= 0) {
+    while (action.indexOf("../") >= 0 &&  url.lastIndexOf("/") > -1) {
       url = url.substring(0, url.lastIndexOf("/"));
       action = action.substring(3);
     }
