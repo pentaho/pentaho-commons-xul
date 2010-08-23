@@ -302,8 +302,11 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
 
     // TODO: this is a different behavior than we implemented in Swing.
-    if(!flexLayout && StringUtils.isEmpty(thisContainer.getAlign()) == false){
+    if(!flexLayout && container != null){
       SimplePanel fillerPanel = new SimplePanel();
+      if(alignment == null){
+        alignment = Align.START;
+      }
       switch(alignment){
         case START:
           container.add(fillerPanel);
