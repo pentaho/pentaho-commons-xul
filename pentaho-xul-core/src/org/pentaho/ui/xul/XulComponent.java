@@ -230,6 +230,9 @@ public interface XulComponent extends Element, XulEventSource {
    */
   public void setOndrop(String ondrop);
   public String getOndrop();
+
+  public void setDropvetoer(String dropVetoMethod);
+  public String getDropvetoer();
   
   public void setBindingProvider( BindingProvider bindingProvider);
 }

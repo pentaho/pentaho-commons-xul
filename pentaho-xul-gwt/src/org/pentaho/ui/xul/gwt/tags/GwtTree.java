@@ -34,6 +34,7 @@ import org.pentaho.ui.xul.components.XulTreeCol;
 import org.pentaho.ui.xul.containers.*;
 import org.pentaho.ui.xul.dnd.DataTransfer;
 import org.pentaho.ui.xul.dnd.DropEvent;
+import org.pentaho.ui.xul.dnd.DropPosition;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
@@ -45,6 +46,7 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.gwt.tags.util.TreeItemWidget;
 import org.pentaho.ui.xul.gwt.util.Resizable;
 import org.pentaho.ui.xul.gwt.util.XulDragController;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellEditorCallback;
@@ -63,6 +65,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
    * Cached elements.
    */
   private Collection elements;
+  private GwtBindingMethod dropVetoerMethod;
+  private XulEventHandler dropVetoerController;
 
 
   public static void register() {
@@ -159,6 +163,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     setOndrop(srcEle.getAttribute("pen:ondrop"));
     setOndrag(srcEle.getAttribute("pen:ondrag"));
     setDrageffect(srcEle.getAttribute("pen:drageffect"));
+
+    setDropvetoer(srcEle.getAttribute("pen:dropvetoer"));
+    
     this.setEditable("true".equals(srcEle.getAttribute("editable")));
     this.domContainer = container;
   }
@@ -247,8 +254,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
       }
 
-      public void onTreeItemStateChanged(TreeItem arg0) {
-
+      public void onTreeItemStateChanged(TreeItem item) {
+        ((TreeItemWidget) item.getWidget()).getTreeItem().setExpanded(item.getState());
       }
 
     });
@@ -908,6 +915,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     try{
       this.elements = elements;
       suppressEvents = true;
+      prevSelectionPos = -1;
       this.getRootChildren().removeAll();
 
       for(Binding b : expandBindings){
@@ -1481,14 +1489,33 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     super.setOndrop(ondrop);
   }
 
+  @Override
+  public void setDropvetoer(String dropVetoMethod) {
+    if(StringUtils.isEmpty(dropVetoMethod)){
+      return;
+    }
+    super.setDropvetoer(dropVetoMethod);
+  }
+  
+  private void resolveDropVetoerMethod(){
+    if(dropVetoerMethod == null){
 
-  // TODO: move once controller is static
-  private enum POSITION{ABOVE,MIDDLE,BELOW};
+      String id = getDropvetoer().substring(0, getDropvetoer().indexOf("."));
+      try {
+        XulEventHandler controller = getXulDomContainer().getEventHandler(id);
+        this.dropVetoerMethod = GwtBindingContext.typeController.findMethod(controller, getDropvetoer().substring(getDropvetoer().indexOf(".")+1, getDropvetoer().indexOf("(")));
+        this.dropVetoerController = controller;
+      } catch (XulException e) {
+        e.printStackTrace();
+      }
+    }
+    
+  }
 
   private class TreeItemDropController extends AbstractPositioningDropController {
     private XulTreeItem xulItem;
     private TreeItemWidget item;
-    private POSITION curPos;
+    private DropPosition curPos;
     private long lasPositionPoll = 0;
 
     public TreeItemDropController(XulTreeItem xulItem, TreeItemWidget item){
@@ -1500,6 +1527,43 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     @Override
     public void onEnter(DragContext context) {
       super.onEnter(context);
+      resolveDropVetoerMethod();
+      if(dropVetoerMethod != null){
+        Object objToMove = ((XulDragController) context.dragController).getDragObject();
+
+        DropEvent event = new DropEvent();
+        DataTransfer dataTransfer = new DataTransfer();
+        dataTransfer.setData(Collections.singletonList(objToMove));
+        event.setDataTransfer(dataTransfer);
+        event.setAccepted(true);
+        event.setDropPosition(curPos);
+        if(curPos == DropPosition.MIDDLE){
+          event.setDropParent(xulItem.getBoundObject());
+        } else {
+
+          XulComponent parent = xulItem.getParent().getParent();
+          Object parentObj;
+          if(parent instanceof GwtTree){
+            parentObj = GwtTree.this.elements;
+          } else {
+            parentObj = ((XulTreeItem) parent).getBoundObject();
+          }
+          event.setDropParent(parentObj);
+        }
+
+        try {
+          // Consult Vetoer method to see if this is a valid drop operation
+          dropVetoerMethod.invoke(dropVetoerController, new Object[]{event});
+
+          //Check to see if this drop candidate should be rejected.
+          if(event.isAccepted() == false){
+            return;
+          }
+        } catch (XulException e) {
+          e.printStackTrace();
+        }
+      }
+
       ((Draggable) XulDragController.getInstance().getProxy()).setDropValid(true);
     }
 
@@ -1520,6 +1584,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     @Override
     public void onMove(DragContext context) {
       super.onMove(context);
+
       int scrollPanelX = 0;
       int scrollPanelY = 0;
       int scrollPanelScrollTop = 0;
@@ -1535,42 +1600,93 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       int y = item.getAbsoluteTop();
       int height = item.getOffsetHeight();
       int middleGround = height/4;
+
       if(context.mouseY < (y+height/2)-middleGround){
-        item.highLightDrop(false);
-        curPos = POSITION.ABOVE;
-
-        int posX = item.getElement().getAbsoluteLeft()
-            - scrollPanelX
-            + scrollPanelScrollLeft;
-
-        int posY = item.getElement().getAbsoluteTop()
-            - scrollPanelY
-            + scrollPanelScrollTop
-            -4;
-        
-        dropPosIndicator.setPosition(posX, posY, item.getOffsetWidth());
-
+        curPos = DropPosition.ABOVE;
       } else if(context.mouseY > (y+height/2)+middleGround){
-        item.highLightDrop(false);
-
-        int posX = item.getElement().getAbsoluteLeft()
-            - scrollPanelX
-            + scrollPanelScrollLeft;
-        
-        int posY = item.getElement().getAbsoluteTop()
-            + item.getElement().getOffsetHeight()
-            - scrollPanelY
-            + scrollPanelScrollTop
-            -4;
-
-        dropPosIndicator.setPosition(posX, posY, item.getOffsetWidth());
-
-        curPos = POSITION.BELOW;
+        curPos = DropPosition.BELOW;
       } else {
-        item.highLightDrop(true);
-        dropPosIndicator.setVisible(false);
-        curPos = POSITION.MIDDLE;
+        curPos = DropPosition.MIDDLE;
       }
+
+      resolveDropVetoerMethod();
+      if(dropVetoerMethod != null){
+        Object objToMove = ((XulDragController) context.dragController).getDragObject();
+
+        DropEvent event = new DropEvent();
+        DataTransfer dataTransfer = new DataTransfer();
+        dataTransfer.setData(Collections.singletonList(objToMove));
+        event.setDataTransfer(dataTransfer);
+        event.setAccepted(true);
+        event.setDropPosition(curPos);
+        if(curPos == DropPosition.MIDDLE){
+          event.setDropParent(xulItem.getBoundObject());
+        } else {
+
+          XulComponent parent = xulItem.getParent().getParent();
+          Object parentObj;
+          if(parent instanceof GwtTree){
+            parentObj = GwtTree.this.elements;
+          } else {
+            parentObj = ((XulTreeItem) parent).getBoundObject();
+          }
+          event.setDropParent(parentObj);
+        }
+        
+        try {
+          // Consult Vetoer method to see if this is a valid drop operation
+          dropVetoerMethod.invoke(dropVetoerController, new Object[]{event});
+
+          //Check to see if this drop candidate should be rejected.
+          if(event.isAccepted() == false){
+
+            ((Draggable) XulDragController.getInstance().getProxy()).setDropValid(false);
+            dropPosIndicator.setVisible(false);
+            return;
+          }
+        } catch (XulException e) {
+          e.printStackTrace();
+        }
+      }
+
+      ((Draggable) XulDragController.getInstance().getProxy()).setDropValid(true);
+
+      switch (curPos) {
+        case ABOVE:
+          item.highLightDrop(false);
+
+          int posX = item.getElement().getAbsoluteLeft()
+              - scrollPanelX
+              + scrollPanelScrollLeft;
+
+          int posY = item.getElement().getAbsoluteTop()
+              - scrollPanelY
+              + scrollPanelScrollTop
+              -4;
+          dropPosIndicator.setPosition(posX, posY, item.getOffsetWidth());
+          break;
+        case MIDDLE:
+          item.highLightDrop(true);
+          dropPosIndicator.setVisible(false);
+          break;
+        case BELOW:
+          item.highLightDrop(false);
+
+          posX = item.getElement().getAbsoluteLeft()
+              - scrollPanelX
+              + scrollPanelScrollLeft;
+
+          posY = item.getElement().getAbsoluteTop()
+              + item.getElement().getOffsetHeight()
+              - scrollPanelY
+              + scrollPanelScrollTop
+              -4;
+
+          dropPosIndicator.setPosition(posX, posY, item.getOffsetWidth());
+          
+          break;
+      }
+
     }
 
     @Override
@@ -1591,7 +1707,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         event.setDataTransfer(dataTransfer);
         event.setAccepted(true);
 
-        if(curPos == POSITION.MIDDLE){
+        if(curPos == DropPosition.MIDDLE){
           event.setDropParent(xulItem.getBoundObject());
         } else {
 
@@ -1628,7 +1744,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
       ((Draggable) context.draggable).notifyDragFinished();
 
-      if(curPos == POSITION.MIDDLE){
+      if(curPos == DropPosition.MIDDLE){
         String property = ((XulTreeCol) GwtTree.this.getColumns().getChildNodes().get(0)).getChildrenbinding();
         GwtBindingMethod childrenMethod = GwtBindingContext.typeController.findGetMethod(xulItem.getBoundObject(), property);
         Collection children = null;
@@ -1654,7 +1770,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         }
         int idx = parentList.indexOf(xulItem.getBoundObject());
 
-        if (curPos == POSITION.BELOW){
+        if (curPos == DropPosition.BELOW){
           idx++;
         }
 

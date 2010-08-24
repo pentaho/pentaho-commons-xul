@@ -74,6 +74,7 @@ public abstract class AbstractXulComponent implements XulComponent {
   protected String ondrop;
 
   protected BindingProvider bindingProvider;
+  private String dropVetoMethod;
 
   public AbstractXulComponent(Element element) {
     this.element = element;
@@ -392,5 +393,13 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void setBindingProvider( BindingProvider bindingProvider ) {
     this.bindingProvider = bindingProvider;
+  }
+
+  public void setDropvetoer(String dropVetoMethod){
+    this.dropVetoMethod = dropVetoMethod;
+  }
+
+  public String getDropvetoer() {
+    return dropVetoMethod;
   }
 }

@@ -34,6 +34,10 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
     this.tItem = tItem;
   }
 
+  public XulTreeItem getTreeItem(){
+    return tItem;
+  }
+
   public void setLabel(String label){
     this.text = label;
     this.label.setText(label);

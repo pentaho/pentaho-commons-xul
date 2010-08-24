@@ -7,7 +7,16 @@ public class DropEvent {
   private Object dropParent;
   private int dropIndex;
   private boolean accepted;
-  
+  private DropPosition dropPosition;
+
+  public DropPosition getDropPosition() {
+    return dropPosition;
+  }
+
+  public void setDropPosition(DropPosition dropPosition) {
+    this.dropPosition = dropPosition;
+  }
+
   public void setDataTransfer(DataTransfer dataTransfer) {
     this.dataTransfer = dataTransfer;
   }

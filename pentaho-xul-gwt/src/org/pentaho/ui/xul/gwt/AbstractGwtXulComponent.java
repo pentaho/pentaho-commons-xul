@@ -59,7 +59,8 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected String drageffect;
   protected String ondrop;
   protected BindingProvider bindingProvider;
-  
+  private String dropVetoMethod;
+
   public AbstractGwtXulComponent(String name) {
     super(name);
   }
@@ -662,5 +663,13 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setBindingProvider(BindingProvider provider){
     this.bindingProvider = provider;
+  }
+
+  public void setDropvetoer(String dropVetoMethod){
+    this.dropVetoMethod = dropVetoMethod;
+  }
+
+  public String getDropvetoer() {
+    return dropVetoMethod;
   }
 }
