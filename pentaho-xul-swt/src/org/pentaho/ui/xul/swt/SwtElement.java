@@ -54,6 +54,7 @@ import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
 import org.pentaho.ui.xul.util.Orient;
+import org.pentaho.ui.xul.util.SwtDragManager;
 
 public class SwtElement extends AbstractXulComponent {
   private static final long serialVersionUID = -4407080035694005764L;
@@ -445,7 +446,7 @@ public class SwtElement extends AbstractXulComponent {
    * the xultype, which is currently not exposed in the api but
    * could be used for grouping of drag and drop groups of widgets.
    */
-  private static class XulSwtDndType implements Serializable {
+  protected static class XulSwtDndType implements Serializable {
 
     private static final long serialVersionUID = 7356053006903234787L;
     
@@ -461,11 +462,11 @@ public class SwtElement extends AbstractXulComponent {
       this.value = uuid.toString();
     }
     
-    Object getValue() {
+    public Object getValue() {
       return dndObjects.get(this.value);
     }
     
-    SwtElement getXulSource() {
+    public SwtElement getXulSource() {
       return dndSources.get(this.value);
     }
   }
@@ -601,6 +602,7 @@ public class SwtElement extends AbstractXulComponent {
         if (!event.isAccepted()) {
           nativeEvent.doit = false;
         }
+        SwtDragManager.getInstance().setCurrentDropEvent(event);
         
       }
     });

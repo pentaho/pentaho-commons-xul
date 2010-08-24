@@ -2,6 +2,7 @@ package org.pentaho.ui.xul.swt.tags;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,7 @@ import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -80,10 +82,14 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeCols;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
+import org.pentaho.ui.xul.dnd.DataTransfer;
 import org.pentaho.ui.xul.dnd.DropEffectType;
 import org.pentaho.ui.xul.dnd.DropEvent;
+import org.pentaho.ui.xul.dnd.DropPosition;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.impl.XulEventHandler;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
+import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.TableSelection;
 import org.pentaho.ui.xul.swt.tags.treeutil.TableColumnSorter;
 import org.pentaho.ui.xul.swt.tags.treeutil.TreeColumnSorter;
@@ -95,10 +101,7 @@ import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeCellLabelProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeColumnModifier;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeContentProvider;
 import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeTextCellEditor;
-import org.pentaho.ui.xul.util.ColumnType;
-import org.pentaho.ui.xul.util.SortDirection;
-import org.pentaho.ui.xul.util.TreeCellEditor;
-import org.pentaho.ui.xul.util.TreeCellRenderer;
+import org.pentaho.ui.xul.util.*;
 
 public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
@@ -171,6 +174,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private boolean preserveSelection;
   
   private Collection currentSelectedItems = null;
+
+  private Method dropVetoerMethod;
+
+  private Object dropVetoerController;
   
   private PropertyChangeListener cellChangeListener = new PropertyChangeListener(){
     public void propertyChange(PropertyChangeEvent arg0) {
@@ -1982,28 +1989,121 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
     }
   }
-  
-  protected void onSwtDragOver(DropTargetEvent event) {
-    event.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
-    if (event.item != null) {
+  @Override
+  public void setDropvetoer(String dropVetoMethod) {
+    if(StringUtils.isEmpty(dropVetoMethod)){
+      return;
+    }
+    super.setDropvetoer(dropVetoMethod);
+  }
+
+  private void resolveDropVetoerMethod(){
+    if(dropVetoerMethod == null && getDropvetoer() != null){
+
+      String id = getDropvetoer().substring(0, getDropvetoer().indexOf("."));
+      try {
+        XulEventHandler controller = this.domContainer.getEventHandler(id);
+        this.dropVetoerMethod = controller.getClass().getMethod(getDropvetoer().substring(getDropvetoer().indexOf(".")+1, getDropvetoer().indexOf("(")), new Class[]{DropEvent.class});
+        this.dropVetoerController = controller;
+      } catch (XulException e) {
+        e.printStackTrace();
+      } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+      }
+    }
+
+  }
+
+  private DropPosition curPos;
+  protected void onSwtDragOver(DropTargetEvent dropEvent) {
+
+    dropEvent.feedback = DND.FEEDBACK_EXPAND | DND.FEEDBACK_SCROLL;
+    if (dropEvent.item != null) {
       Rectangle bounds = null;
       Point pt = null;
       if(isHierarchical()) {
-        TreeItem item = (TreeItem) event.item;
-        pt = tree.getControl().getDisplay().map(null, tree.getControl(), event.x, event.y);
+        TreeItem item = (TreeItem) dropEvent.item;
+        pt = tree.getControl().getDisplay().map(null, tree.getControl(), dropEvent.x, dropEvent.y);
         bounds = item.getBounds();
       } else {
-        TableItem item = (TableItem) event.item;
-        pt = table.getControl().getDisplay().map(null, table.getControl(), event.x, event.y);
+        TableItem item = (TableItem) dropEvent.item;
+        pt = table.getControl().getDisplay().map(null, table.getControl(), dropEvent.x, dropEvent.y);
         bounds = item.getBounds();
       }
-      
+
       if (pt.y < bounds.y + bounds.height / 3) {
-        event.feedback |= DND.FEEDBACK_INSERT_BEFORE;
-      } else if (pt.y > bounds.y + 2 * bounds.height / 3) {
-        event.feedback |= DND.FEEDBACK_INSERT_AFTER;
+        curPos = DropPosition.ABOVE;
+      } else if (pt.y > bounds.y + 2 * (bounds.height / 3)) {
+        curPos = DropPosition.BELOW;
       } else {
-        event.feedback |= DND.FEEDBACK_SELECT;
+        curPos = DropPosition.MIDDLE;
+      }
+
+      resolveDropVetoerMethod();
+      if(dropVetoerMethod != null){
+
+        DropEvent event = SwtDragManager.getInstance().getCurrentDropEvent();
+
+        XulTreeItem xulItem = (XulTreeItem) dropEvent.item.getData();
+
+        if(curPos == DropPosition.MIDDLE){
+          event.setDropParent(xulItem.getBoundObject());
+        } else {
+
+          XulComponent parent = xulItem.getParent().getParent();
+          Object parentObj;
+          if(parent instanceof SwtTree){
+            parentObj = SwtTree.this.elements;
+          } else {
+            parentObj = ((XulTreeItem) parent).getBoundObject();
+          }
+          event.setDropParent(parentObj);
+        }
+
+
+        event.setNativeEvent(dropEvent);
+        event.setAccepted(true);
+
+        resolveDndParentAndIndex(event);
+
+        event.setDropPosition(curPos);
+        
+//        if(curPos == DropPosition.MIDDLE){
+//          event.setDropParent(xulItem.getBoundObject());
+//        } else {
+//
+//          XulComponent parent = xulItem.getParent().getParent();
+//          Object parentObj;
+//          if(parent instanceof GwtTree){
+//            parentObj = GwtTree.this.elements;
+//          } else {
+//            parentObj = ((XulTreeItem) parent).getBoundObject();
+//          }
+//          event.setDropParent(parentObj);
+//        }
+
+        try {
+          // Consult Vetoer method to see if this is a valid drop operation
+          dropVetoerMethod.invoke(dropVetoerController, new Object[]{event});
+
+          //Check to see if this drop candidate should be rejected.
+          if(event.isAccepted() == false){
+            dropEvent.feedback = DND.FEEDBACK_NONE;
+          }
+        } catch (InvocationTargetException e) {
+          e.printStackTrace();
+        } catch (IllegalAccessException e) {
+          e.printStackTrace();
+        }
+      } else {
+
+        if (pt.y < bounds.y + bounds.height / 3) {
+          dropEvent.feedback |= DND.FEEDBACK_INSERT_BEFORE;
+        } else if (pt.y > bounds.y + 2 * (bounds.height / 3)) {
+          dropEvent.feedback |= DND.FEEDBACK_INSERT_AFTER;
+        } else {
+          dropEvent.feedback |= DND.FEEDBACK_SELECT;
+        }
       }
     }
 
