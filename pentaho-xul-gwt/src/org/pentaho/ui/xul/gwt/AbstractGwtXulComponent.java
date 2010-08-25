@@ -279,7 +279,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         }
         if(comp.getHeight() > 0){
           style.setProperty("height", comp.getHeight()+"px");
-        } else {
+        } else if(comp.getFlex() > 0){
           style.setProperty("height", "100%");
         }
       } else {                                      //HBox 
@@ -290,7 +290,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         }
         if(comp.getWidth() > 0){
           style.setProperty("width",comp.getWidth()+"px");
-        } else {
+        }  else if(comp.getFlex() > 0){
           style.setProperty("width","100%");
         }
       }
