@@ -34,6 +34,9 @@ public class GwtRadioGroup extends GwtVbox implements XulRadioGroup, PropertyCha
   }
 
   public void registerRadio(GwtRadio aRadio) {
+    if (aRadio.isChecked()) {
+      setValue(aRadio.getValue());
+    }
     aRadio.addPropertyChangeListener("value", this);
     aRadio.addPropertyChangeListener("checked", this); //$NON-NLS-1$
     aRadio.setDisabled(isDisabled());
