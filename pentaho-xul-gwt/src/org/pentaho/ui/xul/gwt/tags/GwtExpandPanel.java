@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
@@ -32,10 +33,10 @@ public class GwtExpandPanel extends AbstractGwtXulContainer implements XulExpand
 
     contentPanel = new VerticalPanel();
     headerLabel = new Label();
-    headerLabel.setStylePrimaryName("expand-panel-header");
-    expandedImage = new Image("images/arrow_open.png");
+    headerLabel.setStylePrimaryName("expand-panel-header-label");
+    expandedImage = new Image(GWT.getModuleBaseURL() + "images/arrow_open.png");
 
-    collapsedImage = new Image("images/arrow_closed.png");
+    collapsedImage = new Image(GWT.getModuleBaseURL() + "images/arrow_closed.png");
 
     headerPanel = new ExpandPanelHeader(collapsedImage, headerLabel);
 
@@ -108,5 +109,6 @@ class ExpandPanelHeader extends HorizontalPanel {
   public ExpandPanelHeader(Image image, Label header) {
     add(image);
     add(header);
+    setStylePrimaryName("expand-panel-header");
   }
 }

@@ -416,14 +416,32 @@ legend {
   position:relative;
 }
 
+.expand-panel > tbody > tr > td > A {
+  text-decoration: none;
+  outline: 0;
+}
+
 .expand-panel .gwt-Image {
   border: 0px;
 }
 
-.expand-panel-header {
+.expand-panel-header-label {
+  font-size: .85em;
   padding-left: 3px;
-  font-size: 0.85em;
+  font-family: Helvetica, Arial, sans-serif;
+  text-decoration: none;
+  color: #000;
 }
 .expand-panel-content {
   padding: 5px;
+}
+
+.expand-panel-header {
+  text-decoration: none;
+  color: #000;
+}
+
+.expand-panel-header {
+  text-decoration: none;
+  color: #000;
 }
