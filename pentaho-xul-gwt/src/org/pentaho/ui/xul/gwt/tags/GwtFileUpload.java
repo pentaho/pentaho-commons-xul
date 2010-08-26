@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -18,7 +21,6 @@ import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
-import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -30,6 +32,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
   private VerticalPanel uploadPanel;
   private VerticalPanel mainPanel;
   private String action;
+  private Map<String, String> parameters = null;
   private static final String ELEMENT_NAME = "pen:fileupload"; //$NON-NLS-1$
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME,
@@ -43,6 +46,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
   public GwtFileUpload() {
     super(ELEMENT_NAME);
     setManagedObject(new VerticalPanel());
+    this.parameters = new HashMap<String, String>();
   }
 
   private String buildActionUrl(String moduleBaseUrl, String anAction) {
@@ -72,7 +76,6 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     }
     
     uploadForm = new FormPanel();
-    uploadForm.setAction(getAction());
     uploadForm.setEncoding(FormPanel.ENCODING_MULTIPART);
     uploadForm.setMethod(FormPanel.METHOD_POST);
     uploadForm.setHeight(getHeight() + "px");
@@ -146,6 +149,32 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
   public String getAction() {
     return action;
   }
+  
+  private String processParameters() {
+    //TODO the URL being returned should be encoded to UTF-8
+    String fullUrl = null;
+    try {
+      try {
+        StringBuffer buffer = new StringBuffer();
+        Object[] keys = this.parameters.keySet().toArray();
+        buffer.append(this.action);
+        buffer.append("?"); //$NON-NLS-1$
+        for(Object theKey : keys) {
+          buffer.append(theKey);
+          buffer.append("="); //$NON-NLS-1$
+          buffer.append(this.parameters.get(theKey));
+          buffer.append("&"); //$NON-NLS-1$
+        }
+        fullUrl = buffer.toString();
+        fullUrl = fullUrl.substring(0, fullUrl.lastIndexOf("&"));
+      } catch (Exception e) {
+        GwtFileUpload.this.getXulDomContainer().invoke(getOnUploadFailure(), new Object[] {new Throwable(e)});
+      }
+    } catch(XulException xule) {
+      xule.printStackTrace(); 
+    }
+    return fullUrl;
+  }
 
 
   public String getOnUploadFailure() {
@@ -188,10 +217,11 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     firePropertyChange("selectedFile", null, name); //$NON-NLS-1$
   }
   public void submit() {
+    uploadForm.setAction(processParameters());
     uploadForm.submit();
   }
   
   public void addParameter(String name, String value) {
-    uploadPanel.add(new Hidden(name, value));
+    this.parameters.put(name, value);
   }
 }
