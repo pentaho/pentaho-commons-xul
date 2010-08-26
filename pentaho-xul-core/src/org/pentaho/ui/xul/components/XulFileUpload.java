@@ -13,4 +13,5 @@ public interface XulFileUpload  extends XulComponent {
   public String getSeletedFile();
   public void setSelectedFile(String name);
   public void submit();
+  public void addParameter(String name, String value);  
 }

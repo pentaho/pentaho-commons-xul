@@ -18,12 +18,13 @@ import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUpload{
+public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUpload {
   private String uploadSuccessMethod, uploadFailureMethod;
-  public final static String ERROR = ".ERROR_";  
+  public final static String ERROR = ".ERROR_"; //$NON-NLS-1$
   private FormPanel uploadForm = null;
   private FileUpload upload = null; 
   private VerticalPanel uploadPanel;
@@ -44,13 +45,13 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     setManagedObject(new VerticalPanel());
   }
 
-  private String buildActionUrl(String moduleBaseUrl, String action) {
+  private String buildActionUrl(String moduleBaseUrl, String anAction) {
     String url = moduleBaseUrl;
-    while (action.indexOf("../") >= 0 &&  url.lastIndexOf("/") > -1) {
+    while (anAction.indexOf("../") >= 0 &&  url.lastIndexOf("/") > -1) {
       url = url.substring(0, url.lastIndexOf("/"));
-      action = action.substring(3);
+      anAction = anAction.substring(3);
     }
-    url += "/" + action;
+    url += "/" + anAction;
     return url;
   }
   
@@ -188,5 +189,9 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
   }
   public void submit() {
     uploadForm.submit();
+  }
+  
+  public void addParameter(String name, String value) {
+    uploadPanel.add(new Hidden(name, value));
   }
 }
