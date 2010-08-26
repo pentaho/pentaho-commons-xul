@@ -223,7 +223,7 @@ legend {
   padding: 0.2em 0.5em;
   color:black;
   font-size:90%;
-  text-align:right;
+  text-align: left;
 }
 
 
@@ -400,4 +400,8 @@ legend {
 .radio > tbody > tr > td {
   width: 60%;
   padding-left: 3px;
+}
+
+.buttonTable td {
+  padding:3px;
 }

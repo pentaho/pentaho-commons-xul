@@ -95,9 +95,9 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     HorizontalPanel leftButtonPanel = new HorizontalPanel();
     HorizontalPanel centerButtonPanel = new HorizontalPanel();
     HorizontalPanel rightButtonPanel = new HorizontalPanel();
-    rightButtonPanel.setSpacing(3);
-    centerButtonPanel.setSpacing(3);
-    leftButtonPanel.setSpacing(3);
+    rightButtonPanel.setStylePrimaryName("buttonTable");
+    centerButtonPanel.setStylePrimaryName("buttonTable");
+    leftButtonPanel.setStylePrimaryName("buttonTable");
     for(XulButton btn : dialogButtons){
       this.removeChild(btn);
       Widget widget = (Widget) btn.getManagedObject();
