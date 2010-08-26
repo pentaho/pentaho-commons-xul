@@ -74,6 +74,9 @@ public class GwtGrid  extends AbstractGwtXulContainer implements XulGrid {
       sp.setHeight(getHeight()+"px");//$NON-NLS-1$
     }
     grid.setCellSpacing(1);
+    if(getPadding() > 0){
+      grid.setCellPadding(getPadding());
+    }
     updateUI();
   }
 

@@ -39,6 +39,12 @@ public class GwtToolbarspacer extends AbstractGwtXulContainer implements XulTool
     });
   }
 
+  @Override
+  public void setFlex(int flex) {
+    super.setFlex(flex);
+    panel.getElement().setAttribute("flex", ""+flex);
+  }
+
   public void adoptAttributes(XulComponent component) {
     if(component.getAttributeValue("pen:visible") != null){
       setVisible("true".equals(component.getAttributeValue("pen:visible")));
