@@ -223,7 +223,7 @@ legend {
   padding: 0.2em 0.5em;
   color:black;
   font-size:90%;
-  text-align: left;
+  text-align:right;
 }
 
 
@@ -408,4 +408,22 @@ legend {
 
 .gwt-Label{
   font-size: .85em;
+}
+
+.expand-panel {
+  height:100%;
+  width:100%;
+  position:relative;
+}
+
+.expand-panel .gwt-Image {
+  border: 0px;
+}
+
+.expand-panel-header {
+  padding-left: 3px;
+  font-size: 0.85em;
+}
+.expand-panel-content {
+  padding: 5px;
 }
