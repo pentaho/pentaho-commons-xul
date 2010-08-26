@@ -402,6 +402,10 @@ legend {
   padding-left: 3px;
 }
 
-.buttonTable td {
+.buttonTable > tbody >tr > td {
   padding:3px;
+}
+
+.gwt-Label{
+  font-size: .85em;
 }
