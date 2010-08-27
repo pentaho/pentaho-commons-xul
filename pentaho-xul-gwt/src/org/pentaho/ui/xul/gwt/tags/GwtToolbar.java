@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.user.client.ui.SimplePanel;
 import org.pentaho.gwt.widgets.client.toolbar.Toolbar;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarGroup;
@@ -57,8 +58,17 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
 
   @Override
   public void layout() {
+    boolean flexLayout = false;
     for(XulComponent c : this.getChildNodes()){
+      if(c.getFlex() > 0){
+        flexLayout = true;
+      }
       add(c);
+    }
+    if(! flexLayout){
+      SimplePanel spacer = new SimplePanel();
+      spacer.getElement().setAttribute("flex", "1");
+      toolbar.add(spacer);
     }
     if(!loaded){
       loaded = true;
