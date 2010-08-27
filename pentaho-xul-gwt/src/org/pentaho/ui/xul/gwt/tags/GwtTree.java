@@ -95,13 +95,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private DropPositionIndicator dropPosIndicator = new DropPositionIndicator();
 
-  private PropertyChangeListener cellChangeListener = new PropertyChangeListener(){
-    public void propertyChange( PropertyChangeEvent arg0) {
-      GwtTree.this.update();
-    }
-  };
-
-
   @Bindable
   public boolean isVisible() {
     return visible;
@@ -357,13 +350,19 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     PropertyChangeListener listener = new PropertyChangeListener(){
       public void propertyChange(PropertyChangeEvent evt) {
-        if(item.getImage() != null){
+        if(evt.getPropertyName().equals("image") && item.getImage() != null){
           tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+        } else if(evt.getPropertyName().equals("label")){
+          tWidget.setLabel(item.getRow().getCell(0).getLabel());
         }
       }
     };
+
     ((GwtTreeItem) item).addPropertyChangeListener("image", listener);
-    listener.propertyChange(null);
+    ((GwtTreeCell) item.getRow().getCell(0)).addPropertyChangeListener("label", listener);;
+    tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+
+
 
     tWidget.setLabel(item.getRow().getCell(0).getLabel());
     if(this.ondrop != null){
@@ -1010,7 +1009,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         binding.fireSourceChanged();
       }
 
-      cell.addPropertyChangeListener("label", cellChangeListener);
 
       row.addCell(cell);
 

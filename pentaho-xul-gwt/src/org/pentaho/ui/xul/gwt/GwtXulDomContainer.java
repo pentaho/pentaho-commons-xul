@@ -166,7 +166,21 @@ public class GwtXulDomContainer implements XulDomContainer {
   private Class unBoxPrimative(Class clazz){
     return clazz;
   }
-  
+
+  private Map<String, GwtBindingMethod> methodMap = new HashMap<String, GwtBindingMethod>();
+  private GwtBindingMethod getMethod(Object handler, String method){
+    GwtBindingMethod m = methodMap.get(method);
+    if(m != null){
+      return m;
+    }
+
+    String methodName = method.substring(method.indexOf(".")+1, method.indexOf("("));
+
+    m = GwtBindingContext.typeController.findMethod(handler, methodName);
+    methodMap.put(method, m);
+    return m;
+  }
+
   public Object invoke(String method, Object[] args) throws XulException {
     try {
       if (method == null || method.indexOf('.') == -1) {
@@ -174,29 +188,18 @@ public class GwtXulDomContainer implements XulDomContainer {
       }
 
       String eventID = method.substring(0, method.indexOf("."));
-      String methodName = method.substring(method.indexOf(".")+1);
-      
-      if(args == null || args.length == 0){
-        Object[] arguments = getArgs(methodName);
-        if(arguments != null){
-          return invoke(method.substring(0,method.indexOf("("))+"()", arguments);
-        } 
-      }
-      methodName = methodName.substring(0,methodName.indexOf("("));
-      
-      EventHandlerWrapper wrapper = this.handlerWrapers.get(this.handlers.get(eventID));
+      Object handler = this.handlers.get(eventID);
+      GwtBindingMethod m = getMethod(handler, method);
 
-      GwtBindingMethod m = GwtBindingContext.typeController.findMethod(this.handlers.get(eventID), methodName);
       if(args.length > 0){
         try{
-          return m.invoke(this.handlers.get(eventID), args);
+          return m.invoke(handler, args);
         } catch (Exception e){
           throw new XulException("Error invoking method: " + method, e);
         }
       } else {
-
         try{
-          return m.invoke(this.handlers.get(eventID), new Object[]{});
+          return m.invoke(handler, new Object[]{});
         } catch (Exception e){
           throw new XulException("Error invoking method: " + method, e);
         }
