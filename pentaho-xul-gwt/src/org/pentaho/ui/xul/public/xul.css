@@ -345,11 +345,10 @@ legend {
 .tree-item-custom-widget-proxy{
   opacity: 0.85;
   filter: alpha(opacity=85);
-  background-color:#FCCECF;
+  border: 1px dashed #999 !important;
   z-index: 1500 !important;
 }
 .tree-item-custom-widget-proxy-valid{
-  background-color: #D6FCD3;
 }
 
 .tree-item-custom-widget-drop-hover{
@@ -444,4 +443,15 @@ legend {
 .expand-panel-header {
   text-decoration: none;
   color: #000;
+}
+
+.toolbar-button{
+  opacity: 1;
+  filter: alpha(opacity=100);
+
+}
+.toolbar-button-disabled{
+  opacity: 0.4;
+  filter: alpha(opacity=40);
+
 }

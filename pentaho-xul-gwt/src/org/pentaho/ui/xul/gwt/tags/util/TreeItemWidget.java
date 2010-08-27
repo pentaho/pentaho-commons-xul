@@ -87,7 +87,7 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
   public Widget makeProxy(Widget ele) {
     TreeItemWidget item = new TreeItemWidget();
     item.setLabel(getLabel());
-    item.setWidth(this.getElement().getOffsetWidth()+"px");
+    item.setWidth("20px");
     item.makeDraggable();
     return item;
   }
