@@ -18,44 +18,57 @@
   -->
 
 <ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
-    <info organisation="pentaho" module="${ivy.artifact.id}" revision="${project.revision}"/>
-    <configurations>
-        <conf name="default"/>
-        <conf name="test" visibility="private"/>
-    	<conf name="runtime"/>
-        <conf name="codegen" visibility="private"/>
-        <conf name="codegen-mac" visibility="private" extends="codegen"/>
-        <conf name="codegen-win" visibility="private" extends="codegen"/>
-        <conf name="codegen-linux" visibility="private" extends="codegen"/>
-    </configurations>
-    <dependencies defaultconf="default->default">
+  <info organisation="pentaho" module="${ivy.artifact.id}" revision="${project.revision}"/>
+  <configurations>
+    <conf name="default"/>
+    <conf name="test" visibility="private"/>
+    <conf name="runtime"/>
+    <conf name="codegen" visibility="private"/>
+    <conf name="codegen-mac" visibility="private" extends="codegen"/>
+    <conf name="codegen-win" visibility="private" extends="codegen"/>
+    <conf name="codegen-linux" visibility="private" extends="codegen"/>
+  </configurations>
+  <dependencies defaultconf="default->default">
 
-      <dependency org="com.google.code.gwtx" name="gwtx" rev="1.5-20081002" conf="codegen->default"/>
-      <dependency org="com.google.gwt" name="gwt-servlet" rev="1.7.1" conf="default->default"/>
+    <dependency org="com.google.gwt" name="gwt-servlet" rev="2.0.3" conf="default->default"/>
+    <!-- codegen dependencies -->
+    <dependency org="org.zenica" name="gwt-datepicker" rev="r30" conf="codegen->default"/>
+    <!-- it doesn't matter what platform of gwt-dev we use here. GWT compile only cares about the API part of the jar -->
+    <dependency org="com.google.gwt" name="gwt-dev" rev="2.0.3" conf="codegen->default"/>
+    <dependency org="com.google.gwt" name="gwt-user" rev="2.0.3" conf="codegen->default"/>
 
-      <!-- it doesn't matter what platform of gwt-dev we use here. GWT compile only cares about the API part of the jar -->
-      <dependency org="com.google.gwt" name="gwt-dev"  rev="1.7.1" m:classifier="linux"  conf="codegen->default"/>        
-      <dependency org="com.google.gwt" name="gwt-user" rev="1.7.1" conf="codegen->default" />
-      
-      <dependency org="pentaho" name="pentaho-xul-core" rev="TRUNK-SNAPSHOT" conf="default->default" changing="true">
-        <artifact name="pentaho-xul-core"/>
-        <artifact name="pentaho-xul-core" type="source" ext="jar" m:classifier="sources"/>
-      </dependency>
-        
-      <dependency org="pentaho" name="pentaho-xul-gwt" rev="TRUNK-SNAPSHOT"
-                    conf="default->default"
-                    changing="true">
-          <artifact name="pentaho-xul-gwt"/>
-          <artifact name="pentaho-xul-gwt" type="source" ext="jar" m:classifier="sources"/>
-      </dependency>
-      <dependency org="pentaho" name="pentaho-gwt-widgets" rev="TRUNK-SNAPSHOT" conf="codegen->default" changing="true">
-        <artifact name="pentaho-gwt-widgets" />
-        <artifact name="pentaho-gwt-widgets" type="source" ext="jar" m:classifier="sources" />
-      </dependency>
-      <dependency org="pentaho" name="pentaho-xul-swing" rev="TRUNK-SNAPSHOT" conf="default->default"/>
-      <dependency org="pentaho" name="pentaho-xul-swt" rev="TRUNK-SNAPSHOT" conf="default->default"/>
-      <dependency org="com.google.gwt" name="gwt-incubator" rev="1-5_Sept_04" conf="codegen->default" />
-      <dependency org="com.allen_sauer" name="gwt-dnd" rev="2.5.6"       conf="codegen->default"/>
-      
-    </dependencies>
+    <dependency org="com.google.gwt" name="gwt-incubator" rev="2.0.1" conf="codegen->default"/>
+    <dependency org="com.allen_sauer" name="gwt-dnd" rev="3.0.1" conf="codegen->default"/>
+    <dependency org="com.google.code.gwtx" name="gwtx" rev="1.5.2" conf="codegen->default"/>
+
+    <dependency org="pentaho" name="pentaho-gwt-widgets" rev="${dependency.pentaho-gwt-widgets.revision}"
+                conf="codegen->default"
+                changing="true">
+      <artifact name="pentaho-gwt-widgets"/>
+      <artifact name="pentaho-gwt-widgets" type="source" ext="jar" m:classifier="sources"/>
+    </dependency>
+
+    <dependency org="pentaho" name="pentaho-xul-core" rev="${dependency.pentaho-xul.revision}"
+                conf="codegen->default"
+                changing="true">
+      <artifact name="pentaho-xul-core"/>
+      <artifact name="pentaho-xul-core" type="source" ext="jar" m:classifier="sources"/>
+    </dependency>
+
+    <dependency org="pentaho" name="pentaho-xul-gwt" rev="${dependency.pentaho-xul.revision}"
+                conf="codegen->default"
+                changing="true">
+      <artifact name="pentaho-xul-gwt"/>
+      <artifact name="pentaho-xul-gwt" type="source" ext="jar" m:classifier="sources"/>
+    </dependency>
+
+    <dependency org="pentaho" name="pentaho-xul-swing" rev="${dependency.pentaho-xul.revision}"
+                conf="default->default"/>
+
+
+    <dependency org="pentaho" name="pentaho-xul-swing" rev="TRUNK-SNAPSHOT" conf="default->default"/>
+    <dependency org="pentaho" name="pentaho-xul-swt" rev="TRUNK-SNAPSHOT" conf="default->default"/>
+
+
+  </dependencies>
 </ivy-module>

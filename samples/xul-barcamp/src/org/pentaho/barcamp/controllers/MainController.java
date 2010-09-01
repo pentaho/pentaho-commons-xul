@@ -24,10 +24,7 @@ import java.util.List;
 import org.pentaho.barcamp.forms.ContactForm;
 import org.pentaho.barcamp.models.Contact;
 import org.pentaho.barcamp.models.Workspace;
-import org.pentaho.ui.xul.binding.Binding;
-import org.pentaho.ui.xul.binding.BindingConvertor;
-import org.pentaho.ui.xul.binding.BindingFactory;
-import org.pentaho.ui.xul.binding.DefaultBindingFactory;
+import org.pentaho.ui.xul.binding.*;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.containers.XulDialog;
@@ -55,7 +52,7 @@ public class MainController extends AbstractXulEventHandler {
   
   @Bindable
   public void init() {
-
+    
     // Grab references that we care about
     contactTable = (XulTree) document.getElementById("contact_tree");
     contactDialog = (XulDialog) document.getElementById("contact_dialog");
@@ -65,14 +62,11 @@ public class MainController extends AbstractXulEventHandler {
     searchBox = (XulTextbox) document.getElementById("searchString");
     removeBtn = (XulButton) document.getElementById("removeBtn");
 
-
     // Dialog Bindings
     bindings.createBinding(form, "firstName", firstNameBox, "value");
     bindings.createBinding(form, "lastName", lastNameBox, "value");
     bindings.createBinding(form, "email", emailBox, "value");
 
-    
-    
     // Bind Search String
     bindings.createBinding(workspace, "searchString", searchBox, "value");
 
@@ -91,27 +85,7 @@ public class MainController extends AbstractXulEventHandler {
     );
 
     // Bind the selected row of table to Workspace
-    bindings.createBinding(contactTable, "selectedRows", workspace, "selectedContact",
-
-        new BindingConvertor<int[], Contact>() {
-
-          @Override
-          public Contact sourceToTarget(int[] value) {
-            if (value.length > 0 && value[0] > -1) {
-              return workspace.getContactList().get(value[0]);
-            } else {
-              return null;
-            }
-          }
-
-          @Override
-          public int[] targetToSource(Contact ignored) {
-            // Ignored
-            return null;
-          }
-        }
-
-    );
+    bindings.createBinding(contactTable, "selectedItem", workspace, "selectedContact");
 
     // Bind the selected row of the table to the remove button disabled state
     bindings.createBinding(contactTable, "selectedRows", removeBtn, "disabled",
@@ -131,11 +105,15 @@ public class MainController extends AbstractXulEventHandler {
     );
 
     try {
-      // The following 'flashes' the UI with start-up values
+      // The following 'flashes' the UI with start-up values, generally not needed if bindings are setup before models
+      // are hydrated
       contactListBinding.fireSourceChanged();
 
       // Uncomment the following to add an overlay to the document.
-      document.removeOverlay("overlay.xul"); //this works for Swing and SWT
+      // This works for Swing and SWT, Shandor will unify the overlay calls to enable overlay loading from the
+      // event handlers.
+      //document.addOverlay("overlay.xul");
+
 
     } catch (Exception e) {
       e.printStackTrace();

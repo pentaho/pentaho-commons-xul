@@ -16,7 +16,7 @@
   ~ Copyright 2009 Pentaho Corporation.  All rights reserved.
   -->
 
-<module>
+<module rename-to="GwtContactManager">
 
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='com.googlecode.gwtx.Java'/>

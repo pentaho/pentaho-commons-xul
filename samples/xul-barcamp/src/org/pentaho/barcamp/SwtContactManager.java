@@ -22,6 +22,8 @@ import org.pentaho.barcamp.controllers.MainController;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
+import org.pentaho.ui.xul.binding.BindingException;
+import org.pentaho.ui.xul.binding.BindingExceptionHandler;
 import org.pentaho.ui.xul.binding.BindingFactory;
 import org.pentaho.ui.xul.binding.DefaultBindingFactory;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
@@ -34,9 +36,18 @@ public class SwtContactManager {
       // Load the document
       XulDomContainer container = new SwtXulLoader().loadXul("org/pentaho/barcamp/xul/contactManager.xul");
 
-      // Create a Binding Factory
+      // Binding Factories are used to make the creation of many bindings less verbose. We generally give one to all
+      // of our controllers. There are specific implementations for Swing and SWT that ensure events targeting UI
+      // components happen in the event thread.
       BindingFactory bf = new DefaultBindingFactory();
       bf.setDocument(container.getDocumentRoot());
+
+      // Any exceptions that happen in the event thread need to be managed
+      bf.setExceptionHandler(new BindingExceptionHandler(){
+        public void handleException(BindingException t) {
+          t.printStackTrace();
+        }
+      });
 
       // Create our main Controller
       MainController controller = new MainController();
@@ -47,7 +58,10 @@ public class SwtContactManager {
       final XulRunner runner = new SwtXulRunner();
       runner.addContainer(container);
 
+      // Initialize calls any onload methods specified on the top level element (dialog or window)
       runner.initialize();
+
+      // Start will display the window or dialog if you want, we mostly never call this.
       runner.start();
 
     } catch (XulException e) {
