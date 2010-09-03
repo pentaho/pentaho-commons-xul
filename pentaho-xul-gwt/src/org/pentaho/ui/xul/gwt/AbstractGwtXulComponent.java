@@ -269,6 +269,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
           }
         }
       }
+      
       Style style = component.getElement().getStyle();
       //By default 100%, respect hard-coded width
       if(this.getOrientation() == Orient.VERTICAL){ //VBox
@@ -310,11 +311,13 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       }
       switch(alignment){
         case START:
-          container.add(fillerPanel);
           if (this.getOrientation() == Orient.VERTICAL) { //VBox and such
-            ((VerticalPanel) container).setCellHeight(fillerPanel, "100%");
+            //((VerticalPanel) container).setCellHeight(fillerPanel, "100%");
+//          container.add(fillerPanel);
+
           } else {
             ((HorizontalPanel) container).setCellWidth(fillerPanel, "100%");
+            container.add(fillerPanel);
           }
           break;
         case CENTER:
