@@ -187,6 +187,14 @@ public class GwtXulDomContainer implements XulDomContainer {
         throw new XulException("method call does not follow the pattern [EventHandlerID].methodName()");
       }
 
+      if(args == null || args.length == 0){
+      String methodName = method.substring(method.indexOf(".")+1);
+        Object[] arguments = getArgs(methodName);
+        if(arguments != null){
+          return invoke(method.substring(0,method.indexOf("("))+"()", arguments);
+        }
+      }
+
       String eventID = method.substring(0, method.indexOf("."));
       Object handler = this.handlers.get(eventID);
       GwtBindingMethod m = getMethod(handler, method);
