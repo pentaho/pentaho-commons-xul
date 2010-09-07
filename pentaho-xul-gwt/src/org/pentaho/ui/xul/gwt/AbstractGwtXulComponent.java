@@ -242,57 +242,73 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       }
       Widget component = (Widget) wrappedWidget;
       component.getElement().setId(comp.getId());
-      
-      if(component != null){
-        container.add(component);
+
+      if(component == null){
+        continue;
       }
-      if(flexLayout && component != null){
-        
+      SimplePanel componentWrapper = new SimplePanel();
+      componentWrapper.add(component);
+      container.add(componentWrapper);
+
+      if(this.getOrientation() == Orient.VERTICAL){ //VBox
+        container.setWidth("100%");
+
+      } else {                                      //HBox
+        container.setHeight("100%");
+      }
+
+      if(flexLayout){
+
         int componentFlex = comp.getFlex();
         if(componentFlex > 0){
          
           String percentage = Math.round((componentFlex/totalFlex) *100)+"%";
           if(this.getOrientation() == Orient.VERTICAL){ //VBox
-            ((VerticalPanel) container).setCellHeight(component, percentage);
-            ((VerticalPanel) container).setCellWidth(component, "100%");
+            ((VerticalPanel) container).setCellHeight(componentWrapper, percentage);
+            ((VerticalPanel) container).setCellWidth(componentWrapper, "100%");
+            component.setWidth("100%");
   
             if(comp.getFlex() > 0){
-              component.getElement().getStyle().setProperty("height","100%");
+              componentWrapper.setHeight("100%");
+              component.setHeight("100%");
             }
-          } else {                                      //HBox 
-            ((HorizontalPanel) container).setCellWidth(component, percentage);
-            ((HorizontalPanel) container).setCellHeight(component, "100%");
+          } else {                                      //HBox
+            ((HorizontalPanel) container).setCellWidth(componentWrapper, percentage);
+            ((HorizontalPanel) container).setCellHeight(componentWrapper, "100%");
+            component.setHeight("100%");
             
             if(comp.getFlex() > 0){
-              component.setWidth("100%"); 
+              componentWrapper.setWidth("100%");
+              component.setHeight("100%");
             }
           }
         }
       }
       
+      Style wrapperStyle = componentWrapper.getElement().getStyle();
       Style style = component.getElement().getStyle();
       //By default 100%, respect hard-coded width
       if(this.getOrientation() == Orient.VERTICAL){ //VBox
         if(comp.getWidth() > 0){
           style.setProperty("width", comp.getWidth()+"px");
         } else {
-          style.setProperty("width", "100%");
+          wrapperStyle.setProperty("width", "100%");
         }
         if(comp.getHeight() > 0){
           style.setProperty("height", comp.getHeight()+"px");
         } else if(comp.getFlex() > 0){
-          style.setProperty("height", "100%");
+          wrapperStyle.setProperty("height", "100%");
         }
       } else {                                      //HBox 
         if(comp.getHeight() > 0){
           style.setProperty("height",comp.getHeight()+"px");
         } else {
-          style.setProperty("height","100%");
+          wrapperStyle.setProperty("height", "100%");
         }
         if(comp.getWidth() > 0){
           style.setProperty("width",comp.getWidth()+"px");
-        }  else if(comp.getFlex() > 0){
-          style.setProperty("width","100%");
+        } else if(comp.getFlex() > 0){
+          wrapperStyle.setProperty("width", "100%");
         }
       }
     
