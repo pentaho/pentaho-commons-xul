@@ -2040,9 +2040,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
 
       resolveDropVetoerMethod();
-      if(dropVetoerMethod != null){
 
-        DropEvent event = SwtDragManager.getInstance().getCurrentDropEvent();
+      DropEvent event = SwtDragManager.getInstance().getCurrentDropEvent();
+      if(dropVetoerMethod != null){
 
         XulTreeItem xulItem = (XulTreeItem) dropEvent.item.getData();
 
@@ -2086,25 +2086,23 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           // Consult Vetoer method to see if this is a valid drop operation
           dropVetoerMethod.invoke(dropVetoerController, new Object[]{event});
 
-          //Check to see if this drop candidate should be rejected.
-          if(event.isAccepted() == false){
-            dropEvent.feedback = DND.FEEDBACK_NONE;
-          }
         } catch (InvocationTargetException e) {
           e.printStackTrace();
         } catch (IllegalAccessException e) {
           e.printStackTrace();
         }
-      } else {
-
-        if (pt.y < bounds.y + bounds.height / 3) {
-          dropEvent.feedback |= DND.FEEDBACK_INSERT_BEFORE;
-        } else if (pt.y > bounds.y + 2 * (bounds.height / 3)) {
-          dropEvent.feedback |= DND.FEEDBACK_INSERT_AFTER;
-        } else {
-          dropEvent.feedback |= DND.FEEDBACK_SELECT;
-        }
       }
+
+      if(event.isAccepted() == false){
+        dropEvent.feedback = DND.FEEDBACK_NONE;
+      } else if (pt.y < bounds.y + bounds.height / 3) {
+        dropEvent.feedback |= DND.FEEDBACK_INSERT_BEFORE;
+      } else if (pt.y > bounds.y + 2 * (bounds.height / 3)) {
+        dropEvent.feedback |= DND.FEEDBACK_INSERT_AFTER;
+      } else {
+        dropEvent.feedback |= DND.FEEDBACK_SELECT;
+      }
+
     }
 
   }
