@@ -214,9 +214,14 @@ html, body{
 .gwt-Dialog {
   width:100%;
 }
-fieldset {
+.xul-fieldset {
  border:1px solid #777777;
- padding-right: 1px;
+ padding: 0px;
+ margin: 0px;
+}
+
+.xul-textbox{
+  padding: 1px 0px;
 }
 
 legend {

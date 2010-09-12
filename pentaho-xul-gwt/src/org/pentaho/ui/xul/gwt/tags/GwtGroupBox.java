@@ -34,24 +34,18 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     this.orientation = Orient.VERTICAL;
     captionPanel = new CaptionPanel();
     setManagedObject(captionPanel);
-    captionPanel.getElement().getStyle().setProperty("padding", "0px");
-    captionPanel.getElement().getStyle().setProperty("margin", "0px");
+    captionPanel.setStylePrimaryName("xul-fieldset");
     
     VerticalPanel vp;
     container = vp = new VerticalPanel();
     vp.setHeight("100%");
+    vp.setSpacing(2);
     container.setWidth("100%");
-    vp.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
-    vp.setStyleName("vbox");
     
-    SimplePanel sp = new SimplePanel();
-    sp.getElement().getStyle().setProperty("padding", "4px");
-    sp.getElement().getStyle().setProperty("margin", "0px");
-    sp.setWidth("95%");
-    sp.setHeight("100%");
-    sp.add(container);
+    vp.setStyleName("vbox");
+
     ((VerticalPanel) container).setStyleName("vbox");
-    ((CaptionPanel) getManagedObject()).add(sp);
+    captionPanel.add(vp);
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -59,7 +53,7 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     if(!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
       captionPanel.setWidth(srcEle.getAttribute("width") + "px");
     } else {
-      captionPanel.setWidth("95%"); 
+      captionPanel.setWidth("100%");
     }
     if(!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
       captionPanel.setHeight(srcEle.getAttribute("height") + "px");

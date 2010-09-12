@@ -52,6 +52,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   public GwtTextbox() {
     super(ELEMENT_NAME);
     textBox = new TextBox();
+    textBox.setStylePrimaryName("xul-textbox");
     
     // Firefox 2 and sometimes 3 fails to render cursors in Textboxes if they're contained in absolutely
     // positioned div's, such as when they're in dialogs. The workaround is to wrap the <input> in a div
