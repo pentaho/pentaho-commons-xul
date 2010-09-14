@@ -93,7 +93,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
         }
       });
       radioContainer.add(customValueTextBox);
-      customValueTextBox.setWidth("75%");
+//      customValueTextBox.setWidth("75%");
     }
 
     if(currentGroup != null){
