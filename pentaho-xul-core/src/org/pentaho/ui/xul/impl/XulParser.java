@@ -34,6 +34,8 @@ public class XulParser {
   private static final Log logger = LogFactory.getLog(XulParser.class);
 
   public Map<String, Object> handlers = new HashMap<String, Object>();
+  private Map<String, Constructor<?>> constructorCache = new HashMap<String, Constructor<?>>();
+
 
   private XulDomContainer xulDomContainer;
 
@@ -89,25 +91,41 @@ public class XulParser {
       notifyDomReady(c);
     }
   }
+
+  private Constructor<?> getContructor(String className) throws XulException{
+    Constructor<?> con = constructorCache.get(className);
+
+    if(con != null){
+      return con;
+    }
+
+    Class<?> c = null;
+
+    for(ClassLoader loader : classloaders){
+      try{
+        c = loader.loadClass(className);
+      } catch(ClassNotFoundException e){
+        throw new XulException(e);
+      }
+    }
+
+    try {
+      Constructor<?> constructor = c.getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
+      constructorCache.put(className, constructor);
+      return constructor;
+    } catch (NoSuchMethodException e1) {
+      throw new XulException(e1);
+    }
+  
+  }
   
   public XulContainer getPlaceHolderRoot() throws XulException{
-    Object handler = handlers.get("WINDOW");
-
-   
-    Class<?> c = null;
-    try {
-
-      for(ClassLoader loader : classloaders){
-        try{
-          c = loader.loadClass((String) handler);
-        } catch(ClassNotFoundException e){
-          
-        }
-      } 
-      
-      Constructor<?> constructor = c
-          .getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
-      XulWindow ele = (XulWindow) constructor.newInstance(null, null, xulDomContainer, "window");
+    try{
+      Object handlerClassName = handlers.get("WINDOW");
+      if(handlerClassName == null){
+        throw new XulException("Could not find a tag handler for window");
+      }
+      XulWindow ele = (XulWindow) getContructor(handlerClassName.toString()).newInstance(null, null, xulDomContainer, "window");
       return ele;
     } catch (Exception e) {
       throw new XulException(e);
@@ -167,24 +185,9 @@ public class XulParser {
     }
 
     String tagName = srcEle.getName();
-    Class<?> c = null;
     try {
 
-      for(ClassLoader loader : classloaders){
-        try{
-          c = loader.loadClass((String) handler);
-        } catch(ClassNotFoundException e){
-          
-        }
-      } 
-
-      if (c == null)
-      {
-        throw new ClassNotFoundException("Class " + handler + " was not found in the classpath.");
-      }
-      Constructor<?> constructor =
-          c.getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
-
+      Constructor<?> constructor = getContructor((String) handler);
 
       //create a generic element representation of the current Dom4J node
       Element domEle = DocumentFactory.createElement(srcEle.getName().toLowerCase());
@@ -221,19 +224,10 @@ public class XulParser {
        logger.error("tag handler not found: " + name);
        throw new XulException(String.format("No handler available for input: %s", name));
      }
-
-     Class<?> c = null;
      try {
-       for(ClassLoader loader : classloaders){
-         try{
-           c = loader.loadClass((String) handler);
-         } catch(ClassNotFoundException e){
-           
-         }
-       } 
-       
-       Constructor<?> constructor = c.getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
-      
+
+       Constructor<?> constructor = getContructor((String) handler);
+
        XulComponent ele = (XulComponent) constructor.newInstance(null, defaultParent, xulDomContainer, name);
        return ele;
      } catch (Exception e) {
