@@ -399,6 +399,7 @@ legend {
 .radio > tbody > tr > td:first-child {
   width: 40%;
   padding-left: 0px;
+  white-space: nowrap;
 }
 .radio > tbody > tr > td {
   width: 60%;
