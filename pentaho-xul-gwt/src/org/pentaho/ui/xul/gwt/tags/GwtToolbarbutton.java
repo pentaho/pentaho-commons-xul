@@ -254,7 +254,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   public void setDownimage(String img) {
     this.downimage = img;
     if(img != null && img.length() > 0){
-      button.setDownImage(new Image(img));
+      button.setDownImage(new Image(GWT.getModuleBaseURL() + img));
     }
   }
 
