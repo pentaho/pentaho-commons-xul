@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Listener;
@@ -14,6 +15,7 @@ import org.eclipse.swt.widgets.Control;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.components.XulTab;
 import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabpanels;
@@ -62,6 +64,20 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
       public void widgetSelected(SelectionEvent arg0) {
         int prevVal = selectedIndex;
         selectedIndex = tabFolder.getSelectionIndex();
+        
+        // expect to find exactly one tabs child node of this tabbox node
+        XulTabs tabs = null;
+        for (XulComponent c : getChildNodes()) {
+          if (c instanceof XulTabs) {
+            tabs = (XulTabs) c;
+          }
+        }
+        
+        XulTab tab = (XulTab) tabs.getChildNodes().get(selectedIndex);
+        if (StringUtils.isNotBlank(tab.getOnclick())) {
+          SwtTabbox.this.invoke(tab.getOnclick());
+        }
+        
         SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
       }
 
