@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
 import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
@@ -253,7 +254,6 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     } else {
       listBox.setSelectedIndex(getItemIndex(item));
     }
-    onChange(null);
   }
 
   @Bindable
