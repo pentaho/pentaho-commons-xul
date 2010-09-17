@@ -17,7 +17,8 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
  * @param <T>
  *          type of children
  */
-public abstract class AbstractModelNode<T> extends XulEventSourceAdapter implements
+public abstract class
+    AbstractModelNode<T> extends XulEventSourceAdapter implements
     List<T>, Iterable<T>, Serializable {
 
   protected List<T> children = new ArrayList<T>();
