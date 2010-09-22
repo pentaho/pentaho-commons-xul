@@ -252,7 +252,7 @@ TYPICAL TARGET SEQUENCE
             value="ivy.xml"
             description="The name of the IVY xml file defining your project's dependencies" />
   <property name="ivy.artifact.group"
-            value="mycompanyname"
+            value="pentaho"
             description="IVY metadata describing the originating company or organization" />
   <property name="ivy.artifact.pomfile"
             value="${dist.dir}/pom.xml"
