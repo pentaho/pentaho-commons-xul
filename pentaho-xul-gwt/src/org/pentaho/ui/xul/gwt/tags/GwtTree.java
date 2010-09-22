@@ -300,7 +300,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
 
 
-    if(this.ondrag != null){
+    if(StringUtils.isEmpty(this.ondrag) == false){
       for (int i = 0; i < tree.getItemCount(); i++) {
         madeDraggable(tree.getItem(i));
       }
