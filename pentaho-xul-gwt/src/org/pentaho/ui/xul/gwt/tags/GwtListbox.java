@@ -217,8 +217,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
       //Bound situation, return domain object
       return boundElements.toArray()[index];
     }
-    int selIdx = listBox.getSelectedIndex();
-    return selIdx >= 0 ? getChildNodes().get(selIdx) : null;
+    return index >= 0 ? getChildNodes().get(index) : null;
   }
 
   @Bindable
