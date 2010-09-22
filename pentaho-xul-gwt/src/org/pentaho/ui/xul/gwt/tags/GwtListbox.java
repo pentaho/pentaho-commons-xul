@@ -105,6 +105,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   private void fireSelectedEvents() {
 
     firePropertyChange("selectedItem", previousSelectedItem, getSelectedItem());
+    firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{getSelectedItem()});
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
     firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
