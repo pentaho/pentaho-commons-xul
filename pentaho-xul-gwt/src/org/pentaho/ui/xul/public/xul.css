@@ -460,3 +460,12 @@ legend {
   filter: alpha(opacity=40);
 
 }
+
+.xul-pre {
+  font-family: "Lucida Console", Monaco, monospace;
+  overflow: scroll;
+  background: white;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+}

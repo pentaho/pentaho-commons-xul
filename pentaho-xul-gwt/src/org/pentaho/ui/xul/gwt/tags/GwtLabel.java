@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 
+import com.google.gwt.dom.client.PreElement;
 import org.pentaho.gwt.widgets.client.text.ToolTip;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
@@ -30,12 +31,14 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   }
   
   private Label label;
-  
+  private boolean pre;
+
   public GwtLabel() {
     super(ELEMENT_NAME);
     label = new Label();
     setManagedObject(label);
     label.setStyleName("xul-label");
+
 //    label.setWordWrap(true);
   }
 
@@ -43,8 +46,15 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     super.init(srcEle, container);
     setValue(srcEle.getAttribute("value"));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
+
+    setPre("true".equals(srcEle.getAttribute("pre")));
+
   }
-  
+
+  private void setPre(boolean b) {
+    this.pre = b;
+  }
+
   public void layout(){
     label.setTitle(this.getTooltiptext());
     if(StringUtils.isEmpty(this.getTooltiptext()) == false){
@@ -92,7 +102,11 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
 
   @Bindable
   public void setValue(String value){
-    label.setText(value);
+    if (!pre) {
+      label.setText(value);
+    } else {
+      label.getElement().setInnerHTML("<pre class='xul-pre'>" + value + "</pre>");
+    }
   }
   
   @Bindable
