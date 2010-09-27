@@ -105,7 +105,11 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     if (!pre) {
       label.setText(value);
     } else {
-      label.getElement().setInnerHTML("<pre class='xul-pre'>" + value + "</pre>");
+      String style = "";
+      if(getWidth() > 0) {
+        style = "style=\"width:" + getWidth() + "px;\"";
+      }
+      label.getElement().setInnerHTML("<pre class='xul-pre' " + style +">" + value + "</pre>");
     }
   }
   
