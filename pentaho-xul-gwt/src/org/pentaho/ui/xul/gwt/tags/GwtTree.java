@@ -328,6 +328,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
 
     table.populateTable(data);
+    int totalFlex = 0;
+    for (int i = 0; i < getColumns().getColumnCount(); i++) {
+      totalFlex += getColumns().getColumn(i).getFlex();
+    }
+    if(totalFlex > 0){
+      table.fillWidth();
+    }
+
   }
 
   private TreeItem createNode(final XulTreeItem item){

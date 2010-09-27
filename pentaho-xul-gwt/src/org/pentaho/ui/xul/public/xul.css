@@ -91,10 +91,10 @@ html, body{
   border-top: 1px solid #848484;
 }
 
-.gwt-ScrollTable .dataWrapper {
-    overflow-y: scroll !important;
-    overflow-x: hidden !important;
-}
+/*.gwt-ScrollTable .dataWrapper {*/
+    /*overflow-y: scroll !important;*/
+    /*overflow-x: hidden !important;*/
+/*}*/
 
 .gwt-ScrollTable .dataTable td {
   overflow: hidden;
