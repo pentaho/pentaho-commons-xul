@@ -100,13 +100,19 @@ public class XulParser {
     }
 
     Class<?> c = null;
-
+    Throwable lastException = null;
     for(ClassLoader loader : classloaders){
       try{
         c = loader.loadClass(className);
+        if (c != null) {
+          break;
+        }
       } catch(ClassNotFoundException e){
-        throw new XulException(e);
+        lastException = e;
       }
+    }
+    if (c == null && lastException != null) {
+      throw new XulException(lastException);
     }
 
     try {
