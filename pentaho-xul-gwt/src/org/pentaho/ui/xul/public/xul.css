@@ -75,7 +75,7 @@ html, body{
 	to modify this, you'd better modify the pentaho-gwt-widgets->Widgets.css 
 */
 .headerTable >tbody > tr > td{
-  padding:4px;
+  padding:2px;
 }
 .gwt-ScrollTable {
   border: 1px solid #848484;
@@ -124,6 +124,7 @@ html, body{
 .gwt-ScrollTable .dataTable td {
   border-bottom: 1px solid #BEBEBE;
   border-right: 1px solid #BEBEBE;
+  padding: 2px;
 }
 
 .gwt-ScrollTable .dataTable-disabled td {
@@ -149,7 +150,7 @@ html, body{
 }
 
 .gwt-ScrollTable .dataTable tr.selected {
-  background: #BEBEBE none repeat scroll 0% 0%;
+  background: #1dbeff none repeat scroll 0% 0%;
 }
 
 .gwt-ScrollTable .pagingOptions {

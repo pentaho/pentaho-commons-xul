@@ -183,6 +183,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private BaseTable table;
   private boolean isHierarchical = false;
   private boolean firstLayout = true;
+  private Object[][] currentData;
+
   // need to handle layouting
   public void layout() {
     if(this.getRootChildren() == null){
@@ -319,21 +321,30 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private void populateTable(){
 
-    Object data[][] = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
+    currentData = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
 
     for (int i = 0; i < getRootChildren().getItemCount(); i++) {
       for (int j = 0; j < getColumns().getColumnCount(); j++) {
-        data[i][j] = getColumnEditor(j,i);
+        currentData[i][j] = getColumnEditor(j,i);
       }
     }
 
-    table.populateTable(data);
+    table.populateTable(currentData);
     int totalFlex = 0;
     for (int i = 0; i < getColumns().getColumnCount(); i++) {
       totalFlex += getColumns().getColumn(i).getFlex();
     }
     if(totalFlex > 0){
       table.fillWidth();
+    }
+
+    if(this.selectedRows != null && this.selectedRows.length > 0){
+      for(int i=0; i<this.selectedRows.length; i++){
+        int idx = this.selectedRows[i];
+        if(idx > -1 && idx < currentData.length){
+          table.selectRow(idx);
+        }
+      }
     }
 
   }
@@ -435,8 +446,20 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       colType = extractDynamicColType(row, x);
     }
 
-    if(StringUtils.isEmpty(colType) || !column.isEditable()){
-      return new HTML(val);
+    if(!colType.equals("checkbox") && (StringUtils.isEmpty(colType) || !column.isEditable() || getSelectedRows().length != 1  || getSelectedRows()[0] != y)){
+      if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox")){
+        Vector vals = (Vector) cell.getValue();
+        int idx = cell.getSelectedIndex();
+        if(colType.equalsIgnoreCase("editablecombobox")){
+           return new HTML(cell.getLabel());
+        } else if(idx < vals.size()){
+          return new HTML(""+vals.get(idx));
+        } else {
+          return new HTML("");
+        }
+      } else {
+        return new HTML(val);
+      }
     } else if(colType.equalsIgnoreCase("text")){
 
       try{
@@ -634,6 +657,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   }
 
+  private int curSelectedRow = -1;
   private void setupTable(){
     String cols[] = new String[getColumns().getColumnCount()];
 
@@ -698,6 +722,21 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
             rows[i] = selectedRows[i];
           }
           GwtTree.this.setSelectedRows(rows);
+          if(curSelectedRow > -1){
+            Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
+
+            for (int j = 0; j < getColumns().getColumnCount(); j++) {
+              curSelectedRowOriginal[j] = getColumnEditor(j,curSelectedRow);
+            }
+            table.replaceRow(curSelectedRow, curSelectedRowOriginal);
+          }
+          curSelectedRow = rows[0];
+          Object[] newRow = new Object[getColumns().getColumnCount()];
+          
+          for (int j = 0; j < getColumns().getColumnCount(); j++) {
+            newRow[j] = getColumnEditor(j,rows[0]);
+          }
+          table.replaceRow(rows[0], newRow);
         } catch (XulException e) {
           e.printStackTrace();
         }
