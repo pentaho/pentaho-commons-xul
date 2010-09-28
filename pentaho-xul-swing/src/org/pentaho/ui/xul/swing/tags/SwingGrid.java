@@ -25,7 +25,6 @@ public class SwingGrid extends AbstractSwingContainer implements XulGrid {
 
     grid.setLayout(new GridBagLayout());
     grid.setOpaque(false);
-    grid.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     setManagedObject(grid);
     resetContainer();
 	}
