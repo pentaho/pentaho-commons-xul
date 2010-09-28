@@ -95,6 +95,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private DropPositionIndicator dropPosIndicator = new DropPositionIndicator();
 
+  private boolean showAllEditControls = true;
+
   @Bindable
   public boolean isVisible() {
     return visible;
@@ -158,7 +160,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     setDrageffect(srcEle.getAttribute("pen:drageffect"));
 
     setDropvetoer(srcEle.getAttribute("pen:dropvetoer"));
-    
+    if(StringUtils.isEmpty(srcEle.getAttribute("pen:showalleditcontrols")) == false){
+      this.setShowalleditcontrols(srcEle.getAttribute("pen:showalleditcontrols").equals("true"));
+    }
     this.setEditable("true".equals(srcEle.getAttribute("editable")));
     this.domContainer = container;
   }
@@ -446,7 +450,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       colType = extractDynamicColType(row, x);
     }
 
-    if(!colType.equals("checkbox") && (StringUtils.isEmpty(colType) || !column.isEditable() || getSelectedRows().length != 1  || getSelectedRows()[0] != y)){
+    if(!colType.equals("checkbox") && ((StringUtils.isEmpty(colType) || !column.isEditable()) || (showAllEditControls == false && (getSelectedRows().length != 1  || getSelectedRows()[0] != y)))){
       if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox")){
         Vector vals = (Vector) cell.getValue();
         int idx = cell.getSelectedIndex();
@@ -1520,6 +1524,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
 
     return children;
+  }
+
+
+  public boolean isShowalleditcontrols() {
+    return showAllEditControls;
+  }
+
+  public void setShowalleditcontrols(boolean showAllEditControls) {
+    this.showAllEditControls = showAllEditControls;
   }
 
 
