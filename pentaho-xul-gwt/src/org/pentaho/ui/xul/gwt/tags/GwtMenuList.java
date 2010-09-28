@@ -101,6 +101,14 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     if (!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
       setHeight(Integer.parseInt(srcEle.getAttribute("height")));
     }
+
+    if (!StringUtils.isEmpty(srcEle.getAttribute("editable"))) {
+        setEditable(Boolean.parseBoolean(srcEle.getAttribute("editable")));
+    }
+    
+    if (!StringUtils.isEmpty(srcEle.getAttribute("disabled"))) {
+        setDisabled(Boolean.parseBoolean(srcEle.getAttribute("disabled")));
+    }
   }
 
   public String getBinding() {
