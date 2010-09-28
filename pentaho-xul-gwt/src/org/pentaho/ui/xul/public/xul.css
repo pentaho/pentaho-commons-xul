@@ -153,6 +153,10 @@ html, body{
   background: #1dbeff none repeat scroll 0% 0%;
 }
 
+.gwt-ScrollTable .dataTable tr:hover{
+  background: #ceedfa none repeat scroll 0% 0%;
+}
+
 .gwt-ScrollTable .pagingOptions {
   background: #e8e8e8 none repeat scroll 0% 0%;
   border-right: 1px solid #848484;
