@@ -47,6 +47,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private boolean suppressLayout = false;
   private boolean inLayoutProcess = false;
   private String previousSelectedItem = null;
+  private String previousValue;
   private String onCommand;
   private SimplePanel wrapper = null;
 
@@ -282,6 +283,12 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     selectedIndex = getSelectedIndex();
     GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
     previousSelectedItem = (String) getSelectedItem();
+
+
+    String newVal = listbox.getValue();
+    GwtMenuList.this.changeSupport.firePropertyChange("value", previousValue, newVal);
+
+    previousValue = newVal;
 
     if (StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false && prevSelectedIndex != selectedIndex) {
       try {
