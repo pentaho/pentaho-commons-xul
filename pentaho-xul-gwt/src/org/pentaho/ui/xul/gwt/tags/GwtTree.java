@@ -607,6 +607,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         return lb;
       } catch(Exception e){
         System.out.println("error creating menulist, fallback");
+
+        final String fColType = colType;
         e.printStackTrace();
         final CustomListBox lb = new CustomListBox();
 
@@ -621,7 +623,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         lb.addChangeListener(new ChangeListener(){
 
           public void onChange(Widget arg0) {
-            if(column.getType().equalsIgnoreCase("editablecombobox")){
+            if(fColType.equalsIgnoreCase("editablecombobox")){
               cell.setLabel(lb.getValue());
             } else {
               cell.setSelectedIndex(lb.getSelectedIndex());
