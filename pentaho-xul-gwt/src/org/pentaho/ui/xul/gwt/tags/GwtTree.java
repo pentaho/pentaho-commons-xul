@@ -726,21 +726,23 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
             rows[i] = selectedRows[i];
           }
           GwtTree.this.setSelectedRows(rows);
-          if(curSelectedRow > -1){
-            Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
+          if(GwtTree.this.isShowalleditcontrols() == false){
+            if(curSelectedRow > -1){
+              Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
+
+              for (int j = 0; j < getColumns().getColumnCount(); j++) {
+                curSelectedRowOriginal[j] = getColumnEditor(j,curSelectedRow);
+              }
+              table.replaceRow(curSelectedRow, curSelectedRowOriginal);
+            }
+            curSelectedRow = rows[0];
+            Object[] newRow = new Object[getColumns().getColumnCount()];
 
             for (int j = 0; j < getColumns().getColumnCount(); j++) {
-              curSelectedRowOriginal[j] = getColumnEditor(j,curSelectedRow);
+              newRow[j] = getColumnEditor(j,rows[0]);
             }
-            table.replaceRow(curSelectedRow, curSelectedRowOriginal);
+            table.replaceRow(rows[0], newRow);
           }
-          curSelectedRow = rows[0];
-          Object[] newRow = new Object[getColumns().getColumnCount()];
-          
-          for (int j = 0; j < getColumns().getColumnCount(); j++) {
-            newRow[j] = getColumnEditor(j,rows[0]);
-          }
-          table.replaceRow(rows[0], newRow);
         } catch (XulException e) {
           e.printStackTrace();
         }
