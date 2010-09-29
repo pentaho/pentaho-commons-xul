@@ -387,7 +387,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   @Bindable
   public void setValue( String value ) {
     for (ListItem item : listbox.getItems()) {
-      if (item.getValue().equals(value)) {
+      if (item.getValue() != null && item.getValue().equals(value)) {
         listbox.setSelectedItem(item);
         return;
       }
