@@ -450,8 +450,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       colType = extractDynamicColType(row, x);
     }
 
-    if(!colType.equals("checkbox") && ((StringUtils.isEmpty(colType) || !column.isEditable()) || (showAllEditControls == false && (getSelectedRows().length != 1  || getSelectedRows()[0] != y)))){
-      if(colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox")){
+    if((StringUtils.isEmpty(colType) || !column.isEditable()) || ((showAllEditControls == false && (getSelectedRows().length != 1  || getSelectedRows()[0] != y)) && !colType.equals("checkbox"))){
+      if(colType != null && (colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))){
         Vector vals = (Vector) cell.getValue();
         int idx = cell.getSelectedIndex();
         if(colType.equalsIgnoreCase("editablecombobox")){
