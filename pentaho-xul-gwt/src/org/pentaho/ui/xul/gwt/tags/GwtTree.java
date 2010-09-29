@@ -639,7 +639,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         if(idx < vals.size()){
           lb.setSelectedIndex(idx);
         }
-        if(colType.equalsIgnoreCase("editablecombobox")){
+        if(fColType.equalsIgnoreCase("editablecombobox")){
           lb.setEditable(true);
         }
         lb.setValue(cell.getLabel());
