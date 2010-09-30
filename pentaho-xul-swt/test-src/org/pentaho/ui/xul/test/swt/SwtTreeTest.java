@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulEventSourceAdapter;
@@ -160,7 +161,8 @@ public class SwtTreeTest {
 //    assertEquals(0, ((TreeHandler)container.getEventHandler("handler")).selectedRow);
 //    
 //  }
-  
+
+  @Ignore
   @Test
   public void testSetElements(){
     List<Person> peeps = new ArrayList<Person>();

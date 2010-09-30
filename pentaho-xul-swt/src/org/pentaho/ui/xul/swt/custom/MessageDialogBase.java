@@ -60,6 +60,9 @@ public class MessageDialogBase extends SwtElement {
 
   public void setButtons(Object[] buttons) {
     for(Object o : buttons){
+      if(o instanceof String){
+        o = ("ACCEPT".equalsIgnoreCase((String) o)) ? DialogConstant.OK : ("CANCEL".equalsIgnoreCase((String) o)) ? DialogConstant.CANCEL : o;
+      }
       DialogConstant con = (DialogConstant) o;
       switch(con){
         case YES:
