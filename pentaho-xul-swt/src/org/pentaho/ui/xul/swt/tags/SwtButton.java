@@ -224,8 +224,8 @@ public class SwtButton extends SwtElement implements XulButton {
   }
 
   public void setSelected(String selected) {
-    this.selected = Boolean.parseBoolean(selected);  
-    button.setSelection(this.selected);
+    setSelected(Boolean.parseBoolean(selected));
+    
   }
 
   public boolean isSelected() {

@@ -43,7 +43,7 @@ public class SwtDialogTest {
   
   @Test
   public void testGetButtons() throws Exception{
-    assertEquals("accept,cancel,extra1,extra2",dialog.getButtons());
+    assertEquals("ACCEPT,CANCEL,EXTRA1,EXTRA2",dialog.getButtons());
   }
   
   @Test
@@ -55,7 +55,7 @@ public class SwtDialogTest {
     dialog.setButtonlabelextra2("extra2");
     
     ((SwtDialog) dialog).setButtons();
-    assertEquals("accept, cancel, extra1, extra2", dialog.getButtons());
+    assertEquals("ACCEPT,CANCEL,EXTRA1,EXTRA2", dialog.getButtons());
   }
   
   @Test
@@ -125,13 +125,10 @@ public class SwtDialogTest {
   @Test
   public void testGetButtonalign() throws Exception{
     assertEquals("end", dialog.getButtonalign());
-  }
-
-  @Test
-  public void testSetButtonalign() throws Exception{
     dialog.setButtonalign("start");
     assertEquals("start", dialog.getButtonalign());
   }
+
   
   @Ignore
   @Test
