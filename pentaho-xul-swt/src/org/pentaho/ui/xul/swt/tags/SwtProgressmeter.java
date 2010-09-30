@@ -89,7 +89,7 @@ public class SwtProgressmeter extends SwtElement implements XulProgressmeter {
   }
 
   public void setValue(final int value) {
-    Display.getDefault().asyncExec(new Runnable(){
+    Display.getDefault().syncExec(new Runnable(){
       public void run() {
         if (null != progressmeter) {
           progressmeter.setSelection(value);
