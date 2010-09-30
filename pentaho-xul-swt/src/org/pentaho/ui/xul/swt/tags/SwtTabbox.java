@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.swt.tags;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Listener;
@@ -15,7 +14,6 @@ import org.eclipse.swt.widgets.Control;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.components.XulTab;
 import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.containers.XulTabbox;
 import org.pentaho.ui.xul.containers.XulTabpanels;
