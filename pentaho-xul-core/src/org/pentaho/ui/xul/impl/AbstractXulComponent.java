@@ -325,6 +325,12 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   public void setVisible(boolean visible){
     this.visible = visible;
+    
+    // recompute the layout after a visibility change ..
+    if (initialized)
+    {
+      layout();
+    }
   }
 
   public void onDomReady() {

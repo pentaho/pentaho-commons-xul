@@ -59,6 +59,12 @@ public class SwingElement extends AbstractXulComponent {
     super.layout();
     double totalFlex = 0.0;
 
+    if (isVisible() == false)
+    {
+      resetContainer();
+      return;
+    }
+
     for (Element comp : getChildNodes()) {
       //if (comp.getManagedObject() == null) {
       //continue;
