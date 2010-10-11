@@ -37,6 +37,7 @@ import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
 import org.pentaho.ui.xul.containers.XulRoot;
+import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 import org.pentaho.ui.xul.swt.DialogButton;
@@ -45,8 +46,6 @@ import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.util.SwtXulUtil;
 
 public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
-
-  Shell possibleParent;
 
   XulDomContainer domContainer = null;
 
@@ -106,24 +105,16 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   
   private XulSettingsManager settingsManager;
 
+  private boolean closing;
+
   public SwtDialog(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
-    
-    // First, check to see if an outer context was passed before parser started...  
-    if (container.getOuterContext() != null){
-      possibleParent = (Shell) container.getOuterContext();
-    }
-    
-    orient = Orient.VERTICAL;
-    
-    // If not, then try to use the API's parent parameter...
-    if (parent != null && parent instanceof XulRoot ){
-      possibleParent = (Shell) ((XulRoot) parent).getRootObject();
-    }
+
+    this.setOrient(Orient.VERTICAL.toString());
     this.domContainer = container;
     this.setId(self.getAttributeValue("ID"));
     
-    // TODO: deferr this creation until later when all attributes are assigned. For now just get the 
+    // TODO: defer this creation until later when all attributes are assigned. For now just get the
     // resizable one
     String resizableStr = self.getAttributeValue("resizable");
     this.setResizable(resizableStr != null && resizableStr.equals("true"));
@@ -133,28 +124,51 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       setAppicon(self.getAttributeValue("appicon"));
     }
     
-    dialog = createDialog();
+    dialog = createDialog(parent);
     Composite c = createDialogComposite();
     setManagedObject(c);
     
     settingsManager = container.getSettingsManager();
     
   }
-  
-  private BasicDialog createDialog() {
-    
-    final BasicDialog newDialog = new BasicDialog((possibleParent != null) ? possibleParent : new Shell(SWT.SHELL_TRIM), true){
-      @Override
-      protected void handleShellCloseEvent() {
+
+  private Shell getParentShell(XulComponent parent){
+
+    Shell parentShell = null;
+    if (parent != null){
+      if(parent instanceof XulWindow){
+
+        // See if they registered an outter context replacement for the Window's Shell
+        if (domContainer.getOuterContext() != null){
+          parentShell = (Shell) domContainer.getOuterContext();
+        }
+      }
+      if(parentShell == null && parent instanceof XulRoot){
+        parentShell = (Shell) ((XulRoot) parent).getRootObject();
+      }
+    }
+    if(parentShell == null){
+      parentShell = new Shell(SWT.SHELL_TRIM);
+    }
+    return parentShell;
+  }
+
+  private BasicDialog createDialog(XulComponent parent) {
+
+    Shell parentShell = getParentShell(parent);
+    final BasicDialog newDialog = new BasicDialog(parentShell, true);
+    newDialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
+
+    newDialog.getShell().addListener(SWT.Dispose, new Listener(){
+      public void handleEvent(Event event) {
         hide();
       }
-    };
-    newDialog.getShell().setBackgroundMode(SWT.INHERIT_DEFAULT);
-    
+    });
+
     if(StringUtils.isNotEmpty(this.appIcon)){
       setAppicon(this.appIcon);
-    } else if(possibleParent != null && possibleParent.isDisposed() == false){
-      Image parentImg = ((Shell) possibleParent).getImage();
+    } else if(parentShell != null && parentShell.isDisposed() == false){
+      Image parentImg = parentShell.getImage();
       if(parentImg != null){
     	  newDialog.getShell().setImage(parentImg);
       }
@@ -441,11 +455,13 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
   }
 
+
   public void hide() {
     //dialog.getShell().removeListener(SWT.Dispose, listener);    
-    if(dialog.getMainArea().isDisposed()){
+    if(closing || dialog.getMainArea().isDisposed()){
       return;
     }
+    closing = true;
     if(settingsManager != null){
       settingsManager.storeSetting(getId()+".Left", ""+dialog.getShell().getLocation().x);
       settingsManager.storeSetting(getId()+".Top", ""+dialog.getShell().getLocation().y);
@@ -460,7 +476,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     returnCode = IDialogConstants.CLOSE_ID;
     
-    BasicDialog newDialog = createDialog();
+    BasicDialog newDialog = createDialog(getParent());
     Control[] controlz = newDialog.getMainArea().getChildren();
     for(Control c : controlz){
       c.dispose();
@@ -475,16 +491,15 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     setAppicon(this.appIcon);
     
     newDialog.getShell().layout();
-    
-    dialog.close();
+    BasicDialog outgoingDialog = dialog;
+    dialog = newDialog;
+
+    outgoingDialog.close();
     
     isDialogHidden = true;
 
-    dialog = newDialog;
-    
-    
     setManagedObject(dialog.getMainArea());
-    
+    closing = false;
   }
 
   public void setVisible(boolean visible) {
