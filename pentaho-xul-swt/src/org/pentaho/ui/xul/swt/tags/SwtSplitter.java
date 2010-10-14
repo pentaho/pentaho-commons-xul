@@ -38,7 +38,9 @@ public class SwtSplitter extends AbstractSwtXulContainer implements XulSplitter{
       weights[childNum++] = (thisFlex <= 0) ? 0 : thisFlex;
     }
     super.layout();
-    sash.setWeights(weights);
+    if(weights.length > 0){
+      sash.setWeights(weights);
+    }
     sash.setVisible(true);
     sash.layout(true);
   }

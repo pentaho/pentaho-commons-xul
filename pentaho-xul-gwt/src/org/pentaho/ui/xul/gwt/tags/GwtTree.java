@@ -383,7 +383,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     ((GwtTreeItem) item).addPropertyChangeListener("image", listener);
     ((GwtTreeCell) item.getRow().getCell(0)).addPropertyChangeListener("label", listener);;
-    tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+    if (item.getImage() != null) {
+      tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+    }
 
 
 

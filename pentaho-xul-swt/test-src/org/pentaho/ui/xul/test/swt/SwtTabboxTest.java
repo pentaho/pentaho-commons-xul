@@ -33,8 +33,6 @@ public class SwtTabboxTest{
   public void selectedIndexTest() throws Exception{
     
     assertEquals(2, tabbox.getSelectedIndex());
-    XulTabs tabs = (XulTabs) doc.getElementById("tabs");
-    XulTab tab = (XulTab) doc.getElementById("tab1");
   }
   
   @Test

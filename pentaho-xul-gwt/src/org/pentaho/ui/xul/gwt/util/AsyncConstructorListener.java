@@ -6,6 +6,6 @@ package org.pentaho.ui.xul.gwt.util;
  * 
  * @author mlowery
  */
-public interface AsyncConstructorListener {
-  void asyncConstructorDone();
+public interface AsyncConstructorListener<T> {
+  void asyncConstructorDone(T source);
 }

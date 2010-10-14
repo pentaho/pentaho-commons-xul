@@ -4,6 +4,7 @@
 package org.pentaho.ui.xul.impl;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +37,13 @@ public class XulParser {
   public Map<String, Object> handlers = new HashMap<String, Object>();
   private Map<String, Constructor<?>> constructorCache = new HashMap<String, Constructor<?>>();
 
-
   private XulDomContainer xulDomContainer;
+
+
+  private List<ClassLoader> classloaders = new ArrayList<ClassLoader>();
+  {
+    classloaders.add(this.getClass().getClassLoader());
+  }
 
   public XulParser() throws XulException {
     try {
@@ -262,8 +268,7 @@ public class XulParser {
       throw new XulException("Error getting Document instance", e);
     }
   }
-  
-  private List<ClassLoader> classloaders;
+
   public void setClassLoaders(List<ClassLoader> loaders){
     this.classloaders = loaders;
   }

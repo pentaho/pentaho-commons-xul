@@ -64,7 +64,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
       public void widgetSelected(SelectionEvent arg0) {
         int prevVal = selectedIndex;
         selectedIndex = tabFolder.getSelectionIndex();
-        
+
         // expect to find exactly one tabs child node of this tabbox node
         XulTabs tabs = null;
         for (XulComponent c : getChildNodes()) {
@@ -72,12 +72,12 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
             tabs = (XulTabs) c;
           }
         }
-        
+
         XulTab tab = (XulTab) tabs.getChildNodes().get(selectedIndex);
         if (StringUtils.isNotBlank(tab.getOnclick())) {
           SwtTabbox.this.invoke(tab.getOnclick());
         }
-        
+
         SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
       }
 
@@ -173,7 +173,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
     int prevVal = selectedIndex;
     selectedIndex = index;
     SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
-    if (tabFolder.getItemCount() > 0) { // component instantiated
+    if (initialized) { // component instantiated
       tabFolder.setSelection(selectedIndex);
 
       // Programatic set selectedIndex does not fire listener.
@@ -209,6 +209,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
         tabFolder.getItem(tabIndex++).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
       }
     }
+    initialized = true;
     tabFolder.layout(true, true);
     if (selectedIndex < 0 && tabFolder.getItemCount() > 0) {
       selectedIndex = 0;

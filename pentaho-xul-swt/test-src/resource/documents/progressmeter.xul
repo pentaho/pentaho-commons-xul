@@ -3,7 +3,7 @@
 <window id="general-datasource-window"
 	title="Testing progressmeters for SWT, Swing" orient="vertical" height="80" width="400"
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  <script src="org.pentaho.ui.xul.test.swing.ProgressHandler" id="progressHandler"/>
+  <script src="org.pentaho.ui.xul.test.swt.ProgressHandler" id="progressHandler"/>
   <hbox id="all-box">
     <progressmeter id="determined" mode="determined" value="10" flex="1" minimum="5" maximum="70"/>
     <button label="Hit me to advance" onclick="progressHandler.addProgress();" />
