@@ -297,7 +297,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     tree.removeItems();
     TreeItem topNode = new TreeItem("placeholder");
     if(this.rootChildren == null){
-      this.rootChildren = (XulTreeChildren) this.getChildNodes().get(1);
+      this.rootChildren = (XulTreeChildren) this.children.get(1);
     }
     for (XulComponent c : this.rootChildren.getChildNodes()){
       XulTreeItem item = (XulTreeItem) c;
@@ -323,10 +323,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
   }
 
+  private List<XulComponent> colCollection = new ArrayList<XulComponent>();
+
   private void populateTable(){
 
     int rowCount = getRootChildren().getItemCount();
-    List<XulComponent> colCollection = getColumns().getChildNodes();
+    // Getting column editors ends up calling getChildNodes several times. we're going to cache the column collections
+    // for the duration of the operation then clear it out.
+    colCollection = getColumns().getChildNodes();
     int colCount = colCollection.size();
 
     currentData = new Object[rowCount][colCount];
@@ -345,6 +349,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     if(totalFlex > 0){
       table.fillWidth();
     }
+    colCollection.clear();
 
     if(this.selectedRows != null && this.selectedRows.length > 0){
       for(int i=0; i<this.selectedRows.length; i++){
@@ -434,7 +439,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private Widget getColumnEditor(final int x, final int y){
 
-    List<XulComponent> colCollection = this.columns.getChildNodes();
 
     final XulTreeCol column = (XulTreeCol) colCollection.get(x);
     String colType = ((XulTreeCol) colCollection.get(x)).getType();
@@ -1003,8 +1007,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         if(table != null){
           for (T o : elements) {
             XulTreeRow row = this.getRootChildren().addNewRow();
-
-            for (int x=0; x< this.getColumns().getChildNodes().size(); x++) {
+            int colSize = this.getColumns().getChildNodes().size();
+            for (int x=0; x< colSize; x++) {
               XulComponent col = this.getColumns().getColumn(x);
 
               XulTreeCol column = ((XulTreeCol) col);
@@ -1143,7 +1147,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   public void update() {
     layout();
-    updateUI();
   }
 
   public void adoptAttributes(XulComponent component) {

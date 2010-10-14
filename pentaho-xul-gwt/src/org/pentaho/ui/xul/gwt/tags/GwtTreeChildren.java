@@ -47,12 +47,12 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
   }
 
   public XulTreeItem getItem(int rowIndex) {
-    return (XulTreeItem)getChildNodes().get(rowIndex);
+    return (XulTreeItem) children.get(rowIndex);
   }
 
   public int getItemCount() {
-    if (getChildNodes() != null) {
-      return getChildNodes().size();
+    if (children != null) {
+      return children.size();
     } else {
       return 0;
     }
@@ -77,7 +77,7 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
   }
 
   public void removeItem(int rowIndex) {
-    removeChild(getChildNodes().get(rowIndex));
+    removeChild(children.get(rowIndex));
   }
 
   public void setAlternatingbackground(boolean alt) {
@@ -91,10 +91,7 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
   }
 
   public void removeAll() {
-    List<XulComponent> children = getChildNodes();
-    for (Element element : children) {
-      removeChild(element);
-    }
+    children.clear();
     if (getTree() != null) {
       ((GwtTree)getTree()).updateUI();
     }

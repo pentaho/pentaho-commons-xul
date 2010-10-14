@@ -15,7 +15,7 @@ import org.pentaho.ui.xul.dom.Namespace;
 
 
 public class GwtDomElement implements Element {
-  List<Element> children = null;
+  protected List<Element> children = null;
   String name;
   Element parent;
   

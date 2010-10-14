@@ -36,7 +36,7 @@ public class GwtTreeRow extends AbstractGwtXulContainer implements XulTreeRow {
   }
 
   public XulTreeCell getCell(int index) {
-    return (XulTreeCell)getChildNodes().get(index);
+    return (XulTreeCell) children.get(index);
   }
 
   public int getSelectedColumnIndex() {

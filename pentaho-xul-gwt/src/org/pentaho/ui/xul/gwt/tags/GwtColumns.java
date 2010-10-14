@@ -30,11 +30,11 @@ public class GwtColumns extends AbstractGwtXulContainer implements XulColumns {
   }
 
   public XulColumn getColumn(int index) {
-    return (XulColumn) this.getChildNodes().get(index);
+    return (XulColumn) this.children.get(index);
   }
 
   public int getColumnCount() {
-    return this.getChildNodes().size();
+    return this.children.size();
   }
 
   public XulGrid getGrid() {

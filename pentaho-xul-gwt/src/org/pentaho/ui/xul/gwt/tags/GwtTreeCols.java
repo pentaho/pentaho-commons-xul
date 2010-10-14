@@ -43,11 +43,11 @@ public class GwtTreeCols extends AbstractGwtXulContainer implements XulTreeCols 
   }
 
   public XulTreeCol getColumn(int index) {
-    return (XulTreeCol) this.getChildNodes().get(index);
+    return (XulTreeCol) children.get(index);
   }
 
   public int getColumnCount() {
-    return this.getChildNodes().size();
+    return this.children.size();
   }
 
   public XulTree getTree() {
