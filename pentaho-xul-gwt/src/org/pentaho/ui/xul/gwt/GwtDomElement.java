@@ -63,7 +63,25 @@ public class GwtDomElement implements Element {
   }
 
   public List<XulComponent> getChildNodes() {
-    ArrayList<XulComponent> list = new ArrayList<XulComponent>();
+    ArrayList<XulComponent> list = new ArrayList<XulComponent>(){
+      @Override
+      public boolean remove(Object o) {
+        children.remove(o);
+        return super.remove(o);
+      }
+
+      @Override
+      public XulComponent remove(int index) {
+        children.remove(index);
+        return super.remove(index);
+      }
+
+      @Override
+      public void clear() {
+        super.clear();
+        children.clear();
+      }
+    };
     if (this.children == null) {
       return list;
     }

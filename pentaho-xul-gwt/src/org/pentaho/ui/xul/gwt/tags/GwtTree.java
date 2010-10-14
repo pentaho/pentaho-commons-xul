@@ -325,18 +325,22 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private void populateTable(){
 
-    currentData = new Object[getRootChildren().getItemCount()][getColumns().getColumnCount()];
+    int rowCount = getRootChildren().getItemCount();
+    List<XulComponent> colCollection = getColumns().getChildNodes();
+    int colCount = colCollection.size();
 
-    for (int i = 0; i < getRootChildren().getItemCount(); i++) {
-      for (int j = 0; j < getColumns().getColumnCount(); j++) {
+    currentData = new Object[rowCount][colCount];
+
+    for (int i = 0; i < rowCount; i++) {
+      for (int j = 0; j < colCount; j++) {
         currentData[i][j] = getColumnEditor(j,i);
       }
     }
 
     table.populateTable(currentData);
     int totalFlex = 0;
-    for (int i = 0; i < getColumns().getColumnCount(); i++) {
-      totalFlex += getColumns().getColumn(i).getFlex();
+    for (int i = 0; i < colCount; i++) {
+      totalFlex += colCollection.get(i).getFlex();
     }
     if(totalFlex > 0){
       table.fillWidth();
@@ -430,11 +434,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private Widget getColumnEditor(final int x, final int y){
 
+    List<XulComponent> colCollection = this.columns.getChildNodes();
 
-    final XulTreeCol column = this.columns.getColumn(x);
-    String colType = this.columns.getColumn(x).getType();
-    String val = getRootChildren().getItem(y).getRow().getCell(x).getLabel();
+    final XulTreeCol column = (XulTreeCol) colCollection.get(x);
+    String colType = ((XulTreeCol) colCollection.get(x)).getType();
     final GwtTreeCell cell = (GwtTreeCell) getRootChildren().getItem(y).getRow().getCell(x);
+
+    String val = cell.getLabel();
 
     // If collection bound, bindings may need to be updated for runtime changes in column types.
     if(this.elements != null){
@@ -452,7 +458,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       colType = extractDynamicColType(row, x);
     }
 
-    if((StringUtils.isEmpty(colType) || !column.isEditable()) || ((showAllEditControls == false && (getSelectedRows().length != 1  || getSelectedRows()[0] != y)) && !colType.equals("checkbox"))){
+    int[] selectedRows = getSelectedRows();
+
+    if((StringUtils.isEmpty(colType) || !column.isEditable()) || ((showAllEditControls == false && (selectedRows.length != 1  || selectedRows[0] != y)) && !colType.equals("checkbox"))){
       if(colType != null && (colType.equalsIgnoreCase("combobox") || colType.equalsIgnoreCase("editablecombobox"))){
         Vector vals = (Vector) cell.getValue();
         int idx = cell.getSelectedIndex();
@@ -667,7 +675,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private int curSelectedRow = -1;
   private void setupTable(){
-    String cols[] = new String[getColumns().getColumnCount()];
+    List<XulComponent> colCollection = getColumns().getChildNodes();
+    String cols[] = new String[colCollection.size()];
 
 
     SelectionPolicy selectionPolicy = null;
@@ -679,14 +688,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     int[] widths = new int[cols.length];
     int totalFlex = 0;
+
     for (int i = 0; i < cols.length; i++) {
-      totalFlex += getColumns().getColumn(i).getFlex();
+      totalFlex += colCollection.get(i).getFlex();
     }
 
     for (int i = 0; i < cols.length; i++) {
-      cols[i] = getColumns().getColumn(i).getLabel();
+      cols[i] = ((XulTreeCol) colCollection.get(i)).getLabel();
       if(totalFlex > 0 && getWidth() > 0){
-    	  widths[i] = (int) (getWidth() * ((double) getColumns().getColumn(i).getFlex() / totalFlex));
+    	  widths[i] = (int) (getWidth() * ((double) colCollection.get(i).getFlex() / totalFlex));
       } else if(getColumns().getColumn(i).getWidth() > 0){
     	  widths[i] = getColumns().getColumn(i).getWidth();
       }

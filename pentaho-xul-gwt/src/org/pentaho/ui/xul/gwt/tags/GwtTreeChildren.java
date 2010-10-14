@@ -12,6 +12,8 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
+import java.util.List;
+
 public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeChildren {
 
   public static void register() {
@@ -89,7 +91,8 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
   }
 
   public void removeAll() {
-    for (Element element : getChildNodes()) {
+    List<XulComponent> children = getChildNodes();
+    for (Element element : children) {
       removeChild(element);
     }
     if (getTree() != null) {
