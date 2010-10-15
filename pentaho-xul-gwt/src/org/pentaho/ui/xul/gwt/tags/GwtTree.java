@@ -349,7 +349,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     if(totalFlex > 0){
       table.fillWidth();
     }
-    colCollection.clear();
+    colCollection = new ArrayList<XulComponent>();
 
     if(this.selectedRows != null && this.selectedRows.length > 0){
       for(int i=0; i<this.selectedRows.length; i++){
@@ -879,7 +879,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     selectedRows = rows;;
 
     for (int r : rows) {
-      table.selectRow(r);
+      if(this.rootChildren.getChildNodes().size() > r){
+        table.selectRow(r);
+      }
     }
     if(this.suppressEvents == false && Arrays.equals(selectedRows, prevSelected) == false){
       this.changeSupport.firePropertyChange("selectedRows", prevSelected, rows);
@@ -1000,6 +1002,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
 
       if(elements == null || elements.size() == 0){
+        suppressEvents = false;
         updateUI();
         return;
       }
