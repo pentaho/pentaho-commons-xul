@@ -708,6 +708,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     table = new BaseTable(cols, widths, new BaseColumnComparator[cols.length], selectionPolicy);
 
+
     if (getHeight() != 0) {
 	  table.setHeight(getHeight() + "px");
 	} else {
@@ -756,6 +757,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
             curSelectedRow = rows[0];
             Object[] newRow = new Object[getColumns().getColumnCount()];
 
+            GwtTree.this.colCollection = getColumns().getChildNodes();
             for (int j = 0; j < getColumns().getColumnCount(); j++) {
               newRow[j] = getColumnEditor(j,rows[0]);
             }
