@@ -745,6 +745,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
             rows[i] = selectedRows[i];
           }
           GwtTree.this.setSelectedRows(rows);
+          GwtTree.this.colCollection = getColumns().getChildNodes();
           if(GwtTree.this.isShowalleditcontrols() == false){
             if(curSelectedRow > -1){
               Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
@@ -757,7 +758,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
             curSelectedRow = rows[0];
             Object[] newRow = new Object[getColumns().getColumnCount()];
 
-            GwtTree.this.colCollection = getColumns().getChildNodes();
             for (int j = 0; j < getColumns().getColumnCount(); j++) {
               newRow[j] = getColumnEditor(j,rows[0]);
             }
