@@ -432,6 +432,8 @@ legend {
 .expand-panel > tbody > tr > td > A {
   text-decoration: none;
   outline: 0;
+  background-image: none;
+  background-color: #ededed;
 }
 
 .expand-panel .gwt-Image {
