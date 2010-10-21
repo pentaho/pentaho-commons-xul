@@ -65,8 +65,6 @@ html, body{
   border-bottom-color: #848484
 }
 
-
-
 /*=========================  TABLE  =========================*/
 
 /*
@@ -84,6 +82,7 @@ html, body{
                                                                     
 .gwt-ScrollTable .headerWrapper {
   background: #d2d2d2 repeat-x scroll left bottom;
+  padding-right: 0px;
 }
 
 .gwt-ScrollTable .footerWrapper {
@@ -91,10 +90,10 @@ html, body{
   border-top: 1px solid #848484;
 }
 
-/*.gwt-ScrollTable .dataWrapper {*/
-    /*overflow-y: scroll !important;*/
-    /*overflow-x: hidden !important;*/
-/*}*/
+.gwt-ScrollTable .dataWrapper {
+  width: auto !important;
+  overflow-y: scroll !important;
+}
 
 .gwt-ScrollTable .dataTable td {
   overflow: hidden;
