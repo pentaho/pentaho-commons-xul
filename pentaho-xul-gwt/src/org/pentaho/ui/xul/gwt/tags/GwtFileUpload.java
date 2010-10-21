@@ -212,6 +212,11 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
       upload.setVisible(true);
       upload.setHeight(getHeight() + "px"); //$NON-NLS-1$
       upload.setWidth(getWidth() + "px"); //$NON-NLS-1$
+      upload.addChangeHandler(new ChangeHandler(){
+        public void onChange(ChangeEvent event) {
+          setSelectedFile(upload.getFilename());
+        }
+      });
       uploadPanel.add(upload);
     }
     firePropertyChange("selectedFile", null, name); //$NON-NLS-1$
