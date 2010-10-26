@@ -142,6 +142,15 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
+  public void registerResourceBundle(final ResourceBundle bundle)
+  {
+    if (bundle == null)
+    {
+      throw new NullPointerException();
+    }
+    this.resourceBundleList.add(bundle);
+  }
+
   /* (non-Javadoc)
    * @see org.pentaho.ui.xul.XulLoader#loadXulFragment(org.dom4j.Document)
    */
