@@ -33,7 +33,7 @@ public abstract class
   }
   
   public AbstractModelNode(List<T> children) {
-    Collections.copy(this.children, children);
+    this.children = new ArrayList<T>(children);
     for(T t : this.children){
       onAdd(t);
     }

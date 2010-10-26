@@ -26,7 +26,7 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
     }
     
     public AbstractModelList(List<T> children) {
-      Collections.copy(this.children, children);
+     this.children = new ArrayList<T>(children);
     }
 
     @Bindable
