@@ -163,7 +163,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
     newDialog.getShell().addListener(SWT.Dispose, new Listener(){
       public void handleEvent(Event event) {
-        if(letDialogDispose){
+        if(!letDialogDispose){
           hide();
         }
       }
@@ -198,7 +198,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   public void dispose(){
     letDialogDispose = true;
-    if(dialog != null){
+    if(getShell() != null){
       getShell().dispose();
     }
   }
