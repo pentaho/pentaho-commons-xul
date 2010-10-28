@@ -62,10 +62,9 @@ public class SwtBinding extends DefaultBinding {
         final PropertyChangeListener cThis = this;
         if (evt.getPropertyName().equalsIgnoreCase(va)) {
           try {
-            Object value = evaluateExpressions(evt.getNewValue());
-            final Object finalVal = doConversions(value, dir);
-            
-            
+            Object value = doConversions(evt.getNewValue(), dir);
+            final Object finalVal = evaluateExpressions(value);
+
             if (!Display.getDefault().getThread().equals(Thread.currentThread()) 
                 && b.get() instanceof XulComponent) {
               logger.error("Binding Error! Update to XulComponenet (" + target.get() + "," + targetAttr
