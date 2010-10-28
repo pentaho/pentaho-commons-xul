@@ -40,18 +40,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DropTargetEvent;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.TraverseEvent;
-import org.eclipse.swt.events.TraverseListener;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -790,18 +779,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         case EDITABLECOMBOBOX:
           editor = new ComboBoxCellEditor(table.getTable(), new String[] {});
 
-//          final CCombo editableControl = (CCombo) ((ComboBoxCellEditor) editor).getControl();
-//          editableControl.addKeyListener(new KeyAdapter() {
-//
-//            @Override
-//            public void keyReleased(KeyEvent arg0) {
-//              super.keyReleased(arg0);
-//
-//              XulTreeCell cell = getCell(colIdx);
-//              cell.setLabel(editableControl.getText());
-//            }
-//
-//          });
+          final CCombo editableControl = (CCombo) ((ComboBoxCellEditor) editor).getControl();
+          editableControl.addModifyListener(new ModifyListener(){
+            public void modifyText(ModifyEvent modifyEvent) {
+              XulTreeCell cell = getCell(colIdx);
+              cell.setLabel(editableControl.getText());
+            }
+          });
+
           break;
         case PASSWORD:
           editor = new TextCellEditor(table.getTable());
@@ -811,18 +796,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
         default:
           editor = new TextCellEditor(table.getTable());
 
-//          final Text textControl = (Text) ((TextCellEditor) editor).getControl();
-//          textControl.addKeyListener(new KeyAdapter() {
-//
-//            @Override
-//            public void keyReleased(KeyEvent arg0) {
-//              super.keyReleased(arg0);
-//
-//              XulTreeCell cell = getCell(colIdx);
-//              cell.setLabel(textControl.getText());
-//            }
-//
-//          });
+          final Text textControl = (Text) ((TextCellEditor) editor).getControl();
+          textControl.addModifyListener(new ModifyListener() {
+            public void modifyText(ModifyEvent modifyEvent) {
+              XulTreeCell cell = getCell(colIdx);
+              cell.setLabel(textControl.getText());
+            }
+          });
           break;
       }
 
