@@ -466,10 +466,15 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
   }
 
+  public boolean isDisposing(){
+    return letDialogDispose;
+  }
+
 
   public void hide() {
     //dialog.getShell().removeListener(SWT.Dispose, listener);    
-    if(closing || dialog.getMainArea().isDisposed()){
+    if(closing || dialog.getMainArea().isDisposed() || getParentShell(getParent()).isDisposed()
+        || (getParent() instanceof SwtDialog && ((SwtDialog) getParent()).isDisposing()) ){
       return;
     }
     closing = true;
@@ -486,7 +491,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     }
     
     returnCode = IDialogConstants.CLOSE_ID;
-    
+
     BasicDialog newDialog = createDialog(getParent());
     Control[] controlz = newDialog.getMainArea().getChildren();
     for(Control c : controlz){
