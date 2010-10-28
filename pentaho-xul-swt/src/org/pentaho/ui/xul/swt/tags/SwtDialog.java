@@ -107,6 +107,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   private boolean closing;
 
+  private boolean letDialogDispose;
+
   public SwtDialog(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
 
@@ -161,7 +163,9 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
     newDialog.getShell().addListener(SWT.Dispose, new Listener(){
       public void handleEvent(Event event) {
-        hide();
+        if(letDialogDispose){
+          hide();
+        }
       }
     });
 
@@ -190,6 +194,13 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   
   public Shell getShell(){
     return dialog != null ? dialog.getShell() : null;
+  }
+
+  public void dispose(){
+    letDialogDispose = true;
+    if(dialog != null){
+      getShell().dispose();
+    }
   }
 
   public String getButtonlabelaccept() {
