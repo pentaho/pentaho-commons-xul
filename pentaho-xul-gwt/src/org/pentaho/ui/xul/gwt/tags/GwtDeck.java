@@ -21,16 +21,16 @@ import com.google.gwt.widgetideas.client.ResizableWidget;
 public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
 
   static final String ELEMENT_NAME = "deck"; //$NON-NLS-1$
-  
+
   public static void register() {
-    GwtXulParser.registerHandler(ELEMENT_NAME, 
+    GwtXulParser.registerHandler(ELEMENT_NAME,
     new GwtXulHandler() {
       public Element newInstance() {
         return new GwtDeck();
       }
     });
   }
-  
+
   protected DeckPanel container;
   int selectedIndex = 0;
   public GwtDeck() {
@@ -42,7 +42,7 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     container = new DeckPanel();
     setManagedObject(container);
   }
-  
+
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     if (srcEle.hasAttribute("selectedIndex") && srcEle.getAttribute("selectedIndex").trim().length() > 0) {
@@ -53,31 +53,31 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
       }
     }
   }
-  
-  
+
+
   @Override
   public void addChild(Element ele) {
      super.addChild(ele);
      this.container.add((Widget) ((XulComponent)ele).getManagedObject());
-     
+
      // sync with selectedIndex
-     if (this.container.getVisibleWidget() != selectedIndex 
+     if (this.container.getVisibleWidget() != selectedIndex
          && selectedIndex < container.getWidgetCount()) {
        container.showWidget(selectedIndex);
      }
   }
-  
+
   @Override
   public void removeChild(Element ele) {
     super.removeChild(ele);
     this.container.remove((Widget) ((XulComponent)ele).getManagedObject());
-    
+
     // sync with selectedIndex
-    if (this.container.getVisibleWidget() != selectedIndex 
-        && selectedIndex < container.getWidgetCount()) {
+    if (this.container.getVisibleWidget() != selectedIndex
+        && selectedIndex < container.getWidgetCount() && selectedIndex > -1) {
       container.showWidget(selectedIndex);
-    }    
-    
+    }
+
   }
 
   @Bindable
@@ -94,21 +94,21 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
       Widget card = container.getWidget(index);
       notifyOnShow(this);
     }
-    
+
     selectedIndex = index;
     this.firePropertyChange("selectedIndex", previousVal, index);
   }
-  
+
   /**
    * Child XUL elements need to be notified of visibility changes if they implement Resizable.
-   * 
+   *
    * This method is recursive.
-   * 
+   *
    * @param ele
    */
   private void notifyOnShow(Element ele){
-    
-    
+
+
     if(ele instanceof Resizable){
       ((Resizable) ele).onResize();
     }
@@ -118,10 +118,10 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
   }
 
   public void layout() {
-    
+
   }
-  
-  
+
+
   public void adoptAttributes(XulComponent component) {
 
     if(component.getAttributeValue("selectedindex") != null){
