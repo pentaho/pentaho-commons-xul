@@ -74,7 +74,7 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     
     // sync with selectedIndex
     if (this.container.getVisibleWidget() != selectedIndex 
-        && selectedIndex < container.getWidgetCount()) {
+        && selectedIndex < container.getWidgetCount() && selectedIndex > -1) {
       container.showWidget(selectedIndex);
     }    
     
