@@ -28,6 +28,22 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
   public void addItem(XulTreeItem item) {
     this.addChild(item);
   }
+  
+  @Override
+  public void addChild(Element e) {
+	super.addChild(e);
+	if(getTree() != null) {
+		getTree().update();
+	}
+  }
+
+  @Override
+  public void addChildAt(Element c, int pos) {
+	super.addChildAt(c, pos);
+	if(getTree() != null) {
+		getTree().update();
+	}
+  }
 
   public XulTreeRow addNewRow() {
 
@@ -123,7 +139,11 @@ public class SwingTreeChildren extends AbstractSwingContainer implements XulTree
   public void layout() {
     if(getTree() != null){
       tree.setRootChildren(this);
+      if(initialized){
+    	  getTree().update();
+      }
       initialized = true;
+      
     }
   }
 
