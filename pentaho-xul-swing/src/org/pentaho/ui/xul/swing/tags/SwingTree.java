@@ -55,6 +55,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -517,12 +518,23 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   private TreeModel treeModel;
 
+  private class XulTreeNode extends DefaultMutableTreeNode {
+    XulTreeItem item = null;
+
+    public XulTreeNode(Object obj, XulTreeItem item) {
+      super(obj);
+      this.item = item;
+    }
+  }
+  
   private void setupTree() {
-    DefaultMutableTreeNode topNode = new DefaultMutableTreeNode("placeholder");
+    XulTreeNode topNode = new XulTreeNode("placeholder", null);
     for (XulComponent c : getRootChildren().getChildNodes()) {
       XulTreeItem item = (XulTreeItem) c;
-      DefaultMutableTreeNode node = createNode(item);
-      topNode.add(node);
+      XulTreeNode node = createNode(item);
+      if (node != null) {
+        topNode.add(node);
+      }
     }
     treeModel = new XulTreeModel(topNode);
     tree.setModel(treeModel);
@@ -548,16 +560,21 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   }
 
-  private DefaultMutableTreeNode createNode(XulTreeItem item) {
-    DefaultMutableTreeNode node = new DefaultMutableTreeNode(item.getRow().getCell(0).getLabel());
+  private XulTreeNode createNode(XulTreeItem item) {
+    if (item.getRow().getCell(0) == null) {
+      return null;
+    }
+    XulTreeNode node = new XulTreeNode(item.getRow().getCell(0).getLabel(), item);
     if (item.getChildNodes().size() > 1) {
       // has children
       // TODO: make this more defensive
       XulTreeChildren children = (XulTreeChildren) item.getChildNodes().get(1);
       for (XulComponent c : children.getChildNodes()) {
 
-        DefaultMutableTreeNode childNode = createNode((XulTreeItem) c);
-        node.add(childNode);
+        XulTreeNode childNode = createNode((XulTreeItem) c);
+        if (childNode != null) {
+          node.add(childNode);
+        }
       }
     }
     return node;
@@ -1318,6 +1335,14 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         return null;
       }
 
+      TreePath path = tree.getSelectionPath();
+      if (path.getLastPathComponent() instanceof XulTreeNode) {
+        XulTreeNode node = (XulTreeNode) path.getLastPathComponent();
+        // now link node.item to object via bindings
+        SearchBundle b = findSelectedIndex(new SearchBundle(), getRootChildren(), node.item);
+        vals[0] = b.curPos;
+      }
+      
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
       property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
 //      Method childrenMethod = null;
@@ -1335,6 +1360,31 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     return null;
   }
 
+  private class SearchBundle {
+    int curPos;
+
+    boolean found;
+
+    Object selectedItem;
+  }
+
+  private SearchBundle findSelectedIndex(SearchBundle bundle, XulTreeChildren children, XulTreeItem selectedItem) {
+    for (XulComponent c : children.getChildNodes()) {
+      if (c == selectedItem) {
+        bundle.found = true;
+        return bundle;
+      }
+      bundle.curPos++;
+      if (c.getChildNodes().size() > 1) {
+        SearchBundle b = findSelectedIndex(bundle, (XulTreeChildren) c.getChildNodes().get(1), selectedItem);
+        if (b.found) {
+          return b;
+        }
+      }
+    }
+    return bundle;
+  }
+  
   private static class FindSelectedItemTuple {
     Object selectedItem = null;
     int curpos = -1; // ignores first element (root)
