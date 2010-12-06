@@ -62,7 +62,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
     radioButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
         try{
-          setChecked(radioButton.getValue());
+          fireChangedEvents(radioButton.getValue());
           if (isCustomValue() && isChecked()) {
             customValueTextBox.setEnabled(true);
           }
@@ -149,12 +149,19 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
 
   @Bindable
   public void setChecked(boolean checked) {
-   boolean previousVal = this.checked;
+    System.out.println("radio.setChecked= "+checked+"   "+((checked != this.checked)? "firing":"")+ "   "+((checked != radioButton.getValue())?"changing":""));
+
    if(checked != radioButton.getValue()) {
-     radioButton.setValue(checked); 
+     radioButton.setValue(checked, false);
    }
+   fireChangedEvents(checked);
+  }
+
+  public void fireChangedEvents(boolean checked){
+
+   boolean previousVal = this.checked;
    this.checked = checked;
-   this.firePropertyChange("checked", null, checked);
+   this.firePropertyChange("checked", previousVal, checked);
   }
 
   @Bindable
