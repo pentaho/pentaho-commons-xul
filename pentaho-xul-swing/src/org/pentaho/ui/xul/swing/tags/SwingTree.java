@@ -391,6 +391,13 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       if (treeSelectionListener != null) {
         tree.getSelectionModel().addTreeSelectionListener(treeSelectionListener);
       }
+      tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
+        public void valueChanged(TreeSelectionEvent e) {
+          SwingTree.this.changeSupport.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
+          SwingTree.this.changeSupport.firePropertyChange("absoluteSelectedRows", null, SwingTree.this.getAbsoluteSelectedRows());
+          SwingTree.this.fireSelectedItem();
+        }
+      });
     } else {
       table = new JTable();
       if (selectionListener != null) {
@@ -545,17 +552,6 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     renderer.setOpenIcon(null);
     tree.setCellRenderer(renderer);
     tree.setShowsRootHandles(true);
-
-    tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
-
-      public void valueChanged(TreeSelectionEvent e) {
-        SwingTree.this.changeSupport.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
-        SwingTree.this.changeSupport.firePropertyChange("absoluteSelectedRows", null, SwingTree.this.getAbsoluteSelectedRows());
-        SwingTree.this.fireSelectedItem();
-      }
-
-    });
-
     this.setExpanded(this.getExpanded());
 
   }
@@ -668,14 +664,16 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public void update() {
-    if (table != null) {
-      table.setModel(new XulTableModel(this));
-      updateColumnModel();
-      calcColumnWidths();
-      table.updateUI();
-    } else {
-      setupTree();
-      tree.updateUI();
+    if (!suppressEvents) {
+      if (table != null) {
+        table.setModel(new XulTableModel(this));
+        updateColumnModel();
+        calcColumnWidths();
+        table.updateUI();
+      } else {
+        setupTree();
+        tree.updateUI();
+      }
     }
   }
 
