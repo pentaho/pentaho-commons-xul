@@ -28,7 +28,6 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
 public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   private static final long serialVersionUID = 3064125049914932493L;
-  private static final Log logger = LogFactory.getLog(SwtListbox.class);
 
   private List listBox;
   private boolean disabled = false;
@@ -282,8 +281,6 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
 
   public <T> void setElements(Collection<T> elements) {
     if(elements != null) {
-      logger.info("SetElements on listbox called: collection has "+elements.size()+" rows");
-      
       this.elements = elements;
       this.prevSelectedObject = null;
       this.curSelectedIndex = -1;
