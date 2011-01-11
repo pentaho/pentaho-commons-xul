@@ -228,7 +228,10 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
   public void updateTabState() {
     for (int i = 0; i < tabs.getChildNodes().size(); i++) {
       tabFolder.getItem(i).setText("" + tabs.getTabByIndex(i).getLabel());
-      tabFolder.getItem(i).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
+      Control control = tabFolder.getItem(i).getControl();
+      if(control != null){
+        tabFolder.getItem(i).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
+      }
     }
   }
 
