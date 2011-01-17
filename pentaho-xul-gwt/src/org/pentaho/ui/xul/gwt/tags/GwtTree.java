@@ -530,6 +530,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         bind = createBinding(cell, "disabled", checkBox, "disabled");
         bind.setBindingType(Binding.Type.BI_DIRECTIONAL);
         domContainer.addBinding(bind);
+        bind.fireSourceChanged();
 
         return (Widget)checkBox.getManagedObject();
       } catch (Exception e) {
