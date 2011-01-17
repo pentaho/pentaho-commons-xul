@@ -873,13 +873,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private int[] selectedRows;
   public void setSelectedRows(int[] rows) {
-    if (table == null) {
+	  if (table == null || Arrays.equals(selectedRows, rows)) {
       // this only works after the table has been materialized
       return;
     }
 
     int[] prevSelected = selectedRows;
-    selectedRows = rows;;
+    selectedRows = rows;
+    table.deselectRows();
 
     for (int r : rows) {
       if(this.rootChildren.getChildNodes().size() > r){
