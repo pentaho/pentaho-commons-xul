@@ -1,17 +1,15 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.user.client.ui.VerticalPanel;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.util.GwtUIConst;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
-
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
 
@@ -40,7 +38,12 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
     vp.setStyleName("vbox");  //$NON-NLS-1$
   }
 
-
+  @Override
+  @Bindable
+  public void setSpacing(int spacing) {
+    super.setSpacing(spacing);
+    ((VerticalPanel) container).setSpacing(spacing);
+  }
   public void adoptAttributes(XulComponent component) {
     super.adoptAttributes(component);
     setPadding(component.getPadding());

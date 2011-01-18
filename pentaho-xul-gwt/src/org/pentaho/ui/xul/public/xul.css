@@ -249,8 +249,9 @@ legend {
 }
 
 .xulTabBar .xulTabWidgetLabel {
-	font: normal 14px tahoma, arial, helvetica;
-    margin: 0px 0px 0px 0px;	
+	font: normal 12px tahoma, arial, helvetica;
+  margin: 0px 0px 0px 0px;
+  padding-bottom: 5px;
  }
 .xulTabBar .xulTabWidget-selected {
   background-image: url(images/dialog_tab_right.png);
@@ -324,7 +325,7 @@ legend {
 }
 
 .xulTabBar .gwt-TabBarItem {
-  background-color: #e2e2e2;
+  /*background-color: #e2e2e2;*/
   border: none none 1px solid #8d8d8d none;
   margin-right: 2px;
   cursor: hand;
@@ -335,7 +336,7 @@ legend {
 }
 
 .xulTabBar .gwt-TabBarItem-selected {
-  background-color: #e2e2e2;
+  /*background-color: #e2e2e2;*/
   color: black;
   border: none;
   cursor: pointer;
