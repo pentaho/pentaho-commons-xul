@@ -54,8 +54,30 @@ public class SwtToolbar extends AbstractSwtXulContainer implements XulToolbar{
   @Override
   public void layout() {
   }
-  
-  
-  
-  
+
+  @Override
+  public void addChild(Element e) {
+    super.addChild(e);
+    notifySpacers();
+  }
+
+  @Override
+  public void addChildAt(Element c, int pos) {
+    super.addChildAt(c, pos);
+    notifySpacers();
+  }
+
+  @Override
+  public void removeChild(Element ele) {
+    super.removeChild(ele);
+    notifySpacers();
+  }
+
+  private void notifySpacers(){
+    for(XulComponent child : getChildNodes()){
+      if(child instanceof SwtToolbarspacer){
+        ((SwtToolbarspacer) child).recalculateSize();
+      }
+    }
+  }
 }

@@ -43,18 +43,22 @@ public class SwtToolbarspacer extends AbstractSwtXulContainer implements XulTool
 
         @Override
         public void controlResized(ControlEvent arg0) {
-          int totalWidth = toolbar.getBounds().width;
-          int childTotalWidth = 0;
-          for(ToolItem item : toolbar.getItems()){
-            if(item != spacer){
-              childTotalWidth += item.getBounds().width + MARGIN_VALUE;
-            }
-          }
-          spacer.setWidth(Math.max(0, totalWidth - childTotalWidth));
+          recalculateSize();
         }
         
       });
+
     }
+  }
+  void recalculateSize(){
+    int totalWidth = toolbar.getBounds().width;
+    int childTotalWidth = 0;
+    for(ToolItem item : toolbar.getItems()){
+      if(item != spacer){
+        childTotalWidth += item.getBounds().width + MARGIN_VALUE;
+      }
+    }
+    spacer.setWidth(Math.max(0, totalWidth - childTotalWidth));
   }
   
 }
