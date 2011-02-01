@@ -105,7 +105,11 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   private void fireSelectedEvents() {
 
     firePropertyChange("selectedItem", previousSelectedItem, getSelectedItem());
-    firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{getSelectedItem()});
+    if(getSelectedItem() != null){
+      firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{getSelectedItem()});
+    } else {
+      firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{});
+    }
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
     firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
@@ -348,10 +352,14 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     int oldValue = this.selectedIndex;
     this.selectedIndex = index;
     this.listBox.setSelectedIndex(index);
-    
+
+    // TODO: move this all to the centralized fireSelectedEvents method
     this.firePropertyChange("selectedIndex", oldValue, index);
-    this.firePropertyChange("selectedItem", prevSelecteItem, getSelectedItem());
-    this.firePropertyChange("selectedItems", prevSelecteItem, new Object[]{getSelectedItem()});
+    if(getSelectedItem() != null){
+      firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{getSelectedItem()});
+    } else {
+      firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{});
+    }
     prevSelecteItem = getSelectedItem();
 
   }
