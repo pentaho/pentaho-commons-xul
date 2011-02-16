@@ -65,7 +65,7 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   @Bindable
   public void setSrc(Object img) {
     if (img instanceof String) {
-      setSrc((String) img);
+      setSrc(GWT.getModuleBaseURL() + img);
     }
     if (img instanceof Image) {
       setSrc(((Image) img).getUrl());
