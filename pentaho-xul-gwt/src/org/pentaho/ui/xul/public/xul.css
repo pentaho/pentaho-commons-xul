@@ -192,11 +192,17 @@ html, body{
   left: 0px;
   z-index: 300;
   margin: 0px;
-  padding: 0px;
+  padding: 0px;\\
   display: none;
 }
 .xul-label{
   white-space: nowrap;
+}
+
+.hyperlink{
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .xul-label-disabled{

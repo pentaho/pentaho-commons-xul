@@ -2,10 +2,14 @@ package org.pentaho.ui.xul.gwt.tags;
 
 
 import com.google.gwt.dom.client.PreElement;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.user.client.Window;
 import org.pentaho.gwt.widgets.client.text.ToolTip;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
@@ -20,7 +24,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   
   static final String ELEMENT_NAME = "label"; //$NON-NLS-1$
-  
+  private String onclick;
+  private XulDomContainer domContainer;
+
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -43,11 +49,15 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    domContainer = container;
     super.init(srcEle, container);
     setValue(srcEle.getAttribute("value"));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
-
     setPre("true".equals(srcEle.getAttribute("pre")));
+
+    if(StringUtils.isEmpty(srcEle.getAttribute("onclick")) == false){
+      setOnclick(srcEle.getAttribute("onclick"));
+    }
 
   }
 
@@ -57,6 +67,9 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
 
   public void layout(){
     label.setTitle(this.getTooltiptext());
+    if(onclick != null){
+      label.addStyleName("hyperlink");
+    }
     if(StringUtils.isEmpty(this.getTooltiptext()) == false){
       
       // ToolTip creation is wrapped in a passthrough listener. This delayed instantiation works around a problem with the
@@ -98,6 +111,18 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
         
       });
     }
+
+    label.addMouseUpHandler(new MouseUpHandler(){
+      public void onMouseUp(MouseUpEvent mouseUpEvent) {
+        if(onclick != null){
+          try {
+            domContainer.invoke(onclick, new String[]{});
+          } catch (XulException e) {
+            Window.alert("Error executing command: " + onclick);
+          }
+        }
+      }
+    });
   }
 
   @Bindable
@@ -156,6 +181,13 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     super.setTooltiptext(tooltip);
     label.setTitle(this.getTooltiptext());
   }
-  
+
+  public String getOnclick() {
+    return onclick;
+  }
+
+  public void setOnclick(String onclick) {
+    this.onclick = onclick;
+  }
   
 }

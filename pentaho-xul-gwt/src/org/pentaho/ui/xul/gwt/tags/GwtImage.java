@@ -1,5 +1,7 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -27,6 +29,7 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   }
 
   private Image image;
+  private String onclick;
 
   public GwtImage() {
     super(ELEMENT_NAME);
@@ -38,6 +41,9 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     setSrc(srcEle.getAttribute("src")); //$NON-NLS-1$
+    if(StringUtils.isEmpty(srcEle.getAttribute("onclick")) == false){
+      setOnclick(srcEle.getAttribute("onclick")); //$NON-NLS-1$
+    }
     setDisabled("true".equals(srcEle.getAttribute("disabled"))); //$NON-NLS-1$//$NON-NLS-2$
   }
 
@@ -106,4 +112,17 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     return image.isVisible();
   }
 
+  public String getOnclick() {
+    return onclick;
+  }
+
+  public void setOnclick(final String onclick) {
+    this.onclick = onclick;
+    image.addClickHandler(new ClickHandler(){
+      public void onClick(ClickEvent clickEvent) {
+        invoke(onclick, new Object[]{});
+      }
+    });
+    image.getElement().getStyle().setProperty("cursor","pointer");
+  }
 }
