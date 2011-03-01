@@ -91,7 +91,7 @@ html, body{
 }
 
 .gwt-ScrollTable .dataWrapper {
-  width: auto !important;
+  width: 100% !important;
   overflow-y: scroll !important;
 }
 
