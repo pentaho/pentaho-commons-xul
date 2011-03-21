@@ -103,6 +103,9 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   }
 
   private void fireSelectedEvents() {
+	if(suppressEvents) {
+	  return;
+    }
 
     firePropertyChange("selectedItem", previousSelectedItem, getSelectedItem());
     if(getSelectedItem() != null){
@@ -166,6 +169,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     }
     this.listBox.setHeight("100%");
     listBox.clear();
+    listBox.setSuppressLayout(true);
     List<XulComponent> children = getChildNodes();
     for (int i = 0; i < children.size(); i++) {
       if (children.get(i) instanceof GwtListitem) {
@@ -182,7 +186,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     if(getWidth() > 0) {
       listBox.setWidth(getWidth() + "px");
     }
-    
+    listBox.setSuppressLayout(false);    
     setSelectedIndex(getSelectedIndex());
 
     loaded = true;
@@ -197,6 +201,9 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   }
 
   public void onChange(ChangeEvent changeEvent) {
+	if(suppressEvents) {
+		return;
+	}
     try {
       if(onselect != null && onselect.length() > 0) {
         this.getXulDomContainer().invoke(onselect, new Object[] {new Integer(listBox.getSelectedIndex())});
@@ -352,6 +359,10 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     int oldValue = this.selectedIndex;
     this.selectedIndex = index;
     this.listBox.setSelectedIndex(index);
+    
+    if(suppressEvents) {
+		return;
+	}    
 
     // TODO: move this all to the centralized fireSelectedEvents method
     this.firePropertyChange("selectedIndex", oldValue, index);
