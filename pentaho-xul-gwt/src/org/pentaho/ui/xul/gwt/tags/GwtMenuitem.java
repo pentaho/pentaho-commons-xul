@@ -30,6 +30,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   private String onCommand;
   private MenuItem menuitem;
   private boolean isSelected;
+  private Object boundObject;
   
   public GwtMenuitem() {
     super(ELEMENT_NAME);

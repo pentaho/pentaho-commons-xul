@@ -29,6 +29,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   static final String ELEMENT_NAME = "menulist"; //$NON-NLS-1$
   private boolean editable;
+  private Collection<T> elements;
 
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME,
@@ -46,7 +47,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private boolean loaded = false;
   private boolean suppressLayout = false;
   private boolean inLayoutProcess = false;
-  private String previousSelectedItem = null;
+  private Object previousSelectedItem = null;
   private String previousValue;
   private String onCommand;
   private SimplePanel wrapper = null;
@@ -154,6 +155,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   @Bindable
   public void setElements( Collection<T> elements ) {
+    this.elements = elements;
 
     try {
       suppressLayout = true;
@@ -246,7 +248,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 //    }
     int i = 0;
     for (Object o : getElements()) {
-      if (((String) o).equals((String) t)) {
+      if ((o).equals(t)) {
         setSelectedIndex(i);
       }
       i++;
@@ -278,11 +280,13 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   private void fireSelectedEvents() {
 
-    GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, (String) getSelectedItem());
+    int selectedIdx = listbox.getSelectedIndex();
+    Object newSelectedItem = (selectedIdx >= 0) ? (elements != null)? elements.toArray()[selectedIdx] : getSelectedItem() : getSelectedItem();
+    GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, newSelectedItem);
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
     GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
-    previousSelectedItem = (String) getSelectedItem();
+    previousSelectedItem = newSelectedItem;
 
 
     String newVal = listbox.getValue();
