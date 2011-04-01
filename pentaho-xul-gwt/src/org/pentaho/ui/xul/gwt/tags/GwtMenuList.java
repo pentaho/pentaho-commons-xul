@@ -246,8 +246,10 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 //      }
 //      i++;
 //    }
+
     int i = 0;
-    for (Object o : getElements()) {
+    Collection eles = (elements != null)? elements : getElements();
+    for (Object o : eles) {
       if ((o).equals(t)) {
         setSelectedIndex(i);
       }
