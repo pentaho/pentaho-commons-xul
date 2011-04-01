@@ -164,6 +164,12 @@ public class GwtDomElement implements Element {
     if (children == null) {
       children = new ArrayList<Element>();
     }
+
+      Element dElementparent = element.getParent();
+    if(dElementparent != null){
+      dElementparent.removeChild(element);
+    }
+  	    
     ((GwtDomElement)element).setParent(this);
     children.add(element);
     
