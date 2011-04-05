@@ -51,6 +51,7 @@ public abstract class AbstractXulDialogController<T> extends AbstractXulEventHan
     for (DialogListener<T> listener : listeners) {
       listener.onDialogAccept(getDialogResult());
     }
+    listeners.clear();
   }
 
   @Bindable
@@ -69,6 +70,7 @@ public abstract class AbstractXulDialogController<T> extends AbstractXulEventHan
     for (DialogListener<T> listener : listeners) {
       listener.onDialogCancel();
     }
+    listeners.clear();
   }
 
   public void addDialogListener(final DialogListener<T> listener) {
