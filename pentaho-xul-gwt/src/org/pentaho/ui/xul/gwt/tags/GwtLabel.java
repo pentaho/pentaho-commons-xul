@@ -1,10 +1,12 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 
-import com.google.gwt.dom.client.PreElement;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.MouseListener;
+import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.text.ToolTip;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
@@ -17,15 +19,12 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MouseListener;
-import com.google.gwt.user.client.ui.Widget;
-
 public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   
   static final String ELEMENT_NAME = "label"; //$NON-NLS-1$
   private String onclick;
   private XulDomContainer domContainer;
+  private boolean multiline = false;
 
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
@@ -54,6 +53,7 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     setValue(srcEle.getAttribute("value"));
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
     setPre("true".equals(srcEle.getAttribute("pre")));
+    setMultiline("true".equals(srcEle.getAttribute("multiline")));
 
     if(StringUtils.isEmpty(srcEle.getAttribute("onclick")) == false){
       setOnclick(srcEle.getAttribute("onclick"));
@@ -70,6 +70,8 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     if(onclick != null){
       label.addStyleName("hyperlink");
     }
+    label.setWordWrap(multiline);
+
     if(StringUtils.isEmpty(this.getTooltiptext()) == false){
       
       // ToolTip creation is wrapped in a passthrough listener. This delayed instantiation works around a problem with the
@@ -190,4 +192,11 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     this.onclick = onclick;
   }
   
+  public boolean isMultiline() {
+    return false;
+  }
+
+  public void setMultiline(boolean multi) {
+    this.multiline = multi;
+  }
 }
