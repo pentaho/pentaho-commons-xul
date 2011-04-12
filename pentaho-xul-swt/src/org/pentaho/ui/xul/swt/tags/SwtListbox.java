@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.List;
 import org.pentaho.ui.xul.XulComponent;
@@ -43,7 +44,8 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   private int[] curSelectedIndices = null;
   private int curSelectedIndex = -1;
   private Object prevSelectedObject;
-  
+  private boolean suppressEvents;
+
   public SwtListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     this.container = container;
@@ -69,6 +71,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
   
   private void fireSelectedEvents(){
+    if(this.suppressEvents){
+      return;
+    }
 
     int[] indices = listBox.getSelectionIndices();
     SwtListbox.this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
@@ -232,14 +237,11 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
           // TODO  log error... only strings supported...
         }
       }
-      String[] sel = new String[items.length];
+      final String[] sel = new String[items.length];
       System.arraycopy(items, 0, sel, 0, items.length);
+      suppressEvents = true;
       listBox.setSelection(sel);
-      
-      // SWT doesn't seem to fire this event when the selection
-      // is made via code, only with a mouse or keyboard action.
-
-      listBox.notifyListeners(SWT.Selection, new Event());
+      suppressEvents = false;
       
     }
   }
@@ -304,8 +306,10 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
 
   public void setSelectedIndices(int[] indices) {
+    suppressEvents = true;
     listBox.deselectAll();
     listBox.select(indices);
+    suppressEvents = false;
     fireSelectedEvents();
   }
 

@@ -47,7 +47,7 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
 
   private String binding;
 
-  private T previousSelectedItem = null;
+  private Object previousSelectedItem = null;
   
   private SwtMenupopup popup;
   
@@ -58,6 +58,8 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   private String command;
 
   private XulComponent parent;
+  private Collection<T> elements;
+
   public SwtMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menulist");
 
@@ -82,17 +84,7 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
     combobox.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
 
       public void widgetSelected(SelectionEvent e) {
-        SwtMenuList.this.changeSupport.firePropertyChange("selectedItem",
-            previousSelectedItem, combobox.getItem(combobox.getSelectionIndex())
-        );
-        SwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", null
-            , combobox.getSelectionIndex());
-
-        previousSelectedItem = (T) combobox.getItem(combobox.getSelectionIndex());
-        
-        if(SwtMenuList.this.command != null){
-          invoke(SwtMenuList.this.command, new Object[] {});
-        }
+        fireSelectedEvents();
 
       }
 
@@ -182,6 +174,7 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   }
 
   public void setElements(Collection<T> tees) {
+    this.elements = tees;
     for (XulComponent menuItem : popup.getChildNodes()) {
       popup.removeChild(menuItem);
     }
@@ -214,13 +207,26 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
     } else {
       this.combobox.select(idx);
     }
+    fireSelectedEvents();
+  }
+
+
+  private void fireSelectedEvents(){
+    int idx = getSelectedIndex();
     if(idx >= 0){
+      Object newSelectedItem = (idx >= 0) ? (elements != null)? elements.toArray()[idx] : getSelectedItem() : getSelectedItem();
+
       changeSupport.firePropertyChange("selectedItem",
-          previousSelectedItem, combobox.getItem(combobox.getSelectionIndex())
+          previousSelectedItem, newSelectedItem
       );
+      this.previousSelectedItem = newSelectedItem;
     }
     changeSupport.firePropertyChange("selectedIndex", null
         , combobox.getSelectionIndex());
+
+    if(SwtMenuList.this.command != null){
+      invoke(SwtMenuList.this.command, new Object[] {});
+    }
   }
 
   public void setEditable(boolean editable) {
