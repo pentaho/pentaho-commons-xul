@@ -1,21 +1,15 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
-
-import com.allen_sauer.gwt.dnd.client.*;
+import com.allen_sauer.gwt.dnd.client.DragContext;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
+import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
+import com.google.gwt.widgetideas.table.client.TableSelectionListener;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
@@ -52,12 +46,10 @@ import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellEditorCallback;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
-import com.google.gwt.widgetideas.table.client.TableSelectionListener;
-import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable {
 
@@ -1107,6 +1099,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       if(children != null && children.size() > 0){
         treeChildren = (XulTreeChildren) getDocument().createElement("treechildren");
         row.getParent().addChild(treeChildren);
+      }
+      if (children == null) {
+        return;
       }
       for(T child : children){
         row = treeChildren.addNewRow();
