@@ -31,6 +31,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   static final String ELEMENT_NAME = "listbox"; //$NON-NLS-1$
   private int selectedIndex = -1;
+  private Object[] previousSelectedItems;
 
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
@@ -45,7 +46,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   private boolean disabled = false;
 
-  private String selType;
+  private String selType = "SINGLE";
 
   private int rowsToDisplay = 0;
 
@@ -99,19 +100,23 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     if(srcEle.hasAttribute("pen:ondrag") && srcEle.getAttribute("pen:ondrag").trim().length() > 0){
       setOndrag(srcEle.getAttribute("pen:ondrag"));
     }
+
+    if(StringUtils.isEmpty(srcEle.getAttribute("seltype")) == false){
+      setSeltype(srcEle.getAttribute("seltype"));
+    }
     setOnselect(srcEle.getAttribute("onselect"));
   }
 
   private void fireSelectedEvents() {
-	if(suppressEvents) {
-	  return;
+	  if(suppressEvents) {
+	    return;
     }
 
+    Object[] newSelectedObjects = getSelectedItems();
     firePropertyChange("selectedItem", previousSelectedItem, getSelectedItem());
-    if(getSelectedItem() != null){
-      firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{getSelectedItem()});
-    } else {
-      firePropertyChange("selectedItems", new Object[]{prevSelecteItem}, new Object[]{});
+    if(!Arrays.equals(previousSelectedItems, newSelectedObjects)){
+      previousSelectedItems = newSelectedObjects;
+      firePropertyChange("selectedItems", null, newSelectedObjects);
     }
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
@@ -168,8 +173,9 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
       this.listBox.setWidth("100%");
     }
     this.listBox.setHeight("100%");
-    listBox.clear();
     listBox.setSuppressLayout(true);
+    listBox.clear();
+    listBox.setMultiSelect(selType.equalsIgnoreCase("MULTI"));
     List<XulComponent> children = getChildNodes();
     for (int i = 0; i < children.size(); i++) {
       if (children.get(i) instanceof GwtListitem) {
@@ -201,9 +207,9 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   }
 
   public void onChange(ChangeEvent changeEvent) {
-	if(suppressEvents) {
-		return;
-	}
+    if(suppressEvents) {
+      return;
+    }
     try {
       if(onselect != null && onselect.length() > 0) {
         this.getXulDomContainer().invoke(onselect, new Object[] {new Integer(listBox.getSelectedIndex())});
@@ -211,6 +217,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     } catch (XulException e) {
       e.printStackTrace();
     }
+    fireSelectedEvents();
     this.setSelectedIndex(listBox.getSelectedIndex());
   }
   
@@ -233,8 +240,17 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   @Bindable
   public Object[] getSelectedItems() {
-    // TODO: CustomListBox doesn't seem to support multi-selection?
-    return new Object[]{getSelectedItem()};
+    int[] indices = listBox.getSelectedIndices();
+    Object[] selectedItems = new Object[indices.length];
+    for(int i=0; i< indices.length; i++){
+      if(indices[i] >= 0 && indices[i] < boundElements.size()){
+        selectedItems[i] = getItem(indices[i]);
+      } else {
+        break;
+      }
+    }
+    
+    return selectedItems;
   }
 
   private int getItemIndex(Object item) {
@@ -269,10 +285,16 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   @Bindable
   public void setSelectedItems(Object[] items) {
-    List<?> list = Arrays.asList(this.boundElements);
+    List<?> list = Arrays.asList(this.boundElements.toArray());
+    int[] selIndices = new int[items.length];
     for (int i = 0; i < items.length; i++) {
-      list.indexOf(items[i]);
+      if(i < list.size()){
+        selIndices[i] = list.indexOf(items[i]);
+      } else {
+        break;
+      }
     }
+    listBox.setSelectedIndices(selIndices);
   }
 
   public void addItem(Object item) {
@@ -340,15 +362,20 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     boundElements = elements;
     for (T t : elements) {
       String attribute = getBinding();
+      String label = null;
       if (attribute != null && attribute.length() > 0) {
-        try {
-          GwtListitem item = (GwtListitem) container.getDocumentRoot().createElement("listitem");
-          item.setLabel(extractLabel(t));
-          this.addChild(item);
-        } catch(XulException e) {
-          
-        }
+        label = extractLabel(t);
+      } else {
+        label = t.toString();
       }
+      try {
+        GwtListitem item = (GwtListitem) container.getDocumentRoot().createElement("listitem");
+        item.setLabel(label);
+        this.addChild(item);
+      } catch(XulException e) {
+
+      }
+
     }
     suppressEvents = false;
     layout();

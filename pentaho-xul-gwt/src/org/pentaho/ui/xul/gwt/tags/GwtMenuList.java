@@ -283,7 +283,10 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private void fireSelectedEvents() {
 
     int selectedIdx = listbox.getSelectedIndex();
-    Object newSelectedItem = (selectedIdx >= 0) ? (elements != null)? elements.toArray()[selectedIdx] : getSelectedItem() : getSelectedItem();
+    Object newSelectedItem = (selectedIdx >= 0 && elements != null && selectedIdx < elements.size())
+        ?   elements.toArray()[selectedIdx]
+        : getSelectedItem();
+
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, newSelectedItem);
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();

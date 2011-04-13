@@ -2,6 +2,9 @@ package org.pentaho.ui.xul.binding;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 
@@ -23,6 +26,12 @@ public abstract class BindingConvertor<V, R> {
   private static BindingConvertor<String, Double> string2Double = new String2Double();
   private static BindingConvertor<Integer, Boolean> integer2Boolean = new Integer2Boolean();
   private static BindingConvertor<Object, Boolean> object2Boolean = new Object2Boolean();
+
+  private static BindingConvertor<Collection, Object[]> collection2ObjectArray = new Collection2ObjectArray();
+
+  public static BindingConvertor<Collection, Object[]> collection2ObjectArray(){
+    return collection2ObjectArray;
+  }
 
   public static BindingConvertor<Integer, String> integer2String() {
     return integer2String;
@@ -70,6 +79,18 @@ public abstract class BindingConvertor<V, R> {
    */
   public static BindingConvertor<Object, Boolean> object2Boolean() {
     return object2Boolean;
+  }
+
+  static class Collection2ObjectArray extends BindingConvertor<Collection, Object[]>{
+    @Override
+    public Object[] sourceToTarget(Collection value) {
+      return value.toArray();
+    }
+
+    @Override
+    public Collection targetToSource(Object[] value) {
+      return Arrays.asList(value);
+    }
   }
 
   /*
