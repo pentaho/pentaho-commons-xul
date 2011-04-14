@@ -286,9 +286,6 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         ?   elements.toArray()[selectedIdx]
         : getSelectedItem();
 
-    if(newSelectedItem instanceof String){
-      int i=0;
-    }
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, newSelectedItem);
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
