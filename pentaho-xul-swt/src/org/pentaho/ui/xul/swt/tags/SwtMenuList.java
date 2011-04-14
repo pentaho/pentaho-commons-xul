@@ -139,6 +139,10 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
   }
 
   public void setSelectedItem(T t) {
+    if(t == null){
+      this.combobox.deselectAll();
+      return;
+    }
     this.previousSelectedItem = null;
     this.combobox.select(combobox.indexOf(t.toString()));
   }
