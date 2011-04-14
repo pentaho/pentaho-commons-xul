@@ -184,7 +184,6 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
       this.suppressLayout = false;
 
-      listbox.setSuppressLayout(false);
       layout();
     } catch (Exception e) {
       System.out.println(e.getMessage());
@@ -287,6 +286,9 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
         ?   elements.toArray()[selectedIdx]
         : getSelectedItem();
 
+    if(newSelectedItem instanceof String){
+      int i=0;
+    }
     GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, newSelectedItem);
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
