@@ -1577,7 +1577,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
   
   private void resolveDropVetoerMethod(){
-    if(dropVetoerMethod == null){
+    if(dropVetoerMethod == null && !StringUtils.isEmpty(getDropvetoer())){
 
       String id = getDropvetoer().substring(0, getDropvetoer().indexOf("."));
       try {
