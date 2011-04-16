@@ -8,25 +8,35 @@ import java.beans.PropertyChangeSupport;
  */
 public class XulEventSourceAdapter implements XulEventSource{
 
-  protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
-  
+  protected transient PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+
+  private PropertyChangeSupport getChangeSupport(){
+    if(changeSupport == null){
+      changeSupport = new PropertyChangeSupport(this);
+    }
+    return changeSupport;
+  }
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    changeSupport.addPropertyChangeListener(listener);
+    getChangeSupport().addPropertyChangeListener(listener);
   }
   
   public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-    changeSupport.addPropertyChangeListener(propertyName, listener);
+    getChangeSupport().addPropertyChangeListener(propertyName, listener);
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    changeSupport.removePropertyChangeListener(listener);
+    getChangeSupport().removePropertyChangeListener(listener);
+  }
+
+  public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
+    getChangeSupport().removePropertyChangeListener(propertyName, listener);
   }
   
   protected void firePropertyChange(String attr, Object previousVal, Object newVal){
     if(previousVal == null && newVal == null){
       return;
     }
-    changeSupport.firePropertyChange(attr, previousVal, newVal);
+    getChangeSupport().firePropertyChange(attr, previousVal, newVal);
   }
 }
 
