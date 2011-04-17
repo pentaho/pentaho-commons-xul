@@ -1,5 +1,6 @@
   package org.pentaho.ui.xul.util;
 
+  import java.io.Serializable;
   import java.util.ArrayList;
   import java.util.Collection;
   import java.util.Collections;
@@ -18,7 +19,7 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
    *          type of children
    */
   public class AbstractModelList<T> extends XulEventSourceAdapter implements
-      List<T>, Iterable<T> {
+      List<T>, Iterable<T>, Serializable {
 
     protected List<T> children = new ArrayList<T>();
     
