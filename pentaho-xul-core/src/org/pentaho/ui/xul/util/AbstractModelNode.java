@@ -60,6 +60,9 @@ public abstract class
 
   public boolean add(T child) {
     boolean retVal = this.children.add(child);
+    if(child instanceof AbstractModelNode){
+      ((AbstractModelNode) child).setParent(this);
+    }
     onAdd(child);
     
     fireCollectionChanged();
@@ -69,7 +72,6 @@ public abstract class
   public T remove(int idx) {
     T t = children.remove(idx);
     onRemove(t);
-    
     fireCollectionChanged();
     return t;
   }
