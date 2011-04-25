@@ -114,11 +114,13 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
         if(event != null && event.getItem() >= 0) {
           try {
             final String onBeforeSelectMethod = ((GwtTab)tabs.getTabByIndex(event.getItem())).getOnBeforeSelect();
-            Object returnValue = GwtTabbox.this.getXulDomContainer().invoke(onBeforeSelectMethod, new Object[] {event.getItem()});
-            if(returnValue != null && returnValue instanceof Boolean) {
-              Boolean value = (Boolean) returnValue;
-              if(!value) {
-                event.cancel();
+            if(onBeforeSelectMethod != null){
+              Object returnValue = GwtTabbox.this.getXulDomContainer().invoke(onBeforeSelectMethod, new Object[] {event.getItem()});
+              if(returnValue != null && returnValue instanceof Boolean) {
+                Boolean value = (Boolean) returnValue;
+                if(!value) {
+                  event.cancel();
+                }
               }
             }
           } catch (XulException e) {
