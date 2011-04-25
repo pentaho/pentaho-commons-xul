@@ -149,8 +149,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
 
   @Bindable
   public void setChecked(boolean checked) {
-    System.out.println("radio.setChecked= "+checked+"   "+((checked != this.checked)? "firing":"")+ "   "+((checked != radioButton.getValue())?"changing":""));
-
+    
    if(checked != radioButton.getValue()) {
      radioButton.setValue(checked, false);
    }
