@@ -147,9 +147,16 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     setOnselect(srcEle.getAttribute("onselect"));
     setOnedit(srcEle.getAttribute("onedit"));
     setSeltype(srcEle.getAttribute("seltype"));
-    setOndrop(srcEle.getAttribute("pen:ondrop"));
-    setOndrag(srcEle.getAttribute("pen:ondrag"));
-    setDrageffect(srcEle.getAttribute("pen:drageffect"));
+
+    if (StringUtils.isEmpty(srcEle.getAttribute("pen:ondrop")) == false) {
+      setOndrop(srcEle.getAttribute("pen:ondrop"));
+    }
+    if (StringUtils.isEmpty(srcEle.getAttribute("pen:ondrag")) == false) {
+      setOndrag(srcEle.getAttribute("pen:ondrag"));
+    }
+    if (StringUtils.isEmpty(srcEle.getAttribute("pen:drageffect")) == false) {
+      setDrageffect(srcEle.getAttribute("pen:drageffect"));
+    }
 
     setDropvetoer(srcEle.getAttribute("pen:dropvetoer"));
     if(StringUtils.isEmpty(srcEle.getAttribute("pen:showalleditcontrols")) == false){
