@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTabpanel;
 import org.pentaho.ui.xul.containers.XulTabbox;
@@ -114,7 +115,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
         if(event != null && event.getItem() >= 0) {
           try {
             final String onBeforeSelectMethod = ((GwtTab)tabs.getTabByIndex(event.getItem())).getOnBeforeSelect();
-            if(onBeforeSelectMethod != null){
+            if(StringUtils.isEmpty(onBeforeSelectMethod) == false){
               Object returnValue = GwtTabbox.this.getXulDomContainer().invoke(onBeforeSelectMethod, new Object[] {event.getItem()});
               if(returnValue != null && returnValue instanceof Boolean) {
                 Boolean value = (Boolean) returnValue;
