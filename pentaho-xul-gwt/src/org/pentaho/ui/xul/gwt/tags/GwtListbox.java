@@ -243,10 +243,16 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     int[] indices = listBox.getSelectedIndices();
     Object[] selectedItems = new Object[indices.length];
     for(int i=0; i< indices.length; i++){
-      if(indices[i] >= 0 && indices[i] < boundElements.size()){
-        selectedItems[i] = getItem(indices[i]);
+      if(boundElements != null){
+        if(indices[i] >= 0 && indices[i] < boundElements.size()){
+          selectedItems[i] = getItem(indices[i]);
+        } else {
+          break;
+        }
       } else {
-        break;
+        if( indices[i] >= 0 && indices[i] < listBox.getItems().size()){
+          selectedItems[i] = listBox.getItems().get(indices[i]).getText();
+        }
       }
     }
     
