@@ -1380,16 +1380,43 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   public void collapseAll() {
     if (this.isHierarchical()){
-      //TODO: Not yet implemented
+      for (XulComponent c : this.rootChildren.getChildNodes()){
+        XulTreeItem item = (XulTreeItem) c;
+        item.setExpanded(false);
+        expandChildren(item, false);
+      }
     }
 
   }
 
   public void expandAll() {
     if (this.isHierarchical()){
-       //TODO: not implemented yet
+      for (XulComponent c : this.rootChildren.getChildNodes()){
+        XulTreeItem item = (XulTreeItem) c;
+        item.setExpanded(true);
+        expandChildren(item, true);
+      }
+    }
+  }
+
+  private void expandChildren(XulTreeItem parent, boolean expanded) {
+    if (parent == null || parent.getChildNodes() == null || parent.getChildNodes().size() == 0) {
+      return;
     }
 
+    for (XulComponent c : parent.getChildNodes()) {
+      if (c instanceof XulTreeChildren) {
+        XulTreeChildren treeChildren = (XulTreeChildren)c;
+
+        for (XulComponent child : treeChildren.getChildNodes()) {
+          if (child instanceof XulTreeItem) {
+            XulTreeItem item = (XulTreeItem) child;
+            item.setExpanded(expanded);
+            expandChildren(item, expanded);
+          }
+        }
+      }
+    }
   }
 
   @Bindable
