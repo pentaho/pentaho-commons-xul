@@ -97,6 +97,7 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     GwtTabPanels.register();
     GwtTabPanel.register();
     GwtExpandPanel.register();
+    GwtEditPanel.register();
   }
   
   /* (non-Javadoc)

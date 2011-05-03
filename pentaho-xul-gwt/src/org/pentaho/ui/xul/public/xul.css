@@ -486,3 +486,22 @@ legend {
   width: 100%;
   margin: 0px;
 }
+
+.xul-editPanel{
+  border: 1px solid #888;
+}
+
+.xul-editPanel-title{
+  background-color: #888;
+  border-bottom: 1px solid #888;
+  padding: 2px 0px 2px 4px;
+}
+
+.xul-editPanel-title-label{
+  color: white;
+  font-size: .85em;
+}
+
+.xul-editPanel-content{
+
+}
