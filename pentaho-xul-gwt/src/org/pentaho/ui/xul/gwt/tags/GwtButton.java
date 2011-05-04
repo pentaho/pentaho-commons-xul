@@ -37,10 +37,9 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     });
   }
 
-  //private CustomButton customButton;
   private String className;
   private Button customButton;
-  private RoundedButton button;
+  private Button button;
 
   private ImageButton imageButton;
 
@@ -49,7 +48,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public GwtButton() {
     super(ELEMENT_NAME);
     //programatic creation doesn't call init() create here for them
-    button = new RoundedButton();
+    button = new Button();
     setManagedObject(button);
   }
 
@@ -82,7 +81,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
       imageButton.setHeight("");
       imageButton.setWidth("");
     } else {
-      button = new RoundedButton();
+      button = new Button();
       setManagedObject(button);
     }
 
@@ -158,7 +157,11 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public void setDisabled(boolean dis) {
     this.disabled = dis;
     if (button != null) {
-      button.setEnabled(!dis);
+      if(dis){
+        button.addStyleDependentName("disabled");
+      } else {
+        button.removeStyleDependentName("disabled");
+      }
     } else if (imageButton != null) {
       imageButton.setEnabled(!dis);
     } else if (customButton != null) {
@@ -282,6 +285,9 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     if (imageButton != null) {
       imageButton.setHeight("");
       imageButton.setWidth("");
+    }
+    if(button != null){
+      button.setStylePrimaryName("xul-button");
     }
   }
 
