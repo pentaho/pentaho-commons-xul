@@ -23,7 +23,7 @@ html, body{
 */
 
 .dialog-button-panel{
-  border-top: 1px solid #777;
+
 }
 
 .checkbox label{
@@ -490,7 +490,7 @@ legend {
 }
 
 .buttonTable > tbody >tr > td {
-  padding:3px;
+  padding:1px;
 }
 
 .gwt-Label{
@@ -572,4 +572,13 @@ legend {
 
 .xul-editPanel-content{
 
+}
+
+.dialog-content{
+  border: 1px solid black;
+  background: #DDD;
+}
+
+.dialog-button-panel{
+  padding: 2px 0px;
 }

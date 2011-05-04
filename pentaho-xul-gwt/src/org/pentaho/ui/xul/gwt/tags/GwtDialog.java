@@ -98,6 +98,10 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     rightButtonPanel.setStylePrimaryName("buttonTable");
     centerButtonPanel.setStylePrimaryName("buttonTable");
     leftButtonPanel.setStylePrimaryName("buttonTable");
+
+    // keep track of the number in the left and right button cells. If they're not the same, add shims to fix the center
+    // balance
+
     for(XulButton btn : dialogButtons){
       this.removeChild(btn);
       Widget widget = (Widget) btn.getManagedObject();
@@ -129,11 +133,13 @@ public class GwtDialog extends GenericDialog implements XulDialog {
 
     buttonPanel.add(leftButtonPanel);
     buttonPanel.setCellHorizontalAlignment(leftButtonPanel, HorizontalPanel.ALIGN_LEFT);
+    buttonPanel.setCellWidth(leftButtonPanel, "33%");
     buttonPanel.add(centerButtonPanel);
     buttonPanel.setCellHorizontalAlignment(centerButtonPanel, HorizontalPanel.ALIGN_CENTER);
     buttonPanel.setCellWidth(centerButtonPanel, "100%");
     buttonPanel.add(rightButtonPanel);
     buttonPanel.setCellHorizontalAlignment(rightButtonPanel, HorizontalPanel.ALIGN_RIGHT);
+    buttonPanel.setCellWidth(leftButtonPanel, "33%");
     buttonPanel.setWidth("100%");
     
     
@@ -144,7 +150,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   public Panel getDialogContents() {
 
     VerticalPanel contentPanel = new VerticalPanel();
-    contentPanel.setSpacing(3);
+    contentPanel.setSpacing(0);
     container = contentPanel;
     
     return contentPanel;
