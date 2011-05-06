@@ -15,7 +15,7 @@ import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class GwtTabWidget extends HorizontalPanel implements MouseListener {
+public class GwtTabWidget extends HorizontalPanel { 
   private TabPanel tabPanel;
   private Widget tabContent;
   private Label textLabel = new Label();
@@ -29,7 +29,6 @@ public class GwtTabWidget extends HorizontalPanel implements MouseListener {
     this.fullText = text;
     setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     panel.setStyleName("xulTabWidget"); //$NON-NLS-1$
-    leftCap.setStyleName("xulTabWidgetCap"); //$NON-NLS-1$
     Image leftCapImage = new Image(GWT.getModuleBaseURL() + "/images/spacer.gif");
     leftCap.setSpacing(0);
     leftCapImage.setWidth("5px"); //$NON-NLS-1$
@@ -40,7 +39,6 @@ public class GwtTabWidget extends HorizontalPanel implements MouseListener {
     setLabelTooltip(tooltip);
     textLabel.setStyleName("xulTabWidgetLabel");
     textLabel.setWordWrap(false);
-    textLabel.addMouseListener(this);
     tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 
       public void onSelection(SelectionEvent<Integer> event) {
@@ -48,10 +46,8 @@ public class GwtTabWidget extends HorizontalPanel implements MouseListener {
         ElementUtils.blur(getElement().getParentElement());
         if (tabIndex == tabPanel.getWidgetIndex(tabContent)) {
           panel.setStyleName("xulTabWidget-selected"); //$NON-NLS-1$
-          leftCap.setStyleName("xulTabWidgetCap-selected"); //$NON-NLS-1$
         } else {
           panel.setStyleName("xulTabWidget"); //$NON-NLS-1$
-          leftCap.setStyleName("xulTabWidgetCap"); //$NON-NLS-1$
         }
       }
     });
@@ -80,33 +76,4 @@ public class GwtTabWidget extends HorizontalPanel implements MouseListener {
   public void setLabelTooltip(String tooltip) {
     textLabel.setTitle(tooltip);
   }
-
-  public void onMouseDown(Widget sender, int x, int y) {
-  }
-  
-  public void onMouseEnter(Widget sender) {
-    if (tabPanel.getTabBar().getSelectedTab() == tabPanel.getWidgetIndex(tabContent)) {
-        // don't do anything
-    } else {
-      panel.setStyleName("xulTabWidget-hover"); //$NON-NLS-1$
-      leftCap.setStyleName("xulTabWidgetCap-hover"); //$NON-NLS-1$
-    }
-  }
-
-  public void onMouseLeave(Widget sender) {
-   if (tabPanel.getTabBar().getSelectedTab() == tabPanel.getWidgetIndex(tabContent)) {
-        // don't do anything
-   } else {
-      panel.setStyleName("xulTabWidget"); //$NON-NLS-1$
-      leftCap.setStyleName("xulTabWidgetCap"); //$NON-NLS-1$
-   }
-  }
-
-  public void onMouseMove(Widget sender, int x, int y) {
-  }
-
-  public void onMouseUp(Widget sender, int x, int y) {
-  }
-
-
 }
