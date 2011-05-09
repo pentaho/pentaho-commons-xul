@@ -20,7 +20,6 @@ public class GwtTabWidget extends HorizontalPanel {
   private Widget tabContent;
   private Label textLabel = new Label();
   private HorizontalPanel panel = new HorizontalPanel();
-  private HorizontalPanel leftCap = new HorizontalPanel();
   private String fullText;
 
   public GwtTabWidget(String text, String tooltip, final TabPanel tabPanel, final Widget tabContent) {
@@ -28,16 +27,13 @@ public class GwtTabWidget extends HorizontalPanel {
     this.tabContent = tabContent;
     this.fullText = text;
     setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
-    panel.setStyleName("xulTabWidget"); //$NON-NLS-1$
+    panel.setStyleName("pentaho-tabWidget"); //$NON-NLS-1$
     Image leftCapImage = new Image(GWT.getModuleBaseURL() + "/images/spacer.gif");
-    leftCap.setSpacing(0);
-    leftCapImage.setWidth("5px"); //$NON-NLS-1$
-    leftCapImage.setHeight("24px"); //$NON-NLS-1$    
-    leftCap.add(leftCapImage);
+    leftCapImage.setStylePrimaryName("tab-spacer");
 
     setLabelText(text);
     setLabelTooltip(tooltip);
-    textLabel.setStyleName("xulTabWidgetLabel");
+    textLabel.setStyleName("pentaho-tabWidgetLabel");
     textLabel.setWordWrap(false);
     tabPanel.addSelectionHandler(new SelectionHandler<Integer>() {
 
@@ -45,18 +41,17 @@ public class GwtTabWidget extends HorizontalPanel {
         int tabIndex = event.getSelectedItem();
         ElementUtils.blur(getElement().getParentElement());
         if (tabIndex == tabPanel.getWidgetIndex(tabContent)) {
-          panel.setStyleName("xulTabWidget-selected"); //$NON-NLS-1$
+          panel.setStyleName("pentaho-tabWidget-selected"); //$NON-NLS-1$
         } else {
-          panel.setStyleName("xulTabWidget"); //$NON-NLS-1$
+          panel.setStyleName("pentaho-tabWidget"); //$NON-NLS-1$
         }
       }
     });
 
     panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     panel.add(textLabel);
-//    DOM.setStyleAttribute(textLabel.getElement(), "margin", "4px 5px 5px 5px"); //$NON-NLS-1$ //$NON-NLS-2$
-    DOM.setStyleAttribute(textLabel.getElement(), "paddingRight", "5px"); //$NON-NLS-1$ //$NON-NLS-2$
-    add(leftCap);
+    add(leftCapImage);
+    leftCapImage.getElement().getParentElement().setAttribute("class","tab-spacer-wrapper");
     add(panel);
     sinkEvents(Event.ONDBLCLICK | Event.ONMOUSEUP);
   }

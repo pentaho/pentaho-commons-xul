@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 
 public class GwtDialog extends GenericDialog implements XulDialog {
 
@@ -362,6 +363,8 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     for(XulButton btn : dialogButtons){
       this.addChild(btn);
     }
+
+    ElementUtils.replaceScrollbars("scroll-panel");
     
   }
 

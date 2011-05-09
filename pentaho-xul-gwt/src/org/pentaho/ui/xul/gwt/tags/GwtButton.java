@@ -49,7 +49,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     super(ELEMENT_NAME);
     //programatic creation doesn't call init() create here for them
     button = new Button();
-    button.setStylePrimaryName("xul-button");
+    button.setStylePrimaryName("pentaho-button");
     setManagedObject(button);
   }
 

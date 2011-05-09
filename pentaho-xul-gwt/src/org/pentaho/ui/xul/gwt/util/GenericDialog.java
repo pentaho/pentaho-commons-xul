@@ -52,6 +52,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
       }
     };
     dialog.add(contents);
+    dialog.setStylePrimaryName("pentaho-dialog");
     
   }
   

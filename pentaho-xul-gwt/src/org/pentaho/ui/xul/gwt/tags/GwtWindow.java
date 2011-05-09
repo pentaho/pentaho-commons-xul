@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -195,6 +196,8 @@ public class GwtWindow extends AbstractGwtXulContainer implements XulWindow {
     
     
     super.layout();
+
+    ElementUtils.replaceScrollbars("scroll-panel");
   }
 
   public void close() {
