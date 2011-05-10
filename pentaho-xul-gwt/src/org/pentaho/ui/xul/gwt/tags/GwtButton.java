@@ -83,7 +83,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
       imageButton.setWidth("");
     } else {
       button = new Button();
-      button.setStylePrimaryName("xul-button");
+      button.setStylePrimaryName("pentaho-button");
       setManagedObject(button);
     }
 
