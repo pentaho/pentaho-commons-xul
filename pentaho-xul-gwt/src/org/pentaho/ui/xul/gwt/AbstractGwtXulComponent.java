@@ -8,6 +8,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
@@ -690,5 +691,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public String getDropvetoer() {
     return dropVetoMethod;
+  }
+
+  protected void replaceScrollbars(){
+    ElementUtils.replaceScrollbars("scroll-panel");
+    ElementUtils.replaceScrollbars("dataWrapper");
   }
 }

@@ -197,7 +197,7 @@ public class GwtWindow extends AbstractGwtXulContainer implements XulWindow {
     
     super.layout();
 
-    ElementUtils.replaceScrollbars("scroll-panel");
+    replaceScrollbars();
   }
 
   public void close() {
