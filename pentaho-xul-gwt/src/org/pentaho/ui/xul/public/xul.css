@@ -39,6 +39,10 @@ html, body{
   background: white;
 }
 
+.gwt-Tree table {
+  border-collapse: collapse;
+}
+
 .gwt-Tree .gwt-TreeItem {
   cursor: pointer;
   cursor: hand;
@@ -111,8 +115,16 @@ legend {
 
 }
 
+.tree-item-custom-widget td{
+  padding-top:0px;
+  padding-bottom:0px;
+  padding-right:3px;
+  padding-left:0px;
+}
+
 .tree-item-custom-widget{
   border: 1px solid transparent;
+  padding:0;
 }
 .tree-item-custom-widget-selected{
   background-color: #DDD;
