@@ -80,6 +80,7 @@ html, body{
 
 .xul-label{
   white-space: nowrap;
+  font-size: .85em;
 }
 
 .hyperlink{

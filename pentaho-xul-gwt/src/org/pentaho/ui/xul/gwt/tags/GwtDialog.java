@@ -79,10 +79,11 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     preventLayout = false;
   }
   
-  
-  
   @Override
   public Panel getButtonPanel() {
+    if(dialogButtons.isEmpty()){
+      return new SimplePanel();
+    }
     // Check for individual button alignment. If the main align properties is set on the Dialog box then all the
     // individual alignment for the button will be ignored
     boolean ignoreIndividualButtonAlign = false;
@@ -360,6 +361,11 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     }
 
     super.layout();
+    if(dialogButtons.isEmpty()){
+      this.dialog.addStyleName("pentaho-dialog-buttonless");
+    } else {
+      this.dialog.removeStyleName("pentaho-dialog-buttonless");
+    }
     for(XulButton btn : dialogButtons){
       this.addChild(btn);
     }

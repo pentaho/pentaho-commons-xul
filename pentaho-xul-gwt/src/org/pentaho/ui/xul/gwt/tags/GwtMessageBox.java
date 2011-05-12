@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Button;
 
 public class GwtMessageBox extends GenericDialog implements XulMessageBox {
 
@@ -36,7 +37,7 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
   
   private String acceptLabel = "OK";
   
-  private RoundedButton acceptBtn = new RoundedButton();
+  private Button acceptBtn = new Button();
 
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
@@ -57,6 +58,8 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
         hide();
       }
     });
+
+    acceptBtn.setStylePrimaryName("pentaho-button");
   }
   
   protected GwtMessageBox(String elementName){

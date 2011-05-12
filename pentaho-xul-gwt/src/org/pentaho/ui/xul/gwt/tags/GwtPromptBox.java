@@ -22,6 +22,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Button;
 
 public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
 
@@ -33,8 +34,8 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
   
   private String cancelLabel = "Cancel";
 
-  private RoundedButton acceptBtn = new RoundedButton();
-  private RoundedButton cancelBtn = new RoundedButton();
+  private Button acceptBtn = new Button();
+  private Button cancelBtn = new Button();
   
   
   static final String ELEMENT_NAME = "promptbox"; //$NON-NLS-1$
@@ -77,6 +78,7 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
         notifyListenersOnAccept();
       }
     });
+    acceptBtn.setStylePrimaryName("pentaho-button");
 
     cancelBtn.addClickListener(new ClickListener(){
       
@@ -84,6 +86,7 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
         notifyListenersOnCancel();
       }
     });
+    cancelBtn.setStylePrimaryName("pentaho-button");
   }
   
   

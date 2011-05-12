@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.Button;
 
 public class GwtConfirmBox extends GwtMessageBox implements XulConfirmBox {
 
@@ -29,8 +30,8 @@ public class GwtConfirmBox extends GwtMessageBox implements XulConfirmBox {
   
   private String cancelLabel = "No";
 
-  private RoundedButton acceptBtn = new RoundedButton();
-  private RoundedButton cancelBtn = new RoundedButton();
+  private Button acceptBtn = new Button();
+  private Button cancelBtn = new Button();
   
   
   static final String ELEMENT_NAME = "confirmbox"; //$NON-NLS-1$
@@ -59,6 +60,7 @@ public class GwtConfirmBox extends GwtMessageBox implements XulConfirmBox {
         }
       }
     });
+    acceptBtn.setStylePrimaryName("pentaho-button");
 
     cancelBtn.addClickListener(new ClickListener(){
       
@@ -69,6 +71,7 @@ public class GwtConfirmBox extends GwtMessageBox implements XulConfirmBox {
         }
       }
     });
+    cancelBtn.setStylePrimaryName("pentaho-button");
   }
   
 

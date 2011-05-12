@@ -159,11 +159,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public void setDisabled(boolean dis) {
     this.disabled = dis;
     if (button != null) {
-      if(dis){
-        button.addStyleDependentName("disabled");
-      } else {
-        button.removeStyleDependentName("disabled");
-      }
+      button.setEnabled(!dis);
     } else if (imageButton != null) {
       imageButton.setEnabled(!dis);
     } else if (customButton != null) {
