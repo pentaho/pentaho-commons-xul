@@ -194,6 +194,9 @@ legend {
   padding:1px;
 }
 
+.custom-list-item .gwt-Label{
+  font-size: 1em;
+}
 .gwt-Label{
   font-size: .85em;
 }
