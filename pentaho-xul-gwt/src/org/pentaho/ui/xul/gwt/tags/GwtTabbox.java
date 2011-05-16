@@ -103,11 +103,12 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
         continue;
       }
       GwtTabWidget widget = new GwtTabWidget(tabs.getTabByIndex(i).getLabel(), "",  tabPanel, ((Widget) panel.getManagedObject()));
-      tabPanel.add((Widget) panel.getManagedObject(), widget);
+      Widget panelWidget = (Widget) panel.getManagedObject();
+      panelWidget.setStylePrimaryName("pentaho-tabPanel");
+      tabPanel.add(panelWidget, widget);
     }
     setSelectedIndex(selectedIndex);
     initialized = true;
-    tabPanel.setStylePrimaryName("pentaho-tabPanel");
     tabPanel.getTabBar().setStylePrimaryName("pentaho-tabBar");
     tabPanel.addBeforeSelectionHandler( new BeforeSelectionHandler<Integer>(){
 

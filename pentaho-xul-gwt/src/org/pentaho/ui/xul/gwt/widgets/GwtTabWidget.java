@@ -41,9 +41,9 @@ public class GwtTabWidget extends HorizontalPanel {
         int tabIndex = event.getSelectedItem();
         ElementUtils.blur(getElement().getParentElement());
         if (tabIndex == tabPanel.getWidgetIndex(tabContent)) {
-          panel.setStyleName("pentaho-tabWidget-selected"); //$NON-NLS-1$
+          panel.addStyleName("pentaho-tabWidget-selected"); //$NON-NLS-1$
         } else {
-          panel.setStyleName("pentaho-tabWidget"); //$NON-NLS-1$
+          panel.removeStyleName("pentaho-tabWidget-selected"); //$NON-NLS-1$
         }
       }
     });
