@@ -138,7 +138,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     buttonPanel.setCellWidth(leftButtonPanel, "33%");
     buttonPanel.add(centerButtonPanel);
     buttonPanel.setCellHorizontalAlignment(centerButtonPanel, HorizontalPanel.ALIGN_CENTER);
-    buttonPanel.setCellWidth(centerButtonPanel, "100%");
+    buttonPanel.setCellWidth(centerButtonPanel, "33%");
     buttonPanel.add(rightButtonPanel);
     buttonPanel.setCellHorizontalAlignment(rightButtonPanel, HorizontalPanel.ALIGN_RIGHT);
     buttonPanel.setCellWidth(leftButtonPanel, "33%");
