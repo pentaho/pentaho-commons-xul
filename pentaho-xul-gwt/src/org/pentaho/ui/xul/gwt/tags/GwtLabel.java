@@ -193,7 +193,7 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   }
   
   public boolean isMultiline() {
-    return false;
+    return this.multiline;
   }
 
   public void setMultiline(boolean multi) {
