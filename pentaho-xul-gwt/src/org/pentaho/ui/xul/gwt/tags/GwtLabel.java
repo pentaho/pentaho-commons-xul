@@ -142,7 +142,8 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
           style += "height:" + getHeight() + "px;";
         }
       style += "\"";
-      label.getElement().setInnerHTML("<pre class='xul-pre' " + style +">" + value + "</pre>");
+      label.getElement().setInnerHTML("<div class='scroll-panel'> <pre class='xul-pre' " + style +">" + value + "</pre></div>");
+      replaceScrollbars();
     }
   }
   

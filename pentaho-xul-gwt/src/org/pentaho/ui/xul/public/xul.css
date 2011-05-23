@@ -252,7 +252,6 @@ legend {
 
 .xul-pre {
   font-family: "Lucida Console", Monaco, monospace;
-  overflow: scroll;
   background: white;
   height: 100%;
   width: 100%;
