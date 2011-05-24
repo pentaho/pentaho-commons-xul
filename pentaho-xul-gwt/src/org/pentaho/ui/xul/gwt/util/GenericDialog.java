@@ -94,6 +94,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     
     
     p = this.getButtonPanel();
+    p.setWidth("100%");
     HorizontalPanel buttonPanelWrapper = new HorizontalPanel();
     buttonPanelWrapper.setStyleName("button-panel");//$NON-NLS-1$
     buttonPanelWrapper.add(p);
