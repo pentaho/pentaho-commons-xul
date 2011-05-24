@@ -89,6 +89,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private boolean showAllEditControls = true;
 
+  private boolean dropIconsVisible = true;
+
   @Bindable
   public boolean isVisible() {
     return visible;
@@ -163,6 +165,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       this.setShowalleditcontrols(srcEle.getAttribute("pen:showalleditcontrols").equals("true"));
     }
     this.setEditable("true".equals(srcEle.getAttribute("editable")));
+
+    if(StringUtils.isEmpty(srcEle.getAttribute("pen:dropiconsvisible")) == false){
+      this.setDropIconsVisible(srcEle.getAttribute("pen:dropiconsvisible").equals("true"));
+    }
+
     this.domContainer = container;
   }
   private List<TreeItemDropController> dropHandlers = new ArrayList<TreeItemDropController>();
@@ -377,7 +384,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     if(item == null || item.getRow() == null || item.getRow().getChildNodes().size() == 0){
       return node;
     }
-    final TreeItemWidget tWidget = new TreeItemWidget(item);
+    TreeItemWidget tempWidget = new TreeItemWidget(item);
+    tempWidget.setDropIconsVisible(isDropIconsVisible());
+    final TreeItemWidget tWidget = tempWidget;
+
 
     PropertyChangeListener listener = new PropertyChangeListener(){
       public void propertyChange(PropertyChangeEvent evt) {
@@ -1925,5 +1935,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       getElement().getStyle().setProperty("top", scrollTop+"px");
       getElement().getStyle().setProperty("left", (scrollLeft -4)+"px");
     }
+  }
+
+  public boolean isDropIconsVisible() {
+    return dropIconsVisible;
+  }
+
+  public void setDropIconsVisible(boolean dropIconsVisible) {
+    this.dropIconsVisible = dropIconsVisible;
   }
 }

@@ -13,13 +13,18 @@ import org.pentaho.ui.xul.gwt.tags.GwtTree;
 /**
  * User: nbaker
  * Date: Jul 13, 2010
+ *
  */
 public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Draggable {
+  private static final String DROP_INVALID_PNG = "drop_invalid.png";
+  private static final String DROP_VALID_PNG = "drop_valid.png";
+  private static final String EMPTY_PNG = "empty.png";
+  
   Label label = new Label();
   String text;
   private XulTreeItem tItem;
   private Image dragIndicator;
-
+  private boolean dropIconsVisible = true;
 
   public TreeItemWidget(){
     setWidth("100%");
@@ -47,6 +52,13 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
     this.setWidget(0,0,img);
   }
 
+  public boolean isDropIconsVisible() {
+    return dropIconsVisible;
+  }
+
+  public void setDropIconsVisible(boolean dropIconsVisible) {
+    this.dropIconsVisible = dropIconsVisible;
+  }
 
   /**
    * DND required methods below
@@ -77,17 +89,28 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
 
 
   private void makeDraggable(){
-    dragIndicator = new Image(GWT.getModuleBaseURL()+"drop_invalid.png");
+    dragIndicator = new Image(getDropIcon(false));
     setWidget(0, 0, dragIndicator);
 
     this.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
     addStyleDependentName("proxy");
   }
 
+  private String getDropIcon(boolean valid) {
+    if(valid && dropIconsVisible){
+      return GWT.getModuleBaseURL()+ DROP_VALID_PNG;
+    } else if (!valid && dropIconsVisible) {
+      return GWT.getModuleBaseURL()+ DROP_INVALID_PNG;
+    } else {
+      return GWT.getModuleBaseURL()+ EMPTY_PNG;
+    }
+  }
+
   public Widget makeProxy(Widget ele) {
     TreeItemWidget item = new TreeItemWidget();
     item.setLabel(getLabel());
     item.setWidth("20px");
+    item.setDropIconsVisible(this.dropIconsVisible);
     item.makeDraggable();
     return item;
   }
@@ -107,11 +130,10 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
   public void setDropValid(boolean valid){
     if(valid){
       addStyleDependentName("proxy-valid");
-      dragIndicator.setUrl(GWT.getModuleBaseURL()+"drop_valid.png");
     } else {
       removeStyleDependentName("proxy-valid");
-      dragIndicator.setUrl(GWT.getModuleBaseURL()+"drop_invalid.png");
     }
+    dragIndicator.setUrl(getDropIcon(valid));
   }
 
   public void highLightDrop(boolean highlight) {
