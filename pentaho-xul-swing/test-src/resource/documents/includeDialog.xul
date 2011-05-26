@@ -18,7 +18,7 @@
   height="250"
   buttonalign="end"
   title="Test Dialog"
-  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns="http://www.pentaho.org/there.is.only.xul"
   xmlns:html="http://www.w3.org/1999/xhtml"  onload="innerHandler.printLoadMessage('child')">
   
   <script src="org.pentaho.ui.xul.samples.DialogHandler" id="innerHandler"/>

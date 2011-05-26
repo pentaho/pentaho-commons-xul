@@ -19,14 +19,14 @@
   -->
 
 <window
-        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns="http://www.pentaho.org/there.is.only.xul"
         xmlns:pen="http://www.pentaho.org/2008/xul" height="450" width="600"
 
         title="Contact Manager"
         onload="controller.init()"
         id="contactWindow">
 
-    <dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    <dialog xmlns="http://www.pentaho.org/there.is.only.xul"
             xmlns:pen="http://www.pentaho.org/2008/xul"
             id="contact_dialog"
             title="Add Contact"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <window width="400" height="275" title="Edit Filter"
-  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="controller.onLoad()">
+  xmlns="http://www.pentaho.org/there.is.only.xul" onload="controller.onLoad()">
   <!-- button label="show filter dialog" onclick="editFilterController.showFilterDialog2()"/ -->
   <hbox id="editPovContainerPanel">
     <vbox>

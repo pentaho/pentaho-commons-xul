@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window   id="label-test" title="Testing Nick's Sample"
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	xmlns="http://www.pentaho.org/there.is.only.xul">
 
   <checkbox id="checkbox" label="test" command="foo.test()" checked="true"/>
   <checkbox id="checkbox2" label="test" checked="true"/>

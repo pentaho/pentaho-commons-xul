@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <window id="general-window" title="Grids" orient="vertical" height="500" width="700"
-  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  xmlns="http://www.pentaho.org/there.is.only.xul">
   <tree id="tree2" flex="1" hidecolumnpicker="true">
     <treecols>
       <treecol id="sex2" flex="1" label="Cats" primary="true" />

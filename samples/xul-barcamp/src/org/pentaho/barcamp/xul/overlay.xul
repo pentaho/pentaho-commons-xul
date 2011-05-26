@@ -19,7 +19,7 @@
   -->
 
 <overlay
-        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns="http://www.pentaho.org/there.is.only.xul"
         xmlns:pen="http://www.pentaho.org/2008/xul">
 
     <window id="contactWindow" title="I Like This Title Better!">

@@ -19,7 +19,7 @@
   ~ Copyright 2009 Pentaho Corporation.  All rights reserved.
   -->
 
-<dialog xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+<dialog xmlns="http://www.pentaho.org/there.is.only.xul"
         xmlns:pen="http://www.pentaho.org/2008/xul"
         id="contact_dialog"
         title="Add Contact"

@@ -2,7 +2,7 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <window id="fragment"	title="Testing groupboxes for SWT, Swing" orient="vertical" height="500" width="700"
 
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="dataHandler.loadConnectionData()">
+	xmlns="http://www.pentaho.org/there.is.only.xul" onload="dataHandler.loadConnectionData()">
     <vbox>
       <groupbox id="firstGroupbox">
         <caption label="should be removed"/>

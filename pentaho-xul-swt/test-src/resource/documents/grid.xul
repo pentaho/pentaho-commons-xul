@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <window id="general-window" title="Grids" orient="vertical" height="500"
 	width="700"
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	xmlns="http://www.pentaho.org/there.is.only.xul">
 	<grid flex="1">
 		<columns>
 			<column  flex="1"/>

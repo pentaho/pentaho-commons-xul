@@ -2,7 +2,7 @@
 <?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
 <window id="label-test" title="Testing labels and layout for SWT, Swing"
 	orient="vertical"
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns="http://www.pentaho.org/there.is.only.xul"
 	 xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650" onload="handler.setup()">
 
 	<script src="org.pentaho.ui.xul.samples.TableEventHandler" id="handler"/>

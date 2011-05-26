@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <overlay 
-  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  xmlns="http://www.pentaho.org/there.is.only.xul">
   <groupbox id="firstGroupbox">
     <label id="newLabel" value="label 1"/>
     <label value="label 2"/>

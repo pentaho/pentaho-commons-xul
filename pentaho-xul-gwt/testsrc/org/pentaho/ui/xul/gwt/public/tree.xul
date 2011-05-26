@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <window id="general-window" title="Grids" orient="vertical" height="500" width="700" onload="handler.init()"
-        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" xmlns:pen="http://www.pentaho.org/2008/xul">
+        xmlns="http://www.pentaho.org/there.is.only.xul" xmlns:pen="http://www.pentaho.org/2008/xul">
 
     <hbox flex="1">
         <listbox id="list" flex="1" seltype="multi"

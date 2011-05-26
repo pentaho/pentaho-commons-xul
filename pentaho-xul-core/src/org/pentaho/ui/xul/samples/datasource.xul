@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <window id="general-datasource-window"
 	title="Testing groupboxes for SWT, Swing" orient="vertical"
-	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	xmlns="http://www.pentaho.org/there.is.only.xul"
 	width="600" height="450" onload="dataHandler.onLoad()">
 	
 	<script id="dataHandler" src="org.pentaho.ui.xul.samples.DatasourceHandler" />
