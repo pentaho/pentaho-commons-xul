@@ -14,13 +14,22 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.TextType;
 
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.Style.BorderStyle;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.TextBoxBase;
@@ -89,7 +98,25 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   public String getValue(){
     return value;
   }
-
+  
+  private FlowPanel scrollPanel = new FlowPanel() {
+  { 
+ 	  setStylePrimaryName("scroll-panel");
+	  this.sinkEvents(Event.ONMOUSEUP);
+  }
+	  @Override
+	  public void onBrowserEvent(Event event) {
+		  if(multiline) {
+			  if(getChildren().size() > 0) {
+				  Object child = getChildren().get(0);
+				  if(child instanceof TextArea) {
+					  ((TextArea) child).setFocus(true);
+				  }
+			  }
+		  }
+	  }
+  };
+  
   @Bindable
   public void setValue(String text){
       String prevVal = this.value;
@@ -98,12 +125,25 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
         textBox.setText(text);
       }
       this.firePropertyChange("value", prevVal, text);
+      
+      if(StringUtils.isEmpty(text) && multiline) {
+    	  reinitializeMultilineTextArea();
+      }
+      
+  }
+  
+  private void reinitializeMultilineTextArea() {
+	  if(textBox instanceof TextArea) {
+		  rows = 2;
+		  ((TextArea)textBox).setVisibleLines(rows++);
+	  }
   }
   
   // TODO: this double initialization is not good. Any values previously set will be lost in a second layout
   // move to local variables if this late binding is really needed and take advantage of the new onDomReady event 
   // to late bind instead of using layout.
   public void layout(){
+	Object managedObject = null;
     String typeString = this.getAttributeValue("type");
     if(typeString != null && typeString.length() > 0) {
       setType(typeString);
@@ -111,35 +151,72 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     switch(this.type) {
       case PASSWORD:
           textBox = new PasswordTextBox();
+          managedObject = textBox;
+          if(this.getHeight() > 0){
+              textBox.setHeight(this.getHeight()+"px");
+          }
         break;        
       case NUMERIC:
+          if(this.getHeight() > 0){
+              textBox.setHeight(this.getHeight()+"px");
+          }
       default: //regular text  
         if (multiline) {
-          textBox = new TextArea();
-          
+          managedObject = createStyledMultilineTextBox();
           if(cols != null && cols > -1){
-            ((TextArea)textBox).setCharacterWidth(cols);
-            ((TextArea)textBox).setVisibleLines(rows);
+              //((TextArea)textBox).setCharacterWidth(cols);
+              //((TextArea)textBox).setVisibleLines(rows);
           }
-          
         } else {
           //managedObject = textBox = new TextBox();
-          // managedObject = textBox;
+          managedObject = textBox;
+          if(this.getHeight() > 0){
+              textBox.setHeight(this.getHeight()+"px");
+          }
         }
         break;
     }
-    setManagedObject(textBox);
+    setManagedObject(managedObject);
+    
     if(this.getWidth() > 0){
       textBox.setWidth(this.getWidth()+"px");
     } else {
       textBox.setWidth("100%");
     }
-    if(this.getHeight() > 0){
-      textBox.setHeight(this.getHeight()+"px");
-    }
     textBox.setText(getValue());
     textBox.setEnabled(! this.isDisabled() );
     setupListeners();
+  }
+  
+  private SimplePanel createStyledMultilineTextBox() {
+	  
+	  /*
+	   * This method places the TextArea inside an styled ScrollPanel.
+	   * The TextArea is initially set to 2 rows in height and then increases its size
+	   * on each Enter key stroke to avoid displaying its native scrollbars and forcing
+	   * the styled ScrollPanel to show its instead.
+	   * */
+	  
+	  rows = 2;
+	  
+	  textBox = new TextArea();
+	  //textBox.getElement().getStyle().setBorderStyle(BorderStyle.HIDDEN);
+      textBox.addKeyPressHandler(new KeyPressHandler() {
+  		public void onKeyPress(KeyPressEvent event) {
+  			if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+  				((TextArea)textBox).setVisibleLines(rows++);
+  			}
+  		}
+  	  });
+
+      scrollPanel.clear();
+      scrollPanel.add(textBox);
+	  
+      SimplePanel simplePanel = new SimplePanel();
+      simplePanel.setStyleName("multiline-simple-panel");
+      simplePanel.setHeight(this.getHeight()+"px");
+      simplePanel.add(scrollPanel);
+      return simplePanel;
   }
   
   @SuppressWarnings("deprecation")

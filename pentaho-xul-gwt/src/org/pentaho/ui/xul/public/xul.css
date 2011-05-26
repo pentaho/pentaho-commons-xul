@@ -172,6 +172,19 @@ legend {
   width:100%;
 }
 
+.multiline-simple-panel {
+ background-color: white;
+ border:solid;
+ border-width:1px;
+}
+
+.multiline-simple-panel textarea {
+ overflow : hidden;
+ border : none;
+ outline: none;
+ resize : none;
+}
+
 .gwt-Tree > DIV > TABLE{
   width: 100%;
 }
