@@ -45,6 +45,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   protected boolean multiline = false;
   private Integer rows;
   private Integer cols = -1;
+  private Integer lineCharacterCount = 0;
   private String value;
   
   public static void register() {
@@ -192,19 +193,26 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 	  
 	  /*
 	   * This method places the TextArea inside an styled ScrollPanel.
-	   * The TextArea is initially set to 2 rows in height and then increases its size
+	   * The TextArea is initially set to 2 rows in height and then increases its size vertically
 	   * on each Enter key stroke to avoid displaying its native scrollbars and forcing
 	   * the styled ScrollPanel to show its instead.
+	   * 
+	   * Also the size of the TextArea gets increased vertically when the number of characters in a row of text
+	   * is equal to the predefined number of columns in the TextArea.	   * 
 	   * */
 	  
 	  rows = 2;
 	  
 	  textBox = new TextArea();
-	  //textBox.getElement().getStyle().setBorderStyle(BorderStyle.HIDDEN);
       textBox.addKeyPressHandler(new KeyPressHandler() {
   		public void onKeyPress(KeyPressEvent event) {
   			if (event.getCharCode() == KeyCodes.KEY_ENTER) {
   				((TextArea)textBox).setVisibleLines(rows++);
+  			}
+  			lineCharacterCount ++;
+  			if(lineCharacterCount == cols) {
+  				((TextArea)textBox).setVisibleLines(rows++);
+  				lineCharacterCount = 0;
   			}
   		}
   	  });
