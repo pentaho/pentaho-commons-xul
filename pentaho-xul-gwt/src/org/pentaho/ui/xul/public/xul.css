@@ -80,7 +80,7 @@ html, body{
 
 .xul-label{
   white-space: nowrap;
-  font-size: .85em;
+  font-size: .8em;
 }
 
 .hyperlink{
@@ -165,13 +165,6 @@ legend {
   padding-top:4px;
 }
 
-.scroll-panel{
-  position:relative;
-  overflow:auto;
-  height:100%;
-  width:100%;
-}
-
 .multiline-simple-panel {
  background-color: white;
  border:solid;
@@ -211,7 +204,7 @@ legend {
   font-size: .85em;
 }
 .gwt-Label{
-  font-size: .85em;
+  font-size: .8em;
 }
 
 .expand-panel {
