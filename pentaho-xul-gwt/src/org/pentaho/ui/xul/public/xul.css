@@ -282,3 +282,18 @@ legend {
 .xul-editPanel-content{
 
 }
+
+.tree-scroll-panel{
+  position:relative;
+  overflow:auto;
+  height:100%;
+  width:100%;
+}
+
+.label-scroll-panel{
+  position:relative;
+  overflow:auto;
+  height:100%;
+  width:100%;
+}
+

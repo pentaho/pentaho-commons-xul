@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulDeck;
@@ -90,13 +91,12 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     int previousVal = selectedIndex;
     if (index < container.getWidgetCount() && index >= 0) {
       container.showWidget(index);
-
-      Widget card = container.getWidget(index);
       notifyOnShow(this);
     }
     
     selectedIndex = index;
     this.firePropertyChange("selectedIndex", previousVal, index);
+    reinitializeScrollbars(this.container.getWidget(index).getElement());
   }
   
   /**

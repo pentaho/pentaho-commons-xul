@@ -369,7 +369,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     for(XulButton btn : dialogButtons){
       this.addChild(btn);
     }
-    replaceScrollbars();
+    reinitializeScrollbars(this.dialog.getElement());
   }
 
   public String getOnclose() {

@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTabpanel;
@@ -140,6 +141,8 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
             try {
               final String onClickMethod = tabs.getTabByIndex(event.getSelectedItem()).getOnclick();
               GwtTabbox.this.getXulDomContainer().invoke(onClickMethod, new Object[] {});
+              reinitializeScrollbars(tabPanel.getElement());
+              
             } catch (XulException e) {
               e.printStackTrace();
             }

@@ -7,6 +7,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
@@ -693,8 +694,11 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     return dropVetoMethod;
   }
 
-  protected void replaceScrollbars(){
-    ElementUtils.replaceScrollbars("scroll-panel");
-    ElementUtils.replaceScrollbars("dataWrapper");
+  protected void replaceScrollbars(String scrollClass){
+    ElementUtils.replaceScrollbars(scrollClass);
+  }
+
+  protected void reinitializeScrollbars(Element parent){
+    ElementUtils.reinitializeScrollbars(parent, new String[]{"tree-scroll-panel", "label-scroll-panel", "DataWrapper", "listbox-scroll-panel"});
   }
 }
