@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 
 
@@ -79,6 +78,10 @@ public abstract class BindingConvertor<V, R> {
    */
   public static BindingConvertor<Object, Boolean> object2Boolean() {
     return object2Boolean;
+  }
+
+  public static BindingConvertor<String, String> truncatedString(int length) {
+    return new TruncatedStringBindingConvertor(length);
   }
 
   static class Collection2ObjectArray extends BindingConvertor<Collection, Object[]>{
@@ -266,4 +269,23 @@ public abstract class BindingConvertor<V, R> {
     }
 
   }
+
+  static class TruncatedStringBindingConvertor extends BindingConvertor<String, String> {
+    private int length = 100;
+    public TruncatedStringBindingConvertor(int length) {
+      this.length = length;
+    }
+    public String sourceToTarget(String value) {
+      if (value.length() > length) {
+        return value.substring(0, length) + "...";
+      } else {
+        return value;
+      }
+    }
+
+    public String targetToSource(String value) {
+      return value;
+    }
+  }
+
 }

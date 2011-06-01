@@ -1,13 +1,12 @@
 package org.pentaho.ui.xul.binding;
 
-import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 
 public class BindingConvertorTest {
@@ -177,5 +176,13 @@ public class BindingConvertorTest {
     
     assertEquals(Integer.valueOf(0), bc.targetToSource(null));    
   }
-  
+
+  @Test
+  public void testTruncatedString() throws Exception {
+    BindingConvertor<String, String> bc = BindingConvertor.truncatedString(50);
+    String longString = "the quick brown fox jumped over the lazy dog. the quick brown fox jumped over the lazy dog... again.";
+    // account 3 characters for the ellipses (...)
+    assertEquals(53, bc.sourceToTarget(longString).length());
+  }
+
 }

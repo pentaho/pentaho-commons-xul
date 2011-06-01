@@ -1,25 +1,11 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
-import org.pentaho.gwt.widgets.client.dialogs.MessageDialogBox;
+import com.google.gwt.user.client.ui.*;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.util.GenericDialog;
-import org.pentaho.ui.xul.util.XulDialogCallback;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ClickListener;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.Button;
 
 public class GwtMessageBox extends GenericDialog implements XulMessageBox {
 
@@ -80,7 +66,13 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
   public Panel getDialogContents() {
 
     VerticalPanel vp = new VerticalPanel();
-    Label lbl = new Label(message);
+    String[] lines = message.split("\n", -1);
+    StringBuffer sb = new StringBuffer();
+    for (String line: lines) {
+      sb.append(line + "<br/>");
+    }
+    HTML lbl = new HTML(sb.toString());
+    lbl.addStyleName("gwt-Label");
     vp.add(lbl);
     vp.setCellHorizontalAlignment(lbl, vp.ALIGN_CENTER);
     vp.setCellVerticalAlignment(lbl, vp.ALIGN_MIDDLE);
