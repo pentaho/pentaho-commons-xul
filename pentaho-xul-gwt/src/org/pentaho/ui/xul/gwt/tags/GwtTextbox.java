@@ -3,30 +3,22 @@ package org.pentaho.ui.xul.gwt.tags;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
-import org.pentaho.ui.xul.gwt.GwtDomElement;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.TextType;
 
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.BorderStyle;
-import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.KeyboardListener;
 import com.google.gwt.user.client.ui.PasswordTextBox;
@@ -46,7 +38,6 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   protected boolean multiline = false;
   private Integer rows;
   private Integer cols = -1;
-  private Integer lineCharacterCount = 0;
   private String value;
   
   public static void register() {
@@ -69,8 +60,6 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     // positioned div's, such as when they're in dialogs. The workaround is to wrap the <input> in a div
     // with overflow: auto;
     setManagedObject(textBox);
-      
-    // textBox.setPreferredSize(new Dimension(150,18));
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -129,18 +118,18 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       this.firePropertyChange("value", prevVal, text);
       
       if(StringUtils.isEmpty(text) && multiline) {
-    	  reinitializeMultilineTextArea();
-      }
+    	  initializeMultilineTextArea();
+      }    
       if(multiline){
           ElementUtils.replaceScrollbars(scrollPanel.getElement());
       }
-      
   }
   
-  private void reinitializeMultilineTextArea() {
+  private void initializeMultilineTextArea() {
 	  if(textBox instanceof TextArea) {
-		  rows = 2;
-		  ((TextArea)textBox).setVisibleLines(rows++);
+		  textBox.getElement().getStyle().setHeight(1, Unit.PX);
+		  int scrollHeight = 25 + textBox.getElement().getScrollHeight();
+		  textBox.getElement().getStyle().setHeight(scrollHeight, Unit.PX);
 	  }
   }
   
@@ -169,12 +158,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
         if (multiline) {
           managedObject = createStyledMultilineTextBox();
           ElementUtils.replaceScrollbars(scrollPanel.getElement());
-          if(cols != null && cols > -1){
-              //((TextArea)textBox).setCharacterWidth(cols);
-              //((TextArea)textBox).setVisibleLines(rows);
-          }
         } else {
-          //managedObject = textBox = new TextBox();
           managedObject = textBox;
           if(this.getHeight() > 0){
               textBox.setHeight(this.getHeight()+"px");
@@ -195,30 +179,10 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   }
   
   private SimplePanel createStyledMultilineTextBox() {
-	  
-	  /*
-	   * This method places the TextArea inside an styled ScrollPanel.
-	   * The TextArea is initially set to 2 rows in height and then increases its size vertically
-	   * on each Enter key stroke to avoid displaying its native scrollbars and forcing
-	   * the styled ScrollPanel to show its instead.
-	   * 
-	   * Also the size of the TextArea gets increased vertically when the number of characters in a row of text
-	   * is equal to the predefined number of columns in the TextArea.	   * 
-	   * */
-	  
-	  rows = 2;
-	  
 	  textBox = new TextArea();
-      textBox.addKeyPressHandler(new KeyPressHandler() {
-  		public void onKeyPress(KeyPressEvent event) {
-  			if (event.getCharCode() == KeyCodes.KEY_ENTER) {
-  				((TextArea)textBox).setVisibleLines(rows++);
-  			}
-  			lineCharacterCount ++;
-  			if(lineCharacterCount == cols) {
-  				((TextArea)textBox).setVisibleLines(rows++);
-  				lineCharacterCount = 0;
-  			}
+      textBox.addKeyUpHandler(new KeyUpHandler() {
+  		public void onKeyUp(KeyUpEvent event) {
+  			initializeMultilineTextArea();
   		}
   	  });
 
@@ -398,7 +362,8 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     }
     if(StringUtils.isEmpty(component.getAttributeValue("disabled")) == false){
       setDisabled("true".equals(component.getAttributeValue("disabled")));
-    }
+    }         
+
     layout();
     ((AbstractGwtXulComponent) this.getParent()).layout();
   }
