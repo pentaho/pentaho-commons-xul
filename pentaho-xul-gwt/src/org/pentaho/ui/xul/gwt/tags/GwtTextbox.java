@@ -102,7 +102,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   
   private FlowPanel scrollPanel = new FlowPanel() {
   { 
- 	  setStylePrimaryName("scroll-panel");
+ 	  setStylePrimaryName("textbox-scroll-panel");
 	  this.sinkEvents(Event.ONMOUSEUP);
   }
 	  @Override
