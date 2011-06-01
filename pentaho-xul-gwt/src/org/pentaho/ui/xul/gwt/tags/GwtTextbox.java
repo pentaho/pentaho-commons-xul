@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
@@ -130,6 +131,9 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       if(StringUtils.isEmpty(text) && multiline) {
     	  reinitializeMultilineTextArea();
       }
+      if(multiline){
+          ElementUtils.replaceScrollbars(scrollPanel.getElement());
+      }
       
   }
   
@@ -164,6 +168,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       default: //regular text  
         if (multiline) {
           managedObject = createStyledMultilineTextBox();
+          ElementUtils.replaceScrollbars(scrollPanel.getElement());
           if(cols != null && cols > -1){
               //((TextArea)textBox).setCharacterWidth(cols);
               //((TextArea)textBox).setVisibleLines(rows);
