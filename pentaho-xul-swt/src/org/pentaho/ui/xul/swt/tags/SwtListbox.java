@@ -243,6 +243,11 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
       listBox.setSelection(sel);
       suppressEvents = false;
       
+      // SWT doesn't seem to fire this event when the selection
+      // is made via code, only with a mouse or keyboard action.
+
+      listBox.notifyListeners(SWT.Selection, new Event());
+
     }
   }
 
