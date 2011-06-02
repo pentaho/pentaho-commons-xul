@@ -699,6 +699,6 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   protected void reinitializeScrollbars(Element parent){
-    ElementUtils.reinitializeScrollbars(parent, new String[]{"tree-scroll-panel", "label-scroll-panel", "DataWrapper", "listbox-scroll-panel", "textbox-scroll-panel"});
+    ElementUtils.reinitializeScrollbars(parent, new String[]{"tree-scroll-panel", "label-scroll-panel", "listbox-scroll-panel", "textbox-scroll-panel", "table-scroll-panel"});
   }
 }
