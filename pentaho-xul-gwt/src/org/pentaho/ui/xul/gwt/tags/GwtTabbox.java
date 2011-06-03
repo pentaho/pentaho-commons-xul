@@ -1,6 +1,12 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.ui.TabPanel;
+import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTabpanel;
@@ -11,18 +17,9 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
-import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
-import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.gwt.widgets.GwtTabWidget;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Orient;
-
-import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
-import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.ui.TabPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
 
@@ -90,6 +87,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
       tabPanel.selectTab(index);
       firePropertyChange("selectedIndex", previousValue, index);
     }
+    reinitializeScrollbars(tabPanel.getElement());
   }
 
   public void layout() {
@@ -135,14 +133,19 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     });
     
     tabPanel.addSelectionHandler(new SelectionHandler<Integer>(){
-
-      public void onSelection(SelectionEvent<Integer> event) {
+      public void onSelection(final SelectionEvent<Integer> event) {
           if(event != null && event.getSelectedItem() >= 0) {
             try {
               final String onClickMethod = tabs.getTabByIndex(event.getSelectedItem()).getOnclick();
-              GwtTabbox.this.getXulDomContainer().invoke(onClickMethod, new Object[] {});
-              reinitializeScrollbars(tabPanel.getElement());
-              
+              if (onClickMethod != null) {
+                GwtTabbox.this.getXulDomContainer().invoke(onClickMethod, new Object[] {});
+              }
+              Timer t = new Timer() {
+                public void run() {
+                  reinitializeScrollbars(tabPanel.getElement());
+                }
+              };
+              t.schedule(300);
             } catch (XulException e) {
               e.printStackTrace();
             }
