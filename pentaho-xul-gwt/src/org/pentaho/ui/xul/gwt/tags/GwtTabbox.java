@@ -140,12 +140,9 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
               if (onClickMethod != null) {
                 GwtTabbox.this.getXulDomContainer().invoke(onClickMethod, new Object[] {});
               }
-              Timer t = new Timer() {
-                public void run() {
-                  reinitializeScrollbars(tabPanel.getElement());
-                }
-              };
-              t.schedule(300);
+              
+              reinitializeScrollbars(tabPanel.getWidget(event.getSelectedItem()).getElement());
+
             } catch (XulException e) {
               e.printStackTrace();
             }

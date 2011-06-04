@@ -1394,7 +1394,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   private void reinitializeScrollbars(boolean checkSuppress) {
-    if(!checkSuppress || !this.suppressExpansionScrollEvents){
+    if(this.isHierarchical() && (!checkSuppress || !this.suppressExpansionScrollEvents)){
       ElementUtils.replaceScrollbars(scrollPanel.getElement());
     }
   }
