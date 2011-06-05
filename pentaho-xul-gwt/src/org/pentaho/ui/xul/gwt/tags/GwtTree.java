@@ -709,12 +709,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       totalFlex += colCollection.get(i).getFlex();
     }
 
+    boolean allFlexing = true;
+    int totalWidth = 0;
     for (int i = 0; i < cols.length; i++) {
       cols[i] = ((XulTreeCol) colCollection.get(i)).getLabel();
       if(totalFlex > 0 && getWidth() > 0){
     	  widths[i] = (int) (getWidth() * ((double) colCollection.get(i).getFlex() / totalFlex));
+        totalWidth += widths[i];
       } else if(getColumns().getColumn(i).getWidth() > 0){
+        allFlexing = false;
     	  widths[i] = getColumns().getColumn(i).getWidth();
+        totalWidth += widths[i];
       }
     }
 
@@ -731,6 +736,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 	} else {
 		table.setWidth("100%");
 	}
+    if(allFlexing){
+      table.fillWidth();
+    }
 
     table.addTableSelectionListener(new TableSelectionListener() {
       public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
@@ -1394,7 +1402,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   private void reinitializeScrollbars(boolean checkSuppress) {
-    if(!checkSuppress || !this.suppressExpansionScrollEvents){
+    if(this.isHierarchical() && (!checkSuppress || !this.suppressExpansionScrollEvents)){
       ElementUtils.replaceScrollbars(scrollPanel.getElement());
     }
   }
