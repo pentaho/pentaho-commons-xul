@@ -228,7 +228,8 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
     changeSupport.firePropertyChange("selectedIndex", null
         , combobox.getSelectionIndex());
 
-    if(SwtMenuList.this.command != null){
+    if(SwtMenuList.this.command != null
+        && getDocument() != null){    //make sure we're on the dom tree (initialized)
       invoke(SwtMenuList.this.command, new Object[] {});
     }
   }

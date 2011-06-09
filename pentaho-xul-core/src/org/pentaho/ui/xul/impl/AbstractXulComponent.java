@@ -125,6 +125,10 @@ public abstract class AbstractXulComponent implements XulComponent {
 
   protected void invoke(String method, Object[] args) {
     Document doc = getDocument();
+    if(doc == null){
+      logger.error("Error invoking event: document is null");
+      return;
+    }
     XulRoot window = (XulRoot) doc.getRootElement();
     XulDomContainer con = window.getXulDomContainer();
 
