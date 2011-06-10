@@ -458,6 +458,12 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     listBox.setWidth(width + "px");
   }
 
+  @Override
+  public void setHeight(int height) {
+    super.setHeight(height);
+    listBox.setHeight(height + "px");
+  }
+
   public String getCommand() {
     return command;
   }
