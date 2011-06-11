@@ -126,6 +126,7 @@ legend {
 .tree-item-custom-widget{
   border: 1px solid transparent;
   padding:0;
+  width: auto !important;
 }
 .tree-item-custom-widget-selected{
   background-color: #5ED95E;
