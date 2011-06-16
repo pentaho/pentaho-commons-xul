@@ -6,6 +6,7 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
 import com.google.gwt.event.logical.shared.OpenHandler;
 import com.google.gwt.user.client.ui.*;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulExpandPanel;
 import org.pentaho.ui.xul.dom.Element;
@@ -25,6 +26,8 @@ public class GwtExpandPanel extends AbstractGwtXulContainer implements XulExpand
   private Image expandedImage;
   private Image collapsedImage;
   private ExpandPanelHeader headerPanel;
+
+  private static String[] SCROLL_CLASSES = new String[]{"label-scroll-panel"};
 
   public GwtExpandPanel() {
     super(ELEMENT_NAME);
@@ -47,6 +50,7 @@ public class GwtExpandPanel extends AbstractGwtXulContainer implements XulExpand
     disclosurePanel.addOpenHandler(new OpenHandler<DisclosurePanel>(){
       public void onOpen(OpenEvent<DisclosurePanel> disclosurePanelOpenEvent) {
         disclosurePanel.setHeader(new ExpandPanelHeader(expandedImage, headerLabel));
+        ElementUtils.reinitializeScrollbars(disclosurePanel.getElement(), SCROLL_CLASSES);
       }
     });
 
@@ -79,6 +83,10 @@ public class GwtExpandPanel extends AbstractGwtXulContainer implements XulExpand
   public void setExpanded(boolean isExpanded) {
     expanded = isExpanded;
     disclosurePanel.setOpen(expanded);
+    if (expanded) {
+      ElementUtils.reinitializeScrollbars(disclosurePanel.getElement(), SCROLL_CLASSES);
+    }
+
   }
 
   @Bindable
