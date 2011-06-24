@@ -113,7 +113,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   public void setLabel(String label) {
     this.setAttribute("label", label);
     if (button != null) {
-      button.setText(label);
+      button.setHTML("<span>"+label+"</span>");
     }
   }
 
