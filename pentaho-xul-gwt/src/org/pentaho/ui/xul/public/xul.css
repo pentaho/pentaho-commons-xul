@@ -131,6 +131,10 @@ legend {
 .tree-item-custom-widget-selected{
   background-color: #5ED95E;
 }
+
+.tree-item-custom-widget-selected.dragdrop-dragging{
+  background-color: #CBEFA3;
+}
 .tree-item-custom-widget-proxy{
   opacity: 0.85;
   filter: alpha(opacity=85);
@@ -141,9 +145,9 @@ legend {
 }
 
 .tree-item-custom-widget-drop-hover{
-  border: 1px solid #2096FC;
+  border: 1px solid #347C2C;
 
-  background-color: #8CD2FF;
+  background-color: #5ED95E;
 }
 .tree-drop-indicator{
   height: 1px;
