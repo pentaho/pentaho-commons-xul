@@ -51,7 +51,7 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
 
   public GwtPromptBox() {
     super(ELEMENT_NAME);
-    textbox.setWidth("90%");
+    textbox.setWidth("100%");
     textbox.addKeyDownHandler(new KeyDownHandler(){
       public void onKeyDown(KeyDownEvent event) {
         final int keyCode = event.getNativeKeyCode();
@@ -124,9 +124,15 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
     Label lbl = new Label(getMessage());
     vp.add(lbl);
     vp.add(textbox);
-    vp.setCellHorizontalAlignment(textbox, vp.ALIGN_CENTER);
     vp.setCellVerticalAlignment(lbl, vp.ALIGN_BOTTOM);
-    return vp;
+    vp.setCellHorizontalAlignment(textbox, vp.ALIGN_LEFT);
+    vp.setWidth("95%");
+    
+    VerticalPanel vp2 = new VerticalPanel();
+    vp2.setWidth("100%");
+    vp2.add(vp);
+    vp2.setCellHorizontalAlignment(vp, vp.ALIGN_CENTER);
+    return vp2;
   }
 
   public void setAcceptLabel(String lbl){
