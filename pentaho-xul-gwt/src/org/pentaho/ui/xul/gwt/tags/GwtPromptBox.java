@@ -125,7 +125,7 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
     vp.add(lbl);
     vp.add(textbox);
     vp.setCellHorizontalAlignment(textbox, vp.ALIGN_CENTER);
-
+    vp.setCellVerticalAlignment(lbl, vp.ALIGN_BOTTOM);
     return vp;
   }
 
