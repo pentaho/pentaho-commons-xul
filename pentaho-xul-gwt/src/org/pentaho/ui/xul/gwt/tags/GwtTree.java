@@ -411,7 +411,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     tWidget.setLabel(item.getRow().getCell(0).getLabel());
     if(this.ondrop != null){
-      TreeItemDropController controller = new TreeItemDropController(item, tWidget);
+      TreeItemDropController controller = new TreeItemDropController(item, tWidget, this);
       XulDragController.getInstance().registerDropController(controller);
       this.dropHandlers.add(controller);
     }
@@ -1668,11 +1668,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     private TreeItemWidget item;
     private DropPosition curPos;
     private long lasPositionPoll = 0;
+    private GwtTree gwtTree;
 
-    public TreeItemDropController(XulTreeItem xulItem, TreeItemWidget item){
+    public TreeItemDropController(XulTreeItem xulItem, TreeItemWidget item, GwtTree gwtTree){
       super(item);
       this.xulItem = xulItem;
       this.item = item;
+      this.gwtTree = gwtTree;
     }
 
     @Override
@@ -1895,11 +1897,25 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
       ((Draggable) context.draggable).notifyDragFinished();
 
+      // Traverse from the current XulItem to all the way up to the root
+      // and set the expanded state to true. This will ensure that when a
+      // new item gets added to the tree, the tree expand automatically
+      if(xulItem instanceof XulComponent) {
+        XulComponent parent = xulItem;
+        while(parent != null && parent != gwtTree){
+          if(parent instanceof XulTreeItem){
+            ((XulTreeItem)parent).setExpanded(true);
+          }
+          parent = parent.getParent();
+        }
+      }
+
       if(curPos == DropPosition.MIDDLE){
         String property = ((XulTreeCol) GwtTree.this.getColumns().getChildNodes().get(0)).getChildrenbinding();
         GwtBindingMethod childrenMethod = GwtBindingContext.typeController.findGetMethod(xulItem.getBoundObject(), property);
         Collection children = null;
         try {
+
           if(childrenMethod != null){
             children = (Collection) childrenMethod.invoke(xulItem.getBoundObject(), new Object[] {});
           } else if(xulItem.getBoundObject() instanceof Collection ){
