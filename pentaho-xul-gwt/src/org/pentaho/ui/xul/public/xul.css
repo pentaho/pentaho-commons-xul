@@ -30,6 +30,10 @@ html, body{
 	padding-left:3px;
 }
 
+.promptBoxLabel{
+	padding-left: 5%;
+}
+
 .image-button-over{
 	cursor:pointer;
 }
