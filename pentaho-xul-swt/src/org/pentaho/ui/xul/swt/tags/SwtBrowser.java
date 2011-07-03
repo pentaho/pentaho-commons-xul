@@ -1,19 +1,16 @@
 package org.pentaho.ui.xul.swt.tags;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.browser.LocationEvent;
-import org.eclipse.swt.browser.LocationListener;
+import org.eclipse.swt.browser.*;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.widgets.*;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulBrowser;
@@ -155,6 +152,17 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
     
     
     browser = createBrowser(mainPanel);
+    hookupBrowserListeners(browser, false);
+
+    browser.addCloseWindowListener(new CloseWindowListener() {
+      public void close(WindowEvent event) {
+        Browser browser = (Browser)event.widget;
+        Shell shell = browser.getShell();
+        shell.close();
+      }
+    });
+
+
     browser.setUrl(src);
     
     data = new GridData();
@@ -175,7 +183,43 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
     setShowtoolbar(getShowtoolbar());
     mainPanel.layout(true);
   }
-  
+
+  private void hookupBrowserListeners(final Browser browser, final boolean visibilityListeners) {
+    browser.addOpenWindowListener(new OpenWindowListener() {
+      public void open(WindowEvent event) {
+        Shell shell = new Shell(browser.getShell());
+        shell.setText("");
+        shell.setLayout(new FillLayout());
+        Browser newBrowser = new Browser(shell, SWT.NONE);
+        hookupBrowserListeners(newBrowser, true);
+        event.browser = newBrowser;
+      }
+    });
+    if(!visibilityListeners){
+      return;
+    }
+    browser.addVisibilityWindowListener(new VisibilityWindowListener() {
+      public void hide(WindowEvent event) {
+        Browser b = (Browser) event.widget;
+        Shell shell = b.getShell();
+        shell.setVisible(false);
+      }
+
+      public void show(WindowEvent event) {
+        Browser b = (Browser) event.widget;
+        final Shell shell = b.getShell();
+        if (event.location != null) shell.setLocation(event.location);
+        if (event.size != null) {
+          Point size = event.size;
+          shell.setSize(shell.computeSize(size.x, size.y));
+        }
+        if(event.addressBar){ // for some reason we're getting double-events for browser window.open clicks. The second is the one we want and it has this property
+          shell.open();
+        }
+      }
+    });
+  }
+
   protected Browser createBrowser(Composite parent){
     return new Browser(parent, SWT.None);
   }
