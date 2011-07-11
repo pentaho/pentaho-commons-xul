@@ -133,7 +133,7 @@ legend {
   width: auto !important;
 }
 .tree-item-custom-widget-selected{
-  background-color: #5ED95E;
+  background-color: #dbdbdb;
 }
 
 .tree-item-custom-widget-selected.dragdrop-dragging{
