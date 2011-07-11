@@ -262,7 +262,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
       public void onTreeItemStateChanged(TreeItem item) {
         ((TreeItemWidget) item.getWidget()).getTreeItem().setExpanded(item.getState());
-        reinitializeScrollbars(true);
       }
 
     });
@@ -811,7 +810,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       populateTable();
     }
     this.suppressExpansionScrollEvents = false;
-    reinitializeScrollbars(false);
   }
 
   public void afterLayout() {
@@ -1398,14 +1396,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   public void setTreeItemExpanded(XulTreeItem item, boolean expanded) {
     ((TreeItem) item.getManagedObject()).setState(expanded);
-    reinitializeScrollbars(true);
   }
 
-  private void reinitializeScrollbars(boolean checkSuppress) {
-    if(this.isHierarchical() && (!checkSuppress || !this.suppressExpansionScrollEvents)){
-      ElementUtils.replaceScrollbars(scrollPanel.getElement());
-    }
-  }
 
   public void collapseAll() {
     if (this.isHierarchical()){
@@ -1416,7 +1408,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         expandChildren(item, false);
       }
       this.suppressExpansionScrollEvents = false;
-      reinitializeScrollbars(true);
     }
 
   }
@@ -1430,7 +1421,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         expandChildren(item, true);
       }
       this.suppressExpansionScrollEvents = false;
-      reinitializeScrollbars(true);
     }
   }
 
@@ -1454,7 +1444,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
     }
     this.suppressExpansionScrollEvents = false;
-    reinitializeScrollbars(true);
   }
 
   @Bindable

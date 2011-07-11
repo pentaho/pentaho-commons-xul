@@ -96,7 +96,6 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     
     selectedIndex = index;
     this.firePropertyChange("selectedIndex", previousVal, index);
-    reinitializeScrollbars(this.container.getWidget(index).getElement());
   }
   
   /**

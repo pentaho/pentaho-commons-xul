@@ -195,7 +195,6 @@ public class GwtWindow extends AbstractGwtXulContainer implements XulWindow {
 //    frame.setWidget(container);
     
     super.layout();
-    reinitializeScrollbars(container.getElement());
   }
 
   public void close() {

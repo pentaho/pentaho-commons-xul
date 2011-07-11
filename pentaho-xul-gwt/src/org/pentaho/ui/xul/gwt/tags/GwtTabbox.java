@@ -87,7 +87,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
       tabPanel.selectTab(index);
       firePropertyChange("selectedIndex", previousValue, index);
     }
-    reinitializeScrollbars(tabPanel.getElement());
   }
 
   public void layout() {
@@ -140,8 +139,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
               if (onClickMethod != null) {
                 GwtTabbox.this.getXulDomContainer().invoke(onClickMethod, new Object[] {});
               }
-              
-              reinitializeScrollbars(tabPanel.getWidget(event.getSelectedItem()).getElement());
 
             } catch (XulException e) {
               e.printStackTrace();

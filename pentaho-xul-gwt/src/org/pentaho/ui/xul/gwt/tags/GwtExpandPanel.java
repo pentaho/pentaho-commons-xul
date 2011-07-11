@@ -50,7 +50,6 @@ public class GwtExpandPanel extends AbstractGwtXulContainer implements XulExpand
     disclosurePanel.addOpenHandler(new OpenHandler<DisclosurePanel>(){
       public void onOpen(OpenEvent<DisclosurePanel> disclosurePanelOpenEvent) {
         disclosurePanel.setHeader(new ExpandPanelHeader(expandedImage, headerLabel));
-        ElementUtils.reinitializeScrollbars(disclosurePanel.getElement(), SCROLL_CLASSES);
       }
     });
 
@@ -83,9 +82,6 @@ public class GwtExpandPanel extends AbstractGwtXulContainer implements XulExpand
   public void setExpanded(boolean isExpanded) {
     expanded = isExpanded;
     disclosurePanel.setOpen(expanded);
-    if (expanded) {
-      ElementUtils.reinitializeScrollbars(disclosurePanel.getElement(), SCROLL_CLASSES);
-    }
 
   }
 

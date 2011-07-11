@@ -684,11 +684,4 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     return dropVetoMethod;
   }
 
-  protected void replaceScrollbars(String scrollClass){
-    ElementUtils.replaceScrollbars(scrollClass);
-  }
-
-  protected void reinitializeScrollbars(Element parent){
-    ElementUtils.reinitializeScrollbars(parent, new String[]{"tree-scroll-panel", "label-scroll-panel", "listbox-scroll-panel", "textbox-scroll-panel", "table-scroll-panel"});
-  }
 }
