@@ -119,6 +119,9 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
           
           if(cols != null && cols > -1){
             ((TextArea)textBox).setCharacterWidth(cols);
+
+          }
+          if(rows != null && rows > -1){
             ((TextArea)textBox).setVisibleLines(rows);
           }
           
