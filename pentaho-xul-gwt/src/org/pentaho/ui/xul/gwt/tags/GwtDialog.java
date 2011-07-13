@@ -369,6 +369,11 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     for(XulButton btn : dialogButtons){
       this.addChild(btn);
     }
+
+    // call into the method that sets the hover style on button elements for IE,
+    // since hover pseudo-classes don't work when not in quirksmode
+    ElementUtils.setupButtonHoverEffect();
+
   }
 
   public String getOnclose() {
