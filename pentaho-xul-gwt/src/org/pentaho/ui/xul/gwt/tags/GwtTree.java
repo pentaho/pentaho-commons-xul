@@ -350,11 +350,20 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     table.populateTable(currentData);
     int totalFlex = 0;
+    boolean allFlexing = true;
     for (int i = 0; i < colCount; i++) {
-      totalFlex += colCollection.get(i).getFlex();
+      int fx = colCollection.get(i).getFlex();
+      totalFlex += fx;
+      if(fx == 0){
+        allFlexing = false;
+      }
     }
     if(totalFlex > 0){
       table.fillWidth();
+    }
+    // If all flexing need to hide horizontal scrolling to fix an IE7 issue
+    if(allFlexing){
+      table.suppressHorizontalScrolling();
     }
     colCollection = new ArrayList<XulComponent>();
 
