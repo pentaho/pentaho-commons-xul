@@ -84,7 +84,7 @@ html, body{
 
 .xul-label{
   white-space: nowrap;
-  font-size: .8em;
+  font-size: .86em;
 }
 
 .hyperlink{
@@ -113,7 +113,7 @@ html, body{
 legend {
   padding: 0.2em 0.5em;
   color:black;
-  font-size:90%;
+  font-size:.86em;
 }
 
 .gwt-FileUpload {
@@ -213,7 +213,7 @@ legend {
   font-size: 1em;
 }
 .gwt-Label{
-  font-size: .8em;
+  font-size: .86em;
 }
 
 .expand-panel {
@@ -234,7 +234,7 @@ legend {
 }
 
 .expand-panel-header-label {
-  font-size: .85em;
+  font-size: .86em;
   padding-left: 3px;
   font-family: Helvetica, Arial, sans-serif;
   text-decoration: none;
@@ -285,7 +285,7 @@ legend {
 
 .xul-editPanel-title-label{
   color: white;
-  font-size: .85em;
+  font-size: .86em;
 }
 
 .xul-editPanel-content{
