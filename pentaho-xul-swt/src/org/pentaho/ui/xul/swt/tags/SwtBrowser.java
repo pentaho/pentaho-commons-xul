@@ -213,7 +213,7 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
           Point size = event.size;
           shell.setSize(shell.computeSize(size.x, size.y));
         }
-        if(event.addressBar){ // for some reason we're getting double-events for browser window.open clicks. The second is the one we want and it has this property
+        if(!"webkit".equals(b.getBrowserType()) || event.addressBar){ // for some reason we're getting double-events for safari window.open clicks. The second is the one we want and it has this property
           shell.open();
         }
       }
