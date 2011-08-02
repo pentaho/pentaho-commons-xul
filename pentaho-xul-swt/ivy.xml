@@ -9,7 +9,7 @@
         <!--  external dependencies -->
     <dependency org="org.eclipse" name="jface" rev="3.3.0-I20070606-0010" transitive="false" />
    
-    <dependency org="org.eclipse.core" name="commands" rev="3.3.0-I20070605-0010" transitive="false" />
+    <dependency org="org.eclipse.core" name="org.eclipse.core.runtime" rev="3.6.0.v20100505" />
    
 		
         <!--  internal dependencies -->
@@ -21,7 +21,5 @@
         <!--  testing dependencies -->
     <dependency org="junit" name="junit" rev="4.4" conf="test->default" />
     <dependency org="jaxen" name="jaxen" rev="1.1" transitive="false" conf="test->default" />
-    <dependency org="org.eclipse.core" name="commands" rev="3.3.0-I20070605-0010" transitive="false" conf="test->default"/>
-    <dependency org="org.eclipse.equinox" name="common" rev="3.3.0-v20070426" transitive="false" conf="test->default"/>
   </dependencies>
 </ivy-module>
