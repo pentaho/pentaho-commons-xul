@@ -119,6 +119,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   @Bindable
   public void setSelected(boolean selected) {
     radioButton.setValue(selected);
+    fireChangedEvents(selected);
   }
   
 
@@ -161,6 +162,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
    boolean previousVal = this.checked;
    this.checked = checked;
    this.firePropertyChange("checked", previousVal, checked);
+   this.firePropertyChange("selected", previousVal, checked);
   }
 
   @Bindable
