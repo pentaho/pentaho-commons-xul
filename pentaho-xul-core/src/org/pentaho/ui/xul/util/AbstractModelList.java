@@ -44,7 +44,6 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
 
     protected void fireCollectionChanged() {
       firePropertyChange("children", null, this.getChildren());
-      firePropertyChange("children", null, this.getChildren());
     }
 
     public boolean add(T child) {
