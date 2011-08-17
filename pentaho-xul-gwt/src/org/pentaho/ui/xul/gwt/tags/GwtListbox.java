@@ -361,6 +361,7 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
   @Bindable
   public <T> void setElements(Collection<T> elements) {
     boundElements = elements;
+    selectedIndex = -1;
     suppressEvents = true;
     for (XulComponent child : this.getChildNodes()) {
       this.removeChild(child);
@@ -394,8 +395,8 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     this.listBox.setSelectedIndex(index);
     
     if(suppressEvents) {
-		return;
-	}    
+		  return;
+	  }
 
     // TODO: move this all to the centralized fireSelectedEvents method
     this.firePropertyChange("selectedIndex", oldValue, index);
