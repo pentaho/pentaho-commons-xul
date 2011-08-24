@@ -360,6 +360,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     }
     if(totalFlex > 0){
       table.fillWidth();
+    } else {
+      table.noFill();
     }
     // If all flexing need to hide horizontal scrolling to fix an IE7 issue
     if(allFlexing){
