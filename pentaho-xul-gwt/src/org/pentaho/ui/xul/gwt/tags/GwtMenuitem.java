@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.menuitem.PentahoMenuItem;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.containers.XulMenupopup;
@@ -9,8 +10,6 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.MenuItem;
 
 public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem {
 
@@ -27,12 +26,12 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   private String image;
   private String jscommand;
   private String command;
-  private MenuItem menuitem;
+  private PentahoMenuItem menuitem;
   private boolean isSelected;
 
   public GwtMenuitem() {
     super(ELEMENT_NAME);
-    menuitem = new MenuItem("blank", (Command) null);
+    menuitem = new PentahoMenuItem("blank", (Command) null);
     setManagedObject(menuitem);
   }
 
@@ -47,6 +46,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     this.setLabel(srcEle.getAttribute("label"));
     this.setCommand(srcEle.getAttribute("command"));
     this.setJscommand(srcEle.getAttribute("js-command"));
+    this.setDisabled("true".equals(srcEle.getAttribute("disabled")));
   }
 
   public String getAcceltext() {
@@ -58,7 +58,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   }
 
   public boolean isDisabled() {
-    return false;
+    return !menuitem.isEnabled();
   }
 
   public String getLabel() {
@@ -74,11 +74,11 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   }
 
   public void setDisabled(boolean disabled) {
-    throw new RuntimeException("Not implemented");
+    menuitem.setEnabled(!disabled);
   }
 
   public void setDisabled(String disabled) {
-    throw new RuntimeException("Not implemented");
+    menuitem.setEnabled("false".equals(disabled));
   }
 
   public void setLabel(String label) {
