@@ -1,0 +1,125 @@
+package org.pentaho.ui.xul.gwt.tags;
+
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.components.XulMenuitem;
+import org.pentaho.ui.xul.components.XulMenuseparator;
+import org.pentaho.ui.xul.containers.XulMenubar;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
+import org.pentaho.ui.xul.gwt.GwtXulHandler;
+import org.pentaho.ui.xul.gwt.GwtXulParser;
+
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
+
+public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
+
+  private String menubarName;
+  private MenuBar menubar;
+  private boolean loaded;
+  private boolean vertical = true;
+
+  public static void register() {
+    GwtXulParser.registerHandler("menubar", new GwtXulHandler() {
+      public Element newInstance() {
+        return new GwtMenubar();
+      }
+    });
+  }
+
+  public GwtMenubar() {
+    super("menubar");
+  }
+
+  public GwtMenubar(String tagName) {
+    super(tagName);
+  }
+
+  @Override
+  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+    super.init(srcEle, container);
+    this.setHorizontal("vertical".equalsIgnoreCase(srcEle.getAttribute("layout")));
+    menubar = new MenuBar(vertical);
+    this.setLabel(srcEle.getAttribute("label"));
+    setManagedObject(menubar);
+  }
+
+  public void setLabel(String label) {
+    menubar.setTitle(label);
+  }
+
+  public String getLabel() {
+    return menubar.getTitle();
+  }
+
+  public boolean isHorizontal() {
+    return vertical;
+  }
+
+  public void setHorizontal(boolean horizontal) {
+    this.vertical = horizontal;
+  }
+
+  public String getMenubarName() {
+    return menubarName;
+  }
+
+  public void setMenubarName(String name) {
+    this.menubarName = name;
+  }
+
+  @Override
+  public void layout() {
+    for (XulComponent c : this.getChildNodes()) {
+      add(c);
+    }
+    if (!loaded) {
+      loaded = true;
+    }
+  }
+
+  private void add(XulComponent c) {
+    if (c instanceof XulMenuitem) {
+      MenuItem item = (MenuItem) c.getManagedObject();
+      menubar.addItem(item);
+    } else if (c instanceof XulMenuseparator) {
+      menubar.addSeparator();
+    } else if (c instanceof XulMenubar) {
+      MenuBar bar = (MenuBar) c.getManagedObject();
+      menubar.addItem(bar.getTitle(), bar);
+    }
+  }
+
+  @Override
+  public void addChild(Element element) {
+    super.addChild(element);
+    if (loaded == true) {
+      menubar.clearItems();
+      this.layout();
+    }
+  }
+
+  @Override
+  public void addChildAt(Element element, int idx) {
+    super.addChildAt(element, idx);
+    if (loaded == true) {
+      menubar.clearItems();
+      this.layout();
+    }
+  }
+
+  @Override
+  public void removeChild(Element element) {
+    super.removeChild(element);
+    XulComponent child = (XulComponent) element;
+    if (child instanceof XulMenuitem) {
+      menubar.removeItem((MenuItem) child.getManagedObject());
+    }
+
+  }
+
+  public void adoptAttributes(XulComponent component) {
+
+  }
+}

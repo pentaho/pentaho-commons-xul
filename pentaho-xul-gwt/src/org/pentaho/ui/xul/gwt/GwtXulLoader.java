@@ -78,6 +78,8 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     GwtTreeCell.register();
     GwtDialog.register();
     GwtMenuList.register();
+    GwtMenubar.register();
+    GwtMenubarSeparator.register();
     GwtMenuitem.register();
     GwtMenupopup.register();
     GwtMessageBox.register();
