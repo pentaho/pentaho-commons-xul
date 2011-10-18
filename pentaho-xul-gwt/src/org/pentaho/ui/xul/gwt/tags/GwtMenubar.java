@@ -9,9 +9,11 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.Widget;
 
 public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
@@ -69,6 +71,17 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     this.menubarName = name;
   }
 
+  @Bindable
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+    menubar.getElement().getStyle().setProperty("display", (this.visible) ? "" : "none"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    
+    if (getParent() instanceof GwtMenubar) {
+      ((MenuBar)getParent().getManagedObject()).clearItems();
+      ((GwtMenubar)getParent()).layout();
+    }
+  }
+
   @Override
   public void layout() {
     for (XulComponent c : this.getChildNodes()) {
@@ -86,8 +99,10 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     } else if (c instanceof XulMenuseparator) {
       menubar.addSeparator();
     } else if (c instanceof XulMenubar) {
-      MenuBar bar = (MenuBar) c.getManagedObject();
-      menubar.addItem(bar.getTitle(), bar);
+      if (c.isVisible()) {
+        MenuBar bar = (MenuBar) c.getManagedObject();
+        menubar.addItem(bar.getTitle(), bar);
+      }
     }
   }
 

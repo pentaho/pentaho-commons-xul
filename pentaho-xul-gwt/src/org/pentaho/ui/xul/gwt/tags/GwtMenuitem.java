@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.menuitem.CheckBoxMenuItem;
 import org.pentaho.gwt.widgets.client.menuitem.PentahoMenuItem;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -8,8 +9,10 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.MenuItem;
 
 public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem {
 
@@ -26,13 +29,11 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   private String image;
   private String jscommand;
   private String command;
-  private PentahoMenuItem menuitem;
+  private MenuItem menuitem;
   private boolean isSelected;
 
   public GwtMenuitem() {
     super(ELEMENT_NAME);
-    menuitem = new PentahoMenuItem("blank", (Command) null);
-    setManagedObject(menuitem);
   }
 
   public GwtMenuitem(XulMenupopup popup) {
@@ -43,6 +44,15 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   @Override
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
+    String type = srcEle.getAttribute("type");
+    if ("checkbox".equalsIgnoreCase(type)) {
+      menuitem = new CheckBoxMenuItem("blank", (Command) null);
+      boolean checked = "true".equals(srcEle.getAttribute("checked"));
+      ((CheckBoxMenuItem) menuitem).setChecked(checked);
+    } else {
+      menuitem = new PentahoMenuItem("blank", (Command) null);
+    }
+    setManagedObject(menuitem);
     this.setLabel(srcEle.getAttribute("label"));
     this.setCommand(srcEle.getAttribute("command"));
     this.setJscommand(srcEle.getAttribute("js-command"));
@@ -61,6 +71,19 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     return !menuitem.isEnabled();
   }
 
+  public boolean isChecked() {
+    if (menuitem instanceof CheckBoxMenuItem) {
+      return !((CheckBoxMenuItem) menuitem).isChecked();
+    }
+    return false;
+  }
+
+  @Bindable
+  public void setVisible(boolean visible) {
+    this.visible = visible;
+    menuitem.getElement().getStyle().setProperty("display", (this.visible) ? "" : "none"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+  }
+  
   public String getLabel() {
     return menuitem.getText();
   }
@@ -79,6 +102,18 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
 
   public void setDisabled(String disabled) {
     menuitem.setEnabled("false".equals(disabled));
+  }
+
+  public void setChecked(boolean checked) {
+    if (menuitem instanceof CheckBoxMenuItem) {
+      ((CheckBoxMenuItem) menuitem).setChecked(checked);
+    }
+  }
+
+  public void setChecked(String checked) {
+    if (menuitem instanceof CheckBoxMenuItem) {
+      ((CheckBoxMenuItem) menuitem).setChecked("true".equals(checked));
+    }
   }
 
   public void setLabel(String label) {

@@ -22,6 +22,8 @@ import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
 import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 
+import com.google.gwt.user.client.Window;
+
 public class GwtXulDomContainer implements XulDomContainer {
 
   Document document;
@@ -32,13 +34,13 @@ public class GwtXulDomContainer implements XulDomContainer {
   private List<Object> resourceBundles = new ArrayList<Object>();
 
   private boolean initialized;
-  
+
   protected GwtBindingContext bindings;
-  
-  public GwtXulDomContainer(){
+
+  public GwtXulDomContainer() {
     bindings = new GwtBindingContext();
   }
-  
+
   public void addDocument(Document document) {
     this.document = document;
   }
@@ -51,33 +53,33 @@ public class GwtXulDomContainer implements XulDomContainer {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
   Map<String, XulEventHandler> eventHandlers = new HashMap<String, XulEventHandler>();
- 
+
   public void addEventHandler(XulEventHandler handler) {
     handler.setXulDomContainer(this);
     this.handlers.put(handler.getName(), handler);
   }
-  
+
   /**
    * 
    * @deprecated Use {@link #addEventHandler(XulEventHandler)}. This work-around is no longer needed.
    * @param wrapper
    */
   @Deprecated
-  public void addEventHandler(EventHandlerWrapper wrapper){
-    
+  public void addEventHandler(EventHandlerWrapper wrapper) {
+
     XulEventHandler handler = wrapper.getHandler();
     this.handlerWrapers.put(handler, wrapper);
     handler.setXulDomContainer(this);
     this.handlers.put(handler.getName(), handler);
-    
+
   }
 
   public void addEventHandler(String id, String eventClassName) {
     throw new UnsupportedOperationException("use addEventHandler(XulEventHandler handler)");
   }
-  
+
   public XulEventHandler getEventHandler(String key) throws XulException {
     return handlers.get(key);
   }
@@ -90,8 +92,6 @@ public class GwtXulDomContainer implements XulDomContainer {
   public void initialize() {
     this.initialized = true;
   }
-  
-  
 
   public boolean isInitialized() {
     return initialized;
@@ -102,11 +102,10 @@ public class GwtXulDomContainer implements XulDomContainer {
 
   }
 
-
   public Document getDocument(int idx) {
-    
+
     return document;
-      
+
   }
 
   public Map<String, XulEventHandler> getEventHandlers() {
@@ -117,42 +116,41 @@ public class GwtXulDomContainer implements XulDomContainer {
     return "";
   }
 
-
-  private Object[] getArgs(String methodCall){
-    if(methodCall.endsWith("()")){
+  private Object[] getArgs(String methodCall) {
+    if (methodCall.endsWith("()")) {
       return null;
     }
-    String argsList = methodCall.substring(methodCall.indexOf("(")+1, methodCall.lastIndexOf(")"));
+    String argsList = methodCall.substring(methodCall.indexOf("(") + 1, methodCall.lastIndexOf(")"));
     String[] stringArgs = argsList.split(",");
-    Object[] args = new Object[ stringArgs.length ];
-    int i=-1;
-    for(String obj : stringArgs){
+    Object[] args = new Object[stringArgs.length];
+    int i = -1;
+    for (String obj : stringArgs) {
       i++;
       obj = obj.trim();
-      try{
+      try {
         Integer num = Integer.valueOf(obj);
         args[i] = num;
         continue;
-      } catch(NumberFormatException e){
-        try{
+      } catch (NumberFormatException e) {
+        try {
           Double num = Double.valueOf(obj);
           args[i] = num;
           continue;
-        } catch(NumberFormatException e2){
-          try{
-            if(obj.indexOf('\'') == -1 && obj.indexOf('\"') == -1){
+        } catch (NumberFormatException e2) {
+          try {
+            if (obj.indexOf('\'') == -1 && obj.indexOf('\"') == -1) {
               throw new IllegalArgumentException("Not a string");
             }
             String str = obj.replaceAll("'", "");
             str = str.replaceAll("\"", "");
             args[i] = str;
             continue;
-          } catch(IllegalArgumentException e4){
-            try{
+          } catch (IllegalArgumentException e4) {
+            try {
               Boolean flag = Boolean.parseBoolean(obj);
               args[i] = flag;
               continue;
-            } catch(NumberFormatException e3){
+            } catch (NumberFormatException e3) {
               continue;
             }
           }
@@ -160,21 +158,22 @@ public class GwtXulDomContainer implements XulDomContainer {
       }
     }
     return args;
-    
+
   }
 
-  private Class unBoxPrimative(Class clazz){
+  private Class unBoxPrimative(Class clazz) {
     return clazz;
   }
 
   private Map<String, GwtBindingMethod> methodMap = new HashMap<String, GwtBindingMethod>();
-  private GwtBindingMethod getMethod(Object handler, String method){
+
+  private GwtBindingMethod getMethod(Object handler, String method) {
     GwtBindingMethod m = methodMap.get(method);
-    if(m != null){
+    if (m != null) {
       return m;
     }
 
-    String methodName = method.substring(method.indexOf(".")+1, method.indexOf("("));
+    String methodName = method.substring(method.indexOf(".") + 1, method.indexOf("("));
 
     m = GwtBindingContext.typeController.findMethod(handler, methodName);
     methodMap.put(method, m);
@@ -187,11 +186,11 @@ public class GwtXulDomContainer implements XulDomContainer {
         throw new XulException("method call does not follow the pattern [EventHandlerID].methodName()");
       }
 
-      if(args == null || args.length == 0){
-      String methodName = method.substring(method.indexOf(".")+1);
+      if (args == null || args.length == 0) {
+        String methodName = method.substring(method.indexOf(".") + 1);
         Object[] arguments = getArgs(methodName);
-        if(arguments != null){
-          return invoke(method.substring(0,method.indexOf("("))+"()", arguments);
+        if (arguments != null) {
+          return invoke(method.substring(0, method.indexOf("(")) + "()", arguments);
         }
       }
 
@@ -199,16 +198,16 @@ public class GwtXulDomContainer implements XulDomContainer {
       Object handler = this.handlers.get(eventID);
       GwtBindingMethod m = getMethod(handler, method);
 
-      if(args.length > 0){
-        try{
+      if (args.length > 0) {
+        try {
           return m.invoke(handler, args);
-        } catch (Exception e){
+        } catch (Exception e) {
           throw new XulException("Error invoking method: " + method, e);
         }
       } else {
-        try{
-          return m.invoke(handler, new Object[]{});
-        } catch (Exception e){
+        try {
+          return m.invoke(handler, new Object[] {});
+        } catch (Exception e) {
           throw new XulException("Error invoking method: " + method, e);
         }
       }
@@ -218,9 +217,9 @@ public class GwtXulDomContainer implements XulDomContainer {
   }
 
   public void invokeLater(Runnable runnable) {
-    
-        // TODO Auto-generated method stub 
-      
+
+    // TODO Auto-generated method stub
+
   }
 
   public boolean isClosed() {
@@ -235,56 +234,55 @@ public class GwtXulDomContainer implements XulDomContainer {
   }
 
   public void mergeContainer(XulDomContainer container) {
-    
-        // TODO Auto-generated method stub 
-      
+
+    // TODO Auto-generated method stub
+
   }
-  
-  private void applyOverlay(Document doc){
+
+  private void applyOverlay(Document doc) {
     this.document = getDocumentRoot();
-    
-    for(XulComponent overlay : doc.getChildNodes()){
-      for(XulComponent child: overlay.getChildNodes()){
-          
+
+    for (XulComponent overlay : doc.getChildNodes()) {
+      for (XulComponent child : overlay.getChildNodes()) {
+
         XulComponent sourceDocumentNodeMatch;
         String childId = child.getId();
-        if(childId != null && (sourceDocumentNodeMatch = this.document.getElementById(childId)) != null){
-          
+        if (childId != null && (sourceDocumentNodeMatch = this.document.getElementById(childId)) != null) {
 
-          if(child.getRemoveelement()){
-            //punching out existing element NOTE: this is a non-reversable operation presently
+          if (child.getRemoveelement()) {
+            // punching out existing element NOTE: this is a non-reversable operation presently
             sourceDocumentNodeMatch.getParent().removeChild(sourceDocumentNodeMatch);
             continue;
           }
-          
-          //Override any existing attributes
+
+          // Override any existing attributes
           sourceDocumentNodeMatch.adoptAttributes(child);
-          
-          //Process all the children of the overlay and add them to the proper location in the existing document.
-          for(XulComponent overlayChild : child.getChildNodes()){
+
+          // Process all the children of the overlay and add them to the proper location in the existing document.
+          for (XulComponent overlayChild : child.getChildNodes()) {
             int position = overlayChild.getPosition();
             String insertBefore = overlayChild.getInsertbefore();
             String insertAfter = overlayChild.getInsertafter();
-            
+
             XulContainer sourceContainer = ((XulContainer) sourceDocumentNodeMatch);
-            
+
             String id = overlayChild.getId();
             XulComponent existingElement = null;
-            if(id != null && !id.equals("")){
+            if (id != null && !id.equals("")) {
               existingElement = sourceContainer.getElementById(id);
             }
-            if(existingElement != null){
+            if (existingElement != null) {
               existingElement.adoptAttributes(overlayChild);
             } else {
-            
-              //change Components document reference.
+
+              // change Components document reference.
               ((AbstractGwtXulComponent) overlayChild).setXulDomContainer(this);
-              
-              if(position > -1){
+
+              if (position > -1) {
                 sourceContainer.addChildAt(overlayChild, position);
-              } else if(insertBefore != null){
+              } else if (insertBefore != null) {
                 XulComponent relativeTo = document.getElementById(insertBefore);
-                if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
+                if (relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)) {
                   int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
                   relativePos--;
                   Math.abs(relativePos);
@@ -292,9 +290,9 @@ public class GwtXulDomContainer implements XulDomContainer {
                 } else {
                   sourceContainer.addChild(overlayChild);
                 }
-              } else if(insertAfter != null){
+              } else if (insertAfter != null) {
                 XulComponent relativeTo = document.getElementById(insertAfter);
-                if(relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)){
+                if (relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)) {
                   int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
                   relativePos++;
                   sourceContainer.addChildAt(overlayChild, relativePos);
@@ -303,51 +301,88 @@ public class GwtXulDomContainer implements XulDomContainer {
                 }
               } else {
                 sourceContainer.addChild(overlayChild);
-                ((AbstractGwtXulComponent)overlayChild).layout();
+                ((AbstractGwtXulComponent) overlayChild).layout();
               }
             }
-            
+
           }
-          
+
         }
       }
     }
   }
-  
+
   public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc, ResourceBundle bundle) throws XulException {
     XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc, bundle);
     applyOverlay(overlayContainer.getDocumentRoot());
-    
+
   }
-  
+
   public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
     XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
     applyOverlay(overlayContainer.getDocumentRoot());
-    
+
   }
-  
+
+  // public void removeOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
+  // XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
+  //
+  // for (XulComponent child : overlayContainer.getDocumentRoot().getChildNodes()) {
+  // String id = child.getId();
+  // Window.alert("processing remove: " + id);
+  // if (id == null | id.equals("")) {
+  // continue;
+  // }
+  // XulComponent insertedNode = document.getElementById(id);
+  // if (insertedNode != null) {
+  // Window.alert("found and removing node: " + id);
+  // insertedNode.getParent().removeChild(insertedNode);
+  // } else {
+  // Window.alert("no such node: " + id);
+  // }
+  // }
+  // }
+
   public void removeOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
     XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
-    
-    for(XulComponent child : overlayContainer.getDocumentRoot().getChildNodes()){
-      String id = child.getId();
-      if(id == null | id.equals("")){
-        continue;
+
+    for (XulComponent parent : overlayContainer.getDocumentRoot().getChildNodes()) {
+      // need to check this child's children
+      for (XulComponent child : parent.getChildNodes()) {
+        for (XulComponent grandChild : child.getChildNodes()) {
+          String id = grandChild.getId();
+          Window.alert("GwtXulDomContainer::removeOverlay::id=" + id);
+          if (id == null || id.equals("")) {
+            Window.alert("GwtXulDomContainer::removeOverlay::skipping=" + id);
+            continue;
+          }
+          XulComponent insertedNode = document.getElementById(id);
+          if (insertedNode != null) {
+            Window.alert("GwtXulDomContainer::removeOverlay::removing=" + id);
+            Window.alert("GwtXulDomContainer::removeOverlay::parent id=" + insertedNode.getParent().getId());
+            insertedNode.getParent().removeChild(insertedNode);
+          } else {
+            Window.alert("GwtXulDomContainer::removeOverlay::not found=" + id);
+          }
+        }
+        if (child instanceof AbstractGwtXulComponent) {
+          ((AbstractGwtXulComponent) child).layout();
+        }
       }
-      XulComponent insertedNode = document.getElementById(id);
-      if(insertedNode != null){
-        insertedNode.getParent().removeChild(insertedNode);
+      if (parent instanceof AbstractGwtXulComponent) {
+        ((AbstractGwtXulComponent) parent).layout();
       }
     }
+
   }
 
   public void setOuterContext(Object context) {
-    
-        // TODO Auto-generated method stub 
-      
+
+    // TODO Auto-generated method stub
+
   }
-  
-  public void setLoader(GwtXulLoader loader){
+
+  public void setLoader(GwtXulLoader loader) {
     this.loader = loader;
   }
 
@@ -358,12 +393,12 @@ public class GwtXulDomContainer implements XulDomContainer {
   public void addBinding(Binding binding) {
 
     bindings.add(binding);
-    
+
   }
 
   public void addInitializedBinding(Binding b) {
     // TODO Auto-generated method stub
-    
+
   }
 
   public Binding createBinding(XulEventSource source, String sourceAttr, String targetId, String targetAttr) {
@@ -383,21 +418,21 @@ public class GwtXulDomContainer implements XulDomContainer {
 
   public void loadOverlay(String src) throws XulException {
     throw new RuntimeException("not yet implemented");
-    
+
   }
-  
+
   public void loadOverlay(String src, Object resourceBundle) throws XulException {
     throw new RuntimeException("not yet implemented");
   }
 
   public void removeBinding(Binding binding) {
     throw new RuntimeException("not yet implemented");
-    
+
   }
 
   public void removeOverlay(String src) throws XulException {
     throw new RuntimeException("not yet implemented");
-    
+
   }
 
   public void setResourceBundles(final List<Object> resourceBundles) {
@@ -414,17 +449,17 @@ public class GwtXulDomContainer implements XulDomContainer {
 
   public void addPerspective(XulPerspective perspective) {
     // TODO Auto-generated method stub
-    
+
   }
 
   public void loadPerspective(String id) {
     // TODO Auto-generated method stub
-    
+
   }
 
   public void registerClassLoader(Object loader) {
     // TODO Auto-generated method stub
-    
+
   }
 
   public XulSettingsManager getSettingsManager() {
@@ -434,7 +469,5 @@ public class GwtXulDomContainer implements XulDomContainer {
   public void setSettingsManager(XulSettingsManager settings) {
     this.settings = settings;
   }
-  
-  
 
 }

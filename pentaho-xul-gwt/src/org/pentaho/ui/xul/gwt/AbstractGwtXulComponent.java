@@ -3,15 +3,16 @@
  */
 package org.pentaho.ui.xul.gwt;
 
-import com.google.gwt.dom.client.Element;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
-import com.google.gwt.xml.client.NamedNodeMap;
-import com.google.gwt.xml.client.Node;
-import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.util.List;
+
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
-import org.pentaho.ui.xul.*;
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulEventSource;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.BindingProvider;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
@@ -19,9 +20,16 @@ import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.util.List;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.xml.client.NamedNodeMap;
+import com.google.gwt.xml.client.Node;
 
 /**
  * @author OEM
