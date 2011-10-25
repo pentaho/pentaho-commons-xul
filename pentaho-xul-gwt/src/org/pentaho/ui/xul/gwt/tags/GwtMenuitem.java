@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.gwt.widgets.client.menuitem.CheckBoxMenuItem;
 import org.pentaho.gwt.widgets.client.menuitem.PentahoMenuItem;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -12,7 +11,6 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.MenuItem;
 
 public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem {
 
@@ -29,7 +27,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   private String image;
   private String jscommand;
   private String command;
-  private MenuItem menuitem;
+  private PentahoMenuItem menuitem = new PentahoMenuItem("blank", (Command) null);;
   private boolean isSelected;
 
   public GwtMenuitem() {
@@ -46,11 +44,9 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     super.init(srcEle, container);
     String type = srcEle.getAttribute("type");
     if ("checkbox".equalsIgnoreCase(type)) {
-      menuitem = new CheckBoxMenuItem("blank", (Command) null);
       boolean checked = "true".equals(srcEle.getAttribute("checked"));
-      ((CheckBoxMenuItem) menuitem).setChecked(checked);
-    } else {
-      menuitem = new PentahoMenuItem("blank", (Command) null);
+      menuitem.setUseCheckUI(true);
+      menuitem.setChecked(checked);
     }
     setManagedObject(menuitem);
     this.setLabel(srcEle.getAttribute("label"));
@@ -72,10 +68,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   }
 
   public boolean isChecked() {
-    if (menuitem instanceof CheckBoxMenuItem) {
-      return !((CheckBoxMenuItem) menuitem).isChecked();
-    }
-    return false;
+      return menuitem.isChecked();
   }
 
   @Bindable
@@ -105,15 +98,13 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   }
 
   public void setChecked(boolean checked) {
-    if (menuitem instanceof CheckBoxMenuItem) {
-      ((CheckBoxMenuItem) menuitem).setChecked(checked);
-    }
+    menuitem.setUseCheckUI(true);
+    menuitem.setChecked(checked);
   }
 
   public void setChecked(String checked) {
-    if (menuitem instanceof CheckBoxMenuItem) {
-      ((CheckBoxMenuItem) menuitem).setChecked("true".equals(checked));
-    }
+    menuitem.setUseCheckUI(true);
+    menuitem.setChecked("true".equals(checked));
   }
 
   public void setLabel(String label) {
