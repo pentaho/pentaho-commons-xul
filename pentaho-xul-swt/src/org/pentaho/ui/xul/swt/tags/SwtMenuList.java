@@ -143,8 +143,12 @@ public class SwtMenuList<T> extends AbstractSwtXulContainer implements XulMenuLi
       this.combobox.deselectAll();
       return;
     }
+    if(this.elements != null){
+      this.combobox.select(new ArrayList(this.elements).indexOf(t));
+    } else {
+      this.combobox.select(combobox.indexOf(t.toString()));
+    }
     this.previousSelectedItem = null;
-    this.combobox.select(combobox.indexOf(t.toString()));
   }
 
   public void setOncommand(final String command) {
