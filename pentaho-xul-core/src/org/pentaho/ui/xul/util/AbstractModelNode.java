@@ -23,6 +23,9 @@ public abstract class
 
   protected List<T> children = new ArrayList<T>();
   protected AbstractModelNode parent;
+
+  // set-like behavior checking additions by comparison
+  protected boolean isUniqueList;
   
   public AbstractModelNode() {
   }
@@ -59,6 +62,12 @@ public abstract class
   }
 
   public boolean add(T child) {
+    if(this.isUniqueList){
+      T t = checkForUnique(child);
+      if(t != null){
+        remove(t);
+      }
+    }
     boolean retVal = this.children.add(child);
     if(child instanceof AbstractModelNode){
       ((AbstractModelNode) child).setParent(this);
@@ -162,6 +171,15 @@ public abstract class
   }
 
   public boolean addAll(Collection<? extends T> c) {
+    if(this.isUniqueList){
+      Iterator<? extends T> iter = c.iterator();
+      while(iter.hasNext()){
+        T t = checkForUnique(iter.next());
+        if(t != null){
+          remove(t);
+        }
+      }
+    }
     boolean retVal = this.children.addAll(c);
     if(retVal) {
       for(T t : c){
@@ -221,6 +239,12 @@ public abstract class
   }
 
   public void add(int index, T element) {
+    if(this.isUniqueList){
+      T t = checkForUnique(element);
+      if(t != null){
+        remove(t);
+      }
+    }
     children.add(index, element);
     onAdd(element);
     fireCollectionChanged();
@@ -228,6 +252,16 @@ public abstract class
 
   public boolean addAll(int index, Collection<? extends T> c) {
 
+    if(this.isUniqueList){
+      Iterator<? extends T> iter = c.iterator();
+      while(iter.hasNext()){
+        T t = checkForUnique(iter.next());
+        if(t != null){
+          remove(t);
+        }
+      }
+    }
+    
     boolean retVal = children.addAll(index, c);
     if(retVal){
       for(T t : c){
@@ -280,4 +314,24 @@ public abstract class
     
   }
 
+  public boolean isUniqueList() {
+    return isUniqueList;
+  }
+
+  public void setUniqueList(boolean uniqueList) {
+    isUniqueList = uniqueList;
+  }
+
+  protected T checkForUnique(T newChild){
+    for(T t : this){
+      if(compareChildren(t, newChild)){
+        return t;
+      }
+    }
+    return null;
+  }
+
+  protected boolean compareChildren(T child, T newChild){
+    return child.equals(newChild);
+  }
 }
