@@ -59,9 +59,7 @@ public class GwtContactManager implements  EntryPoint {
           MainController controller = new MainController();
           controller.setBindingFactory(bf);
 
-          EventHandlerWrapper wrapper = GWT.create(MainController.class);
-          wrapper.setHandler(controller);
-          ((GwtXulDomContainer) container).addEventHandler(wrapper);
+          container.addEventHandler(controller);
           
           runner.initialize();
           runner.start();
