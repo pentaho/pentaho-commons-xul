@@ -101,7 +101,8 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     } else if (c instanceof XulMenubar) {
       if (c.isVisible()) {
         MenuBar bar = (MenuBar) c.getManagedObject();
-        menubar.addItem(bar.getTitle(), bar);
+        MenuItem submenu = new MenuItem(bar.getTitle(), bar);
+        menubar.addItem(submenu);
       }
     }
   }
