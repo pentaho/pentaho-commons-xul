@@ -27,11 +27,13 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
   private String image;
   private String jscommand;
   private String command;
-  private PentahoMenuItem menuitem = new PentahoMenuItem("blank", (Command) null);;
+  private PentahoMenuItem menuitem;
   private boolean isSelected;
 
   public GwtMenuitem() {
     super(ELEMENT_NAME);
+    menuitem = new PentahoMenuItem("blank", (Command) null);
+    setManagedObject(menuitem);
   }
 
   public GwtMenuitem(XulMenupopup popup) {
@@ -48,7 +50,6 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
       menuitem.setUseCheckUI(true);
       menuitem.setChecked(checked);
     }
-    setManagedObject(menuitem);
     this.setLabel(srcEle.getAttribute("label"));
     this.setCommand(srcEle.getAttribute("command"));
     this.setJscommand(srcEle.getAttribute("js-command"));

@@ -13,7 +13,6 @@ import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.Widget;
 
 public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
@@ -40,11 +39,12 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
   @Override
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    super.init(srcEle, container);
     this.setHorizontal("vertical".equalsIgnoreCase(srcEle.getAttribute("layout")));
     menubar = new MenuBar(vertical);
     this.setLabel(srcEle.getAttribute("label"));
     setManagedObject(menubar);
+    // init AFTER we set the managed object and we get "id" set for us
+    super.init(srcEle, container);
   }
 
   public void setLabel(String label) {
