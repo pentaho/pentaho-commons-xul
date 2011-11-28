@@ -1,21 +1,23 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import com.allen_sauer.gwt.dnd.client.DragContext;
-import com.allen_sauer.gwt.dnd.client.VetoDragException;
-import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.*;
-import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
-import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
-import com.google.gwt.widgetideas.table.client.TableSelectionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
+
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
 import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
 import org.pentaho.gwt.widgets.client.ui.Draggable;
-import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -26,7 +28,12 @@ import org.pentaho.ui.xul.binding.BindingConvertor;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.components.XulTreeCol;
-import org.pentaho.ui.xul.containers.*;
+import org.pentaho.ui.xul.containers.XulRoot;
+import org.pentaho.ui.xul.containers.XulTree;
+import org.pentaho.ui.xul.containers.XulTreeChildren;
+import org.pentaho.ui.xul.containers.XulTreeCols;
+import org.pentaho.ui.xul.containers.XulTreeItem;
+import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dnd.DataTransfer;
 import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.dnd.DropPosition;
@@ -47,10 +54,29 @@ import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellEditorCallback;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import com.allen_sauer.gwt.dnd.client.DragContext;
+import com.allen_sauer.gwt.dnd.client.VetoDragException;
+import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.ChangeListener;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.KeyboardListener;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
+import com.google.gwt.user.client.ui.TreeListener;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
+import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
+import com.google.gwt.widgetideas.table.client.TableSelectionListener;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable {
 
@@ -334,6 +360,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private void populateTable(){
 
+    
     int rowCount = getRootChildren().getItemCount();
     // Getting column editors ends up calling getChildNodes several times. we're going to cache the column collections
     // for the duration of the operation then clear it out.
@@ -352,6 +379,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     int totalFlex = 0;
     boolean allFlexing = true;
     for (int i = 0; i < colCount; i++) {
+      XulTreeCol col = (XulTreeCol) colCollection.get(i);
+      table.setColumnSortable(i, col.isSortActive());
+      if(col.isSortActive()) {
+        table.setSortingEnabled(true);
+      }
       int fx = colCollection.get(i).getFlex();
       totalFlex += fx;
       if(fx == 0){
@@ -1496,12 +1528,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public boolean isSortable() {
-    // TODO Auto-generated method stub
     return false;
   }
 
-  public void setSortable(boolean sort) {
-    // TODO Auto-generated method stub
+  public void setSortable(boolean sortable) {
 
   }
 

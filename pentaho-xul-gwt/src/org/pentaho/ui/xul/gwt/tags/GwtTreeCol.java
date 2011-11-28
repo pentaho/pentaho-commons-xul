@@ -25,6 +25,9 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private String tooltipBinding;
   private String expandBinding;
   private String imageBinding;
+  private boolean sortActive = false;
+  private String sortDirection = null;
+
 
 
   public static void register() {
@@ -56,6 +59,8 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     if(StringUtils.isEmpty(srcEle.getAttribute("pen:imagebinding")) == false){
       setImagebinding(srcEle.getAttribute("pen:imagebinding")); //$NON-NLS-1$ 
     }
+    setSortActive("true".equalsIgnoreCase(srcEle.getAttribute("sortActive"))); //$NON-NLS-1$ //$NON-NLS-2$)
+    setSortDirection(srcEle.getAttribute("sortDirection")); //$NON-NLS-1$
   }
   
   public void autoSize() {
@@ -76,10 +81,6 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return getAttributeValue("label");
   }
 
-  public String getSortDirection() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
   public String getSrc() {
     // TODO Auto-generated method stub
@@ -111,7 +112,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
   public boolean isSortActive() {
     // TODO Auto-generated method stub
-    return false;
+    return sortActive;
   }
 
   public void setBinding(String binding) {
@@ -147,13 +148,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public void setSortActive(boolean sort) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void setSortDirection(String dir) {
-    // TODO Auto-generated method stub
-    
+    this.sortActive = sort;
   }
 
   public void setSrc(String srcUrl) {
@@ -254,6 +249,16 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
   public void setComparatorbinding(String comp) {
     
+  }
+
+  public void setSortDirection(String dir) {
+    sortDirection = dir;
+    
+  }
+
+  public String getSortDirection() {
+    // TODO Auto-generated method stub
+    return sortDirection;
   }
   
   
