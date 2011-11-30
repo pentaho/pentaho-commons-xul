@@ -19,7 +19,9 @@ import com.google.gwt.user.client.ui.Widget;
 public class GwtImage extends AbstractGwtXulComponent implements XulImage {
 
   static final String ELEMENT_NAME = "image"; //$NON-NLS-1$
-
+  private enum Property{
+    ID, DISABLED, SRC
+  }
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
       public Element newInstance() {
@@ -36,6 +38,25 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     image = new Image();
     setManagedObject(image);
     image.setStyleName("xul-image"); //$NON-NLS-1$
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+
+        case DISABLED:
+          setDisabled("true".equals(value));
+          break;
+        case SRC:
+          setSrc(value);
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -82,15 +103,6 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
 
   public void refresh() {
 
-  }
-
-  public void adoptAttributes(XulComponent component) {
-    if (component.getAttributeValue("disabled") != null) { //$NON-NLS-1$
-      setDisabled("true".equals(component.getAttributeValue("disabled"))); //$NON-NLS-1$//$NON-NLS-2$
-    }
-    if (component.getAttributeValue("value") != null) { //$NON-NLS-1$
-      setSrc(component.getAttributeValue("src")); //$NON-NLS-1$
-    }
   }
 
   @Override

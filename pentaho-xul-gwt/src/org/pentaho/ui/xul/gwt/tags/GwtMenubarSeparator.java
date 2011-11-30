@@ -21,7 +21,4 @@ public class GwtMenubarSeparator extends AbstractGwtXulComponent implements XulM
     });
   }
 
-  public void adoptAttributes(XulComponent component) {
-
-  }
 }

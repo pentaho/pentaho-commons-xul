@@ -136,7 +136,4 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
   }
 
-  public void adoptAttributes(XulComponent component) {
-
-  }
 }

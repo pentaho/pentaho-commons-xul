@@ -23,9 +23,6 @@ public class GwtToolbarseparator extends AbstractGwtXulComponent implements XulT
   }
 
 
-  public void adoptAttributes(XulComponent component) {
-
-  }
 }
 
   

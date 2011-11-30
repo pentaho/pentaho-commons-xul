@@ -27,7 +27,9 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   public GwtRadioGroup radioGroup;
 
   private boolean customValue = false;
-
+  private enum Property{
+    ID, LABEL, VALUE, CHECKED, DISABLED
+  }
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -74,6 +76,30 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
         }
       }
     });
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+        case LABEL:
+          setLabel(value);
+          break;
+        case VALUE:
+          setValue(value);
+          break;
+        case CHECKED:
+          setChecked("true".equals(value));
+          break;
+        case DISABLED:
+          setDisabled("true".equals(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -180,23 +206,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   public String getCommand(){
     return command;
   }
-  
-  public void adoptAttributes(XulComponent component) {
 
-    if(component.getAttributeValue("label") != null){
-      setLabel(component.getAttributeValue("label"));
-    }
-    if(component.getAttributeValue("value") != null){
-      setValue(component.getAttributeValue("value"));
-    }
-    if(component.getAttributeValue("checked") != null){
-      setChecked("true".equals(component.getAttributeValue("checked")));
-    }
-    if(component.getAttributeValue("disabled") != null){
-      setDisabled("true".equals(component.getAttributeValue("disabled")));
-    }
-  }
-  
   public void setClass(String className){
     radioButton.setStylePrimaryName(className);
   }

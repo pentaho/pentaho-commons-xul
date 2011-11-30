@@ -26,6 +26,10 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
       }
     });
   }
+
+  private enum Property{
+    PADDING, ID
+  }
   
   Align alignment;
   
@@ -39,6 +43,23 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     hp.setStyleName("hbox");
     
   }
+
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+
+        case PADDING:
+          setPadding(Integer.valueOf(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
+  }
   
   @Override
   @Bindable
@@ -51,11 +72,7 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     super.init(srcEle, container);
     setAlign(srcEle.getAttribute("align"));
   }
-  
-  public void adoptAttributes(XulComponent component) {
-    super.adoptAttributes(component);
-    setPadding(component.getPadding());
-  }
+
 
   @Override
   @Bindable

@@ -19,6 +19,8 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
+import javax.naming.ldap.PagedResultsResponseControl;
+
 public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   
   static final String ELEMENT_NAME = "label"; //$NON-NLS-1$
@@ -37,6 +39,10 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   
   private Label label;
   private boolean pre;
+
+  private enum Property{
+    ID, VALUE, DISABLED, PRE, MULTILINE, ONCLICK
+  }
 
   public GwtLabel() {
     super(ELEMENT_NAME);
@@ -59,6 +65,33 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
       setOnclick(srcEle.getAttribute("onclick"));
     }
 
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.toUpperCase());
+      switch (prop) {
+        case VALUE:
+          setValue(value);
+          break;
+        case DISABLED:
+          setDisabled("true".equals(value));
+          break;
+        case PRE:
+          setPre("true".equals(value));
+          break;
+        case MULTILINE:
+          setMultiline("true".equals(value));
+          break;
+        case ONCLICK:
+          setOnclick(value);
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
 
   private void setPre(boolean b) {
@@ -167,16 +200,6 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   }
   
 
-  
-  public void adoptAttributes(XulComponent component) {
-    
-    if(component.getAttributeValue("disabled") != null){
-      setDisabled("true".equals(component.getAttributeValue("disabled")));
-    }
-    if(component.getAttributeValue("value") != null){
-      setValue(component.getAttributeValue("value"));
-    }
-  }
 
   @Override
   @Bindable

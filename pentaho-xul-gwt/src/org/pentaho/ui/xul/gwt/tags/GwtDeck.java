@@ -22,7 +22,10 @@ import com.google.gwt.widgetideas.client.ResizableWidget;
 public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
 
   static final String ELEMENT_NAME = "deck"; //$NON-NLS-1$
-  
+
+  private enum Property{
+    ID, SELECTEDINDEX
+  }
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -42,6 +45,22 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     super(ELEMENT_NAME);
     container = new DeckPanel();
     setManagedObject(container);
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+
+        case SELECTEDINDEX:
+          this.setSelectedIndex(Integer.valueOf(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -120,13 +139,5 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
     
   }
   
-  
-  public void adoptAttributes(XulComponent component) {
-
-    if(component.getAttributeValue("selectedindex") != null){
-      setSelectedIndex(Integer.parseInt(component.getAttributeValue("selectedindex")));
-    }
-  }
-
 
 }

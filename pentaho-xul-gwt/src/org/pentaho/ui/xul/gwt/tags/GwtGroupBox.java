@@ -29,6 +29,10 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     });
   }
 
+  private enum Property{
+    ID, CAPTION
+  }
+
   public GwtGroupBox() {
     super(ELEMENT_NAME);
     this.orientation = Orient.VERTICAL;
@@ -46,6 +50,22 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
 
     ((VerticalPanel) container).setStyleName("vbox");
     captionPanel.add(vp);
+  }
+
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+        case CAPTION:
+          setCaption(value);
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -110,13 +130,6 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
   }
   
 
-  
-  public void adoptAttributes(XulComponent component) {
-
-    if(component.getAttributeValue("caption") != null){
-      setCaption(component.getAttributeValue("caption"));
-    }
-  }
   
   @Override
   public void setHeight(int height) {

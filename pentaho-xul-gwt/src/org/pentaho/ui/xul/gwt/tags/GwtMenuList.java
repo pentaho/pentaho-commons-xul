@@ -274,9 +274,6 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     }
   }
 
-  public void adoptAttributes( XulComponent component ) {
-
-  }
 
 
   private void fireSelectedEvents() {

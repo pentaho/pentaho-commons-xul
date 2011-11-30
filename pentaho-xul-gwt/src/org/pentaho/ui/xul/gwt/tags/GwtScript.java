@@ -57,10 +57,4 @@ public class GwtScript extends AbstractGwtXulComponent implements XulScript {
   public void layout(){
   }
 
-  public void adoptAttributes(XulComponent component) {
-    
-    if(component.getAttributeValue("src") != null){
-      setSrc(component.getAttributeValue("src"));
-    }
-  }
 }

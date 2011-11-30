@@ -58,9 +58,5 @@ public class GwtTreeRow extends AbstractGwtXulContainer implements XulTreeRow {
     super.setParent(item);
   }
 
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
-  }
 
 }

@@ -85,10 +85,6 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
     
   }
 
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
-  }
 
   public void removeAll() {
     children.clear();

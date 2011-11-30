@@ -11,7 +11,10 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 public class GwtCaption extends AbstractGwtXulComponent implements XulCaption {
   
   static final String ELEMENT_NAME = "caption"; //$NON-NLS-1$
-  
+
+  private enum Property{
+    LABEL
+  }
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -26,6 +29,21 @@ public class GwtCaption extends AbstractGwtXulComponent implements XulCaption {
   public GwtCaption() {
     super(ELEMENT_NAME);
     setManagedObject(caption);
+  }
+
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+        case LABEL: setLabel(value);
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -48,10 +66,4 @@ public class GwtCaption extends AbstractGwtXulComponent implements XulCaption {
   }
   
 
-  public void adoptAttributes(XulComponent component) {
-
-    if(component.getAttributeValue("label") != null){
-      setLabel(component.getAttributeValue("label"));
-    }
-  }
 }

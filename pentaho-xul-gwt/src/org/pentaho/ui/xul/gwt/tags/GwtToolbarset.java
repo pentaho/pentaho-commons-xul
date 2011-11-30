@@ -25,10 +25,6 @@ public class GwtToolbarset extends AbstractGwtXulContainer implements XulToolbar
   }
 
 
-  public void adoptAttributes(XulComponent component) {
-
-  }
-  
 }
 
   

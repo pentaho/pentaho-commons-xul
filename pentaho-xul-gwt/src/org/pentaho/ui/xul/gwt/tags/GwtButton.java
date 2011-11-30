@@ -29,6 +29,11 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   enum ORIENT {horizontal, vertical}
   private String dir, group, image, type, onclick, tooltip, disabledImage;
 
+
+  private enum Property{
+    ID, CLASSNAME, LABEL, IMAGE, DISABLEDIMAGE, DISABLED
+  }
+
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
       public Element newInstance() {
@@ -51,6 +56,34 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     button = new Button();
     button.setStylePrimaryName("pentaho-button");
     setManagedObject(button);
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+
+        case CLASSNAME:
+          this.setClassName(value);
+          break;
+        case LABEL:
+          setLabel(value);
+          break;
+        case IMAGE:
+          setImage(value);
+          break;
+        case DISABLEDIMAGE:
+          setDisabledImage(value);
+          break;
+        case DISABLED:
+          setDisabled("true".equals(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -111,7 +144,6 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void setLabel(String label) {
-    this.setAttribute("label", label);
     if (button != null) {
       button.setHTML("<span>"+label+"</span>");
     }
@@ -288,25 +320,6 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     if (imageButton != null) {
       imageButton.setHeight("");
       imageButton.setWidth("");
-    }
-  }
-
-  public void adoptAttributes(XulComponent component) {
-
-    if (component.getAttributeValue("label") != null) {
-      setLabel(component.getAttributeValue("label"));
-    }
-    if (component.getAttributeValue("onclick") != null) {
-      setOnclick(component.getAttributeValue("onclick"));
-    }
-    if (component.getAttributeValue("image") != null) {
-      setImage(component.getAttributeValue("image"));
-    }
-    if (component.getAttributeValue("tooltiptext") != null) {
-      setTooltiptext(component.getAttributeValue("tooltiptext"));
-    }
-    if (component.getAttributeValue("disabled") != null) {
-      setDisabled("true".equals(component.getAttributeValue("disabled")));
     }
   }
   

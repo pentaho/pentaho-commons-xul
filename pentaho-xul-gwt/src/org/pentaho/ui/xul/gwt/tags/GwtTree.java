@@ -1233,11 +1233,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     layout();
   }
 
-  public void adoptAttributes(XulComponent component) {
-    super.adoptAttributes(component);
-    layout();
-  }
-
   public void registerCellEditor(String key, TreeCellEditor editor){
     customEditors.put(key, editor);
   }

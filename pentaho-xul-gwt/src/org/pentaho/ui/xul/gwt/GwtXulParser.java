@@ -29,7 +29,7 @@ public class GwtXulParser {
   Document xulDocument;
   XulDomContainer xulDomContainer;
   
-  public GwtXulParser() throws XulException {
+  public GwtXulParser() {
   }
   
   private void resetParser(){

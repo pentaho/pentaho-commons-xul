@@ -48,11 +48,4 @@ public class GwtBox extends AbstractGwtXulContainer implements XulBox {
     super.setOrient(orient);
     updateOrientation();
   }
-
-  public void adoptAttributes(XulComponent c) {
-    
-        // TODO Auto-generated method stub 
-      
-  }
-  
 }

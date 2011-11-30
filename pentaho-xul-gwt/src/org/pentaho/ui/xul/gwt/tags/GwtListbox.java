@@ -41,6 +41,10 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
     });
   }
 
+  private enum Property{
+    ID, SELECTEDINDEX
+  }
+
   private Collection boundElements;
   
 
@@ -84,7 +88,23 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
     });
   }
-  
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+        case SELECTEDINDEX:
+          setSelectedIndex(Integer.valueOf(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
+  }
+
+
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
     this.container = container;
@@ -416,15 +436,6 @@ public class GwtListbox extends AbstractGwtXulContainer implements XulListbox, C
 
   }
 
-  public void adoptAttributes(XulComponent component) {
-    super.adoptAttributes(component);
-    
-    if (component.getAttributeValue("selectedindex") != null) {//$NON-NLS-1$
-      setSelectedIndex(Integer.parseInt(component.getAttributeValue("selectedindex")));//$NON-NLS-1$
-    }
-    layout();
-    ((AbstractGwtXulComponent) this.getParent()).layout();
-  }
 
   public String getBinding() {
     return binding;

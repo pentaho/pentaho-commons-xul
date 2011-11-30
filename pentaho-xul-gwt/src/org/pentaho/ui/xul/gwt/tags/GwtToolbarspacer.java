@@ -14,12 +14,31 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class GwtToolbarspacer extends AbstractGwtXulContainer implements XulToolbarspacer{
 
   private SimplePanel panel = new SimplePanel();
-  
+
+
+  private enum Property{
+    VISIBLE
+  }
   public GwtToolbarspacer(){
     super("toolbarspacer");
     setManagedObject(panel);
     //Do not change. GWT widgets Toolbar keys off this to know that the panel is suposed to act as a spacer
     panel.setStyleName("spacer");
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+        case VISIBLE:
+          setVisible("true".equals(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container){
@@ -45,11 +64,6 @@ public class GwtToolbarspacer extends AbstractGwtXulContainer implements XulTool
     panel.getElement().setAttribute("flex", ""+flex);
   }
 
-  public void adoptAttributes(XulComponent component) {
-    if(component.getAttributeValue("pen:visible") != null){
-      setVisible("true".equals(component.getAttributeValue("pen:visible")));
-    }
-  }
 
   @Override
   public void setVisible(boolean visible) {

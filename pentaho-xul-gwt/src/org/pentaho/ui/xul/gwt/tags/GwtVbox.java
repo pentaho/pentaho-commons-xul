@@ -14,7 +14,13 @@ import org.pentaho.ui.xul.util.Orient;
 public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
 
   static final String ELEMENT_NAME = "vbox"; //$NON-NLS-1$
-  
+
+
+  private enum Property{
+    PADDING
+  }
+
+
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -26,6 +32,21 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
   
   public GwtVbox() {
     this(ELEMENT_NAME);
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+       case PADDING:
+         setPadding(Integer.valueOf(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
   
   public GwtVbox(String elementName) {
@@ -43,12 +64,6 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
   public void setSpacing(int spacing) {
     super.setSpacing(spacing);
     ((VerticalPanel) container).setSpacing(spacing);
-  }
-  public void adoptAttributes(XulComponent component) {
-    super.adoptAttributes(component);
-    setPadding(component.getPadding());
-    this.resetContainer();
-    this.layout();
   }
 
   @Override

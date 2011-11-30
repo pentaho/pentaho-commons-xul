@@ -286,8 +286,4 @@ public class GwtWindow extends AbstractGwtXulContainer implements XulWindow {
   }
 
 
-  public void adoptAttributes(XulComponent component) {
-
-  }
-
 }

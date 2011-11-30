@@ -123,11 +123,6 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     this.firePropertyChange("value", previousVal, value);
   }
 
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
-  }
-
   private boolean disabled = false;
   @Override
   @Bindable

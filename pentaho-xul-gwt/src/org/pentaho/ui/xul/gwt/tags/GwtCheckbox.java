@@ -29,6 +29,9 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   }
   
   private CheckBox checkBox;
+  private enum Property{
+    ID, CHECKED, DISABLED, COMMAND, CLASS
+  }
   
   public GwtCheckbox() {
     super(ELEMENT_NAME);
@@ -47,6 +50,31 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
         }
       }
     });
+  }
+
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+        case CHECKED:
+          setChecked("true".equals(value));
+          break;
+        case DISABLED:
+          setDisabled("true".equals(value));
+          break;
+        case COMMAND:
+          setCommand(value);
+          break;
+        case CLASS:
+          setClass(value);
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
   
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -123,20 +151,7 @@ public class GwtCheckbox extends AbstractGwtXulComponent implements XulCheckbox 
   public String getCommand(){
     return command;
   }
-  
-  public void adoptAttributes(XulComponent component) {
 
-    if(component.getAttributeValue("label") != null){
-      setLabel(component.getAttributeValue("label"));
-    }
-    if(component.getAttributeValue("checked") != null){
-      setChecked("true".equals(component.getAttributeValue("checked")));
-    }
-    if(component.getAttributeValue("disabled") != null){
-      setDisabled("true".equals(component.getAttributeValue("disabled")));
-    }
-  }
-  
   public void setClass(String className){
     checkBox.setStylePrimaryName(className);
   }

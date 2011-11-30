@@ -165,10 +165,6 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     }
   }
 
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
-  }
 
   public List<InlineBindingExpression> getBindingExpressions() {
     List<InlineBindingExpression> exps = new ArrayList<InlineBindingExpression>();

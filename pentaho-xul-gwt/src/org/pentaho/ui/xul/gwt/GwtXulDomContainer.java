@@ -19,6 +19,7 @@ import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.gwt.overlay.OverlayProfile;
 import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 
@@ -239,89 +240,42 @@ public class GwtXulDomContainer implements XulDomContainer {
 
   }
 
-  private void applyOverlay(Document doc) {
+  private Map<String, OverlayProfile> overlays = new HashMap<String, OverlayProfile>();
+  private void applyOverlay(Document doc, boolean apply){
     this.document = getDocumentRoot();
 
-    for (XulComponent overlay : doc.getChildNodes()) {
-      for (XulComponent child : overlay.getChildNodes()) {
+    // components come in referencing a different dom container. reset it now
+    setXulDomContainer(doc.getRootElement());
+    OverlayProfile overlayProfile = new OverlayProfile(doc.getRootElement(), document.getRootElement());
+    overlays.put(doc.getRootElement().getAttributeValue("id"), overlayProfile);
+    if(apply){
+      overlayProfile.perform();
+    }
+  }
 
-        XulComponent sourceDocumentNodeMatch;
-        String childId = child.getId();
-        if (childId != null && (sourceDocumentNodeMatch = this.document.getElementById(childId)) != null) {
-
-          if (child.getRemoveelement()) {
-            // punching out existing element NOTE: this is a non-reversable operation presently
-            sourceDocumentNodeMatch.getParent().removeChild(sourceDocumentNodeMatch);
-            continue;
-          }
-
-          // Override any existing attributes
-          sourceDocumentNodeMatch.adoptAttributes(child);
-
-          // Process all the children of the overlay and add them to the proper location in the existing document.
-          for (XulComponent overlayChild : child.getChildNodes()) {
-            int position = overlayChild.getPosition();
-            String insertBefore = overlayChild.getInsertbefore();
-            String insertAfter = overlayChild.getInsertafter();
-
-            XulContainer sourceContainer = ((XulContainer) sourceDocumentNodeMatch);
-
-            String id = overlayChild.getId();
-            XulComponent existingElement = null;
-            if (id != null && !id.equals("")) {
-              existingElement = sourceContainer.getElementById(id);
-            }
-            if (existingElement != null) {
-              existingElement.adoptAttributes(overlayChild);
-            } else {
-
-              // change Components document reference.
-              ((AbstractGwtXulComponent) overlayChild).setXulDomContainer(this);
-
-              if (position > -1) {
-                sourceContainer.addChildAt(overlayChild, position);
-              } else if (insertBefore != null) {
-                XulComponent relativeTo = document.getElementById(insertBefore);
-                if (relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)) {
-                  int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
-                  relativePos--;
-                  Math.abs(relativePos);
-                  sourceContainer.addChildAt(overlayChild, relativePos);
-                } else {
-                  sourceContainer.addChild(overlayChild);
-                }
-              } else if (insertAfter != null) {
-                XulComponent relativeTo = document.getElementById(insertAfter);
-                if (relativeTo != null && sourceDocumentNodeMatch.getChildNodes().contains(relativeTo)) {
-                  int relativePos = sourceDocumentNodeMatch.getChildNodes().indexOf(relativeTo);
-                  relativePos++;
-                  sourceContainer.addChildAt(overlayChild, relativePos);
-                } else {
-                  sourceContainer.addChild(overlayChild);
-                }
-              } else {
-                sourceContainer.addChild(overlayChild);
-                ((AbstractGwtXulComponent) overlayChild).layout();
-              }
-            }
-
-          }
-
-        }
-      }
+  private void setXulDomContainer(XulComponent ele){
+    ((AbstractGwtXulComponent) ele).setXulDomContainer(this);
+    for(XulComponent child : ele.getChildNodes()){
+      setXulDomContainer(child);
     }
   }
 
   public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc, ResourceBundle bundle) throws XulException {
-    XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc, bundle);
-    applyOverlay(overlayContainer.getDocumentRoot());
+    loadOverlay(overlayDoc, bundle, true);
+  }
 
+  public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc, ResourceBundle bundle, boolean applyAtStart) throws XulException {
+    XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc, bundle);
+    applyOverlay(overlayContainer.getDocumentRoot(), applyAtStart);
   }
 
   public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
-    XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
-    applyOverlay(overlayContainer.getDocumentRoot());
+    loadOverlay(overlayDoc, true);
+  }
 
+  public void loadOverlay(com.google.gwt.xml.client.Document overlayDoc, boolean applyAtStart) throws XulException {
+    XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
+    applyOverlay(overlayContainer.getDocumentRoot(), applyAtStart);
   }
 
   // public void removeOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
@@ -344,34 +298,9 @@ public class GwtXulDomContainer implements XulDomContainer {
   // }
 
   public void removeOverlay(com.google.gwt.xml.client.Document overlayDoc) throws XulException {
-    XulDomContainer overlayContainer = this.loader.loadXul(overlayDoc);
-
-    for (XulComponent parent : overlayContainer.getDocumentRoot().getChildNodes()) {
-      // need to check this child's children
-      for (XulComponent child : parent.getChildNodes()) {
-        for (XulComponent grandChild : child.getChildNodes()) {
-          String id = grandChild.getId();
-          Window.alert("GwtXulDomContainer::removeOverlay::id=" + id);
-          if (id == null || id.equals("")) {
-            Window.alert("GwtXulDomContainer::removeOverlay::skipping=" + id);
-            continue;
-          }
-          XulComponent insertedNode = document.getElementById(id);
-          if (insertedNode != null) {
-            Window.alert("GwtXulDomContainer::removeOverlay::removing=" + id);
-            Window.alert("GwtXulDomContainer::removeOverlay::parent id=" + insertedNode.getParent().getId());
-            insertedNode.getParent().removeChild(insertedNode);
-          } else {
-            Window.alert("GwtXulDomContainer::removeOverlay::not found=" + id);
-          }
-        }
-        if (child instanceof AbstractGwtXulComponent) {
-          ((AbstractGwtXulComponent) child).layout();
-        }
-      }
-      if (parent instanceof AbstractGwtXulComponent) {
-        ((AbstractGwtXulComponent) parent).layout();
-      }
+    OverlayProfile profile = overlays.get(overlayDoc.getAttributes().getNamedItem("id"));
+    if(profile != null){
+      profile.remove();
     }
 
   }
@@ -417,7 +346,11 @@ public class GwtXulDomContainer implements XulDomContainer {
   }
 
   public void loadOverlay(String src) throws XulException {
-    throw new RuntimeException("not yet implemented");
+
+    OverlayProfile profile = overlays.get(src);
+    if(profile != null){
+      profile.perform();
+    }
 
   }
 
@@ -431,7 +364,10 @@ public class GwtXulDomContainer implements XulDomContainer {
   }
 
   public void removeOverlay(String src) throws XulException {
-    throw new RuntimeException("not yet implemented");
+    OverlayProfile profile = overlays.get(src);
+    if(profile != null){
+      profile.remove();
+    }
 
   }
 

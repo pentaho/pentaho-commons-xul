@@ -37,7 +37,10 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   private Integer rows;
   private Integer cols = -1;
   private String value;
-  
+
+  private enum Property{
+    ID, ROWS, COLS, VALUE, DISABLED
+  }
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
     new GwtXulHandler() {
@@ -61,6 +64,32 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
       
     // textBox.setPreferredSize(new Dimension(150,18));
   }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+
+        case ROWS:
+          setRows(Integer.valueOf(value));
+          break;
+        case COLS:
+          setCols(Integer.valueOf(value));
+          break;
+        case VALUE:
+          setValue(value);
+          break;
+        case DISABLED:
+          setDisabled("true".equals(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
+  }
+
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     super.init(srcEle, container);
@@ -296,25 +325,6 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     this.type = type;
   }
 
-  public void adoptAttributes(XulComponent component) {
-    super.adoptAttributes(component);
-
-    if(StringUtils.isEmpty(component.getAttributeValue("rows")) == false){
-      setRows(getInt(component.getAttributeValue("rows")));
-    }
-    if(StringUtils.isEmpty(component.getAttributeValue("cols")) == false){
-      setCols(getInt(component.getAttributeValue("cols")));
-    }
-
-    if(StringUtils.isEmpty(component.getAttributeValue("value")) == false){
-      setValue(component.getAttributeValue("value"));
-    }
-    if(StringUtils.isEmpty(component.getAttributeValue("disabled")) == false){
-      setDisabled("true".equals(component.getAttributeValue("disabled")));
-    }
-    layout();
-    ((AbstractGwtXulComponent) this.getParent()).layout();
-  }
 
   void setRows(Integer rows) {
     this.rows = rows;

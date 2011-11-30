@@ -30,6 +30,10 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   private String dir, group, image, onclick, tooltip, disabledImage, type, downimage, downimagedisabled;
 
+  private enum Property{
+    ID, LABEL, DISABLED, ONCLICK, IMAGE, TOOLTIPTEXT, VISIBLE
+  }
+
   public GwtToolbarbutton() {
     super("toolbarbutton");
   }
@@ -40,6 +44,37 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
         return new GwtToolbarbutton();
       }
     });
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+
+        case LABEL:
+          setLabel(value);
+          break;
+        case DISABLED:
+          setDisabled("true".equals(value));
+          break;
+        case ONCLICK:
+          setOnclick(value);
+          break;
+        case IMAGE:
+          setImage(value);
+          break;
+        case TOOLTIPTEXT:
+          setTooltiptext(value);
+          break;
+        case VISIBLE:
+          setVisible("true".equals(value));
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    }
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
@@ -245,29 +280,6 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     if (button != null) {
       button.setToolTip(tooltip);
     }
-  }
-
-  public void adoptAttributes(XulComponent component) {
-
-    if (component.getAttributeValue("label") != null) {
-      setLabel(component.getAttributeValue("label"));
-    }
-    if (component.getAttributeValue("disabled") != null) {
-      setDisabled("true".equals(component.getAttributeValue("disabled")));
-    }
-    if (component.getAttributeValue("onclick") != null) {
-      setOnclick(component.getAttributeValue("onclick"));
-    }
-    if (component.getAttributeValue("image") != null) {
-      setImage(component.getAttributeValue("image"));
-    }
-    if (component.getAttributeValue("tooltiptext") != null) {
-      setTooltiptext(component.getAttributeValue("tooltiptext"));
-    }
-    if (component.getAttributeValue("pen:visible") != null) {
-      setVisible("true".equals(component.getAttributeValue("pen:visible")));
-    }
-
   }
 
   public String getDownimage() {

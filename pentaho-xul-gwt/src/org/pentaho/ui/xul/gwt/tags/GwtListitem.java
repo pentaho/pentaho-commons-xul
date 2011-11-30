@@ -23,6 +23,10 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
       }
     });
   }
+
+  private enum Property{
+    ID, LABEL, VALUE
+  }
   
   public GwtListitem() {
     super(ELEMENT_NAME);
@@ -35,6 +39,25 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
     }
     if (!StringUtils.isEmpty(srcEle.getAttribute(VALUE))) {
       setValue(srcEle.getAttribute(VALUE));
+    }
+  }
+
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+    try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+      switch (prop) {
+        case LABEL:
+          setLabel(value);
+          break;
+        case VALUE:
+          setValue(value);
+          setValue(value);
+          break;
+      }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
     }
   }
 
@@ -71,14 +94,4 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
     setAttribute(VALUE, (String)value);
   }
 
-  public void adoptAttributes(XulComponent component) {
-    
-    if(component.getAttributeValue(LABEL) != null){
-      setLabel(component.getAttributeValue(LABEL));
-    }
-    
-    if(component.getAttributeValue(VALUE) != null){
-      setValue(component.getAttributeValue(VALUE));
-    }
-  }
 }

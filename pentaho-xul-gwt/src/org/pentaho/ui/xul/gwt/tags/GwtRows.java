@@ -41,12 +41,6 @@ public class GwtRows extends AbstractGwtXulContainer implements XulRows {
     return (XulGrid) getParent();
   }
 
-
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
-  }
-
   public void layout(){
 
   }

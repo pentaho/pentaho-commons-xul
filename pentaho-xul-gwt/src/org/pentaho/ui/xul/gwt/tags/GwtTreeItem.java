@@ -99,9 +99,6 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     this.addChild(row);
   }
 
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub 
-  }
 
   @Bindable
   public String getImage() {

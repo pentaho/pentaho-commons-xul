@@ -15,6 +15,7 @@ import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.binding.BindingProvider;
 import org.pentaho.ui.xul.containers.XulRoot;
+import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.stereotype.Bindable;
 import org.pentaho.ui.xul.util.Align;
@@ -568,51 +569,44 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       Window.alert("Error calling oncommand event"+e.getMessage());
     }
   }
-  public void adoptAttributes(XulComponent component) {
-    if (StringUtils.isEmpty(component.getAttributeValue("tooltiptext")) == false) {
-      // TODO: setOrient should live in an interface somewhere???
-      setTooltiptext(component.getAttributeValue("tooltiptext"));
+  public enum Property{
+    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION
+  }
+  @Override
+  public void setAttribute(String name, String value) {
+    super.setAttribute(name, value);
+     try{
+      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
+       switch (prop) {
+         case TOOLTIP:
+           setTooltiptext(value);
+           break;
+         case FLEX:
+           setFlex(Integer.valueOf(value));
+           break;
+         case WIDTH:
+           setWidth(Integer.valueOf(value));
+           break;
+         case HEIGHT:
+           setHeight(Integer.valueOf(value));
+           break;
+         case VISIBLE:
+           setVisible("true".equals(value));
+           break;
+         case POSITION:
+           setPosition(Integer.valueOf(value));
+           break;
+       }
+    } catch(IllegalArgumentException e){
+      System.out.println("Could not find Property in enum for: "+name+" in class"+getClass().getName());
     }
 
-    if (StringUtils.isEmpty(component.getAttributeValue("flex")) == false) {
-      try {
-        setFlex(Integer.parseInt(component.getAttributeValue("flex")));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
+  }
 
-    if (StringUtils.isEmpty(component.getAttributeValue("width")) == false) {
-      try {
-        setWidth(Integer.parseInt(component.getAttributeValue("width")));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-    if (StringUtils.isEmpty(component.getAttributeValue("height")) == false) {
-      try {
-        setHeight(Integer.parseInt(component.getAttributeValue("height")));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-
-    if (StringUtils.isEmpty(component.getAttributeValue("position")) == false) {
-      try {
-        setPosition(Integer.parseInt(component.getAttributeValue("position")));
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-
-    if (StringUtils.isEmpty(component.getAttributeValue("visible")) == false){ //$NON-NLS-1$
-      try {
-        setVisible(component.getAttributeValue("visible").equalsIgnoreCase("true")? true : false); //$NON-NLS-1$ //$NON-NLS-2$
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-    }
-
+  @Override
+  public void setAttribute(Attribute attribute) {
+    super.setAttribute(attribute);
+    setAttribute(attribute.getName(), attribute.getValue());
   }
 
   public void setAlign(String align) {
@@ -692,4 +686,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     return dropVetoMethod;
   }
 
+  public void adoptAttributes(XulComponent xulComponent) {
+    //To change body of implemented methods use File | Settings | File Templates.
+  }
 }

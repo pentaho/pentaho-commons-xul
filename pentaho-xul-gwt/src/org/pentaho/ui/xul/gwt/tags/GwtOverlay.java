@@ -35,8 +35,6 @@ public class GwtOverlay extends AbstractGwtXulContainer implements XulOverlay{
       
   }
 
-  public void adoptAttributes(XulComponent component) {
-  }
 
   public boolean isDisabled() {
     return false;

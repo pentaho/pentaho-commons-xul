@@ -120,7 +120,4 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
     
   }
 
-  public void adoptAttributes(XulComponent component) {
-
-  }
 }

@@ -59,9 +59,5 @@ public class GwtTreeCols extends AbstractGwtXulContainer implements XulTreeCols 
     return false;
   }
 
-  public void adoptAttributes(XulComponent component) {
-    // TODO Auto-generated method stub
-    
-  }
 
 }
