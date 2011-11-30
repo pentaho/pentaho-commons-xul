@@ -104,6 +104,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private boolean suppressEvents = false;
   private boolean editable = false;
   private boolean visible = true;
+  private boolean isSortable = false;
   private String command;
 
   private Map<String, TreeCellEditor> customEditors = new HashMap<String, TreeCellEditor>();
@@ -385,6 +386,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       // if any column has sortActive flag on, then we will enable the sorting on a table
       // Also we will sort that column by default with a provided direction.
       if(col.isSortActive()) {
+        isSortable = true;
         table.setSortingEnabled(true);
         table.sortColumn(i, sortDirection != null && sortDirection.equals("ASCENDING") ? true: false);         //$NON-NLS-1$
       }
@@ -394,6 +396,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         allFlexing = false;
       }
     }
+    // If the table is sortable then set all columns to be sortable. This enables the sorting by clicking the column header
+    if(isSortable) {
+      for (int i = 0; i < colCount; i++) {
+        table.setColumnSortable(i, true);
+      }
+    }
+    
     if(totalFlex > 0){
       table.fillWidth();
     } else {
