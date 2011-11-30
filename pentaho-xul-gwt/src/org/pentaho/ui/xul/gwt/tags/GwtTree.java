@@ -380,9 +380,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     boolean allFlexing = true;
     for (int i = 0; i < colCount; i++) {
       XulTreeCol col = (XulTreeCol) colCollection.get(i);
-      table.setColumnSortable(i, col.isSortActive());
+      // Get the direction of the sort
+      String sortDirection = col.getSortDirection();
+      // if any column has sortActive flag on, then we will enable the sorting on a table
+      // Also we will sort that column by default with a provided direction.
       if(col.isSortActive()) {
         table.setSortingEnabled(true);
+        table.sortColumn(i, sortDirection != null && sortDirection.equals("ASCENDING") ? true: false);         //$NON-NLS-1$
       }
       int fx = colCollection.get(i).getFlex();
       totalFlex += fx;
@@ -409,7 +413,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         }
       }
     }
-
   }
 
   private TreeItem createNode(final XulTreeItem item){
