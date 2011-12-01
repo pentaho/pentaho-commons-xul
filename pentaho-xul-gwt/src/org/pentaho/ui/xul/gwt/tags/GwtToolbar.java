@@ -58,6 +58,7 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
 
   @Override
   public void layout() {
+    toolbar.removeAll();
     boolean flexLayout = false;
     for(XulComponent c : this.getChildNodes()){
       if(c.getFlex() > 0){
@@ -96,7 +97,7 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
   public void addChild(Element element) {
     super.addChild(element);
     if(loaded == true){
-      toolbar.removeAll();
+//      toolbar.removeAll();
       this.layout();
     }
   }
@@ -105,7 +106,7 @@ public class GwtToolbar extends AbstractGwtXulContainer implements XulToolbar{
   public void addChildAt(Element element, int idx) {
     super.addChildAt(element, idx);
     if(loaded == true){
-      toolbar.removeAll();
+//      toolbar.removeAll();
       this.layout();
     }
   }
