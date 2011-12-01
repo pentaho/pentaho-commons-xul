@@ -134,7 +134,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
    */
   public void setOnclick(final String method) {
     this.onclick = method;
-    if (method != null) {
+    if (method != null && button != null) {
       button.setCommand(new Command() {
         public void execute() {
           try {
@@ -153,7 +153,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   public void setJscommand(String jscommand) {
     this.jscommand = jscommand;
-    if (jscommand != null) {
+    if (jscommand != null && button != null) {
       button.setCommand(new Command() {
         public void execute() {
           executeJS(GwtToolbarbutton.this.jscommand);
@@ -183,7 +183,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   @Bindable
   public void setDisabled(boolean dis) {
-    button.setEnabled(!dis);
+    if(button != null){
+      button.setEnabled(!dis);
+    }
   }
 
   public String getDir() {
@@ -311,7 +313,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public void setVisible(boolean visible) {
     super.setVisible(visible);
-    button.setVisible(visible);
+    if(button != null){
+      button.setVisible(visible);
+    }
   }
 
 }
