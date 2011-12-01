@@ -224,6 +224,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public void setImage(String src) {
     this.image = src;
+    if(button == null){
+      return;
+    }
     if (src != null && src.length() > 0) {
       Image i = new Image(GWT.getModuleBaseURL() + src);
       // WebDriver support.. give the image a direct id we can use as a hook
@@ -237,7 +240,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public void setDisabledImage(String src) {
     this.disabledImage = src;
-    if (src != null && src.length() > 0) {
+    if (src != null && src.length() > 0 && button != null) {
       button.setDisabledImage(new Image(GWT.getModuleBaseURL() + disabledImage));
     }
   }
@@ -292,14 +295,14 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   public void setDownimage(String img) {
     this.downimage = img;
-    if (img != null && img.length() > 0) {
+    if (img != null && img.length() > 0 && button != null) {
       button.setDownImage(new Image(GWT.getModuleBaseURL() + img));
     }
   }
 
   public void setDownimagedisabled(String img) {
     this.downimagedisabled = img;
-    if (img != null && img.length() > 0) {
+    if (img != null && img.length() > 0 && button != null) {
       button.setDownImageDisabled(new Image(GWT.getModuleBaseURL() + img));
     }
   }
