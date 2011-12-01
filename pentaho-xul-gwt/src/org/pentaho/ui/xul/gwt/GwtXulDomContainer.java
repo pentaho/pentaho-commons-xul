@@ -248,9 +248,12 @@ public class GwtXulDomContainer implements XulDomContainer {
     setXulDomContainer(doc.getRootElement());
     OverlayProfile overlayProfile = new OverlayProfile(doc.getRootElement(), document.getRootElement());
     overlays.put(doc.getRootElement().getAttributeValue("id"), overlayProfile);
-    if(apply){
-      overlayProfile.perform();
+
+    // attribute on the overlay can veto the loading (set to false). It can't force one with true though
+    if(!apply || "false".equals(doc.getRootElement().getAttributeValue("loadatstart"))){
+      return;
     }
+    overlayProfile.perform();
   }
 
   private void setXulDomContainer(XulComponent ele){
