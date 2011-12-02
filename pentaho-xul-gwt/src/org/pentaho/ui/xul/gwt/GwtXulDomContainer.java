@@ -23,6 +23,7 @@ import org.pentaho.ui.xul.gwt.overlay.OverlayProfile;
 import org.pentaho.ui.xul.gwt.util.EventHandlerWrapper;
 import org.pentaho.ui.xul.impl.XulEventHandler;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 
 public class GwtXulDomContainer implements XulDomContainer {
@@ -33,6 +34,7 @@ public class GwtXulDomContainer implements XulDomContainer {
   GwtXulLoader loader;
   private XulSettingsManager settings;
   private List<Object> resourceBundles = new ArrayList<Object>();
+  private List<String> overlayToBeApplied = new ArrayList<String>();
 
   private boolean initialized;
 
@@ -247,11 +249,16 @@ public class GwtXulDomContainer implements XulDomContainer {
     // components come in referencing a different dom container. reset it now
     setXulDomContainer(doc.getRootElement());
     OverlayProfile overlayProfile = new OverlayProfile(doc.getRootElement(), document.getRootElement());
-    overlays.put(doc.getRootElement().getAttributeValue("id"), overlayProfile);
-
-    // attribute on the overlay can veto the loading (set to false). It can't force one with true though
-    if(!apply || "false".equals(doc.getRootElement().getAttributeValue("loadatstart"))){
-      return;
+    String id = doc.getRootElement().getAttributeValue("id");
+    overlays.put(id, overlayProfile);
+    boolean exists = existsInOverlayCache(id);
+    if(!exists) {
+      // attribute on the overlay can veto the loading (set to false). It can't force one with true though
+      if(!apply || "false".equals(doc.getRootElement().getAttributeValue("loadatstart"))){
+        return;
+      }
+    } else {
+      removeFromOverlayCache(id);      
     }
     overlayProfile.perform();
   }
@@ -353,6 +360,8 @@ public class GwtXulDomContainer implements XulDomContainer {
     OverlayProfile profile = overlays.get(src);
     if(profile != null){
       profile.perform();
+    } else {
+      overlayToBeApplied.add(src) ;
     }
 
   }
@@ -407,6 +416,28 @@ public class GwtXulDomContainer implements XulDomContainer {
 
   public void setSettingsManager(XulSettingsManager settings) {
     this.settings = settings;
+  }
+  
+  private boolean existsInOverlayCache(String id) {
+    if(overlayToBeApplied != null && overlayToBeApplied.size() > 0) {
+      for(String overlayId:overlayToBeApplied) {
+        if(overlayId.equals(id)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private void removeFromOverlayCache(String id) {
+    if(overlayToBeApplied != null && overlayToBeApplied.size() > 0) {    
+      for(String overlayId:overlayToBeApplied) {
+        if(overlayId.equals(id)) {
+          overlayToBeApplied.remove(overlayId);
+          break;
+        }
+      }
+    }
   }
 
 }
