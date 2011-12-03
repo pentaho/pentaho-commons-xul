@@ -251,14 +251,18 @@ public class GwtXulDomContainer implements XulDomContainer {
     OverlayProfile overlayProfile = new OverlayProfile(doc.getRootElement(), document.getRootElement());
     String id = doc.getRootElement().getAttributeValue("id");
     overlays.put(id, overlayProfile);
-    boolean exists = existsInOverlayCache(id);
+    // Check if the if the overlay id exists in the overlay to be loaded cache
+    //boolean exists = existsInOverlayCache(id);
+    boolean exists = overlayToBeApplied.contains(id);
     if(!exists) {
       // attribute on the overlay can veto the loading (set to false). It can't force one with true though
       if(!apply || "false".equals(doc.getRootElement().getAttributeValue("loadatstart"))){
         return;
       }
     } else {
-      removeFromOverlayCache(id);      
+      // remove the overlay id from the cache and apply the overlay
+      //removeFromOverlayCache(id);
+      overlayToBeApplied.remove(id);
     }
     overlayProfile.perform();
   }
@@ -361,6 +365,8 @@ public class GwtXulDomContainer implements XulDomContainer {
     if(profile != null){
       profile.perform();
     } else {
+      // Overlay is not yet registered by the plugin. So cache this id and apply it at the time of
+      // registration
       overlayToBeApplied.add(src) ;
     }
 
@@ -417,27 +423,4 @@ public class GwtXulDomContainer implements XulDomContainer {
   public void setSettingsManager(XulSettingsManager settings) {
     this.settings = settings;
   }
-  
-  private boolean existsInOverlayCache(String id) {
-    if(overlayToBeApplied != null && overlayToBeApplied.size() > 0) {
-      for(String overlayId:overlayToBeApplied) {
-        if(overlayId.equals(id)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  private void removeFromOverlayCache(String id) {
-    if(overlayToBeApplied != null && overlayToBeApplied.size() > 0) {    
-      for(String overlayId:overlayToBeApplied) {
-        if(overlayId.equals(id)) {
-          overlayToBeApplied.remove(overlayId);
-          break;
-        }
-      }
-    }
-  }
-
 }
