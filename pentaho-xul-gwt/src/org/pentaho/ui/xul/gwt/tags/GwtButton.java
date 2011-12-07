@@ -273,9 +273,11 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
   @Bindable
   public void setDisabledImage(String src) {
-    src = GWT.getModuleBaseURL() + src;
-    this.disabledImage = src;
-    this.imageButton.setDisabledUrl(src);
+    if (imageButton != null) {
+      src = GWT.getModuleBaseURL() + src;
+      this.disabledImage = src;
+      this.imageButton.setDisabledUrl(src);
+    }
   }
 
   @Bindable
