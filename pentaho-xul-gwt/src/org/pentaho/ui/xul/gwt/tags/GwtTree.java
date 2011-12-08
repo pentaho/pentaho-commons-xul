@@ -118,6 +118,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private boolean showAllEditControls = true;
 
   private boolean dropIconsVisible = true;
+  private String onedit, onselect, seltype;
 
   @Bindable
   public boolean isVisible() {
@@ -895,11 +896,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public String getOnedit() {
-    return getAttributeValue("onedit");
+    return onedit;
   }
 
   public String getOnselect() {
-    return getAttributeValue("onselect");
+    return onselect;
   }
 
   public XulTreeChildren getRootChildren() {
@@ -976,7 +977,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public String getSeltype() {
-    return getAttributeValue("seltype");
+    return seltype;
   }
 
   public Object[][] getValues() {
@@ -1210,11 +1211,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public void setOnedit(String onedit) {
-    this.setAttribute("onedit", onedit);
+    this.onedit =onedit;
   }
 
   public void setOnselect(String select) {
-    this.setAttribute("onselect", select);
+    this.onselect = select;
   }
 
   public void setRootChildren(XulTreeChildren rootChildren) {
@@ -1234,7 +1235,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   public void setSeltype(String type) {
     // TODO Auto-generated method stub
     // SINGLE, CELL, MULTIPLE, NONE
-    this.setAttribute("seltype", type);
+    this.seltype = type;
   }
 
   public void update() {

@@ -14,6 +14,8 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
   static final String ELEMENT_NAME = "listitem"; //$NON-NLS-1$
   private static final String VALUE = "value"; //$NON-NLS-1$
   private static final String LABEL = "label"; //$NON-NLS-1$
+  private String label = "";
+  private Object value;
   
   public static void register() {
     GwtXulParser.registerHandler(ELEMENT_NAME, 
@@ -62,11 +64,11 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
   }
 
   public String getLabel(){
-    return getAttributeValue(LABEL);
+    return label;
   }
   
   public void setLabel(String label) {
-    setAttribute(LABEL, label);
+    this.label = label;
   }
   
   public String toString(){
@@ -77,8 +79,8 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
   }
 
   public Object getValue() {
-    if (getAttributeValue(VALUE) != null) {
-      return getAttributeValue(VALUE);
+    if (value != null) {
+      return value;
     }
     return getLabel();
   }
@@ -91,7 +93,7 @@ public class GwtListitem extends AbstractGwtXulComponent implements XulListitem 
   }
 
   public void setValue(Object value) {
-    setAttribute(VALUE, (String)value);
+    this.value = value;
   }
 
 }

@@ -22,6 +22,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   private boolean selIdxBindingsAdded;
   private boolean valBindingsAdded;
   private boolean labelBindingsAdded;
+  private String label = "";
   
   public static void register() {
     GwtXulParser.registerHandler("treecell",
@@ -44,7 +45,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
 
   @Bindable
   public String getLabel() {
-    return (getAttributeValue("label") != null && getAttributeValue("label").trim().length() > 0) ? getAttributeValue("label") : "";
+    return this.label;
   }
 
   @Bindable
@@ -76,8 +77,8 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
 
   @Bindable
   public void setLabel(String label) {
-    String prevVal = this.getAttributeValue("label");
-    this.setAttribute("label", label);
+    String prevVal = this.label;
+    this.label = label;
     this.firePropertyChange("label", prevVal, label);
   }
 
