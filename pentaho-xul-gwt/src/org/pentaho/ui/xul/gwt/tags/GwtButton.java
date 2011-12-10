@@ -1,7 +1,6 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
-import org.pentaho.gwt.widgets.client.buttons.RoundedButton;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper.ButtonLabelType;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
@@ -9,8 +8,9 @@ import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulButton;
+import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
@@ -18,11 +18,19 @@ import org.pentaho.ui.xul.stereotype.Bindable;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.PopupPanel;
+import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class GwtButton extends AbstractGwtXulComponent implements XulButton {
+public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   static final String ELEMENT_NAME = "button"; //$NON-NLS-1$
   enum DIRECTION {forward, reverse};
@@ -49,7 +57,9 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   private ImageButton imageButton;
 
   private boolean disabled;
-
+  private MenuBar menuBar;
+  private PopupPanel popupPanel; 
+  private HandlerRegistration handlerRegistration;
   public GwtButton() {
     super(ELEMENT_NAME);
     //programatic creation doesn't call init() create here for them
@@ -126,7 +136,7 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
     }
     if (!StringUtils.isEmpty(srcEle.getAttribute("onclick"))) {
       setOnclick(srcEle.getAttribute("onclick"));
-    }
+    } 
     if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
       setImage(srcEle.getAttribute("image"));
     }
@@ -166,14 +176,106 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
         }
       }
     };
+    
+    if (button != null) {
+      handlerRegistration = button.addClickHandler(handler);
+    } else if (imageButton != null) {
+      handlerRegistration = imageButton.addClickHandler(handler);
+    } else if (customButton != null) {
+      handlerRegistration = customButton.addClickHandler(handler);
+    }
+  }
+  
+  private void setupClickHandler(){
+    // Remove the handler that was added before
+    
+    if(handlerRegistration != null) {
+      handlerRegistration.removeHandler(); 
+    }
+    
+    // Add a new handler
+    
+    ClickHandler handler = new ClickHandler(){
+      public void onClick(ClickEvent event) {
+        if(!GwtButton.this.disabled) {
+          // Is this a GwtPopup Button and is this already created
+          XulMenupopup popup = getPopupElement();
+          if(popup != null && popupPanel == null) {
+            popupPanel = new PopupPanel();
+            menuBar = new MenuBar(true);
+            menuBar.setAutoOpen(true);
+              // This is a GwtMenuPopop
+              for (XulComponent menuItem : popup.getChildNodes()) {
+                final GwtMenuitem tempItem = ((GwtMenuitem) menuItem);
+                menuBar.addItem(tempItem.getLabel(), new PopupMenuCommand(tempItem.getCommand(), popupPanel));
+              }
+             popupPanel.setWidget(menuBar);
+             popupPanel.setPopupPositionAndShow(new PositionCallback() {
+               public void setPosition(int offsetWidth, int offsetHeight) {
+                 int absLeft = -1;
+                 int absTop = -1;
+                 int offHeight = -1;
+                 if (button != null) {
+                   absLeft = button.getAbsoluteLeft();
+                   absTop = button.getAbsoluteTop();
+                   offHeight = button.getOffsetHeight();
+                 } else if (imageButton != null) {
+                   absLeft = imageButton.getAbsoluteLeft();
+                   absTop = imageButton.getAbsoluteTop();
+                   offHeight = imageButton.getOffsetHeight();
+                 } else if (customButton != null) {
+                   absLeft = customButton.getAbsoluteLeft();
+                   absTop = customButton.getAbsoluteTop();
+                   offHeight = customButton.getOffsetHeight();
+                 }
+                 popupPanel.setPopupPosition(absLeft, absTop + offHeight);
+               }
+             });
+          } else if(popup == null) {
+              try {
+                GwtButton.this.getXulDomContainer().invoke(GwtButton.this.onclick, new Object[] {});
+              } catch (XulException e) {
+                e.printStackTrace();
+              }
+          } else {
+            // If the user click on the popup button again while the popup is showing, hide it
+            if(popupPanel.isShowing()) {
+              popupPanel.hide();
+            } else {
+              popupPanel.setPopupPositionAndShow(new PositionCallback() {
+                public void setPosition(int offsetWidth, int offsetHeight) {
+                  int absLeft = -1;
+                  int absTop = -1;
+                  int offHeight = -1;
+                  if (button != null) {
+                    absLeft = button.getAbsoluteLeft();
+                    absTop = button.getAbsoluteTop();
+                    offHeight = button.getOffsetHeight();
+                  } else if (imageButton != null) {
+                    absLeft = imageButton.getAbsoluteLeft();
+                    absTop = imageButton.getAbsoluteTop();
+                    offHeight = imageButton.getOffsetHeight();
+                  } else if (customButton != null) {
+                    absLeft = customButton.getAbsoluteLeft();
+                    absTop = customButton.getAbsoluteTop();
+                    offHeight = customButton.getOffsetHeight();
+                  }
+                  popupPanel.setPopupPosition(absLeft,  absTop + offHeight);
+                }
+              });              
+            }
+          }
+        }
+      }
+    };
 
 
     if (button != null) {
-      button.addClickHandler(handler);
+      handlerRegistration = button.addClickHandler(handler);
     } else if (imageButton != null) {
-      imageButton.addClickHandler(handler);
+      handlerRegistration = imageButton.addClickHandler(handler);
     } else if (customButton != null) {
-      customButton.addClickHandler(handler);
+      handlerRegistration = customButton.addClickHandler(handler);
     }
   }
 
@@ -318,11 +420,17 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
   }
 
   public void layout() {
-    super.layout();
     if (imageButton != null) {
       imageButton.setHeight("");
       imageButton.setWidth("");
     }
+
+    if(!initialized) {
+      setupClickHandler();
+    }
+      
+    super.layout();
+    
   }
   
   @Override
@@ -365,5 +473,37 @@ public class GwtButton extends AbstractGwtXulComponent implements XulButton {
 
   public String getClassName() {
     return className;
+  }
+  
+  private GwtMenupopup getPopupElement() {
+    for (Element comp : getChildNodes()) {
+      if (comp instanceof GwtMenupopup) {
+        return (GwtMenupopup) comp;
+      }
+    }
+    return null;
+  }
+  
+  class PopupMenuCommand implements Command  {
+
+    private String command;
+    private PopupPanel popupPanel;
+    
+    public PopupMenuCommand(String command, PopupPanel popupPanel) {
+      this.command = command;
+      this.popupPanel = popupPanel;
+    }
+    @Override
+    public void execute() {
+      try {
+        if (popupPanel != null) {
+          popupPanel.hide();
+        }
+        GwtButton.this.getXulDomContainer().invoke(command, new Object[] {});
+      } catch (XulException e) {
+        System.out.println("Error invoking method "+ command + " " + e.getMessage());
+        e.printStackTrace();
+      }
+    }
   }
 }
