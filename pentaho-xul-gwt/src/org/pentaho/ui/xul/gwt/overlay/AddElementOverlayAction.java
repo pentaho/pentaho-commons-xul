@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.gwt.overlay;
 
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 
@@ -23,6 +22,13 @@ public class AddElementOverlayAction implements IOverlayAction {
     this.insertType = insertType;
   }
 
+  public AddElementOverlayAction(Element element, Element parent, Element relativeElement, Type insertType ){
+    this.element = element;
+    this.parent = parent;
+    this.relativeElement = relativeElement;
+    this.insertType = insertType;
+  }
+  
   public AddElementOverlayAction(Element element, Element parent, Type insertType, int position ){
     this.element = element;
     this.parent = parent;

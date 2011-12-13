@@ -1,11 +1,10 @@
 package org.pentaho.ui.xul.gwt.overlay;
 
-import org.apache.commons.logging.Log;
-import org.pentaho.ui.xul.dom.Attribute;
-import org.pentaho.ui.xul.dom.Element;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.pentaho.ui.xul.dom.Attribute;
+import org.pentaho.ui.xul.dom.Element;
 
 /**
  * User: nbaker
@@ -34,6 +33,7 @@ public class OverlayProfile {
         // we don't support both removing and adding to a node at the same time for obvious reasons
         for(Element childNode : overlayNode.getChildNodes()){
           AddElementOverlayAction.Type insertType = AddElementOverlayAction.Type.LAST;
+          Element relativeElement = null;
           if(childNode.getAttributeValue("pos") != null){
             String pos = childNode.getAttributeValue("pos");
             if("first".equals(pos)){
@@ -44,12 +44,14 @@ public class OverlayProfile {
               insertType = AddElementOverlayAction.Type.POSITION;
             }
           } else if(childNode.getAttributeValue("insertbefore") != null){
+            relativeElement = rootElement.getElementById(childNode.getAttributeValue("insertbefore"));
             insertType = AddElementOverlayAction.Type.BEFORE;
           } else if(childNode.getAttributeValue("insertafter") != null){
+            relativeElement = rootElement.getElementById(childNode.getAttributeValue("insertafter"));
             insertType = AddElementOverlayAction.Type.AFTER;
           }
 
-          actions.add(new AddElementOverlayAction(childNode, targetNode, insertType));
+          actions.add(new AddElementOverlayAction(childNode, targetNode, relativeElement, insertType));
         }
       }
 
