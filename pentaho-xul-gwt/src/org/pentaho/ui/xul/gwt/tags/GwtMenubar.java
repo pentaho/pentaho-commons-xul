@@ -84,6 +84,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
   @Override
   public void layout() {
+    menubar.clearItems();
     for (XulComponent c : this.getChildNodes()) {
       add(c);
     }
