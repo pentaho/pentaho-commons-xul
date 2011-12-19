@@ -31,5 +31,7 @@ public interface DialogController<T> {
     void onDialogCancel();
     
     void onDialogReady();
+    
+    void onDialogError(String errorMessage);
   }
 }
