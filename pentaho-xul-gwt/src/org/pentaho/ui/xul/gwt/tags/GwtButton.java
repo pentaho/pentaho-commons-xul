@@ -18,6 +18,7 @@ import org.pentaho.ui.xul.stereotype.Bindable;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -201,7 +202,21 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
           // Is this a GwtPopup Button and is this already created
           XulMenupopup popup = getPopupElement();
           if(popup != null && popupPanel == null) {
-            popupPanel = new PopupPanel();
+            popupPanel = new PopupPanel(true) {
+
+              @Override
+              public boolean onKeyDownPreview(char key, int modifiers) {
+                // Use the popup's key preview hooks to close the dialog when either
+                // enter or escape is pressed.
+                switch (key) {
+                case KeyCodes.KEY_ESCAPE:
+                  hide();
+                  break;
+                }
+                return true;
+              }
+              
+            };
             menuBar = new MenuBar(true);
             menuBar.setAutoOpen(true);
               // This is a GwtMenuPopop
