@@ -1,10 +1,8 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import com.google.gwt.core.client.GWT;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarToggleButton;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulToolbarbutton;
@@ -14,14 +12,9 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.xml.client.NamedNodeMap;
-import com.google.gwt.xml.client.Node;
 
 public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulToolbarbutton {
 
@@ -161,15 +154,6 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
       });
     }
   }
-
-  private native void executeJS(String js)
-  /*-{
-    try{
-      $wnd.eval(js);
-    } catch (e){
-      alert("Javascript Error: " + e.message+"\n\n"+js);
-    }
-  }-*/;
 
   @Bindable
   public String getLabel() {

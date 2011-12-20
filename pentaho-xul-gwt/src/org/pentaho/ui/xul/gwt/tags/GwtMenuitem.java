@@ -158,15 +158,6 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     }
   }
 
-  private native void executeJS(String js)
-  /*-{
-    try{
-      $wnd.eval(js);
-    } catch (e){
-      alert("Javascript Error: " + e.message+"\n\n"+js);
-    }
-  }-*/;
-
   @Override
   public String toString() {
     return getLabel();
