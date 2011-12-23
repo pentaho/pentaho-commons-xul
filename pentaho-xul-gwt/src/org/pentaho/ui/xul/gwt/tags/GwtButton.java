@@ -199,9 +199,6 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     ClickHandler handler = new ClickHandler(){
       public void onClick(ClickEvent event) {
         if(!GwtButton.this.disabled) {
-          if(popupPanel != null && popupPanel.isShowing()) {
-              popupPanel.hide();
-          } else {
           // Is this a GwtPopup Button and is this already created
           XulMenupopup popup = getPopupElement();
           if(popup == null) {
@@ -256,7 +253,6 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                }
              });
           }
-         }
         }
       }
     };
