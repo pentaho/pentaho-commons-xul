@@ -199,9 +199,18 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     ClickHandler handler = new ClickHandler(){
       public void onClick(ClickEvent event) {
         if(!GwtButton.this.disabled) {
+          if(popupPanel != null && popupPanel.isShowing()) {
+              popupPanel.hide();
+          } else {
           // Is this a GwtPopup Button and is this already created
           XulMenupopup popup = getPopupElement();
-          if(popup != null && popupPanel == null) {
+          if(popup == null) {
+            try {
+              GwtButton.this.getXulDomContainer().invoke(GwtButton.this.onclick, new Object[] {});
+            } catch (XulException e) {
+              e.printStackTrace();
+            }
+          } else {
             popupPanel = new PopupPanel(true) {
 
               @Override
@@ -246,40 +255,8 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                  popupPanel.setPopupPosition(absLeft, absTop + offHeight);
                }
              });
-          } else if(popup == null) {
-              try {
-                GwtButton.this.getXulDomContainer().invoke(GwtButton.this.onclick, new Object[] {});
-              } catch (XulException e) {
-                e.printStackTrace();
-              }
-          } else {
-            // If the user click on the popup button again while the popup is showing, hide it
-            if(popupPanel.isShowing()) {
-              popupPanel.hide();
-            } else {
-              popupPanel.setPopupPositionAndShow(new PositionCallback() {
-                public void setPosition(int offsetWidth, int offsetHeight) {
-                  int absLeft = -1;
-                  int absTop = -1;
-                  int offHeight = -1;
-                  if (button != null) {
-                    absLeft = button.getAbsoluteLeft();
-                    absTop = button.getAbsoluteTop();
-                    offHeight = button.getOffsetHeight();
-                  } else if (imageButton != null) {
-                    absLeft = imageButton.getAbsoluteLeft();
-                    absTop = imageButton.getAbsoluteTop();
-                    offHeight = imageButton.getOffsetHeight();
-                  } else if (customButton != null) {
-                    absLeft = customButton.getAbsoluteLeft();
-                    absTop = customButton.getAbsoluteTop();
-                    offHeight = customButton.getOffsetHeight();
-                  }
-                  popupPanel.setPopupPosition(absLeft,  absTop + offHeight);
-                }
-              });              
-            }
           }
+         }
         }
       }
     };
