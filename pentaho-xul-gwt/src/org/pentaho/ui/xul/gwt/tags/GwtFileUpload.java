@@ -90,6 +90,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     uploadForm.setVisible(true);
     // Create a FileUpload widget.
     upload = new FileUpload();
+    upload.setStylePrimaryName("gwt-StyledFileUpload");
     upload.setName("uploadFormElement"); //$NON-NLS-1$
     upload.setVisible(true);
     upload.setHeight(getHeight() + "px");
@@ -109,7 +110,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     uploadTextBox = new GwtTextbox();
     uploadTextBox.setId("gwt_FileUpload_uploadTextBox");
     uploadTextBox.setHeight(getHeight());
-    uploadTextBox.setWidth(getWidth() - 45);
+    uploadTextBox.setWidth(getWidth() - 50);
 
     GwtButton uploadButton = new GwtButton();
     uploadButton.setId("gwt_FileUpload_uploadButton");
@@ -242,6 +243,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     if(name == null || name.length() <=0) {
       hiddenPanel.remove(upload);
       upload = new FileUpload();
+      upload.setStylePrimaryName("gwt-StyledFileUpload");
       upload.setName("uploadFormElement"); //$NON-NLS-1$
       upload.setVisible(true);
       upload.setHeight(getHeight() + "px"); //$NON-NLS-1$
