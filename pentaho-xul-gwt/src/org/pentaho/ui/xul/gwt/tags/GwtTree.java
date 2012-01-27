@@ -399,7 +399,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
     }
 
-    table.populateTable(currentData);
+    table.populateTable(currentData, elements);
     int totalFlex = 0;
     boolean allFlexing = true;
     for (int i = 0; i < colCount; i++) {
@@ -1099,8 +1099,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       this.elements = elements;
       suppressEvents = true;
       prevSelectionPos = -1;
-      this.getRootChildren().removeAll();
-
+      if(this.getRootChildren() != null) {
+        this.getRootChildren().removeAll();
+      }
+      this.elements = elements;
       for (Binding b : expandBindings) {
         b.destroyBindings();
       }
