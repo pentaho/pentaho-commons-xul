@@ -38,6 +38,7 @@ import org.eclipse.jface.viewers.TreeViewerEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.events.*;
@@ -1617,24 +1618,30 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     }
   }
 
-  private void removeItemFromElements(Object item) {
+  private void removeItemFromElements(Object item, DropEvent event) {
     String method = toGetter(((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding());
-    removeItem(elements, method, item);
+    removeItem(elements, method, item, event);
   }
   
-  private void removeItem(Object parent, String childrenMethodProperty, Object toRemove) {
+  private void removeItem(Object parent, String childrenMethodProperty, Object toRemove, DropEvent event) {
     Collection children = getChildCollection(parent, childrenMethodProperty);
     if (children == null) {
       return;
     }
     Iterator iter = children.iterator();
+    int pos = 0;
     while (iter.hasNext()) {
       Object next = iter.next();
       if (next == toRemove) {
+        // check to see if DnD is same origin, if so index needs to be adjusted
+        if(event.getDropParent() == children && event.getDropIndex() > pos){
+          event.setDropIndex(event.getDropIndex()  - 1);
+        }
         children.remove(toRemove);
         return;
       }
-      removeItem(next, childrenMethodProperty, toRemove);
+      removeItem(next, childrenMethodProperty, toRemove, event);
+      pos++;
     }
   }
   
@@ -1950,13 +1957,13 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   @Override
-  protected void onSwtDragFinished(DropEffectType effect) {
+  protected void onSwtDragFinished(DropEffectType effect, DropEvent event) {
     if (effect == DropEffectType.MOVE) {
       // ISelection sel = tree.getSelection();
       if (elements != null) {
         // remove cachedDndItems from the tree.. traverse 
         for (Object item : cachedDndItems) {
-          removeItemFromElements(item);
+          removeItemFromElements(item, event);
         }
         cachedDndItems = null;
         setElements(elements);

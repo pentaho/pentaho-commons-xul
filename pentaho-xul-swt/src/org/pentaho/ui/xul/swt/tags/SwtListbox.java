@@ -364,7 +364,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox{
   }
   
   @Override
-  protected void onSwtDragFinished(DropEffectType effect) {
+  protected void onSwtDragFinished(DropEffectType effect, DropEvent event) {
     if (effect == DropEffectType.MOVE) {
       if (elements != null) {
         throw new UnsupportedOperationException("Bindings not yet supported in drag with move");

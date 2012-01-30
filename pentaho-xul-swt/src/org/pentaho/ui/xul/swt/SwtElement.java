@@ -621,10 +621,10 @@ public class SwtElement extends AbstractXulComponent {
   /**
    * called once the drag is finished
    * 
-   * @param nativeEvent swt event
    * @param effect drop effect, used to detemine if removing is necessary
+   * @param event
    */
-  protected void onSwtDragFinished(DropEffectType effect) {
+  protected void onSwtDragFinished(DropEffectType effect, DropEvent event) {
     throw new UnsupportedOperationException("unsupported element type: " + getClass()); //$NON-NLS-1$
   }
   
@@ -708,7 +708,7 @@ public class SwtElement extends AbstractXulComponent {
         if (xulDndSource == null) {
           throw new RuntimeException("DND Source is null");
         }
-        xulDndSource.onSwtDragFinished(lookupXulEffect(nativeEvent.detail));
+        xulDndSource.onSwtDragFinished(lookupXulEffect(nativeEvent.detail), event);
         
         onSwtDragDropAccepted(event);
         
