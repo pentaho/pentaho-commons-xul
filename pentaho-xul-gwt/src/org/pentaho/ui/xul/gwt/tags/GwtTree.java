@@ -17,6 +17,7 @@ import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
 import org.pentaho.gwt.widgets.client.table.ColumnComparators.BaseColumnComparator;
+import org.pentaho.gwt.widgets.client.table.TableColumnSortListener;
 import org.pentaho.gwt.widgets.client.ui.Draggable;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
@@ -78,7 +79,7 @@ import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
 import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
 import com.google.gwt.widgetideas.table.client.TableSelectionListener;
 
-public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable {
+public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable, TableColumnSortListener {
 
   /**
    * Cached elements.
@@ -796,7 +797,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
     }
 
-    table = new BaseTable(cols, widths, new BaseColumnComparator[cols.length], selectionPolicy);
+    table = new BaseTable(cols, widths, new BaseColumnComparator[cols.length], selectionPolicy, this);
 
     if (getHeight() != 0) {
       table.setHeight(getHeight() + "px");
@@ -1096,12 +1097,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   public <T> void setElements(Collection<T> elements) {
 
     try {
-      this.elements = elements;
       suppressEvents = true;
       prevSelectionPos = -1;
-      if(this.getRootChildren() != null) {
-        this.getRootChildren().removeAll();
-      }
+      this.getRootChildren().removeAll();
       this.elements = elements;
       for (Binding b : expandBindings) {
         b.destroyBindings();
@@ -2031,5 +2029,10 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   public void setDropIconsVisible(boolean dropIconsVisible) {
     this.dropIconsVisible = dropIconsVisible;
+  }
+
+  @Override
+  public void onSortingComplete(Collection sortedData) {
+    elements = sortedData;
   }
 }
