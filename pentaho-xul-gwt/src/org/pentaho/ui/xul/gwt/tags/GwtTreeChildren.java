@@ -7,12 +7,9 @@ import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
-
-import java.util.List;
 
 public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeChildren {
 
@@ -29,6 +26,20 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
     super("treechildren");
   }
   
+  public void addChildAt(Element element, int idx) {
+    super.addChildAt(element, idx);
+    if (getTree() != null) {
+      ((GwtTree)getTree()).updateUI();
+    }
+  }
+  
+  public void addChild(Element element) {
+    super.addChild(element);
+    if (getTree() != null) {
+      ((GwtTree)getTree()).updateUI();
+    }
+  }
+
   public void addItem(XulTreeItem item) {
     addChild(item);
   }
@@ -58,10 +69,6 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
     }
   }
 
-  public XulTree getTree() {
-    return (XulTree)getParent();
-  }
-
   public boolean isAlternatingbackground() {
     // TODO Auto-generated method stub
     return false;
@@ -85,6 +92,19 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
     
   }
 
+  public XulTree getTree() {
+    XulTree tree = null;
+    XulComponent parent = getParent();
+    while (parent != null) {
+      if (parent instanceof XulTree) {
+        tree = (XulTree) parent;
+        break;
+      }
+      parent = parent.getParent();
+    }
+    return tree;
+  }  
+  
 
   public void removeAll() {
     children.clear();
