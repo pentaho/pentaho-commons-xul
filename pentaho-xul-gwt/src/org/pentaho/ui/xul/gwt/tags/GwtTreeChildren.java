@@ -14,29 +14,34 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeChildren {
 
   public static void register() {
-    GwtXulParser.registerHandler("treechildren",
-    new GwtXulHandler() {
+    GwtXulParser.registerHandler("treechildren", new GwtXulHandler() {
       public Element newInstance() {
         return new GwtTreeChildren();
       }
     });
   }
-  
+
   public GwtTreeChildren() {
     super("treechildren");
   }
-  
+
   public void addChildAt(Element element, int idx) {
     super.addChildAt(element, idx);
-    if (getTree() != null) {
-      ((GwtTree)getTree()).updateUI();
+    try {
+      if (getTree() != null) {
+        ((GwtTree) getTree()).updateUI();
+      }
+    } catch (Throwable t) {
     }
   }
-  
+
   public void addChild(Element element) {
     super.addChild(element);
-    if (getTree() != null) {
-      ((GwtTree)getTree()).updateUI();
+    try {
+      if (getTree() != null) {
+        ((GwtTree) getTree()).updateUI();
+      }
+    } catch (Throwable t) {
     }
   }
 
@@ -46,8 +51,8 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
 
   public XulTreeRow addNewRow() {
     try {
-      XulTreeRow row = (XulTreeRow)getDocument().createElement("treerow");
-      XulTreeItem item = (XulTreeItem)getDocument().createElement("treeitem");
+      XulTreeRow row = (XulTreeRow) getDocument().createElement("treerow");
+      XulTreeItem item = (XulTreeItem) getDocument().createElement("treeitem");
       item.setRow(row);
       addItem(item);
       return row;
@@ -89,7 +94,7 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
 
   public void setAlternatingbackground(boolean alt) {
     // TODO Auto-generated method stub
-    
+
   }
 
   public XulTree getTree() {
@@ -103,14 +108,13 @@ public class GwtTreeChildren extends AbstractGwtXulContainer implements XulTreeC
       parent = parent.getParent();
     }
     return tree;
-  }  
-  
+  }
 
   public void removeAll() {
     children.clear();
     if (getTree() != null) {
-      ((GwtTree)getTree()).updateUI();
+      ((GwtTree) getTree()).updateUI();
     }
   }
-  
+
 }
