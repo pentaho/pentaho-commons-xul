@@ -125,7 +125,7 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     if(item != null && item.isDisposed() == false){
       int mask = 0;
       if(accessKey.indexOf("ctrl") > -1){ //$NON-NLS-1$
-        mask += SWT.CTRL;
+        mask += SWT.MOD1;
       }
       if(accessKey.indexOf("shift") > -1){ //$NON-NLS-1$
         mask += SWT.SHIFT;
@@ -145,6 +145,19 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
       if (accessKey.indexOf("esc") > -1) { //$NON-NLS-1$
         mask += SWT.ESC;
       }
+      if(accessKey.indexOf("left") > -1){ //$NON-NLS-1$
+          mask += SWT.ARROW_LEFT;
+      }
+      if(accessKey.indexOf("right") > -1){ //$NON-NLS-1$
+          mask += SWT.ARROW_RIGHT;
+      }
+      if(accessKey.indexOf("up") > -1){ //$NON-NLS-1$
+          mask += SWT.ARROW_UP;
+      }
+      if(accessKey.indexOf("down") > -1){ //$NON-NLS-1$
+          mask += SWT.ARROW_DOWN;
+      }
+      
       String remainder = accessKey.replaceAll("ctrl", "").replaceAll("shift", "").replaceAll("alt", "").replaceAll("-", "").trim();
       if(remainder.length() == 1){
         mask += remainder.toUpperCase().charAt(0);
