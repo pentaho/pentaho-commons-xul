@@ -249,7 +249,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
       return;
     }
     if (tabFolder.getItemCount() > idx) {
-      tabFolder.getItem(idx).dispose();
+      tabFolder.getItem(idx).getControl().dispose();
     }
   }
 
