@@ -1,5 +1,8 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Image;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarToggleButton;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
@@ -11,10 +14,6 @@ import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Image;
 
 public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulToolbarbutton {
 
@@ -195,6 +194,9 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   @Bindable
   public boolean isSelected() {
+    if (button instanceof ToolbarToggleButton) {
+      return ((ToolbarToggleButton) button).isSelected();
+    }
     return false;
   }
 

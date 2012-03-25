@@ -1,18 +1,8 @@
 package org.pentaho.ui.xul.gwt.util;
 
-import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
-import org.pentaho.gwt.widgets.client.utils.ElementUtils;
-import org.pentaho.gwt.widgets.client.utils.Rectangle;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.tags.GwtDialog;
-
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 
 public abstract class GenericDialog extends AbstractGwtXulContainer{
 
@@ -55,9 +45,12 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     dialog.setStylePrimaryName("pentaho-dialog");
     
   }
-  
+
+
   public void hide(){
-    dialog.hide();
+    if(dialog != null){
+      dialog.hide();
+    }
   }
   
   public void show(){
