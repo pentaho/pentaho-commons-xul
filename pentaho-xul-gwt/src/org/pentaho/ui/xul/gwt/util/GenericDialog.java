@@ -1,6 +1,7 @@
 package org.pentaho.ui.xul.gwt.util;
 
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.ui.*;
 import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 
