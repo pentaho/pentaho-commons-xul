@@ -125,37 +125,37 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     if(item != null && item.isDisposed() == false){
       int mask = 0;
       if(accessKey.indexOf("ctrl") > -1){ //$NON-NLS-1$
-        mask += SWT.MOD1;
+        mask |= SWT.MOD1;
       }
       if(accessKey.indexOf("shift") > -1){ //$NON-NLS-1$
-        mask += SWT.SHIFT;
+        mask |= SWT.SHIFT;
       }
       if(accessKey.indexOf("alt") > -1){ //$NON-NLS-1$
-        mask += SWT.ALT;
+        mask |= SWT.ALT;
       }
       if(accessKey.indexOf("pageup") > -1) { //$NON-NLS-1$
-        mask += SWT.PAGE_UP;
+        mask |= SWT.PAGE_UP;
       }
       if(accessKey.indexOf("pagedown") > -1) { //$NON-NLS-1$
-        mask += SWT.PAGE_DOWN;
+        mask |= SWT.PAGE_DOWN;
       }
       if(accessKey.indexOf("home") > -1) { //$NON-NLS-1$
-        mask += SWT.HOME;
+        mask |= SWT.HOME;
       }
       if (accessKey.indexOf("esc") > -1) { //$NON-NLS-1$
-        mask += SWT.ESC;
+        mask |= SWT.ESC;
       }
+      if(accessKey.indexOf("up") > -1 && accessKey.indexOf("pageup") == -1){ //$NON-NLS-1$
+          mask |= SWT.ARROW_UP;
+      }
+      if(accessKey.indexOf("down") > -1 && accessKey.indexOf("pagedown") == -1){ //$NON-NLS-1$
+          mask |= SWT.ARROW_DOWN;
+      }      
       if(accessKey.indexOf("left") > -1){ //$NON-NLS-1$
-          mask += SWT.ARROW_LEFT;
+          mask |= SWT.ARROW_LEFT;
       }
       if(accessKey.indexOf("right") > -1){ //$NON-NLS-1$
-          mask += SWT.ARROW_RIGHT;
-      }
-      if(accessKey.indexOf("up") > -1){ //$NON-NLS-1$
-          mask += SWT.ARROW_UP;
-      }
-      if(accessKey.indexOf("down") > -1){ //$NON-NLS-1$
-          mask += SWT.ARROW_DOWN;
+          mask |= SWT.ARROW_RIGHT;
       }
       
       String remainder = accessKey.replaceAll("ctrl", "").replaceAll("shift", "").replaceAll("alt", "").replaceAll("-", "").trim();
