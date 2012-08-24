@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
@@ -14,7 +15,9 @@ import org.pentaho.ui.xul.dom.Element;
 public class SwtCheckbox extends SwtButton implements XulCheckbox {
 	
 	private static final Log logger = LogFactory.getLog(SwtCheckbox.class);
-	private String command;
+  public static final String CHECKED = "checked";
+
+  private String command;
 	
   public SwtCheckbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(null, parent, container, tagName);
@@ -22,7 +25,14 @@ public class SwtCheckbox extends SwtButton implements XulCheckbox {
 
   @Override
   protected Button createNewButton(Composite parent) {
-    return new Button(parent, SWT.CHECK);
+    final Button button = new Button(parent, SWT.CHECK);
+    button.addSelectionListener(new SelectionAdapter() {
+      @Override
+      public void widgetSelected(SelectionEvent e) {
+        changeSupport.firePropertyChange(CHECKED, !button.getSelection(), button.getSelection());
+      }
+    });
+    return button;
   }
   
   public boolean isChecked() {
@@ -30,7 +40,9 @@ public class SwtCheckbox extends SwtButton implements XulCheckbox {
   }
 
   public void setChecked(boolean checked) {
+    boolean prev = isChecked();
     if ((!button.isDisposed()) && (button != null)) button.setSelection(checked);
+    changeSupport.firePropertyChange(CHECKED, null, checked);
   }
   
   public void setCommand(final String method) {

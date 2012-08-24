@@ -455,7 +455,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
     int width = 75;
     for(Map.Entry<String, SwtButton> entry : activeDialogButtons.entrySet()){
-      width = Math.max(width, entry.getValue().button.getBounds().width);
+      // Compute the size required to render the component and grab the width
+      width = Math.max(width, entry.getValue().button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
     }
     
     GridData gd = new GridData();
