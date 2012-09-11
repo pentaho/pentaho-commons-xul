@@ -227,7 +227,9 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   }
 
   protected Browser createBrowser(Composite parent){
-    return new Browser(parent, SWT.None);
+    Browser browser =  new Browser(parent, SWT.None);
+    browser.setUrl("http://");
+    return browser;
   }
 
   public boolean getShowtoolbar() {
