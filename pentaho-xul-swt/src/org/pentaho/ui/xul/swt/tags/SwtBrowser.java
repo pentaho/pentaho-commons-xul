@@ -1,5 +1,6 @@
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.*;
 import org.eclipse.swt.events.KeyAdapter;
@@ -19,12 +20,14 @@ import org.pentaho.ui.xul.swt.SwtElement;
 
 public class SwtBrowser  extends SwtElement implements XulBrowser {
 
+  private static final String EMPTY_URL = "about:blank";
+  
   private Browser browser;
   private Composite mainPanel;
   private boolean showToolbar = true;
   private Text location;
   private ToolBar toolbar;
-  private String src = "about:blank";
+  private String src = EMPTY_URL;
   private String home;
   private Composite toolbarPanel;
 
@@ -57,6 +60,9 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   }
 
   public void setSrc(String src) {
+    if (StringUtils.isEmpty(src)) {
+      src = EMPTY_URL;
+    }
     if(browser != null){
       browser.setUrl(src);
       location.setText(src);
@@ -221,7 +227,9 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   }
 
   protected Browser createBrowser(Composite parent){
-    return new Browser(parent, SWT.None);
+    Browser browser =  new Browser(parent, SWT.None);
+    browser.setUrl("http://");
+    return browser;
   }
 
   public boolean getShowtoolbar() {
