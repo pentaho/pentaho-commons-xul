@@ -1776,29 +1776,26 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   @Override
-  public void setPopup(final IMenuManager menu) {
+  public void setPopup(final IMenuManager menuMgr) {
     final Control control;
     if (isHierarchical()){
       control = tree.getControl();
     }else{
       control = table.getControl();
     }
-//    control.setMenu(m);
+
+	Menu menu = ((MenuManager)menuMgr).createContextMenu(control);
+	control.setMenu(menu);
+    
     control.addListener(SWT.MenuDetect, new Listener(){
 
       public void handleEvent(Event evt) {
 
         
         Point pt = control.getDisplay().map(control, null, new Point(evt.x, evt.y));
-        
-    	if( menu instanceof MenuManager) {
-    		Menu m = ((MenuManager) menu).createContextMenu(control);
-            m.setLocation(evt.x, evt.y);
-            m.setVisible(true);
-    	}
-        
+        Menu menu = control.getMenu();
+        menu.setLocation(evt.x, evt.y);
         menu.setVisible(true);
-		menu.update(true);
       }
       
     });

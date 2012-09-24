@@ -8,6 +8,8 @@ import java.io.InputStream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -89,6 +91,30 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
     setManagedObject(button);
   }
   
+
+  public void setMenu(final IMenuManager menu){
+    //the generic impl... override if you need a more sophisticated handling of the menu
+    if(button != null && button.isDisposed() == false){
+      button.addSelectionListener(new SelectionAdapter(){
+  
+        
+        @Override
+        public void widgetSelected(SelectionEvent evt) {
+          Rectangle rect = button.getBounds();
+          Point pt = button.getParent().toDisplay(new Point(rect.x, rect.y));
+          if( menu instanceof MenuManager ) {
+        	  Menu swtMenu = ((MenuManager) menu).createContextMenu(button.getParent());
+        	  menu.update(true);
+        	  swtMenu.setLocation(pt.x, pt.y + rect.height);
+        	  swtMenu.setVisible(true);
+          }
+          
+        }
+        
+      });
+    }
+  
+  }
 
   public void setMenu(final Menu menu){
     //the generic impl... override if you need a more sophisticated handling of the menu
