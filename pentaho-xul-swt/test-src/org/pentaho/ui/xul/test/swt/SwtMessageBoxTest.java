@@ -7,7 +7,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMessageBox;
-import org.pentaho.ui.xul.containers.XulMenu;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 
@@ -15,7 +14,6 @@ public class SwtMessageBoxTest {
 
   Document doc = null;
   XulDomContainer container;
-//  XulMenu menu;
   
   @Before
   public void setUp() throws Exception {
@@ -23,7 +21,6 @@ public class SwtMessageBoxTest {
     container = new SwtXulLoader().loadXul("resource/documents/messagetest.xul");
 
     doc = container.getDocumentRoot();
-//    menu = (XulMenu) doc.getElementById("file-menu");
     
   }
   
