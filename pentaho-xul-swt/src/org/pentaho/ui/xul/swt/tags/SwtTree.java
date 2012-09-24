@@ -15,6 +15,8 @@ import java.util.Vector;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -1772,9 +1774,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       tree.setExpandedState(item, expanded);
     }
   }
-  
+
   @Override
-  public void setPopup(final Menu menu) {
+  public void setPopup(final IMenuManager menu) {
     final Control control;
     if (isHierarchical()){
       control = tree.getControl();
@@ -1788,8 +1790,15 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
         
         Point pt = control.getDisplay().map(control, null, new Point(evt.x, evt.y));
-        menu.setLocation(evt.x, evt.y);
+        
+    	if( menu instanceof MenuManager) {
+    		Menu m = ((MenuManager) menu).createContextMenu(control);
+            m.setLocation(evt.x, evt.y);
+            m.setVisible(true);
+    	}
+        
         menu.setVisible(true);
+		menu.update(true);
       }
       
     });
