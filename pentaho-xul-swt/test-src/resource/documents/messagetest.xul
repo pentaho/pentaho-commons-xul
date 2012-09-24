@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="label-test" title="Testing Menu"
+  orient="vertical"
+  xmlns="http://www.pentaho.org/there.is.only.xul"
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
+  <script id="handler" src="org.pentaho.ui.xul.samples.ListBoxHandler"/>
+
+</window>

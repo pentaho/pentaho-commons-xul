@@ -15,15 +15,15 @@ public class SwtMessageBoxTest {
 
   Document doc = null;
   XulDomContainer container;
-  XulMenu menu;
+//  XulMenu menu;
   
   @Before
   public void setUp() throws Exception {
     
-    container = new SwtXulLoader().loadXul("resource/documents/menutest.xul");
+    container = new SwtXulLoader().loadXul("resource/documents/messagetest.xul");
 
     doc = container.getDocumentRoot();
-    menu = (XulMenu) doc.getElementById("file-menu");
+//    menu = (XulMenu) doc.getElementById("file-menu");
     
   }
   

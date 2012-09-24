@@ -24,9 +24,10 @@ public class JfaceMenubar extends AbstractSwtXulContainer implements XulMenubar 
       
       if( window == null ) {
     	  logger.error("No ApplicationWindow available via ApplicationWindowLocal");
+      } else {
+          menuManager = window.getMenuBarManager();
       }
       
-      menuManager = window.getMenuBarManager();
       logger.debug("JfaceMenubar grabbed window's MenuManager: "+menuManager);
 //      System.out.println("JfaceMenubar grabbed window's MenuManager: "+menuManager);
       setManagedObject(menuManager);

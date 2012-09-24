@@ -7,9 +7,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulException;
 
-public class SwtMenubarTest extends ApplicationWindow {
+public class SwtMenubarSample1 extends ApplicationWindow {
 
-  public SwtMenubarTest(Shell parentShell) {
+  public SwtMenubarSample1(Shell parentShell) {
 		super(parentShell);
 
 		this.addMenuBar();
@@ -36,7 +36,7 @@ public class SwtMenubarTest extends ApplicationWindow {
 
   public static void main( String args[] ) throws IllegalArgumentException, XulException {
 	  
-	  SwtMenubarTest window = new SwtMenubarTest(null);
+	  SwtMenubarSample1 window = new SwtMenubarSample1(null);
 	  window.setBlockOnOpen( true );
 	  window.open();
 	    Display.getCurrent().dispose();	    
