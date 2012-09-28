@@ -72,7 +72,12 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   
   public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd){
 
-    action = new Action((self != null) ? self.getAttributeValue("label") : "tmp name") {
+	  int style = Action.AS_DROP_DOWN_MENU;
+	  if( self != null && "checkbox".equals(self.getAttributeValue("type")) ) {
+		style = Action.AS_CHECK_BOX;
+	  }
+	  
+    action = new Action((self != null) ? self.getAttributeValue("label") : "tmp name", style) {
     	      public void run() {
     	          String command = JfaceMenuitem.this.onCommand;
     	          if(command != null){
