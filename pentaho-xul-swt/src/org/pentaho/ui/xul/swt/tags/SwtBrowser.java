@@ -168,7 +168,6 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
       }
     });
 
-
     browser.setUrl(src);
     
     data = new GridData();
@@ -227,8 +226,9 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   }
 
   protected Browser createBrowser(Composite parent){
-    Browser browser =  new Browser(parent, SWT.None);
-    browser.setUrl("http://");
+	 // Force *nix (like CentOS) to use Mozilla
+    Browser browser =  new Browser(parent, (isUnix() ? SWT.MOZILLA : SWT.NONE));
+    browser.setUrl(EMPTY_URL);
     return browser;
   }
 
@@ -247,5 +247,12 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   
   public Browser getBrowser(){
     return browser;
+  }
+  
+  private static boolean isUnix() {
+	  String os = System.getProperty("os.name").toLowerCase();
+	  // linux or unix
+	  return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
+
   }
 }
