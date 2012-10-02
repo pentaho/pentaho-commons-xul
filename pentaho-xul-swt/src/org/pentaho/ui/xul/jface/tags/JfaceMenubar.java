@@ -63,6 +63,10 @@ public class JfaceMenubar extends AbstractSwtXulContainer implements XulMenubar 
 	      super.addChild(c);
 	  }
 
+	  if(menuManager == null) {
+		  // there is nothing else to do
+		  return;
+	  }
 	  // see if we have this already
 	  IContributionItem items[] = menuManager.getItems();
 	  for( IContributionItem item : items ) {

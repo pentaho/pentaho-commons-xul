@@ -298,16 +298,15 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   @Override
   public void setVisible(boolean visible) {
 
-	  IMenuManager menu = (IMenuManager) parent.getManagedObject();
-	  for( IContributionItem item : menu.getItems() ) {
-		  if( item.getId() != null && item.getId().equals(action.getId() )) {
-//System.out.println("JFaceMenuItem setting visible for "+item.getId()+" "+label+" ("+item.getClass().getSimpleName()+") to "+visible);
-			  			  item.setVisible(visible);
-			  			  return;
+	  if( parent.getManagedObject() instanceof IMenuManager ) {
+		  IMenuManager menu = (IMenuManager) parent.getManagedObject();
+		  for( IContributionItem item : menu.getItems() ) {
+			  if( item.getId() != null && item.getId().equals(action.getId() )) {
+	  			  item.setVisible(visible);
+	  			  return;
+			  }
 		  }
 	  }
-//	  System.out.println("JFaceMenuItem failed setting visible for "+action.getId()+" "+label);
-	  
 	  
   }
   

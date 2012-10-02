@@ -3,6 +3,9 @@ package org.pentaho.ui.xul.jface.tags;
 import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -169,17 +172,31 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
       popup.removeChild(menuItem);
     }
 
-    if(tees == null){
+    if(tees == null || tees.size() == 0){
       return;
+    }
+    
+    List<XulComponent> items = popup.getChildNodes();
+    Map<String,JfaceMenuitem> itemMap = new HashMap<String,JfaceMenuitem>();
+    for( XulComponent item : items ) {
+    	if( item instanceof JfaceMenuitem ) {
+        	itemMap.put(((JfaceMenuitem) item).getLabel(), (JfaceMenuitem) item);
+    	}
     }
     for (T t : tees) {
       try{
-        XulMenuitem item = (XulMenuitem) xulDomContainer.getDocumentRoot().createElement("menuitem");
+    	  String label = extractLabel(t);
+    	  if( itemMap.get(label) != null ) {
+    		  // make it visible
+    		  itemMap.get(label).setVisible(true);
+    	  } else {
+    	        XulMenuitem item = (XulMenuitem) xulDomContainer.getDocumentRoot().createElement("menuitem");
 
-        String attribute = getBinding();
-        item.setLabel(extractLabel(t));
-  
-        popup.addChild(item);
+    	        String attribute = getBinding();
+    	        item.setLabel( label );
+    	  
+    	        popup.addChild(item);
+    	  }
       } catch(XulException e){
         logger.error("Unable to create new menulist menuitem: ", e);
       }

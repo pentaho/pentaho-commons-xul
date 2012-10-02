@@ -4,14 +4,20 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.jface.tags.PentahoMenuManager;
 
-public class JFaceExample extends ApplicationWindow implements Listener
+public class JFaceExample extends ApplicationWindow implements Listener, ShellListener, DisposeListener
 {
   private ExitAction exitAction;
   Menu swtSubMenu;
@@ -24,8 +30,10 @@ public class JFaceExample extends ApplicationWindow implements Listener
     super( null );
     exitAction = new ExitAction( this );
     this.addMenuBar();
-
+    
   }
+  
+  
   
   public void menuInit() {
 	  subMenu.setEnabled(false);
@@ -34,6 +42,8 @@ public class JFaceExample extends ApplicationWindow implements Listener
   protected Control createContents(Composite parent)
   {
     getShell().setText("JFace File Explorer");
+//    getShell().addDisposeListener(this);
+    getShell().addShellListener(this);
     setStatus( "JFace Example v1.0" );
     menuInit();
 
@@ -58,12 +68,12 @@ public class JFaceExample extends ApplicationWindow implements Listener
   
   public int open() {
 
-	  setBlockOnOpen( true );
+	  setBlockOnOpen( false );
 	    super.open();
-//	    runEventLoop2(getShell());
+	    runEventLoop2(getShell());
 	    return 0;
   }
-/* 
+ 
   private void runEventLoop2(Shell loopShell) {
 	   		//Use the display provided by the shell if possible
 	   		Display display;
@@ -82,7 +92,7 @@ public class JFaceExample extends ApplicationWindow implements Listener
 	   		}
 	   		if (!display.isDisposed()) display.update();
 	   	}  
-  */
+  
   protected MenuManager createMenuManager()
   {
     MenuManager menuBar = new MenuManager("");
@@ -121,6 +131,57 @@ public class JFaceExample extends ApplicationWindow implements Listener
 @Override
 public void handleEvent(Event arg0) {
 	this.stop(false);
+}
+
+
+
+@Override
+public void shellActivated(ShellEvent arg0) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+@Override
+public void shellClosed(ShellEvent arg0) {
+
+	System.out.println("shellClosed()");
+	stop(false);
+}
+
+
+
+@Override
+public void shellDeactivated(ShellEvent arg0) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+@Override
+public void shellDeiconified(ShellEvent arg0) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+@Override
+public void shellIconified(ShellEvent arg0) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+
+@Override
+public void widgetDisposed(DisposeEvent arg0) {
+	
+	System.out.println("widgetDisposed()");
+	stop(false);
+
 }
   
 }
