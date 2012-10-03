@@ -127,7 +127,7 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
 	   		}
 	    } else {
 	    	parent.addChild(this);
-	    	menu.add(action);
+	    	//menu.add(action); -- The menu action is already added by parent.addChild(this)
 	    }
   	  }
     }
