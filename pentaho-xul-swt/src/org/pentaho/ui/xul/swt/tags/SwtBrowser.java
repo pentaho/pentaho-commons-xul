@@ -227,7 +227,7 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
 
   protected Browser createBrowser(Composite parent){
 	 // Force *nix (like CentOS) to use Mozilla
-    Browser browser =  new Browser(parent, (isUnix() ? SWT.MOZILLA : SWT.NONE));
+    Browser browser =  new Browser(parent, (isCentOS() ? SWT.MOZILLA : SWT.NONE));
     browser.setUrl(EMPTY_URL);
     return browser;
   }
@@ -249,10 +249,12 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
     return browser;
   }
   
-  private static boolean isUnix() {
+  private static boolean isCentOS() {
 	  String os = System.getProperty("os.name").toLowerCase();
+	  String osVersion = System.getProperty("os.version").toLowerCase();  
+	  
 	  // linux or unix
-	  return (os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0);
+	  return (os.indexOf("nux") >= 0 && osVersion.contains("centos"));
 
   }
 }
