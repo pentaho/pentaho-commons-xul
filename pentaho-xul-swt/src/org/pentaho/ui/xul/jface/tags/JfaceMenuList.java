@@ -97,7 +97,9 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
       if(mItem.isSelected()){
         this.selectedItem = mItem;
       }
-      combobox.add(mItem.getLabel());
+      if(mItem.isVisible()){	
+    	  combobox.add(mItem.getLabel());
+      }
     }
     int idx = -1;
     if(selectedItem != null){
@@ -106,6 +108,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
       idx = 0;
     }
     this.setSelectedIndex(idx);
+    this.combobox.update();
   }
 
   /*
@@ -167,7 +170,10 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   }
 
   public void setElements(Collection<T> tees) {
-    this.elements = tees;
+	  
+	    String selected = this.getSelectedItem();
+	    this.elements = tees;
+    
     for (XulComponent menuItem : popup.getChildNodes()) {
       popup.removeChild(menuItem);
     }
@@ -202,6 +208,14 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
       }
     }
 
+    if( selected != null ) {
+    	Collection<T> elist = getElements();
+    	for( T t : elist ) {
+    		if( selected.equals(t.toString() )) {
+    	    	setSelectedItem(t);
+    		}
+    	}
+    }
     layout();
   }
   public int getSelectedIndex() {
@@ -216,7 +230,21 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
     }
     fireSelectedEvents();
   }
-
+  
+  @Override
+  public void removeChild(Element ele) {
+	    String selected = this.getSelectedItem();
+	  super.removeChild(ele);
+	    if( selected != null ) {
+	    	Collection<T> elist = getElements();
+	    	for( T t : elist ) {
+	    		if( selected.equals(t.toString() )) {
+	    	    	setSelectedItem(t);
+	    		}
+	    	}
+	    }
+	  
+  }
 
   private void fireSelectedEvents(){
     int idx = getSelectedIndex();
