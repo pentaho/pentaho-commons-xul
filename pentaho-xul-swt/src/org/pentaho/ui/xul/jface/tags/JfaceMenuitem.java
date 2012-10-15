@@ -224,18 +224,24 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
 
   public boolean isSelected() {
 	  if( action != null ) {
-	    return action.isChecked();
+//	    return action.isChecked();
 	  }
 	  return selected;
   }
   
   public void setSelected(boolean val){
+	  boolean changing = selected != val;
     selected = val;
     if(action != null){
       action.setChecked(selected);
-//System.out.println("JfaceMenuItem.setSelected "+action.getId()+"="+val);
-    } else {
-//    	System.out.println("JfaceMenuItem.setSelected no action");
+    }
+    if(parent != null && parent instanceof JfaceMenupopup && parent.getParent() instanceof JfaceMenuList ) {
+    	if( val ) {
+        	((JfaceMenuList) parent.getParent() ).setSelectedItem(this);
+    	} 
+    	else if(changing) {
+        	((JfaceMenuList) parent.getParent() ).setSelectedItem(null);
+    	}
     }
   }
 

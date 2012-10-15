@@ -84,6 +84,13 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
     super.addChild(ele);
     if(ele instanceof XulMenupopup){
       popup = (JfaceMenupopup) ele;
+      for( XulComponent child : popup.getChildNodes() ) {
+    	  if( child instanceof JfaceMenuitem ) {
+    		  if(((JfaceMenuitem) child).isSelected()) {
+   				  setSelectedItem((T) child);
+    		  }
+    	  }
+      }
     }
   }
 
