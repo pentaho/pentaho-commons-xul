@@ -15,6 +15,8 @@ import java.util.Vector;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -1775,24 +1777,25 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
   
   @Override
-  public void setPopup(final Menu menu) {
+  public void setPopup(final IMenuManager menuMgr) {
     final Control control;
     if (isHierarchical()){
       control = tree.getControl();
     }else{
       control = table.getControl();
     }
-//    control.setMenu(m);
+
+	Menu menu = ((MenuManager)menuMgr).createContextMenu(control);
+	control.setMenu(menu);
+    
     control.addListener(SWT.MenuDetect, new Listener(){
 
       public void handleEvent(Event evt) {
-
-        
-        Point pt = control.getDisplay().map(control, null, new Point(evt.x, evt.y));
-        menu.setLocation(evt.x, evt.y);
-        menu.setVisible(true);
-      }
-      
+          Point pt = control.getDisplay().map(control, null, new Point(evt.x, evt.y));
+          Menu menu = control.getMenu();
+          menu.setLocation(evt.x, evt.y);
+          menu.setVisible(true);
+        }
     });
 
   }

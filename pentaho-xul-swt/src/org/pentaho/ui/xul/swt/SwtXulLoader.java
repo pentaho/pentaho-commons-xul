@@ -58,12 +58,12 @@ public class SwtXulLoader extends AbstractXulLoader{
     parser.registerHandler("TAB", "org.pentaho.ui.xul.swt.tags.SwtTab");
     parser.registerHandler("TABPANELS", "org.pentaho.ui.xul.swt.tags.SwtTabpanels");
     parser.registerHandler("TABPANEL", "org.pentaho.ui.xul.swt.tags.SwtTabpanel");
-    parser.registerHandler("MENULIST", "org.pentaho.ui.xul.swt.tags.SwtMenuList");
-    parser.registerHandler("MENUPOPUP", "org.pentaho.ui.xul.swt.tags.SwtMenupopup");
-    parser.registerHandler("MENUITEM", "org.pentaho.ui.xul.swt.tags.SwtMenuitem");
-    parser.registerHandler("MENUSEPARATOR", "org.pentaho.ui.xul.swt.tags.SwtMenuseparator");
-    parser.registerHandler("MENU", "org.pentaho.ui.xul.swt.tags.SwtMenu");
-    parser.registerHandler("MENUBAR", "org.pentaho.ui.xul.swt.tags.SwtMenubar");
+    parser.registerHandler("MENULIST", "org.pentaho.ui.xul.jface.tags.JfaceMenuList");
+    parser.registerHandler("MENUPOPUP", "org.pentaho.ui.xul.jface.tags.JfaceMenupopup");
+    parser.registerHandler("MENUITEM", "org.pentaho.ui.xul.jface.tags.JfaceMenuitem");
+    parser.registerHandler("MENUSEPARATOR", "org.pentaho.ui.xul.jface.tags.JfaceMenuseparator");
+    parser.registerHandler("MENU", "org.pentaho.ui.xul.jface.tags.JfaceMenu");
+    parser.registerHandler("MENUBAR", "org.pentaho.ui.xul.jface.tags.JfaceMenubar");
     parser.registerHandler("RADIOGROUP", "org.pentaho.ui.xul.swt.tags.SwtRadioGroup");
     parser.registerHandler("RADIO", "org.pentaho.ui.xul.swt.tags.SwtRadio");
     parser.registerHandler("IMAGE", "org.pentaho.ui.xul.swt.tags.SwtImage");

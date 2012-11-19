@@ -17,6 +17,8 @@ import java.util.WeakHashMap;
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
@@ -377,7 +379,7 @@ public class SwtElement extends AbstractXulComponent {
     throw new NotImplementedException();
   }
   
-  public void setMenu(final Menu menu){
+  public void setMenu(final IMenuManager menu){
     //the generic impl... override if you need a more sophisticated handling of the menu
     if(getManagedObject() instanceof Control){
       final Control c = (Control) getManagedObject();
@@ -387,6 +389,7 @@ public class SwtElement extends AbstractXulComponent {
         public void mouseDown(MouseEvent evt) {
           Control source = (Control) evt.getSource();
           Point pt = source.getDisplay().map(source, null, new Point(evt.x, evt.y));
+          Menu menu = source.getMenu();
           menu.setLocation(pt.x, pt.y);
           menu.setVisible(true);
         }
@@ -395,11 +398,15 @@ public class SwtElement extends AbstractXulComponent {
     }
   }
   
-  public void setPopup(Menu menu){
-    //the generic impl... override if you need a more sophisticated handling of the popupmenu
-    if(getManagedObject() instanceof Control){
-      ((Control) getManagedObject()).setMenu(menu);
-    }
+  public void setPopup(IMenuManager menu){
+	//the generic impl... override if you need a more sophisticated handling of the popupmenu
+	if(getManagedObject() instanceof Control){
+	    Control control = (Control) getManagedObject();
+	  	if( menu instanceof MenuManager) {
+	   		Menu m = ((MenuManager) menu).createContextMenu(control);
+	   		menu.update(true);
+	  	}
+	}
   }
 
   @Override
@@ -410,7 +417,7 @@ public class SwtElement extends AbstractXulComponent {
       if(pop == null){
         logger.error("could not find popup menu ("+context+") to add to this component");
       } else {
-        setPopup((Menu) pop.getManagedObject());
+        setPopup((IMenuManager) pop.getManagedObject());
       }
     }
     
@@ -420,7 +427,7 @@ public class SwtElement extends AbstractXulComponent {
       if(pop == null){
         logger.error("could not find popup menu ("+context+") to add to this component");
       } else {
-        setMenu((Menu) pop.getManagedObject());
+        setMenu((IMenuManager) pop.getManagedObject());
       }
     }
   }
