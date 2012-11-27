@@ -68,6 +68,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     return !menuitem.isEnabled();
   }
 
+  @Bindable
   public boolean isChecked() {
       return menuitem.isChecked();
   }
@@ -98,6 +99,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     menuitem.setEnabled("false".equals(disabled));
   }
 
+  @Bindable
   public void setChecked(boolean checked) {
     menuitem.setUseCheckUI(true);
     menuitem.setChecked(checked);
