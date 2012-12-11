@@ -237,7 +237,6 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     return disabledImage;
   }
 
-  @Bindable
   public void setSelected(String selected) {
 
   }
@@ -245,7 +244,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public void setSelected(boolean selected) {
     if (button instanceof ToolbarToggleButton) {
-      ((ToolbarToggleButton) button).setSelected(selected, true);
+      ((ToolbarToggleButton) button).setSelected(selected, false);
     } else if (button instanceof ToolbarButton) {
     }
 
