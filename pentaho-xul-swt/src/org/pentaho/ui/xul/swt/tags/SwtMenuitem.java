@@ -13,6 +13,7 @@ import org.eclipse.jface.action.LegacyActionTools;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Menu;
@@ -250,6 +251,9 @@ public class SwtMenuitem extends SwtElement implements XulMenuitem{
     setAcceltext(getAcceltext());
   }
   
+  public void addSelectionListener(SelectionListener listener) {
+    item.addSelectionListener(listener);
+  }
 }
 
   
