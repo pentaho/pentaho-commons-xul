@@ -66,70 +66,90 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
 
   }
   
+  public JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName, int pos, Action action) {
+    super("menuitem");
+    this.parent = parent;
+    this.domContainer = domContainer;
+    createItem(self, parent, pos, true, action);
+  }
+
+  public void setAction(Action action) {
+    this.action = action;
+  }
+  
   public IAction getAction() {
 	  return action;
   }
-  
-  public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd){
 
-	  int style = Action.AS_DROP_DOWN_MENU;
-	  if( self != null && "checkbox".equals(self.getAttributeValue("type")) ) {
-		style = Action.AS_CHECK_BOX;
-	  }
-	  
-    action = new Action((self != null) ? self.getAttributeValue("label") : "tmp name", style) {
-    	      public void run() {
-    	          String command = JfaceMenuitem.this.onCommand;
-    	          if(command != null){
-    	        	  try {
-    	            invoke(command);
-    	        	  } catch (Exception e) {
-    	        		  e.printStackTrace();
-    	        	  }
-    	          }
-    	      }
-    	    };
-    	    
-    	    
-    	    String id = getId();
-    	    if( id == null && self != null ) {
-    	    	id = self.getAttributeValue("ID");
-    	    }
-    	    if( id == null ) {
-    	    	id="menuitem-"+menuItemSerial;
-    	    	menuItemSerial++;
-    	    }
-    	    action.setId(id);
-    	    if( action.getText() == null || action.getText().equals("") ) {
-//    	    	System.out.println("JfaceMenuitem createItem adding blank action");
-    	    }
-    	    
-    	    action.setChecked(selected);
-    	    
+  public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd){
+    createItem(self, parent, pos, autoAdd, null);
+  }
+
+  public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd, Action alternativeAction) {
+
+    int style = Action.AS_DROP_DOWN_MENU;
+    if (self != null && "checkbox".equals(self.getAttributeValue("type"))) {
+      style = Action.AS_CHECK_BOX;
+    }
+
+    if (alternativeAction != null) {
+      action = alternativeAction;
+    } else {
+      action = new Action((self != null) ? self.getAttributeValue("label") : "tmp name", style) {
+        public void run() {
+          String command = JfaceMenuitem.this.onCommand;
+          if (command != null) {
+            try {
+              invoke(command);
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+          }
+        }
+      };
+    }
+
+    String id = getId();
+    if (id == null && self != null) {
+      id = self.getAttributeValue("ID");
+    }
+    if (id == null) {
+      id = "menuitem-" + menuItemSerial;
+      menuItemSerial++;
+    }
+    action.setId(id);
+    if (action.getText() == null || action.getText().equals("")) {
+      // System.out.println("JfaceMenuitem createItem adding blank action");
+    }
+
+    action.setChecked(selected);
+
     setManagedObject(action);
-    if( autoAdd ) {
-  	  IMenuManager menu = (IMenuManager) parent.getManagedObject();
-  	  if( pos == -1 ) {
-  		  menu.add(action);
-  	  } else {
-  	    if( pos < getChildNodes().size() ) {
-	    	if( pos >= menu.getItems().length ) {
-//	    		System.out.println("hmm..."+menu.getItems().length);
-	    	}
-	   		String anchorId = menu.getItems()[pos].getId();
-	   		if( anchorId == null ) {
-//	   			System.out.println("can't find anchor id for "+((JfaceMenuitem) self).getLabel());
-		    	menu.add(action);
-		    	parent.addChild(this);
-	   		} else {
-	   			menu.insertBefore(anchorId, action);
-	   			parent.addChildAt(this, pos);
-	   		}
-	    } else {
-	    	parent.addChild(this);
-	    	//menu.add(action); -- The menu action is already added by parent.addChild(this)
-	    }
-  	  }
+    if (autoAdd) {
+      IMenuManager menu = (IMenuManager) parent.getManagedObject();
+      if (pos == -1) {
+        menu.add(action);
+      } else {
+        if (pos < getChildNodes().size()) {
+          if (pos >= menu.getItems().length) {
+            // System.out.println("hmm..."+menu.getItems().length);
+          }
+          String anchorId = menu.getItems()[pos].getId();
+          if (anchorId == null) {
+            // System.out.println("can't find anchor id for "+((JfaceMenuitem)
+            // self).getLabel());
+            menu.add(action);
+            parent.addChild(this);
+          } else {
+            menu.insertBefore(anchorId, action);
+            parent.addChildAt(this, pos);
+          }
+        } else {
+          parent.addChild(this);
+          // menu.add(action); -- The menu action is already added by
+          // parent.addChild(this)
+        }
+      }
     }
   }
 
@@ -316,6 +336,8 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
 	  }
 	  
   }
+  
+  
   
   
 }

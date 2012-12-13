@@ -263,6 +263,9 @@ public class JfaceMenupopup extends AbstractSwtXulContainer implements XulMenupo
 	  }
   }
   
+  public void removeChildren() {
+    menu.removeAll();
+  }
 }
 
   
