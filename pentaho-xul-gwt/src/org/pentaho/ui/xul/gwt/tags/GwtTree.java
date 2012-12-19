@@ -1098,6 +1098,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     try {
       suppressEvents = true;
+      suppressLayout = true;
       prevSelectionPos = -1;
       this.getRootChildren().removeAll();
       this.elements = elements;
@@ -1113,6 +1114,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
       if (elements == null || elements.size() == 0) {
         suppressEvents = false;
+        suppressLayout = false;
         updateUI();
         return;
       }
@@ -1155,6 +1157,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
 
       suppressEvents = false;
+      suppressLayout = false;
       this.clearSelection();
       updateUI();
     } catch (Exception e) {
