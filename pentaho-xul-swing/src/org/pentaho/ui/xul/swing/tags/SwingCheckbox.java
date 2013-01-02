@@ -5,7 +5,6 @@ package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
 import javax.swing.JCheckBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -14,10 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulCheckbox;
-import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
@@ -40,7 +36,7 @@ public class SwingCheckbox extends SwingElement implements XulCheckbox{
     
     checkBox.addItemListener(new ItemListener(){
       public void itemStateChanged(ItemEvent e) {
-        SwingCheckbox.this.changeSupport.firePropertyChange("checked", null, ((JCheckBox) e.getSource()).isSelected());
+        SwingCheckbox.this.firePropertyChange("checked", null, ((JCheckBox) e.getSource()).isSelected());
       }
     });
     

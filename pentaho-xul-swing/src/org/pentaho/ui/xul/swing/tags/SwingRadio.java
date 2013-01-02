@@ -46,7 +46,7 @@ public class SwingRadio extends SwingElement implements XulRadio{
       public void itemStateChanged(ItemEvent e) {
         boolean selected = (e.getStateChange()==ItemEvent.SELECTED);
         logger.debug("firing selected property change: isSelected="+selected);
-        SwingRadio.this.changeSupport.firePropertyChange("selected", null, selected);
+        SwingRadio.this.firePropertyChange("selected", null, selected);
       }
       
     });
@@ -102,6 +102,6 @@ public class SwingRadio extends SwingElement implements XulRadio{
   public void setValue(String aValue) {
     String previousVal = this.value;
     this.value = aValue;  
-    this.changeSupport.firePropertyChange("value", previousVal, aValue);
+    this.firePropertyChange("value", previousVal, aValue);
   }     
 }

@@ -1,6 +1,5 @@
 package org.pentaho.ui.xul.swing.tags;
 
-import javax.swing.JButton;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -80,7 +79,7 @@ public class SwingScale extends SwingElement implements XulScale{
     if(slider != null){
       slider.setValue(value);
     }
-    this.changeSupport.firePropertyChange("value", prevVal, value);
+    this.firePropertyChange("value", prevVal, value);
   }
 
   public void layout() {
