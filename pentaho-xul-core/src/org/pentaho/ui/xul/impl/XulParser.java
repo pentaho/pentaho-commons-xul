@@ -3,10 +3,10 @@
  */
 package org.pentaho.ui.xul.impl;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -20,7 +20,6 @@ import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
@@ -31,28 +30,25 @@ import org.pentaho.ui.xul.util.XulUtil;
  *
  */
 public class XulParser {
-  Document xulDocument;
+  private static final Namespace PENTAHO_NAMESPACE = new Namespace("pen", "http://www.pentaho.org/2008/xul");
+
   private static final Log logger = LogFactory.getLog(XulParser.class);
 
-  public Map<String, Object> handlers = new HashMap<String, Object>();
-  private Map<String, Constructor<?>> constructorCache = new HashMap<String, Constructor<?>>();
-
   private XulDomContainer xulDomContainer;
-
-
-  private List<ClassLoader> classloaders = new ArrayList<ClassLoader>();
-  {
-    classloaders.add(this.getClass().getClassLoader());
-  }
+  private Map<String,XulElementFactory> xulElementFactory;
+  private Document xulDocument;
+  private List<ClassLoader> classloaders;
 
   public XulParser() throws XulException {
+    classloaders = new ArrayList<ClassLoader>();
+    classloaders.add(this.getClass().getClassLoader());
+    xulElementFactory = new HashMap<String, XulElementFactory>();
     try {
       xulDocument = DocumentFactory.createDocument();
     } catch (Exception e) {
       throw new XulException("Error getting Document instance", e);
     }
   }
-  
 
   public void setContainer(XulDomContainer xulDomContainer) {
     this.xulDomContainer = xulDomContainer;
@@ -93,52 +89,21 @@ public class XulParser {
   
   private void notifyDomReady(XulComponent node){
     node.onDomReady();
-    for(XulComponent c : node.getChildNodes()){
-      notifyDomReady(c);
+    List<XulComponent> childNodes = node.getChildNodes();
+    for (int i = 0; i < childNodes.size(); i++)
+    {
+      XulComponent component = childNodes.get(i);
+      notifyDomReady(component);
     }
   }
 
-  private Constructor<?> getContructor(String className) throws XulException{
-    Constructor<?> con = constructorCache.get(className);
-
-    if(con != null){
-      return con;
-    }
-
-    Class<?> c = null;
-    Throwable lastException = null;
-    for(ClassLoader loader : classloaders){
-      try{
-        c = loader.loadClass(className);
-        if (c != null) {
-          break;
-        }
-      } catch(ClassNotFoundException e){
-        lastException = e;
-      }
-    }
-    if (c == null && lastException != null) {
-      throw new XulException(lastException);
-    }
-
-    try {
-      Constructor<?> constructor = c.getConstructor(new Class[] { Element.class, XulComponent.class, XulDomContainer.class, String.class });
-      constructorCache.put(className, constructor);
-      return constructor;
-    } catch (NoSuchMethodException e1) {
-      throw new XulException(e1);
-    }
-  
-  }
-  
   public XulContainer getPlaceHolderRoot() throws XulException{
     try{
-      Object handlerClassName = handlers.get("WINDOW");
-      if(handlerClassName == null){
-        throw new XulException("Could not find a tag handler for window");
-      }
-      XulWindow ele = (XulWindow) getContructor(handlerClassName.toString()).newInstance(null, null, xulDomContainer, "window");
-      return ele;
+      XulElementFactory elementFactory = xulElementFactory.get("WINDOW");
+      if (elementFactory == null)
+        throw new XulException("Unable to find handler for 'window'");
+
+      return (XulContainer) elementFactory.create(null, null, xulDomContainer, "WINDOW");
     } catch (Exception e) {
       throw new XulException(e);
     }
@@ -164,12 +129,11 @@ public class XulParser {
       root.addChild(childElement);
 
     }
-    if (root != null) {
-      // should layout be part of the public API?
-      // is this the appropriate place for layout?
-      if (root instanceof AbstractXulComponent) {
-        ((AbstractXulComponent)root).layout();
-      }
+
+    // should layout be part of the public API?
+    // is this the appropriate place for layout?
+    if (root instanceof AbstractXulComponent) {
+      ((AbstractXulComponent)root).layout();
     }
 
     return root;
@@ -177,20 +141,20 @@ public class XulParser {
 
   protected XulComponent getElement(org.dom4j.Element srcEle, XulContainer parent) throws XulException {
 
-    String handlerName = srcEle.getName().toUpperCase();
-    Attribute att = srcEle.attribute(new QName("customclass",new Namespace("pen", "http://www.pentaho.org/2008/xul")));
+    String handlerName = srcEle.getName().toUpperCase(Locale.ENGLISH);
+    Attribute att = srcEle.attribute(new QName("customclass", PENTAHO_NAMESPACE));
     
     // If the custom handler is registered, use it; otherwise, fall back to the original element handler...
+    XulElementFactory elementFactory = null;
     if (att != null){
-      String potentialHandlerName = att.getValue().toUpperCase();
-      if (handlers.get(potentialHandlerName)!=null){
-        handlerName = potentialHandlerName;
-      }
+      String potentialHandlerName = att.getValue().toUpperCase(Locale.ENGLISH);
+      elementFactory = this.xulElementFactory.get(potentialHandlerName);
     }
 
-    Object handler = handlers.get(handlerName);
+    if (elementFactory == null)
+    elementFactory = this.xulElementFactory.get(handlerName);
 
-    if (handler == null) {
+    if (elementFactory == null) {
     	logger.error("handler not found: " + handlerName);
       return null;
     	//throw new XulException(String.format("No handler available for input: %s", srcEle.getName()));
@@ -199,8 +163,6 @@ public class XulParser {
     String tagName = srcEle.getName();
     try {
 
-      Constructor<?> constructor = getContructor((String) handler);
-
       //create a generic element representation of the current Dom4J node
       Element domEle = DocumentFactory.createElement(srcEle.getName().toLowerCase());
       List<Attribute> attrs = srcEle.attributes();
@@ -208,8 +170,8 @@ public class XulParser {
         domEle.setAttribute(attr.getName(), attr.getValue());
       }
       
-      XulComponent ele = (XulComponent) constructor.newInstance(domEle, parent, xulDomContainer, tagName);
-      
+      XulComponent ele = elementFactory.create(domEle, parent, xulDomContainer, tagName);
+
       //preserve atributes in new Generic Dom node
       for(Attribute attr : attrs){
         ele.setAttribute(attr.getName(), attr.getValue());
@@ -230,27 +192,35 @@ public class XulParser {
   }
 
   public XulComponent getElement(String name, XulComponent defaultParent) throws XulException{
-  	 Object handler = handlers.get(name.toUpperCase());
+    XulElementFactory handler = this.xulElementFactory.get(name.toUpperCase(Locale.ENGLISH));
 
      if (handler == null) {
        logger.error("tag handler not found: " + name);
        throw new XulException(String.format("No handler available for input: %s", name));
      }
+
      try {
-
-       Constructor<?> constructor = getContructor((String) handler);
-
-       XulComponent ele = (XulComponent) constructor.newInstance(null, defaultParent, xulDomContainer, name);
-       return ele;
+       return handler.create(null, defaultParent, xulDomContainer, name);
      } catch (Exception e) {
        throw new XulException(e);
      }
   }
 
-  public void registerHandler(String type, String handler) {
-
-    handlers.put(type.toUpperCase(), handler);
-
+  public void registerHandler(String type, XulElementFactory handler) throws XulException
+  {
+    if (handler == null)
+      throw new NullPointerException();
+    if (type == null)
+      throw new NullPointerException();
+    xulElementFactory.put(type.toUpperCase(Locale.ENGLISH), handler);
+  }
+  public void registerHandler(String type, String handler) throws XulException
+  {
+    if (type == null)
+      throw new NullPointerException();
+    if (handler == null)
+      throw new NullPointerException();
+    xulElementFactory.put(type.toUpperCase(Locale.ENGLISH), new ReflectionXulElementFactory(handler, classloaders));
   }
 
   public Document getDocumentRoot() {
@@ -270,7 +240,12 @@ public class XulParser {
   }
 
   public void setClassLoaders(List<ClassLoader> loaders){
-    this.classloaders = loaders;
+    this.classloaders.clear();
+    this.classloaders.addAll(loaders);
   }
 
+  public boolean isRegistered(final String elementName)
+  {
+    return xulElementFactory.containsKey(elementName.toUpperCase(Locale.ENGLISH));
+  }
 }
