@@ -86,7 +86,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     }
     this.value = text;
     if (text != null || oldVal != null) {
-      this.changeSupport.firePropertyChange("value", oldVal, text);
+      this.firePropertyChange("value", oldVal, text);
     }
   }
 
@@ -107,7 +107,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     if (textComp != null) {
       textComp.setEnabled(!dis);
     }
-    this.changeSupport.firePropertyChange("disabled", oldValue, dis);
+    this.firePropertyChange("disabled", oldValue, dis);
   }
 
   public void setMaxlength(int length) {
@@ -205,7 +205,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
 	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
 	      public void keyReleased(KeyEvent e) {
 	        if(oldValue != null && !oldValue.equals(textComp.getText())){
-	          SwingTextbox.this.changeSupport.firePropertyChange("value", oldValue, SwingTextbox.this.getValue());
+	          SwingTextbox.this.firePropertyChange("value", oldValue, SwingTextbox.this.getValue());
 	          oldValue = textComp.getText();
 	        } else if(oldValue == null){
 	          //AWT error where sometimes the keyReleased is fired before keyPressed.

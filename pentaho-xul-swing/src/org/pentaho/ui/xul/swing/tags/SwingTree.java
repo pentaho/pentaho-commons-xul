@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
+import javax.swing.event.CellEditorListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -121,13 +123,13 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   private SELECTION_MODE selType = SELECTION_MODE.SINGLE;
 
   private XulDomContainer domContainer;
-  
+
   private String command;
-  
+
   private String newItemBinding;
-  
+
   private boolean autoCreateNewRows;
-  
+
 
   public SwingTree(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("tree");
@@ -283,7 +285,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     if (table != null) {
       table.getSelectionModel().addListSelectionListener(selectionListener);
     }
-    
+
     treeSelectionListener = new TreeSelectionListener() {
       public void valueChanged(TreeSelectionEvent e) {
         if (tree != null) {
@@ -291,7 +293,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         }
       }
     };
-    
+
     if (tree != null) {
       tree.getSelectionModel().addTreeSelectionListener(treeSelectionListener);
     }
@@ -320,7 +322,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     getRootChildren().addItem(new SwingTreeItem(row));
 
-    table.updateUI();
+//    table.updateUI();
   }
 
   public void removeTreeRows(int[] rows) {
@@ -340,10 +342,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       }
     }
 
-    table.updateUI();
+//    table.updateUI();
     // treat as selection change.
-    changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
-    changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
+    firePropertyChange("selectedRows", null, getSelectedRows());
+    firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
   }
 
   private int rows = -1;
@@ -393,8 +395,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       }
       tree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
         public void valueChanged(TreeSelectionEvent e) {
-          SwingTree.this.changeSupport.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
-          SwingTree.this.changeSupport.firePropertyChange("absoluteSelectedRows", null, SwingTree.this.getAbsoluteSelectedRows());
+          SwingTree.this.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
+          SwingTree.this.firePropertyChange("absoluteSelectedRows", null, SwingTree.this.getAbsoluteSelectedRows());
           SwingTree.this.fireSelectedItem();
         }
       });
@@ -487,8 +489,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         if (event.getValueIsAdjusting() == true) {
           return;
         }
-        SwingTree.this.changeSupport.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
-        SwingTree.this.changeSupport.firePropertyChange("absoluteSelectedRows", null, SwingTree.this.getAbsoluteSelectedRows());
+        SwingTree.this.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows());
+        SwingTree.this.firePropertyChange("absoluteSelectedRows", null, SwingTree.this.getAbsoluteSelectedRows());
       }
     });
 
@@ -533,7 +535,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       this.item = item;
     }
   }
-  
+
   private void setupTree() {
     XulTreeNode topNode = new XulTreeNode("placeholder", null);
     for (XulComponent c : getRootChildren().getChildNodes()) {
@@ -646,8 +648,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       }
       return vals;
     }
-  }  
-  
+  }
+
   public void addRow(XulTreeRow row) {
     SwingTreeItem item = new SwingTreeItem(row);
 
@@ -669,10 +671,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         table.setModel(new XulTableModel(this));
         updateColumnModel();
         calcColumnWidths();
-        table.updateUI();
+//        table.updateUI();
       } else {
         setupTree();
-        tree.updateUI();
+//        tree.updateUI();
       }
     }
   }
@@ -775,166 +777,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   private TableCellEditor getCellEditor(final SwingTreeCol col) {
-    return new DefaultCellEditor(new JComboBox()) {
-
-      JComponent control;
-
-      @Override
-      public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
-        Component comp;
-        ColumnType colType = col.getColumnType();
-        if (colType == ColumnType.DYNAMIC) {
-          colType = ColumnType.valueOf(extractDynamicColType(elements.toArray()[row], column));
-        }
-
-        final XulTreeCell cell = getRootChildren().getItem(row).getRow().getCell(column);
-        switch (colType) {
-        case CHECKBOX:
-          final JCheckBox checkbox = new JCheckBox();
-          final JTable tbl = table;
-          checkbox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-              SwingTree.this.table.setValueAt(checkbox.isSelected(), row, column);
-              tbl.getCellEditor().stopCellEditing();
-            }
-          });
-
-          control = checkbox;
-          if (value instanceof String) {
-            checkbox.setSelected(((String) value).equalsIgnoreCase("true"));
-          } else if (value instanceof Boolean) {
-            checkbox.setSelected((Boolean) value);
-          } else if (value == null) {
-            checkbox.setSelected(false);
-          }
-          if (isSelected) {
-            checkbox.setBackground(Color.LIGHT_GRAY);
-          }
-          comp = checkbox;
-          checkbox.setEnabled(!cell.isDisabled());
-          break;
-        case EDITABLECOMBOBOX:
-        case COMBOBOX:
-          Vector val = (value != null && value instanceof Vector) ? (Vector) value : new Vector();
-          final JComboBox comboBox = new JComboBox(val);
-
-          if (isSelected) {
-            comboBox.setBackground(Color.LIGHT_GRAY);
-          }
-
-          if (colType == ColumnType.EDITABLECOMBOBOX) {
-
-            comboBox.setEditable(true);
-            final JTextComponent textComp = (JTextComponent) comboBox.getEditor().getEditorComponent();
-
-            textComp.addKeyListener(new KeyListener() {
-              private String oldValue = "";
-
-              public void keyPressed(KeyEvent e) {
-                oldValue = textComp.getText();
-              }
-
-              public void keyReleased(KeyEvent e) {
-                if (oldValue != null && !oldValue.equals(textComp.getText())) {
-                  SwingTree.this.table.setValueAt(textComp.getText(), row, column);
-
-                  oldValue = textComp.getText();
-                } else if (oldValue == null) {
-                  // AWT error where sometimes the keyReleased is fired before keyPressed.
-                  oldValue = textComp.getText();
-                } else {
-                  logger.debug("Special key pressed, ignoring");
-                }
-              }
-
-              public void keyTyped(KeyEvent e) {
-              }
-            });
-
-            comboBox.addActionListener(new ActionListener() {
-              public void actionPerformed(ActionEvent event) {
-                // if(textComp.hasFocus() == false && comboBox.hasFocus()){
-                SwingTree.logger.debug("Setting ComboBox value from editor: " + comboBox.getSelectedItem() + ", " + row + ", " + column);
-
-                SwingTree.this.table.setValueAt(comboBox.getSelectedIndex(), row, column);
-                // }
-              }
-            });
-          } else {
-            comboBox.addActionListener(new ActionListener() {
-              public void actionPerformed(ActionEvent event) {
-
-                SwingTree.logger.debug("Setting ComboBox value from editor: " + comboBox.getSelectedItem() + ", " + row + ", " + column);
-
-                SwingTree.this.table.setValueAt(comboBox.getSelectedIndex(), row, column);
-              }
-            });
-          }
-
-          control = comboBox;
-          comboBox.setEnabled(!cell.isDisabled());
-          comp = comboBox;
-          break;
-        case LABEL:
-          JLabel lbl = new JLabel(cell.getLabel());
-          comp = lbl;
-          control = lbl;
-          break;
-        case CUSTOM:
-          return new CustomCellEditorWrapper(cell, customEditors.get(col.getType()));
-        default:
-          final JTextField label = new JTextField((String) value);
-
-          label.getDocument().addDocumentListener(new DocumentListener() {
-
-            public void changedUpdate(DocumentEvent arg0) {
-              SwingTree.this.table.setValueAt(label.getText(), row, column);
-            }
-
-            public void insertUpdate(DocumentEvent arg0) {
-              SwingTree.this.table.setValueAt(label.getText(), row, column);
-            }
-
-            public void removeUpdate(DocumentEvent arg0) {
-              SwingTree.this.table.setValueAt(label.getText(), row, column);
-            }
-
-          });
-          if (isSelected) {
-            label.setOpaque(true);
-            // label.setBackground(Color.LIGHT_GRAY);
-          }
-
-          control = label;
-          comp = label;
-          label.setEnabled(!cell.isDisabled());
-          label.setDisabledTextColor(Color.DARK_GRAY);
-          break;
-        }
-
-        return comp;
-      }
-
-      @Override
-      public Object getCellEditorValue() {
-        if (control instanceof JCheckBox) {
-          return ((JCheckBox) control).isSelected();
-        } else if (control instanceof JComboBox) {
-          JComboBox box = (JComboBox) control;
-          if (box.isEditable()) {
-            return ((JTextComponent) box.getEditor().getEditorComponent()).getText();
-          } else {
-            return box.getSelectedIndex();
-          }
-        } else if (control instanceof JTextField) {
-          return ((JTextField) control).getText();
-        } else {
-          return ((JLabel) control).getText();
-        }
-      }
-
-    };
-
+    return new SwingTreeCellEditor(col);
   }
 
   private class XulTreeModel extends DefaultTreeModel {
@@ -1126,12 +969,12 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     if (elements == null) {
       if (table != null) {
-        table.updateUI();
+//        table.updateUI();
       } else {
-        tree.updateUI();
+//        tree.updateUI();
       }
-      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
-      changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
+      firePropertyChange("selectedRows", null, getSelectedRows());
+      firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
       return;
     }
     try {
@@ -1249,16 +1092,16 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       }
 
       if (table != null) {
-        table.updateUI();
+//        table.updateUI();
       } else {
         setupTree();
-        tree.updateUI();
+//        tree.updateUI();
       }
       suppressEvents = false;
 
       // treat as a selection change
-      changeSupport.firePropertyChange("selectedRows", null, getSelectedRows());
-      changeSupport.firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
+      firePropertyChange("selectedRows", null, getSelectedRows());
+      firePropertyChange("absoluteSelectedRows", null, getAbsoluteSelectedRows());
     } catch (XulException e) {
       logger.error("error adding elements", e);
     } catch (Exception e) {
@@ -1285,9 +1128,9 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       // find children
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
       property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
-      
+
       Method childrenMethod = null;
-      
+
       try{
         childrenMethod = element.getClass().getMethod(property, new Class[] {});
       } catch(NoSuchMethodException e){
@@ -1322,7 +1165,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   private void fireSelectedItem() {
-    this.changeSupport.firePropertyChange("selectedItem", null, getSelectedItem());
+    this.firePropertyChange("selectedItem", null, getSelectedItem());
   }
 
   public Object getSelectedItem() {
@@ -1340,7 +1183,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
         SearchBundle b = findSelectedIndex(new SearchBundle(), getRootChildren(), node.item);
         vals[0] = b.curPos;
       }
-      
+
       String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
       property = "get" + (property.substring(0, 1).toUpperCase() + property.substring(1));
 //      Method childrenMethod = null;
@@ -1382,7 +1225,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     }
     return bundle;
   }
-  
+
   private static class FindSelectedItemTuple {
     Object selectedItem = null;
     int curpos = -1; // ignores first element (root)
@@ -1419,7 +1262,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 //    }
 //    return null;
 //  }
-  
+
   private FindSelectedItemTuple findSelectedItem(Object parent, String childrenMethodProperty,
       FindSelectedItemTuple tuple) {
     if (tuple.curpos == tuple.selectedIndex) {
@@ -1461,11 +1304,11 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       logger.error(e);
       return null;
     }
-    
+
     return children;
   }
-  
-  
+
+
   public void setExpanded(boolean expanded) {
     this.expanded = expanded;
     if (this.tree != null) {
@@ -1521,6 +1364,11 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       cell.setValue(value);
     }
 
+    public Object getCellEditorValue()
+    {
+      return getText();
+    }
+
   }
 
   private static class CustomTreeCellEditor implements org.pentaho.ui.xul.util.TreeCellEditor {
@@ -1560,10 +1408,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void setTreeItemExpanded(XulTreeItem item, boolean expanded) {
 
-    throw new UnsupportedOperationException("not implemented");    
+    throw new UnsupportedOperationException("not implemented");
   }
-  
-  
+
+
   public void collapseAll() {
     if (this.isHierarchical) {
       // TODO: Not yet implemented
@@ -1585,7 +1433,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public <T> void setSelectedItems(Collection<T> items) {
     int[] selIndexes= new int[items.size()];
-    
+
     if (this.isHierarchical && this.elements != null) {
       int pos = 0;
       for(T t : items){
@@ -1594,7 +1442,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     }
     this.setSelectedRows(selIndexes);
   }
-  
+
   public int findIndexOfItem(Object o){
 
     String property = ((XulTreeCol) this.getColumns().getChildNodes().get(0)).getChildrenbinding();
@@ -1610,7 +1458,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     FindSelectedIndexTuple tuple = findSelectedItem(this.elements, childrenMethod, new FindSelectedIndexTuple(o));
     return tuple.selectedIndex;
   }
-  
+
 
   private static class FindSelectedIndexTuple {
     Object selectedItem = null;
@@ -1657,7 +1505,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void setHiddenrootnode(boolean hidden) {
     // TODO Auto-generated method stub
-    
+
   }
 
   public String getCommand() {
@@ -1673,7 +1521,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   }
 
   public void setPreserveexpandedstate(boolean preserve) {
-    
+
   }
 
   public boolean isSortable() {
@@ -1683,7 +1531,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void setSortable(boolean sort) {
     // TODO Auto-generated method stub
-    
+
   }
 
   public boolean isTreeLines() {
@@ -1693,17 +1541,17 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void setTreeLines(boolean visible) {
     // TODO Auto-generated method stub
-    
+
   }
-  
+
   public void setNewitembinding(String binding){
     newItemBinding = binding;
   }
-  
+
   public String getNewitembinding(){
     return newItemBinding;
   }
-  
+
   public void setAutocreatenewrows(boolean auto){
     this.autoCreateNewRows = auto;
   }
@@ -1719,7 +1567,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
   public void setPreserveselection(boolean preserve) {
     // TODO This method is not fully implemented. We need to completely implement this in this class
-    
+
   }
 
 
@@ -1728,5 +1576,332 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       return bindingProvider.getBinding(source, prop1, target, prop2);
     }
     return new DefaultBinding(source, prop1, target, prop2);
+  }
+
+  private class SwingTreeCellEditor extends DefaultCellEditor
+  {
+    private final SwingTreeCol col;
+    private CheckBoxCellEditor checkBoxCellEditor;
+    private ComboBoxCellEditor comboBoxCellEditor;
+    private LabelCellEditor labelCellEditor;
+    private DefaultCellEditor activeCellEditor;
+    private TextFieldCellEditor textFieldCellEditor;
+    private CustomCellEditorWrapper wrapper;
+
+    public SwingTreeCellEditor(final SwingTreeCol col)
+    {
+      super(new JTextField());
+      this.col = col;
+    }
+
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, final int row, final int column) {
+      ColumnType colType = col.getColumnType();
+      if (colType == ColumnType.DYNAMIC) {
+        colType = ColumnType.valueOf(extractDynamicColType(elements.toArray()[row], column));
+      }
+
+      switch (colType) {
+      case CHECKBOX:
+      {
+        if (checkBoxCellEditor == null)
+          checkBoxCellEditor = new CheckBoxCellEditor();
+
+        activeCellEditor = checkBoxCellEditor;
+        return checkBoxCellEditor.getTableCellEditorComponent(table, value, isSelected, row, column);
+      }
+      case EDITABLECOMBOBOX:
+      case COMBOBOX:
+      {
+        if (comboBoxCellEditor == null)
+          comboBoxCellEditor = new ComboBoxCellEditor(col);
+
+        activeCellEditor = comboBoxCellEditor;
+        return comboBoxCellEditor.getTableCellEditorComponent(table, value, isSelected, row, column);
+      }
+      case LABEL:
+      {
+        if (labelCellEditor == null)
+          labelCellEditor = new LabelCellEditor();
+
+        final XulTreeCell cell = getRootChildren().getItem(row).getRow().getCell(column);
+        labelCellEditor.setValue(cell.getLabel());
+        activeCellEditor = labelCellEditor;
+        return labelCellEditor.getTableCellEditorComponent(table, value, isSelected, row, column);
+      }
+      case CUSTOM:
+      {
+        activeCellEditor = null;
+        final XulTreeCell cell = getRootChildren().getItem(row).getRow().getCell(column);
+        wrapper = new CustomCellEditorWrapper(cell, customEditors.get(col.getType()));
+        return wrapper;
+      }
+      default:
+        if (textFieldCellEditor == null)
+          textFieldCellEditor = new TextFieldCellEditor();
+        return textFieldCellEditor.getTableCellEditorComponent(table, value, isSelected, row, column);
+      }
+    }
+
+    @Override
+    public Object getCellEditorValue() {
+      if (activeCellEditor != null)
+        return activeCellEditor.getCellEditorValue();
+      if (wrapper != null)
+        wrapper.getCellEditorValue();
+      return null;
+    }
+
+    public boolean isCellEditable(final EventObject anEvent)
+    {
+
+      return false;
+    }
+
+    public boolean shouldSelectCell(final EventObject anEvent)
+    {
+      return false;
+    }
+
+    public boolean stopCellEditing()
+    {
+      return false;
+    }
+
+    public void cancelCellEditing()
+    {
+
+    }
+
+    public void addCellEditorListener(final CellEditorListener l)
+    {
+
+    }
+
+    public void removeCellEditorListener(final CellEditorListener l)
+    {
+
+    }
+  }
+
+  private class TextFieldCellEditor extends DefaultCellEditor implements DocumentListener
+  {
+    private JTable table;
+    private int row;
+    private int column;
+    private boolean skipEvents;
+
+    private TextFieldCellEditor()
+    {
+      super(new JTextField());
+
+      final JTextField label = new JTextField();
+      editorComponent = label;
+      label.getDocument().addDocumentListener(this);
+    }
+
+    public void changedUpdate(DocumentEvent arg0) {
+      if (skipEvents) return;
+      final JTextField label = (JTextField) editorComponent;
+      this.table.setValueAt(label.getText(), row, column);
+    }
+
+    public void insertUpdate(DocumentEvent arg0) {
+      if (skipEvents) return;
+      final JTextField label = (JTextField) editorComponent;
+      table.setValueAt(label.getText(), row, column);
+    }
+
+    public void removeUpdate(DocumentEvent arg0) {
+      if (skipEvents) return;
+      final JTextField label = (JTextField) editorComponent;
+      table.setValueAt(label.getText(), row, column);
+    }
+
+    public Component getTableCellEditorComponent(final JTable table,
+                                                 final Object value,
+                                                 final boolean isSelected,
+                                                 final int row,
+                                                 final int column)
+    {
+      skipEvents = true;
+      try
+      {
+        this.table = table;
+        this.row = row;
+        this.column = column;
+        final XulTreeCell cell = getRootChildren().getItem(row).getRow().getCell(column);
+        JTextField component = (JTextField) super.getTableCellEditorComponent(table, value, isSelected, row, column);
+        component.setEnabled(!cell.isDisabled());
+        component.setDisabledTextColor(Color.DARK_GRAY);
+
+        return component;
+      }
+      finally
+      {
+        skipEvents = false;
+      }
+    }
+
+    public Object getCellEditorValue()
+    {
+      final JTextField label = (JTextField) editorComponent;
+      return label.getText();
+    }
+  }
+
+  private class LabelCellEditor extends DefaultCellEditor
+  {
+    private LabelCellEditor()
+    {
+      super(new JTextField());
+      editorComponent = new JLabel();
+    }
+
+    public void setValue(final String value)
+    {
+      JLabel label = (JLabel) editorComponent;
+      label.setText(value);
+    }
+
+    public Object getCellEditorValue()
+    {
+      JLabel label = (JLabel) editorComponent;
+      return label.getText();
+    }
+  }
+
+  private class ComboBoxCellEditor extends DefaultCellEditor
+  {
+    private SwingTreeCol col;
+
+    private ComboBoxCellEditor(SwingTreeCol col)
+    {
+      super(new JComboBox());
+      this.col = col;
+    }
+
+    public Component getTableCellEditorComponent(final JTable table,
+                                                 final Object value,
+                                                 final boolean isSelected,
+                                                 final int row,
+                                                 final int column)
+    {
+      Vector val = (value != null && value instanceof Vector) ? (Vector) value : new Vector();
+      final JComboBox comboBox = new JComboBox(val);
+      this.editorComponent = comboBox;
+
+      if (isSelected) {
+        comboBox.setBackground(Color.LIGHT_GRAY);
+      }
+      ColumnType colType = col.getColumnType();
+      if (colType == ColumnType.DYNAMIC) {
+        colType = ColumnType.valueOf(extractDynamicColType(elements.toArray()[row], column));
+      }
+
+      if (colType == ColumnType.EDITABLECOMBOBOX) {
+
+        comboBox.setEditable(true);
+        final JTextComponent textComp = (JTextComponent) comboBox.getEditor().getEditorComponent();
+
+        textComp.addKeyListener(new KeyListener() {
+          private String oldValue = "";
+
+          public void keyPressed(KeyEvent e) {
+            oldValue = textComp.getText();
+          }
+
+          public void keyReleased(KeyEvent e) {
+            if (oldValue != null && !oldValue.equals(textComp.getText())) {
+              SwingTree.this.table.setValueAt(textComp.getText(), row, column);
+
+              oldValue = textComp.getText();
+            } else if (oldValue == null) {
+              // AWT error where sometimes the keyReleased is fired before keyPressed.
+              oldValue = textComp.getText();
+            } else {
+              logger.debug("Special key pressed, ignoring");
+            }
+          }
+
+          public void keyTyped(KeyEvent e) {
+          }
+        });
+
+        comboBox.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+            // if(textComp.hasFocus() == false && comboBox.hasFocus()){
+            SwingTree.logger.debug("Setting ComboBox value from editor: " + comboBox.getSelectedItem() + ", " + row + ", " + column);
+
+            SwingTree.this.table.setValueAt(comboBox.getSelectedIndex(), row, column);
+            // }
+          }
+        });
+      } else {
+        comboBox.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent event) {
+
+            SwingTree.logger.debug("Setting ComboBox value from editor: " + comboBox.getSelectedItem() + ", " + row + ", " + column);
+
+            SwingTree.this.table.setValueAt(comboBox.getSelectedIndex(), row, column);
+          }
+        });
+      }
+
+      final XulTreeCell cell = getRootChildren().getItem(row).getRow().getCell(column);
+      comboBox.setEnabled(!cell.isDisabled());
+      return comboBox;
+    }
+
+    public Object getCellEditorValue()
+    {
+      JComboBox box = (JComboBox) editorComponent;
+      if (box.isEditable()) {
+        JTextComponent editorComponent1 = (JTextComponent) box.getEditor().getEditorComponent();
+        return editorComponent1.getText();
+      } else {
+        return box.getSelectedIndex();
+      }
+    }
+
+  }
+  private class CheckBoxCellEditor extends DefaultCellEditor
+  {
+    private CheckBoxCellEditor()
+    {
+      super(new JCheckBox());
+    }
+
+    public Component getTableCellEditorComponent(final JTable table,
+                                                 final Object value,
+                                                 final boolean isSelected,
+                                                 final int row,
+                                                 final int column)
+    {
+      final Boolean bvalue;
+      if (value instanceof String) {
+        bvalue = (((String) value).equalsIgnoreCase("true"));
+      } else if (value instanceof Boolean) {
+        bvalue = ((Boolean) value);
+      } else if (value != null) {
+        bvalue = (false);
+      }
+      else bvalue = null;
+
+      Component component = super.getTableCellEditorComponent(table, bvalue, isSelected, row, column);
+
+      final XulTreeCell cell = getRootChildren().getItem(row).getRow().getCell(column);
+      component.setEnabled(!cell.isDisabled());
+      if (isSelected) {
+        component.setBackground(Color.LIGHT_GRAY);
+      }
+      return component;
+    }
+
+    public Object getCellEditorValue()
+    {
+      final JCheckBox c = (JCheckBox) editorComponent;
+      return c.isSelected();
+    }
   }
 }
