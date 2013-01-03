@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.pentaho.ui.xul.swing;
 
@@ -23,8 +23,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
-import org.pentaho.ui.xul.XulContainer;
-import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.components.XulSplitter;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.impl.AbstractXulComponent;
@@ -46,7 +44,7 @@ public class SwingElement extends AbstractXulComponent {
 
   protected GridBagConstraints gc = new GridBagConstraints();
 
-  protected PropertyChangeSupport changeSupport = new PropertyChangeSupport(this);
+  private PropertyChangeSupport _changeSupport;
 
   public SwingElement(String tagName) {
     super(tagName);
@@ -177,11 +175,11 @@ public class SwingElement extends AbstractXulComponent {
       }
 
       Component component = (Component) maybeComponent;
-      
+
       if(comp.getWidth() > 0 || comp.getHeight() > 0){
         Dimension minSize = component.getMinimumSize();
         Dimension prefSize = component.getPreferredSize();
-        
+
         if(comp.getWidth() > 0){
           minSize.width = comp.getWidth();
           prefSize.width = comp.getWidth();
@@ -193,7 +191,7 @@ public class SwingElement extends AbstractXulComponent {
         component.setMinimumSize(minSize);
         component.setPreferredSize(prefSize);
       }
-      
+
       container.add(component, gc);
 
       if (i + 1 == getChildNodes().size() && !flexLayout) {
@@ -202,7 +200,7 @@ public class SwingElement extends AbstractXulComponent {
 
       } else {
         gc.weightx = 1.0;
-       
+
       }
         container.add(Box.createGlue(), gc);
       }
@@ -238,7 +236,7 @@ public class SwingElement extends AbstractXulComponent {
       layout();
     }
   }
-  
+
   public void addChildAt(Element c, int pos) {
     super.addChildAt(c, pos);
     if (initialized) {
@@ -255,7 +253,7 @@ public class SwingElement extends AbstractXulComponent {
       layout();
     }
   }
-  
+
   @Override
   public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
 
@@ -277,7 +275,7 @@ public class SwingElement extends AbstractXulComponent {
 
   public void setOnblur(final String method) {
     super.setOnblur(method);
-    
+
     if (getJComponent() != null) {
       getJComponent().addFocusListener(new FocusListener() {
 
@@ -292,12 +290,32 @@ public class SwingElement extends AbstractXulComponent {
     }
   }
 
+  protected void firePropertyChange(final String propertyName, final Object oldValue, final Object newValue)
+  {
+    if (_changeSupport == null) return;
+    _changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+  }
+
+  protected void firePropertyChange(final String propertyName, final int oldValue, final int newValue)
+  {
+    if (_changeSupport == null) return;
+    _changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+  }
+
+  protected void firePropertyChange(final String propertyName, final boolean oldValue, final boolean newValue)
+  {
+    if (_changeSupport == null) return;
+    _changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+  }
+
   public void addPropertyChangeListener(PropertyChangeListener listener) {
-    changeSupport.addPropertyChangeListener(listener);
+    if (_changeSupport == null) _changeSupport = new PropertyChangeSupport(this);
+    _changeSupport.addPropertyChangeListener(listener);
   }
 
   public void removePropertyChangeListener(PropertyChangeListener listener) {
-    changeSupport.removePropertyChangeListener(listener);
+    if (_changeSupport == null) return;
+    _changeSupport.removePropertyChangeListener(listener);
   }
 
   public void setDisabled(boolean disabled) {
@@ -315,6 +333,6 @@ public class SwingElement extends AbstractXulComponent {
 
   public void adoptAttributes(XulComponent component) {
     // TODO Auto-generated method stub
-    
+
   }
 }

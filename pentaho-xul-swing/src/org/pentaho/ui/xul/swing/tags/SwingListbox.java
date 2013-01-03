@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.beans.Expression;
 import java.util.Arrays;
 import java.util.Collection;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
@@ -16,7 +15,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,7 +23,6 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwingListbox extends AbstractSwingContainer implements XulListbox, ListSelectionListener{
@@ -166,11 +163,11 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   
   private void fireSetSelectedIndices(int[] indices) {
     if(!Arrays.equals(curSelectedIndices, indices)) {
-      this.changeSupport.firePropertyChange("selectedIndices", curSelectedIndices, indices);
+      this.firePropertyChange("selectedIndices", curSelectedIndices, indices);
       curSelectedIndices = indices;
     }
 
-    this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndex, getSelectedIndex());
+    this.firePropertyChange("selectedIndex", curSelectedIndex, getSelectedIndex());
     curSelectedIndex = getSelectedIndex();
     
   }

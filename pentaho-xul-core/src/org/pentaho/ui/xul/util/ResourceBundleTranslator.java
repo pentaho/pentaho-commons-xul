@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+@Deprecated
 public class ResourceBundleTranslator {
 
 	public static String translate(InputStream input, ResourceBundle bundle) throws IOException{
