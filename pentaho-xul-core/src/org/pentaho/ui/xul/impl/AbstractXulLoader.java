@@ -720,7 +720,6 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
       
     //check for top-level message bundle and apply it
-    Document doc = null;
     if(this.mainBundle != null){
       translateDocument(document, mainBundle);
     }
@@ -728,7 +727,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     UpperCaseIDWorker idWorker = new UpperCaseIDWorker();
     idWorker.process(document);
 
-    Element overlayRoot = doc.getRootElement();
+    Element overlayRoot = document.getRootElement();
 
     for (Object child : overlayRoot.elements()) {
       Element overlay = (Element) child;
