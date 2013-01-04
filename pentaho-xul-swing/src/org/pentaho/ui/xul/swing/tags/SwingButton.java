@@ -6,11 +6,8 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentAdapter;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -144,7 +141,7 @@ public class SwingButton extends SwingElement implements XulButton{
     final AbstractButton button = getButton();
     boolean previous = !button.isEnabled();
     button.setEnabled(!dis);
-    this.changeSupport.firePropertyChange("disabled", previous, dis);
+    this.firePropertyChange("disabled", previous, dis);
   }
 
   public String getImage() {

@@ -1,11 +1,14 @@
 package org.pentaho.ui.xul.swing.tags;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.Expression;
-import java.util.ArrayList;
 import java.util.Collection;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JMenuItem;
@@ -24,7 +27,6 @@ import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
-import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuList<T> {
 
@@ -111,12 +113,8 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
   }
   
   private void fireSelectedEvents(){
-
-
-
-    
-    SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, this.getSelectedItem());
-      SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
+    SwingMenuList.this.firePropertyChange("selectedItem", previousSelectedItem, this.getSelectedItem());
+      SwingMenuList.this.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
       previousSelectedItem = getSelectedItem();
   }
 
@@ -263,7 +261,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
 	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
 	      public void keyReleased(KeyEvent e) {
 	        if(oldValue != null && !oldValue.equals(textComp.getText())){
-	          SwingMenuList.this.changeSupport.firePropertyChange("value", oldValue, SwingMenuList.this.getValue());
+	          SwingMenuList.this.firePropertyChange("value", oldValue, SwingMenuList.this.getValue());
 	          oldValue = textComp.getText();
 	        } else if(oldValue == null){
 	          //AWT error where sometimes the keyReleased is fired before keyPressed.

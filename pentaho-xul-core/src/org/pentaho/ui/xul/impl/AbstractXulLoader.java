@@ -1,13 +1,10 @@
 package org.pentaho.ui.xul.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,8 +35,8 @@ import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
-import org.pentaho.ui.xul.util.ResourceBundleTranslator;
 
+/** @noinspection HardCodedStringLiteral*/
 public abstract class AbstractXulLoader implements XulLoader {
 
   protected XulParser parser;
@@ -52,7 +49,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   private ResourceBundle mainBundle = null;
   
-  private List<Object> resourceBundleList  = new ArrayList<Object>();
+  private List<ResourceBundle> resourceBundleList  = new ArrayList<ResourceBundle>();
 
   private List<ClassLoader> classloaders = new ArrayList<ClassLoader>();
 
@@ -88,51 +85,44 @@ public abstract class AbstractXulLoader implements XulLoader {
   public XulDomContainer loadXul(Object xulDocument) throws IllegalArgumentException, XulException {
     Document document = (Document)xulDocument;
     try {
-      xulDocument = preProcess(document);
+      preProcess(document);
 
-      String processedDoc = performIncludeTranslations(document.asXML());
-      String localOutput = (mainBundle != null) ? ResourceBundleTranslator.translate(processedDoc, mainBundle)
-          : processedDoc;
-      
-      SAXReader rdr = new SAXReader();
-      //localOutput = localOutput.replace("UTF-8", "ISO-8859-1");
-      
+      performIncludeTranslations(document);
+      if (mainBundle != null)
+      {
+        translateDocument(document, mainBundle);
+      }
 
-//      System.out.println("============ Post Processed: ============");
-//      System.out.println(localOutput);
-//      System.out.println("============ End Post Processed: ============");
-      
-      
-      final Document doc = rdr.read(new StringReader(localOutput));
-
-//      System.out.println("============ After Parse: ============");
-//      System.out.println(doc.asXML());
-//      System.out.println("============ After Parse: ============");
-      
-      
       XulDomContainer container = new XulWindowContainer(this);
       container.setOuterContext(outerContext);
       container.setSettingsManager(settings);
-      container.setResourceBundles(this.resourceBundleList);
+      container.setResourceBundles((List) this.resourceBundleList);
       parser.setContainer(container);
       parser.setClassLoaders(classloaders);
-      parser.parseDocument(doc.getRootElement());
+      parser.parseDocument(document.getRootElement());
 
       for(ClassLoader l : classloaders){
         container.registerClassLoader(l);
       }
       return container;
-
+    } catch (XulException e) {
+      throw e;
     } catch (Exception e) {
       throw new XulException(e);
     }
+  }
+
+  private void translateDocument(final Document document, final ResourceBundle bundle) throws XulException
+  {
+    DocumentTranslator translator = new DocumentTranslator(bundle);
+    translator.process(document);
   }
 
   public void setRootDir(String loc) {
     if(!rootDir.equals("/")){      //lets only set this once
       return;
     }
-    if (loc.lastIndexOf("/") > 0 && loc.indexOf(".xul") > -1) { //exists and not first char
+    if (loc.lastIndexOf("/") > 0 && loc.contains(".xul")) { //exists and not first char
       rootDir = loc.substring(0, loc.lastIndexOf("/") + 1);
     } else {
       rootDir = loc;
@@ -157,7 +147,7 @@ public abstract class AbstractXulLoader implements XulLoader {
   public XulDomContainer loadXulFragment(Object xulDocument) throws IllegalArgumentException, XulException {
     Document document = (Document)xulDocument;
     XulDomContainer container = new XulFragmentContainer(this);
-    container.setResourceBundles(this.resourceBundleList);
+    container.setResourceBundles((List) this.resourceBundleList);
     container.setOuterContext(outerContext);
     container.setSettingsManager(settings);
 
@@ -261,12 +251,15 @@ public abstract class AbstractXulLoader implements XulLoader {
   }
 
   public XulDomContainer loadXulFragment(String resource, Object bundle) throws XulException {
-
     if (bundle instanceof ResourceBundle == false)
     {
       throw new XulException("Need a resource-bundle as bundle");
     }
-    
+    return loadXulFragment(resource, (ResourceBundle) bundle);
+  }
+
+  private XulDomContainer loadXulFragment(String resource, ResourceBundle bundle) throws XulException {
+
     try {
 
       final InputStream in = getResourceAsStream(resource);
@@ -276,10 +269,10 @@ public abstract class AbstractXulLoader implements XulLoader {
       }
       try {
         resourceBundleList.add(bundle);
-        final String localOutput = ResourceBundleTranslator.translate(in, (ResourceBundle) bundle);
         final SAXReader rdr = new SAXReader();
-        final Document doc = rdr.read(new StringReader(localOutput));
-
+        final Document doc = rdr.read(in);
+        DocumentTranslator translator = new DocumentTranslator(resourceBundleList);
+        translator.process(doc);
         setRootDir(resource);
 
         return this.loadXulFragment(doc);
@@ -294,8 +287,7 @@ public abstract class AbstractXulLoader implements XulLoader {
     }
   }
 
-
-  public String performIncludeTranslations(final String input) throws XulException {
+  private void performIncludeTranslations (Document doc) throws XulException {
     for (final String includeSrc : includedSources) {
       final String resStr = includeSrc.replace(".xul", "");
       final ResourceBundle res = loadResourceBundle(resStr);
@@ -309,11 +301,11 @@ public abstract class AbstractXulLoader implements XulLoader {
           final URLClassLoader cls = getLocalDirClassLoader();
           resourceBundleList.add(ResourceBundle.getBundle(resStr, locale, cls));
         } catch(MalformedURLException ex){
-          // intentionally empty 
+          // intentionally empty
         } catch(MissingResourceException ex){
           // intentionally empty
         }
-        
+
       }
     }
 
@@ -337,17 +329,9 @@ public abstract class AbstractXulLoader implements XulLoader {
       }
     }
 
-    String output = input;
-    for(final Object bundle : resourceBundleList){
-      try {
-        output = ResourceBundleTranslator.translate(output, (ResourceBundle) bundle);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-    return output;
+    DocumentTranslator translator = new DocumentTranslator(resourceBundleList);
+    translator.process(doc);
   }
-
 
   private URLClassLoader getLocalDirClassLoader()
       throws MalformedURLException
@@ -361,14 +345,28 @@ public abstract class AbstractXulLoader implements XulLoader {
   }
 
   public void register(String tagName, String className) {
+    try
+    {
     parser.registerHandler(tagName, className);
+    }
+    catch (XulException e)
+    {
+      throw new IllegalStateException(e);
+    }
   }
 
   public String getRootDir() {
     return this.rootDir;
   }
 
-  public Document preProcess(Document srcDoc) throws XulException {
+  /**
+   * Processes all include directives found in the file. Include elements are only allowed as direct children
+   * of the document's root element.
+   *
+   * @param srcDoc
+   * @throws XulException
+   */
+  private void preProcess(Document srcDoc) throws XulException {
 
     XPath xpath = new DefaultXPath("//pen:include");
 
@@ -381,9 +379,10 @@ public abstract class AbstractXulLoader implements XulLoader {
     List<Element> eles = xpath.selectNodes(srcDoc);
 
     for (Element ele : eles) {
-      String src = "";
-
-      src = this.getRootDir() + ele.attributeValue("src");
+      String src = this.getRootDir() + ele.attributeValue("src");
+      if (src == null) {
+        throw new XulException("'src' attribute missing on include element");
+      }
 
       String resourceBundle = ele.attributeValue("resource");
       if (resourceBundle != null) {
@@ -413,7 +412,8 @@ public abstract class AbstractXulLoader implements XulLoader {
                 in = new FileInputStream(f);
                 includedSources.add(src);
               } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                // in would be <null> and that would trigger a NPE later down the road. Exit clearly and early.
+                throw new XulException("Include src attribute is invalid.");
               }
             }
           }
@@ -426,7 +426,10 @@ public abstract class AbstractXulLoader implements XulLoader {
         String ignoreRoot = ele.attributeValue("ignoreroot");
         if (root.getName().equals("overlay")) {
           processOverlay(root, ele.getDocument().getRootElement());
-        } else if (ignoreRoot == null || ignoreRoot.equalsIgnoreCase("false")) {
+          return;
+        }
+
+        if (ignoreRoot == null || ignoreRoot.equalsIgnoreCase("false")) {
           logger.debug("Including entire file: " + src);
           List contentOfParent = ele.getParent().content();
           int index = contentOfParent.indexOf(ele);
@@ -453,7 +456,8 @@ public abstract class AbstractXulLoader implements XulLoader {
   
             this.processOverlay(overlay.attributeValue("src"), srcDoc);
           }
-        } else {
+        }
+        else {
           logger.debug("Including children: " + src);
           List contentOfParent = ele.getParent().content();
           int index = contentOfParent.indexOf(ele);
@@ -494,27 +498,22 @@ public abstract class AbstractXulLoader implements XulLoader {
         }
       }
     }
-
-    return srcDoc;
   }
 
   protected Document getDocFromInputStream(InputStream in) throws XulException {
+    if (in == null) {
+      throw new NullPointerException();
+    }
+
     try {
 
-      BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-      StringBuffer buf = new StringBuffer();
-      String line;
-      while ((line = reader.readLine()) != null) {
-        buf.append(line);
-      }
-      in.close();
-      
-      String upperedIdDoc = this.upperCaseIDAttrs(buf.toString());
       SAXReader rdr = new SAXReader();
-      return rdr.read(new StringReader(upperedIdDoc));
+      Document document = rdr.read(in);
+      UpperCaseIDWorker idWorker = new UpperCaseIDWorker();
+      idWorker.process(document);
+      return document;
     } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+      throw new XulException(e);
     }
   }
 
@@ -707,52 +706,28 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
       XulDomContainer container, Object resourceBundle) throws XulException {
+    ResourceBundle res = (ResourceBundle) resourceBundle;
+    processOverlay(overlaySrc, targetDocument, container, res);
+  }
+
+  public void processOverlay(String overlaySrc, org.pentaho.ui.xul.dom.Document targetDocument,
+      XulDomContainer container, ResourceBundle resourceBundle) throws XulException {
 
     InputStream in = getInputStreamForSrc(overlaySrc);
-    Document doc = null;
-     
-    ResourceBundle res = (ResourceBundle) resourceBundle;
-    
-    String runningTranslatedOutput = getDocFromInputStream(in).asXML();     //TODO IOUtils this
+    Document document = getDocFromInputStream(in);
     if(resourceBundle != null){
-      try{
-        runningTranslatedOutput = ResourceBundleTranslator.translate(runningTranslatedOutput, res);
-        
-  
-       } catch(IOException e){
-        logger.error("Error loading resource bundle for overlay: "+overlaySrc, e);
-      }
+      translateDocument(document, resourceBundle);
     }
       
     //check for top-level message bundle and apply it
     if(this.mainBundle != null){
-      try{
-          
-        runningTranslatedOutput = ResourceBundleTranslator.translate(runningTranslatedOutput, this.mainBundle);
-        try{
-          SAXReader rdr = new SAXReader();
-          String upperedIdDoc = this.upperCaseIDAttrs(runningTranslatedOutput.toString());
-          doc = rdr.read(new StringReader(upperedIdDoc)); 
-        } catch(DocumentException e){
-          logger.error("Error loading XML while applying top level message bundle to overlay file:", e);
-        }
-      } catch(IOException e){
-        logger.error("Error loading Resource Bundle File to apply to overlay: ",e);
-      }
-    } else {
-      try{
-        SAXReader rdr = new SAXReader();
-        String upperedIdDoc = this.upperCaseIDAttrs(runningTranslatedOutput.toString());
-        doc = rdr.read(new StringReader(upperedIdDoc)); 
-      } catch(DocumentException e){
-        logger.error("Error loading XML while applying top level message bundle to overlay file:", e);
-      }
-    } 
-    
-  
-    
-    
-    Element overlayRoot = doc.getRootElement();
+      translateDocument(document, mainBundle);
+    }
+
+    UpperCaseIDWorker idWorker = new UpperCaseIDWorker();
+    idWorker.process(document);
+
+    Element overlayRoot = document.getRootElement();
 
     for (Object child : overlayRoot.elements()) {
       Element overlay = (Element) child;
@@ -875,7 +850,7 @@ public abstract class AbstractXulLoader implements XulLoader {
   }
 
   public boolean isRegistered(String elementName) {
-    return this.parser.handlers.containsKey(elementName);
+    return this.parser.isRegistered(elementName);
   }
   
 

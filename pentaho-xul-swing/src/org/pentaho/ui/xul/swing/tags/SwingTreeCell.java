@@ -1,18 +1,16 @@
 package org.pentaho.ui.xul.swing.tags;
 
 import java.util.Vector;
-
 import javax.swing.JLabel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTreeRow;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingTreeCell extends SwingElement implements XulTreeCell {
 
@@ -39,7 +37,7 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
     logger.debug("swingTreeCell.setSelectedIndex("+index+")");
     Object oldValue = this.index;
     this.index = index;
-    this.changeSupport.firePropertyChange("selectedIndex", oldValue, index);
+    this.firePropertyChange("selectedIndex", oldValue, index);
   }
 
   public int getSelectedIndex() {
@@ -72,7 +70,7 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
   public void setLabel(String label) {
     String oldValue = this.label.getText();
     this.label.setText(label);
-    this.changeSupport.firePropertyChange("label", oldValue, label);
+    this.firePropertyChange("label", oldValue, label);
   }
 
   public void setSrc(String srcUrl) {
@@ -95,13 +93,12 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
       this.value = vec;
 
     } else if (value instanceof Boolean) {
-      this.value = (Boolean) value;
+      this.value = value;
     } else {
       this.value = value;
     }
     
-    this.index = index;
-    this.changeSupport.firePropertyChange("value", oldValue, value);
+    this.firePropertyChange("value", oldValue, value);
   }
 
   public void setTreeRowParent(XulTreeRow row) {

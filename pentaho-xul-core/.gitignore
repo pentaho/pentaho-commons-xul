@@ -1,0 +1,7 @@
+# Store this file at the root of your local repository.
+bin
+eclipse-bin
+lib
+test-lib
+
+
