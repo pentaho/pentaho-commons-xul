@@ -44,7 +44,7 @@ public class SwingElement extends AbstractXulComponent {
 
   protected GridBagConstraints gc = new GridBagConstraints();
 
-  private PropertyChangeSupport _changeSupport;
+  protected PropertyChangeSupport _changeSupport;
 
   public SwingElement(String tagName) {
     super(tagName);
