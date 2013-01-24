@@ -10,8 +10,12 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
@@ -35,6 +39,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   private String binding;
 
   private Object previousSelectedItem = null;
+  private String previousValue;
   
   private JfaceMenupopup popup;
   
@@ -52,6 +57,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
 
     this.xulDomContainer = domContainer;
     this.parent = parent;
+    setEditable("true".equals(self.getAttributeValue("editable")));
     setupCombobox();
 
   }
@@ -59,22 +65,22 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
 
   private void setupCombobox(){
 
-
-    if(editable){
-      combobox = new Combo((Composite)parent.getManagedObject(), SWT.DROP_DOWN);
-    } else {
-      combobox = new Combo((Composite)parent.getManagedObject(), SWT.DROP_DOWN | SWT.READ_ONLY);
-    }
+    int style = SWT.DROP_DOWN;
+    if (!editable) style |= SWT.READ_ONLY;
+    combobox = new Combo((Composite)parent.getManagedObject(), style);
 
     setManagedObject(combobox);
 
-    combobox.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-
+    combobox.addSelectionListener(new SelectionAdapter() {
       public void widgetSelected(SelectionEvent e) {
         fireSelectedEvents();
-
       }
-
+    });
+    
+    combobox.addModifyListener(new ModifyListener(){
+      public void modifyText(ModifyEvent modifyEvent) {
+        fireModifiedEvents();
+      }
     });
   }
   
@@ -96,25 +102,20 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
 
 
   public void layout() {
+    int index = getSelectedIndex();
     combobox.removeAll();
-    selectedItem = null; //clear selection
-    
     for (XulComponent item : popup.getChildNodes()) {
-    	JfaceMenuitem mItem = (JfaceMenuitem) item;
-      if(mItem.isSelected()){
-        this.selectedItem = mItem;
-      }
-      if(mItem.isVisible()){	
-    	  combobox.add(mItem.getLabel());
+      JfaceMenuitem mItem = (JfaceMenuitem) item;
+      if(mItem.isVisible()){
+        combobox.add(mItem.getLabel());
       }
     }
-    int idx = -1;
-    if(selectedItem != null){
-      idx = combobox.indexOf(selectedItem.toString());
-    } else if( popup.getChildNodes().size() > 0){
-      idx = 0;
+    if (index == -1) {
+      setValue(previousValue);
     }
-    this.setSelectedIndex(idx);
+    else {
+      setSelectedIndex(index);
+    }
     this.combobox.update();
   }
 
@@ -126,24 +127,6 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   @Deprecated
   public void replaceAllItems(Collection<T> tees) {
     setElements(tees);
-  }
-
-  public String getSelectedItem() {
-    int idx = combobox.getSelectionIndex();
-    return (idx > -1 && idx < this.combobox.getItemCount())? this.combobox.getItem(idx) : null;
-  }
-
-  public void setSelectedItem(T t) {
-    if(t == null){
-      this.combobox.deselectAll();
-      return;
-    }
-    if(this.elements != null){
-      this.combobox.select(new ArrayList(this.elements).indexOf(t));
-    } else {
-      this.combobox.select(combobox.indexOf(t.toString()));
-    }
-    this.previousSelectedItem = null;
   }
 
   public void setOncommand(final String command) {
@@ -177,63 +160,66 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   }
 
   public void setElements(Collection<T> tees) {
-	  
-	    String selected = this.getSelectedItem();
-	    this.elements = tees;
-    
-    for (XulComponent menuItem : popup.getChildNodes()) {
-      popup.removeChild(menuItem);
-    }
 
-    if(tees == null || tees.size() == 0){
-      return;
-    }
-    
-    List<XulComponent> items = popup.getChildNodes();
-    Map<String,JfaceMenuitem> itemMap = new HashMap<String,JfaceMenuitem>();
-    for( XulComponent item : items ) {
-    	if( item instanceof JfaceMenuitem ) {
-        	itemMap.put(((JfaceMenuitem) item).getLabel(), (JfaceMenuitem) item);
-    	}
-    }
+    //assign the new elements.
+    this.elements = tees;
+
+    XulMenuitem menuitem;
+    List<XulComponent> menuItems = popup.getChildNodes();
+    int index = 0;
+    int itemCount = menuItems.size();
+    //loop over new elements
     for (T t : tees) {
-      try{
-    	  String label = extractLabel(t);
-    	  if( itemMap.get(label) != null ) {
-    		  // make it visible
-    		  itemMap.get(label).setVisible(true);
-    	  } else {
-    	        XulMenuitem item = (XulMenuitem) xulDomContainer.getDocumentRoot().createElement("menuitem");
-
-    	        String attribute = getBinding();
-    	        item.setLabel( label );
-    	  
-    	        popup.addChild(item);
-    	  }
-      } catch(XulException e){
-        logger.error("Unable to create new menulist menuitem: ", e);
+      //obtain an item
+      if (index < itemCount) {
+        //item exists, reuse it
+        menuitem = (XulMenuitem) menuItems.get(index);
+        menuitem.setVisible(true);
       }
+      else {
+        //item doesn't exist, create one
+        menuitem = popup.createNewMenuitemAtPos(index);
+      }
+      index++;
+      //update item
+      menuitem.setLabel(extractLabel(t));
     }
-
-    if( selected != null ) {
-    	Collection<T> elist = getElements();
-    	for( T t : elist ) {
-    		if( selected.equals(t.toString() )) {
-    	    	setSelectedItem(t);
-    		}
-    	}
-    }
+    //hide remaining existing items
+    for (; index < itemCount; index++) menuItems.get(index).setVisible(false);
     layout();
+    setValue(previousValue);
   }
+
+  public String getSelectedItem() {
+    int idx = combobox.getSelectionIndex();
+    return (idx > -1 && idx < this.combobox.getItemCount())? this.combobox.getItem(idx) : null;
+  }
+
+  public void setSelectedItem(T t) {
+    int index;
+    if(t == null){
+      index = -1;
+    }
+    else 
+    if (elements == null) {
+      index = combobox.indexOf(t.toString());
+    }
+    else {
+      index = new ArrayList(elements).indexOf(t);
+    }
+    setSelectedIndex(index);
+  }
+
   public int getSelectedIndex() {
+    if (elements == null || elements.size() == 0) return -1;
     return this.combobox.getSelectionIndex();
   }
 
   public void setSelectedIndex(int idx) {
     if(idx == -1){
-      this.combobox.clearSelection();
+      combobox.clearSelection();
     } else {
-      this.combobox.select(idx);
+      combobox.select(idx);
     }
     fireSelectedEvents();
   }
@@ -256,7 +242,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   private void fireSelectedEvents(){
     int idx = getSelectedIndex();
     if(idx >= 0){
-      Object newSelectedItem = (idx >= 0) ? (elements != null)? elements.toArray()[idx] : getSelectedItem() : getSelectedItem();
+      Object newSelectedItem = (elements == null)? null : elements.toArray()[idx];
 
       changeSupport.firePropertyChange("selectedItem",
           previousSelectedItem, newSelectedItem
@@ -271,6 +257,12 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
       invoke(JfaceMenuList.this.command, new Object[] {});
     }
   }
+  
+  private void fireModifiedEvents(){
+    String newValue = getValue();
+    changeSupport.firePropertyChange("value", previousValue, newValue);
+    previousValue = newValue;
+  }
 
   public void setEditable(boolean editable) {
     this.editable = editable;
@@ -281,10 +273,11 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   }
 
   public String getValue() {
-    return getSelectedItem();
+    return combobox.getText();
   }
 
   public void setValue(String value) {
+    if (value == null) value = "";
     combobox.setText(value);
   }
 
