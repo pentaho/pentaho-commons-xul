@@ -50,21 +50,17 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   private String command;
 
   private XulComponent parent;
-  private Collection<T> elements;
 
   public JfaceMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
     super("menulist");
-
     this.xulDomContainer = domContainer;
     this.parent = parent;
     setEditable("true".equals(self.getAttributeValue("editable")));
     setupCombobox();
-
   }
 
 
   private void setupCombobox(){
-
     int style = SWT.DROP_DOWN;
     if (!editable) style |= SWT.READ_ONLY;
     combobox = new Combo((Composite)parent.getManagedObject(), style);
@@ -88,33 +84,47 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   @Override
   public void addChild(Element ele) {
     super.addChild(ele);
-    if(ele instanceof XulMenupopup){
-      popup = (JfaceMenupopup) ele;
-      for( XulComponent child : popup.getChildNodes() ) {
-    	  if( child instanceof JfaceMenuitem ) {
-    		  if(((JfaceMenuitem) child).isSelected()) {
-   				  setSelectedItem((T) child);
-    		  }
-    	  }
+    if(!(ele instanceof XulMenupopup)) return;
+    popup = (JfaceMenupopup) ele;
+    int index = -1;
+    int selectedIndex = index;
+    for( XulComponent child : popup.getChildNodes() ) {
+      index++;
+      if(!(child instanceof JfaceMenuitem)) {
+        continue;
+      }
+      if(((JfaceMenuitem) child).isSelected()) {
+        combobox.select(index);
+        selectedIndex = index;
       }
     }
+    setSelectedIndex(selectedIndex);
   }
 
 
   public void layout() {
-    int index = getSelectedIndex();
+    JfaceMenuitem selectedItem;
+    int i = 0;
+    int index = -1;
     combobox.removeAll();
     for (XulComponent item : popup.getChildNodes()) {
       JfaceMenuitem mItem = (JfaceMenuitem) item;
       if(mItem.isVisible()){
         combobox.add(mItem.getLabel());
       }
+      if (mItem.isSelected()) {
+        combobox.select(i);
+        index = i;
+      }
+      i++;
     }
     if (index == -1) {
-      setValue(previousValue);
-    }
-    else {
-      setSelectedIndex(index);
+      if (getEditable()) {
+        setValue(previousValue);
+      }
+      else {
+        setSelectedIndex(0);
+      }
     }
     this.combobox.update();
   }
@@ -134,7 +144,8 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   }
 
   public Collection<T> getElements() {
-    return (Collection) popup.getChildNodes();
+    if (popup == null) return null;
+    return (List<T>)popup.getChildNodes();
   }
 
   public String getBinding() {
@@ -160,10 +171,6 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   }
 
   public void setElements(Collection<T> tees) {
-
-    //assign the new elements.
-    this.elements = tees;
-
     XulMenuitem menuitem;
     List<XulComponent> menuItems = popup.getChildNodes();
     int index = 0;
@@ -197,6 +204,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
 
   public void setSelectedItem(T t) {
     int index;
+    List<T> elements = (List<T>)getElements();
     if(t == null){
       index = -1;
     }
@@ -205,14 +213,21 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
       index = combobox.indexOf(t.toString());
     }
     else {
-      index = new ArrayList(elements).indexOf(t);
+      index = elements.indexOf(t);
     }
     setSelectedIndex(index);
   }
 
   public int getSelectedIndex() {
-    if (elements == null || elements.size() == 0) return -1;
-    return this.combobox.getSelectionIndex();
+    int selectedIndex;
+    Collection elements = getElements();
+    if (elements == null || elements.size() == 0) {
+      selectedIndex = -1;
+    }
+    else {
+      selectedIndex = this.combobox.getSelectionIndex();
+    }
+    return selectedIndex;
   }
 
   public void setSelectedIndex(int idx) {
@@ -226,21 +241,18 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   
   @Override
   public void removeChild(Element ele) {
-	    String selected = this.getSelectedItem();
-	  super.removeChild(ele);
-	    if( selected != null ) {
-	    	Collection<T> elist = getElements();
-	    	for( T t : elist ) {
-	    		if( selected.equals(t.toString() )) {
-	    	    	setSelectedItem(t);
-	    		}
-	    	}
-	    }
-	  
+    String selected = this.getSelectedItem();
+    super.removeChild(ele);
+    if (selected == null) return;
+    Collection<T> elist = getElements();
+    for( T t : elist ) {
+      if (selected.equals(t.toString())) setSelectedItem(t);
+    }
   }
 
   private void fireSelectedEvents(){
     int idx = getSelectedIndex();
+    Collection elements = getElements();
     if(idx >= 0){
       Object newSelectedItem = (elements == null)? null : elements.toArray()[idx];
 
