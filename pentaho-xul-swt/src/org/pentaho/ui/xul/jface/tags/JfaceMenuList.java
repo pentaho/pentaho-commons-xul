@@ -44,6 +44,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   private JfaceMenupopup popup;
   
   private JfaceMenuitem selectedItem = null;
+  private List elements = null;
 
   private boolean editable = false;
   
@@ -144,8 +145,19 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   }
 
   public Collection<T> getElements() {
-    if (popup == null) return null;
-    return (List<T>)popup.getChildNodes();
+    List<T> elements = null;
+    if (this.elements == null) {
+      if (popup == null) {
+        elements = null;
+      }
+      else {
+        elements = (List<T>)popup.getChildNodes();
+      }
+    }
+    else {
+      elements = this.elements;
+    }
+    return elements;
   }
 
   public String getBinding() {
@@ -173,6 +185,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   public void setElements(Collection<T> tees) {
     XulMenuitem menuitem;
     List<XulComponent> menuItems = popup.getChildNodes();
+    elements = (List<T>)tees;
     int index = 0;
     int itemCount = menuItems.size();
     //loop over new elements
@@ -253,17 +266,14 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
   private void fireSelectedEvents(){
     int idx = getSelectedIndex();
     Collection elements = getElements();
+    
     if(idx >= 0){
       Object newSelectedItem = (elements == null)? null : elements.toArray()[idx];
-
-      changeSupport.firePropertyChange("selectedItem",
-          previousSelectedItem, newSelectedItem
-      );
+      changeSupport.firePropertyChange("selectedItem", previousSelectedItem, newSelectedItem);
       this.previousSelectedItem = newSelectedItem;
     }
-    changeSupport.firePropertyChange("selectedIndex", null
-        , combobox.getSelectionIndex());
-
+    
+    changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectionIndex());
     if(JfaceMenuList.this.command != null
         && getDocument() != null){    //make sure we're on the dom tree (initialized)
       invoke(JfaceMenuList.this.command, new Object[] {});
