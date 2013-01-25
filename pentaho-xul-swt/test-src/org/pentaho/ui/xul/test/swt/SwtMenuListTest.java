@@ -21,9 +21,7 @@ public class SwtMenuListTest {
   
   @Before
   public void setUp() throws Exception {
-    
     container = new SwtXulLoader().loadXul("resource/documents/menulist.xul");
-
     doc = container.getDocumentRoot();
     list = (XulMenuList) doc.getElementById("list");
     
@@ -32,7 +30,6 @@ public class SwtMenuListTest {
   @Test
   public void testGetSelectedItem() throws Exception{
     XulMenuitem item = (XulMenuitem) doc.getElementById("regions");
-    
     assertEquals(list.getSelectedItem().toString(), item.getLabel());
   }
 
@@ -67,8 +64,9 @@ public class SwtMenuListTest {
     assertEquals(4, list2.getElements().size());
   }
   
+
   @Test
-  public void testGetSelecetdIndex() throws Exception{
+  public void testGetSelectedIndex() throws Exception{
     assertEquals(1, list.getSelectedIndex());
   }
   
