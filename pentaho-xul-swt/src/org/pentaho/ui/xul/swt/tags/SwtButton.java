@@ -110,6 +110,8 @@ public class SwtButton extends SwtElement implements XulButton {
     });
     setManagedObject(button);
     setVisible(isVisible());
+    // set the enabled state too
+    button.setEnabled(!isDisabled());
   }
   
   protected Button createNewButton(Composite parent) {
