@@ -389,9 +389,9 @@ public class SwtElement extends AbstractXulComponent {
         public void mouseDown(MouseEvent evt) {
           Control source = (Control) evt.getSource();
           Point pt = source.getDisplay().map(source, null, new Point(evt.x, evt.y));
-          Menu menu = source.getMenu();
-          menu.setLocation(pt.x, pt.y);
-          menu.setVisible(true);
+          Menu m = ((MenuManager) menu).createContextMenu(source);
+          m.setLocation(pt.x, pt.y);
+          m.setVisible(true);
         }
         
       });
