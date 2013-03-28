@@ -15,13 +15,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -47,67 +44,67 @@ import org.pentaho.ui.xul.util.SwtXulUtil;
 
 public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
-  XulDomContainer domContainer = null;
+  protected XulDomContainer domContainer = null;
 
-  private BasicDialog dialog = null;
+  protected BasicDialog dialog = null;
   
-  private String title = null;
+  protected String title = null;
 
-  private String onload;
-  private String onclose;
-  private String onunload;
+  protected String onload;
+  protected String onclose;
+  protected String onunload;
 
-  private XulDialogheader header;
+  protected XulDialogheader header;
 
-  private int height = -999;
+  protected int height = -999;
 
-  private int width = -999;
+  protected int width = -999;
 
-  private boolean isDialogHidden = true;
+  protected boolean isDialogHidden = true;
   
-  private int returnCode = -9999;
+  protected int returnCode = -9999;
   
-  private BUTTON_ALIGN buttonAlignment;
+  protected BUTTON_ALIGN buttonAlignment;
 
-  private enum BUTTON_ALIGN {
+  protected enum BUTTON_ALIGN {
     START, CENTER, END, LEFT, RIGHT, MIDDLE
   };
 
-  private Map<String, SwtButton> activeDialogButtons = new HashMap<String, SwtButton>();
+  protected Map<String, SwtButton> activeDialogButtons = new HashMap<String, SwtButton>();
   
-  private String buttonlabelaccept;
+  protected String buttonlabelaccept;
 
-  private String buttonlabelcancel;
+  protected String buttonlabelcancel;
 
-  private String buttonlabelextra1;
+  protected String buttonlabelextra1;
 
-  private String buttonlabelextra2;
+  protected String buttonlabelextra2;
 
-  private String[] buttons = new String[]{"accept", "cancel"};
+  protected String[] buttons = new String[]{"accept", "cancel"};
 
-  private String ondialogaccept;
+  protected String ondialogaccept;
 
-  private String ondialogcancel;
+  protected String ondialogcancel;
 
-  private String ondialogextra1;
+  protected String ondialogextra1;
 
-  private String ondialogextra2;
+  protected String ondialogextra2;
   
-  private boolean resizable = false;
+  protected boolean resizable = false;
   
-  private boolean buttonsCreated = false;
+  protected boolean buttonsCreated = false;
   
-  private String appIcon;
+  protected String appIcon;
 
-  private static final Log logger = LogFactory.getLog(SwtDialog.class);
+  protected static final Log logger = LogFactory.getLog(SwtDialog.class);
   
-  private boolean pack;
+  protected boolean pack;
   
-  private XulSettingsManager settingsManager;
+  protected XulSettingsManager settingsManager;
 
-  private boolean closing;
+  protected boolean closing;
 
-  private boolean letDialogDispose;
+  protected boolean letDialogDispose;
 
   public SwtDialog(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
@@ -134,13 +131,13 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     
   }
 
-  private Shell getParentShell(XulComponent parent){
+  protected Shell getParentShell(XulComponent parent){
 
     Shell parentShell = null;
     if (parent != null){
       if(parent instanceof XulWindow){
 
-        // See if they registered an outter context replacement for the Window's Shell
+        // See if they registered an outer context replacement for the Window's Shell
         if (domContainer.getOuterContext() != null){
           parentShell = (Shell) domContainer.getOuterContext();
         }
