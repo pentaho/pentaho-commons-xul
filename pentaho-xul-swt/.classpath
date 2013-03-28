@@ -5,6 +5,21 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/pentaho-xul-core"/>
 	<classpathentry kind="con" path="org.apache.ivyde.eclipse.cpcontainer.IVYDE_CONTAINER/?ivyXmlPath=ivy.xml&amp;confs=*&amp;ivySettingsPath=file%3A.%2Fivysettings.xml&amp;buildPropertyFiles=build.properties&amp;acceptedTypes=jar&amp;sourceTypes=source&amp;javadocTypes=javadoc&amp;sourceSuffixes=&amp;javadocSuffixes=&amp;doRetrieve=false&amp;retrievePattern=lib%2F%5Bconf%5D%2F%5Bartifact%5D.%5Bext%5D&amp;alphaOrder=true"/>
-	<classpathentry kind="lib" path="C:/Workspace_XUL/pentaho-xul-swt/dev-lib/x86-3.3.0-v3346.jar"/>
 	<classpathentry kind="output" path="eclipse-bin"/>
+	<classpathentry kind="lib" path="lib/commands-3.3.0-I20070605-0010.jar" />
+	<classpathentry kind="lib" path="lib/common-3.3.0-v20070426.jar" />
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.8.0.jar" />
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar" />
+	<classpathentry kind="lib" path="lib/commons-lang-2.2.jar" />
+	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar" />
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar" />
+	<classpathentry kind="lib" path="lib/groovy-all-1.5.6.jar" />
+	<classpathentry kind="lib" path="lib/jaxen-1.1.jar" />
+	<classpathentry kind="lib" path="lib/jface-3.3.0-I20070606-0010.jar" />
+	<classpathentry kind="lib" path="lib/pentaho-xul-core-TRUNK-SNAPSHOT.jar" />
+	<classpathentry kind="lib" path="lib/swt-linux-x86_64-3.7.jar" />
+	<classpathentry kind="lib" path="test-lib/commands-3.3.0-I20070605-0010.jar" />
+	<classpathentry kind="lib" path="test-lib/common-3.3.0-v20070426.jar" />
+	<classpathentry kind="lib" path="test-lib/jaxen-1.1.jar" />
+	<classpathentry kind="lib" path="test-lib/junit-4.4.jar" />
 </classpath>
