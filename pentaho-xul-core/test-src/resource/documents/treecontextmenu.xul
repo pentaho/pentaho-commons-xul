@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="file://E:/workspaces/sprint_workspace/pentaho-xul/test/resource/documents/xul.css" type="text/css"?>
+<window id="label-test" title="Testing labels and layout for SWT, Swing"
+  orient="vertical"
+  xmlns="http://www.pentaho.org/there.is.only.xul"
+  xmlns:pen="http://www.pentaho.org/2008/xul"
+   xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650" pen:appicon="window_icon.png" 
+   onload="handler.init()">
+  <tree flex="1" editable="true" seltype="multiple" enableColumnDrag="true" id="testTable" width="400" 
+  		newitembinding="handler.createNewRow()">
+
+    <treecols id="column_list">
+      <treecol id="selected" pen:binding="selected" label="Selected" type="checkbox" editable="true" />
+      <treecol id="parameter" pen:binding="parameter" label="Name" flex="2" editable="true" />
+      <treecol id="defaulted" pen:binding="defaulted" label="Default Value" flex="1" editable="true" />
+      <treecol id="value" pen:binding="value" label="Value" flex="1" editable="true"  />
+      <treecol id="description" pen:binding="description" label="Description" flex="5" editable="true" />
+    </treecols>
+
+    <treechildren id="main_treechildren">
+ 
+    </treechildren>
+  </tree>
+  
+</window>
