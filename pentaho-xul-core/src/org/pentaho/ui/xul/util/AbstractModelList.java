@@ -1,15 +1,15 @@
   package org.pentaho.ui.xul.util;
 
   import java.io.Serializable;
-  import java.util.ArrayList;
-  import java.util.Collection;
-  import java.util.Collections;
-  import java.util.Iterator;
-  import java.util.List;
-  import java.util.ListIterator;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import org.pentaho.ui.xul.XulEventSourceAdapter;
-  import org.pentaho.ui.xul.stereotype.Bindable;
+import org.pentaho.ui.xul.containers.XulManagedCollection;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
   /**
    * Base class for UI model objects that provides {@see java.util.List}
@@ -19,7 +19,7 @@ import org.pentaho.ui.xul.XulEventSourceAdapter;
    *          type of children
    */
   public class AbstractModelList<T> extends XulEventSourceAdapter implements
-      List<T>, Iterable<T>, Serializable {
+      List<T>, Iterable<T>, Serializable, XulManagedCollection {
 
     protected List<T> children = new ArrayList<T>();
     
