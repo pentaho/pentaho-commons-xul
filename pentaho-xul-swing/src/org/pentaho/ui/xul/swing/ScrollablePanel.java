@@ -49,14 +49,3 @@ public class ScrollablePanel extends JPanel {
     return 2;
   }
 }
-
-/*
-  DECOMPILATION REPORT
-
-  Decompiled from: /home/aaron/workspaces/pentaho/pentaho-database/lib-ext/pentaho-xul-framework-1.7.0-24982.jar
-  Total time: 18 ms
-  Jad reported messages/errors:
-The class file version is 49.0 (only 45.3, 46.0 and 47.0 are supported)
-  Exit status: 0
-  Caught exceptions:
-*/
