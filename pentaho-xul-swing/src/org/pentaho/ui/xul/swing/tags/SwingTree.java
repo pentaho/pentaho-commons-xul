@@ -428,19 +428,6 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       if (selectionListener != null) {
         table.getSelectionModel().addListSelectionListener(selectionListener);
       }
-      // The newItemBinding must be populated to get the  context menu - and once you have it, you have the whole
-      // set of menu options (no coded alternatives today). Review this logic when there is a requirement for 
-      // fine-grained control of which menu items are available to the table. 
-      
-      if (StringUtils.isNotEmpty(newItemBinding)){
-        if (this.isCollectionManaged()){
-          popupListener = new PopupListener();
-          table.addMouseListener(popupListener);
-          table.getTableHeader().addMouseListener(popupListener);
-        }else{
-          logger.error("Attempt to enable context menu options aborted; operation not available on an unbound collection.");
-        }
-      }
     }
 
     JComponent comp = (table != null ? table : tree);
@@ -1277,6 +1264,27 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
             row.addCell(cell);
           }
         }
+        
+        // Setup context menu.. must do this here, as elements may not have been initialized in the layout() method.
+        if (popupListener == null){
+          
+          // The newItemBinding must be populated to get the  context menu - and once you have it, you have the whole
+          // set of menu options (no coded alternatives today). Review this logic when there is a requirement for 
+          // fine-grained control of which menu items are available to the table. 
+          
+          if (StringUtils.isNotEmpty(newItemBinding)){
+            if (isCollectionManaged()){
+
+              popupListener = new PopupListener();
+              table.addMouseListener(popupListener);
+              table.getTableHeader().addMouseListener(popupListener);
+              
+            }else{
+              logger.error( "Operations associated with newitembinding attribute not allowed on an unbound collection. Refactor your model " + 
+                  "to use a managed collection (for an example, see AbstractModelList)." );
+            }
+          }
+        }
       } else {// tree
 
         for (T o : elements) {
@@ -1880,16 +1888,10 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
    * Do not expose functions that require a bound colleciton if the collection is 
    * not bound. 
    * 
-   * @return true if the collection implements the XulManagedColleciton interface 
+   * @return true if the collection implements the XulManagedCollection interface 
    */
   private boolean isCollectionManaged(){
-    if (elements instanceof XulManagedCollection){
-      return true;
-    }else{
-      logger.error( "Operation not allowed on an unbound collection. Refactor your model " + 
-                    "to use a managed collection (for an example, see AbstractModelList)." );
-      return false;
-    }
+    return (elements instanceof XulManagedCollection);
   }
 
   /**
