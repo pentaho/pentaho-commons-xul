@@ -137,7 +137,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
   private String newItemBinding;
   
   private boolean autoCreateNewRows;
-    
+  
   JPopupMenu popupMenu = new JPopupMenu();
   JMenuItem addRowMenu = new JMenuItem(Messages.getString("SwingTree.insert")); //$NON-NLS-1$
   JMenuItem deleteRowMenu = new JMenuItem(Messages.getString("SwingTree.deleteRow")); //$NON-NLS-1$
@@ -544,7 +544,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       table.getColumnModel().getColumn(i).setWidth(newColWidth);
       table.getColumnModel().getColumn(i).setPreferredWidth(newColWidth);
 
-      table.getColumnModel().getColumn(i).setMinWidth(newColWidth);
+      // COMMONS-111 this line of code prevents user resizing of columns ...
+      //table.getColumnModel().getColumn(i).setMinWidth(newColWidth);
     }
   }
 
