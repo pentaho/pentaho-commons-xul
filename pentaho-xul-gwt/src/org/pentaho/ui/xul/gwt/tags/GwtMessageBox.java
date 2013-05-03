@@ -35,8 +35,7 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
 
   public GwtMessageBox() {
     super(ELEMENT_NAME);
-    //setup default width and height in case user does not specify
-    setHeight(125);
+    //setup default width in case user does not specify
     setWidth(250);
     
     acceptBtn.addClickListener(new ClickListener(){

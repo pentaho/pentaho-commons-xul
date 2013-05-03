@@ -103,10 +103,6 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
     if(getWidth() > 0){
       contents.setWidth(getWidth() + "px");//$NON-NLS-1$
     }
-    if(getHeight() > 0){
-      int offsetHeight = getHeight() - HEADER_HEIGHT;
-      contents.setHeight(offsetHeight + "px");//$NON-NLS-1$
-    }
     dialog.center();
     dialog.show();
 
