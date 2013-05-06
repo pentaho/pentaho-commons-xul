@@ -53,7 +53,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
       dialog.hide();
     }
   }
-  
+
   public void show(){
     // Instantiation if delayed to prevent errors with the underlying GWT's not being able to calculate available size
     // in the case that the GWT app has been loaded into an iframe that's not visible.
@@ -102,6 +102,10 @@ public abstract class GenericDialog extends AbstractGwtXulContainer{
  
     if(getWidth() > 0){
       contents.setWidth(getWidth() + "px");//$NON-NLS-1$
+    }
+    if(getHeight() > 0){
+      int offsetHeight = getHeight() - HEADER_HEIGHT;
+      contents.setHeight(offsetHeight + "px");//$NON-NLS-1$
     }
     dialog.center();
     dialog.show();
