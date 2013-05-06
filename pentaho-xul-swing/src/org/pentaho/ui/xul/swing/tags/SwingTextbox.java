@@ -160,6 +160,29 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   public Object getTextControl() {
     return getManagedObject();
   }
+  
+  @Override
+  public int getWidth(){
+    if (width <= 0){
+      return 150; //reasonable default
+    }
+    return width;
+  }
+  
+  @Override
+  public void setWidth(int width) {
+    super.setWidth(width);
+    if (textComp == null){
+      return;
+    }
+    Dimension box = new Dimension();
+    box.height =this.textComp.getPreferredSize().height;
+    box.width = width;
+    this.textComp.setMaximumSize(box);
+    this.textComp.setPreferredSize(box);
+    this.textComp.setMinimumSize(box);
+  }
+
 
   @Override
   public Object getManagedObject() {
@@ -167,7 +190,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
       switch (this.type) {
         case PASSWORD:
           JPasswordField pass = new JPasswordField((value != null) ? value : "");
-          pass.setPreferredSize(new Dimension(150, 20));
+          pass.setPreferredSize(new Dimension(getWidth(), 20));
           pass.setMinimumSize(new Dimension(pass.getPreferredSize().width, pass.getPreferredSize().height));
           pass.setEditable(!readonly);
           textComp = pass;
@@ -181,11 +204,11 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
             textComp = textArea;
             setManagedObject(scrollPane);
             textArea.setEditable(!readonly);
-            this.scrollPane.setMinimumSize(new Dimension(this.width, this.height));
+            this.scrollPane.setMinimumSize(new Dimension(getWidth(), this.height));
             //this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
           } else {
             textField = new JTextField((value != null) ? value : "");
-            textField.setPreferredSize(new Dimension(150, textField.getPreferredSize().height));
+            textField.setPreferredSize(new Dimension(getWidth(), textField.getPreferredSize().height));
             textField.setMinimumSize(new Dimension(textField.getPreferredSize().width,
                 textField.getPreferredSize().height));
             textField.setEditable(!readonly);
