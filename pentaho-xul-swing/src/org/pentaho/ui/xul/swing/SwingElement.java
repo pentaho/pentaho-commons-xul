@@ -272,7 +272,7 @@ public class SwingElement extends AbstractXulComponent {
   }
 
   public JComponent getJComponent() {
-    return (JComponent) getManagedObject();
+    return getManagedObject() instanceof JComponent ? (JComponent) getManagedObject() : null;
   }
 
   public void setOnblur(final String method) {

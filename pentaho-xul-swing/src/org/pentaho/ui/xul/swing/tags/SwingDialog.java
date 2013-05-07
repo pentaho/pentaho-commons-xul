@@ -120,7 +120,7 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     this.orientation = Orient.VERTICAL;
 
     container = new JPanel(new GridBagLayout());
-    setManagedObject(container);
+    setManagedObject("empty");
 
     resetContainer();
   }
