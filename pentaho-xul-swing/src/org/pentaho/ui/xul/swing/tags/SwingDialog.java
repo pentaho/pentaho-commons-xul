@@ -152,6 +152,10 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
 
   }
   
+  public JComponent getContainer(){
+    return container;
+  }
+  
   public JDialog getDialog(){
     if (dialog == null) {
       createDialog();
