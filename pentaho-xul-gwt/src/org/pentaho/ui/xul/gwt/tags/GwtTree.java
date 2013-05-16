@@ -13,6 +13,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.gwt.gen2.table.client.SelectionGrid;
+import com.google.gwt.gen2.table.event.client.RowSelectionEvent;
+import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
@@ -75,9 +78,6 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widgetideas.table.client.SelectionGrid.SelectionPolicy;
-import com.google.gwt.widgetideas.table.client.SourceTableSelectionEvents;
-import com.google.gwt.widgetideas.table.client.TableSelectionListener;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable, TableColumnSortListener {
 
@@ -426,7 +426,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         table.setColumnSortable(i, true);
       }
     }
-
     if (totalFlex > 0) {
       table.fillWidth();
     } else {
@@ -769,11 +768,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     List<XulComponent> colCollection = getColumns().getChildNodes();
     String cols[] = new String[colCollection.size()];
 
-    SelectionPolicy selectionPolicy = null;
+    SelectionGrid.SelectionPolicy selectionPolicy = null;
     if ("single".equals(getSeltype())) {
-      selectionPolicy = SelectionPolicy.ONE_ROW;
+      selectionPolicy = SelectionGrid.SelectionPolicy.ONE_ROW;
     } else if ("multiple".equals(getSeltype())) {
-      selectionPolicy = SelectionPolicy.MULTI_ROW;
+      selectionPolicy = SelectionGrid.SelectionPolicy.MULTI_ROW;
     }
 
     int[] widths = new int[cols.length];
@@ -813,60 +812,49 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       table.fillWidth();
     }
 
-    table.addTableSelectionListener(new TableSelectionListener() {
-      public void onAllRowsDeselected(SourceTableSelectionEvents sender) {
-      }
 
-      public void onCellHover(SourceTableSelectionEvents sender, int row, int cell) {
-      }
-
-      public void onCellUnhover(SourceTableSelectionEvents sender, int row, int cell) {
-      }
-
-      public void onRowDeselected(SourceTableSelectionEvents sender, int row) {
-      }
-
-      public void onRowHover(SourceTableSelectionEvents sender, int row) {
-      }
-
-      public void onRowUnhover(SourceTableSelectionEvents sender, int row) {
-      }
-
-      public void onRowsSelected(SourceTableSelectionEvents sender, int firstRow, int numRows) {
+    RowSelectionHandler handler = new RowSelectionHandler() {
+      @Override
+      public void onRowSelection(RowSelectionEvent event) {
+        //To change body of implemented methods use File | Settings | File Templates.
         try {
-          if (getOnselect() != null && getOnselect().trim().length() > 0) {
-            getXulDomContainer().invoke(getOnselect(), new Object[] {});
-          }
-          Integer[] selectedRows = table.getSelectedRows().toArray(new Integer[table.getSelectedRows().size()]);
-          // set.toArray(new Integer[]) doesn't unwrap ><
-          int[] rows = new int[selectedRows.length];
-          for (int i = 0; i < selectedRows.length; i++) {
-            rows[i] = selectedRows[i];
-          }
-          GwtTree.this.setSelectedRows(rows);
-          GwtTree.this.colCollection = getColumns().getChildNodes();
-          if (GwtTree.this.isShowalleditcontrols() == false) {
-            if (curSelectedRow > -1) {
-              Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
+
+          if(!GwtTree.this.suppressEvents){
+            if (getOnselect() != null && getOnselect().trim().length() > 0) {
+              getXulDomContainer().invoke(getOnselect(), new Object[] {});
+            }
+            Integer[] selectedRows = table.getSelectedRows().toArray(new Integer[table.getSelectedRows().size()]);
+            // set.toArray(new Integer[]) doesn't unwrap ><
+            int[] rows = new int[selectedRows.length];
+            for (int i = 0; i < selectedRows.length; i++) {
+              rows[i] = selectedRows[i];
+            }
+            GwtTree.this.setSelectedRows(rows);
+            GwtTree.this.colCollection = getColumns().getChildNodes();
+            if (GwtTree.this.isShowalleditcontrols() == false) {
+              if (curSelectedRow > -1) {
+                Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
+
+                for (int j = 0; j < getColumns().getColumnCount(); j++) {
+                  curSelectedRowOriginal[j] = getColumnEditor(j, curSelectedRow);
+                }
+                table.replaceRow(curSelectedRow, curSelectedRowOriginal);
+              }
+              curSelectedRow = rows[0];
+              Object[] newRow = new Object[getColumns().getColumnCount()];
 
               for (int j = 0; j < getColumns().getColumnCount(); j++) {
-                curSelectedRowOriginal[j] = getColumnEditor(j, curSelectedRow);
+                newRow[j] = getColumnEditor(j, rows[0]);
               }
-              table.replaceRow(curSelectedRow, curSelectedRowOriginal);
-            }
-            curSelectedRow = rows[0];
-            Object[] newRow = new Object[getColumns().getColumnCount()];
-
-            for (int j = 0; j < getColumns().getColumnCount(); j++) {
-              newRow[j] = getColumnEditor(j, rows[0]);
-            }
-            table.replaceRow(rows[0], newRow);
+              table.replaceRow(rows[0], newRow);
+             }
           }
         } catch (XulException e) {
           e.printStackTrace();
         }
       }
-    });
+    };
+    table.addRowSelectionHandler(handler);
 
     setWidgetInPanel(table);
     updateUI();
@@ -973,6 +961,9 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private int[] selectedRows;
 
   public void setSelectedRows(int[] rows) {
+
+    boolean localSuppressEvents=this.suppressEvents;
+    this.suppressEvents=true;
     if (table == null || Arrays.equals(selectedRows, rows)) {
       // this only works after the table has been materialized
       return;
@@ -999,6 +990,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
       this.changeSupport.firePropertyChange("selectedItems", null, selectedObjects);
     }
+    this.suppressEvents=localSuppressEvents;
   }
 
   public String getSeltype() {
