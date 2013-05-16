@@ -5,8 +5,10 @@
     <inherits name='com.googlecode.gwtx.Java'/>
     <inherits name='org.pentaho.ui.Xul'/>
   <inherits name="org.pentaho.gwt.widgets.Widgets"/>
+    <inherits name="com.google.gwt.gen2.table.Table"/>
+    <inherits name="com.google.gwt.gen2.table.Table"/>
 
-  <source path="gwt">
+    <source path="gwt">
       <exclude name="**/service/XulLoaderServlet*"/>
       <exclude name="**/generators/*"/>
     </source>
