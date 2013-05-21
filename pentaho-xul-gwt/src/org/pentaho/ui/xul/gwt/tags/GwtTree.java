@@ -819,7 +819,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         //To change body of implemented methods use File | Settings | File Templates.
         try {
 
-          if(!GwtTree.this.suppressEvents){
             if (getOnselect() != null && getOnselect().trim().length() > 0) {
               getXulDomContainer().invoke(getOnselect(), new Object[] {});
             }
@@ -848,7 +847,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
               }
               table.replaceRow(rows[0], newRow);
              }
-          }
         } catch (XulException e) {
           e.printStackTrace();
         }
@@ -962,8 +960,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   public void setSelectedRows(int[] rows) {
 
-    boolean localSuppressEvents=this.suppressEvents;
-    this.suppressEvents=true;
     if (table == null || Arrays.equals(selectedRows, rows)) {
       // this only works after the table has been materialized
       return;
@@ -971,13 +967,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     int[] prevSelected = selectedRows;
     selectedRows = rows;
-    table.deselectRows();
 
-    for (int r : rows) {
-      if (this.rootChildren.getChildNodes().size() > r) {
-        table.selectRow(r);
-      }
-    }
     if (this.suppressEvents == false && Arrays.equals(selectedRows, prevSelected) == false) {
       this.changeSupport.firePropertyChange("selectedRows", prevSelected, rows);
       this.changeSupport.firePropertyChange("absoluteSelectedRows", prevSelected, rows);
@@ -990,7 +980,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
       this.changeSupport.firePropertyChange("selectedItems", null, selectedObjects);
     }
-    this.suppressEvents=localSuppressEvents;
   }
 
   public String getSeltype() {
