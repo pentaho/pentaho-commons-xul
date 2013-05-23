@@ -297,6 +297,7 @@ legend {
   overflow:auto;
   height:100%;
   width:100%;
+  background-color: #FFF;
 }
 
 .label-scroll-panel{
