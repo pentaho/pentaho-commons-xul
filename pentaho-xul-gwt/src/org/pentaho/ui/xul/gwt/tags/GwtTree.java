@@ -267,9 +267,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       tree = new Tree();
       setWidgetInPanel(tree);
     }
-    scrollPanel.setWidth("100%"); //$NON-NLS-1$
-    scrollPanel.setHeight("100%"); //$NON-NLS-1$
-    scrollPanel.getElement().getStyle().setProperty("backgroundColor", "white"); //$NON-NLS-1$//$NON-NLS-2$
     if (getWidth() > 0) {
       scrollPanel.setWidth(getWidth() + "px"); //$NON-NLS-1$
     }
