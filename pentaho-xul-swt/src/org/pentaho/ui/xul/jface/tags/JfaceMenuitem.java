@@ -8,8 +8,8 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.LegacyActionTools;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -24,7 +24,6 @@ import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class JfaceMenuitem extends SwtElement implements XulMenuitem{
-  
 	private static int menuItemSerial = 0;
   private static final Log logger = LogFactory.getLog(JfaceMenuitem.class);
   private String onCommand;
@@ -32,7 +31,7 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   private XulDomContainer domContainer;
   private XulComponent parent;
   private String remainder;
-  private Action action;
+  private ActionContributionItem contributionItem;
   private String acceltext = "";
   private String accesskey = "";
   private String label = "";
@@ -41,57 +40,37 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   
   
   public JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("menuitem");
-    this.parent = parent;
-//    setManagedObject("empty");
-    this.domContainer = domContainer;
-    if(parent.getManagedObject() != null && parent.getManagedObject() instanceof IMenuManager){
-      createItem(self, parent, -1, false);
-    } else {
-//System.out.println("JfaceMenuitem not creating item");    	
-    }
-
+    this(self, parent, domContainer, tagName, -1, null);
   }
 
   public JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName, int pos) {
-    super("menuitem");
-    this.parent = parent;
-//    setManagedObject("empty");
-    this.domContainer = domContainer;
-    if(parent.getManagedObject() != null && parent.getManagedObject() instanceof IMenuManager){
-     createItem(self, parent, pos, true);
-    } else {
-//System.out.println("JfaceMenuitem not creating item");    	
-    }
-
+    this(self, parent, domContainer, tagName, pos, null);
   }
   
   public JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName, int pos, Action action) {
     super("menuitem");
     this.parent = parent;
     this.domContainer = domContainer;
-    createItem(self, parent, pos, true, action);
+    if (parent.getManagedObject() != null && parent.getManagedObject() instanceof IMenuManager) {
+      createItem(self, parent, pos, true);
+    }
   }
 
   public void setAction(Action action) {
-    this.action = action;
+    contributionItem = new ActionContributionItem(action);
   }
   
   public IAction getAction() {
-	  return action;
+	  return contributionItem.getAction();
   }
-
-  public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd){
-    createItem(self, parent, pos, autoAdd, null);
-  }
-
-  public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd, Action alternativeAction) {
-
+  
+  private Action initAction(Element self, Action alternativeAction) {
     int style = Action.AS_DROP_DOWN_MENU;
     if (self != null && "checkbox".equals(self.getAttributeValue("type"))) {
       style = Action.AS_CHECK_BOX;
     }
-
+    
+    Action action;
     if (alternativeAction != null) {
       action = alternativeAction;
     } else {
@@ -118,36 +97,34 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
       menuItemSerial++;
     }
     action.setId(id);
-    if (action.getText() == null || action.getText().equals("")) {
-      // System.out.println("JfaceMenuitem createItem adding blank action");
-    }
 
     action.setChecked(selected);
+    return action;
+  }
 
-    setManagedObject(action);
+  public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd){
+    createItem(self, parent, pos, autoAdd, null);
+  }
+
+  public void createItem(Element self, XulComponent parent, int pos, boolean autoAdd, Action alternativeAction) {
+    contributionItem = new ActionContributionItem(initAction(self, alternativeAction));
+    setManagedObject(contributionItem);
     if (autoAdd) {
       IMenuManager menu = (IMenuManager) parent.getManagedObject();
       if (pos == -1) {
-        menu.add(action);
+        menu.add(contributionItem);
       } else {
         if (pos < getChildNodes().size()) {
-          if (pos >= menu.getItems().length) {
-            // System.out.println("hmm..."+menu.getItems().length);
-          }
           String anchorId = menu.getItems()[pos].getId();
           if (anchorId == null) {
-            // System.out.println("can't find anchor id for "+((JfaceMenuitem)
-            // self).getLabel());
-            menu.add(action);
+            menu.add(contributionItem);
             parent.addChild(this);
           } else {
-            menu.insertBefore(anchorId, action);
+            menu.insertBefore(anchorId, contributionItem);
             parent.addChildAt(this, pos);
           }
         } else {
           parent.addChild(this);
-          // menu.add(action); -- The menu action is already added by
-          // parent.addChild(this)
         }
       }
     }
@@ -175,8 +152,7 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   }
   
   private void setText(){
-	  
-    if(action != null){
+    if(contributionItem != null){
       String text = "";
       if(this.label != null){
         text += this.label;
@@ -185,13 +161,12 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
           text += "\t"+acceltext;
       }
 
-      action.setText(text);
+      contributionItem.getAction().setText(text);
     }
   }
 
   public void setAccesskey(String accessKey) {
-    
-    if(action != null){
+    if(contributionItem != null){
       int mask = 0;
       if(accessKey.indexOf("ctrl") > -1){ //$NON-NLS-1$
     	boolean isMac = System.getProperty("os.name").toLowerCase().indexOf("mac") >= 0;
@@ -223,13 +198,14 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
         mask += LegacyActionTools.findKeyCode(remainder);        
       }
       
-      action.setAccelerator(mask);
+      contributionItem.getAction().setAccelerator(mask);
+      contributionItem.update(IAction.TEXT);
     }
   }
   public void setDisabled(boolean disabled) {
     this.disabled = disabled;
-    if (action != null) {
-    	action.setEnabled(!disabled);
+    if (contributionItem != null) {
+      contributionItem.getAction().setEnabled(!disabled);
     }
   }
   
@@ -243,17 +219,14 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   }
 
   public boolean isSelected() {
-	  if( action != null ) {
-//	    return action.isChecked();
-	  }
 	  return selected;
   }
   
   public void setSelected(boolean val){
 	  boolean changing = selected != val;
 	  selected = val;
-    if(action != null){
-      action.setChecked(selected);
+    if(contributionItem != null){
+      contributionItem.getAction().setChecked(selected);
     }
     if(parent != null && parent instanceof JfaceMenupopup && parent.getParent() instanceof JfaceMenuList ) {
     	if( val ) {
@@ -268,8 +241,8 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   public void setImage( Image img ) {
       ImageDescriptor id = ImageDescriptor.createFromImage(img);
 
-      if( action != null ) {
-      	action.setImageDescriptor(id);
+      if(contributionItem != null ) {
+        contributionItem.getAction().setImageDescriptor(id);
       }
   }
   
@@ -282,8 +255,8 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
         Image img = new Image(Display.getCurrent(), in);
         ImageDescriptor id = ImageDescriptor.createFromImage(img);
 
-        if( action != null ) {
-        	action.setImageDescriptor(id);
+        if(contributionItem != null ) {
+          contributionItem.getAction().setImageDescriptor(id);
         }
 
       } catch (FileNotFoundException e) {
@@ -311,35 +284,19 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   }
   
   public void reposition(int position){
-//    int accel = item..getAccelerator();
-    action = null;
+    contributionItem = null;
     createItem(this, parent, position, true);
     setDisabled(isDisabled());
     this.setImage(getImage());
     setSelected(isSelected());
-//    item.setAccelerator(accel);
     setAcceltext(getAcceltext());
   }
   
   @Override
   public void setVisible(boolean visible) {
-
 	  this.visible = visible;
-	  if( parent.getManagedObject() instanceof IMenuManager ) {
-		  IMenuManager menu = (IMenuManager) parent.getManagedObject();
-		  for( IContributionItem item : menu.getItems() ) {
-			  if( item.getId() != null && item.getId().equals(action.getId() )) {
-	  			  item.setVisible(visible);
-	  			  return;
-			  }
-		  }
-	  }
-	  
+	  contributionItem.setVisible(visible);
   }
-  
-  
-  
-  
 }
 
   
