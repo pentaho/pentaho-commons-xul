@@ -1,8 +1,5 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Image;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarButton;
 import org.pentaho.gwt.widgets.client.toolbar.ToolbarToggleButton;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
@@ -15,14 +12,19 @@ import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.Image;
+
 public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulToolbarbutton {
 
   private ToolbarButton button;
+
   private String jscommand;
 
   private String dir, group, image, onclick, tooltip, disabledImage, type, downimage, downimagedisabled;
 
-  private enum Property{
+  private enum Property {
     ID, LABEL, DISABLED, ONCLICK, IMAGE, TOOLTIPTEXT, VISIBLE
   }
 
@@ -41,7 +43,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Override
   public void setAttribute(String name, String value) {
     super.setAttribute(name, value);
-    try{
+    try {
       Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
       switch (prop) {
 
@@ -64,8 +66,8 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
           setVisible("true".equals(value));
           break;
       }
-    } catch(IllegalArgumentException e){
-      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    } catch (IllegalArgumentException e) {
+      System.out.println("Could not find Property in Enum for: " + name + " in class" + getClass().getName());
     }
   }
 
@@ -91,6 +93,12 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     String vis = srcEle.getAttribute("pen:visible");
     if (vis != null && !vis.equals("")) {
       setVisible("true".equals(vis));
+    }
+
+    // Add class name to toolbar button
+    String className = srcEle.getAttribute("pen:classname");
+    if (className != null && !className.isEmpty()) {
+      ((ToolbarButton) getManagedObject()).addClassName(className);
     }
 
   }
@@ -166,7 +174,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   @Bindable
   public void setDisabled(boolean dis) {
-    if(button != null){
+    if (button != null) {
       button.setEnabled(!dis);
     }
   }
@@ -212,7 +220,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public void setImage(String src) {
     this.image = src;
-    if(button == null){
+    if (button == null) {
       return;
     }
     if (src != null && src.length() > 0) {
@@ -298,7 +306,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public void setVisible(boolean visible) {
     super.setVisible(visible);
-    if(button != null){
+    if (button != null) {
       button.setVisible(visible);
     }
   }
