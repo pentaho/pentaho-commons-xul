@@ -21,9 +21,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -34,12 +31,18 @@ import com.google.gwt.user.client.ui.SimplePanel;
 public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   static final String ELEMENT_NAME = "button"; //$NON-NLS-1$
-  enum DIRECTION {forward, reverse};
-  enum ORIENT {horizontal, vertical}
+
+  enum DIRECTION {
+    forward, reverse
+  };
+
+  enum ORIENT {
+    horizontal, vertical
+  }
+
   private String dir, group, image, type, onclick, tooltip, disabledImage;
 
-
-  private enum Property{
+  private enum Property {
     ID, CLASSNAME, LABEL, IMAGE, DISABLEDIMAGE, DISABLED
   }
 
@@ -52,15 +55,21 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   private String className;
+
   private Button customButton;
+
   private Button button;
 
   private ImageButton imageButton;
 
   private boolean disabled;
+
   private MenuBar menuBar;
-  private PopupPanel popupPanel; 
+
+  private PopupPanel popupPanel;
+
   private HandlerRegistration handlerRegistration;
+
   public GwtButton() {
     super(ELEMENT_NAME);
     //programatic creation doesn't call init() create here for them
@@ -72,7 +81,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   @Override
   public void setAttribute(String name, String value) {
     super.setAttribute(name, value);
-    try{
+    try {
       Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
       switch (prop) {
 
@@ -92,30 +101,39 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
           setDisabled("true".equals(value));
           break;
       }
-    } catch(IllegalArgumentException e){
-      System.out.println("Could not find Property in Enum for: "+name+" in class"+getClass().getName());
+    } catch (IllegalArgumentException e) {
+      System.out.println("Could not find Property in Enum for: " + name + " in class" + getClass().getName());
     }
   }
 
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    if(!StringUtils.isEmpty(srcEle.getAttribute("dir")) && !StringUtils.isEmpty(srcEle.getAttribute("image")) && !StringUtils.isEmpty(srcEle.getAttribute("label"))) {
-      
-      if(!StringUtils.isEmpty(srcEle.getAttribute("pen:classname"))) {
+
+    String classNameAttribute = srcEle.getAttribute("pen:classname");
+
+    if (!StringUtils.isEmpty(srcEle.getAttribute("dir")) && !StringUtils.isEmpty(srcEle.getAttribute("image"))
+        && !StringUtils.isEmpty(srcEle.getAttribute("label"))) {
+
+      if (!StringUtils.isEmpty(srcEle.getAttribute("pen:classname"))) {
         /* customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
         srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")),,srcEle.getAttribute("pen:classname"));*/
         customButton = new Button(ButtonHelper.createButtonLabel(
-        new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
-        srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")),srcEle.getAttribute("pen:classname")));
-        
+            new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")), srcEle.getAttribute("label"),
+            getButtonLabelOrigin(srcEle.getAttribute("dir"), srcEle.getAttribute("orient")), classNameAttribute));
+
       } else {
-     /* customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
-          srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")));*/
-      customButton = new Button(ButtonHelper.createButtonLabel(
-          new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
-          srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient"))));
+        /* customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
+             srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")));*/
+        customButton = new Button(ButtonHelper.createButtonLabel(
+            new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")), srcEle.getAttribute("label"),
+            getButtonLabelOrigin(srcEle.getAttribute("dir"), srcEle.getAttribute("orient"))));
       }
       setManagedObject(customButton);
       button = null;
+
+      if (classNameAttribute != null && !classNameAttribute.isEmpty()) {
+        customButton.addStyleName(classNameAttribute);
+      }
+
     } else if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
       //we create a button by default, remove it here
       button = null;
@@ -125,10 +143,18 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       sp.add(imageButton);
       imageButton.setHeight("");
       imageButton.setWidth("");
+
+      if (classNameAttribute != null && !classNameAttribute.isEmpty()) {
+        imageButton.addStyleName(classNameAttribute);
+      }
     } else {
       button = new Button();
       button.setStylePrimaryName("pentaho-button");
       setManagedObject(button);
+
+      if (classNameAttribute != null && !classNameAttribute.isEmpty()) {
+        button.addStyleName(classNameAttribute);
+      }
     }
 
     super.init(srcEle, container);
@@ -137,7 +163,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     }
     if (!StringUtils.isEmpty(srcEle.getAttribute("onclick"))) {
       setOnclick(srcEle.getAttribute("onclick"));
-    } 
+    }
     if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
       setImage(srcEle.getAttribute("image"));
     }
@@ -147,16 +173,16 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     if (!StringUtils.isEmpty(srcEle.getAttribute("pen:disabledimage"))) {
       this.setDisabledImage(srcEle.getAttribute("pen:disabledimage"));
     }
-    if (!StringUtils.isEmpty(srcEle.getAttribute("pen:classname"))) {
+    if (!StringUtils.isEmpty(classNameAttribute)) {
       this.setClassName(srcEle.getAttribute("pen:classname"));
     }
-    
+
     setDisabled("true".equals(srcEle.getAttribute("disabled")));
   }
 
   public void setLabel(String label) {
     if (button != null) {
-      button.setHTML("<span>"+label+"</span>");
+      button.setHTML("<span>" + label + "</span>");
     }
   }
 
@@ -165,10 +191,10 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
    */
   public void setOnclick(final String method) {
     this.onclick = method;
-    
-    ClickHandler handler = new ClickHandler(){
+
+    ClickHandler handler = new ClickHandler() {
       public void onClick(ClickEvent event) {
-        if(!GwtButton.this.disabled) {
+        if (!GwtButton.this.disabled) {
           try {
             GwtButton.this.getXulDomContainer().invoke(method, new Object[] {});
           } catch (XulException e) {
@@ -177,7 +203,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
         }
       }
     };
-    
+
     if (button != null) {
       handlerRegistration = button.addClickHandler(handler);
     } else if (imageButton != null) {
@@ -186,22 +212,22 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       handlerRegistration = customButton.addClickHandler(handler);
     }
   }
-  
-  private void setupClickHandler(){
+
+  private void setupClickHandler() {
     // Remove the handler that was added before
-    
-    if(handlerRegistration != null) {
-      handlerRegistration.removeHandler(); 
+
+    if (handlerRegistration != null) {
+      handlerRegistration.removeHandler();
     }
-    
+
     // Add a new handler
-    
-    ClickHandler handler = new ClickHandler(){
+
+    ClickHandler handler = new ClickHandler() {
       public void onClick(ClickEvent event) {
-        if(!GwtButton.this.disabled) {
+        if (!GwtButton.this.disabled) {
           // Is this a GwtPopup Button and is this already created
           XulMenupopup popup = getPopupElement();
-          if(popup == null) {
+          if (popup == null) {
             try {
               GwtButton.this.getXulDomContainer().invoke(GwtButton.this.onclick, new Object[] {});
             } catch (XulException e) {
@@ -215,48 +241,47 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                 // Use the popup's key preview hooks to close the dialog when either
                 // enter or escape is pressed.
                 switch (key) {
-                case KeyCodes.KEY_ESCAPE:
-                  hide();
-                  break;
+                  case KeyCodes.KEY_ESCAPE:
+                    hide();
+                    break;
                 }
                 return true;
               }
-              
+
             };
             menuBar = new MenuBar(true);
             menuBar.setAutoOpen(true);
-              // This is a GwtMenuPopop
-              for (XulComponent menuItem : popup.getChildNodes()) {
-                final GwtMenuitem tempItem = ((GwtMenuitem) menuItem);
-                menuBar.addItem(tempItem.getLabel(), new PopupMenuCommand(tempItem.getCommand(), popupPanel));
+            // This is a GwtMenuPopop
+            for (XulComponent menuItem : popup.getChildNodes()) {
+              final GwtMenuitem tempItem = ((GwtMenuitem) menuItem);
+              menuBar.addItem(tempItem.getLabel(), new PopupMenuCommand(tempItem.getCommand(), popupPanel));
+            }
+            popupPanel.setWidget(menuBar);
+            popupPanel.setPopupPositionAndShow(new PositionCallback() {
+              public void setPosition(int offsetWidth, int offsetHeight) {
+                int absLeft = -1;
+                int absTop = -1;
+                int offHeight = -1;
+                if (button != null) {
+                  absLeft = button.getAbsoluteLeft();
+                  absTop = button.getAbsoluteTop();
+                  offHeight = button.getOffsetHeight();
+                } else if (imageButton != null) {
+                  absLeft = imageButton.getAbsoluteLeft();
+                  absTop = imageButton.getAbsoluteTop();
+                  offHeight = imageButton.getOffsetHeight();
+                } else if (customButton != null) {
+                  absLeft = customButton.getAbsoluteLeft();
+                  absTop = customButton.getAbsoluteTop();
+                  offHeight = customButton.getOffsetHeight();
+                }
+                popupPanel.setPopupPosition(absLeft, absTop + offHeight);
               }
-             popupPanel.setWidget(menuBar);
-             popupPanel.setPopupPositionAndShow(new PositionCallback() {
-               public void setPosition(int offsetWidth, int offsetHeight) {
-                 int absLeft = -1;
-                 int absTop = -1;
-                 int offHeight = -1;
-                 if (button != null) {
-                   absLeft = button.getAbsoluteLeft();
-                   absTop = button.getAbsoluteTop();
-                   offHeight = button.getOffsetHeight();
-                 } else if (imageButton != null) {
-                   absLeft = imageButton.getAbsoluteLeft();
-                   absTop = imageButton.getAbsoluteTop();
-                   offHeight = imageButton.getOffsetHeight();
-                 } else if (customButton != null) {
-                   absLeft = customButton.getAbsoluteLeft();
-                   absTop = customButton.getAbsoluteTop();
-                   offHeight = customButton.getOffsetHeight();
-                 }
-                 popupPanel.setPopupPosition(absLeft, absTop + offHeight);
-               }
-             });
+            });
           }
         }
       }
     };
-
 
     if (button != null) {
       handlerRegistration = button.addClickHandler(handler);
@@ -282,7 +307,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     this.disabled = dis;
     if (button != null) {
       button.setEnabled(!dis);
-      if(dis){
+      if (dis) {
         button.addStyleName("disabled");
       } else {
         button.removeStyleName("disabled");
@@ -352,7 +377,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       sp.add(imageButton);
       imageButton.setHeight("");
       imageButton.setWidth("");
-    }    
+    }
     if (imageButton != null) {
       src = GWT.getModuleBaseURL() + src;
       this.image = src;
@@ -413,14 +438,14 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       imageButton.setWidth("");
     }
 
-    if(!initialized) {
+    if (!initialized) {
       setupClickHandler();
     }
-      
+
     super.layout();
-    
+
   }
-  
+
   @Override
   public void setVisible(boolean visible) {
     super.setVisible(visible);
@@ -435,24 +460,25 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   private ButtonLabelType getButtonLabelOrigin(String direction, String orient) {
-    if(direction == null || direction.length() <= 0) {
+    if (direction == null || direction.length() <= 0) {
       direction = DIRECTION.forward.toString();
     }
-    if(orient == null || orient.length() <= 0) {
+    if (orient == null || orient.length() <= 0) {
       orient = ORIENT.horizontal.toString();
     }
-    
-    if(direction != null && orient != null) {
-      if(direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.vertical.toString())) {
+
+    if (direction != null && orient != null) {
+      if (direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.vertical.toString())) {
         return ButtonLabelType.TEXT_ON_BOTTOM;
-      } else if(direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.vertical.toString())) {
+      } else if (direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.vertical.toString())) {
         return ButtonLabelType.TEXT_ON_TOP;
-      } else if(direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.horizontal.toString())) {
+      } else if (direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.horizontal.toString())) {
         return ButtonLabelType.TEXT_ON_LEFT;
-      } else if(direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.horizontal.toString())) {
+      } else if (direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.horizontal.toString())) {
         return ButtonLabelType.TEXT_ON_RIGHT;
       }
-    } return ButtonLabelType.NO_TEXT;
+    }
+    return ButtonLabelType.NO_TEXT;
   }
 
   public void setClassName(String className) {
@@ -462,7 +488,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   public String getClassName() {
     return className;
   }
-  
+
   private GwtMenupopup getPopupElement() {
     for (Element comp : getChildNodes()) {
       if (comp instanceof GwtMenupopup) {
@@ -471,16 +497,18 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     }
     return null;
   }
-  
-  class PopupMenuCommand implements Command  {
+
+  class PopupMenuCommand implements Command {
 
     private String command;
+
     private PopupPanel popupPanel;
-    
+
     public PopupMenuCommand(String command, PopupPanel popupPanel) {
       this.command = command;
       this.popupPanel = popupPanel;
     }
+
     @Override
     public void execute() {
       try {
@@ -489,7 +517,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
         }
         GwtButton.this.getXulDomContainer().invoke(command, new Object[] {});
       } catch (XulException e) {
-        System.out.println("Error invoking method "+ command + " " + e.getMessage());
+        System.out.println("Error invoking method " + command + " " + e.getMessage());
         e.printStackTrace();
       }
     }
