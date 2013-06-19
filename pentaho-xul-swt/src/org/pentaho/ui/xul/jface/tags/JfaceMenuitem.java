@@ -38,21 +38,27 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
   private String image = "";
   private boolean selected = false;
   
-  
   public JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    this(self, parent, domContainer, tagName, -1, null);
+    this(self, parent, domContainer, tagName, -1, null, parent.getManagedObject() != null
+        && parent.getManagedObject() instanceof IMenuManager, false);
   }
 
   public JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName, int pos) {
-    this(self, parent, domContainer, tagName, pos, null);
+    this(self, parent, domContainer, tagName, pos, null, parent.getManagedObject() != null
+        && parent.getManagedObject() instanceof IMenuManager, true);
   }
-  
+
   public JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName, int pos, Action action) {
+    this(self, parent, domContainer, tagName, pos, action, true, true);
+  }
+
+  private JfaceMenuitem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName, int pos,
+      Action action, boolean shouldCreate, boolean autoAdd) {
     super("menuitem");
     this.parent = parent;
     this.domContainer = domContainer;
-    if (parent.getManagedObject() != null && parent.getManagedObject() instanceof IMenuManager) {
-      createItem(self, parent, pos, true);
+    if (shouldCreate) {
+      createItem(self, parent, pos, autoAdd);
     }
   }
 

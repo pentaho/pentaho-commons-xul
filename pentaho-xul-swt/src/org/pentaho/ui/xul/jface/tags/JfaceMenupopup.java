@@ -141,7 +141,9 @@ public class JfaceMenupopup extends AbstractSwtXulContainer implements XulMenupo
 	    	if( man instanceof IAction ) {
 		    	action = (IAction) item.getManagedObject();
 //			    System.out.println("JfaceMenupopup appending menu item "+action.getText());
-	    	} 
+	    	} else if ( man instanceof IContributionItem ) {
+	    	  contribs = (IContributionItem) man;
+	    	}
 	    	else if( man == null ) {
 //			    System.out.println("JfaceMenupopup appending null item ");
 	    	} else {
