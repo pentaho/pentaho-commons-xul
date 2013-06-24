@@ -110,7 +110,7 @@ public class GwtFileUpload  extends AbstractGwtXulContainer implements XulFileUp
     uploadTextBox = new GwtTextbox();
     uploadTextBox.setId("gwt_FileUpload_uploadTextBox");
     uploadTextBox.setHeight(getHeight());
-    uploadTextBox.setWidth(getWidth() - 50);
+    uploadTextBox.setWidth(getWidth() - 55);
 
     GwtButton uploadButton = new GwtButton();
     uploadButton.setId("gwt_FileUpload_uploadButton");
