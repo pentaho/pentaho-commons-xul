@@ -69,6 +69,13 @@ public class SwingTreeCell extends SwingElement implements XulTreeCell {
 
   }
 
+
+  public void setLabel(Object label) {
+    String oldValue = this.label.getText();
+    this.label.setText(label.toString());
+    this.changeSupport.firePropertyChange("label", oldValue, label.toString());
+  }
+
   public void setLabel(String label) {
     String oldValue = this.label.getText();
     this.label.setText(label);

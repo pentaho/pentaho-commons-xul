@@ -62,7 +62,14 @@ public class SwingBinding extends DefaultBinding{
         if (evt.getPropertyName().equalsIgnoreCase(va)) {
           try {
             Object value = doConversions(evt.getNewValue(), dir);
-            final Object finalVal = evaluateExpressions(value);
+
+            value = evaluateExpressions(value);
+            // handle String specially
+            if(value != null && targetSetMethod.getParameterTypes()[0] == String.class && targetSetMethod.getParameterTypes()[0].isAssignableFrom(value.getClass()) == false){
+              value = value.toString();
+            }
+
+            final Object finalVal = value;
             
             if(!EventQueue.isDispatchThread() && b.get() instanceof XulComponent){
               logger.error("Binding Error! Update to XulComponenet ("+target.get()+","+targetAttr+") outside of event thread!");

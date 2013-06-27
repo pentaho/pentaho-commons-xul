@@ -79,7 +79,7 @@ public class SwingXulLoader extends AbstractXulLoader implements XulLoader{
     
 
     parser.registerHandler("SCALE", "org.pentaho.ui.xul.swing.tags.SwingScale");
-    
+    parser.registerHandler("LINE", "org.pentaho.ui.xul.swing.tags.SwingLine");
 
   }
 

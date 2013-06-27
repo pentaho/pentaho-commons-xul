@@ -82,6 +82,7 @@ import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
+import org.pentaho.ui.xul.swing.SwingBinding;
 import org.pentaho.ui.xul.swing.messages.Messages;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.TreeCellEditorCallback;
@@ -428,6 +429,16 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       if (selectionListener != null) {
         table.getSelectionModel().addListSelectionListener(selectionListener);
       }
+      table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        public void valueChanged(ListSelectionEvent event) {
+          if (event.getValueIsAdjusting() == true) {
+            return;
+          }
+          SwingTree.this.changeSupport.firePropertyChange("selectedRows", null, SwingTree.this.getSelectedRows()); //$NON-NLS-1$
+          SwingTree.this.fireSelectedItem();
+
+        }
+      });
     }
 
     JComponent comp = (table != null ? table : tree);
@@ -1401,6 +1412,8 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
       FindSelectedItemTuple tuple = findSelectedItem(this.elements, property, new FindSelectedItemTuple(vals[0]));
       return tuple != null ? tuple.selectedItem : null;
+    } else if(!this.isHierarchical() && elements != null && this.getSelectedRows().length > 0 && elements.toArray().length > this.getSelectedRows()[0]){
+      return elements.toArray()[this.getSelectedRows()[0]];
     }
     return null;
   }
@@ -1782,7 +1795,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
     if(bindingProvider != null){
       return bindingProvider.getBinding(source, prop1, target, prop2);
     }
-    return new DefaultBinding(source, prop1, target, prop2);
+    return new SwingBinding(source, prop1, target, prop2);
   }
   
   /**

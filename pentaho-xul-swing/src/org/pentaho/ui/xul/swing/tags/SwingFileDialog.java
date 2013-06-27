@@ -5,6 +5,8 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.Point;
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -82,9 +84,20 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   
   private RETURN_CODE showOpen(){
     Point loc = getParentObject().getLocation();
-    fc.setLocation(loc);
+    switch (this.getViewType()) {
+      case FILES_DIRECTORIES:
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        break;
+      case DIRECTORIES:
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        break;
+      default:
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    }
+
+
     int retVal = fc.showOpenDialog(getParentObject());
-    
+
     switch(retVal){
       case JFileChooser.APPROVE_OPTION:
         if(this.selectionType == SEL_TYPE.SINGLE){

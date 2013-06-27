@@ -46,7 +46,8 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
 
   private int[] curSelectedIndices = new int[0];
   private int curSelectedIndex = -1;
-  
+  private boolean suppressEvents;
+
   public SwingListbox(Element self, XulComponent parent, XulDomContainer container, String tagName) {
     super(tagName);
     model = new DefaultListModel();
@@ -106,6 +107,9 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   }
   
   public void layout(){
+    if(suppressEvents){
+      return;
+    }
     this.model.clear();
     for(Element comp : getChildNodes()){
       if(comp instanceof SwingListitem){
@@ -113,8 +117,12 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
         logger.info("added swingListitem to model");
       }
     }
-    if(this.selectedIndex > -1){
-      this.listBox.setSelectedIndex(selectedIndex);
+    if(this.curSelectedIndex > -1){
+      if(this.listBox.getMaxSelectionIndex() < this.curSelectedIndex){
+        this.setSelectedIndex(-1);
+      } else {
+        this.listBox.setSelectedIndex(curSelectedIndex);
+      }
     }
     
     initialized = true;
@@ -129,7 +137,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   }
   
   public void valueChanged(ListSelectionEvent e) {
-    if(e.getValueIsAdjusting() == true){
+    if(e.getValueIsAdjusting() == true || suppressEvents){
       return;
     }
     if(onselect != null && initialized){
@@ -170,9 +178,16 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
       curSelectedIndices = indices;
     }
 
-    this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndex, getSelectedIndex());
-    curSelectedIndex = getSelectedIndex();
-    
+    int newSelectedIndex = getSelectedIndex();
+    this.changeSupport.firePropertyChange("selectedIndex", curSelectedIndex, newSelectedIndex);
+
+    if(this.boundElements != null){
+      Object oldItem = (curSelectedIndex > -1 && this.boundElements.toArray().length > curSelectedIndex) ? this.boundElements.toArray()[curSelectedIndex] : "";
+      Object newItem = (newSelectedIndex > -1 && this.boundElements.toArray().length > newSelectedIndex) ? this.boundElements.toArray()[newSelectedIndex] : null;
+      this.changeSupport.firePropertyChange("selectedItem", oldItem, newItem);
+    }
+    curSelectedIndex = newSelectedIndex;
+
   }
   
   public void addItem(Object item) {
@@ -207,6 +222,10 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   public void setSelectedIndex(int index) {
     selectedIndex = index;
     listBox.setSelectedIndex(index);
+    // SetSelectedIndex with -1 and an empty listbox won't fire an event. Manually fire it here
+    if(index == -1 && listBox.getMaxSelectionIndex() == -1){
+      this.fireSetSelectedIndices(new int[]{-1});
+    }
   }
 
   
@@ -216,6 +235,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
   }
 
   public <T> void setElements(Collection<T> elements) {
+    this.suppressEvents = true;
     boundElements = elements;
     
     logger.info("SetElements on listbox called: collection has "+elements.size()+" rows");
@@ -231,7 +251,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
 
       this.addChild(item);
     }
-
+    this.suppressEvents = false;
     layout();
     
   }

@@ -313,6 +313,15 @@ public class SwingElement extends AbstractXulComponent {
     return false;
   }
 
+  @Override
+  public void setVisible(boolean visible) {
+    super.setVisible(visible);
+
+    if (getJComponent() != null) {
+      getJComponent().setVisible(visible);
+    }
+  }
+
   public void adoptAttributes(XulComponent component) {
     // TODO Auto-generated method stub
     

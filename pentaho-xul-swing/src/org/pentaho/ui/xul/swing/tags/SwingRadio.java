@@ -6,7 +6,7 @@ package org.pentaho.ui.xul.swing.tags;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.JRadioButton;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -17,6 +17,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulRadio;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
+import org.pentaho.ui.xul.swing.SwingRoot;
 
 /**
  * @author aphillips
@@ -25,6 +26,7 @@ import org.pentaho.ui.xul.swing.SwingElement;
 public class SwingRadio extends SwingElement implements XulRadio{
   
   private String value;
+  private String group;
   private JRadioButton radioButton;
   private static final Log logger = LogFactory.getLog(SwingRadio.class);
   
@@ -103,5 +105,27 @@ public class SwingRadio extends SwingElement implements XulRadio{
     String previousVal = this.value;
     this.value = aValue;  
     this.changeSupport.firePropertyChange("value", previousVal, aValue);
-  }     
+  }
+
+  public String getGroup() {
+    return group;
+  }
+
+  public void setGroup(String group) {
+    this.group = group;
+  }
+
+  @Override
+  public void onDomReady() {
+    if(this.group != null && getDocument() != null && getDocument().getRootElement() instanceof SwingRoot){
+      ButtonGroup buttonGroup = ((SwingRoot) getDocument().getRootElement()).getButtonGroup(group);
+      AbstractButton button = (AbstractButton) getManagedObject();
+      buttonGroup.add(button);
+      if(buttonGroup.getButtonCount() == 1){
+        //first button in, TODO: remove once selected="true" attribute supported
+        button.setSelected(true);
+      }
+    }
+  }
+
 }
