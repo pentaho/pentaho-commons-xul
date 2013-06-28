@@ -5,9 +5,6 @@ import java.lang.ref.WeakReference;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -15,10 +12,9 @@ import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeChildren;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
-import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
-import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
 public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem {
 
@@ -189,6 +185,16 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
 
   public void setBoundObject(Object obj) {
     boundObjectRef = new WeakReference(obj);
+  }
+
+  @Override
+  public void setClassname(String classname) {
+    // Classname does not apply to SWT
+  }
+
+  @Override
+  public String getClassname() {
+    return null;
   }
 
 }

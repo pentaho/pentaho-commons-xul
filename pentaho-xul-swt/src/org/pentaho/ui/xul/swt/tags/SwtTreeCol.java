@@ -245,4 +245,14 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
       comparatorBinding = comp;
     }
 
+    @Override
+    public String getClassnameBinding() {
+      return null;
+    }
+  
+    @Override
+    public void setClassnameBinding(String classname) {
+      // Classname does not apply to SWT
+    }
+
   }
