@@ -20,6 +20,7 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   private Object obj;
   private String command;
   private String jscommand;
+  private String classname;
 
   public static void register() {
     GwtXulParser.registerHandler("treeitem", new GwtXulHandler() {
@@ -152,7 +153,6 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   }
 
   public void setBoundObject(Object obj) {
-
     this.obj = obj;
   }
 
@@ -160,5 +160,19 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   @Deprecated
   public void addPropertyChangeListener(String prop, PropertyChangeListener listener) {
     changeSupport.addPropertyChangeListener(prop, listener);
+  }
+
+  @Bindable
+  @Override
+  public String getClassname() {
+    return this.classname;
+  }
+
+  @Bindable
+  @Override
+  public void setClassname(String classname) {
+    String oldClassname = this.classname;
+    this.classname = classname;
+    firePropertyChange("classname", oldClassname, classname); //$NON-NLS-1$
   }
 }

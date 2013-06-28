@@ -26,4 +26,7 @@ public interface XulTreeItem extends XulContainer {
   
   public void setBoundObject(Object obj);
   public Object getBoundObject();
+
+  public void setClassname(String classname);
+  public String getClassname();
 }

@@ -13,9 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import com.google.gwt.gen2.table.client.SelectionGrid;
-import com.google.gwt.gen2.table.event.client.RowSelectionEvent;
-import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.table.BaseTable;
@@ -62,6 +59,9 @@ import com.allen_sauer.gwt.dnd.client.DragContext;
 import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.gen2.table.client.SelectionGrid;
+import com.google.gwt.gen2.table.event.client.RowSelectionEvent;
+import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ChangeListener;
@@ -464,22 +464,41 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     tempWidget.setDropIconsVisible(isDropIconsVisible());
     final TreeItemWidget tWidget = tempWidget;
 
+    final String spacerPath = "images/spacer.gif";
+
     PropertyChangeListener listener = new PropertyChangeListener() {
       public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("image") && item.getImage() != null) {
-          tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+          Image img = new Image(GWT.getModuleBaseURL() + item.getImage());
+          if (item.getClassname() != null) {
+            img.setUrl(GWT.getModuleBaseURL() + spacerPath);
+          }
+          tWidget.setImage(img);
         } else if (evt.getPropertyName().equals("label")) {
           tWidget.setLabel(item.getRow().getCell(0).getLabel());
+        } else if (evt.getPropertyName().equals("classname") && item.getImage() != null) {
+          tWidget.getImage().removeStyleName((String) evt.getOldValue());
+          tWidget.getImage().addStyleName(item.getClassname());
         }
       }
     };
 
     ((GwtTreeItem) item).addPropertyChangeListener("image", listener);
+    ((GwtTreeItem) item).addPropertyChangeListener("classname", listener);
     ((GwtTreeCell) item.getRow().getCell(0)).addPropertyChangeListener("label", listener);
-    ;
+
     if (item.getImage() != null) {
-      tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+      Image img = new Image(GWT.getModuleBaseURL() + item.getImage());
+
+      if (item.getClassname() != null) {
+        img.addStyleName(item.getClassname());
+        img.setUrl(GWT.getModuleBaseURL() + spacerPath);
+      }
+
+      tWidget.setImage(img);
     }
+
+
 
     tWidget.setLabel(item.getRow().getCell(0).getLabel());
     if (this.ondrop != null) {
@@ -1174,6 +1193,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         binding.fireSourceChanged();
       }
 
+      String classnameBind = column.getClassnameBinding();
+      if (classnameBind != null) {
+        Binding binding = createBinding((XulEventSource) element, classnameBind, row.getParent(), "classname");
+        elementBindings.add(binding);
+        binding.setBindingType(Binding.Type.BI_DIRECTIONAL);
+        domContainer.addBinding(binding);
+        binding.fireSourceChanged();
+      }
+
       row.addCell(cell);
 
       // find children
@@ -1359,8 +1387,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   public class CustomCellEditorWrapper extends SimplePanel implements TreeCellEditorCallback {
 
     private TreeCellEditor editor;
+
     private TreeCellRenderer renderer;
+
     private Label label = new Label();
+
     private XulTreeCell cell;
 
     public CustomCellEditorWrapper(XulTreeCell cell, TreeCellEditor editor) {
@@ -1377,7 +1408,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
       hPanel.add(labelWrapper);
       hPanel.setCellWidth(labelWrapper, "100%");
-      ImageButton btn = new ImageButton(GWT.getModuleBaseURL() + "/images/open_new.png", GWT.getModuleBaseURL() + "/images/open_new.png", "", 29, 24);
+      ImageButton btn = new ImageButton(GWT.getModuleBaseURL() + "/images/open_new.png", GWT.getModuleBaseURL()
+          + "/images/open_new.png", "", 29, 24);
       btn.getElement().getStyle().setProperty("margin", "0px");
 
       hPanel.add(btn);
@@ -1403,7 +1435,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         this.clear();
         this.add((Widget) this.renderer.getNativeComponent());
       } else {
-        this.label.setText((this.renderer.getText(cell.getValue()) != null) ? this.renderer.getText(cell.getValue()) : " ");
+        this.label.setText((this.renderer.getText(cell.getValue()) != null) ? this.renderer.getText(cell.getValue())
+            : " ");
       }
 
     }
@@ -1416,7 +1449,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         this.clear();
         this.add((Widget) this.renderer.getNativeComponent());
       } else {
-        this.label.setText((this.renderer.getText(cell.getValue()) != null) ? this.renderer.getText(cell.getValue()) : " ");
+        this.label.setText((this.renderer.getText(cell.getValue()) != null) ? this.renderer.getText(cell.getValue())
+            : " ");
       }
 
     }
@@ -1425,20 +1459,20 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     public void onBrowserEvent(Event event) {
       int code = event.getTypeInt();
       switch (code) {
-      case Event.ONMOUSEUP:
-        editor.setValue(cell.getValue());
+        case Event.ONMOUSEUP:
+          editor.setValue(cell.getValue());
 
-        int col = cell.getParent().getChildNodes().indexOf(cell);
+          int col = cell.getParent().getChildNodes().indexOf(cell);
 
-        XulTreeItem item = (XulTreeItem) cell.getParent().getParent();
-        int row = item.getParent().getChildNodes().indexOf(item);
+          XulTreeItem item = (XulTreeItem) cell.getParent().getParent();
+          int row = item.getParent().getChildNodes().indexOf(item);
 
-        Object boundObj = (GwtTree.this.getElements() != null) ? GwtTree.this.getElements().toArray()[row] : null;
-        String columnBinding = GwtTree.this.getColumns().getColumn(col).getBinding();
+          Object boundObj = (GwtTree.this.getElements() != null) ? GwtTree.this.getElements().toArray()[row] : null;
+          String columnBinding = GwtTree.this.getColumns().getColumn(col).getBinding();
 
-        editor.show(row, col, boundObj, columnBinding, this);
-      default:
-        break;
+          editor.show(row, col, boundObj, columnBinding, this);
+        default:
+          break;
       }
       super.onBrowserEvent(event);
     }

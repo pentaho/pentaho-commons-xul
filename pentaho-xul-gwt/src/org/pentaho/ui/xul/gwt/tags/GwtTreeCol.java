@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCol;
@@ -27,7 +26,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private String imageBinding;
   private boolean sortActive = false;
   private String sortDirection = null;
-
+  private String classnameBinding;
 
 
   public static void register() {
@@ -53,14 +52,20 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     setColumntypebinding(srcEle.getAttribute("pen:columntypebinding"));
     setDisabledbinding(srcEle.getAttribute("pen:disabledbinding"));
     setEditable("true".equalsIgnoreCase(srcEle.getAttribute("editable"))); //$NON-NLS-1$ //$NON-NLS-2$
-    if(StringUtils.isEmpty(srcEle.getAttribute("pen:expandedbinding")) == false){
+    if (StringUtils.isEmpty(srcEle.getAttribute("pen:expandedbinding")) == false) {
       setExpandedbinding(srcEle.getAttribute("pen:expandedbinding")); //$NON-NLS-1$ 
     }
-    if(StringUtils.isEmpty(srcEle.getAttribute("pen:imagebinding")) == false){
+    if (StringUtils.isEmpty(srcEle.getAttribute("pen:imagebinding")) == false) {
       setImagebinding(srcEle.getAttribute("pen:imagebinding")); //$NON-NLS-1$ 
     }
     setSortActive("true".equalsIgnoreCase(srcEle.getAttribute("sortActive"))); //$NON-NLS-1$ //$NON-NLS-2$)
     setSortDirection(srcEle.getAttribute("sortDirection")); //$NON-NLS-1$
+
+    // Classname
+    String classname = srcEle.getAttribute("pen:classnamebinding"); //$NON-NLS-1$
+    if (!StringUtils.isEmpty(classname)) {
+      setClassnameBinding(classname);
+    }
   }
   
   public void autoSize() {
@@ -249,12 +254,20 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
 
   public void setSortDirection(String dir) {
     sortDirection = dir;
-    
   }
 
   public String getSortDirection() {
-    // TODO Auto-generated method stub
     return sortDirection;
+  }
+
+  @Override
+  public String getClassnameBinding() {
+    return this.classnameBinding;
+  }
+
+  @Override
+  public void setClassnameBinding(String classnameBinding) {
+    this.classnameBinding = classnameBinding;
   }
   
   
