@@ -1,13 +1,30 @@
 package org.pentaho.ui.xul.gwt.tags.util;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.*;
-import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.*;
 import org.pentaho.gwt.widgets.client.ui.Draggable;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.gwt.tags.GwtTree;
+
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasAllMouseHandlers;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.dom.client.MouseMoveEvent;
+import com.google.gwt.event.dom.client.MouseMoveHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.dom.client.MouseUpEvent;
+import com.google.gwt.event.dom.client.MouseUpHandler;
+import com.google.gwt.event.dom.client.MouseWheelEvent;
+import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 
 /**
@@ -19,6 +36,8 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
   private static final String DROP_INVALID_PNG = "drop_invalid.png";
   private static final String DROP_VALID_PNG = "drop_valid.png";
   private static final String EMPTY_PNG = "empty.png";
+
+  private Image img;
   
   Label label = new Label();
   String text;
@@ -48,8 +67,13 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
     this.label.setText(label);
   }
   
-  public void setImage( Image img){
+  public void setImage(Image img) {
+    this.img = img;
     this.setWidget(0,0,img);
+  }
+
+  public Image getImage() {
+    return this.img;
   }
 
   public boolean isDropIconsVisible() {
