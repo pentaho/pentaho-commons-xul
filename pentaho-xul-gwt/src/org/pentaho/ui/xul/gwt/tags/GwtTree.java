@@ -464,10 +464,16 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     tempWidget.setDropIconsVisible(isDropIconsVisible());
     final TreeItemWidget tWidget = tempWidget;
 
+    final String spacerPath = "images/spacer.gif";
+
     PropertyChangeListener listener = new PropertyChangeListener() {
       public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("image") && item.getImage() != null) {
-          tWidget.setImage(new Image(GWT.getModuleBaseURL() + item.getImage()));
+          Image img = new Image(GWT.getModuleBaseURL() + item.getImage());
+          if (item.getClassname() != null) {
+            img.setUrl(GWT.getModuleBaseURL() + spacerPath);
+          }
+          tWidget.setImage(img);
         } else if (evt.getPropertyName().equals("label")) {
           tWidget.setLabel(item.getRow().getCell(0).getLabel());
         } else if (evt.getPropertyName().equals("classname") && item.getImage() != null) {
@@ -486,6 +492,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
       if (item.getClassname() != null) {
         img.addStyleName(item.getClassname());
+        img.setUrl(GWT.getModuleBaseURL() + spacerPath);
       }
 
       tWidget.setImage(img);
