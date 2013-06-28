@@ -15,7 +15,6 @@ import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
-import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem {
   private static final Log logger = LogFactory.getLog(SwingTreeItem.class);
@@ -144,6 +143,15 @@ public class SwingTreeItem extends AbstractSwingContainer implements XulTreeItem
     boundObjectRef = new WeakReference(obj);
   }
 
+  @Override
+  public void setClassname(String classname) {
+    // Classname does not apply to Swing
+  }
+
+  @Override
+  public String getClassname() {
+    return null;
+  }
   
   
 }
