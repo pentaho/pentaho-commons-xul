@@ -118,7 +118,7 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
       }
     }
     if(this.curSelectedIndex > -1){
-      if(this.listBox.getMaxSelectionIndex() < this.curSelectedIndex){
+      if(this.listBox.getModel().getSize() < this.curSelectedIndex){
         this.setSelectedIndex(-1);
       } else {
         this.listBox.setSelectedIndex(curSelectedIndex);
@@ -213,18 +213,20 @@ public class SwingListbox extends AbstractSwingContainer implements XulListbox, 
     return listBox.getSelectedIndices();
   }
 
-  private int selectedIndex = -1;
   public void setSelectedindex(String idx) {
-    selectedIndex = Integer.parseInt(idx);
-    listBox.setSelectedIndex(Integer.parseInt(idx));
+    setSelectedIndex(Integer.parseInt(idx));
   }
   
   public void setSelectedIndex(int index) {
-    selectedIndex = index;
-    listBox.setSelectedIndex(index);
+    curSelectedIndex = index;
     // SetSelectedIndex with -1 and an empty listbox won't fire an event. Manually fire it here
-    if(index == -1 && listBox.getMaxSelectionIndex() == -1){
-      this.fireSetSelectedIndices(new int[]{-1});
+    if(this.initialized){
+      if(index == -1 && this.listBox.getModel().getSize() == 0){
+        listBox.setSelectedIndex(-1);
+        this.fireSetSelectedIndices(new int[]{-1});
+      } else {
+        listBox.setSelectedIndex(index);
+      }
     }
   }
 
