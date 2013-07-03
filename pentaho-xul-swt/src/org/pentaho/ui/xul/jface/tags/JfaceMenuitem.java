@@ -58,7 +58,7 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem{
     this.parent = parent;
     this.domContainer = domContainer;
     if (shouldCreate) {
-      createItem(self, parent, pos, autoAdd);
+      createItem(self, parent, pos, autoAdd, action);
     }
   }
 
