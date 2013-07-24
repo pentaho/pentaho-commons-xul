@@ -28,7 +28,7 @@ public class GwtTabWidget extends HorizontalPanel {
     this.fullText = text;
     setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
     panel.setStyleName("pentaho-tabWidget"); //$NON-NLS-1$
-    Image leftCapImage = new Image(GWT.getModuleBaseURL() + "/images/spacer.gif");
+    Image leftCapImage = new Image(GWT.getModuleBaseURL() + "images/spacer.gif");
     leftCapImage.setStylePrimaryName("tab-spacer");
 
     setLabelText(text);
