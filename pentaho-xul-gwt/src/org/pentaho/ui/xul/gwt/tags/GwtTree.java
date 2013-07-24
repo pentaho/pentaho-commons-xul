@@ -1484,7 +1484,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public void setTreeItemExpanded(XulTreeItem item, boolean expanded) {
-    ((TreeItem) item.getManagedObject()).setState(expanded);
+    TreeItem ti = ((TreeItem) item.getManagedObject());
+    ti.setState(expanded);
+    if(ti.getChildCount() > 0) {
+      if(expanded) {
+        ti.addStyleName("tree-item-expanded");
+        ti.removeStyleName("tree-item-collapsed");
+      } else {
+        ti.removeStyleName("tree-item-expanded");
+        ti.addStyleName("tree-item-collapsed");
+      }
+    }
   }
 
   public void collapseAll() {
