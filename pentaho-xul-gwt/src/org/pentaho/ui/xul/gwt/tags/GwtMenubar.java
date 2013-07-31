@@ -1,5 +1,14 @@
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.PopupPanel;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -9,10 +18,8 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.util.FrameCover;
 import org.pentaho.ui.xul.stereotype.Bindable;
-
-import com.google.gwt.user.client.ui.MenuBar;
-import com.google.gwt.user.client.ui.MenuItem;
 
 public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
@@ -20,6 +27,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   private MenuBar menubar;
   private boolean loaded;
   private boolean vertical = true;
+  private FrameCover frameCover = null;
 
   public static void register() {
     GwtXulParser.registerHandler("menubar", new GwtXulHandler() {
@@ -40,11 +48,43 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   @Override
   public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
     this.setHorizontal("vertical".equalsIgnoreCase(srcEle.getAttribute("layout")));
-    menubar = new MenuBar(vertical);
+    frameCover = new FrameCover();
+
+    menubar = new MenuBar(vertical) {
+      @Override
+      public void onBrowserEvent(Event event) {
+        switch (DOM.eventGetType(event)) {
+          case Event.ONMOUSEOVER:
+          case Event.ONCLICK:
+            frameCover.cover();
+            break;
+        }
+        super.onBrowserEvent(event);
+      }
+    };
+
+    frameCover.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        menubar.closeAllChildren(true);
+      }
+    });
+
+    menubar.addCloseHandler(new CloseHandler<PopupPanel>() {
+      @Override
+      public void onClose(CloseEvent<PopupPanel> event) {
+        if(!menubar.isVisible()) {
+          frameCover.remove();
+        }
+      }
+    });
+
     this.setLabel(srcEle.getAttribute("label"));
     setManagedObject(menubar);
+
     // init AFTER we set the managed object and we get "id" set for us
     super.init(srcEle, container);
+
   }
 
   public void setLabel(String label) {
