@@ -104,6 +104,9 @@ public class FrameCover {
   }
 
   private void setFrameSize() {
+    if(frameLid == null){
+      return;
+    }
     // get all iFrames on the document
     NodeList<Element> iframes = Document.get().getElementsByTagName("iframe");
 
