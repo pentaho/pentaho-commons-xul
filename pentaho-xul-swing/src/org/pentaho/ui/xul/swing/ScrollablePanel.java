@@ -1,17 +1,51 @@
-/*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+/*jadclipse*/// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
+package org.pentaho.ui.xul.swing;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.LayoutManager;
+import java.awt.Rectangle;
+
+import javax.swing.JPanel;
+
+public class ScrollablePanel extends JPanel {
+  public ScrollablePanel() {
+  }
+
+  public ScrollablePanel(Component c){
+    super(new BorderLayout());
+    add(c, BorderLayout.CENTER);
+  }
+  public ScrollablePanel(boolean isDoubleBuffered) {
+    super(isDoubleBuffered);
+  }
+
+  public ScrollablePanel(LayoutManager layout, boolean isDoubleBuffered) {
+    super(layout, isDoubleBuffered);
+  }
+
+  public ScrollablePanel(LayoutManager layout) {
+    super(layout);
+  }
+
+  public Dimension getPreferredScrollableViewportSize() {
+    return new Dimension(1, 1);
+  }
+
+  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+    return 2;
+  }
+
+  public boolean getScrollableTracksViewportHeight() {
+    return true;
+  }
+
+  public boolean getScrollableTracksViewportWidth() {
+    return true;
+  }
+
+  public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+    return 2;
+  }
+}
