@@ -251,6 +251,9 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
     }
     else {
       index = elements.indexOf(t);
+      if (index == -1) {
+        index = combobox.indexOf(t.toString());
+      }
     }
     setSelectedIndex(index);
   }
