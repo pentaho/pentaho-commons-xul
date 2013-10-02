@@ -54,7 +54,19 @@ public class SwtMenuListTest {
   public void testSetSelectedItem() throws Exception{
     XulMenuitem item = (XulMenuitem) doc.getElementById("sales");
     list.setSelectedItem(item);
-    assertEquals(list.getSelectedItem().toString(), item.getLabel());
+    assertEquals(item.getLabel(), list.getSelectedItem().toString());
+    list.setSelectedItem("Customers");
+    assertEquals("Customers", list.getSelectedItem().toString());
+  }
+
+  @Test
+  public void testSetSelectedItemNoBinding() throws Exception{
+    XulMenuitem item = (XulMenuitem) doc.getElementById("sales-nobinding");
+    XulMenuList listNoBinding = (XulMenuList) doc.getElementById("list-nobinding");
+    listNoBinding.setSelectedItem(item);
+    assertEquals(item.getLabel(), listNoBinding.getSelectedItem().toString());
+    listNoBinding.setSelectedItem("Customers");
+    assertEquals("Customers", listNoBinding.getSelectedItem().toString());
   }
 
   @Test

@@ -23,5 +23,13 @@
        
       </menupopup>
     </menulist>
+    <menulist label="cube" oncommand="handler.changeState()" id="list-nobinding">
+      <menupopup>
+        <menuitem label="Sales" id="sales-nobinding" />
+        <menuitem label="Regions"
+                  selected="true" id="regions-nobinding"/>
+        <menuitem label="Customers" />
+      </menupopup>
+    </menulist>
 	</hbox>
 </window>
