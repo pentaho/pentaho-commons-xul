@@ -168,7 +168,14 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
         elements = null;
       }
       else {
-        elements = (List<T>)popup.getChildNodes();
+        if (this.getBinding() != null) {
+          elements = (List<T>) new ArrayList<String>();
+          for (XulComponent component : popup.getChildNodes()) {
+            elements.add((T) component.getAttributeValue(this.getBinding()));
+          }
+        } else {
+          elements = (List<T>) popup.getChildNodes();
+        }
       }
     }
     else {
