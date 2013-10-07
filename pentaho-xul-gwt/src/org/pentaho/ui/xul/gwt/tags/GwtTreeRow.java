@@ -1,11 +1,9 @@
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTreeItem;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
@@ -21,6 +19,10 @@ public class GwtTreeRow extends AbstractGwtXulContainer implements XulTreeRow {
     });
   }
   
+  private GwtTree getTree() {
+	  return (GwtTree) this.getParent().getParent().getParent();
+  }
+
   public GwtTreeRow() {
     super("treerow");
   }
@@ -28,12 +30,28 @@ public class GwtTreeRow extends AbstractGwtXulContainer implements XulTreeRow {
   public void addCell(XulTreeCell cell) {
     addChild(cell);
   }
-
+  
   public void addCellText(int index, String text) {
-    GwtTreeCell cell = new GwtTreeCell();
-    cell.setLabel(text);
-    addCell(cell);
+	GwtTreeCell cell = null;
+    if (index < getChildNodes().size()) {
+      cell = (GwtTreeCell) getChildNodes().get(index);
+	} else {
+      cell = new GwtTreeCell();
+      this.addCell(cell);
+    }
+
+    switch (getTree().getColumns().getColumn(index).getColumnType()) {
+      case CHECKBOX:
+      case COMBOBOX:
+        cell.setValue(text);
+        break;
+      default:
+        cell.setLabel(text);
+    }
+    getTree().update();
+    layout();
   }
+
 
   public XulTreeCell getCell(int index) {
     return (XulTreeCell) children.get(index);

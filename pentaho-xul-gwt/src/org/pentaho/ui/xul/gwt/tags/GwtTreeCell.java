@@ -121,7 +121,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
     } else {
       this.value = value;
     }
-    this.firePropertyChange("value", previousVal, value);
+    this.firePropertyChange("value", previousVal, this.value);
   }
 
   private boolean disabled = false;
