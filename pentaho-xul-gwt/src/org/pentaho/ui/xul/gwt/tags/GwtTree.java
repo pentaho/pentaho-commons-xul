@@ -1,20 +1,3 @@
-/*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
-
 package org.pentaho.ui.xul.gwt.tags;
 
 import java.beans.PropertyChangeEvent;
@@ -560,8 +543,18 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     final XulTreeCol column = (XulTreeCol) colCollection.get(x);
     String colType = ((XulTreeCol) colCollection.get(x)).getType();
-    final GwtTreeCell cell = (GwtTreeCell) getRootChildren().getItem(y).getRow().getCell(x);
-
+    XulTreeItem item = getRootChildren().getItem(y);
+    if(item == null){
+      return new HTML("");
+    }
+    XulTreeRow row1 = item.getRow();
+    if(row1 == null){
+      return new HTML("");
+    }
+    final GwtTreeCell cell = (GwtTreeCell) (row1.getChildNodes().size() > x ? row1.getCell(x) : null);
+    if(cell == null){
+      return new HTML("");
+    }
     String val = cell.getLabel();
 
     // If collection bound, bindings may need to be updated for runtime changes in column types.
@@ -1019,42 +1012,44 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     return seltype;
   }
 
-  public Object[][] getValues() {
+    public Object[][] getValues() {
 
-    Object[][] data = new Object[getRootChildren().getChildNodes().size()][getColumns().getColumnCount()];
-    int y = 0;
-    for (XulComponent component : getRootChildren().getChildNodes()) {
-      XulTreeItem item = (XulTreeItem) component;
-      for (XulComponent childComp : item.getChildNodes()) {
-        XulTreeRow row = (XulTreeRow) childComp;
-        for (int x = 0; x < getColumns().getColumnCount(); x++) {
-          XulTreeCell cell = row.getCell(x);
-          switch (columns.getColumn(x).getColumnType()) {
-          case CHECKBOX:
-            Boolean flag = (Boolean) cell.getValue();
-            if (flag == null) {
-              flag = Boolean.FALSE;
+        Object[][] data = new Object[getRootChildren().getChildNodes().size()][getColumns().getColumnCount()];
+
+        int y = 0;
+        for (XulComponent item : getRootChildren().getChildNodes()) {
+            int x = 0;
+            for (XulComponent tempCell : ((XulTreeItem) item).getRow().getChildNodes()) {
+                XulTreeCell cell = (XulTreeCell) tempCell;
+                switch (columns.getColumn(x).getColumnType()) {
+                    case CHECKBOX:
+                        Boolean flag = (Boolean) cell.getValue();
+                        if (flag == null) {
+                            flag = Boolean.FALSE;
+                        }
+                        data[y][x] = flag;
+                        break;
+                    case COMBOBOX:
+                        Vector values = (Vector) cell.getValue();
+                        int idx = cell.getSelectedIndex();
+                        data[y][x] = values.get(idx);
+                        break;
+                    default: // label
+                        data[y][x] = cell.getLabel();
+                        break;
+                }
+                x++;
+
             }
-            data[y][x] = flag;
-            break;
-          case COMBOBOX:
-            Vector values = (Vector) cell.getValue();
-            int idx = cell.getSelectedIndex();
-            data[y][x] = values.get(idx);
-            break;
-          default: // label
-            data[y][x] = cell.getLabel();
-            break;
-          }
+
+            y++;
         }
-        y++;
-      }
 
+        return data;
     }
-    return data;
-  }
 
-  @Bindable
+
+    @Bindable
   public boolean isEditable() {
     return editable;
   }
@@ -1501,17 +1496,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public void setTreeItemExpanded(XulTreeItem item, boolean expanded) {
-    TreeItem ti = ((TreeItem) item.getManagedObject());
-    ti.setState(expanded);
-    if(ti.getChildCount() > 0) {
-      if(expanded) {
-        ti.addStyleName("tree-item-expanded");
-        ti.removeStyleName("tree-item-collapsed");
-      } else {
-        ti.removeStyleName("tree-item-expanded");
-        ti.addStyleName("tree-item-collapsed");
-      }
-    }
+    ((TreeItem) item.getManagedObject()).setState(expanded);
   }
 
   public void collapseAll() {

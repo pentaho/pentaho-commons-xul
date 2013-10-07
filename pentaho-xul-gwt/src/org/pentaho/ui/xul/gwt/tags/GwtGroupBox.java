@@ -112,9 +112,10 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
 
   @Override
   public void addChildAt(Element element, int idx) {
-    
-        // TODO Auto-generated method stub super.addChildAt(element, idx);
-      
+	if(element instanceof XulCaption){
+	  setCaption(((XulCaption) element).getLabel());  
+    }
+    super.addChildAt(element, idx);
   }
 
   public void resetContainer(){
