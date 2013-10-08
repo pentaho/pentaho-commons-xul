@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.mock;
 
@@ -93,57 +93,57 @@ public abstract class XulDialogAdapter implements XulDialog {
     return false;
   }
 
-  public void setButtonalign(String align) {
+  public void setButtonalign( String align ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setButtonlabelaccept(String label) {
+  public void setButtonlabelaccept( String label ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setButtonlabelcancel(String label) {
+  public void setButtonlabelcancel( String label ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setButtonlabelextra1(String label) {
+  public void setButtonlabelextra1( String label ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setButtonlabelextra2(String label) {
+  public void setButtonlabelextra2( String label ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setButtons(String buttons) {
+  public void setButtons( String buttons ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOndialogaccept(String command) {
+  public void setOndialogaccept( String command ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOndialogcancel(String command) {
+  public void setOndialogcancel( String command ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOndialogextra1(String command) {
+  public void setOndialogextra1( String command ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOndialogextra2(String command) {
+  public void setOndialogextra2( String command ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setVisible(boolean visible) {
+  public void setVisible( boolean visible ) {
     // TODO Auto-generated method stub
 
   }
@@ -183,42 +183,42 @@ public abstract class XulDialogAdapter implements XulDialog {
     return null;
   }
 
-  public void invokeLater(Runnable runnable) {
+  public void invokeLater( Runnable runnable ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOnclose(String onclose) {
+  public void setOnclose( String onclose ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOnload(String onload) {
+  public void setOnload( String onload ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOnunload(String onunload) {
+  public void setOnunload( String onunload ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setTitle(String title) {
+  public void setTitle( String title ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setXulDomContainer(XulDomContainer xulDomContainer) {
+  public void setXulDomContainer( XulDomContainer xulDomContainer ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void addComponent(XulComponent component) {
+  public void addComponent( XulComponent component ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void addComponentAt(XulComponent component, int idx) {
+  public void addComponentAt( XulComponent component, int idx ) {
     // TODO Auto-generated method stub
 
   }
@@ -228,7 +228,7 @@ public abstract class XulDialogAdapter implements XulDialog {
     return null;
   }
 
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
+  public void addPropertyChangeListener( PropertyChangeListener listener ) {
     // TODO Auto-generated method stub
 
   }
@@ -283,67 +283,67 @@ public abstract class XulDialogAdapter implements XulDialog {
     return false;
   }
 
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
+  public void removePropertyChangeListener( PropertyChangeListener listener ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setBgcolor(String bgcolor) {
+  public void setBgcolor( String bgcolor ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setDisabled(boolean disabled) {
+  public void setDisabled( boolean disabled ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setFlex(int flex) {
+  public void setFlex( int flex ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setHeight(int height) {
+  public void setHeight( int height ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setId(String id) {
+  public void setId( String id ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setOnblur(String method) {
+  public void setOnblur( String method ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setPadding(int padding) {
+  public void setPadding( int padding ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setTooltiptext(String tooltip) {
+  public void setTooltiptext( String tooltip ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setWidth(int width) {
+  public void setWidth( int width ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void addChild(Element element) {
+  public void addChild( Element element ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void addChildAt(Element element, int idx) {
+  public void addChildAt( Element element, int idx ) {
     // TODO Auto-generated method stub
 
   }
 
-  public String getAttributeValue(String attributeName) {
+  public String getAttributeValue( String attributeName ) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -363,12 +363,12 @@ public abstract class XulDialogAdapter implements XulDialog {
     return null;
   }
 
-  public XulComponent getElementById(String id) {
+  public XulComponent getElementById( String id ) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  public XulComponent getElementByXPath(String path) {
+  public XulComponent getElementByXPath( String path ) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -378,7 +378,7 @@ public abstract class XulDialogAdapter implements XulDialog {
     return null;
   }
 
-  public List<XulComponent> getElementsByTagName(String tagName) {
+  public List<XulComponent> getElementsByTagName( String tagName ) {
     // TODO Auto-generated method stub
     return null;
   }
@@ -403,44 +403,44 @@ public abstract class XulDialogAdapter implements XulDialog {
     return null;
   }
 
-  public void removeChild(Element element) {
+  public void removeChild( Element element ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
+  public void replaceChild( XulComponent oldElement, XulComponent newElement ) throws XulDomException {
     // TODO Auto-generated method stub
 
   }
 
-  public void setAttribute(Attribute attribute) {
+  public void setAttribute( Attribute attribute ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setAttribute(String name, String value) {
+  public void setAttribute( String name, String value ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setAttributes(List<Attribute> attribute) {
+  public void setAttributes( List<Attribute> attribute ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setNamespace(String prefix, String uri) {
+  public void setNamespace( String prefix, String uri ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void removeComponent(XulComponent component) {
-    
+  public void removeComponent( XulComponent component ) {
+
   }
 
-  public void adoptAttributes(XulComponent component) {
-    
-        // TODO Auto-generated method stub 
-      
+  public void adoptAttributes( XulComponent component ) {
+
+    // TODO Auto-generated method stub
+
   }
 
   public String getInsertafter() {
@@ -467,40 +467,38 @@ public abstract class XulDialogAdapter implements XulDialog {
     return true;
   }
 
-  public void setInsertafter(String id) {
-    
-        // TODO Auto-generated method stub 
-      
+  public void setInsertafter( String id ) {
+
+    // TODO Auto-generated method stub
+
   }
 
-  public void setInsertbefore(String id) {
-    
-        // TODO Auto-generated method stub 
-      
+  public void setInsertbefore( String id ) {
+
+    // TODO Auto-generated method stub
+
   }
 
-  public void setPosition(int pos) {
-    
-        // TODO Auto-generated method stub 
-      
+  public void setPosition( int pos ) {
+
+    // TODO Auto-generated method stub
+
   }
 
-  public void setRemoveelement(boolean flag) {
-    
-        // TODO Auto-generated method stub 
-      
+  public void setRemoveelement( boolean flag ) {
+
+    // TODO Auto-generated method stub
+
   }
 
   public String getAlign() {
     return Align.START.toString();
   }
 
-  public void setAlign(String align) {
-    
-        // TODO Auto-generated method stub 
-      
+  public void setAlign( String align ) {
+
+    // TODO Auto-generated method stub
+
   }
-  
-  
-  
+
 }
