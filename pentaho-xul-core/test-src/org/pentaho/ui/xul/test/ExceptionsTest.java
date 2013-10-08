@@ -1,82 +1,76 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
+import org.junit.Test;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class ExceptionsTest {
 
   @Test
-  public final void testXulException1() throws Exception{
-  	XulException e = new XulException("This is an error");
-  	assertNotNull(e);
-  }
-  
-  @Test
-  public final void testXulException2() throws Exception{
-  	XulException e = new XulException();
-  	assertNotNull(e);
+  public final void testXulException1() throws Exception {
+    XulException e = new XulException( "This is an error" );
+    assertNotNull( e );
   }
 
   @Test
-  public final void testXulException3() throws Exception{
-  	XulException e = new XulException("This is an error", new Exception("foo"));
-  	assertNotNull(e);
+  public final void testXulException2() throws Exception {
+    XulException e = new XulException();
+    assertNotNull( e );
   }
 
   @Test
-  public final void testXulException4() throws Exception{
-  	XulException e = new XulException(new Exception("foo"));
-  	assertNotNull(e);
-  }
-  
-  @Test
-  public final void testXulDomException1() throws Exception{
-  	XulDomException e = new XulDomException("This is an error");
-  	assertNotNull(e);
-  }
-  
-  @Test
-  public final void testXulDomException2() throws Exception{
-  	XulDomException e = new XulDomException();
-  	assertNotNull(e);
+  public final void testXulException3() throws Exception {
+    XulException e = new XulException( "This is an error", new Exception( "foo" ) );
+    assertNotNull( e );
   }
 
   @Test
-  public final void testXulDomException3() throws Exception{
-  	XulDomException e = new XulDomException("This is an error", new Exception("foo"));
-  	assertNotNull(e);
+  public final void testXulException4() throws Exception {
+    XulException e = new XulException( new Exception( "foo" ) );
+    assertNotNull( e );
   }
 
   @Test
-  public final void testXulDomException4() throws Exception{
-  	XulDomException e = new XulDomException(new Exception("foo"));
-  	assertNotNull(e);
+  public final void testXulDomException1() throws Exception {
+    XulDomException e = new XulDomException( "This is an error" );
+    assertNotNull( e );
   }
-  
+
+  @Test
+  public final void testXulDomException2() throws Exception {
+    XulDomException e = new XulDomException();
+    assertNotNull( e );
+  }
+
+  @Test
+  public final void testXulDomException3() throws Exception {
+    XulDomException e = new XulDomException( "This is an error", new Exception( "foo" ) );
+    assertNotNull( e );
+  }
+
+  @Test
+  public final void testXulDomException4() throws Exception {
+    XulDomException e = new XulDomException( new Exception( "foo" ) );
+    assertNotNull( e );
+  }
+
 }
-	

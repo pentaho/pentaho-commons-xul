@@ -1,60 +1,59 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.dnd;
 
 import java.util.List;
 
 /**
- * For now this only allows a single type of dnd object, to match more closely to Mozilla,
- * we could add a list of types:
+ * For now this only allows a single type of dnd object, to match more closely to Mozilla, we could add a list of types:
  * 
  * https://developer.mozilla.org/En/DragDrop/DataTransfer
  * 
  * @author Will Gorman (wgorman@pentaho.com)
  */
 public class DataTransfer {
-  
+
   private DropEffectType dropEffect;
   private List<DropEffectType> effectsAllowed;
   private List<Object> data;
-  
+
   public List<Object> getData() {
     return data;
   }
-  
-  public void setData(List<Object> data) {
+
+  public void setData( List<Object> data ) {
     this.data = data;
   }
-  
+
   public DropEffectType getDropEffect() {
     return dropEffect;
   }
-  
-  public void setDropEffect(DropEffectType dropEffect) {
+
+  public void setDropEffect( DropEffectType dropEffect ) {
     this.dropEffect = dropEffect;
   }
-  
+
   public List<DropEffectType> getEffectsAllowed() {
     return effectsAllowed;
   }
-  
-  public void setEffectsAllowed(List<DropEffectType> effectsAllowed) {
+
+  public void setEffectsAllowed( List<DropEffectType> effectsAllowed ) {
     this.effectsAllowed = effectsAllowed;
   }
-  
+
 }

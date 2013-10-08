@@ -1,50 +1,54 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul;
 
 public interface IMenuCustomization {
 
-	public enum CustomizationType { INSERT_BEFORE, INSERT_AFTER, FIRST_CHILD, LAST_CHILD, REPLACE, DELETE };
-	
-	public enum ItemType { MENU_ITEM, SUBMENU };
+  public enum CustomizationType {
+    INSERT_BEFORE, INSERT_AFTER, FIRST_CHILD, LAST_CHILD, REPLACE, DELETE
+  };
 
-	public String getLabel();
+  public enum ItemType {
+    MENU_ITEM, SUBMENU
+  };
 
-	public void setLabel(String label);
+  public String getLabel();
 
-	public String getAnchorId();
+  public void setLabel( String label );
 
-	public void setAnchorId(String anchorId);
+  public String getAnchorId();
 
-	public String getId();
+  public void setAnchorId( String anchorId );
 
-	public void setId(String id);
+  public String getId();
 
-	public String getCommand();
+  public void setId( String id );
 
-	public void setCommand(String command);
+  public String getCommand();
 
-	public CustomizationType getCustomizationType();
+  public void setCommand( String command );
 
-	public void setCustomizationType( CustomizationType customizationType);
+  public CustomizationType getCustomizationType();
 
-	public ItemType getItemType();
+  public void setCustomizationType( CustomizationType customizationType );
 
-	public void setItemType(ItemType itemType);
+  public ItemType getItemType();
+
+  public void setItemType( ItemType itemType );
 
 }

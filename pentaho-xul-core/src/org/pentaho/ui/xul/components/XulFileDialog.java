@@ -1,47 +1,56 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.components;
-
-import java.io.File;
 
 import org.pentaho.ui.xul.XulComponent;
 
 public interface XulFileDialog extends XulComponent {
-  public enum RETURN_CODE{OK, CANCEL, ERROR}
-  public enum SEL_TYPE{SINGLE, MULTIPLE}
-  public enum VIEW_TYPE{FILES_DIRECTORIES, DIRECTORIES}
- 
+  public enum RETURN_CODE {
+    OK, CANCEL, ERROR
+  }
+
+  public enum SEL_TYPE {
+    SINGLE, MULTIPLE
+  }
+
+  public enum VIEW_TYPE {
+    FILES_DIRECTORIES, DIRECTORIES
+  }
+
   public RETURN_CODE showOpenDialog();
-  public RETURN_CODE showOpenDialog(Object f);
-  
+
+  public RETURN_CODE showOpenDialog( Object f );
+
   public RETURN_CODE showSaveDialog();
-  public RETURN_CODE showSaveDialog(Object f);
-  
+
+  public RETURN_CODE showSaveDialog( Object f );
+
   public Object getFile();
+
   public Object[] getFiles();
-  
-  public void setSelectionMode(SEL_TYPE type);
+
+  public void setSelectionMode( SEL_TYPE type );
+
   public SEL_TYPE getSelectionMode();
-  
-  public void setViewType(VIEW_TYPE type);
+
+  public void setViewType( VIEW_TYPE type );
+
   public VIEW_TYPE getViewType();
 
-  public void setModalParent(Object parent);
+  public void setModalParent( Object parent );
 }
-
-  
