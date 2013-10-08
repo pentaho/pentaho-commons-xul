@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 /**
  * 
@@ -32,22 +32,22 @@ import org.pentaho.ui.xul.dom.Document;
 
 /**
  * @author OEM
- *
+ * 
  */
 public class XulFragmentContainer extends AbstractXulDomContainer {
-  private static final Log logger = LogFactory.getLog(XulFragmentContainer.class);
+  private static final Log logger = LogFactory.getLog( XulFragmentContainer.class );
   private Document fragment;
-  
-  public XulFragmentContainer(XulLoader xulLoader){
+
+  public XulFragmentContainer( XulLoader xulLoader ) {
     super();
     this.xulLoader = xulLoader;
   }
 
-  public Document getDocumentRoot(){
+  public Document getDocumentRoot() {
     return fragment;
   }
 
-  public void addDocument(Document document){
+  public void addDocument( Document document ) {
     this.fragment = document;
   }
 
@@ -55,65 +55,62 @@ public class XulFragmentContainer extends AbstractXulDomContainer {
   public void close() {
   }
 
-  public boolean isClosed(){
+  public boolean isClosed() {
     return false;
   }
 
   @Override
-  public XulFragmentContainer loadFragment(String xulLocation) throws XulException{
-    logger.error("loadFragment not implemented in XulFragmentContainer");
-    throw new XulException("loadFragment not implemented in XulFragmentContainer");
+  public XulFragmentContainer loadFragment( String xulLocation ) throws XulException {
+    logger.error( "loadFragment not implemented in XulFragmentContainer" );
+    throw new XulException( "loadFragment not implemented in XulFragmentContainer" );
   }
 
-  public XulMessageBox createErrorMessageBox(String title, String message, Throwable throwable) {
+  public XulMessageBox createErrorMessageBox( String title, String message, Throwable throwable ) {
     return null;
   }
 
-  public XulDomContainer loadFragment(String xulLocation, Object bundle) throws XulException {
-    logger.error("loadFragment not implemented in XulFragmentContainer");
+  public XulDomContainer loadFragment( String xulLocation, Object bundle ) throws XulException {
+    logger.error( "loadFragment not implemented in XulFragmentContainer" );
     return null;
   }
 
-	public Document getDocument(int idx) {
-		if (idx > 0){
-			return null;
-		} else {
-			return fragment;
-		}
-	}
-
+  public Document getDocument( int idx ) {
+    if ( idx > 0 ) {
+      return null;
+    } else {
+      return fragment;
+    }
+  }
 
   @Deprecated
-  public void addBinding(Binding binding) {
-    //no implementation needed
-  }
-  
-  public void addInitializedBinding(Binding binding) {
-    //no implementation needed
+  public void addBinding( Binding binding ) {
+    // no implementation needed
   }
 
-  public void loadOverlay(String src) throws XulException {
-    //no implementation needed
+  public void addInitializedBinding( Binding binding ) {
+    // no implementation needed
   }
 
-  public void removeOverlay(String src) throws XulException {
-    //no implementation needed
+  public void loadOverlay( String src ) throws XulException {
+    // no implementation needed
   }
 
-  public void removeBinding(Binding binding) {
-    //no implementation needed
-      
+  public void removeOverlay( String src ) throws XulException {
+    // no implementation needed
   }
 
-  public void loadFragment(String id, String src) throws XulException {
-    //no implementation needed
+  public void removeBinding( Binding binding ) {
+    // no implementation needed
+
   }
 
-  public void loadOverlay(String src, Object resourceBundle) throws XulException {
+  public void loadFragment( String id, String src ) throws XulException {
+    // no implementation needed
+  }
+
+  public void loadOverlay( String src, Object resourceBundle ) throws XulException {
     // TODO Auto-generated method stub
-    
+
   }
-  
-  
 
 }
