@@ -843,12 +843,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       @Override
       public void onRowSelection(RowSelectionEvent event) {
         //To change body of implemented methods use File | Settings | File Templates.
-        try {
-
-            if (getOnselect() != null && getOnselect().trim().length() > 0) {
-              getXulDomContainer().invoke(getOnselect(), new Object[] {});
-            }
+        try {	
             Integer[] selectedRows = table.getSelectedRows().toArray(new Integer[table.getSelectedRows().size()]);
+            
+            if (getOnselect() != null && getOnselect().trim().length() > 0) {
+              getXulDomContainer().invoke(getOnselect(), new Object[] {selectedRows.length > 0 ? selectedRows[0] : null});
+            }
+            
             // set.toArray(new Integer[]) doesn't unwrap ><
             int[] rows = new int[selectedRows.length];
             for (int i = 0; i < selectedRows.length; i++) {
