@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swt.tags;
 
@@ -55,116 +55,116 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
   private String onclose;
 
   private XulDomContainer domContainer;
-  
-  // used to prevent recursing. 
+
+  // used to prevent recursing.
   private boolean suppressRemoveEvents;
 
-  public SwtTabbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("tabbox");
+  public SwtTabbox( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( "tabbox" );
     int style = SWT.MULTI;
-    if (self.getAttributeValue("closable") != null && self.getAttributeValue("closable").equals("true")) {
+    if ( self.getAttributeValue( "closable" ) != null && self.getAttributeValue( "closable" ).equals( "true" ) ) {
       style |= SWT.CLOSE;
     }
     this.domContainer = domContainer;
 
-    tabFolder = new CTabFolder((Composite) parent.getManagedObject(), style);
-    tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+    tabFolder = new CTabFolder( (Composite) parent.getManagedObject(), style );
+    tabFolder.setLayoutData( new GridData( GridData.FILL_BOTH ) );
 
-    tabFolder.setSimple(false);
-    tabFolder.setUnselectedImageVisible(true);
-    tabFolder.setUnselectedCloseVisible(true);
-    tabFolder.setBorderVisible(true);
+    tabFolder.setSimple( false );
+    tabFolder.setUnselectedImageVisible( true );
+    tabFolder.setUnselectedCloseVisible( true );
+    tabFolder.setBorderVisible( true );
 
-    tabFolder.addSelectionListener(new SelectionAdapter() {
+    tabFolder.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected(SelectionEvent arg0) {
+      public void widgetSelected( SelectionEvent arg0 ) {
         int prevVal = selectedIndex;
         selectedIndex = tabFolder.getSelectionIndex();
 
         // expect to find exactly one tabs child node of this tabbox node
         XulTabs tabs = null;
-        for (XulComponent c : getChildNodes()) {
-          if (c instanceof XulTabs) {
+        for ( XulComponent c : getChildNodes() ) {
+          if ( c instanceof XulTabs ) {
             tabs = (XulTabs) c;
           }
         }
 
-        XulTab tab = (XulTab) tabs.getChildNodes().get(selectedIndex);
-        if (StringUtils.isNotBlank(tab.getOnclick())) {
-          SwtTabbox.this.invoke(tab.getOnclick());
+        XulTab tab = (XulTab) tabs.getChildNodes().get( selectedIndex );
+        if ( StringUtils.isNotBlank( tab.getOnclick() ) ) {
+          SwtTabbox.this.invoke( tab.getOnclick() );
         }
 
-        SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
+        SwtTabbox.this.changeSupport.firePropertyChange( "selectedIndex", prevVal, selectedIndex );
       }
 
-    });
+    } );
 
-    tabFolder.addCTabFolder2Listener(new CTabFolder2Listener() {
+    tabFolder.addCTabFolder2Listener( new CTabFolder2Listener() {
 
-      public void close(CTabFolderEvent arg0) {
-        if (onclose != null) {
+      public void close( CTabFolderEvent arg0 ) {
+        if ( onclose != null ) {
           try {
             int pos = 0;
-            for (int i = 0; i < tabFolder.getItems().length; i++) {
-              if (tabFolder.getItems()[i] == arg0.item) {
+            for ( int i = 0; i < tabFolder.getItems().length; i++ ) {
+              if ( tabFolder.getItems()[i] == arg0.item ) {
                 pos = i;
                 break;
               }
             }
-            Boolean returnVal = (Boolean) SwtTabbox.this.domContainer.invoke(onclose, new Object[] { pos });
-            if (returnVal == true) {
-              remove(pos);
+            Boolean returnVal = (Boolean) SwtTabbox.this.domContainer.invoke( onclose, new Object[] { pos } );
+            if ( returnVal == true ) {
+              remove( pos );
             } else {
               arg0.doit = false;
             }
-          } catch (XulException e) {
+          } catch ( XulException e ) {
             e.printStackTrace();
           }
         } else {
-          remove(tabFolder.getSelectionIndex());
+          remove( tabFolder.getSelectionIndex() );
         }
 
       }
 
-      public void maximize(CTabFolderEvent arg0) {
+      public void maximize( CTabFolderEvent arg0 ) {
       }
 
-      public void minimize(CTabFolderEvent arg0) {
+      public void minimize( CTabFolderEvent arg0 ) {
       }
 
-      public void restore(CTabFolderEvent arg0) {
+      public void restore( CTabFolderEvent arg0 ) {
       }
 
-      public void showList(CTabFolderEvent arg0) {
+      public void showList( CTabFolderEvent arg0 ) {
       }
-    });
+    } );
 
     // Set a small vertical gradient
-    tabFolder.setSelectionBackground(new Color[] {
-        tabFolder.getDisplay().getSystemColor(SWT.COLOR_WIDGET_NORMAL_SHADOW),
-        tabFolder.getDisplay().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW), }, new int[] { 55, }, true);
+    tabFolder.setSelectionBackground( new Color[] {
+      tabFolder.getDisplay().getSystemColor( SWT.COLOR_WIDGET_NORMAL_SHADOW ),
+      tabFolder.getDisplay().getSystemColor( SWT.COLOR_WIDGET_LIGHT_SHADOW ), }, new int[] { 55, }, true );
 
-    setManagedObject(tabFolder);
+    setManagedObject( tabFolder );
   }
 
-  private void remove(int pos) {
+  private void remove( int pos ) {
     suppressRemoveEvents = true;
-    this.tabs.removeChild(this.tabs.getChildNodes().get(pos));
-    this.panels.removeChild(this.panels.getChildNodes().get(pos));
-    if (tabs.getChildNodes().size() == 0) { // last one doesn't fire selection event. Manually do that here
-      setSelectedIndex(-1);
+    this.tabs.removeChild( this.tabs.getChildNodes().get( pos ) );
+    this.panels.removeChild( this.panels.getChildNodes().get( pos ) );
+    if ( tabs.getChildNodes().size() == 0 ) { // last one doesn't fire selection event. Manually do that here
+      setSelectedIndex( -1 );
     }
     suppressRemoveEvents = false;
   }
 
   @Override
-  public void addChild(Element ele) {
-    super.addChild(ele);
+  public void addChild( Element ele ) {
+    super.addChild( ele );
 
-    if (ele instanceof SwtTabs) {
+    if ( ele instanceof SwtTabs ) {
       this.tabs = (SwtTabs) ele;
-    } else if (ele instanceof SwtTabpanels) {
+    } else if ( ele instanceof SwtTabpanels ) {
       this.panels = (SwtTabpanels) ele;
     }
 
@@ -175,7 +175,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
   }
 
   public XulTabpanel getSelectedPanel() {
-    return panels.getTabpanelByIndex(getSelectedIndex());
+    return panels.getTabpanelByIndex( getSelectedIndex() );
   }
 
   public XulTabpanels getTabpanels() {
@@ -186,12 +186,12 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
     return tabs;
   }
 
-  public void setSelectedIndex(int index) {
+  public void setSelectedIndex( int index ) {
     int prevVal = selectedIndex;
     selectedIndex = index;
-    SwtTabbox.this.changeSupport.firePropertyChange("selectedIndex", prevVal, selectedIndex);
-    if (initialized) { // component instantiated
-      tabFolder.setSelection(selectedIndex);
+    SwtTabbox.this.changeSupport.firePropertyChange( "selectedIndex", prevVal, selectedIndex );
+    if ( initialized ) { // component instantiated
+      tabFolder.setSelection( selectedIndex );
 
       // Programatic set selectedIndex does not fire listener.
       int sel = tabFolder.getSelectionIndex();
@@ -203,109 +203,109 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
 
     CTabItem[] t = tabFolder.getItems();
 
-    for (int i = 0; i < t.length; i++) {
+    for ( int i = 0; i < t.length; i++ ) {
       t[i].dispose();
     }
 
-    for (int i = 0; i < tabs.getChildNodes().size(); i++) {
+    for ( int i = 0; i < tabs.getChildNodes().size(); i++ ) {
       int style = SWT.None;
       int tabIndex = 0;
-      if (isClosable()) {
+      if ( isClosable() ) {
         style = SWT.Close;
       }
-      SwtTab tab = (SwtTab) tabs.getChildNodes().get(i);
-      if (tab.isVisible()) {
-        CTabItem item = new CTabItem(tabFolder, style);
-        item.setText(tabs.getTabByIndex(i).getLabel());
+      SwtTab tab = (SwtTab) tabs.getChildNodes().get( i );
+      if ( tab.isVisible() ) {
+        CTabItem item = new CTabItem( tabFolder, style );
+        item.setText( tabs.getTabByIndex( i ).getLabel() );
         // There could be a chance that the tabs have been added but tab panel are still
         // not there. In this case we need to break from this layout routine
-        if (panels.getChildNodes().size() <= i) {
+        if ( panels.getChildNodes().size() <= i ) {
           break;
         }
-        item.setControl((Control) panels.getTabpanelByIndex(i).getManagedObject());
-        tabFolder.getItem(tabIndex++).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
+        item.setControl( (Control) panels.getTabpanelByIndex( i ).getManagedObject() );
+        tabFolder.getItem( tabIndex++ ).getControl().setEnabled( !tabs.getTabByIndex( i ).isDisabled() );
       }
     }
     initialized = true;
-    tabFolder.layout(true, true);
-    if (selectedIndex < 0 && tabFolder.getItemCount() > 0) {
+    tabFolder.layout( true, true );
+    if ( selectedIndex < 0 && tabFolder.getItemCount() > 0 ) {
       selectedIndex = 0;
     }
-    setSelectedIndex(selectedIndex);
+    setSelectedIndex( selectedIndex );
   }
 
-  public void setTabDisabledAt(boolean flag, int pos) {
-    tabFolder.getItem(pos).getControl().setEnabled(!flag);
+  public void setTabDisabledAt( boolean flag, int pos ) {
+    tabFolder.getItem( pos ).getControl().setEnabled( !flag );
   }
 
-  public void setTabVisibleAt(boolean flag, int pos) {
-    tabFolder.getItem(pos).getControl().setVisible(flag);
+  public void setTabVisibleAt( boolean flag, int pos ) {
+    tabFolder.getItem( pos ).getControl().setVisible( flag );
   }
 
   public void updateTabState() {
-    for (int i = 0; i < tabs.getChildNodes().size(); i++) {
-      tabFolder.getItem(i).setText("" + tabs.getTabByIndex(i).getLabel());
-      Control control = tabFolder.getItem(i).getControl();
-      if(control != null){
-        tabFolder.getItem(i).getControl().setEnabled(!tabs.getTabByIndex(i).isDisabled());
+    for ( int i = 0; i < tabs.getChildNodes().size(); i++ ) {
+      tabFolder.getItem( i ).setText( "" + tabs.getTabByIndex( i ).getLabel() );
+      Control control = tabFolder.getItem( i ).getControl();
+      if ( control != null ) {
+        tabFolder.getItem( i ).getControl().setEnabled( !tabs.getTabByIndex( i ).isDisabled() );
       }
     }
   }
 
-  public void removeTab(int idx) {
-    if(suppressRemoveEvents){
+  public void removeTab( int idx ) {
+    if ( suppressRemoveEvents ) {
       return;
     }
-    if (tabFolder.getItemCount() >= idx) {
-      tabFolder.getItem(idx).dispose();
+    if ( tabFolder.getItemCount() >= idx ) {
+      tabFolder.getItem( idx ).dispose();
     }
   }
 
-  public void removeTabpanel(int idx) {
-    if(suppressRemoveEvents){
+  public void removeTabpanel( int idx ) {
+    if ( suppressRemoveEvents ) {
       return;
     }
-    if (tabFolder.getItemCount() > idx) {
-      tabFolder.getItem(idx).getControl().dispose();
+    if ( tabFolder.getItemCount() > idx ) {
+      tabFolder.getItem( idx ).getControl().dispose();
     }
   }
 
-  public void addTab(int idx) {
+  public void addTab( int idx ) {
     int style = SWT.None;
-    if (isClosable()) {
+    if ( isClosable() ) {
       style = SWT.Close;
     }
-    CTabItem item = new CTabItem(tabFolder, style);
-    String lbl = tabs.getTabByIndex(idx).getLabel();
-    if (lbl != null) {
-      item.setText(lbl);
+    CTabItem item = new CTabItem( tabFolder, style );
+    String lbl = tabs.getTabByIndex( idx ).getLabel();
+    if ( lbl != null ) {
+      item.setText( lbl );
     }
 
-    //may have been added after panel
-    //addTabpanel(idx);
-    if (selectedIndex < 0) {
+    // may have been added after panel
+    // addTabpanel(idx);
+    if ( selectedIndex < 0 ) {
       selectedIndex = 0;
     }
-    setSelectedIndex(selectedIndex);
+    setSelectedIndex( selectedIndex );
   }
 
-  public void addTabpanel(int idx) {
+  public void addTabpanel( int idx ) {
 
-    //not sure if the tab has been added first, ignore if not
-    if (tabFolder.getItemCount() <= idx || panels.getChildNodes().size() <= idx) {
+    // not sure if the tab has been added first, ignore if not
+    if ( tabFolder.getItemCount() <= idx || panels.getChildNodes().size() <= idx ) {
       return;
     }
-    CTabItem item = tabFolder.getItem(idx);
-    Control control = (Control) panels.getTabpanelByIndex(idx).getManagedObject();
-    if (control.getParent() != tabFolder) {
-      control.setParent(tabFolder);
+    CTabItem item = tabFolder.getItem( idx );
+    Control control = (Control) panels.getTabpanelByIndex( idx ).getManagedObject();
+    if ( control.getParent() != tabFolder ) {
+      control.setParent( tabFolder );
     }
-    item.setControl(control);
-    item.getControl().setEnabled(!tabs.getTabByIndex(idx).isDisabled());
+    item.setControl( control );
+    item.getControl().setEnabled( !tabs.getTabByIndex( idx ).isDisabled() );
 
   }
 
-  public void setClosable(boolean flag) {
+  public void setClosable( boolean flag ) {
     this.closable = flag;
 
   }
@@ -314,7 +314,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
     return this.closable;
   }
 
-  public void setOnclose(String command) {
+  public void setOnclose( String command ) {
     this.onclose = command;
   }
 

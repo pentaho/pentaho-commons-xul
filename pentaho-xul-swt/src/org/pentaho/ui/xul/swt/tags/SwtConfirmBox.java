@@ -1,76 +1,54 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swt.tags;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulConfirmBox;
-import org.pentaho.ui.xul.components.XulPromptBox;
 import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.swt.DialogButton;
-import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.custom.MessageDialogBase;
-import org.pentaho.ui.xul.util.XulDialogCallback;
 
 public class SwtConfirmBox extends MessageDialogBase implements XulConfirmBox {
 
-  
   static final String ELEMENT_NAME = "confirmbox"; //$NON-NLS-1$
 
   private MessageBox dialog;
-  
-  public SwtConfirmBox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super(tagName);
-    
+
+  public SwtConfirmBox( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( tagName );
+
   }
 
-  protected void createNewMessageBox(){
+  protected void createNewMessageBox() {
     Shell shell = getParentObject();
-    
-    dialog = new MessageBox(shell, acceptBtn | cancelBtn);
-    dialog.setText(getTitle());
-    dialog.setMessage(this.getMessage());
-  }
-  
 
+    dialog = new MessageBox( shell, acceptBtn | cancelBtn );
+    dialog.setText( getTitle() );
+    dialog.setMessage( this.getMessage() );
+  }
 
   public int open() {
     createNewMessageBox();
     int retVal = dialog.open();
-    notifyListeners(retVal);
+    notifyListeners( retVal );
     return retVal;
   }
 
-  
 }

@@ -1,25 +1,31 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swt.tags;
 
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.browser.*;
+import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.browser.CloseWindowListener;
+import org.eclipse.swt.browser.LocationEvent;
+import org.eclipse.swt.browser.LocationListener;
+import org.eclipse.swt.browser.OpenWindowListener;
+import org.eclipse.swt.browser.VisibilityWindowListener;
+import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionEvent;
@@ -28,17 +34,21 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulBrowser;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 
-public class SwtBrowser  extends SwtElement implements XulBrowser {
+public class SwtBrowser extends SwtElement implements XulBrowser {
 
   private static final String EMPTY_URL = "about:blank";
-  
+
   private Browser browser;
   private Composite mainPanel;
   private boolean showToolbar = true;
@@ -48,44 +58,43 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   private String home;
   private Composite toolbarPanel;
 
-  public SwtBrowser(Element self, XulComponent parent, XulDomContainer container, String tagName) {
-    super(tagName);
-    
+  public SwtBrowser( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
+    super( tagName );
+
     Composite parentComposite = (Composite) parent.getManagedObject();
-    
-    mainPanel = new Composite(parentComposite, SWT.BORDER);
+
+    mainPanel = new Composite( parentComposite, SWT.BORDER );
     GridLayout layout = new GridLayout();
     layout.marginHeight = 0;
     layout.marginWidth = 0;
-    
-    mainPanel.setLayout(layout);
-    
 
-    setManagedObject(mainPanel);
+    mainPanel.setLayout( layout );
+
+    setManagedObject( mainPanel );
   }
 
-  public void execute(String data) {
-    browser.execute(data);
+  public void execute( String data ) {
+    browser.execute( data );
   }
 
   public String getData() {
-    return ""+browser.getData();
+    return "" + browser.getData();
   }
 
   public String getSrc() {
     return browser.getUrl();
   }
 
-  public void setSrc(String src) {
-    if (StringUtils.isEmpty(src)) {
+  public void setSrc( String src ) {
+    if ( StringUtils.isEmpty( src ) ) {
       src = EMPTY_URL;
     }
-    if(browser != null){
-      browser.setUrl(src);
-      location.setText(src);
+    if ( browser != null ) {
+      browser.setUrl( src );
+      location.setText( src );
     }
     this.src = src;
-    if(home == null){
+    if ( home == null ) {
       home = src;
     }
   }
@@ -95,157 +104,169 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
   }
 
   public void forward() {
-    browser.forward(); 
+    browser.forward();
   }
 
   public void home() {
-    browser.setUrl(home);
+    browser.setUrl( home );
   }
-  
-  public void reload(){
+
+  public void reload() {
     browser.refresh();
   }
-  
-  public void stop(){
+
+  public void stop() {
     browser.stop();
   }
 
   @Override
   public void layout() {
 
-    toolbarPanel = new Composite(mainPanel, SWT.BORDER);
+    toolbarPanel = new Composite( mainPanel, SWT.BORDER );
     GridData data = new GridData();
     data.horizontalAlignment = SWT.FILL;
     data.grabExcessHorizontalSpace = true;
-    toolbarPanel.setLayoutData(data);
+    toolbarPanel.setLayoutData( data );
 
-    GridLayout layout = new GridLayout(3, false);
+    GridLayout layout = new GridLayout( 3, false );
     layout.marginHeight = 0;
     layout.marginWidth = 0;
-    toolbarPanel.setLayout(layout);
-    
-    toolbar = new ToolBar(toolbarPanel, SWT.FLAT | SWT.HORIZONTAL);
-    ToolItem item = new ToolItem(toolbar, SWT.PUSH);
-    item.setText("<");
-    item.addSelectionListener(new SelectionListener(){
-      public void widgetDefaultSelected(SelectionEvent se) {}
-      public void widgetSelected(SelectionEvent se) {
+    toolbarPanel.setLayout( layout );
+
+    toolbar = new ToolBar( toolbarPanel, SWT.FLAT | SWT.HORIZONTAL );
+    ToolItem item = new ToolItem( toolbar, SWT.PUSH );
+    item.setText( "<" );
+    item.addSelectionListener( new SelectionListener() {
+      public void widgetDefaultSelected( SelectionEvent se ) {
+      }
+
+      public void widgetSelected( SelectionEvent se ) {
         back();
       }
-    });
+    } );
     data = new GridData();
     data.horizontalSpan = 1;
     data.grabExcessHorizontalSpace = false;
-    toolbar.setLayoutData(data);
-    
-    item = new ToolItem(toolbar, SWT.PUSH);
-    item.setText(">");
-    item.addSelectionListener(new SelectionListener(){
-      public void widgetDefaultSelected(SelectionEvent se) {}
-      public void widgetSelected(SelectionEvent se) {
+    toolbar.setLayoutData( data );
+
+    item = new ToolItem( toolbar, SWT.PUSH );
+    item.setText( ">" );
+    item.addSelectionListener( new SelectionListener() {
+      public void widgetDefaultSelected( SelectionEvent se ) {
+      }
+
+      public void widgetSelected( SelectionEvent se ) {
         forward();
       }
-    });
+    } );
 
-    item = new ToolItem(toolbar, SWT.PUSH);
-    item.setText("R");
-    item.addSelectionListener(new SelectionListener(){
-      public void widgetDefaultSelected(SelectionEvent se) {}
-      public void widgetSelected(SelectionEvent se) {
+    item = new ToolItem( toolbar, SWT.PUSH );
+    item.setText( "R" );
+    item.addSelectionListener( new SelectionListener() {
+      public void widgetDefaultSelected( SelectionEvent se ) {
+      }
+
+      public void widgetSelected( SelectionEvent se ) {
         reload();
       }
-    });
-    
-    location = new Text(toolbarPanel, SWT.BORDER);
-    location.setText(src);
-    location.addKeyListener(new KeyAdapter(){
+    } );
+
+    location = new Text( toolbarPanel, SWT.BORDER );
+    location.setText( src );
+    location.addKeyListener( new KeyAdapter() {
       @Override
-      public void keyPressed(KeyEvent arg0) {
-        if(arg0.character == SWT.CR){
-          setSrc(location.getText());
+      public void keyPressed( KeyEvent arg0 ) {
+        if ( arg0.character == SWT.CR ) {
+          setSrc( location.getText() );
         }
       }
-    });
-    
+    } );
+
     data = new GridData();
     data.horizontalSpan = 2;
     data.grabExcessHorizontalSpace = true;
     data.horizontalAlignment = SWT.FILL;
-    location.setLayoutData(data);
-    
-    
-    browser = createBrowser(mainPanel);
-    hookupBrowserListeners(browser, false);
+    location.setLayoutData( data );
 
-    browser.addCloseWindowListener(new CloseWindowListener() {
-      public void close(WindowEvent event) {
-        Browser browser = (Browser)event.widget;
+    browser = createBrowser( mainPanel );
+    hookupBrowserListeners( browser, false );
+
+    browser.addCloseWindowListener( new CloseWindowListener() {
+      public void close( WindowEvent event ) {
+        Browser browser = (Browser) event.widget;
         Shell shell = browser.getShell();
         shell.close();
       }
-    });
+    } );
 
-    browser.setUrl(src);
-    
+    browser.setUrl( src );
+
     data = new GridData();
     data.grabExcessHorizontalSpace = true;
     data.grabExcessVerticalSpace = true;
     data.verticalAlignment = SWT.FILL;
     data.horizontalAlignment = SWT.FILL;
-    browser.setLayoutData(data);
-    
-    browser.addLocationListener(new LocationListener(){
-      public void changed(LocationEvent arg0) {
+    browser.setLayoutData( data );
+
+    browser.addLocationListener( new LocationListener() {
+      public void changed( LocationEvent arg0 ) {
         SwtBrowser.this.src = arg0.location;
-        location.setText(arg0.location);
+        location.setText( arg0.location );
       }
-      public void changing(LocationEvent arg0) {}
-    });
-    
-    setShowtoolbar(getShowtoolbar());
-    mainPanel.layout(true);
+
+      public void changing( LocationEvent arg0 ) {
+      }
+    } );
+
+    setShowtoolbar( getShowtoolbar() );
+    mainPanel.layout( true );
   }
 
-  private void hookupBrowserListeners(final Browser browser, final boolean visibilityListeners) {
-    browser.addOpenWindowListener(new OpenWindowListener() {
-      public void open(WindowEvent event) {
-        Shell shell = new Shell(browser.getShell());
-        shell.setText("");
-        shell.setLayout(new FillLayout());
-        Browser newBrowser = new Browser(shell, SWT.NONE);
-        hookupBrowserListeners(newBrowser, true);
+  private void hookupBrowserListeners( final Browser browser, final boolean visibilityListeners ) {
+    browser.addOpenWindowListener( new OpenWindowListener() {
+      public void open( WindowEvent event ) {
+        Shell shell = new Shell( browser.getShell() );
+        shell.setText( "" );
+        shell.setLayout( new FillLayout() );
+        Browser newBrowser = new Browser( shell, SWT.NONE );
+        hookupBrowserListeners( newBrowser, true );
         event.browser = newBrowser;
       }
-    });
-    if(!visibilityListeners){
+    } );
+    if ( !visibilityListeners ) {
       return;
     }
-    browser.addVisibilityWindowListener(new VisibilityWindowListener() {
-      public void hide(WindowEvent event) {
+    browser.addVisibilityWindowListener( new VisibilityWindowListener() {
+      public void hide( WindowEvent event ) {
         Browser b = (Browser) event.widget;
         Shell shell = b.getShell();
-        shell.setVisible(false);
+        shell.setVisible( false );
       }
 
-      public void show(WindowEvent event) {
+      public void show( WindowEvent event ) {
         Browser b = (Browser) event.widget;
         final Shell shell = b.getShell();
-        if (event.location != null) shell.setLocation(event.location);
-        if (event.size != null) {
-          Point size = event.size;
-          shell.setSize(shell.computeSize(size.x, size.y));
+        if ( event.location != null ) {
+          shell.setLocation( event.location );
         }
-        if(!"webkit".equals(b.getBrowserType()) || event.addressBar){ // for some reason we're getting double-events for safari window.open clicks. The second is the one we want and it has this property
+        if ( event.size != null ) {
+          Point size = event.size;
+          shell.setSize( shell.computeSize( size.x, size.y ) );
+        }
+        if ( !"webkit".equals( b.getBrowserType() ) || event.addressBar ) { // for some reason we're getting
+                                                                            // double-events for safari window.open
+                                                                            // clicks. The second is the one we want and
+                                                                            // it has this property
           shell.open();
         }
       }
-    });
+    } );
   }
 
-  protected Browser createBrowser(Composite parent){
-	 // Force *nix (like CentOS) to use Mozilla
-    Browser browser =  new Browser(parent, (isCentOS() ? SWT.MOZILLA : SWT.NONE));
-    browser.setUrl(EMPTY_URL);
+  protected Browser createBrowser( Composite parent ) {
+    // Force *nix (like CentOS) to use Mozilla
+    Browser browser = new Browser( parent, ( isCentOS() ? SWT.MOZILLA : SWT.NONE ) );
+    browser.setUrl( EMPTY_URL );
     return browser;
   }
 
@@ -253,25 +274,25 @@ public class SwtBrowser  extends SwtElement implements XulBrowser {
     return showToolbar;
   }
 
-  public void setShowtoolbar(boolean flag) {
+  public void setShowtoolbar( boolean flag ) {
     this.showToolbar = flag;
-    if(toolbarPanel != null){
-      toolbarPanel.setVisible(flag);
-      ((GridData) toolbarPanel.getLayoutData()).exclude = !showToolbar;
-      mainPanel.layout(true);
+    if ( toolbarPanel != null ) {
+      toolbarPanel.setVisible( flag );
+      ( (GridData) toolbarPanel.getLayoutData() ).exclude = !showToolbar;
+      mainPanel.layout( true );
     }
   }
-  
-  public Browser getBrowser(){
+
+  public Browser getBrowser() {
     return browser;
   }
-  
+
   private static boolean isCentOS() {
-	  String os = System.getProperty("os.name").toLowerCase();
-	  String osVersion = System.getProperty("os.version").toLowerCase();  
-	  
-	  // linux or unix
-	  return (os.indexOf("nux") >= 0 && osVersion.contains("centos"));
+    String os = System.getProperty( "os.name" ).toLowerCase();
+    String osVersion = System.getProperty( "os.version" ).toLowerCase();
+
+    // linux or unix
+    return ( os.indexOf( "nux" ) >= 0 && osVersion.contains( "centos" ) );
 
   }
 }

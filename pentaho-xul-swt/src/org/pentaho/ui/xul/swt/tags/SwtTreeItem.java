@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swt.tags;
 
@@ -35,7 +35,7 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
 public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem {
 
-  private static final Log logger = LogFactory.getLog(SwtTreeItem.class);
+  private static final Log logger = LogFactory.getLog( SwtTreeItem.class );
 
   private XulTreeRow row;
   private XulTreeChildren treeChildren; // Hierachical tree
@@ -44,29 +44,29 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
   private boolean expanded;
   private Reference boundObjectRef;
 
-  public SwtTreeItem(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("treeitem");
+  public SwtTreeItem( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( "treeitem" );
     this.domContainer = domContainer;
-    setManagedObject("empty");
+    setManagedObject( "empty" );
   }
 
-  public SwtTreeItem(XulTreeRow row) {
-    super("treeitem");
+  public SwtTreeItem( XulTreeRow row ) {
+    super( "treeitem" );
 
     try {
-      this.element = DocumentFactory.createElement("treeitem", this);
-    } catch (XulException e) {
-      throw new IllegalArgumentException("error creating treeitem", e);
+      this.element = DocumentFactory.createElement( "treeitem", this );
+    } catch ( XulException e ) {
+      throw new IllegalArgumentException( "error creating treeitem", e );
     }
 
-    super.addChild(row);
+    super.addChild( row );
     this.row = row;
-    setManagedObject("empty");
+    setManagedObject( "empty" );
   }
 
-  public SwtTreeItem(XulTreeChildren parent) {
-    super("treeitem");
-    setManagedObject("empty");
+  public SwtTreeItem( XulTreeChildren parent ) {
+    super( "treeitem" );
+    setManagedObject( "empty" );
   }
 
   public XulTreeRow getRow() {
@@ -93,27 +93,27 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
 
   }
 
-  public void setContainer(boolean isContainer) {
+  public void setContainer( boolean isContainer ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setEmpty(boolean empty) {
+  public void setEmpty( boolean empty ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setRow(XulTreeRow row) {
+  public void setRow( XulTreeRow row ) {
     this.row = row;
-    super.addChild(row);
+    super.addChild( row );
   }
 
   @Override
   public void layout() {
-    if (getChildNodes().size() > 1) {
+    if ( getChildNodes().size() > 1 ) {
       // tree
-      for (Element comp : getChildNodes()) { // should be the only one in there
-        if (comp instanceof XulTreeRow) { // more of an assert, should be true;
+      for ( Element comp : getChildNodes() ) { // should be the only one in there
+        if ( comp instanceof XulTreeRow ) { // more of an assert, should be true;
           this.row = (SwtTreeRow) comp;
         } else {
           this.treeChildren = (XulTreeChildren) comp;
@@ -121,8 +121,8 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
       }
     } else {
       // table
-      for (Element comp : getChildNodes()) { // should be the only one in there
-        if (comp instanceof XulTreeRow) { // more of an assert, should be true;
+      for ( Element comp : getChildNodes() ) { // should be the only one in there
+        if ( comp instanceof XulTreeRow ) { // more of an assert, should be true;
           this.row = (SwtTreeRow) comp;
         }
       }
@@ -135,25 +135,23 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
     return image;
   }
 
-  public void setImage(String src) {
+  public void setImage( String src ) {
     this.image = src;
 
-    if (this.initialized) {
+    if ( this.initialized ) {
       XulTree tree = getTree();
-      if (tree != null) {
+      if ( tree != null ) {
         tree.update();
       }
     }
   }
-  
-  
 
   @Override
-  public void setTooltiptext(String tooltip) {
-    super.setTooltiptext(tooltip);
-    if (this.initialized) {
+  public void setTooltiptext( String tooltip ) {
+    super.setTooltiptext( tooltip );
+    if ( this.initialized ) {
       XulTree tree = getTree();
-      if (tree != null) {
+      if ( tree != null ) {
         tree.update();
       }
     }
@@ -163,8 +161,8 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
   public XulTree getTree() {
     XulTree tree = null;
     XulComponent parent = getParent();
-    while (parent != null) {
-      if (parent instanceof XulTree) {
+    while ( parent != null ) {
+      if ( parent instanceof XulTree ) {
         tree = (XulTree) parent;
         break;
       }
@@ -173,7 +171,7 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
     return tree;
   }
 
-  public void setXulDomContainer(XulDomContainer container) {
+  public void setXulDomContainer( XulDomContainer container ) {
     this.domContainer = container;
   }
 
@@ -181,31 +179,31 @@ public class SwtTreeItem extends AbstractSwtXulContainer implements XulTreeItem 
     return expanded;
   }
 
-  public void setExpanded(boolean expanded) {
+  public void setExpanded( boolean expanded ) {
     this.expanded = expanded;
-    if (this.initialized) {
+    if ( this.initialized ) {
       XulTree tree = getTree();
-      if (tree != null) {
-        tree.setTreeItemExpanded(this, expanded);
+      if ( tree != null ) {
+        tree.setTreeItemExpanded( this, expanded );
       }
     }
-    
-    changeSupport.firePropertyChange("expanded", null, expanded);
+
+    changeSupport.firePropertyChange( "expanded", null, expanded );
   }
 
   public Object getBoundObject() {
-    if (boundObjectRef != null){
+    if ( boundObjectRef != null ) {
       return boundObjectRef.get();
     }
     return null;
   }
 
-  public void setBoundObject(Object obj) {
-    boundObjectRef = new WeakReference(obj);
+  public void setBoundObject( Object obj ) {
+    boundObjectRef = new WeakReference( obj );
   }
 
   @Override
-  public void setClassname(String classname) {
+  public void setClassname( String classname ) {
     // Classname does not apply to SWT
   }
 

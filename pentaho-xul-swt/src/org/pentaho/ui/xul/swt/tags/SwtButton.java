@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swt.tags;
 
@@ -42,7 +42,7 @@ import org.pentaho.ui.xul.util.SwtXulUtil;
 
 public class SwtButton extends SwtElement implements XulButton {
   private static final long serialVersionUID = -7218075117194366698L;
-  private static final Log logger = LogFactory.getLog(SwtButton.class);
+  private static final Log logger = LogFactory.getLog( SwtButton.class );
 
   protected org.eclipse.swt.widgets.Button button;
   private String label;
@@ -60,124 +60,123 @@ public class SwtButton extends SwtElement implements XulButton {
   private Label imageButton;
   private static WeakHashMap<Display, Cursor> cursorMap = new WeakHashMap<Display, Cursor>();
 
-  public SwtButton(Button button) {
-    super("button");
+  public SwtButton( Button button ) {
+    super( "button" );
     this.button = button;
-    button.addSelectionListener(new SelectionAdapter(){
-      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        invoke(onclick);
+    button.addSelectionListener( new SelectionAdapter() {
+      public void widgetSelected( org.eclipse.swt.events.SelectionEvent arg0 ) {
+        invoke( onclick );
       }
-    });
-    setManagedObject(this.button);
+    } );
+    setManagedObject( this.button );
   }
 
-  public SwtButton(Element self, XulComponent parent, XulDomContainer container, String tagName) {
-    super(tagName);
+  public SwtButton( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
+    super( tagName );
     this.parent = parent;
     this.domContainer = container;
-    
+
     // Extract custom parameters
-    if(self != null) {
-      disabledImage = self.getAttributeValue("disabledimage"); //$NON-NLS-1$
+    if ( self != null ) {
+      disabledImage = self.getAttributeValue( "disabledimage" ); //$NON-NLS-1$
     }
-    
-    if (self != null) {
-      selectedImage = self.getAttributeValue("selectedimage"); //$NON-NLS-1$
+
+    if ( self != null ) {
+      selectedImage = self.getAttributeValue( "selectedimage" ); //$NON-NLS-1$
     }
-    // Special creation path for image buttons with no text. We don't want them to appear with the 
+    // Special creation path for image buttons with no text. We don't want them to appear with the
     // traditional button border.
-    if(self != null && self.getAttributeValue("image") != null){
-      setManagedObject(createImageButton());
+    if ( self != null && self.getAttributeValue( "image" ) != null ) {
+      setManagedObject( createImageButton() );
     } else {
-      button = createNewButton((Composite)parent.getManagedObject());
-      setManagedObject(button);
+      button = createNewButton( (Composite) parent.getManagedObject() );
+      setManagedObject( button );
     }
   }
-  
-  private Control createImageButton(){
-    imageButton = new Label(((Composite) parent.getManagedObject()), SWT.NONE);
-    imageButton.addMouseListener(new MouseAdapter(){
-      
+
+  private Control createImageButton() {
+    imageButton = new Label( ( (Composite) parent.getManagedObject() ), SWT.NONE );
+    imageButton.addMouseListener( new MouseAdapter() {
+
       @Override
-      public void mouseUp(MouseEvent arg0) {
-        if(disabled == false){
-          invoke(onclick);
+      public void mouseUp( MouseEvent arg0 ) {
+        if ( disabled == false ) {
+          invoke( onclick );
         }
       }
-      
-    });
-    Display display = ((Composite) parent.getManagedObject()).getDisplay();
-    Cursor cursor = cursorMap.get(display);
-    if(cursor == null){
-      cursor = new Cursor(((Composite) parent.getManagedObject()).getDisplay(), SWT.CURSOR_HAND);
-      cursorMap.put(display, cursor);
+
+    } );
+    Display display = ( (Composite) parent.getManagedObject() ).getDisplay();
+    Cursor cursor = cursorMap.get( display );
+    if ( cursor == null ) {
+      cursor = new Cursor( ( (Composite) parent.getManagedObject() ).getDisplay(), SWT.CURSOR_HAND );
+      cursorMap.put( display, cursor );
     }
-    imageButton.setCursor(cursor);
-    
+    imageButton.setCursor( cursor );
+
     return imageButton;
-    
+
   }
-  
-  public void setButton(Button button){
+
+  public void setButton( Button button ) {
     this.button = button;
-    button.addSelectionListener(new SelectionAdapter(){
-      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        invoke(onclick);
+    button.addSelectionListener( new SelectionAdapter() {
+      public void widgetSelected( org.eclipse.swt.events.SelectionEvent arg0 ) {
+        invoke( onclick );
       }
-    });
-    setManagedObject(button);
-    setVisible(isVisible());
+    } );
+    setManagedObject( button );
+    setVisible( isVisible() );
     // set the enabled state too
-    button.setEnabled(!isDisabled());
+    button.setEnabled( !isDisabled() );
   }
-  
-  protected Button createNewButton(Composite parent) {
-    Button button = new Button(parent, SWT.NONE);
-    button.addSelectionListener(new SelectionAdapter(){
-      public void widgetSelected(org.eclipse.swt.events.SelectionEvent arg0){
-        invoke(onclick);
+
+  protected Button createNewButton( Composite parent ) {
+    Button button = new Button( parent, SWT.NONE );
+    button.addSelectionListener( new SelectionAdapter() {
+      public void widgetSelected( org.eclipse.swt.events.SelectionEvent arg0 ) {
+        invoke( onclick );
       }
-    });
+    } );
     return button;
   }
 
-  
   /**
-   * XUL's attribute is "disabled", thus this acts
-   * exactly the opposite of SWT. If the property is not 
-   * available, then the control is enabled. 
+   * XUL's attribute is "disabled", thus this acts exactly the opposite of SWT. If the property is not available, then
+   * the control is enabled.
+   * 
    * @return boolean true if the control is disabled.
    */
   public boolean isDisabled() {
     return disabled;
   }
 
-  public void setDisabled(boolean disabled) {
+  public void setDisabled( boolean disabled ) {
     this.disabled = disabled;
-    if(button != null){
-      if(button.isDisposed()) {
+    if ( button != null ) {
+      if ( button.isDisposed() ) {
         return;
       }
       button.setEnabled( !disabled );
     } else {
-      if(imageButton.isDisposed()) {
+      if ( imageButton.isDisposed() ) {
         return;
       }
-    	this.imageButton.setEnabled(!disabled);
+      this.imageButton.setEnabled( !disabled );
     }
 
-    if(this.disabled) {
-      if(disabledImage != null) {
-        displayImage(disabledImage);
+    if ( this.disabled ) {
+      if ( disabledImage != null ) {
+        displayImage( disabledImage );
       }
     } else {
-      if(image != null) {
-        displayImage(image);
+      if ( image != null ) {
+        displayImage( image );
       }
     }
   }
 
-  public void setOnclick(final String method) {
+  public void setOnclick( final String method ) {
     this.onclick = method;
 
   }
@@ -186,39 +185,39 @@ public class SwtButton extends SwtElement implements XulButton {
     return label;
   }
 
-  public void setLabel(String label) {
+  public void setLabel( String label ) {
     this.label = label;
-    if(button != null){
-      button.setText(label);
+    if ( button != null ) {
+      button.setText( label );
     } else {
-      imageButton.setText(label);
+      imageButton.setText( label );
     }
-    
+
   }
 
   public String getImage() {
     return this.image;
   }
-  
+
   public String getDisabledImage() {
     return this.disabledImage;
   }
 
-  public void setImage(String src) {
+  public void setImage( String src ) {
     this.image = src;
-    displayImage(src);
+    displayImage( src );
   }
-  
-  public void setDisabledImage(String src) {
-    this.disabledImage = src;   
+
+  public void setDisabledImage( String src ) {
+    this.disabledImage = src;
   }
 
   public String getDir() {
     return dir.toString().toLowerCase();
   }
 
-  public void setDir(String dir) {
-    this.dir = Direction.valueOf(dir.toUpperCase());
+  public void setDir( String dir ) {
+    this.dir = Direction.valueOf( dir.toUpperCase() );
   }
 
   public String getGroup() {
@@ -229,69 +228,69 @@ public class SwtButton extends SwtElement implements XulButton {
     return this.type.toString();
   }
 
-  public void setGroup(String group) {
+  public void setGroup( String group ) {
     this.group = group;
   }
 
-  public void setType(String type) {
-    this.type = Type.valueOf(type.toString().toUpperCase());
-    
+  public void setType( String type ) {
+    this.type = Type.valueOf( type.toString().toUpperCase() );
+
   }
 
   public String getOnclick() {
     return this.onclick;
   }
 
-  public void setSelected(String selected) {
-    setSelected(Boolean.parseBoolean(selected));
-    
+  public void setSelected( String selected ) {
+    setSelected( Boolean.parseBoolean( selected ) );
+
   }
 
   public boolean isSelected() {
-    return selected;  
+    return selected;
   }
 
-  public void setSelected(boolean selected) {
+  public void setSelected( boolean selected ) {
     this.selected = selected;
-    if(button != null){
-      button.setSelection(this.selected);
+    if ( button != null ) {
+      button.setSelection( this.selected );
     }
-    
-    if(this.selected) {
-      if(selectedImage != null) {
-        displayImage(selectedImage);
+
+    if ( this.selected ) {
+      if ( selectedImage != null ) {
+        displayImage( selectedImage );
       }
     } else {
-      if(image != null) {
-        displayImage(image);
+      if ( image != null ) {
+        displayImage( image );
       }
     }
 
   }
 
   public void doClick() {
-    if(button != null){
-      button.setSelection(true);
-    } else if(onclick != null){
-      invoke(onclick);
+    if ( button != null ) {
+      button.setSelection( true );
+    } else if ( onclick != null ) {
+      invoke( onclick );
     }
   }
-  
-  protected void displayImage(String src) {
 
-    Display d = ((Composite) parent.getManagedObject()).getDisplay();
-    if(d == null){
+  protected void displayImage( String src ) {
+
+    Display d = ( (Composite) parent.getManagedObject() ).getDisplay();
+    if ( d == null ) {
       d = Display.getCurrent() != null ? Display.getCurrent() : Display.getDefault();
     }
 
-    Image img = SwtXulUtil.getCachedImage(src, domContainer, d);
-    if (img != null){
-      if(button != null){
-        button.setImage(img);
-      } else { //image button implementation
-        imageButton.setImage(img);
+    Image img = SwtXulUtil.getCachedImage( src, domContainer, d );
+    if ( img != null ) {
+      if ( button != null ) {
+        button.setImage( img );
+      } else { // image button implementation
+        imageButton.setImage( img );
       }
     }
   }
-  
+
 }
