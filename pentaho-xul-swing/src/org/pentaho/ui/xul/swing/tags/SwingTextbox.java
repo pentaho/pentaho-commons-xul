@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 /**
  * 
@@ -47,7 +47,7 @@ import org.pentaho.ui.xul.util.TextType;
 
 /**
  * @author nbaker
- *
+ * 
  */
 public class SwingTextbox extends SwingElement implements XulTextbox {
   private JTextField textField;
@@ -62,7 +62,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
 
   private JScrollPane scrollPane;
 
-  private static final Log logger = LogFactory.getLog(SwingTextbox.class);
+  private static final Log logger = LogFactory.getLog( SwingTextbox.class );
 
   private boolean readonly = false;
 
@@ -77,34 +77,34 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   private int max = -1;
 
   private int maxlength = -1;
-  
+
   private String oldValue = null;
-  
-  public SwingTextbox(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("textbox");
-    setManagedObject(null);
+
+  public SwingTextbox( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( "textbox" );
+    setManagedObject( null );
   }
 
   public String getValue() {
-    if (textComp != null) {
+    if ( textComp != null ) {
       return textComp.getText();
     } else {
-      logger.error("Attempt to get Textbox's value before it's instantiated");
+      logger.error( "Attempt to get Textbox's value before it's instantiated" );
       return null;
     }
   }
 
-  public void setValue(String text) {
+  public void setValue( String text ) {
     String oldVal = this.value;
-    if(textComp != null && textComp.getText().equals(text)){
+    if ( textComp != null && textComp.getText().equals( text ) ) {
       return;
     }
-    if (textComp != null) {
-      textComp.setText(text);
+    if ( textComp != null ) {
+      textComp.setText( text );
     }
     this.value = text;
-    if (text != null || oldVal != null) {
-      this.changeSupport.firePropertyChange("value", oldVal, text);
+    if ( text != null || oldVal != null ) {
+      this.changeSupport.firePropertyChange( "value", oldVal, text );
     }
   }
 
@@ -119,16 +119,16 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     return this.disabled;
   }
 
-  public void setDisabled(boolean dis) {
+  public void setDisabled( boolean dis ) {
     boolean oldValue = this.disabled;
     this.disabled = dis;
-    if (textComp != null) {
-      textComp.setEnabled(!dis);
+    if ( textComp != null ) {
+      textComp.setEnabled( !dis );
     }
-    this.changeSupport.firePropertyChange("disabled", oldValue, dis);
+    this.changeSupport.firePropertyChange( "disabled", oldValue, dis );
   }
 
-  public void setMaxlength(int length) {
+  public void setMaxlength( int length ) {
     maxlength = length;
   }
 
@@ -136,7 +136,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     return multiline;
   }
 
-  public void setMultiline(boolean multi) {
+  public void setMultiline( boolean multi ) {
     this.multiline = multi;
   }
 
@@ -144,26 +144,26 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     return readonly;
   }
 
-  public void setReadonly(boolean readOnly) {
+  public void setReadonly( boolean readOnly ) {
     this.readonly = readOnly;
   }
 
   public String getType() {
-    if (type == null) {
+    if ( type == null ) {
       return null;
     }
 
     return type.toString();
   }
 
-  public void setType(String type) {
-    if (type == null) {
+  public void setType( String type ) {
+    if ( type == null ) {
       return;
     }
-    setType(TextType.valueOf(type.toUpperCase()));
+    setType( TextType.valueOf( type.toUpperCase() ) );
   }
 
-  public void setType(TextType type) {
+  public void setType( TextType type ) {
     this.type = type;
   }
 
@@ -178,113 +178,115 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
   public Object getTextControl() {
     return getManagedObject();
   }
-  
+
   @Override
-  public int getWidth(){
-    if (width <= 0){
-      return 150; //reasonable default
+  public int getWidth() {
+    if ( width <= 0 ) {
+      return 150; // reasonable default
     }
     return width;
   }
-  
+
   @Override
-  public void setWidth(int width) {
-    super.setWidth(width);
-    if (textComp == null){
+  public void setWidth( int width ) {
+    super.setWidth( width );
+    if ( textComp == null ) {
       return;
     }
     Dimension box = new Dimension();
-    box.height =this.textComp.getPreferredSize().height;
+    box.height = this.textComp.getPreferredSize().height;
     box.width = width;
-    this.textComp.setMaximumSize(box);
-    this.textComp.setPreferredSize(box);
-    this.textComp.setMinimumSize(box);
+    this.textComp.setMaximumSize( box );
+    this.textComp.setPreferredSize( box );
+    this.textComp.setMinimumSize( box );
   }
-
 
   @Override
   public Object getManagedObject() {
-    if (super.getManagedObject() == null) {
-      switch (this.type) {
+    if ( super.getManagedObject() == null ) {
+      switch ( this.type ) {
         case PASSWORD:
-          JPasswordField pass = new JPasswordField((value != null) ? value : "");
-          pass.setPreferredSize(new Dimension(getWidth(), 20));
-          pass.setMinimumSize(new Dimension(pass.getPreferredSize().width, pass.getPreferredSize().height));
-          pass.setEditable(!readonly);
+          JPasswordField pass = new JPasswordField( ( value != null ) ? value : "" );
+          pass.setPreferredSize( new Dimension( getWidth(), 20 ) );
+          pass.setMinimumSize( new Dimension( pass.getPreferredSize().width, pass.getPreferredSize().height ) );
+          pass.setEditable( !readonly );
           textComp = pass;
-          setManagedObject(pass);
+          setManagedObject( pass );
           break;
         case NUMERIC:
-        default: //regular text
-          if (this.multiline) {
-            textArea = new JTextArea((value != null) ? value : "");
-            scrollPane = new JScrollPane(textArea);
+        default: // regular text
+          if ( this.multiline ) {
+            textArea = new JTextArea( ( value != null ) ? value : "" );
+            scrollPane = new JScrollPane( textArea );
             textComp = textArea;
-            setManagedObject(scrollPane);
-            textArea.setEditable(!readonly);
-            this.scrollPane.setMinimumSize(new Dimension(getWidth(), this.height));
-            //this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+            setManagedObject( scrollPane );
+            textArea.setEditable( !readonly );
+            this.scrollPane.setMinimumSize( new Dimension( getWidth(), this.height ) );
+            // this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
           } else {
-            textField = new JTextField((value != null) ? value : "");
-            textField.setPreferredSize(new Dimension(getWidth(), textField.getPreferredSize().height));
-            textField.setMinimumSize(new Dimension(textField.getPreferredSize().width,
-                textField.getPreferredSize().height));
-            textField.setEditable(!readonly);
-            setManagedObject(textField);
+            textField = new JTextField( ( value != null ) ? value : "" );
+            textField.setPreferredSize( new Dimension( getWidth(), textField.getPreferredSize().height ) );
+            textField.setMinimumSize( new Dimension( textField.getPreferredSize().width,
+                textField.getPreferredSize().height ) );
+            textField.setEditable( !readonly );
+            setManagedObject( textField );
             textComp = textField;
           }
 
-          //constrin Numeric only here
-          if (this.type == TextType.NUMERIC) {
-            textComp.setDocument(new NumericDocument(min, max));
+          // constrin Numeric only here
+          if ( this.type == TextType.NUMERIC ) {
+            textComp.setDocument( new NumericDocument( min, max ) );
           }
-          textComp.setEnabled(!disabled);
+          textComp.setEnabled( !disabled );
           break;
       }
 
-      textComp.addKeyListener(new KeyListener() {
-	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
-	      public void keyReleased(KeyEvent e) {
-	        if(oldValue != null && !oldValue.equals(textComp.getText())){
-	          SwingTextbox.this.changeSupport.firePropertyChange("value", oldValue, SwingTextbox.this.getValue());
-	          oldValue = textComp.getText();
-	        } else if(oldValue == null){
-	          //AWT error where sometimes the keyReleased is fired before keyPressed.
-	          oldValue = textComp.getText();
-	        } else {
-	          logger.debug("Special key pressed, ignoring");
-	        }
-	      }
-
-        public void keyTyped(KeyEvent e) {
+      textComp.addKeyListener( new KeyListener() {
+        public void keyPressed( KeyEvent e ) {
+          oldValue = textComp.getText();
         }
 
-      });
-      
-      textComp.setToolTipText(this.getTooltiptext());
-      
-      //	    Why do we need this here if we setup oninput in the setOninput
-      //	     textComp.addKeyListener(new KeyAdapter() {
-      //	       
-      //	       public void keyReleased(KeyEvent e) {
-      //	         invoke(onInput);
-      //	       }
-      //	     });
+        public void keyReleased( KeyEvent e ) {
+          if ( oldValue != null && !oldValue.equals( textComp.getText() ) ) {
+            SwingTextbox.this.changeSupport.firePropertyChange( "value", oldValue, SwingTextbox.this.getValue() );
+            oldValue = textComp.getText();
+          } else if ( oldValue == null ) {
+            // AWT error where sometimes the keyReleased is fired before keyPressed.
+            oldValue = textComp.getText();
+          } else {
+            logger.debug( "Special key pressed, ignoring" );
+          }
+        }
+
+        public void keyTyped( KeyEvent e ) {
+        }
+
+      } );
+
+      textComp.setToolTipText( this.getTooltiptext() );
+
+      // Why do we need this here if we setup oninput in the setOninput
+      // textComp.addKeyListener(new KeyAdapter() {
+      //
+      // public void keyReleased(KeyEvent e) {
+      // invoke(onInput);
+      // }
+      // });
     }
 
     return super.getManagedObject();
 
   }
 
-  public void setOninput(final String method) {
-    if (textComp != null) {
-      textComp.addKeyListener(new KeyAdapter() {
+  public void setOninput( final String method ) {
+    if ( textComp != null ) {
+      textComp.addKeyListener( new KeyAdapter() {
 
-        public void keyReleased(KeyEvent e) {
-          invoke(method);
+        public void keyReleased( KeyEvent e ) {
+          invoke( method );
         }
-      });
-    } else { //Not instantiated, save for later
+      } );
+    } else { // Not instantiated, save for later
       onInput = method;
     }
   }
@@ -293,66 +295,65 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
     return "" + min;
   }
 
-  public void setMin(String min) {
-    this.min = Integer.parseInt(min);
+  public void setMin( String min ) {
+    this.min = Integer.parseInt( min );
   }
 
   public String getMax() {
     return "" + max;
   }
 
-  public void setMax(String max) {
-    this.max = Integer.parseInt(max);
+  public void setMax( String max ) {
+    this.max = Integer.parseInt( max );
   }
 
-  @SuppressWarnings("serial")
+  @SuppressWarnings( "serial" )
   private class NumericDocument extends PlainDocument {
     private int min;
 
     private int max;
 
-    public NumericDocument(int min, int max) {
+    public NumericDocument( int min, int max ) {
       super();
       this.min = min;
       this.max = max;
     }
 
     @Override
-    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-      if (str == null) {
+    public void insertString( int offs, String str, AttributeSet a ) throws BadLocationException {
+      if ( str == null ) {
         return;
       }
-      if (!validString(str)) {
-        logger.error("Textbox input not a valid number: " + str);
+      if ( !validString( str ) ) {
+        logger.error( "Textbox input not a valid number: " + str );
         return;
       }
 
-      //if not special chars, evaluate number for range
-      if (str.charAt(str.length() - 1) != '.' && str.charAt(str.length() - 1) != '-') {
+      // if not special chars, evaluate number for range
+      if ( str.charAt( str.length() - 1 ) != '.' && str.charAt( str.length() - 1 ) != '-' ) {
 
-        if (max > -1 && Double.parseDouble(super.getText(0, super.getLength()) + str) > max) {
-          logger.error(String.format("Textbox Greater [%f]less than max: %d", Float.parseFloat(super.getText(0, super
-              .getLength())
-              + str), max));
+        if ( max > -1 && Double.parseDouble( super.getText( 0, super.getLength() ) + str ) > max ) {
+          logger.error( String.format( "Textbox Greater [%f]less than max: %d", Float.parseFloat( super.getText( 0,
+              super.getLength() )
+              + str ), max ) );
           return;
         }
 
       }
 
-      //everything checks out insert string
-      super.insertString(offs, str, a);
+      // everything checks out insert string
+      super.insertString( offs, str, a );
 
     }
 
-    private boolean validString(String str) {
-      return StringUtils.isNumeric(str.replace(".", "").replace("-", "")) || str.equals("-") || str.equals(".");
+    private boolean validString( String str ) {
+      return StringUtils.isNumeric( str.replace( ".", "" ).replace( "-", "" ) ) || str.equals( "-" )
+          || str.equals( "." );
     }
   }
-  
 
-  public void setCommand(String command) {
-    throw new RuntimeException("command not implemented on textbox");
+  public void setCommand( String command ) {
+    throw new RuntimeException( "command not implemented on textbox" );
   }
-  
 
 }
