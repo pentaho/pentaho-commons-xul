@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swing.tags;
 
@@ -27,27 +27,27 @@ import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingTabpanels extends AbstractSwingContainer implements XulTabpanels {
-  public SwingTabpanels(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("tabpanels");
-    setManagedObject("empty");
+  public SwingTabpanels( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( "tabpanels" );
+    setManagedObject( "empty" );
   }
 
-  public XulTabpanel getTabpanelByIndex(int index) {
-    return (index < getChildNodes().size()) ? (SwingTabpanel) this.getChildNodes().get(index) : null;
+  public XulTabpanel getTabpanelByIndex( int index ) {
+    return ( index < getChildNodes().size() ) ? (SwingTabpanel) this.getChildNodes().get( index ) : null;
   }
 
   @Override
-  public void removeChild(Element ele) {
-    int idx = getChildNodes().indexOf(ele);
-    super.removeChild(ele);
-    ((XulTabbox) getParent()).removeTabpanel(idx);
+  public void removeChild( Element ele ) {
+    int idx = getChildNodes().indexOf( ele );
+    super.removeChild( ele );
+    ( (XulTabbox) getParent() ).removeTabpanel( idx );
   }
 
   @Override
   public void layout() {
     initialized = true;
-    if (getParent() != null) {
-    	((SwingElement)getParent()).layout();
+    if ( getParent() != null ) {
+      ( (SwingElement) getParent() ).layout();
     }
   }
 
