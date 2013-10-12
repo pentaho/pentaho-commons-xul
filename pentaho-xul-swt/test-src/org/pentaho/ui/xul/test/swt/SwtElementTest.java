@@ -1,31 +1,30 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.test.swt;
 
-
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStream;
-
-import javax.swing.JComponent;
 
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
@@ -37,16 +36,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulDomException;
-import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.XulRunner;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
 import org.pentaho.ui.xul.util.Orient;
-
-import static org.junit.Assert.*;
 
 public class SwtElementTest {
 
@@ -54,7 +48,7 @@ public class SwtElementTest {
   Document doc = null;
   XulDomContainer container;
   SwtElement element;
-  
+
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
   }
@@ -66,120 +60,122 @@ public class SwtElementTest {
   @Before
   public void setUp() throws Exception {
 
-    InputStream in = SwtXulRunner.class.getClassLoader().getResourceAsStream("resource/documents/splitterTest.xul");
-    assertNotNull("XUL input not found.", in);
+    InputStream in = SwtXulRunner.class.getClassLoader().getResourceAsStream( "resource/documents/splitterTest.xul" );
+    assertNotNull( "XUL input not found.", in );
     SAXReader rdr = new SAXReader();
-    final Document doc = rdr.read(in);
-    
-    container = new SwtXulLoader().loadXul(doc);
+    final Document doc = rdr.read( in );
+
+    container = new SwtXulLoader().loadXul( doc );
 
     runner = new SwtXulRunner();
-    runner.addContainer(container);
-    
-    element = (SwtElement) container.getDocumentRoot().getElementById("testContainerElement");
+    runner.addContainer( container );
+
+    element = (SwtElement) container.getDocumentRoot().getElementById( "testContainerElement" );
   }
 
   @After
   public void tearDown() throws Exception {
-  	try{
-  		runner.stop();
-  	} catch(Exception e){}
+    try {
+      runner.stop();
+    } catch ( Exception e ) {
+    }
   }
 
   @Test
   public final void testOrient() {
-  	element.setOrient("vertical");
-  	String getVal = element.getOrient();
-  	assertTrue(getVal.equalsIgnoreCase("vertical"));
+    element.setOrient( "vertical" );
+    String getVal = element.getOrient();
+    assertTrue( getVal.equalsIgnoreCase( "vertical" ) );
   }
 
   @Test
   public final void testVerticalOrientation() {
-  	element.setOrient("vertical");
-  	Orient val = element.getOrientation();
-  	assertEquals(val, Orient.VERTICAL);
+    element.setOrient( "vertical" );
+    Orient val = element.getOrientation();
+    assertEquals( val, Orient.VERTICAL );
   }
 
   @Test
   public final void testHorizontalOrientation() {
-  	element.setOrient("horizontal");
-  	Orient val = element.getOrientation();
-  	assertEquals(val, Orient.HORIZONTAL);
+    element.setOrient( "horizontal" );
+    Orient val = element.getOrientation();
+    assertEquals( val, Orient.HORIZONTAL );
   }
-  
+
   @Test
   @Ignore
   public final void testSetOnBlur() {
-  	element.setOnblur("test.foo()");
+    element.setOnblur( "test.foo()" );
   }
 
   @Test
   public final void testAddChangeListener() {
-  	element.addPropertyChangeListener(new PropertyChangeListener(){
-			public void propertyChange(PropertyChangeEvent arg0) {
-			}
-  	}); 
+    element.addPropertyChangeListener( new PropertyChangeListener() {
+      public void propertyChange( PropertyChangeEvent arg0 ) {
+      }
+    } );
   }
 
   @Test
   public final void testRemoveChangeListener() {
-  	PropertyChangeListener changeListener = new PropertyChangeListener(){
-			public void propertyChange(PropertyChangeEvent arg0) {
-			}
-  	};
-  	element.addPropertyChangeListener(changeListener);
-  	element.removePropertyChangeListener(changeListener);
+    PropertyChangeListener changeListener = new PropertyChangeListener() {
+      public void propertyChange( PropertyChangeEvent arg0 ) {
+      }
+    };
+    element.addPropertyChangeListener( changeListener );
+    element.removePropertyChangeListener( changeListener );
   }
-  
-  @Test 
+
+  @Test
   @Ignore
   public final void testSetDisabled() {
-  	element.setDisabled(true);
+    element.setDisabled( true );
   }
 
   @Test
   @Ignore
   public final void testGetDisabled() {
-  	element.setDisabled(true);
-  	boolean b1 = element.isDisabled();
-  	
-  	element.setDisabled(false);
-  	boolean b2 = element.isDisabled();
-  	
-  	assertTrue(b1 && !b2);
-  	
+    element.setDisabled( true );
+    boolean b1 = element.isDisabled();
+
+    element.setDisabled( false );
+    boolean b2 = element.isDisabled();
+
+    assertTrue( b1 && !b2 );
+
   }
 
   @Test
-  public final void testReplaceChild() throws Exception{
-		XulComponent firstChild = element.getFirstChild();
-  	
-  	XulComponent newComp = element.getDocument().createElement("button");
-  	element.replaceChild(firstChild, newComp);
-	
+  public final void testReplaceChild() throws Exception {
+    XulComponent firstChild = element.getFirstChild();
+
+    XulComponent newComp = element.getDocument().createElement( "button" );
+    element.replaceChild( firstChild, newComp );
+
   }
 
   @Test
-  public final void testReplaceChildFailure() throws Exception{
-//  	assertThrows(XulDomException.class){
-//  		public void test() throws Exception { 
-//  			XulComponent firstChild = element.getFirstChild();
-//  	  	
-//  	  	XulComponent newComp = element.getDocument().createElement("button");
-//  	  	XulComponent badComp = element.getDocument().createElement("button");
-//  	  	element.replaceChild(badComp, newComp); 
-//  		} 
-//  	}.runTest();
+  public final void testReplaceChildFailure() throws Exception {
+    // assertThrows(XulDomException.class){
+    // public void test() throws Exception {
+    // XulComponent firstChild = element.getFirstChild();
+    //
+    // XulComponent newComp = element.getDocument().createElement("button");
+    // XulComponent badComp = element.getDocument().createElement("button");
+    // element.replaceChild(badComp, newComp);
+    // }
+    // }.runTest();
 
-  	try{
-	  	XulComponent firstChild = element.getFirstChild();
-	  	  	
-	  	XulComponent newComp = element.getDocument().createElement("button");
-	  	XulComponent badComp = element.getDocument().createElement("button");
-	  	element.replaceChild(badComp, newComp); 
-	  	fail("You should have thrown a XulDomException");
-  	} catch(Exception e){}
-	
+    try {
+      XulComponent firstChild = element.getFirstChild();
+
+      XulComponent newComp = element.getDocument().createElement( "button" );
+      XulComponent badComp = element.getDocument().createElement( "button" );
+      element.replaceChild( badComp, newComp );
+      fail( "You should have thrown a XulDomException" );
+    } catch ( Exception e ) {
+    }
+
   }
-  
+
 }
