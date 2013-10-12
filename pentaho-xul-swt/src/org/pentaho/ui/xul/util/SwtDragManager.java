@@ -1,38 +1,37 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.util;
 
-import org.eclipse.swt.dnd.DragSourceEvent;
 import org.pentaho.ui.xul.dnd.DropEvent;
 
 /**
- * User: nbaker
- * Date: Aug 24, 2010
+ * User: nbaker Date: Aug 24, 2010
  */
 public class SwtDragManager {
 
   private static SwtDragManager instance = new SwtDragManager();
   private DropEvent currentDropEvent;
-  private SwtDragManager(){
+
+  private SwtDragManager() {
 
   }
 
-  public static SwtDragManager getInstance(){
+  public static SwtDragManager getInstance() {
     return instance;
   }
 
@@ -40,7 +39,7 @@ public class SwtDragManager {
     return currentDropEvent;
   }
 
-  public void setCurrentDropEvent(DropEvent currentDropEvent) {
+  public void setCurrentDropEvent( DropEvent currentDropEvent ) {
     this.currentDropEvent = currentDropEvent;
   }
 }

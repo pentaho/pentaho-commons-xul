@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swt.custom;
 
@@ -35,134 +35,129 @@ public class BasicDialog extends TitleAreaDialog {
   private Composite dialogArea = null;
   private Composite contentArea = null;
   private Composite buttonArea = null;
-  
+
   private int height = -999;
-  private int width = -999; 
-  
-  public BasicDialog(Shell shell, boolean resizable) {
-    super(shell); 
-    setResizable(resizable);
+  private int width = -999;
+
+  public BasicDialog( Shell shell, boolean resizable ) {
+    super( shell );
+    setResizable( resizable );
     create();
   }
-  
-  public void addShellListener(ShellAdapter adapter){
-    getShell().addShellListener(adapter);
-  }
 
+  public void addShellListener( ShellAdapter adapter ) {
+    getShell().addShellListener( adapter );
+  }
 
   /**
    * For test purposes only
-   * @param args params to main
+   * 
+   * @param args
+   *          params to main
    */
-  public static void main(String[] args) {
-    new BasicDialog(new Shell(), true).open();
+  public static void main( String[] args ) {
+    new BasicDialog( new Shell(), true ).open();
   }
 
   @Override
-  protected Control createContents(Composite parent) {
-    
-    contentArea = (Composite)super.createContents(parent);
+  protected Control createContents( Composite parent ) {
+
+    contentArea = (Composite) super.createContents( parent );
     // TODO This should be dependent on whether we want to set up the header or not...
     getTitleImageLabel().dispose();
-    
+
     return contentArea;
   }
-  
-  
 
   public Control getMainDialogArea() {
     return dialogArea;
   }
 
   @Override
-  protected Control createDialogArea(Composite parent) {
-    Control c = super.createDialogArea(parent);
-    //c.setBackground(c.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
+  protected Control createDialogArea( Composite parent ) {
+    Control c = super.createDialogArea( parent );
+    // c.setBackground(c.getDisplay().getSystemColor(SWT.COLOR_YELLOW));
     dialogArea = (Composite) c;
     return dialogArea;
   }
-  
-  public Composite getMainArea(){
+
+  public Composite getMainArea() {
     return dialogArea;
   }
-  
+
   @Override
-  protected void createButtonsForButtonBar(Composite parent) {
+  protected void createButtonsForButtonBar( Composite parent ) {
     buttonArea = parent;
-    buttonArea.setLayout(new GridLayout());
-    
-    Label spacer = new Label(buttonArea, SWT.None);
-    
-    spacer.setSize(new Point(10, 10));
+    buttonArea.setLayout( new GridLayout() );
+
+    Label spacer = new Label( buttonArea, SWT.None );
+
+    spacer.setSize( new Point( 10, 10 ) );
     GridData data = new GridData();
     data.grabExcessHorizontalSpace = true;
     data.grabExcessVerticalSpace = false;
-    spacer.setLayoutData(data);
-    
+    spacer.setLayoutData( data );
+
   }
-  
-  public Button createButton(DialogButton dialogButton, boolean defaultButton){
-    Button button = createButton(buttonArea, dialogButton.getId(), dialogButton.getLabel(), defaultButton);
+
+  public Button createButton( DialogButton dialogButton, boolean defaultButton ) {
+    Button button = createButton( buttonArea, dialogButton.getId(), dialogButton.getLabel(), defaultButton );
     return button;
   }
 
-  public Composite getButtonArea(){
+  public Composite getButtonArea() {
     return buttonArea;
   }
-  
-  
-  public void resizeBounds(){
+
+  public void resizeBounds() {
     initializeBounds();
   }
 
   /**
-   *  The dialog does a fine job of sizing appropriately, 
-   *  but we must support fixed size as well.. 
-   *  Don't set the height and width and the default initial 
-   *  size should be reasonable. 
+   * The dialog does a fine job of sizing appropriately, but we must support fixed size as well.. Don't set the height
+   * and width and the default initial size should be reasonable.
    */
   @Override
   protected Point getInitialSize() {
-    
-    if ((height > 0) && (width > 0)){
-      return new Point(width, height);
+
+    if ( ( height > 0 ) && ( width > 0 ) ) {
+      return new Point( width, height );
     }
     return super.getInitialSize();
   }
-  
+
   /**
-   * This is silly, but we need this method to try to 
-   * preempt a user from setting a size too small 
-   * to render the child components well. 
+   * This is silly, but we need this method to try to preempt a user from setting a size too small to render the child
+   * components well.
    * 
-   * @return the height and width that the dialog deems reasonable,
-   * without taking into account the user specified height and width.
+   * @return the height and width that the dialog deems reasonable, without taking into account the user specified
+   *         height and width.
    */
-  public Point getPreferredSize(){
+  public Point getPreferredSize() {
     return super.getInitialSize();
   }
 
-  public void setHeight(int height) {
+  public void setHeight( int height ) {
     this.height = height;
     this.resizeBounds();
   }
 
-  public void setWidth(int width) {
+  public void setWidth( int width ) {
     this.width = width;
     this.resizeBounds();
   }
 
   @Override
-  protected void buttonPressed(int buttonId) {
+  protected void buttonPressed( int buttonId ) {
     // Empty on purpose
   }
-  
-  protected void setResizable(boolean resize){
+
+  protected void setResizable( boolean resize ) {
     // TODO: find a better way to do this conditional bitmask
-    if(resize){
-      setShellStyle(SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL);
+    if ( resize ) {
+      setShellStyle( SWT.DIALOG_TRIM | SWT.RESIZE | SWT.APPLICATION_MODAL );
     } else {
-      setShellStyle(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+      setShellStyle( SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL );
     }
   }
 }

@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.test.swt;
 
@@ -36,39 +36,40 @@ public class SwtLabelTest {
   Document doc = null;
   XulDomContainer container;
   XulLabel label;
-  
+
   @Before
   public void setUp() throws Exception {
-    
-    container = new SwtXulLoader().loadXul("resource/documents/labeltest.xul");
+
+    container = new SwtXulLoader().loadXul( "resource/documents/labeltest.xul" );
 
     runner = new SwtXulRunner();
-    runner.addContainer(container);
-    label = (XulLabel) container.getDocumentRoot().getElementById("label-one");
-    
+    runner.addContainer( container );
+    label = (XulLabel) container.getDocumentRoot().getElementById( "label-one" );
+
   }
-  
+
   @After
   public void tearDown() throws Exception {
-    try{
+    try {
       runner.stop();
-    } catch(Exception e){}
+    } catch ( Exception e ) {
+    }
   }
-  
+
   @Test
-  public void testValue() throws Exception{
-    assertEquals("First Label", label.getValue());
-    label.setValue("testing...");
-    assertEquals("testing...", label.getValue());
-    
+  public void testValue() throws Exception {
+    assertEquals( "First Label", label.getValue() );
+    label.setValue( "testing..." );
+    assertEquals( "testing...", label.getValue() );
+
   }
-  
+
   @Test
-  public void testDisable() throws Exception{
-    assertTrue(!label.isDisabled());
-    label.setDisabled(true);
-    assertTrue(label.isDisabled());
-    
+  public void testDisable() throws Exception {
+    assertTrue( !label.isDisabled() );
+    label.setDisabled( true );
+    assertTrue( label.isDisabled() );
+
   }
-  
+
 }
