@@ -1,45 +1,36 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swing.tags;
 
 import java.awt.Component;
-import java.awt.Dialog;
-import java.awt.Frame;
 import java.awt.Point;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
 
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulFileDialog;
-import org.pentaho.ui.xul.containers.XulRoot;
-import org.pentaho.ui.xul.containers.XulWindow;
-import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.SwingElement;
 
-public class SwingFileDialog extends SwingElement implements XulFileDialog{
-  
+public class SwingFileDialog extends SwingElement implements XulFileDialog {
+
   JFileChooser fc;
   private SEL_TYPE selectionType = SEL_TYPE.SINGLE;
   private VIEW_TYPE viewType = VIEW_TYPE.FILES_DIRECTORIES;
@@ -47,19 +38,19 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
   private File[] selectedFiles;
   private Component parentObject = null;
   private XulComponent parent;
-  
-  public SwingFileDialog(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("filedialog");
+
+  public SwingFileDialog( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( "filedialog" );
     this.parent = domContainer.getDocumentRoot().getRootElement();
-    domContainer.getDocumentRoot().getRootElement().addChild(this);
+    domContainer.getDocumentRoot().getRootElement().addChild( this );
   }
 
   public File getFile() {
-    return fc.getSelectedFile();  
+    return fc.getSelectedFile();
   }
 
   public File[] getFiles() {
-    return fc.getSelectedFiles();  
+    return fc.getSelectedFiles();
   }
 
   public SEL_TYPE getSelectionMode() {
@@ -70,21 +61,21 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     return viewType;
   }
 
-  public void setSelectionMode(SEL_TYPE type) {
-    this.selectionType = type;   
+  public void setSelectionMode( SEL_TYPE type ) {
+    this.selectionType = type;
   }
 
-  public void setViewType(VIEW_TYPE type) {
-    this.viewType = type;   
+  public void setViewType( VIEW_TYPE type ) {
+    this.viewType = type;
   }
 
   public RETURN_CODE showOpenDialog() {
     fc = new JFileChooser();
     return showOpen();
   }
-  
-  public RETURN_CODE showOpenDialog(Object f) {
-    fc = new JFileChooser((File) f);
+
+  public RETURN_CODE showOpenDialog( Object f ) {
+    fc = new JFileChooser( (File) f );
     return showOpen();
   }
 
@@ -94,30 +85,29 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     return showSave();
   }
 
-  public RETURN_CODE showSaveDialog(Object f) {
-    fc = new JFileChooser((File) f);
+  public RETURN_CODE showSaveDialog( Object f ) {
+    fc = new JFileChooser( (File) f );
     return showSave();
   }
-  
-  private RETURN_CODE showOpen(){
+
+  private RETURN_CODE showOpen() {
     Point loc = getParentObject().getLocation();
-    switch (this.getViewType()) {
+    switch ( this.getViewType() ) {
       case FILES_DIRECTORIES:
-        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        fc.setFileSelectionMode( JFileChooser.FILES_AND_DIRECTORIES );
         break;
       case DIRECTORIES:
-        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fc.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
         break;
       default:
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fc.setFileSelectionMode( JFileChooser.FILES_ONLY );
     }
 
+    int retVal = fc.showOpenDialog( getParentObject() );
 
-    int retVal = fc.showOpenDialog(getParentObject());
-
-    switch(retVal){
+    switch ( retVal ) {
       case JFileChooser.APPROVE_OPTION:
-        if(this.selectionType == SEL_TYPE.SINGLE){
+        if ( this.selectionType == SEL_TYPE.SINGLE ) {
           selectedFile = fc.getSelectedFile();
         } else {
           selectedFiles = fc.getSelectedFiles();
@@ -128,11 +118,11 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
         return RETURN_CODE.CANCEL;
     }
   }
-  
-  private RETURN_CODE showSave(){
-    fc.setLocation(getParentObject().getLocation());
-    int retVal = fc.showSaveDialog(getParentObject());
-    switch(retVal){
+
+  private RETURN_CODE showSave() {
+    fc.setLocation( getParentObject().getLocation() );
+    int retVal = fc.showSaveDialog( getParentObject() );
+    switch ( retVal ) {
       case JFileChooser.APPROVE_OPTION:
         selectedFile = fc.getSelectedFile();
         return RETURN_CODE.OK;
@@ -142,17 +132,15 @@ public class SwingFileDialog extends SwingElement implements XulFileDialog{
     }
   }
 
-  public void setModalParent(Object parent) {
+  public void setModalParent( Object parent ) {
     parentObject = (Component) parent;
   }
-  
-  private Component getParentObject(){
-    if(parentObject != null){
+
+  private Component getParentObject() {
+    if ( parentObject != null ) {
       return parentObject;
     } else {
       return (Component) this.parent.getManagedObject();
     }
   }
 }
-
-  

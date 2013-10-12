@@ -13,27 +13,28 @@ public class ScrollablePanel extends JPanel {
   public ScrollablePanel() {
   }
 
-  public ScrollablePanel(Component c){
-    super(new BorderLayout());
-    add(c, BorderLayout.CENTER);
-  }
-  public ScrollablePanel(boolean isDoubleBuffered) {
-    super(isDoubleBuffered);
+  public ScrollablePanel( Component c ) {
+    super( new BorderLayout() );
+    add( c, BorderLayout.CENTER );
   }
 
-  public ScrollablePanel(LayoutManager layout, boolean isDoubleBuffered) {
-    super(layout, isDoubleBuffered);
+  public ScrollablePanel( boolean isDoubleBuffered ) {
+    super( isDoubleBuffered );
   }
 
-  public ScrollablePanel(LayoutManager layout) {
-    super(layout);
+  public ScrollablePanel( LayoutManager layout, boolean isDoubleBuffered ) {
+    super( layout, isDoubleBuffered );
+  }
+
+  public ScrollablePanel( LayoutManager layout ) {
+    super( layout );
   }
 
   public Dimension getPreferredScrollableViewportSize() {
-    return new Dimension(1, 1);
+    return new Dimension( 1, 1 );
   }
 
-  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
+  public int getScrollableBlockIncrement( Rectangle visibleRect, int orientation, int direction ) {
     return 2;
   }
 
@@ -45,7 +46,7 @@ public class ScrollablePanel extends JPanel {
     return true;
   }
 
-  public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
+  public int getScrollableUnitIncrement( Rectangle visibleRect, int orientation, int direction ) {
     return 2;
   }
 }

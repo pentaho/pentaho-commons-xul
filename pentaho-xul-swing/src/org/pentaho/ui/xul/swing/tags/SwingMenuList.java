@@ -1,26 +1,30 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swing.tags;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.Expression;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.DefaultComboBoxModel;
@@ -41,7 +45,6 @@ import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
-import org.pentaho.ui.xul.swing.SwingElement;
 
 public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuList<T> {
 
@@ -49,7 +52,7 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
 
   private XulDomContainer xulDomContainer;
 
-  private static final Log logger = LogFactory.getLog(SwingMenuList.class);
+  private static final Log logger = LogFactory.getLog( SwingMenuList.class );
 
   private boolean loaded = false;
 
@@ -59,31 +62,32 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
 
   private boolean editable = false;
 
-  public SwingMenuList(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("menulist");
+  public SwingMenuList( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( "menulist" );
 
     this.xulDomContainer = domContainer;
 
-    combobox = new JComboBox(new DefaultComboBoxModel());
-    setManagedObject(combobox);
+    combobox = new JComboBox( new DefaultComboBoxModel() );
+    setManagedObject( combobox );
 
-    combobox.addItemListener(new ItemListener() {
+    combobox.addItemListener( new ItemListener() {
 
-      public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED && !inLayoutProcess && initialized) {
+      public void itemStateChanged( ItemEvent e ) {
+        if ( e.getStateChange() == ItemEvent.SELECTED && !inLayoutProcess && initialized ) {
           fireSelectedEvents();
         }
       }
 
-    });
+    } );
 
   }
 
   private boolean suppressLayout = false;
   private boolean inLayoutProcess = false;
+
   public void layout() {
     inLayoutProcess = true;
-    if(suppressLayout){
+    if ( suppressLayout ) {
       inLayoutProcess = false;
       return;
     }
@@ -92,115 +96,111 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     model.removeAllElements();
 
     SwingMenuitem selectedItem = null;
-    
-    //capture first child as default selection
+
+    // capture first child as default selection
     boolean firstChild = true;
-    for (XulComponent item : popup.getChildNodes()) {
-      JMenuItem jmenuItem = (JMenuItem) ((SwingMenuitem) item).getManagedObject();
+    for ( XulComponent item : popup.getChildNodes() ) {
+      JMenuItem jmenuItem = (JMenuItem) ( (SwingMenuitem) item ).getManagedObject();
       SwingMenuitem tempItem = (SwingMenuitem) item;
-      model.addElement(tempItem);
-      
-      if (tempItem.isSelected() || firstChild) {
+      model.addElement( tempItem );
+
+      if ( tempItem.isSelected() || firstChild ) {
         selectedItem = tempItem;
         firstChild = false;
       }
     }
-    
+
     inLayoutProcess = false;
 
-    if (selectedItem != null) {
-      //if first setting it to the currently selected one will not fire event.
-      //manually firing here
-      if(model.getSelectedItem() == selectedItem){
+    if ( selectedItem != null ) {
+      // if first setting it to the currently selected one will not fire event.
+      // manually firing here
+      if ( model.getSelectedItem() == selectedItem ) {
         fireSelectedEvents();
       }
-      model.setSelectedItem(selectedItem);
+      model.setSelectedItem( selectedItem );
     }
     initialized = true;
     loaded = true;
   }
-  
-  public void onDomReady(){
 
-    if(combobox.getSelectedItem() != null){
+  public void onDomReady() {
+
+    if ( combobox.getSelectedItem() != null ) {
       fireSelectedEvents();
     }
   }
-  
-  private void fireSelectedEvents(){
 
+  private void fireSelectedEvents() {
 
-
-    
-    SwingMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, this.getSelectedItem());
-      SwingMenuList.this.changeSupport.firePropertyChange("selectedIndex", null, combobox.getSelectedIndex());
-      previousSelectedItem = getSelectedItem();
+    SwingMenuList.this.changeSupport.firePropertyChange( "selectedItem", previousSelectedItem, this.getSelectedItem() );
+    SwingMenuList.this.changeSupport.firePropertyChange( "selectedIndex", null, combobox.getSelectedIndex() );
+    previousSelectedItem = getSelectedItem();
   }
 
-
   public SwingMenupopup getPopupElement() {
-    for (Element comp : getChildNodes()) {
-      if (SwingMenupopup.class.isAssignableFrom(comp.getClass())) {
+    for ( Element comp : getChildNodes() ) {
+      if ( SwingMenupopup.class.isAssignableFrom( comp.getClass() ) ) {
         return (SwingMenupopup) comp;
       }
     }
-    throw new IllegalStateException("menulist is missing a menupopup child element");
+    throw new IllegalStateException( "menulist is missing a menupopup child element" );
   }
 
   /*
-   * Swaps out the managed list.  Effectively replaces the SwingMenupopup child component.
-   * (non-Javadoc)
+   * Swaps out the managed list. Effectively replaces the SwingMenupopup child component. (non-Javadoc)
+   * 
    * @see org.pentaho.ui.xul.components.XulMenuList#replaceAll(java.util.List)
    */
   @Deprecated
-  public void replaceAllItems(Collection<T> tees) {
-    setElements(tees);
+  public void replaceAllItems( Collection<T> tees ) {
+    setElements( tees );
   }
 
   public String getSelectedItem() {
 
-    if(editable){
+    if ( editable ) {
       return textComp.getText();
     }
-    return ((SwingMenuitem) this.combobox.getModel().getSelectedItem()).getLabel();
+    return ( (SwingMenuitem) this.combobox.getModel().getSelectedItem() ).getLabel();
   }
 
-  public void setSelectedItem(T t) {
+  public void setSelectedItem( T t ) {
     SwingMenupopup popup = getPopupElement();
-    for (XulComponent item : popup.getChildNodes()) {
+    for ( XulComponent item : popup.getChildNodes() ) {
       SwingMenuitem tempItem = (SwingMenuitem) item;
-      if (tempItem.getLabel().equals(extractLabel(t))) {
-        this.combobox.setSelectedItem(tempItem);
+      if ( tempItem.getLabel().equals( extractLabel( t ) ) ) {
+        this.combobox.setSelectedItem( tempItem );
       }
     }
   }
 
-  public void setOncommand(final String command) {
-    combobox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
+  public void setOncommand( final String command ) {
+    combobox.addActionListener( new ActionListener() {
+      public void actionPerformed( ActionEvent evt ) {
 
         /*
-         * This actionlistener is fired at parse time when elements are added.
-         * We'll ignore that call by checking a variable set to true post parse time
+         * This actionlistener is fired at parse time when elements are added. We'll ignore that call by checking a
+         * variable set to true post parse time
          */
-        if (!loaded) {
+        if ( !loaded ) {
           return;
         }
         Document doc = getDocument();
         XulRoot window = (XulRoot) doc.getRootElement();
         final XulDomContainer con = window.getXulDomContainer();
 
-        SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater( new Runnable() {
           public void run() {
             try {
-              con.invoke(command, new Object[] {});
-            } catch (XulException e) {
-              logger.error("Error calling oncommand event", e);
+              con.invoke( command, new Object[] {} );
+            } catch ( XulException e ) {
+              logger.error( "Error calling oncommand event", e );
             }
           }
-        });
+        } );
       }
-    });
+    } );
   }
 
   public Collection<T> getElements() {
@@ -211,38 +211,38 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     return binding;
   }
 
-  public void setBinding(String binding) {
+  public void setBinding( String binding ) {
     this.binding = binding;
   }
 
-  private String extractLabel(T t) {
+  private String extractLabel( T t ) {
     String attribute = getBinding();
-    if (StringUtils.isEmpty(attribute)) {
+    if ( StringUtils.isEmpty( attribute ) ) {
       return t.toString();
     } else {
-      String getter = "get" + (String.valueOf(attribute.charAt(0)).toUpperCase()) + attribute.substring(1);
+      String getter = "get" + ( String.valueOf( attribute.charAt( 0 ) ).toUpperCase() ) + attribute.substring( 1 );
       try {
-        return new Expression(t, getter, null).getValue().toString();
-      } catch (Exception e) {
-        throw new RuntimeException(e);
+        return new Expression( t, getter, null ).getValue().toString();
+      } catch ( Exception e ) {
+        throw new RuntimeException( e );
       }
     }
   }
 
-  public void setElements(Collection<T> tees) {
+  public void setElements( Collection<T> tees ) {
     this.suppressLayout = true;
     XulMenupopup popup = getPopupElement();
-    for (XulComponent menuItem : popup.getChildNodes()) {
-      popup.removeChild(menuItem);
+    for ( XulComponent menuItem : popup.getChildNodes() ) {
+      popup.removeChild( menuItem );
     }
 
-    for (T t : tees) {
-      SwingMenuitem item = new SwingMenuitem(null, popup, this.xulDomContainer, null);
+    for ( T t : tees ) {
+      SwingMenuitem item = new SwingMenuitem( null, popup, this.xulDomContainer, null );
 
       String attribute = getBinding();
-      item.setLabel(extractLabel(t));
+      item.setLabel( extractLabel( t ) );
 
-      popup.addChild(item);
+      popup.addChild( item );
     }
 
     this.suppressLayout = false;
@@ -253,47 +253,51 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
     return this.combobox.getSelectedIndex();
   }
 
-  public void setSelectedIndex(int idx) {
-    this.combobox.setSelectedIndex(idx);
+  public void setSelectedIndex( int idx ) {
+    this.combobox.setSelectedIndex( idx );
   }
 
   @Override
-  public void setWidth(int width) {
-    super.setWidth(width);
+  public void setWidth( int width ) {
+    super.setWidth( width );
     Dimension box = new Dimension();
-    box.height =this.combobox.getPreferredSize().height;
+    box.height = this.combobox.getPreferredSize().height;
     box.width = width;
-    this.combobox.setMaximumSize(box);
-    this.combobox.setPreferredSize(box);
-    this.combobox.setMinimumSize(box);
+    this.combobox.setMaximumSize( box );
+    this.combobox.setPreferredSize( box );
+    this.combobox.setMinimumSize( box );
   }
 
   private String oldValue = "";
   private JTextComponent textComp;
-  public void setEditable(boolean editable) {
+
+  public void setEditable( boolean editable ) {
     this.editable = editable;
-    combobox.setEditable(editable);
-    if(editable){
+    combobox.setEditable( editable );
+    if ( editable ) {
       textComp = (JTextComponent) combobox.getEditor().getEditorComponent();
 
-      textComp.addKeyListener(new KeyListener() {
-	      public void keyPressed(KeyEvent e) {oldValue = textComp.getText();}
-	      public void keyReleased(KeyEvent e) {
-	        if(oldValue != null && !oldValue.equals(textComp.getText())){
-	          SwingMenuList.this.changeSupport.firePropertyChange("value", oldValue, SwingMenuList.this.getValue());
-	          oldValue = textComp.getText();
-	        } else if(oldValue == null){
-	          //AWT error where sometimes the keyReleased is fired before keyPressed.
-	          oldValue = textComp.getText();
-	        } else {
-	          logger.debug("Special key pressed, ignoring");
-	        }
-	      }
-
-        public void keyTyped(KeyEvent e) {
+      textComp.addKeyListener( new KeyListener() {
+        public void keyPressed( KeyEvent e ) {
+          oldValue = textComp.getText();
         }
 
-      });
+        public void keyReleased( KeyEvent e ) {
+          if ( oldValue != null && !oldValue.equals( textComp.getText() ) ) {
+            SwingMenuList.this.changeSupport.firePropertyChange( "value", oldValue, SwingMenuList.this.getValue() );
+            oldValue = textComp.getText();
+          } else if ( oldValue == null ) {
+            // AWT error where sometimes the keyReleased is fired before keyPressed.
+            oldValue = textComp.getText();
+          } else {
+            logger.debug( "Special key pressed, ignoring" );
+          }
+        }
+
+        public void keyTyped( KeyEvent e ) {
+        }
+
+      } );
     }
   }
 
@@ -302,14 +306,13 @@ public class SwingMenuList<T> extends AbstractSwingContainer implements XulMenuL
   }
 
   public String getValue() {
-    return (textComp != null)
-        ? textComp.getText()
-        : ((SwingMenuitem) this.combobox.getModel().getSelectedItem()).getLabel();
+    return ( textComp != null ) ? textComp.getText() : ( (SwingMenuitem) this.combobox.getModel().getSelectedItem() )
+        .getLabel();
   }
 
-  public void setValue(String value) {
-    if(editable){
-      ((JTextComponent) combobox.getEditor().getEditorComponent()).setText(value);
+  public void setValue( String value ) {
+    if ( editable ) {
+      ( (JTextComponent) combobox.getEditor().getEditorComponent() ).setText( value );
     }
   }
 }

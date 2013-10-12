@@ -1,23 +1,24 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.test.swing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.dom4j.Document;
 import org.junit.After;
@@ -45,13 +46,13 @@ public class SwingRadioTest {
   @Before
   public void setUp() throws Exception {
 
-    container = new SwingXulLoader().loadXul("resource/documents/radioTest.xul");
+    container = new SwingXulLoader().loadXul( "resource/documents/radioTest.xul" );
 
     runner = new SwingXulRunner();
-    runner.addContainer(container);
-    radio1 = (XulRadio) container.getDocumentRoot().getElementById("radio1");
-    radio2 = (XulRadio) container.getDocumentRoot().getElementById("radio2");
-    radio3 = (XulRadio) container.getDocumentRoot().getElementById("radio3");
+    runner.addContainer( container );
+    radio1 = (XulRadio) container.getDocumentRoot().getElementById( "radio1" );
+    radio2 = (XulRadio) container.getDocumentRoot().getElementById( "radio2" );
+    radio3 = (XulRadio) container.getDocumentRoot().getElementById( "radio3" );
 
   }
 
@@ -59,48 +60,48 @@ public class SwingRadioTest {
   public void tearDown() throws Exception {
     try {
       runner.stop();
-    } catch (Exception e) {
+    } catch ( Exception e ) {
     }
   }
 
   @Test
   public void testIsSelected() throws Exception {
-    //test initial value from parse
-    assertTrue(radio2.isSelected());
-    assertTrue(!radio1.isSelected());
-    
+    // test initial value from parse
+    assertTrue( radio2.isSelected() );
+    assertTrue( !radio1.isSelected() );
+
   }
-  
+
   @Test
   public void testSetSelected() throws Exception {
-    radio1.setSelected(true);
-    assertTrue(!radio2.isSelected());
-    assertTrue(radio1.isSelected());
+    radio1.setSelected( true );
+    assertTrue( !radio2.isSelected() );
+    assertTrue( radio1.isSelected() );
   }
-  
+
   @Test
   public void testGetLabel() throws Exception {
-    //test initial value from parse
-    assertEquals("Test 1", radio1.getLabel());
+    // test initial value from parse
+    assertEquals( "Test 1", radio1.getLabel() );
   }
-  
+
   @Test
   public void testSetLabel() throws Exception {
-    radio1.setLabel("testing");
-    assertEquals("testing", radio1.getLabel());
+    radio1.setLabel( "testing" );
+    assertEquals( "testing", radio1.getLabel() );
   }
-  
+
   @Test
   public void testIsDisabled() throws Exception {
-    //test initial value from parse
-    assertTrue(radio1.isDisabled() == false);
-    assertTrue(radio3.isDisabled());
+    // test initial value from parse
+    assertTrue( radio1.isDisabled() == false );
+    assertTrue( radio3.isDisabled() );
   }
-  
+
   @Test
   public void testSetDisabled() throws Exception {
-    //test initial value from parse
-    radio1.setDisabled(true);
-    assertTrue(radio1.isDisabled());
+    // test initial value from parse
+    radio1.setDisabled( true );
+    assertTrue( radio1.isDisabled() );
   }
 }

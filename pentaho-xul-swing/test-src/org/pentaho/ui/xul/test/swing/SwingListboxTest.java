@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.test.swing;
 
@@ -43,182 +43,184 @@ public class SwingListboxTest {
   @Before
   public void setUp() throws Exception {
 
-    container = new SwingXulLoader().loadXul("resource/documents/listbox.xul");
+    container = new SwingXulLoader().loadXul( "resource/documents/listbox.xul" );
 
     doc = container.getDocumentRoot();
-    list = (XulListbox) doc.getElementById("listbox");
+    list = (XulListbox) doc.getElementById( "listbox" );
 
   }
 
   @Test
   public void testDisabled() throws Exception {
-    assertTrue(!list.isDisabled());
-    list.setDisabled(true);
-    assertTrue(list.isDisabled());
-    list.setDisabled("false");
-    assertTrue(list.isDisabled() == false);
-    list.setDisabled("true");
-    assertTrue(list.isDisabled());
+    assertTrue( !list.isDisabled() );
+    list.setDisabled( true );
+    assertTrue( list.isDisabled() );
+    list.setDisabled( "false" );
+    assertTrue( list.isDisabled() == false );
+    list.setDisabled( "true" );
+    assertTrue( list.isDisabled() );
   }
 
   @Test
   public void testRows() throws Exception {
-    assertEquals(5, list.getRows());
-    list.setRows(6);
-    assertEquals(6, list.getRows());
+    assertEquals( 5, list.getRows() );
+    list.setRows( 6 );
+    assertEquals( 6, list.getRows() );
   }
 
   @Test
   public void testSeltype() throws Exception {
-    assertEquals("single", list.getSeltype());
+    assertEquals( "single", list.getSeltype() );
 
   }
 
   @Test
   public void testOnselect() throws Exception {
-    assertEquals("handler.consume()", list.getOnselect());
+    assertEquals( "handler.consume()", list.getOnselect() );
 
   }
 
   @Test
   public void testSelectedIndex() throws Exception {
-    list.setSelectedIndex(2);
-    assertEquals(2, list.getSelectedIndex());
+    list.setSelectedIndex( 2 );
+    assertEquals( 2, list.getSelectedIndex() );
   }
 
   @Test
   public void testGetSelectedValue() throws Exception {
-    list.setSelectedIndex(2);
-    XulListitem item = (XulListitem) doc.getElementById("listItem2");
-    assertEquals(list.getSelectedItem(), item);
+    list.setSelectedIndex( 2 );
+    XulListitem item = (XulListitem) doc.getElementById( "listItem2" );
+    assertEquals( list.getSelectedItem(), item );
   }
 
   @Test
   public void testGetSelectedItems() throws Exception {
-    list.setSelectedIndex(2);
-    XulListitem item = (XulListitem) doc.getElementById("listItem2");
+    list.setSelectedIndex( 2 );
+    XulListitem item = (XulListitem) doc.getElementById( "listItem2" );
     Object[] selectedItems = list.getSelectedItems();
-    assertEquals(1, selectedItems.length);
-    assertEquals(selectedItems[0], item);
+    assertEquals( 1, selectedItems.length );
+    assertEquals( selectedItems[0], item );
   }
 
   @Test
   public void testSetSelectedItem() throws Exception {
-    assertEquals(1, list.getSelectedIndex());
-    XulListitem item = (XulListitem) doc.getElementById("listItem2");
-    list.setSelectedItem(item);
-    assertEquals(2, list.getSelectedIndex());
+    assertEquals( 1, list.getSelectedIndex() );
+    XulListitem item = (XulListitem) doc.getElementById( "listItem2" );
+    list.setSelectedItem( item );
+    assertEquals( 2, list.getSelectedIndex() );
   }
 
   @Test
   public void testSetSelectedIndices() {
     int[] indices = { 0, 2 };
-    list.setSeltype("multiple");
-    list.setSelectedIndices(indices);
-    assertTrue("selected indices should be equal: " + toString(indices) + " vs " + toString(list.getSelectedIndices()),
-        Arrays.equals(indices, list.getSelectedIndices()));
+    list.setSeltype( "multiple" );
+    list.setSelectedIndices( indices );
+    assertTrue( "selected indices should be equal: " + toString( indices ) + " vs "
+        + toString( list.getSelectedIndices() ), Arrays.equals( indices, list.getSelectedIndices() ) );
   }
-  
-  private static String toString(int[] is) {
+
+  private static String toString( int[] is ) {
     StringBuilder builder = new StringBuilder();
-    builder.append('{');
-    for (int i : is) {
-      builder.append(i);
-      builder.append(',');
+    builder.append( '{' );
+    for ( int i : is ) {
+      builder.append( i );
+      builder.append( ',' );
     }
-    builder.append('}');
+    builder.append( '}' );
     return builder.toString();
   }
 
   @Test
   public void testSetSelectedIndicesByItem() throws Exception {
-    assertEquals(1, list.getSelectedIndex());
-    list.setSeltype("multiple");
-    Object[] items = new Object[] { doc.getElementById("listItem2"), doc.getElementById("listItem1") };
-    list.setSelectedItems(items);
+    assertEquals( 1, list.getSelectedIndex() );
+    list.setSeltype( "multiple" );
+    Object[] items = new Object[] { doc.getElementById( "listItem2" ), doc.getElementById( "listItem1" ) };
+    list.setSelectedItems( items );
     int[] selected = list.getSelectedIndices();
-    assertEquals(2, selected.length);
-    assertEquals(1, selected[0]);
-    assertEquals(2, selected[1]);
+    assertEquals( 2, selected.length );
+    assertEquals( 1, selected[0] );
+    assertEquals( 2, selected[1] );
   }
 
   @Test
   public void testSetSelectedItems() throws Exception {
-    assertEquals(1, list.getSelectedIndex());
-    list.setSeltype("multiple");
+    assertEquals( 1, list.getSelectedIndex() );
+    list.setSeltype( "multiple" );
 
-    XulListitem item2 = (XulListitem) doc.getElementById("listItem2");
-    XulListitem item1 = (XulListitem) doc.getElementById("listItem1");
+    XulListitem item2 = (XulListitem) doc.getElementById( "listItem2" );
+    XulListitem item1 = (XulListitem) doc.getElementById( "listItem1" );
     Object[] items = new Object[] { item2, item1 };
-    list.setSelectedItems(items);
+    list.setSelectedItems( items );
 
     Object[] selected = list.getSelectedItems();
-    assertEquals(item1, selected[0]);
-    assertEquals(item2, selected[1]);
+    assertEquals( item1, selected[0] );
+    assertEquals( item2, selected[1] );
   }
 
   @Test
   public void testgetRowCount() throws Exception {
-    assertEquals(3, list.getRowCount());
+    assertEquals( 3, list.getRowCount() );
 
   }
 
   @Test
   public void testRemoveItems() throws Exception {
-    assertEquals(3, list.getRowCount());
+    assertEquals( 3, list.getRowCount() );
     list.removeItems();
-    assertEquals(0, list.getRowCount());
+    assertEquals( 0, list.getRowCount() );
   }
 
   @Test
   public void testItemLabel() throws Exception {
-    XulListitem item1 = (XulListitem) doc.getElementById("listItem1");
-    assertEquals("ODBC", item1.getLabel());
-    item1.setLabel("foo");
-    assertEquals("foo", item1.getLabel());
+    XulListitem item1 = (XulListitem) doc.getElementById( "listItem1" );
+    assertEquals( "ODBC", item1.getLabel() );
+    item1.setLabel( "foo" );
+    assertEquals( "foo", item1.getLabel() );
   }
 
   @Test
   public void testItemValue() throws Exception {
-    XulListitem item1 = (XulListitem) doc.getElementById("listItem1");
-    item1.setValue("bar");
-    assertEquals("bar", item1.getValue());
+    XulListitem item1 = (XulListitem) doc.getElementById( "listItem1" );
+    item1.setValue( "bar" );
+    assertEquals( "bar", item1.getValue() );
   }
-  
+
   @Test
   public void testSetElements() throws Exception {
-    XulListbox box = (XulListbox) doc.getElementById("listbox2");
+    XulListbox box = (XulListbox) doc.getElementById( "listbox2" );
     List<Person> peeps = new ArrayList<Person>();
-    peeps.add(new Person("Nick"));
-    peeps.add(new Person("Barb"));
-    peeps.add(new Person("Kenneth"));
-    
-    box.setElements(peeps);
-    
-    assertEquals(3, box.getRowCount());
-    
+    peeps.add( new Person( "Nick" ) );
+    peeps.add( new Person( "Barb" ) );
+    peeps.add( new Person( "Kenneth" ) );
+
+    box.setElements( peeps );
+
+    assertEquals( 3, box.getRowCount() );
+
     List<XulComponent> items = box.getChildNodes();
-    assertEquals("Nick",((XulListitem) items.get(0)).getLabel());
-    assertEquals("Barb",((XulListitem) items.get(1)).getLabel());
-    assertEquals("Kenneth",((XulListitem) items.get(2)).getLabel());
-    
+    assertEquals( "Nick", ( (XulListitem) items.get( 0 ) ).getLabel() );
+    assertEquals( "Barb", ( (XulListitem) items.get( 1 ) ).getLabel() );
+    assertEquals( "Kenneth", ( (XulListitem) items.get( 2 ) ).getLabel() );
+
   }
-  
-  public class Person{
+
+  public class Person {
     private String firstName;
-    public Person(String firstName){
+
+    public Person( String firstName ) {
       this.firstName = firstName;
     }
+
     public String getFirstName() {
-    
+
       return firstName;
     }
-    public void setFirstName(String firstName) {
-    
+
+    public void setFirstName( String firstName ) {
+
       this.firstName = firstName;
     }
-    
-    
+
   }
-  
+
 }

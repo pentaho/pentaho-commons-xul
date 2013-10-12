@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.swing.tags;
 
@@ -21,7 +21,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 
@@ -34,20 +33,19 @@ import org.pentaho.ui.xul.containers.XulStatusbar;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.ScrollablePanel;
-import org.pentaho.ui.xul.swing.SwingElement;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwingStatusbar extends AbstractSwingContainer implements XulStatusbar {
-  private static final Log logger = LogFactory.getLog(SwingStatusbar.class);
+  private static final Log logger = LogFactory.getLog( SwingStatusbar.class );
 
-  public SwingStatusbar(Element self, XulComponent parent, XulDomContainer domContainer, String tagName) {
-    super("statusbar");
-    
-    container = new ScrollablePanel(new GridBagLayout());
-    container.setBackground(Color.decode("#EFEFEF"));
-    container.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.gray));
+  public SwingStatusbar( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
+    super( "statusbar" );
 
-    setManagedObject(container);
+    container = new ScrollablePanel( new GridBagLayout() );
+    container.setBackground( Color.decode( "#EFEFEF" ) );
+    container.setBorder( BorderFactory.createMatteBorder( 1, 0, 0, 0, Color.gray ) );
+
+    setManagedObject( container );
 
     resetContainer();
 
@@ -62,7 +60,7 @@ public class SwingStatusbar extends AbstractSwingContainer implements XulStatusb
     gc.gridy = 0;
     gc.gridheight = GridBagConstraints.REMAINDER;
     gc.gridwidth = 1;
-    gc.insets = new Insets(0, 0, 0, 0);
+    gc.insets = new Insets( 0, 0, 0, 0 );
     gc.fill = GridBagConstraints.BOTH;
     gc.anchor = GridBagConstraints.CENTER;
     gc.weighty = 1;
@@ -81,9 +79,9 @@ public class SwingStatusbar extends AbstractSwingContainer implements XulStatusb
   }
 
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
+  public void replaceChild( XulComponent oldElement, XulComponent newElement ) throws XulDomException {
     this.resetContainer();
-    super.replaceChild(oldElement, newElement);
+    super.replaceChild( oldElement, newElement );
   }
 
 }
