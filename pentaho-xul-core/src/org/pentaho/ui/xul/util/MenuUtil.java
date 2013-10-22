@@ -66,7 +66,8 @@ public class MenuUtil {
             parent = anchor.getParent().getParent(); // the menubar
             anchorIndex = parent.getChildNodes().indexOf( anchor.getParent() ); // index of the anchor's XulMenu
             anchor = anchor.getParent();
-          } else if ( anchor.getParent() instanceof XulMenupopup && anchor.getParent().getParent() instanceof XulMenu ) {
+          } else if ( anchor.getParent() instanceof XulMenupopup && anchor.getParent()
+            .getParent() instanceof XulMenu ) {
             // we are adding an item to a popup menu
             parent = anchor.getParent(); // the popup menu
             anchorIndex = parent.getChildNodes().indexOf( anchor ); // index of the anchor's XulMenu

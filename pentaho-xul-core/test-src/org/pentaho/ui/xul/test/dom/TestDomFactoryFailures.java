@@ -47,6 +47,7 @@ public class TestDomFactoryFailures extends TestCase {
       assertTrue( doc instanceof Document );
       fail( "Should have thrown an exception" );
     } catch ( Exception e ) {
+      //ignored
     }
   }
 
@@ -56,6 +57,7 @@ public class TestDomFactoryFailures extends TestCase {
       assertTrue( doc instanceof Document );
       fail( "Should have thrown an exception" );
     } catch ( Exception e ) {
+      //ignored
     }
   }
 
@@ -65,6 +67,7 @@ public class TestDomFactoryFailures extends TestCase {
       assertTrue( ele instanceof Element && ele.getName().equals( "testelement" ) );
       fail( "Should have thrown an exception" );
     } catch ( Exception e ) {
+      //ignored
     }
   }
 
@@ -74,6 +77,7 @@ public class TestDomFactoryFailures extends TestCase {
       assertTrue( ele instanceof Element && ele.getName().equals( "testelement" ) );
       fail( "Should have thrown an exception" );
     } catch ( Exception e ) {
+      //ignored
     }
   }
 
