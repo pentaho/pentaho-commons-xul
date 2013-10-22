@@ -17,12 +17,11 @@
 
 package org.pentaho.ui.xul.samples;
 
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
-
 import org.pentaho.ui.xul.components.XulImage;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
+
+import javax.swing.ImageIcon;
+import java.awt.Image;
 
 public class ImageHandler extends AbstractXulEventHandler {
   public void switchSrc() {

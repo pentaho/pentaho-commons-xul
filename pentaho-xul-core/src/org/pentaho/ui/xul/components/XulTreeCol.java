@@ -17,11 +17,11 @@
 
 package org.pentaho.ui.xul.components;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.util.ColumnType;
+
+import java.util.List;
 
 public interface XulTreeCol extends XulComponent {
 

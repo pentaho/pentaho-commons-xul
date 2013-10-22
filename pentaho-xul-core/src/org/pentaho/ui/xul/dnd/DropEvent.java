@@ -63,8 +63,8 @@ public class DropEvent {
   }
 
   /**
-   * For the case of trees, this is the node in the tree where the item was dropped, only for bound trees. For all other
-   * elements, this is null.
+   * For the case of trees, this is the node in the tree where the item was dropped, only for bound trees. For all
+   * other elements, this is null.
    * 
    * @return parent node
    */

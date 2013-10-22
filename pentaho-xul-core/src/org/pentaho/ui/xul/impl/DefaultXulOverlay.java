@@ -17,10 +17,10 @@
 
 package org.pentaho.ui.xul.impl;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.XulOverlay;
 import org.pentaho.ui.xul.XulOverlayFragment;
+
+import java.util.List;
 
 public class DefaultXulOverlay implements XulOverlay {
 

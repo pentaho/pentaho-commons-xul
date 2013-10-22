@@ -21,12 +21,12 @@
 
 package org.pentaho.ui.xul.dom;
 
-import java.lang.reflect.Constructor;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulException;
+
+import java.lang.reflect.Constructor;
 
 /**
  * @author OEM

@@ -21,10 +21,10 @@
 
 package org.pentaho.ui.xul.components;
 
-import java.util.Collection;
-
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomException;
+
+import java.util.Collection;
 
 /**
  * @author aphillips

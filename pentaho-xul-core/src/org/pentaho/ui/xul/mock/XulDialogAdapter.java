@@ -17,9 +17,6 @@
 
 package org.pentaho.ui.xul.mock;
 
-import java.beans.PropertyChangeListener;
-import java.util.List;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
@@ -30,6 +27,9 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.Namespace;
 import org.pentaho.ui.xul.util.Align;
 import org.pentaho.ui.xul.util.Orient;
+
+import java.beans.PropertyChangeListener;
+import java.util.List;
 
 public abstract class XulDialogAdapter implements XulDialog {
 

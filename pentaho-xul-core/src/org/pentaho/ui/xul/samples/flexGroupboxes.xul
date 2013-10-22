@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <window width="400" height="275" title="Testing..." xmlns="http://www.pentaho.org/there.is.only.xul">
-	<script src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
-	<script src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>
-	
-	<hbox flex="1">
+  <script src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
+  <script src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>
 
-		<groupbox flex="1">
-  			<caption label="Group A"/>
-  			<textbox label="label"/>
-		</groupbox>
-		<groupbox flex="4">
-  			<caption label="Group B"/>
-			<label value="label"/>
-		</groupbox>
+  <hbox flex="1">
 
-		
-	</hbox>
+    <groupbox flex="1">
+      <caption label="Group A"/>
+      <textbox label="label"/>
+    </groupbox>
+    <groupbox flex="4">
+      <caption label="Group B"/>
+      <label value="label"/>
+    </groupbox>
+
+
+  </hbox>
 </window>

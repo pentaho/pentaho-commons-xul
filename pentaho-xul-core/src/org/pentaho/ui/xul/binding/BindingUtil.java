@@ -17,13 +17,13 @@
 
 package org.pentaho.ui.xul.binding;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class BindingUtil {
   private static final Log logger = LogFactory.getLog( BindingUtil.class );

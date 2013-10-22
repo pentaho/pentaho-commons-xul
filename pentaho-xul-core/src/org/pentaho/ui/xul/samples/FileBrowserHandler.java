@@ -17,13 +17,13 @@
 
 package org.pentaho.ui.xul.samples;
 
-import java.io.File;
-
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulFileDialog;
 import org.pentaho.ui.xul.components.XulFileDialog.RETURN_CODE;
 import org.pentaho.ui.xul.components.XulTextbox;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
+
+import java.io.File;
 
 public class FileBrowserHandler extends AbstractXulEventHandler {
   public void showSave() {

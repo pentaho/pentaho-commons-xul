@@ -127,9 +127,9 @@ public interface XulButton extends XulComponent {
   public String getType();
 
   /**
-   * Buttons with type="radio" and the same value for their group attribute are put into the same group. Only one button
-   * from each group can be checked at a time. If the user selects one the buttons, the others in the group are
-   * unchecked.
+   * Buttons with type="radio" and the same value for their group attribute are put into the same group. Only one
+   * button from each group can be checked at a time. If the user selects one the buttons, the others in the group
+   * are unchecked.
    * 
    * @param group
    */

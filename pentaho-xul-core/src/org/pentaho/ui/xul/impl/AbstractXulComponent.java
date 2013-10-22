@@ -21,8 +21,6 @@
 
 package org.pentaho.ui.xul.impl;
 
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -37,6 +35,8 @@ import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.Namespace;
 import org.pentaho.ui.xul.util.Align;
+
+import java.util.List;
 
 /**
  * @author OEM

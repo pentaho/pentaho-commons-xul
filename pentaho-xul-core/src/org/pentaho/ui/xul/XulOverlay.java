@@ -17,7 +17,6 @@
 
 package org.pentaho.ui.xul;
 
-
 public interface XulOverlay {
 
   /**
@@ -51,8 +50,8 @@ public interface XulOverlay {
 
   @Deprecated
   // use getSource
-    public
-    String getOverlayXml();
+  public
+  String getOverlayXml();
 
   /**
    * Returns the URI for the overlay file. The overlay object should implement this method or the getOverlayUri

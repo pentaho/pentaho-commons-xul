@@ -20,11 +20,11 @@ package org.pentaho.ui.xul.components;
 import org.pentaho.ui.xul.XulComponent;
 
 /**
- * A Xul messagebox wrapper. This widget is not rendered from XUL XML, but instead allows us to code in keeping with the
- * agnostic nature of the framework regarding underlying UI implementation.
+ * A Xul messagebox wrapper. This widget is not rendered from XUL XML, but instead allows us to code in keeping
+ * with the agnostic nature of the framework regarding underlying UI implementation.
  * 
- * Rather than try to build message boxes from standard XUL XML definitions, it seemed much more efficient at this time
- * to use the rich messagebox utilities already build into each UI technology.
+ * Rather than try to build message boxes from standard XUL XML definitions, it seemed much more efficient at this
+ * time to use the rich messagebox utilities already build into each UI technology.
  * 
  * @author gmoran
  * 
@@ -75,9 +75,9 @@ public interface XulMessageBox extends XulComponent {
   public Object[] getButtons();
 
   /**
-   * Sets a custom icon on the messagebox dialog. Values for this parameter are implementation specific. If icon is set
-   * to null, no icon is displayed. If this value is not set at all, the underlying implementation's version of an
-   * information icon is displayed by default.
+   * Sets a custom icon on the messagebox dialog. Values for this parameter are implementation specific. If icon is
+   * set to null, no icon is displayed. If this value is not set at all, the underlying implementation's version of
+   * an information icon is displayed by default.
    * 
    * @param icon
    *          The icon to display on the messagebox.

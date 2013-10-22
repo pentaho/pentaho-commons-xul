@@ -30,8 +30,8 @@ public interface XulProgressmeter extends XulComponent {
   String MODE_INDETERMINATE = "undetermined"; //$NON-NLS-1$
 
   /**
-   * An indeterminate progress bar continuously displays animation indicating that an operation of unknown length is
-   * occurring.
+   * An indeterminate progress bar continuously displays animation indicating that an operation of unknown length
+   * is occurring.
    * 
    * @param indeterminate
    *          <code>true</code> for indeterminate; <code>false</code> for determinate
@@ -39,8 +39,8 @@ public interface XulProgressmeter extends XulComponent {
   void setIndeterminate( boolean indeterminate );
 
   /**
-   * An indeterminate progress bar continuously displays animation indicating that an operation of unknown length is
-   * occurring.
+   * An indeterminate progress bar continuously displays animation indicating that an operation of unknown length
+   * is occurring.
    * 
    * @return indeterminate mode
    */

@@ -17,6 +17,9 @@
 
 package org.pentaho.ui.xul.util;
 
+import org.dom4j.Attribute;
+import org.pentaho.ui.xul.XulDomContainer;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,9 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import org.dom4j.Attribute;
-import org.pentaho.ui.xul.XulDomContainer;
 
 public final class XulUtil {
 

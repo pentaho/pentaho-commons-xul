@@ -43,8 +43,8 @@ public interface XulEventHandler {
   public Object getData();
 
   /**
-   * A generic way of passing data to the event handler. It seems we should maybe accept parameters instead of doing
-   * this.
+   * A generic way of passing data to the event handler. It seems we should maybe accept parameters instead of
+   * doing this.
    * 
    * @param any
    *          data events may want to operate on.

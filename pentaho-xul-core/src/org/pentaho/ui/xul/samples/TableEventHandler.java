@@ -17,13 +17,13 @@
 
 package org.pentaho.ui.xul.samples;
 
-import java.util.Vector;
-
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTreeCell;
 import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.containers.XulTreeRow;
 import org.pentaho.ui.xul.impl.AbstractXulEventHandler;
+
+import java.util.Vector;
 
 public class TableEventHandler extends AbstractXulEventHandler {
 

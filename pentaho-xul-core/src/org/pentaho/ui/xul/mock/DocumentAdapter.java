@@ -17,8 +17,6 @@
 
 package org.pentaho.ui.xul.mock;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulDomException;
@@ -28,6 +26,8 @@ import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.Namespace;
+
+import java.util.List;
 
 public abstract class DocumentAdapter implements Document {
 

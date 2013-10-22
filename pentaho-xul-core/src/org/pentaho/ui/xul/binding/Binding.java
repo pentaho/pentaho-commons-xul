@@ -17,12 +17,12 @@
 
 package org.pentaho.ui.xul.binding;
 
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
+
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
-import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
 
 public interface Binding {
 

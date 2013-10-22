@@ -23,8 +23,8 @@ package org.pentaho.ui.xul.util;
  * Benefits of capturing these methods in an interface:
  * <ul>
  * <li>Enforces consistency in public method names in controllers that manage a <code>XulDialog</code>.</li>
- * <li>Allows another controller, inside or outside of the <code>XulDomContainer</code> in which this controller lives,
- * to show/hide a dialog without knowing the implementing class.</li>
+ * <li>Allows another controller, inside or outside of the <code>XulDomContainer</code> in which this controller
+ * lives, to show/hide a dialog without knowing the implementing class.</li>
  * </ul>
  * 
  * @author mlowery
@@ -39,8 +39,8 @@ public interface DialogController<T> {
   void removeDialogListener( final DialogListener<T> listener );
 
   /**
-   * Listeners to this dialog are called when the user accepts or cancels the dialog. On accept, the listener is passed
-   * in an object of type <code>T</code>.
+   * Listeners to this dialog are called when the user accepts or cancels the dialog. On accept, the listener is
+   * passed in an object of type <code>T</code>.
    */
   interface DialogListener<T> {
     void onDialogAccept( T returnValue );

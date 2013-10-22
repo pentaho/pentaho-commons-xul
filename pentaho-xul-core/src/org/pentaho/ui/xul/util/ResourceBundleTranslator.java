@@ -17,6 +17,8 @@
 
 package org.pentaho.ui.xul.util;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,8 +27,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringEscapeUtils;
 
 public class ResourceBundleTranslator {
 
