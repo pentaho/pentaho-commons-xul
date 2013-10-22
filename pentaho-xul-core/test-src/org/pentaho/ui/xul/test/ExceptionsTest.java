@@ -17,11 +17,11 @@
 
 package org.pentaho.ui.xul.test;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.XulException;
+
+import static org.junit.Assert.assertNotNull;
 
 public class ExceptionsTest {
 
