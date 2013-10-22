@@ -17,10 +17,10 @@
 
 package org.pentaho.ui.xul.samples;
 
+import org.pentaho.ui.xul.XulEventSourceAdapter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.pentaho.ui.xul.XulEventSourceAdapter;
 
 public class ProductModel extends XulEventSourceAdapter {
   private List<Product> products = new ArrayList<Product>();

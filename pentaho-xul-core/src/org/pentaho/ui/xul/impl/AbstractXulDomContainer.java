@@ -22,14 +22,6 @@
 package org.pentaho.ui.xul.impl;
 
 import groovy.lang.GroovyClassLoader;
-
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -47,6 +39,13 @@ import org.pentaho.ui.xul.binding.BindingContext;
 import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.dom.Document;
+
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author nbaker

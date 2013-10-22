@@ -21,9 +21,6 @@
 
 package org.pentaho.ui.xul.dom.dom4j;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.pentaho.ui.xul.XulComponent;
@@ -32,6 +29,9 @@ import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.Namespace;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author OEM

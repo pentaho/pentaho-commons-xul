@@ -17,11 +17,11 @@
 
 package org.pentaho.ui.xul.containers;
 
-import java.util.Collection;
-
 import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
+
+import java.util.Collection;
 
 public interface XulTree extends XulContainer {
 

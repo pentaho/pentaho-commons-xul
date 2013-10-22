@@ -17,7 +17,6 @@
 
 package org.pentaho.ui.xul.components;
 
-
 public interface XulToolbarbutton extends XulButton {
 
   public void setDownimage( String img );

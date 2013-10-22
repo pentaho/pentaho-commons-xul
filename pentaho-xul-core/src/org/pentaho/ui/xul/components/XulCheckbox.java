@@ -75,8 +75,8 @@ public interface XulCheckbox extends XulComponent {
   public void setDisabled( boolean dis );
 
   /**
-   * According to XUL spec, this is the appropriate event to listen to for checkbox state changes from a user interface.
-   * Note that to remain pure to the spec, this will not report a state change set via code or script.
+   * According to XUL spec, this is the appropriate event to listen to for checkbox state changes from a user
+   * interface. Note that to remain pure to the spec, this will not report a state change set via code or script.
    * 
    * @see CheckboxStateChange at http://www.xulplanet.com/references/elemref/ref_EventHandlers.html
    * 

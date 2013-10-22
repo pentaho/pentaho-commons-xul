@@ -17,10 +17,10 @@
 
 package org.pentaho.ui.xul;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.impl.XulEventHandler;
+
+import java.util.List;
 
 public interface XulPerspective {
   List<XulOverlay> getOverlays();

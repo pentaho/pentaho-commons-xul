@@ -21,10 +21,10 @@
 
 package org.pentaho.ui.xul;
 
-import java.beans.PropertyChangeListener;
-
 import org.pentaho.ui.xul.binding.BindingProvider;
 import org.pentaho.ui.xul.dom.Element;
+
+import java.beans.PropertyChangeListener;
 
 /**
  * The base interface for any XUL widget.
@@ -65,28 +65,29 @@ public interface XulComponent extends Element, XulEventSource {
   public String getId();
 
   /**
-   * From the XUL specification: http://www.xulplanet.com/references/elemref/ref_XULElement.html#attr_flex Indicates the
-   * flexibility of the element, which indicates how an element's container distributes remaining empty space among its
-   * children. Flexible elements grow and shrink to fit their given space. Elements with larger flex values will be made
-   * larger than elements with lower flex values, at the ratio determined by the two elements. The actual value is not
-   * relevant unless there are other flexible elements within the same container. Once the default sizes of elements in
-   * a box are calculated, the remaining space in the box is divided among the flexible elements, according to their
-   * flex ratios.
+   * From the XUL specification: http://www.xulplanet.com/references/elemref/ref_XULElement.html#attr_flex
+   * Indicates the flexibility of the element, which indicates how an element's container distributes remaining
+   * empty space among its children. Flexible elements grow and shrink to fit their given space. Elements with
+   * larger flex values will be made larger than elements with lower flex values, at the ratio determined by the
+   * two elements. The actual value is not relevant unless there are other flexible elements within the same
+   * container. Once the default sizes of elements in a box are calculated, the remaining space in the box is
+   * divided among the flexible elements, according to their flex ratios.
    * 
    * @return the flex value for this component
    */
   public int getFlex();
 
   /**
-   * This field makes sense only relative to the values of its siblings. NOTE that if only one sibling has a flex value,
-   * then that sibling gets ALL the extra space in the container, no matter what the flex value is.
+   * This field makes sense only relative to the values of its siblings. NOTE that if only one sibling has a flex
+   * value, then that sibling gets ALL the extra space in the container, no matter what the flex value is.
    * 
    * @param flex
    */
   public void setFlex( int flex );
 
   /**
-   * Sets the method that will be invoked when this component loses focus. Also hooks up any listeners for this event.
+   * Sets the method that will be invoked when this component loses focus. Also hooks up any listeners for this
+   * event.
    * 
    * @param method
    *          the method to execute when the focus is lost.
@@ -94,7 +95,8 @@ public interface XulComponent extends Element, XulEventSource {
   public void setOnblur( String method );
 
   /**
-   * Gets the method that will be invoked when this component loses focus. Also hooks up any listeners for this event.
+   * Gets the method that will be invoked when this component loses focus. Also hooks up any listeners for this
+   * event.
    */
   public String getOnblur();
 
@@ -184,8 +186,8 @@ public interface XulComponent extends Element, XulEventSource {
   public void setVisible( boolean visible );
 
   /**
-   * Called by the parser when the document is fully parsed. Some implementations require knowledge of parents above the
-   * document, or only behave properly when an unbroken chain to the root is in place.
+   * Called by the parser when the document is fully parsed. Some implementations require knowledge of parents
+   * above the document, or only behave properly when an unbroken chain to the root is in place.
    */
   public void onDomReady();
 

@@ -17,25 +17,6 @@
 
 package org.pentaho.ui.xul.impl;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,6 +37,25 @@ import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 import org.pentaho.ui.xul.util.ResourceBundleTranslator;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public abstract class AbstractXulLoader implements XulLoader {
 
@@ -93,7 +93,8 @@ public abstract class AbstractXulLoader implements XulLoader {
     try {
       parser = new XulParser();
     } catch ( Exception e ) {
-      throw new XulException( "Error getting XulParser Instance, probably a DOM Factory problem: " + e.getMessage(), e );
+      throw new XulException( "Error getting XulParser Instance, probably a DOM Factory problem: "
+        + e.getMessage(), e );
     }
 
     locale = Locale.getDefault();
@@ -482,6 +483,7 @@ public abstract class AbstractXulLoader implements XulLoader {
             in.close();
           }
         } catch ( IOException ignored ) {
+          //ignored
         }
       }
     }
@@ -547,6 +549,7 @@ public abstract class AbstractXulLoader implements XulLoader {
         doc = getDocFromInputStream( new FileInputStream( f ) );
         return doc;
       } catch ( FileNotFoundException ignored ) {
+        //ignored
       }
     } else {
       // try fully qualified name
@@ -558,6 +561,7 @@ public abstract class AbstractXulLoader implements XulLoader {
           doc = getDocFromInputStream( new FileInputStream( f ) );
           return doc;
         } catch ( FileNotFoundException ignored ) {
+          //ignored
         }
       } else {
         return null;
@@ -749,7 +753,8 @@ public abstract class AbstractXulLoader implements XulLoader {
 
       org.pentaho.ui.xul.dom.Element sourceElement = targetDocument.getElementById( overlayId );
       if ( sourceElement == null ) {
-        logger.warn( "Cannot overlay element with id [" + overlayId + "] as it does not exist in the target document." );
+        logger.warn( "Cannot overlay element with id [" + overlayId + "] "
+          + "as it does not exist in the target document." );
         continue;
       }
 

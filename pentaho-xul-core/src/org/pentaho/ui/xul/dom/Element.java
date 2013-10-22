@@ -21,10 +21,10 @@
 
 package org.pentaho.ui.xul.dom;
 
-import java.util.List;
-
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
+
+import java.util.List;
 
 /**
  * @author NBaker

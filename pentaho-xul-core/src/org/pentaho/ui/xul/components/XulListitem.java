@@ -32,8 +32,8 @@ import org.pentaho.ui.xul.XulComponent;
 public interface XulListitem extends XulComponent {
 
   /**
-   * The text that is displayed in the box for this listItem. If the label is not set, an attempt is made to set the
-   * text by calling toString() on the value object, if present. Otherwise no text is displayed.
+   * The text that is displayed in the box for this listItem. If the label is not set, an attempt is made to set
+   * the text by calling toString() on the value object, if present. Otherwise no text is displayed.
    * 
    * @param label
    *          The listitem label to display.
@@ -62,8 +62,8 @@ public interface XulListitem extends XulComponent {
   public boolean isSelected();
 
   /**
-   * A value associated with the listitem. Use for your own purposes. If no label is set on this listitem, an attempt is
-   * made to derive a label by calling toString() on this object.
+   * A value associated with the listitem. Use for your own purposes. If no label is set on this listitem, an
+   * attempt is made to derive a label by calling toString() on this object.
    * 
    * @param value
    *          The object to associate with this listitem.

@@ -17,12 +17,12 @@
 
 package org.pentaho.ui.xul.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.pentaho.ui.xul.XulOverlay;
 import org.pentaho.ui.xul.XulPerspective;
 import org.pentaho.ui.xul.dom.Document;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class XulPerspectiveImpl implements XulPerspective {
 

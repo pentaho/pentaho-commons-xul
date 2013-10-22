@@ -17,6 +17,14 @@
 
 package org.pentaho.ui.xul.binding;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulEventSource;
+import org.pentaho.ui.xul.XulException;
+import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
+import org.pentaho.ui.xul.dom.Document;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.Reference;
@@ -26,14 +34,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulEventSource;
-import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.binding.BindingConvertor.Direction;
-import org.pentaho.ui.xul.dom.Document;
 
 public class DefaultBinding implements Binding {
 

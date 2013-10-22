@@ -20,7 +20,8 @@ package org.pentaho.ui.xul.dnd;
 import java.util.List;
 
 /**
- * For now this only allows a single type of dnd object, to match more closely to Mozilla, we could add a list of types:
+ * For now this only allows a single type of dnd object, to match more closely to Mozilla, we could add a list of
+ * types:
  * 
  * https://developer.mozilla.org/En/DragDrop/DataTransfer
  * 

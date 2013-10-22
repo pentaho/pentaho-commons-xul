@@ -17,11 +17,6 @@
 
 package org.pentaho.ui.xul.impl;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.dom4j.io.SAXReader;
@@ -34,6 +29,11 @@ import org.pentaho.ui.xul.binding.DefaultBindingContext;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class XulWindowContainer extends AbstractXulDomContainer {
   private static final Log logger = LogFactory.getLog( XulWindowContainer.class );

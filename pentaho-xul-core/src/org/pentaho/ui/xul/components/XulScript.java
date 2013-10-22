@@ -22,9 +22,9 @@
 package org.pentaho.ui.xul.components;
 
 /**
- * The Xul wrapper for identifying XulEventHandler classes. This class merely associates a class name with an id in a
- * given window. The hooking up of events to these classes occurs at the control level. Windows can have as many event
- * handling classes as needed.
+ * The Xul wrapper for identifying XulEventHandler classes. This class merely associates a class name with an id in
+ * a given window. The hooking up of events to these classes occurs at the control level. Windows can have as many
+ * event handling classes as needed.
  * 
  * @author nbaker
  * 
@@ -46,8 +46,8 @@ public interface XulScript {
   public String getSrc();
 
   /**
-   * The id to associate this class with. This id is later appended to the beginning of each event hookup method name,
-   * in order to reference back to the event handler class that that method resides in.
+   * The id to associate this class with. This id is later appended to the beginning of each event hookup method
+   * name, in order to reference back to the event handler class that that method resides in.
    * 
    * @param id
    *          Id of this event handler class.

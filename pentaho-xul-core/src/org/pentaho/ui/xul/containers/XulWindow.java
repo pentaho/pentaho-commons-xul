@@ -24,8 +24,8 @@ package org.pentaho.ui.xul.containers;
 import org.pentaho.ui.xul.XulException;
 
 /**
- * Typically the top level container, the XulWindow interface provides the necessary methods to display and dispose of
- * an independent container. Models the XUL window widget.
+ * Typically the top level container, the XulWindow interface provides the necessary methods to display and dispose
+ * of an independent container. Models the XUL window widget.
  * 
  * @author nbaker
  * 

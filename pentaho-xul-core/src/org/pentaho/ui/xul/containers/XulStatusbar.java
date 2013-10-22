@@ -17,7 +17,6 @@
 
 package org.pentaho.ui.xul.containers;
 
-
 /**
  * Creates a horizontal bar ususaly at the bottom of a window or dialog used to display statux information to the
  * application user.

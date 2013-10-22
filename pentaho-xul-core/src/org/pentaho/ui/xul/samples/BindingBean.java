@@ -17,10 +17,10 @@
 
 package org.pentaho.ui.xul.samples;
 
+import org.pentaho.ui.xul.XulEventSourceAdapter;
+
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-
-import org.pentaho.ui.xul.XulEventSourceAdapter;
 
 public class BindingBean extends XulEventSourceAdapter {
 

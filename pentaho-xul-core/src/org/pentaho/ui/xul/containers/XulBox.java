@@ -20,8 +20,8 @@ package org.pentaho.ui.xul.containers;
 import org.pentaho.ui.xul.XulContainer;
 
 /**
- * An interface for a box container. This container will add its children according to the orientation set. The default
- * is horizontally.
+ * An interface for a box container. This container will add its children according to the orientation set. The
+ * default is horizontally.
  * 
  * @author nbaker
  */
@@ -29,7 +29,8 @@ import org.pentaho.ui.xul.XulContainer;
 public interface XulBox extends XulContainer {
 
   /**
-   * Sets the orientation of this box container, which dictates in what direction the box's child controls get added.
+   * Sets the orientation of this box container, which dictates in what direction the box's child controls get
+   * added.
    * 
    * @param orient
    *          Valid values are horizontal or vertical

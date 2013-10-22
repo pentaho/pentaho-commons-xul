@@ -17,16 +17,16 @@
 
 package org.pentaho.ui.xul.util;
 
+import org.pentaho.ui.xul.XulEventSourceAdapter;
+import org.pentaho.ui.xul.containers.XulManagedCollection;
+import org.pentaho.ui.xul.stereotype.Bindable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-
-import org.pentaho.ui.xul.XulEventSourceAdapter;
-import org.pentaho.ui.xul.containers.XulManagedCollection;
-import org.pentaho.ui.xul.stereotype.Bindable;
 
 /**
  * Base class for UI model objects that provides {@see java.util.List} implementations and XulEventSource support

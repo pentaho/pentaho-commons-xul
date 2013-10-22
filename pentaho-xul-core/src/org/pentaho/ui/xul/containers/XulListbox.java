@@ -17,12 +17,13 @@
 
 package org.pentaho.ui.xul.containers;
 
-import java.util.Collection;
-
 import org.pentaho.ui.xul.XulContainer;
 
+import java.util.Collection;
+
 /**
- * The interface for the XUL listbox widget. The listbox can be single select or multi-select and can have scrollbars.
+ * The interface for the XUL listbox widget. The listbox can be single select or multi-select and can have
+ * scrollbars.
  * 
  * @author nbaker
  * 
@@ -34,8 +35,8 @@ public interface XulListbox extends XulContainer {
   };
 
   /**
-   * Adds a list item object to the list. Note that specific implementations may limit the object class types allowed to
-   * be passed in.
+   * Adds a list item object to the list. Note that specific implementations may limit the object class types
+   * allowed to be passed in.
    * 
    * @param item
    */
@@ -77,9 +78,9 @@ public interface XulListbox extends XulContainer {
   public int getRows();
 
   /**
-   * The number of rows to display in the list box. If the listbox contains more than this many rows, a scrollbar will
-   * appear which the user can use to scroll to the other rows. To get the actual number of rows in the listbox, use the
-   * getRowCount method.
+   * The number of rows to display in the list box. If the listbox contains more than this many rows, a scrollbar
+   * will appear which the user can use to scroll to the other rows. To get the actual number of rows in the
+   * listbox, use the getRowCount method.
    * 
    * @param rows
    *          The number of rows to display in the listbox.
@@ -134,8 +135,8 @@ public interface XulListbox extends XulContainer {
 
   /**
    * 
-   * @return if the list is a multiple selection listbox, then return the list of selected items. If single select, this
-   *         will be a list of one, and you should use the getSelectedItem() method instead.
+   * @return if the list is a multiple selection listbox, then return the list of selected items. If single select,
+   *         this will be a list of one, and you should use the getSelectedItem() method instead.
    * 
    */
   public Object[] getSelectedItems();
@@ -149,8 +150,8 @@ public interface XulListbox extends XulContainer {
   public void setSelectedItems( Object[] items );
 
   /**
-   * Sets the method that will be invoked when an item in this list is selected. Also hooks up any listeners for this
-   * event.
+   * Sets the method that will be invoked when an item in this list is selected. Also hooks up any listeners for
+   * this event.
    * 
    * @param method
    *          the method to execute when the item is selected.
