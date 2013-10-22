@@ -24,7 +24,8 @@ public class InlineBindingExpression {
   private String modelAttr;
 
   private static final String USAGE =
-      "Usage: Inline binding expression syntax: \npen:binding=\"modelProperty\" \nor pen:binding=\"xulComponentProperty=modelProperty\"";
+      "Usage: Inline binding expression syntax: \npen:binding=\"modelProperty\" "
+        + "\nor pen:binding=\"xulComponentProperty=modelProperty\"";
 
   public static final String DEFAULT_XUL_COMP_ATTR = "label";
 

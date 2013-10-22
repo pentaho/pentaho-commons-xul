@@ -17,13 +17,13 @@
 
 package org.pentaho.ui.xul.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
 import org.junit.Test;
 import org.pentaho.ui.xul.binding.Binding;
 import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.samples.BindingBean;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class NonXulBindingsTest {
 

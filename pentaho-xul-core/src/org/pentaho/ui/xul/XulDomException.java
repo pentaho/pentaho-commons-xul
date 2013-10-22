@@ -19,9 +19,6 @@ package org.pentaho.ui.xul;
 
 public class XulDomException extends XulException {
 
-  /**
-	 * 
-	 */
   private static final long serialVersionUID = -3676902604274491856L;
 
   public XulDomException() {
