@@ -24,18 +24,17 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * User: nbaker
- * Date: Aug 6, 2010
+ * User: nbaker Date: Aug 6, 2010
  */
 public class Person extends AbstractModelNode<Person> {
   private String name;
-  private PropertyChangeListener listener = new PropertyChangeListener(){
-    public void propertyChange(PropertyChangeEvent evt) {
+  private PropertyChangeListener listener = new PropertyChangeListener() {
+    public void propertyChange( PropertyChangeEvent evt ) {
       fireCollectionChanged();
     }
   };
 
-  public Person(String name) {
+  public Person( String name ) {
     this.name = name;
   }
 
@@ -45,18 +44,17 @@ public class Person extends AbstractModelNode<Person> {
   }
 
   @Bindable
-  public void setName(String name) {
+  public void setName( String name ) {
     this.name = name;
   }
 
   @Override
-  public void onAdd(Person child) {
-    child.addPropertyChangeListener("children", listener);
+  public void onAdd( Person child ) {
+    child.addPropertyChangeListener( "children", listener );
   }
 
   @Override
-  public void onRemove(Person child) {
-    child.removePropertyChangeListener(listener);
+  public void onRemove( Person child ) {
+    child.removePropertyChangeListener( listener );
   }
 }
-  
