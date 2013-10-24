@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.gwt.tags;
 
@@ -64,11 +64,11 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   public static void register() {
-    GwtXulParser.registerHandler(ELEMENT_NAME, new GwtXulHandler() {
+    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
       public Element newInstance() {
         return new GwtButton();
       }
-    });
+    } );
   }
 
   private String className;
@@ -88,176 +88,187 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   private HandlerRegistration handlerRegistration;
 
   public GwtButton() {
-    super(ELEMENT_NAME);
-    //programatic creation doesn't call init() create here for them
+    super( ELEMENT_NAME );
+    // programatic creation doesn't call init() create here for them
     button = new Button();
-    button.setStylePrimaryName("pentaho-button");
-    setManagedObject(button);
+    button.setStylePrimaryName( "pentaho-button" );
+    setManagedObject( button );
   }
 
   @Override
-  public void setAttribute(String name, String value) {
-    super.setAttribute(name, value);
+  public void setAttribute( String name, String value ) {
+    super.setAttribute( name, value );
     try {
-      Property prop = Property.valueOf(name.replace("pen:", "").toUpperCase());
-      switch (prop) {
+      Property prop = Property.valueOf( name.replace( "pen:", "" ).toUpperCase() );
+      switch ( prop ) {
 
         case CLASSNAME:
-          this.setClassName(value);
+          this.setClassName( value );
           break;
         case LABEL:
-          setLabel(value);
+          setLabel( value );
           break;
         case IMAGE:
-          setImage(value);
+          setImage( value );
           break;
         case DISABLEDIMAGE:
-          setDisabledImage(value);
+          setDisabledImage( value );
           break;
         case DISABLED:
-          setDisabled("true".equals(value));
+          setDisabled( "true".equals( value ) );
           break;
       }
-    } catch (IllegalArgumentException e) {
-      System.out.println("Could not find Property in Enum for: " + name + " in class" + getClass().getName());
+    } catch ( IllegalArgumentException e ) {
+      System.out.println( "Could not find Property in Enum for: " + name + " in class" + getClass().getName() );
     }
   }
 
-  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
+  public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
 
-    String classNameAttribute = srcEle.getAttribute("pen:classname");
+    String classNameAttribute = srcEle.getAttribute( "pen:classname" );
 
-    if (!StringUtils.isEmpty(srcEle.getAttribute("dir")) && !StringUtils.isEmpty(srcEle.getAttribute("image"))
-        && !StringUtils.isEmpty(srcEle.getAttribute("label"))) {
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "dir" ) ) && !StringUtils.isEmpty( srcEle.getAttribute( "image" ) )
+        && !StringUtils.isEmpty( srcEle.getAttribute( "label" ) ) ) {
 
-      if (!StringUtils.isEmpty(srcEle.getAttribute("pen:classname"))) {
-        /* customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
-        srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")),,srcEle.getAttribute("pen:classname"));*/
-        customButton = new Button(ButtonHelper.createButtonLabel(
-            new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")), srcEle.getAttribute("label"),
-            getButtonLabelOrigin(srcEle.getAttribute("dir"), srcEle.getAttribute("orient")), classNameAttribute));
+      if ( !StringUtils.isEmpty( srcEle.getAttribute( "pen:classname" ) ) ) {
+        /*
+         * customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
+         * srcEle.getAttribute("label"),
+         * getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient"
+         * )),,srcEle.getAttribute("pen:classname"));
+         */
+        customButton =
+            new Button( ButtonHelper.createButtonLabel( new Image( GWT.getModuleBaseURL()
+                + srcEle.getAttribute( "image" ) ), srcEle.getAttribute( "label" ), getButtonLabelOrigin( srcEle
+                .getAttribute( "dir" ), srcEle.getAttribute( "orient" ) ), classNameAttribute ) );
 
       } else {
-        /* customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
-             srcEle.getAttribute("label"), getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")));*/
-        customButton = new Button(ButtonHelper.createButtonLabel(
-            new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")), srcEle.getAttribute("label"),
-            getButtonLabelOrigin(srcEle.getAttribute("dir"), srcEle.getAttribute("orient"))));
+        /*
+         * customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
+         * srcEle.getAttribute("label"),
+         * getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")));
+         */
+        customButton =
+            new Button( ButtonHelper.createButtonLabel( new Image( GWT.getModuleBaseURL()
+                + srcEle.getAttribute( "image" ) ), srcEle.getAttribute( "label" ), getButtonLabelOrigin( srcEle
+                .getAttribute( "dir" ), srcEle.getAttribute( "orient" ) ) ) );
       }
-      setManagedObject(customButton);
+      setManagedObject( customButton );
       button = null;
 
-      if (classNameAttribute != null && !classNameAttribute.isEmpty()) {
-        customButton.addStyleName(classNameAttribute);
+      if ( classNameAttribute != null && !classNameAttribute.isEmpty() ) {
+        customButton.addStyleName( classNameAttribute );
       }
 
-    } else if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
-      //we create a button by default, remove it here
+    } else if ( !StringUtils.isEmpty( srcEle.getAttribute( "image" ) ) ) {
+      // we create a button by default, remove it here
       button = null;
       imageButton = new ImageButton();
       SimplePanel sp = new SimplePanel();
-      setManagedObject(sp);
-      sp.add(imageButton);
-      imageButton.setHeight("");
-      imageButton.setWidth("");
+      setManagedObject( sp );
+      sp.add( imageButton );
+      imageButton.setHeight( "" );
+      imageButton.setWidth( "" );
 
-      if (classNameAttribute != null && !classNameAttribute.isEmpty()) {
-        imageButton.addStyleName(classNameAttribute);
+      if ( classNameAttribute != null && !classNameAttribute.isEmpty() ) {
+        imageButton.addStyleName( classNameAttribute );
       }
     } else {
       button = new Button();
-      button.setStylePrimaryName("pentaho-button");
-      setManagedObject(button);
+      button.setStylePrimaryName( "pentaho-button" );
+      setManagedObject( button );
 
-      if (classNameAttribute != null && !classNameAttribute.isEmpty()) {
-        button.addStyleName(classNameAttribute);
+      if ( classNameAttribute != null && !classNameAttribute.isEmpty() ) {
+        button.addStyleName( classNameAttribute );
       }
     }
 
-    super.init(srcEle, container);
-    if (!StringUtils.isEmpty(srcEle.getAttribute("label"))) {
-      setLabel(srcEle.getAttribute("label"));
+    super.init( srcEle, container );
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "label" ) ) ) {
+      setLabel( srcEle.getAttribute( "label" ) );
     }
-    if (!StringUtils.isEmpty(srcEle.getAttribute("onclick"))) {
-      setOnclick(srcEle.getAttribute("onclick"));
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "onclick" ) ) ) {
+      setOnclick( srcEle.getAttribute( "onclick" ) );
     }
-    if (!StringUtils.isEmpty(srcEle.getAttribute("image"))) {
-      setImage(srcEle.getAttribute("image"));
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "image" ) ) ) {
+      setImage( srcEle.getAttribute( "image" ) );
     }
-    if (!StringUtils.isEmpty(srcEle.getAttribute("tooltiptext"))) {
-      setTooltiptext(srcEle.getAttribute("tooltiptext"));
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "tooltiptext" ) ) ) {
+      setTooltiptext( srcEle.getAttribute( "tooltiptext" ) );
     }
-    if (!StringUtils.isEmpty(srcEle.getAttribute("pen:disabledimage"))) {
-      this.setDisabledImage(srcEle.getAttribute("pen:disabledimage"));
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "pen:disabledimage" ) ) ) {
+      this.setDisabledImage( srcEle.getAttribute( "pen:disabledimage" ) );
     }
-    if (!StringUtils.isEmpty(classNameAttribute)) {
-      this.setClassName(srcEle.getAttribute("pen:classname"));
+    if ( !StringUtils.isEmpty( classNameAttribute ) ) {
+      this.setClassName( srcEle.getAttribute( "pen:classname" ) );
     }
 
-    setDisabled("true".equals(srcEle.getAttribute("disabled")));
+    setDisabled( "true".equals( srcEle.getAttribute( "disabled" ) ) );
   }
 
-  public void setLabel(String label) {
-    if (button != null) {
-      button.setHTML("<span>" + label + "</span>");
+  public void setLabel( String label ) {
+    if ( button != null ) {
+      button.setHTML( "<span>" + label + "</span>" );
     }
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.pentaho.ui.xul.components.XulButton#setOnClick(java.lang.String)
    */
-  public void setOnclick(final String method) {
+  public void setOnclick( final String method ) {
     this.onclick = method;
 
     ClickHandler handler = new ClickHandler() {
-      public void onClick(ClickEvent event) {
-        if (!GwtButton.this.disabled) {
+      public void onClick( ClickEvent event ) {
+        if ( !GwtButton.this.disabled ) {
           try {
-            GwtButton.this.getXulDomContainer().invoke(method, new Object[] {});
-          } catch (XulException e) {
+            GwtButton.this.getXulDomContainer().invoke( method, new Object[] {} );
+          } catch ( XulException e ) {
             e.printStackTrace();
           }
         }
       }
     };
 
-    if (button != null) {
-      handlerRegistration = button.addClickHandler(handler);
-    } else if (imageButton != null) {
-      handlerRegistration = imageButton.addClickHandler(handler);
-    } else if (customButton != null) {
-      handlerRegistration = customButton.addClickHandler(handler);
+    if ( button != null ) {
+      handlerRegistration = button.addClickHandler( handler );
+    } else if ( imageButton != null ) {
+      handlerRegistration = imageButton.addClickHandler( handler );
+    } else if ( customButton != null ) {
+      handlerRegistration = customButton.addClickHandler( handler );
     }
   }
 
   private void setupClickHandler() {
     // Remove the handler that was added before
 
-    if (handlerRegistration != null) {
+    if ( handlerRegistration != null ) {
       handlerRegistration.removeHandler();
     }
 
     // Add a new handler
 
     ClickHandler handler = new ClickHandler() {
-      public void onClick(ClickEvent event) {
-        if (!GwtButton.this.disabled) {
+      public void onClick( ClickEvent event ) {
+        if ( !GwtButton.this.disabled ) {
           // Is this a GwtPopup Button and is this already created
           XulMenupopup popup = getPopupElement();
-          if (popup == null) {
+          if ( popup == null ) {
             try {
-              GwtButton.this.getXulDomContainer().invoke(GwtButton.this.onclick, new Object[] {});
-            } catch (XulException e) {
+              GwtButton.this.getXulDomContainer().invoke( GwtButton.this.onclick, new Object[] {} );
+            } catch ( XulException e ) {
               e.printStackTrace();
             }
           } else {
-            popupPanel = new PopupPanel(true) {
+            popupPanel = new PopupPanel( true ) {
 
               @Override
-              public boolean onKeyDownPreview(char key, int modifiers) {
+              public boolean onKeyDownPreview( char key, int modifiers ) {
                 // Use the popup's key preview hooks to close the dialog when either
                 // enter or escape is pressed.
-                switch (key) {
+                switch ( key ) {
                   case KeyCodes.KEY_ESCAPE:
                     hide();
                     break;
@@ -266,52 +277,52 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
               }
 
             };
-            menuBar = new MenuBar(true);
-            menuBar.setAutoOpen(true);
+            menuBar = new MenuBar( true );
+            menuBar.setAutoOpen( true );
             // This is a GwtMenuPopop
-            for (XulComponent menuItem : popup.getChildNodes()) {
-              final GwtMenuitem tempItem = ((GwtMenuitem) menuItem);
-              menuBar.addItem(tempItem.getLabel(), new PopupMenuCommand(tempItem.getCommand(), popupPanel));
+            for ( XulComponent menuItem : popup.getChildNodes() ) {
+              final GwtMenuitem tempItem = ( (GwtMenuitem) menuItem );
+              menuBar.addItem( tempItem.getLabel(), new PopupMenuCommand( tempItem.getCommand(), popupPanel ) );
             }
-            popupPanel.setWidget(menuBar);
-            popupPanel.setPopupPositionAndShow(new PositionCallback() {
-              public void setPosition(int offsetWidth, int offsetHeight) {
+            popupPanel.setWidget( menuBar );
+            popupPanel.setPopupPositionAndShow( new PositionCallback() {
+              public void setPosition( int offsetWidth, int offsetHeight ) {
                 int absLeft = -1;
                 int absTop = -1;
                 int offHeight = -1;
-                if (button != null) {
+                if ( button != null ) {
                   absLeft = button.getAbsoluteLeft();
                   absTop = button.getAbsoluteTop();
                   offHeight = button.getOffsetHeight();
-                } else if (imageButton != null) {
+                } else if ( imageButton != null ) {
                   absLeft = imageButton.getAbsoluteLeft();
                   absTop = imageButton.getAbsoluteTop();
                   offHeight = imageButton.getOffsetHeight();
-                } else if (customButton != null) {
+                } else if ( customButton != null ) {
                   absLeft = customButton.getAbsoluteLeft();
                   absTop = customButton.getAbsoluteTop();
                   offHeight = customButton.getOffsetHeight();
                 }
-                popupPanel.setPopupPosition(absLeft, absTop + offHeight);
+                popupPanel.setPopupPosition( absLeft, absTop + offHeight );
               }
-            });
+            } );
           }
         }
       }
     };
 
-    if (button != null) {
-      handlerRegistration = button.addClickHandler(handler);
-    } else if (imageButton != null) {
-      handlerRegistration = imageButton.addClickHandler(handler);
-    } else if (customButton != null) {
-      handlerRegistration = customButton.addClickHandler(handler);
+    if ( button != null ) {
+      handlerRegistration = button.addClickHandler( handler );
+    } else if ( imageButton != null ) {
+      handlerRegistration = imageButton.addClickHandler( handler );
+    } else if ( customButton != null ) {
+      handlerRegistration = customButton.addClickHandler( handler );
     }
   }
 
   @Bindable
   public String getLabel() {
-    return (button != null) ? button.getText() : null;
+    return ( button != null ) ? button.getText() : null;
   }
 
   @Bindable
@@ -320,31 +331,31 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   @Bindable
-  public void setDisabled(boolean dis) {
+  public void setDisabled( boolean dis ) {
     this.disabled = dis;
-    if (button != null) {
-      button.setEnabled(!dis);
-      if (dis) {
-        button.addStyleName("disabled");
+    if ( button != null ) {
+      button.setEnabled( !dis );
+      if ( dis ) {
+        button.addStyleName( "disabled" );
       } else {
-        button.removeStyleName("disabled");
+        button.removeStyleName( "disabled" );
       }
-    } else if (imageButton != null) {
-      imageButton.setEnabled(!dis);
-    } else if (customButton != null) {
-      customButton.setEnabled(!dis);
+    } else if ( imageButton != null ) {
+      imageButton.setEnabled( !dis );
+    } else if ( customButton != null ) {
+      customButton.setEnabled( !dis );
     }
   }
 
   public void doClick() {
 
-    //button.click();  This was not working for me, TODO: investigate programatic click
-    if (onclick == null) {
+    // button.click(); This was not working for me, TODO: investigate programatic click
+    if ( onclick == null ) {
       return;
     }
     try {
-      GwtButton.this.getXulDomContainer().invoke(onclick, new Object[] {});
-    } catch (XulException e) {
+      GwtButton.this.getXulDomContainer().invoke( onclick, new Object[] {} );
+    } catch ( XulException e ) {
       e.printStackTrace();
     }
   }
@@ -375,87 +386,87 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     return false;
   }
 
-  public void setDir(String dir) {
+  public void setDir( String dir ) {
     this.dir = dir;
   }
 
-  public void setGroup(String group) {
+  public void setGroup( String group ) {
     this.group = group;
-    //TODO: implement button group
+    // TODO: implement button group
   }
 
   @Bindable
-  public void setImage(String src) {
-    if (imageButton == null) {
+  public void setImage( String src ) {
+    if ( imageButton == null ) {
       button = null;
       imageButton = new ImageButton();
       SimplePanel sp = new SimplePanel();
-      setManagedObject(sp);
-      sp.add(imageButton);
-      imageButton.setHeight("");
-      imageButton.setWidth("");
+      setManagedObject( sp );
+      sp.add( imageButton );
+      imageButton.setHeight( "" );
+      imageButton.setWidth( "" );
     }
-    if (imageButton != null) {
+    if ( imageButton != null ) {
       src = GWT.getModuleBaseURL() + src;
       this.image = src;
-      this.imageButton.setEnabledUrl(src);
-      this.imageButton.setDisabledUrl(src);
+      this.imageButton.setEnabledUrl( src );
+      this.imageButton.setDisabledUrl( src );
     }
   }
 
   @Bindable
-  public void setDisabledImage(String src) {
-    if (imageButton != null) {
+  public void setDisabledImage( String src ) {
+    if ( imageButton != null ) {
       src = GWT.getModuleBaseURL() + src;
       this.disabledImage = src;
-      this.imageButton.setDisabledUrl(src);
+      this.imageButton.setDisabledUrl( src );
     }
   }
 
   @Bindable
-  public void setSelected(String selected) {
-    button.setFocus(Boolean.parseBoolean(selected));
-    //TODO: implement selected with button group;
+  public void setSelected( String selected ) {
+    button.setFocus( Boolean.parseBoolean( selected ) );
+    // TODO: implement selected with button group;
   }
 
   @Bindable
-  public void setSelected(boolean selected) {
-    if (button != null) {
-      button.setFocus(selected);
-    } else if (imageButton != null) {
-      imageButton.setFocus(selected);
-    } else if (customButton != null) {
-      customButton.setFocus(selected);
+  public void setSelected( boolean selected ) {
+    if ( button != null ) {
+      button.setFocus( selected );
+    } else if ( imageButton != null ) {
+      imageButton.setFocus( selected );
+    } else if ( customButton != null ) {
+      customButton.setFocus( selected );
     }
   }
 
-  public void setType(String type) {
+  public void setType( String type ) {
 
-    // TODO Auto-generated method stub 
+    // TODO Auto-generated method stub
 
   }
 
   @Override
   @Bindable
-  public void setTooltiptext(String tooltip) {
-    super.setTooltiptext(tooltip);
-    if (button != null) {
-      button.setTitle(tooltip);
-    } else if (imageButton != null) {
-      imageButton.setTitle(tooltip);
-    } else if (customButton != null) {
-      customButton.setTitle(tooltip);
+  public void setTooltiptext( String tooltip ) {
+    super.setTooltiptext( tooltip );
+    if ( button != null ) {
+      button.setTitle( tooltip );
+    } else if ( imageButton != null ) {
+      imageButton.setTitle( tooltip );
+    } else if ( customButton != null ) {
+      customButton.setTitle( tooltip );
     }
 
   }
 
   public void layout() {
-    if (imageButton != null) {
-      imageButton.setHeight("");
-      imageButton.setWidth("");
+    if ( imageButton != null ) {
+      imageButton.setHeight( "" );
+      imageButton.setWidth( "" );
     }
 
-    if (!initialized) {
+    if ( !initialized ) {
       setupClickHandler();
     }
 
@@ -464,41 +475,41 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   @Override
-  public void setVisible(boolean visible) {
-    super.setVisible(visible);
+  public void setVisible( boolean visible ) {
+    super.setVisible( visible );
 
-    if (button != null) {
-      button.setVisible(visible);
-    } else if (imageButton != null) {
-      imageButton.setVisible(visible);
-    } else if (customButton != null) {
-      customButton.setVisible(visible);
+    if ( button != null ) {
+      button.setVisible( visible );
+    } else if ( imageButton != null ) {
+      imageButton.setVisible( visible );
+    } else if ( customButton != null ) {
+      customButton.setVisible( visible );
     }
   }
 
-  private ButtonLabelType getButtonLabelOrigin(String direction, String orient) {
-    if (direction == null || direction.length() <= 0) {
+  private ButtonLabelType getButtonLabelOrigin( String direction, String orient ) {
+    if ( direction == null || direction.length() <= 0 ) {
       direction = DIRECTION.forward.toString();
     }
-    if (orient == null || orient.length() <= 0) {
+    if ( orient == null || orient.length() <= 0 ) {
       orient = ORIENT.horizontal.toString();
     }
 
-    if (direction != null && orient != null) {
-      if (direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.vertical.toString())) {
+    if ( direction != null && orient != null ) {
+      if ( direction.equals( DIRECTION.forward.toString() ) && orient.equals( ORIENT.vertical.toString() ) ) {
         return ButtonLabelType.TEXT_ON_BOTTOM;
-      } else if (direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.vertical.toString())) {
+      } else if ( direction.equals( DIRECTION.reverse.toString() ) && orient.equals( ORIENT.vertical.toString() ) ) {
         return ButtonLabelType.TEXT_ON_TOP;
-      } else if (direction.equals(DIRECTION.reverse.toString()) && orient.equals(ORIENT.horizontal.toString())) {
+      } else if ( direction.equals( DIRECTION.reverse.toString() ) && orient.equals( ORIENT.horizontal.toString() ) ) {
         return ButtonLabelType.TEXT_ON_LEFT;
-      } else if (direction.equals(DIRECTION.forward.toString()) && orient.equals(ORIENT.horizontal.toString())) {
+      } else if ( direction.equals( DIRECTION.forward.toString() ) && orient.equals( ORIENT.horizontal.toString() ) ) {
         return ButtonLabelType.TEXT_ON_RIGHT;
       }
     }
     return ButtonLabelType.NO_TEXT;
   }
 
-  public void setClassName(String className) {
+  public void setClassName( String className ) {
     this.className = className;
   }
 
@@ -507,8 +518,8 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   private GwtMenupopup getPopupElement() {
-    for (Element comp : getChildNodes()) {
-      if (comp instanceof GwtMenupopup) {
+    for ( Element comp : getChildNodes() ) {
+      if ( comp instanceof GwtMenupopup ) {
         return (GwtMenupopup) comp;
       }
     }
@@ -521,7 +532,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
     private PopupPanel popupPanel;
 
-    public PopupMenuCommand(String command, PopupPanel popupPanel) {
+    public PopupMenuCommand( String command, PopupPanel popupPanel ) {
       this.command = command;
       this.popupPanel = popupPanel;
     }
@@ -529,12 +540,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     @Override
     public void execute() {
       try {
-        if (popupPanel != null) {
+        if ( popupPanel != null ) {
           popupPanel.hide();
         }
-        GwtButton.this.getXulDomContainer().invoke(command, new Object[] {});
-      } catch (XulException e) {
-        System.out.println("Error invoking method " + command + " " + e.getMessage());
+        GwtButton.this.getXulDomContainer().invoke( command, new Object[] {} );
+      } catch ( XulException e ) {
+        System.out.println( "Error invoking method " + command + " " + e.getMessage() );
         e.printStackTrace();
       }
     }

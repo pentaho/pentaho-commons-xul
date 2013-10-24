@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.gwt.tags;
 
@@ -45,49 +45,47 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private String sortDirection = null;
   private String classnameBinding;
 
-
   public static void register() {
-    GwtXulParser.registerHandler("treecol", 
-    new GwtXulHandler() {
+    GwtXulParser.registerHandler( "treecol", new GwtXulHandler() {
       public Element newInstance() {
         return new GwtTreeCol();
       }
-    });
+    } );
   }
-  
+
   public GwtTreeCol() {
-    super("treecol");
+    super( "treecol" );
   }
-  
-  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    super.init(srcEle, container);
-    setLabel(srcEle.getAttribute("label"));
-    setBinding(srcEle.getAttribute("pen:binding"));
-    setChildrenbinding(srcEle.getAttribute("pen:childrenbinding"));
-    setType(srcEle.getAttribute("type"));
-    setCombobinding(srcEle.getAttribute("pen:combobinding"));
-    setColumntypebinding(srcEle.getAttribute("pen:columntypebinding"));
-    setDisabledbinding(srcEle.getAttribute("pen:disabledbinding"));
-    setEditable("true".equalsIgnoreCase(srcEle.getAttribute("editable"))); //$NON-NLS-1$ //$NON-NLS-2$
-    if (StringUtils.isEmpty(srcEle.getAttribute("pen:expandedbinding")) == false) {
-      setExpandedbinding(srcEle.getAttribute("pen:expandedbinding")); //$NON-NLS-1$ 
+
+  public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
+    super.init( srcEle, container );
+    setLabel( srcEle.getAttribute( "label" ) );
+    setBinding( srcEle.getAttribute( "pen:binding" ) );
+    setChildrenbinding( srcEle.getAttribute( "pen:childrenbinding" ) );
+    setType( srcEle.getAttribute( "type" ) );
+    setCombobinding( srcEle.getAttribute( "pen:combobinding" ) );
+    setColumntypebinding( srcEle.getAttribute( "pen:columntypebinding" ) );
+    setDisabledbinding( srcEle.getAttribute( "pen:disabledbinding" ) );
+    setEditable( "true".equalsIgnoreCase( srcEle.getAttribute( "editable" ) ) ); //$NON-NLS-1$ //$NON-NLS-2$
+    if ( StringUtils.isEmpty( srcEle.getAttribute( "pen:expandedbinding" ) ) == false ) {
+      setExpandedbinding( srcEle.getAttribute( "pen:expandedbinding" ) ); //$NON-NLS-1$ 
     }
-    if (StringUtils.isEmpty(srcEle.getAttribute("pen:imagebinding")) == false) {
-      setImagebinding(srcEle.getAttribute("pen:imagebinding")); //$NON-NLS-1$ 
+    if ( StringUtils.isEmpty( srcEle.getAttribute( "pen:imagebinding" ) ) == false ) {
+      setImagebinding( srcEle.getAttribute( "pen:imagebinding" ) ); //$NON-NLS-1$ 
     }
-    setSortActive("true".equalsIgnoreCase(srcEle.getAttribute("sortActive"))); //$NON-NLS-1$ //$NON-NLS-2$)
-    setSortDirection(srcEle.getAttribute("sortDirection")); //$NON-NLS-1$
+    setSortActive( "true".equalsIgnoreCase( srcEle.getAttribute( "sortActive" ) ) ); //$NON-NLS-1$ //$NON-NLS-2$)
+    setSortDirection( srcEle.getAttribute( "sortDirection" ) ); //$NON-NLS-1$
 
     // Classname
-    String classname = srcEle.getAttribute("pen:classnamebinding"); //$NON-NLS-1$
-    if (!StringUtils.isEmpty(classname)) {
-      setClassnameBinding(classname);
+    String classname = srcEle.getAttribute( "pen:classnamebinding" ); //$NON-NLS-1$
+    if ( !StringUtils.isEmpty( classname ) ) {
+      setClassnameBinding( classname );
     }
   }
-  
+
   public void autoSize() {
     // TODO Auto-generated method stub
-    
+
   }
 
   public String getBinding() {
@@ -100,9 +98,8 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   public String getLabel() {
-    return getAttributeValue("label");
+    return getAttributeValue( "label" );
   }
-
 
   public String getSrc() {
     // TODO Auto-generated method stub
@@ -137,64 +134,63 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return sortActive;
   }
 
-  public void setBinding(String binding) {
+  public void setBinding( String binding ) {
     this.binding = binding;
   }
 
-  public void setCustomeditor(String customClass) {
+  public void setCustomeditor( String customClass ) {
     // TODO Auto-generated method stub
-    
+
   }
 
-  public void setEditable(boolean edit) {
+  public void setEditable( boolean edit ) {
     this.editable = edit;
   }
 
-  public void setFixed(boolean fixed) {
+  public void setFixed( boolean fixed ) {
     // TODO Auto-generated method stub
-    
+
   }
 
-  public void setHidden(boolean hide) {
+  public void setHidden( boolean hide ) {
     // TODO Auto-generated method stub
-    
+
   }
 
-  public void setLabel(String label) {
-    setAttribute("label", label);
+  public void setLabel( String label ) {
+    setAttribute( "label", label );
   }
 
-  public void setPrimary(boolean primo) {
+  public void setPrimary( boolean primo ) {
     // TODO Auto-generated method stub
-    
+
   }
 
-  public void setSortActive(boolean sort) {
+  public void setSortActive( boolean sort ) {
     this.sortActive = sort;
   }
 
-  public void setSrc(String srcUrl) {
+  public void setSrc( String srcUrl ) {
     // TODO Auto-generated method stub
-    
+
   }
 
-  public void setType(String type) {
+  public void setType( String type ) {
     this.colType = type;
-    try{
-      this.type = ColumnType.valueOf(type.toUpperCase());
-    } catch(Exception e){
+    try {
+      this.type = ColumnType.valueOf( type.toUpperCase() );
+    } catch ( Exception e ) {
       this.type = ColumnType.CUSTOM;
     }
   }
 
-
   public List<InlineBindingExpression> getBindingExpressions() {
     List<InlineBindingExpression> exps = new ArrayList<InlineBindingExpression>();
-    if(binding == null){
+    if ( binding == null ) {
       return exps;
     }
-    for (String bindingExpText : binding.split(",")) {
-      exps.add(new InlineBindingExpression(bindingExpText.trim()));
+    for ( String bindingExpText : binding.split( "," ) ) {
+      exps.add( new InlineBindingExpression( bindingExpText.trim() ) );
     }
     return exps;
   }
@@ -204,28 +200,28 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   private String childrenBinding, comboBinding;
+
   public String getChildrenbinding() {
     return childrenBinding;
   }
 
   public String getCombobinding() {
-    return comboBinding;  
+    return comboBinding;
   }
 
-  public void setChildrenbinding(String childProperty) {
-    this.childrenBinding = childProperty;  
+  public void setChildrenbinding( String childProperty ) {
+    this.childrenBinding = childProperty;
   }
 
-  public void setCombobinding(String property) {
+  public void setCombobinding( String property ) {
     this.comboBinding = property;
   }
-  
 
-  public void setColumntypebinding(String propertyName){
+  public void setColumntypebinding( String propertyName ) {
     this.columnTypeBinding = propertyName;
   }
 
-  public String getColumntypebinding(){
+  public String getColumntypebinding() {
     return this.columnTypeBinding;
   }
 
@@ -233,7 +229,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return disabledBinding;
   }
 
-  public void setDisabledbinding(String property) {
+  public void setDisabledbinding( String property ) {
     this.disabledBinding = property;
   }
 
@@ -241,7 +237,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return imageBinding;
   }
 
-  public void setImagebinding(String img) {
+  public void setImagebinding( String img ) {
     this.imageBinding = img;
   }
 
@@ -249,7 +245,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return expandBinding;
   }
 
-  public void setExpandedbinding(String bind) {
+  public void setExpandedbinding( String bind ) {
     this.expandBinding = bind;
   }
 
@@ -257,19 +253,19 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     return tooltipBinding;
   }
 
-  public void setTooltipbinding(String bind) {
-    this.tooltipBinding = bind;      
+  public void setTooltipbinding( String bind ) {
+    this.tooltipBinding = bind;
   }
 
   public String getComparatorbinding() {
     return null;
   }
 
-  public void setComparatorbinding(String comp) {
-    
+  public void setComparatorbinding( String comp ) {
+
   }
 
-  public void setSortDirection(String dir) {
+  public void setSortDirection( String dir ) {
     sortDirection = dir;
   }
 
@@ -283,12 +279,8 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   }
 
   @Override
-  public void setClassnameBinding(String classnameBinding) {
+  public void setClassnameBinding( String classnameBinding ) {
     this.classnameBinding = classnameBinding;
   }
-  
-  
-  
-  
-  
+
 }
