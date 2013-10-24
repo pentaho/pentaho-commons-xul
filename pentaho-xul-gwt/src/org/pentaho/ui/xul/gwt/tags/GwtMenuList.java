@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.gwt.tags;
 
@@ -25,7 +25,11 @@ import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.listbox.CustomListBox;
 import org.pentaho.gwt.widgets.client.listbox.ListItem;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
-import org.pentaho.ui.xul.*;
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.XulDomException;
+import org.pentaho.ui.xul.XulEventSource;
+import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulMenuList;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.containers.XulRoot;
@@ -49,12 +53,11 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private Collection<T> elements;
 
   public static void register() {
-    GwtXulParser.registerHandler(ELEMENT_NAME,
-        new GwtXulHandler() {
-          public Element newInstance() {
-            return new GwtMenuList();
-          }
-        });
+    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
+      public Element newInstance() {
+        return new GwtMenuList();
+      }
+    } );
   }
 
   private int selectedIndex = -1;
@@ -70,7 +73,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   private SimplePanel wrapper = null;
 
   public GwtMenuList() {
-    super(ELEMENT_NAME);
+    super( ELEMENT_NAME );
     wrapper = new SimplePanel() {
 
       @Override
@@ -79,31 +82,31 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
       @Override
       public void setWidth( String width ) {
-        super.setWidth(width);
-        listbox.setWidth(width);
+        super.setWidth( width );
+        listbox.setWidth( width );
       }
 
     };
     listbox = new CustomListBox();
-    wrapper.add(listbox);
-    setManagedObject(wrapper);
+    wrapper.add( listbox );
+    setManagedObject( wrapper );
 
-    listbox.addChangeListener(new ChangeListener() {
+    listbox.addChangeListener( new ChangeListener() {
 
       public void onChange( Widget arg0 ) {
 
         /*
-         * This actionlistener is fired at parse time when elements are added.
-         * We'll ignore that call by checking a variable set to true post parse time
+         * This actionlistener is fired at parse time when elements are added. We'll ignore that call by checking a
+         * variable set to true post parse time
          */
-        if (!loaded) {
+        if ( !loaded ) {
           return;
         }
 
         fireSelectedEvents();
       }
 
-    });
+    } );
   }
 
   public CustomListBox getNativeListBox() {
@@ -111,22 +114,22 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   }
 
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
-    super.init(srcEle, container);
-    setBinding(srcEle.getAttribute("pen:binding"));
-    setOnCommand(srcEle.getAttribute("oncommand"));
-    if (!StringUtils.isEmpty(srcEle.getAttribute("width"))) {
-      setWidth(Integer.parseInt(srcEle.getAttribute("width")));
+    super.init( srcEle, container );
+    setBinding( srcEle.getAttribute( "pen:binding" ) );
+    setOnCommand( srcEle.getAttribute( "oncommand" ) );
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "width" ) ) ) {
+      setWidth( Integer.parseInt( srcEle.getAttribute( "width" ) ) );
     }
-    if (!StringUtils.isEmpty(srcEle.getAttribute("height"))) {
-      setHeight(Integer.parseInt(srcEle.getAttribute("height")));
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "height" ) ) ) {
+      setHeight( Integer.parseInt( srcEle.getAttribute( "height" ) ) );
     }
 
-    if (!StringUtils.isEmpty(srcEle.getAttribute("editable"))) {
-        setEditable(Boolean.parseBoolean(srcEle.getAttribute("editable")));
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "editable" ) ) ) {
+      setEditable( Boolean.parseBoolean( srcEle.getAttribute( "editable" ) ) );
     }
-    
-    if (!StringUtils.isEmpty(srcEle.getAttribute("disabled"))) {
-        setDisabled(Boolean.parseBoolean(srcEle.getAttribute("disabled")));
+
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "disabled" ) ) ) {
+      setDisabled( Boolean.parseBoolean( srcEle.getAttribute( "disabled" ) ) );
     }
   }
 
@@ -136,16 +139,16 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   @Bindable
   @Override
-  public void setDisabled(boolean disabled) {
-    this.listbox.setEnabled(!disabled);
-    super.setDisabled(disabled);
+  public void setDisabled( boolean disabled ) {
+    this.listbox.setEnabled( !disabled );
+    super.setDisabled( disabled );
   }
-  
+
   @Bindable
   public Collection getElements() {
     List<Object> vals = new ArrayList<Object>();
-    for (int i = 0; i < listbox.getItems().size(); i++) {
-      vals.add(listbox.getItems().get(i).getValue());
+    for ( int i = 0; i < listbox.getItems().size(); i++ ) {
+      vals.add( listbox.getItems().get( i ).getValue() );
     }
     return vals;
   }
@@ -159,11 +162,11 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   public String getSelectedItem() {
     ListItem selectedItem = listbox.getSelectedItem();
 
-    return (selectedItem == null) ? null : listbox.getSelectedItem().getValue().toString();
+    return ( selectedItem == null ) ? null : listbox.getSelectedItem().getValue().toString();
   }
 
   public void replaceAllItems( Collection tees ) throws XulDomException {
-    throw new RuntimeException("Not implemented");
+    throw new RuntimeException( "Not implemented" );
   }
 
   public void setBinding( String binding ) {
@@ -176,98 +179,98 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
     try {
       suppressLayout = true;
-      listbox.setSuppressLayout(true);
+      listbox.setSuppressLayout( true );
 
       XulMenupopup popup = getPopupElement();
-      for (XulComponent menuItem : popup.getChildNodes()) {
-        popup.removeChild(menuItem);
+      for ( XulComponent menuItem : popup.getChildNodes() ) {
+        popup.removeChild( menuItem );
       }
-      if (elements == null || elements.size() == 0) {
+      if ( elements == null || elements.size() == 0 ) {
         this.suppressLayout = false;
         layout();
         return;
       }
-      for (T t : elements) {
-        GwtMenuitem item = new GwtMenuitem(popup);
+      for ( T t : elements ) {
+        GwtMenuitem item = new GwtMenuitem( popup );
 
         String attribute = getBinding();
-        if (!StringUtils.isEmpty(attribute)) {
-          item.setLabel(extractLabel(t));
+        if ( !StringUtils.isEmpty( attribute ) ) {
+          item.setLabel( extractLabel( t ) );
         } else {
-          item.setLabel(t.toString());
+          item.setLabel( t.toString() );
         }
-        popup.addChild(item);
+        popup.addChild( item );
       }
 
       this.suppressLayout = false;
 
       layout();
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
+    } catch ( Exception e ) {
+      System.out.println( e.getMessage() );
       e.printStackTrace();
     }
 
   }
 
   public GwtMenupopup getPopupElement() {
-    for (Element comp : getChildNodes()) {
-      if (comp instanceof GwtMenupopup) {
+    for ( Element comp : getChildNodes() ) {
+      if ( comp instanceof GwtMenupopup ) {
         return (GwtMenupopup) comp;
       }
     }
-    throw new IllegalStateException("menulist is missing a menupopup child element");
+    throw new IllegalStateException( "menulist is missing a menupopup child element" );
   }
 
   public void setOncommand( final String command ) {
-    this.listbox.addChangeListener(new ChangeListener() {
+    this.listbox.addChangeListener( new ChangeListener() {
 
       public void onChange( Widget arg0 ) {
 
         /*
-         * This actionlistener is fired at parse time when elements are added.
-         * We'll ignore that call by checking a variable set to true post parse time
+         * This actionlistener is fired at parse time when elements are added. We'll ignore that call by checking a
+         * variable set to true post parse time
          */
-        if (!loaded) {
+        if ( !loaded ) {
           return;
         }
         Document doc = getDocument();
         XulRoot window = (XulRoot) doc.getRootElement();
         final XulDomContainer con = window.getXulDomContainer();
         try {
-          con.invoke(command, new Object[]{});
-        } catch (XulException e) {
-          Window.alert("MenuList onChange error: " + e.getMessage());
+          con.invoke( command, new Object[] {} );
+        } catch ( XulException e ) {
+          Window.alert( "MenuList onChange error: " + e.getMessage() );
         }
         fireSelectedEvents();
       }
 
-    });
+    } );
   }
 
   @Bindable
   public void setSelectedIndex( int idx ) {
     int previousValue = selectedIndex;
     selectedIndex = idx;
-    listbox.setSelectedIndex(idx);
-    firePropertyChange("selectedIndex", previousValue, idx);
+    listbox.setSelectedIndex( idx );
+    firePropertyChange( "selectedIndex", previousValue, idx );
   }
 
   @Bindable
   public void setSelectedItem( T t ) {
-    //this is coming in as a string for us.
-//    int i=0;
-//    for(Object o : getElements()){
-//      if(((String) o).equals(extractLabel(t))){
-//        setSelectedIndex(i);
-//      }
-//      i++;
-//    }
+    // this is coming in as a string for us.
+    // int i=0;
+    // for(Object o : getElements()){
+    // if(((String) o).equals(extractLabel(t))){
+    // setSelectedIndex(i);
+    // }
+    // i++;
+    // }
 
     int i = 0;
-    Collection eles = (elements != null)? elements : getElements();
-    for (Object o : eles) {
-      if ((o).equals(t)) {
-        setSelectedIndex(i);
+    Collection eles = ( elements != null ) ? elements : getElements();
+    for ( Object o : eles ) {
+      if ( ( o ).equals( t ) ) {
+        setSelectedIndex( i );
       }
       i++;
     }
@@ -275,47 +278,44 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   private String extractLabel( T t ) {
     String attribute = getBinding();
-    if (StringUtils.isEmpty(attribute) || !(t instanceof XulEventSource)) {
+    if ( StringUtils.isEmpty( attribute ) || !( t instanceof XulEventSource ) ) {
       return t.toString();
     } else {
       try {
-        GwtBindingMethod m = GwtBindingContext.typeController.findGetMethod(t, attribute);
-        if (m == null) {
-          System.out.println("could not find getter method for " + t + "." + attribute);
+        GwtBindingMethod m = GwtBindingContext.typeController.findGetMethod( t, attribute );
+        if ( m == null ) {
+          System.out.println( "could not find getter method for " + t + "." + attribute );
         }
-        return m.invoke(t, new Object[]{}).toString();
+        return m.invoke( t, new Object[] {} ).toString();
 
-      } catch (Exception e) {
-        throw new RuntimeException(e);
+      } catch ( Exception e ) {
+        throw new RuntimeException( e );
       }
     }
   }
 
-
-
   private void fireSelectedEvents() {
 
     int selectedIdx = listbox.getSelectedIndex();
-    Object newSelectedItem = (selectedIdx >= 0 && elements != null && selectedIdx < elements.size())
-        ?   elements.toArray()[selectedIdx]
-        : getSelectedItem();
+    Object newSelectedItem =
+        ( selectedIdx >= 0 && elements != null && selectedIdx < elements.size() ) ? elements.toArray()[selectedIdx]
+            : getSelectedItem();
 
-    GwtMenuList.this.changeSupport.firePropertyChange("selectedItem", previousSelectedItem, newSelectedItem);
+    GwtMenuList.this.changeSupport.firePropertyChange( "selectedItem", previousSelectedItem, newSelectedItem );
     int prevSelectedIndex = selectedIndex;
     selectedIndex = getSelectedIndex();
-    GwtMenuList.this.changeSupport.firePropertyChange("selectedIndex", prevSelectedIndex, selectedIndex);
+    GwtMenuList.this.changeSupport.firePropertyChange( "selectedIndex", prevSelectedIndex, selectedIndex );
     previousSelectedItem = newSelectedItem;
 
-
     String newVal = listbox.getValue();
-    GwtMenuList.this.changeSupport.firePropertyChange("value", previousValue, newVal);
+    GwtMenuList.this.changeSupport.firePropertyChange( "value", previousValue, newVal );
 
     previousValue = newVal;
 
-    if (StringUtils.isEmpty(GwtMenuList.this.getOnCommand()) == false && prevSelectedIndex != selectedIndex) {
+    if ( StringUtils.isEmpty( GwtMenuList.this.getOnCommand() ) == false && prevSelectedIndex != selectedIndex ) {
       try {
-        GwtMenuList.this.getXulDomContainer().invoke(GwtMenuList.this.getOnCommand(), new Object[]{});
-      } catch (XulException e) {
+        GwtMenuList.this.getXulDomContainer().invoke( GwtMenuList.this.getOnCommand(), new Object[] {} );
+      } catch ( XulException e ) {
         e.printStackTrace();
       }
     }
@@ -325,7 +325,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
   public void layout() {
 
     inLayoutProcess = true;
-    if (suppressLayout) {
+    if ( suppressLayout ) {
       inLayoutProcess = false;
       return;
     }
@@ -333,43 +333,43 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
     Object currentSelectedItem = listbox.getSelectedItem();
     GwtMenupopup popup = getPopupElement();
     selectedIndex = -1;
-    listbox.setSuppressLayout(true);
+    listbox.setSuppressLayout( true );
     this.listbox.removeAll();
 
     GwtMenuitem selectedItem = null;
 
-    //capture first child as default selection
+    // capture first child as default selection
     boolean firstChild = true;
-    for (XulComponent item : popup.getChildNodes()) {
-      GwtMenuitem tempItem = ((GwtMenuitem) item);
-      listbox.addItem(tempItem.getLabel());
-      if (tempItem.isSelected() || firstChild) {
+    for ( XulComponent item : popup.getChildNodes() ) {
+      GwtMenuitem tempItem = ( (GwtMenuitem) item );
+      listbox.addItem( tempItem.getLabel() );
+      if ( tempItem.isSelected() || firstChild ) {
         selectedItem = tempItem;
         firstChild = false;
       }
     }
 
-    listbox.setSuppressLayout(false);
+    listbox.setSuppressLayout( false );
     inLayoutProcess = false;
 
-    if (selectedItem != null) {
-      //if first setting it to the currently selected one will not fire event.
-      //manually firing here
-      if (this.getSelectedItem().equals(selectedItem.getLabel())) {
+    if ( selectedItem != null ) {
+      // if first setting it to the currently selected one will not fire event.
+      // manually firing here
+      if ( this.getSelectedItem().equals( selectedItem.getLabel() ) ) {
         fireSelectedEvents();
       }
-      setSelectedItem((T) selectedItem.getLabel());
+      setSelectedItem( (T) selectedItem.getLabel() );
     }
-    if (getSelectedIndex() > -1) {
-      if (currentSelectedIndex < listbox.getItems().size()) {
-        int index = getIndexForItem(currentSelectedItem);
-        if (index > 0) {
-          listbox.setSelectedIndex(currentSelectedIndex);
+    if ( getSelectedIndex() > -1 ) {
+      if ( currentSelectedIndex < listbox.getItems().size() ) {
+        int index = getIndexForItem( currentSelectedItem );
+        if ( index > 0 ) {
+          listbox.setSelectedIndex( currentSelectedIndex );
         } else {
-          listbox.setSelectedIndex(listbox.getSelectedIndex());
+          listbox.setSelectedIndex( listbox.getSelectedIndex() );
         }
       } else {
-        listbox.setSelectedIndex(listbox.getSelectedIndex());
+        listbox.setSelectedIndex( listbox.getSelectedIndex() );
       }
     }
     loaded = true;
@@ -392,7 +392,7 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   @Bindable
   public void setEditable( boolean editable ) {
-    this.listbox.setEditable(editable);
+    this.listbox.setEditable( editable );
     this.editable = editable;
   }
 
@@ -408,31 +408,31 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
 
   @Bindable
   public void setValue( String value ) {
-    for (ListItem item : listbox.getItems()) {
-      if (item.getValue() != null && item.getValue().equals(value)) {
-        listbox.setSelectedItem(item);
+    for ( ListItem item : listbox.getItems() ) {
+      if ( item.getValue() != null && item.getValue().equals( value ) ) {
+        listbox.setSelectedItem( item );
         return;
       }
     }
-    listbox.setValue(value);
+    listbox.setValue( value );
   }
 
   @Override
   public void setWidth( int width ) {
-    listbox.setWidth(width + "px");
+    listbox.setWidth( width + "px" );
   }
 
   @Override
   public void setHeight( int height ) {
-    listbox.setHeight(height + "px");
+    listbox.setHeight( height + "px" );
   }
 
   private int getIndexForItem( Object obj ) {
     int index = -1;
-    if (obj != null) {
-      for (ListItem item : listbox.getItems()) {
+    if ( obj != null ) {
+      for ( ListItem item : listbox.getItems() ) {
         index++;
-        if (item.getValue() != null && item.getValue().equals(obj.toString())) {
+        if ( item.getValue() != null && item.getValue().equals( obj.toString() ) ) {
           return index;
         }
       }

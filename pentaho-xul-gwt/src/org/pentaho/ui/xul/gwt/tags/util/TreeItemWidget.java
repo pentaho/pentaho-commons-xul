@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.gwt.tags.util;
 
@@ -43,11 +43,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-
 /**
- * User: nbaker
- * Date: Jul 13, 2010
- *
+ * User: nbaker Date: Jul 13, 2010
+ * 
  */
 public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Draggable {
   private static final String DROP_INVALID_PNG = "drop_invalid.png";
@@ -55,38 +53,38 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
   private static final String EMPTY_PNG = "empty.png";
 
   private Image img;
-  
+
   Label label = new Label();
   String text;
   private XulTreeItem tItem;
   private Image dragIndicator;
   private boolean dropIconsVisible = true;
 
-  public TreeItemWidget(){
-    setWidth("100%");
-    this.setStylePrimaryName("tree-item-custom-widget");
-    this.setWidget(0,1,label);
-    this.getCellFormatter().setWidth(0,1,"100%");
-    ElementUtils.preventTextSelection(this.getElement());
+  public TreeItemWidget() {
+    setWidth( "100%" );
+    this.setStylePrimaryName( "tree-item-custom-widget" );
+    this.setWidget( 0, 1, label );
+    this.getCellFormatter().setWidth( 0, 1, "100%" );
+    ElementUtils.preventTextSelection( this.getElement() );
   }
 
-  public TreeItemWidget(XulTreeItem tItem){
+  public TreeItemWidget( XulTreeItem tItem ) {
     this();
     this.tItem = tItem;
   }
 
-  public XulTreeItem getTreeItem(){
+  public XulTreeItem getTreeItem() {
     return tItem;
   }
 
-  public void setLabel(String label){
+  public void setLabel( String label ) {
     this.text = label;
-    this.label.setText(label);
+    this.label.setText( label );
   }
-  
-  public void setImage(Image img) {
+
+  public void setImage( Image img ) {
     this.img = img;
-    this.setWidget(0,0,img);
+    this.setWidget( 0, 0, img );
   }
 
   public Image getImage() {
@@ -97,7 +95,7 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
     return dropIconsVisible;
   }
 
-  public void setDropIconsVisible(boolean dropIconsVisible) {
+  public void setDropIconsVisible( boolean dropIconsVisible ) {
     this.dropIconsVisible = dropIconsVisible;
   }
 
@@ -105,53 +103,52 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
    * DND required methods below
    */
   public HandlerRegistration addMouseUpHandler( MouseUpHandler handler ) {
-    return addDomHandler(handler, MouseUpEvent.getType());
+    return addDomHandler( handler, MouseUpEvent.getType() );
   }
 
   public HandlerRegistration addMouseOutHandler( MouseOutHandler handler ) {
-    return addDomHandler(handler, MouseOutEvent.getType());
+    return addDomHandler( handler, MouseOutEvent.getType() );
   }
 
   public HandlerRegistration addMouseMoveHandler( MouseMoveHandler handler ) {
-    return addDomHandler(handler, MouseMoveEvent.getType());
+    return addDomHandler( handler, MouseMoveEvent.getType() );
   }
 
   public HandlerRegistration addMouseWheelHandler( MouseWheelHandler handler ) {
-    return addDomHandler(handler, MouseWheelEvent.getType());
+    return addDomHandler( handler, MouseWheelEvent.getType() );
   }
 
   public HandlerRegistration addMouseOverHandler( MouseOverHandler handler ) {
-    return addDomHandler(handler, MouseOverEvent.getType());
+    return addDomHandler( handler, MouseOverEvent.getType() );
   }
 
   public HandlerRegistration addMouseDownHandler( MouseDownHandler handler ) {
-    return addDomHandler(handler, MouseDownEvent.getType());
+    return addDomHandler( handler, MouseDownEvent.getType() );
   }
 
+  private void makeDraggable() {
+    dragIndicator = new Image( getDropIcon( false ) );
+    setWidget( 0, 0, dragIndicator );
 
-  private void makeDraggable(){
-    dragIndicator = new Image(getDropIcon(false));
-    setWidget(0, 0, dragIndicator);
-
-    this.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-    addStyleDependentName("proxy");
+    this.getCellFormatter().setVerticalAlignment( 0, 0, HasVerticalAlignment.ALIGN_MIDDLE );
+    addStyleDependentName( "proxy" );
   }
 
-  private String getDropIcon(boolean valid) {
-    if(valid && dropIconsVisible){
-      return GWT.getModuleBaseURL()+ DROP_VALID_PNG;
-    } else if (!valid && dropIconsVisible) {
-      return GWT.getModuleBaseURL()+ DROP_INVALID_PNG;
+  private String getDropIcon( boolean valid ) {
+    if ( valid && dropIconsVisible ) {
+      return GWT.getModuleBaseURL() + DROP_VALID_PNG;
+    } else if ( !valid && dropIconsVisible ) {
+      return GWT.getModuleBaseURL() + DROP_INVALID_PNG;
     } else {
-      return GWT.getModuleBaseURL()+ EMPTY_PNG;
+      return GWT.getModuleBaseURL() + EMPTY_PNG;
     }
   }
 
-  public Widget makeProxy(Widget ele) {
+  public Widget makeProxy( Widget ele ) {
     TreeItemWidget item = new TreeItemWidget();
-    item.setLabel(getLabel());
-    item.setWidth("20px");
-    item.setDropIconsVisible(this.dropIconsVisible);
+    item.setLabel( getLabel() );
+    item.setWidth( "20px" );
+    item.setDropIconsVisible( this.dropIconsVisible );
     item.makeDraggable();
     return item;
   }
@@ -165,23 +162,23 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
   }
 
   public void notifyDragFinished() {
-    ((GwtTree) tItem.getTree()).notifyDragFinished(tItem);
+    ( (GwtTree) tItem.getTree() ).notifyDragFinished( tItem );
   }
 
-  public void setDropValid(boolean valid){
-    if(valid){
-      addStyleDependentName("proxy-valid");
+  public void setDropValid( boolean valid ) {
+    if ( valid ) {
+      addStyleDependentName( "proxy-valid" );
     } else {
-      removeStyleDependentName("proxy-valid");
+      removeStyleDependentName( "proxy-valid" );
     }
-    dragIndicator.setUrl(getDropIcon(valid));
+    dragIndicator.setUrl( getDropIcon( valid ) );
   }
 
-  public void highLightDrop(boolean highlight) {
-    if(highlight){
-      addStyleDependentName("drop-hover");
+  public void highLightDrop( boolean highlight ) {
+    if ( highlight ) {
+      addStyleDependentName( "drop-hover" );
     } else {
-      removeStyleDependentName("drop-hover");
+      removeStyleDependentName( "drop-hover" );
     }
   }
 }

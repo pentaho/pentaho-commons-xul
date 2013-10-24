@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.gwt.tags;
 
@@ -29,45 +29,44 @@ import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-public class GwtTabPanel  extends AbstractGwtXulContainer implements XulTabpanel {
+public class GwtTabPanel extends AbstractGwtXulContainer implements XulTabpanel {
 
   static final String ELEMENT_NAME = "tabpanel"; //$NON-NLS-1$
-  
+
   public static void register() {
-    GwtXulParser.registerHandler(ELEMENT_NAME, 
-    new GwtXulHandler() {
+    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
       public Element newInstance() {
         return new GwtTabPanel();
       }
-    });
+    } );
   }
-  
+
   protected VerticalPanel verticalPanel;
 
   public GwtTabPanel() {
-    this(Orient.VERTICAL);
+    this( Orient.VERTICAL );
   }
 
-  public GwtTabPanel(Orient orient) {
-    super(ELEMENT_NAME);
+  public GwtTabPanel( Orient orient ) {
+    super( ELEMENT_NAME );
     this.orientation = orient;
     verticalPanel = new VerticalPanel();
-    verticalPanel.setSpacing(GwtUIConst.PANEL_SPACING);    // IE_6_FIX, move to CSS
+    verticalPanel.setSpacing( GwtUIConst.PANEL_SPACING ); // IE_6_FIX, move to CSS
     container = verticalPanel;
-    setManagedObject(container);
+    setManagedObject( container );
   }
-  
-  public void resetContainer(){
-    for(int i=0; i< verticalPanel.getWidgetCount();i++) {
-      verticalPanel.remove(i);
+
+  public void resetContainer() {
+    for ( int i = 0; i < verticalPanel.getWidgetCount(); i++ ) {
+      verticalPanel.remove( i );
     }
     verticalPanel = new VerticalPanel();
   }
 
   @Override
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException{
+  public void replaceChild( XulComponent oldElement, XulComponent newElement ) throws XulDomException {
     this.resetContainer();
-    super.replaceChild(oldElement, newElement);
+    super.replaceChild( oldElement, newElement );
   }
 
 }

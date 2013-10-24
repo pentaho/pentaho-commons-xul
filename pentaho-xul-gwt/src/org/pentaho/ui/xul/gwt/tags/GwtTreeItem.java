@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.gwt.tags;
 
@@ -40,15 +40,15 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   private String classname;
 
   public static void register() {
-    GwtXulParser.registerHandler("treeitem", new GwtXulHandler() {
+    GwtXulParser.registerHandler( "treeitem", new GwtXulHandler() {
       public Element newInstance() {
         return new GwtTreeItem();
       }
-    });
+    } );
   }
 
   public GwtTreeItem() {
-    super("treeitem");
+    super( "treeitem" );
   }
 
   @Override
@@ -57,13 +57,13 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   }
 
   @Override
-  public void init(com.google.gwt.xml.client.Element srcEle, XulDomContainer container) {
-    super.init(srcEle, container);
-    setCommand(srcEle.getAttribute("command"));
-    setJsCommand(srcEle.getAttribute("js-command"));
+  public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
+    super.init( srcEle, container );
+    setCommand( srcEle.getAttribute( "command" ) );
+    setJsCommand( srcEle.getAttribute( "js-command" ) );
   }
 
-  public void setCommand(final String command) {
+  public void setCommand( final String command ) {
     this.command = command;
   }
 
@@ -75,14 +75,14 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     return jscommand;
   }
 
-  public void setJsCommand(String jscommand) {
+  public void setJsCommand( String jscommand ) {
     this.jscommand = jscommand;
   }
 
   public XulTreeRow getRow() {
-    List list = getElementsByTagName("treerow");
-    if (list.size() > 0) {
-      return (XulTreeRow) list.get(0);
+    List list = getElementsByTagName( "treerow" );
+    if ( list.size() > 0 ) {
+      return (XulTreeRow) list.get( 0 );
     }
     return null;
   }
@@ -90,8 +90,8 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   public XulTree getTree() {
     XulTree tree = null;
     XulComponent parent = getParent();
-    while (parent != null) {
-      if (parent instanceof XulTree) {
+    while ( parent != null ) {
+      if ( parent instanceof XulTree ) {
         tree = (XulTree) parent;
         break;
       }
@@ -120,21 +120,21 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
 
   }
 
-  public void setContainer(boolean isContainer) {
+  public void setContainer( boolean isContainer ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setEmpty(boolean empty) {
+  public void setEmpty( boolean empty ) {
     // TODO Auto-generated method stub
 
   }
 
-  public void setRow(XulTreeRow row) {
-    if (getRow() != null) {
-      this.removeChild(getRow());
+  public void setRow( XulTreeRow row ) {
+    if ( getRow() != null ) {
+      this.removeChild( getRow() );
     }
-    this.addChild(row);
+    this.addChild( row );
   }
 
   @Bindable
@@ -143,10 +143,10 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   }
 
   @Bindable
-  public void setImage(String src) {
+  public void setImage( String src ) {
     String oldSrc = this.image;
     this.image = src;
-    firePropertyChange("image", oldSrc, src);
+    firePropertyChange( "image", oldSrc, src );
   }
 
   @Bindable
@@ -155,28 +155,28 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   }
 
   @Bindable
-  public void setExpanded(boolean expanded) {
+  public void setExpanded( boolean expanded ) {
     this.expanded = expanded;
     XulTree tree = getTree();
-    if (tree != null) {
-      tree.setTreeItemExpanded(this, expanded);
+    if ( tree != null ) {
+      tree.setTreeItemExpanded( this, expanded );
     }
 
-    changeSupport.firePropertyChange("expanded", null, expanded);
+    changeSupport.firePropertyChange( "expanded", null, expanded );
   }
 
   public Object getBoundObject() {
     return obj;
   }
 
-  public void setBoundObject(Object obj) {
+  public void setBoundObject( Object obj ) {
     this.obj = obj;
   }
 
   // TODO: migrate into XulComponent
   @Deprecated
-  public void addPropertyChangeListener(String prop, PropertyChangeListener listener) {
-    changeSupport.addPropertyChangeListener(prop, listener);
+  public void addPropertyChangeListener( String prop, PropertyChangeListener listener ) {
+    changeSupport.addPropertyChangeListener( prop, listener );
   }
 
   @Bindable
@@ -187,9 +187,9 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
 
   @Bindable
   @Override
-  public void setClassname(String classname) {
+  public void setClassname( String classname ) {
     String oldClassname = this.classname;
     this.classname = classname;
-    firePropertyChange("classname", oldClassname, classname); //$NON-NLS-1$
+    firePropertyChange( "classname", oldClassname, classname ); //$NON-NLS-1$
   }
 }

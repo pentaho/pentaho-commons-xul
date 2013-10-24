@@ -1,19 +1,19 @@
 /*!
-* This program is free software; you can redistribute it and/or modify it under the
-* terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
-* Foundation.
-*
-* You should have received a copy of the GNU Lesser General Public License along with this
-* program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
-* or from the Free Software Foundation, Inc.,
-* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-* without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU Lesser General Public License for more details.
-*
-* Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
-*/
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ */
 
 package org.pentaho.ui.xul.gwt;
 
@@ -24,23 +24,21 @@ import java.util.Map;
 
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
-import org.pentaho.ui.xul.XulEventSourceAdapter;
 import org.pentaho.ui.xul.dom.Attribute;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.dom.Namespace;
 
-
 public class GwtDomElement implements Element {
   protected List<Element> children = null;
   String name;
   Element parent;
-  
-  public GwtDomElement(String name) {
+
+  public GwtDomElement( String name ) {
     this.name = name;
     children = new ArrayList<Element>();
   }
-  
+
   public String getText() {
     // TODO Auto-generated method stub
     return null;
@@ -51,46 +49,46 @@ public class GwtDomElement implements Element {
   }
 
   public Document getDocument() {
-    if (this instanceof Document) {
-      return (Document)this;
+    if ( this instanceof Document ) {
+      return (Document) this;
     }
-    if (parent == null) {
+    if ( parent == null ) {
       Document doc = new GwtDomDocument();
-      doc.addChild(this);
+      doc.addChild( this );
       return doc;
     }
-    if (parent instanceof Document) {
-      return (Document)parent;
+    if ( parent instanceof Document ) {
+      return (Document) parent;
     } else {
       return parent.getDocument();
     }
-    
+
   }
 
   public XulComponent getParent() {
-    return (XulComponent)parent;
+    return (XulComponent) parent;
   }
 
   public XulComponent getFirstChild() {
-    if(children.size() > 0){
-      return (XulComponent) children.get(0);
+    if ( children.size() > 0 ) {
+      return (XulComponent) children.get( 0 );
     } else {
       return null;
     }
   }
 
   public List<XulComponent> getChildNodes() {
-    ArrayList<XulComponent> list = new ArrayList<XulComponent>(){
+    ArrayList<XulComponent> list = new ArrayList<XulComponent>() {
       @Override
-      public boolean remove(Object o) {
-        children.remove(o);
-        return super.remove(o);
+      public boolean remove( Object o ) {
+        children.remove( o );
+        return super.remove( o );
       }
 
       @Override
-      public XulComponent remove(int index) {
-        children.remove(index);
-        return super.remove(index);
+      public XulComponent remove( int index ) {
+        children.remove( index );
+        return super.remove( index );
       }
 
       @Override
@@ -99,107 +97,106 @@ public class GwtDomElement implements Element {
         children.clear();
       }
     };
-    if (this.children == null) {
+    if ( this.children == null ) {
       return list;
     }
-    for(Element ele : this.children){
-      list.add((XulComponent) ele);
-      
+    for ( Element ele : this.children ) {
+      list.add( (XulComponent) ele );
+
     }
     return list;
   }
 
-  public void setNamespace(String prefix, String uri) {
+  public void setNamespace( String prefix, String uri ) {
     throw new UnsupportedOperationException();
-    
+
   }
 
   public Namespace getNamespace() {
     throw new UnsupportedOperationException();
   }
 
-  public XulComponent getElementById(String id) {
-    if(id == null){
-      throw new IllegalArgumentException("ID null");
+  public XulComponent getElementById( String id ) {
+    if ( id == null ) {
+      throw new IllegalArgumentException( "ID null" );
     }
-    if (id.equals(this.getAttributeValue("id"))) {
+    if ( id.equals( this.getAttributeValue( "id" ) ) ) {
       return (XulComponent) this;
-    } else if (children != null) {
-      for (Element child : children) {
-        Element elem = child.getElementById(id);
-        if (elem != null) {
+    } else if ( children != null ) {
+      for ( Element child : children ) {
+        Element elem = child.getElementById( id );
+        if ( elem != null ) {
           return (XulComponent) elem;
         }
       }
     }
     return null;
-    
+
   }
 
-  public XulComponent getElementByXPath(String path) {
+  public XulComponent getElementByXPath( String path ) {
     // support for : "/window/vbox/groupbox/vbox/label"
-    if (path.startsWith("//")) {
+    //CHECKSTYLE IGNORE EmptyBlock FOR NEXT 3 LINES
+    if ( path.startsWith( "//" ) ) {
       // global search
-    } else if (path.startsWith("/")) {
+    } else if ( path.startsWith( "/" ) ) {
       // root lookup
-      String xpath[] = path.split("/");
+      String[] xpath = path.split( "/" );
       List<Element> currElements = new ArrayList<Element>();
-      currElements.add(getDocument());
-      for (int i = 1; i < xpath.length; i++) {
+      currElements.add( getDocument() );
+      for ( int i = 1; i < xpath.length; i++ ) {
         List<Element> newCurrElements = new ArrayList<Element>();
-        for (Element elem : currElements) {
-          List<XulComponent> list = elem.getElementsByTagName(xpath[i]);
-          newCurrElements.addAll(list);
+        for ( Element elem : currElements ) {
+          List<XulComponent> list = elem.getElementsByTagName( xpath[i] );
+          newCurrElements.addAll( list );
         }
         currElements = newCurrElements;
       }
-      if (currElements.size() > 0) {
-        return (XulComponent) currElements.get(0);
+      if ( currElements.size() > 0 ) {
+        return (XulComponent) currElements.get( 0 );
       }
-    } else {
-      // local lookup
     }
     return null;
   }
 
-  public List<XulComponent> getElementsByTagName(String tagName) {
-    
+  public List<XulComponent> getElementsByTagName( String tagName ) {
+
     ArrayList<XulComponent> list = new ArrayList<XulComponent>();
-    if (children == null) {
+    if ( children == null ) {
       return list;
     }
-    for (Element child : children) {
-      if (child.getName().equals(tagName)) {
-        list.add((XulComponent) child);
+    for ( Element child : children ) {
+      if ( child.getName().equals( tagName ) ) {
+        list.add( (XulComponent) child );
       }
     }
     return list;
-    
+
   }
-  
-  public void addChild(Element element) {
-    if (children == null) {
+
+  public void addChild( Element element ) {
+    if ( children == null ) {
       children = new ArrayList<Element>();
     }
 
-      Element dElementparent = element.getParent();
-    if(dElementparent != null){
-      dElementparent.removeChild(element);
+    Element dElementparent = element.getParent();
+    if ( dElementparent != null ) {
+      dElementparent.removeChild( element );
     }
-  	    
-    ((GwtDomElement)element).setParent(this);
-    children.add(element);
-    
+
+    ( (GwtDomElement) element ).setParent( this );
+    children.add( element );
+
   }
 
-  public void setParent(Element parent) {
+  public void setParent( Element parent ) {
     // this should be a GwtDomElement
     this.parent = parent;
   }
-  
-  public void removeChild(Element element) {
-    if (children != null) {
-      children.remove(element);
+
+  public void removeChild( Element element ) {
+    if ( children != null ) {
+      children.remove( element );
     }
   }
 
@@ -208,62 +205,62 @@ public class GwtDomElement implements Element {
   }
 
   public List<Attribute> getAttributes() {
-    if (attributes == null) {
+    if ( attributes == null ) {
       attributes = new HashMap<String, Attribute>();
     }
-    return new ArrayList<Attribute>(attributes.values());
+    return new ArrayList<Attribute>( attributes.values() );
   }
 
-  public void setAttributes(List<Attribute> attribute) {
+  public void setAttributes( List<Attribute> attribute ) {
     throw new UnsupportedOperationException();
   }
 
-  public void setAttribute(Attribute attribute) {
-    attributes.put(attribute.getName(), attribute);
+  public void setAttribute( Attribute attribute ) {
+    attributes.put( attribute.getName(), attribute );
   }
 
   Map<String, Attribute> attributes = null;
-  
-  public void setAttribute(String name, String value) {
-    if (attributes == null) {
+
+  public void setAttribute( String name, String value ) {
+    if ( attributes == null ) {
       attributes = new HashMap<String, Attribute>();
     }
-    attributes.put(name, new Attribute(name, value));
-    
+    attributes.put( name, new Attribute( name, value ) );
+
   }
 
-  public String getAttributeValue(String attributeName) {
-    if (attributes == null) {
+  public String getAttributeValue( String attributeName ) {
+    if ( attributes == null ) {
       attributes = new HashMap<String, Attribute>();
     }
-    Attribute attrib = attributes.get(attributeName);
-    if (attrib != null) {
+    Attribute attrib = attributes.get( attributeName );
+    if ( attrib != null ) {
       return attrib.getValue();
     }
     return null;
   }
 
-  public void replaceChild(Element oldElement, Element newElement) {
-    int index = children.indexOf(oldElement);
-    children.remove(index);
-    children.add(index, newElement);
-    ((GwtDomElement)newElement).setParent((XulComponent)this);
+  public void replaceChild( Element oldElement, Element newElement ) {
+    int index = children.indexOf( oldElement );
+    children.remove( index );
+    children.add( index, newElement );
+    ( (GwtDomElement) newElement ).setParent( (XulComponent) this );
   }
 
-  public void addChildAt(Element element, int idx) {
+  public void addChildAt( Element element, int idx ) {
 
-    if (children == null) {
+    if ( children == null ) {
       children = new ArrayList<Element>();
     }
-    ((GwtDomElement)element).setParent(this);
-    children.add(idx, element);
-      
+    ( (GwtDomElement) element ).setParent( this );
+    children.add( idx, element );
+
   }
 
-  public void replaceChild(XulComponent oldElement, XulComponent newElement) throws XulDomException {
-    
-        // TODO Auto-generated method stub 
-      
+  public void replaceChild( XulComponent oldElement, XulComponent newElement ) throws XulDomException {
+
+    // TODO Auto-generated method stub
+
   }
-  
+
 }
