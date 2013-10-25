@@ -339,8 +339,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       }
       switch ( alignment ) {
         case START:
-          ( (HorizontalPanel) container ).setCellWidth( fillerPanel, "100%" );
-          container.add( fillerPanel );
+          if ( this.getOrientation() != Orient.VERTICAL ) {
+            ( (HorizontalPanel) container ).setCellWidth( fillerPanel, "100%" );
+            container.add( fillerPanel );
+          }
           break;
         case CENTER:
           container.add( fillerPanel );
