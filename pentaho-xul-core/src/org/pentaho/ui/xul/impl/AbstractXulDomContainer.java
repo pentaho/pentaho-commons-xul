@@ -21,7 +21,6 @@
 
 package org.pentaho.ui.xul.impl;
 
-import groovy.lang.GroovyClassLoader;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -87,29 +86,7 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     return xulLoader;
   }
 
-  private void addGroovyHandler( String id, String location ) throws XulException {
-    try {
-
-      location = location.replace( '.', '/' ).replace( "/groovy", ".groovy" );
-
-      InputStream in = getClass().getClassLoader().getResourceAsStream( location );
-
-      if ( in == null ) {
-        throw new NullPointerException( "Error: Groovy script was not found: " + location );
-      }
-      GroovyClassLoader gcl = new GroovyClassLoader();
-      Class clazz = gcl.parseClass( in );
-      Object script = clazz.newInstance();
-      XulEventHandler groovyHandler = (XulEventHandler) script;
-
-      groovyHandler.setXulDomContainer( this );
-      eventHandlers.put( id, groovyHandler );
-
-    } catch ( Exception e ) {
-      throw new XulException( e );
-    }
-  }
-
+  
   @Deprecated
   public void addEventHandler( String id, String eventClassName ) throws XulException {
 
@@ -117,11 +94,6 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
     // if(eventHandlers.containsKey(id)){ //if already registered
     // return;
     // }
-
-    if ( eventClassName.indexOf( "groovy" ) > -1 ) {
-      addGroovyHandler( id, eventClassName );
-      return;
-    }
 
     try {
       Class cls = Class.forName( eventClassName );
