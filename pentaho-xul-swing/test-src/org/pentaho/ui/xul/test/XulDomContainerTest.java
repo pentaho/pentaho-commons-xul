@@ -52,10 +52,9 @@ public class XulDomContainerTest {
     XulLoader loader = new SwingXulLoader();
     XulDomContainer container = loader.loadXul( "resource/documents/testEventHandlers.xul" );
     Map<String, XulEventHandler> handlers = container.getEventHandlers();
-    assertTrue( handlers.size() == 3 );
+    assertTrue( handlers.size() == 2 );
     assertNotNull( handlers.get( "handler1" ) );
     assertNotNull( handlers.get( "handler2" ) );
-    assertNotNull( handlers.get( "handler5" ) );
   }
 
   @Test
