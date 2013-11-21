@@ -8,7 +8,6 @@
   >
   <script id="handler1" src="org.pentaho.ui.xul.samples.SampleEventHandler"/>
   <script id="handler2" src="org.pentaho.ui.xul.samples.SampleEventHandler"/>
-  <script id="handler5" src="org.pentaho.ui.xul.samples.testHandler.groovy"/>
   <hbox>
     <textbox id="textbox1" value="initial value"/>
   </hbox>
