@@ -75,6 +75,30 @@ html, body{
 
 /*=========================  TABLE  =========================*/
 
+/*=========================  GWT FILEUPLOAD  =========================*/
+
+.gwt_file_upload_hidden_div {
+    position: relative;
+}
+
+.gwt_file_upload_hidden_div .gwt-StyledFileUpload {
+    visibility: hidden;     /*to remove cursor blinking after selecting file to upload in ie*/
+}
+
+.gwt_file_upload_hidden_div .gwt_file_upload_label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
+#gwt_FileUpload_uploadTextBox {
+    background: #fff;
+    border: 1px solid #CBDDE8;
+    float: left;
+    cursor: default;
+}
+
 /*
 	All this stuff is already in the pentaho-gwt-widgets projects, where it belongs. I won't
 	remove it now cuz I'm unsure of the consequences, but keep in mind that if you need
