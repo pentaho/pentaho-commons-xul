@@ -28,6 +28,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.tags.util.LabelWidget;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.core.client.GWT;
@@ -42,6 +43,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.DOM;
 
 public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpload {
   private String uploadSuccessMethod, uploadFailureMethod;
@@ -51,7 +53,7 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
   private VerticalPanel uploadPanel;
   private VerticalPanel mainPanel;
   private HTMLPanel hiddenPanel;
-  private GwtTextbox uploadTextBox;
+  private GwtLabel uploadTextBox;
   private String action;
   private Map<String, String> parameters = null;
   private static final String ELEMENT_NAME = "pen:fileupload"; //$NON-NLS-1$
@@ -109,6 +111,7 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     upload = new FileUpload();
     upload.setStylePrimaryName( "gwt-StyledFileUpload" );
     upload.setName( "uploadFormElement" ); //$NON-NLS-1$
+    upload.getElement().setId( "uploadFormElement" );
     upload.setVisible( true );
     upload.setHeight( getHeight() + "px" );
     upload.setWidth( getWidth() + "px" );
@@ -124,29 +127,34 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     String uploadButtonDisabledImage = srcEle.getAttribute( "disabledimage" );
 
     hiddenPanel = new HTMLPanel( "<div id='hidden_div' class='gwt_file_upload_hidden_div'></div>" );
-    uploadTextBox = new GwtTextbox();
+    uploadTextBox = new GwtLabel();
     uploadTextBox.setId( "gwt_FileUpload_uploadTextBox" );
-    uploadTextBox.setHeight( getHeight() );
-    uploadTextBox.setWidth( getWidth() - 55 );
 
     GwtButton uploadButton = new GwtButton();
     uploadButton.setId( "gwt_FileUpload_uploadButton" );
     uploadButton.setHeight( 22 );
 
+    final LabelWidget label = new LabelWidget( "uploadFormElement" );
+    label.setStyleName( "gwt_file_upload_label" );
     // If "image" attribute has been defined in the fileupload control do not display the file textfield AND do not
     // set the button label.
     if ( StringUtils.isEmpty( uploadButtonImage ) ) {
       uploadButton.setLabel( "..." );
-      hiddenPanel.add( (Widget) uploadTextBox.getManagedObject(), "hidden_div" );
+      final Widget labelWidget = (Widget) uploadTextBox.getManagedObject();
+      label.add( labelWidget );
       uploadTextBox.layout();
+      labelWidget.setHeight( getHeight() + "px" );
+      labelWidget.setWidth( ( getWidth() - 55 ) + "px" );
+      DOM.setStyleAttribute( labelWidget.getElement(), "lineHeight", getHeight() + "px" );
     } else {
       uploadButton.setImage( uploadButtonImage );
       uploadButton.setDisabledImage( uploadButtonDisabledImage );
     }
 
-    hiddenPanel.add( (Widget) uploadButton.getManagedObject(), "hidden_div" );
+    label.add( (Widget) uploadButton.getManagedObject() );
     uploadButton.layout();
     hiddenPanel.add( upload, "hidden_div" );
+    hiddenPanel.add( label, "hidden_div" );
     // -- upload styling -- //
 
     uploadPanel.add( hiddenPanel );
@@ -265,6 +273,7 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
       upload = new FileUpload();
       upload.setStylePrimaryName( "gwt-StyledFileUpload" );
       upload.setName( "uploadFormElement" ); //$NON-NLS-1$
+      upload.getElement().setId( "uploadFormElement" );
       upload.setVisible( true );
       upload.setHeight( getHeight() + "px" ); //$NON-NLS-1$
       upload.setWidth( getWidth() + "px" ); //$NON-NLS-1$
