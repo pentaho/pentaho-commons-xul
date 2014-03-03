@@ -17,15 +17,21 @@
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseOutEvent;
+import com.google.gwt.event.dom.client.MouseOutHandler;
+import com.google.gwt.event.dom.client.MouseOverEvent;
+import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
+
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -44,10 +50,43 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   private MenuBar menubar;
   private boolean loaded;
   private boolean vertical = true;
+  private boolean mouseOver = false;
+  private boolean autoClose = true;
+  private final int closeDelay = 300;
   private FrameCover frameCover = null;
+
+  protected class MenuBar extends com.google.gwt.user.client.ui.MenuBar {
+    private GwtMenubar gwtMenubar;
+
+    public MenuBar( boolean vertical ) {
+      super( vertical );
+    }
+
+    @Override
+    protected MenuItem getSelectedItem() {
+      return super.getSelectedItem();
+    }
+
+    @Override
+    public void focus() {
+      super.focus();
+      if ( autoClose ) {
+        closeAllChildren( false );
+      }
+    }
+
+    public void setGwtMenubar( GwtMenubar gwtMenubar ) {
+      this.gwtMenubar = gwtMenubar;
+    }
+
+    public GwtMenubar getGwtMenubar() {
+      return gwtMenubar;
+    }
+  }
 
   public static void register() {
     GwtXulParser.registerHandler( "menubar", new GwtXulHandler() {
+      @Override
       public Element newInstance() {
         return new GwtMenubar();
       }
@@ -64,7 +103,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
   @Override
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
-    this.setHorizontal( "vertical".equalsIgnoreCase( srcEle.getAttribute( "layout" ) ) );
+    setHorizontal( "vertical".equalsIgnoreCase( srcEle.getAttribute( "layout" ) ) );
     frameCover = new FrameCover();
 
     menubar = new MenuBar( vertical ) {
@@ -80,10 +119,12 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
       }
     };
 
+    menubar.setGwtMenubar( this );
+
     frameCover.addClickHandler( new ClickHandler() {
       @Override
       public void onClick( ClickEvent event ) {
-        menubar.closeAllChildren( true );
+        closeAllChildren( false );
       }
     } );
 
@@ -96,12 +137,70 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
       }
     } );
 
-    this.setLabel( srcEle.getAttribute( "label" ) );
+    if ( autoClose ) {
+      menubar.addDomHandler( new MouseOutHandler() {
+        @Override
+        public void onMouseOut( MouseOutEvent event ) {
+          if ( isMouseOver() ) {
+            setMouseOver( false );
+            Scheduler.get().scheduleFixedDelay( new RepeatingCommand() {
+              @SuppressWarnings( "finally" )
+              @Override
+              public boolean execute() {
+                try {
+                  hide();
+                } finally {
+                  return false;
+                }
+              }
+            }, closeDelay );
+          }
+        }
+      }, MouseOutEvent.getType() );
+
+      menubar.addDomHandler( new MouseOverHandler() {
+        @Override
+        public void onMouseOver( MouseOverEvent event ) {
+          setMouseOver( true );
+        }
+      }, MouseOverEvent.getType() );
+    }
+
+    setLabel( srcEle.getAttribute( "label" ) );
     setManagedObject( menubar );
 
     // init AFTER we set the managed object and we get "id" set for us
     super.init( srcEle, container );
+  }
 
+  private void hide() {
+    XulComponent parentComponent = getParent();
+    if ( parentComponent instanceof GwtMenubar ) {
+      if ( !isMouseOver() ) {
+        MenuItem child = getSelectedItem();
+        if ( child != null ) {
+          MenuBar subMenu = (MenuBar) child.getSubMenu();
+          if ( subMenu != null ) {
+            if ( subMenu.getGwtMenubar().isMouseOver() ) {
+              return;
+            }
+          }
+        }
+        GwtMenubar parentMenu = ( (GwtMenubar) parentComponent );
+        if ( !parentMenu.isMouseOver() ) {
+          parentMenu.closeAllChildren( false );
+          parentMenu.hide();
+        }
+      }
+    }
+  }
+
+  protected void closeAllChildren( boolean focus ) {
+    menubar.closeAllChildren( focus );
+  }
+
+  protected MenuItem getSelectedItem() {
+    return menubar.getSelectedItem();
   }
 
   public void setLabel( String label ) {
@@ -117,7 +216,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   }
 
   public void setHorizontal( boolean horizontal ) {
-    this.vertical = horizontal;
+    vertical = horizontal;
   }
 
   public String getMenubarName() {
@@ -125,9 +224,26 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   }
 
   public void setMenubarName( String name ) {
-    this.menubarName = name;
+    menubarName = name;
   }
 
+  protected boolean isMouseOver() {
+    return mouseOver;
+  }
+
+  protected void setMouseOver( boolean mouseOver ) {
+    this.mouseOver = mouseOver;
+  }
+
+  public boolean isAutoClose() {
+    return autoClose;
+  }
+
+  public void setAutoClose( boolean autoClose ) {
+    this.autoClose = autoClose;
+  }
+
+  @Override
   @Bindable
   public void setVisible( boolean visible ) {
     this.visible = visible;
@@ -142,7 +258,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   @Override
   public void layout() {
     menubar.clearItems();
-    for ( XulComponent c : this.getChildNodes() ) {
+    for ( XulComponent c : getChildNodes() ) {
       add( c );
     }
     if ( !loaded ) {
@@ -171,7 +287,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     super.addChild( element );
     if ( loaded == true ) {
       menubar.clearItems();
-      this.layout();
+      layout();
     }
   }
 
@@ -180,7 +296,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     super.addChildAt( element, idx );
     if ( loaded == true ) {
       menubar.clearItems();
-      this.layout();
+      layout();
     }
   }
 
@@ -191,7 +307,5 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     if ( child instanceof XulMenuitem ) {
       menubar.removeItem( (MenuItem) child.getManagedObject() );
     }
-
   }
-
 }
