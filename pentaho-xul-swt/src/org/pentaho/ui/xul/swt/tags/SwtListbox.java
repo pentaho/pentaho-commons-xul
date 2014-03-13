@@ -17,8 +17,11 @@
 
 package org.pentaho.ui.xul.swt.tags;
 
+import java.beans.Expression;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -27,68 +30,48 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.List;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.XulEventSource;
 import org.pentaho.ui.xul.XulException;
-import org.pentaho.ui.xul.binding.Binding;
-import org.pentaho.ui.xul.binding.DefaultBinding;
 import org.pentaho.ui.xul.containers.XulListbox;
 import org.pentaho.ui.xul.dnd.DropEffectType;
 import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
   private static final long serialVersionUID = 3064125049914932493L;
 
-  private ListViewer listBox;
-
+  private List listBox;
   private boolean disabled = false;
-
   private String selType;
-
   private int rowsToDisplay = 0;
-
   String onSelect = null;
-
   private XulDomContainer container;
 
   private String binding;
-
   private Collection elements;
-
   private String command;
 
   private int[] curSelectedIndices = null;
-
   private int curSelectedIndex = -1;
-
   private Object prevSelectedObject;
-
   private boolean suppressEvents;
 
-  private java.util.List<Binding> elementBindings = new ArrayList<Binding>();
-
   public SwtListbox( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
-
     super( tagName );
     this.container = container;
 
     int style = SWT.BORDER | SWT.V_SCROLL;
-
     if ( self.getAttributeValue( "seltype" ) != null && self.getAttributeValue( "seltype" ).equals( "multi" ) ) {
       style |= SWT.MULTI;
     } else {
       style |= SWT.SINGLE;
     }
+    listBox = new List( (Composite) parent.getManagedObject(), style );
 
-    listBox = new ListViewer( (Composite) parent.getManagedObject(), style );
-
-    listBox.getList().addSelectionListener( new SelectionAdapter() {
+    listBox.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( SelectionEvent arg0 ) {
@@ -105,7 +88,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
       return;
     }
 
-    int[] indices = listBox.getList().getSelectionIndices();
+    int[] indices = listBox.getSelectionIndices();
     SwtListbox.this.changeSupport.firePropertyChange( "selectedIndices", curSelectedIndices, indices );
     curSelectedIndices = indices;
 
@@ -128,15 +111,15 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
   public void setDisabled( boolean disabled ) {
     this.disabled = disabled;
-    if ( !listBox.getList().isDisposed() ) {
-      listBox.getList().setEnabled( !disabled );
+    if ( !listBox.isDisposed() ) {
+      listBox.setEnabled( !disabled );
     }
   }
 
   public void setDisabled( String dis ) {
     this.disabled = Boolean.parseBoolean( dis );
-    if ( !listBox.getList().isDisposed() ) {
-      listBox.getList().setEnabled( !disabled );
+    if ( !listBox.isDisposed() ) {
+      listBox.setEnabled( !disabled );
     }
   }
 
@@ -146,13 +129,13 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
   public void setRows( int rowsToDisplay ) {
     this.rowsToDisplay = rowsToDisplay;
-    if ( ( !listBox.getList().isDisposed() ) && ( rowsToDisplay > 0 ) ) {
-      int ht = rowsToDisplay * listBox.getList().getItemHeight();
+    if ( ( !listBox.isDisposed() ) && ( rowsToDisplay > 0 ) ) {
+      int ht = rowsToDisplay * listBox.getItemHeight();
 
       // listBox.setSize(listBox.getSize().x,height);
-      if ( listBox.getList().getLayoutData() != null ) {
-        ( (GridData) listBox.getList().getLayoutData() ).heightHint = ht;
-        ( (GridData) listBox.getList().getLayoutData() ).minimumHeight = ht;
+      if ( listBox.getLayoutData() != null ) {
+        ( (GridData) listBox.getLayoutData() ).heightHint = ht;
+        ( (GridData) listBox.getLayoutData() ).minimumHeight = ht;
       }
     }
   }
@@ -172,12 +155,26 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
   public void addItem( Object item ) {
 
-    listBox.add( item );
+    // SWT limitation - these can only be strings ...
+
+    // We could still attempt to load the object using
+    // its toString() method, but then what you recieved
+    // back from getItem() or getSelection() would
+    // be inconsistent with what you put into the list...
+
+    // TODO: Could possibly simulate a model
+    // by holding onto real objects and syncing them
+    // with the listbox.
+
+    if ( !( item instanceof String ) ) {
+      // log error... only strings supported...
+    }
+    listBox.add( (String) item );
 
   }
 
   public void removeItems() {
-    listBox.getList().removeAll();
+    listBox.removeAll();
   }
 
   public String getOnselect() {
@@ -186,7 +183,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
   public void setOnselect( final String method ) {
     onSelect = method;
-    listBox.getList().addSelectionListener( new SelectionAdapter() {
+    listBox.addSelectionListener( new SelectionAdapter() {
       public void widgetSelected( org.eclipse.swt.events.SelectionEvent arg0 ) {
         invoke( method );
       }
@@ -194,7 +191,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
   }
 
   public Object getSelectedItem() {
-    if ( listBox.getSelection() == null || listBox.getList().getSelectionCount() <= 0 ) {
+    if ( listBox.getSelection() == null || listBox.getSelectionCount() <= 0 ) {
       return null;
     }
 
@@ -204,7 +201,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
       return elements.toArray()[selIdx];
     }
     // otherwise return String value
-    return listBox.getList().getSelection()[0];
+    return listBox.getSelection()[0];
   }
 
   public Object[] getSelectedItems() {
@@ -220,15 +217,15 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
     }
     // otherwise return String value
 
-    return listBox.getList().getSelection();
+    return listBox.getSelection();
   }
 
   public int getSelectedIndex() {
-    return listBox.getList().getSelectionIndex();
+    return listBox.getSelectionIndex();
   }
 
   public int[] getSelectedIndices() {
-    return listBox.getList().getSelectionIndices();
+    return listBox.getSelectionIndices();
   }
 
   public void setSelectedItem( Object item ) {
@@ -250,20 +247,21 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
       }
       setSelectedIndices( indices );
     } else {
-
-      final String[] sel = new String[items.length];
-      for ( int i = 0; i < items.length; i++ ) {
-        sel[i] = items.toString();
+      for ( Object object : items ) {
+        if ( !( object instanceof String ) ) {
+          // TODO log error... only strings supported...
+        }
       }
-
+      final String[] sel = new String[items.length];
+      System.arraycopy( items, 0, sel, 0, items.length );
       suppressEvents = true;
-      listBox.getList().setSelection( sel );
+      listBox.setSelection( sel );
       suppressEvents = false;
 
       // SWT doesn't seem to fire this event when the selection
       // is made via code, only with a mouse or keyboard action.
 
-      listBox.getList().notifyListeners( SWT.Selection, new Event() );
+      listBox.notifyListeners( SWT.Selection, new Event() );
 
     }
   }
@@ -279,26 +277,24 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
   }
 
   public int getRowCount() {
-    return ( !listBox.getList().isDisposed() ) ? listBox.getList().getItemCount() : 0;
+    return ( !listBox.isDisposed() ) ? listBox.getItemCount() : 0;
   }
 
   public void setSelectedIndex( int index ) {
-    if ( index > listBox.getList().getItemCount() ) {
+    if ( index > listBox.getItemCount() ) {
       return;
     }
-    if ( listBox.getList().isDisposed() ) {
+    if ( listBox.isDisposed() ) {
       // TODO log error ..
-      System.out.println( "Warning: attempting to access listbox after disposal." );
     }
-    listBox.getList().setSelection( index );
+    listBox.setSelection( index );
   }
 
   public void setSelectedindex( String index ) {
-    if ( listBox.getList().isDisposed() ) {
+    if ( listBox.isDisposed() ) {
       // TODO log error ..
-      System.out.println( "Warning: attempting to access listbox after disposal." );
     }
-    listBox.getList().setSelection( Integer.parseInt( index ) );
+    listBox.setSelection( Integer.parseInt( index ) );
   }
 
   public <T> Collection<T> getElements() {
@@ -308,17 +304,13 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
   public <T> void setElements( Collection<T> elements ) {
     if ( elements != null ) {
-
-      destroyPreviousBindings();
-
       this.elements = elements;
       this.prevSelectedObject = null;
       this.curSelectedIndex = -1;
       this.curSelectedIndices = null;
 
-      listBox.getList().removeAll();
+      listBox.removeAll();
       for ( T t : elements ) {
-
         SwtListitem item = null;
         try {
           item = (SwtListitem) container.getDocumentRoot().createElement( "listitem" );
@@ -326,10 +318,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
-
+        // SwtListitem item = new SwtListitem(null, this, container, null);
         this.addChild( item );
-        item.setValue( t );
-        wireLabel( t, item );
+        item.setLabel( extractLabel( t ) );
       }
       layout();
     }
@@ -337,8 +328,8 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
   public void setSelectedIndices( int[] indices ) {
     suppressEvents = true;
-    listBox.getList().deselectAll();
-    listBox.getList().select( indices );
+    listBox.deselectAll();
+    listBox.select( indices );
     suppressEvents = false;
     fireSelectedEvents();
   }
@@ -351,49 +342,23 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
     return binding;
   }
 
-  public void updateLabel( SwtListitem item ) {
-    listBox.update( item.getValue(), null  );
-  }
-
-  private <T> void wireLabel( T t, SwtListitem item ) {
+  private <T> String extractLabel( T t ) {
     if ( t == null ) {
-      return;
+      return "";
     }
-
-    listBox.add( t );
-
     String attribute = getBinding();
-    if ( StringUtils.isNotEmpty( attribute ) ) {
-
+    if ( StringUtils.isEmpty( attribute ) ) {
+      return t.toString();
+    } else {
+      String getter = "get" + ( String.valueOf( attribute.charAt( 0 ) ).toUpperCase() ) + attribute.substring( 1 );
       try {
-
-        Binding binding = createBinding( (XulEventSource) t, attribute, item, "label" );
-        elementBindings.add( binding );
-        binding.setBindingType( Binding.Type.ONE_WAY );
-        container.addBinding( binding );
-        binding.fireSourceChanged();
-
+        return "" + ( new Expression( t, getter, null ).getValue() );
       } catch ( Exception e ) {
         throw new RuntimeException( e );
       }
     }
   }
 
-  private Binding createBinding( XulEventSource source, String prop1, XulEventSource target, String prop2 ) {
-    if ( bindingProvider != null ) {
-      return bindingProvider.getBinding( source, prop1, target, prop2 );
-    }
-    return new DefaultBinding( source, prop1, target, prop2 );
-  }
-
-  private void destroyPreviousBindings() {
-
-    for ( Binding bind : elementBindings ) {
-      bind.destroyBindings();
-    }
-    elementBindings.clear();
-
-  }
   //
   // SwtListbox supports drag bindings, but not drop bindings
   //
@@ -402,12 +367,12 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
   protected java.util.List<Object> getSwtDragData() {
     java.util.List<Object> list = new ArrayList<Object>();
     if ( elements != null && elements instanceof java.util.List ) {
-      int[] indices = listBox.getList().getSelectionIndices();
+      int[] indices = listBox.getSelectionIndices();
       for ( int i = 0; i < indices.length; i++ ) {
         list.add( ( (java.util.List) elements ).get( indices[i] ) );
       }
     } else {
-      for ( String str : listBox.getList().getSelection() ) {
+      for ( String str : listBox.getSelection() ) {
         list.add( str );
       }
     }
@@ -422,7 +387,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
       } else {
 
         // remove both from xul and from list
-        int[] indices = listBox.getList().getSelectionIndices();
+        int[] indices = listBox.getSelectionIndices();
         for ( int i = indices.length - 1; i >= 0; i-- ) {
           removeChild( getChildNodes().get( indices[i] ) );
         }
@@ -447,7 +412,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
           e.printStackTrace();
         }
         this.addChild( item );
-        item.setValue( data.get( i ) );
+        item.setLabel( data.get( i ).toString() );
       }
       layout();
     }
@@ -484,7 +449,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
   public void setCommand( final String command ) {
     this.command = command;
-    listBox.getList().addMouseListener( new MouseAdapter() {
+    listBox.addMouseListener( new MouseAdapter() {
       public void mouseDoubleClick( MouseEvent arg0 ) {
         invoke( command );
       }
