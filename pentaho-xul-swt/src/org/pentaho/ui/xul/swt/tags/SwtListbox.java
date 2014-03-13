@@ -360,8 +360,6 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
       return;
     }
 
-    listBox.add( t );
-
     String attribute = getBinding();
     if ( StringUtils.isNotEmpty( attribute ) ) {
 
