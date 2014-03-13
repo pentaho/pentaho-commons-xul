@@ -40,8 +40,14 @@ public class SwtListitem extends SwtElement implements XulListitem {
   }
 
   public void setLabel( String text ) {
+
     XulComponent p = getParent() != null ? getParent() : parent;
     label = text;
+
+    if ( value == null ) {
+      setValue( label );
+    }
+
     ( (SwtListbox) p ).updateLabel( this );
   }
 
@@ -82,6 +88,9 @@ public class SwtListitem extends SwtElement implements XulListitem {
         label = value.toString();
 
       }
+
+    XulComponent p = getParent() != null ? getParent() : parent;
+    ( (SwtListbox) p ).addItem( value );
   }
 
 }
