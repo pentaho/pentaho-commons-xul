@@ -1,0 +1,50 @@
+<!--
+  ~ /*!
+  ~  * This program is free software; you can redistribute it and/or modify it under the
+  ~  * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+  ~  * Foundation.
+  ~  *
+  ~  * You should have received a copy of the GNU Lesser General Public License along with this
+  ~  * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+  ~  * or from the Free Software Foundation, Inc.,
+  ~  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+  ~  *
+  ~  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+  ~  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+  ~  * See the GNU Lesser General Public License for more details.
+  ~  *
+  ~  * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+  ~  */
+  -->
+
+<!--===========================================================================
+  This is the build file for the Pentaho BI Platform Util project.
+  
+  This build file will use the build-res/subfloor.xml file as the default build
+  process and should only override the tasks that need to differ from
+  the common build file.
+  
+  See build-res/subfloor.xml for more details
+============================================================================-->
+<project name="pentaho-commons-auth-ui" basedir="." default="default"
+	xmlns:ivy="antlib:org.apache.ivy.ant" >
+	
+	<description>
+	  This build file is used to create the pentaho-commons-auth-ui project
+		and works with the build-res/subfloor.xml file.
+	</description>
+
+	<!-- Define the default location of the common build file -->
+	<property name="common.build.file" value="./build-res/subfloor.xml" 
+		description="This is the location of the standardized build-res/subfloor.xml file"/>
+
+	<!-- Import the build-res/subfloor.xml file which contains all the default tasks -->
+	<import file="${common.build.file}"/>
+
+    <!--
+      AS STATED ABOVE, THE ONLY TASKS THAT SHOULD EXIST IN THIS BUILD FILE ARE
+      THE TASKS THAT NEED TO DIFFER FROM THE DEFAULT IMPLEMENTATION OF THE TASKS
+      FOUND IN build-res/subfloor.xml.
+    --> 
+
+</project>
