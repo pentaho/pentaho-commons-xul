@@ -28,9 +28,10 @@ public class SwtListitem extends SwtElement implements XulListitem {
 
   String label = null;
 
-  // SWT list boxes only support String items
-  String value = null;
+  Object value = null;
+
   XulComponent parent;
+
   boolean isSelected = false;
 
   public SwtListitem( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
@@ -41,46 +42,46 @@ public class SwtListitem extends SwtElement implements XulListitem {
   public void setLabel( String text ) {
     XulComponent p = getParent() != null ? getParent() : parent;
     label = text;
-    ( (XulListbox) p ).addItem( label );
+    ( (SwtListbox) p ).updateLabel( this );
   }
 
   public String getLabel() {
+
     return label;
+
   }
 
   public Object getValue() {
+
     return value;
+
   }
 
   public boolean isSelected() {
+
     return isSelected;
+
   }
 
   public void setSelected( boolean selected ) {
     isSelected = selected;
-    if ( label != null ) {
-      ( (XulListbox) parent ).setSelectedItem( label );
-    } else if ( value != null ) {
+
+    if ( value != null ) {
+
       ( (XulListbox) parent ).setSelectedItem( value );
+
     }
   }
 
-  /**
-   * In other implementations of listbox, you can associate a String and an object with the listitem... not so in SWT..
-   * so, for this impl, the value and the label should ALWAYS be the same.
-   */
   public void setValue( Object value ) {
 
-    // SWT only supports String items.
-    if ( value instanceof String ) {
-      this.value = (String) value;
+      this.value = value;
 
-      // If the label attribute is missing, we
-      // need to figure out a way to add this child to the list ...
       if ( label == null ) {
-        setLabel( this.value );
+
+        label = value.toString();
+
       }
-    }
   }
 
 }
