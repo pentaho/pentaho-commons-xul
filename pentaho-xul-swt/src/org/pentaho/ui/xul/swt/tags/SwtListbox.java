@@ -39,6 +39,7 @@ import org.pentaho.ui.xul.dnd.DropEvent;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 
+import java.beans.Expression;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -328,7 +329,9 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
         }
 
         this.addChild( item );
-        item.setValue( t );
+        if (t instanceof XulEventSource ){
+          item.setValue( t );
+        }
         wireLabel( t, item );
       }
       layout();
@@ -365,15 +368,30 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
       try {
 
-        Binding binding = createBinding( (XulEventSource) t, attribute, item, "label" );
-        elementBindings.add( binding );
-        binding.setBindingType( Binding.Type.ONE_WAY );
-        container.addBinding( binding );
-        binding.fireSourceChanged();
+        if (t instanceof XulEventSource ){
+
+          Binding binding = createBinding( (XulEventSource) t, attribute, item, "label" );
+          elementBindings.add( binding );
+          binding.setBindingType( Binding.Type.ONE_WAY );
+          container.addBinding( binding );
+          binding.fireSourceChanged();
+
+        } else {
+
+          // do things the old way; backward compatibility to pre-binding code
+
+          String getter = "get" + ( String.valueOf(attribute.charAt(0) ).toUpperCase()) + attribute.substring(1);
+          String label =  ""+ ( new Expression(t, getter, null).getValue() );
+          item.setValue( label ); // the object was not preserved in history .. it shouldn't be here
+          item.setLabel( label );
+
+          }
 
       } catch ( Exception e ) {
         throw new RuntimeException( e );
       }
+    } else {
+      item.setLabel( t.toString() );
     }
   }
 
