@@ -194,7 +194,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
   }
 
   public Object getSelectedItem() {
-    if ( listBox.getSelection() == null || listBox.getList().getSelectionCount() <= 0 ) {
+    if ( listBox.getList().getSelection() == null || listBox.getList().getSelectionCount() <= 0 ) {
       return null;
     }
 
@@ -253,7 +253,7 @@ public class SwtListbox extends AbstractSwtXulContainer implements XulListbox {
 
       final String[] sel = new String[items.length];
       for ( int i = 0; i < items.length; i++ ) {
-        sel[i] = items.toString();
+        sel[i] = items[i].toString();
       }
 
       suppressEvents = true;
