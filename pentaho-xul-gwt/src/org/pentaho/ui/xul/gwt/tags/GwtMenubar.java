@@ -17,6 +17,18 @@
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.components.XulMenuitem;
+import org.pentaho.ui.xul.components.XulMenuseparator;
+import org.pentaho.ui.xul.containers.XulMenubar;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
+import org.pentaho.ui.xul.gwt.GwtXulHandler;
+import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.util.FrameCover;
+import org.pentaho.ui.xul.stereotype.Bindable;
+
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -32,28 +44,18 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.PopupPanel;
 
-import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.components.XulMenuitem;
-import org.pentaho.ui.xul.components.XulMenuseparator;
-import org.pentaho.ui.xul.containers.XulMenubar;
-import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
-import org.pentaho.ui.xul.gwt.GwtXulParser;
-import org.pentaho.ui.xul.gwt.util.FrameCover;
-import org.pentaho.ui.xul.stereotype.Bindable;
-
 public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
   private String menubarName;
   private MenuBar menubar;
   private boolean loaded;
   private boolean vertical = true;
-  private boolean mouseOver = false;
-  private boolean autoClose = true;
-  private final int closeDelay = 300;
+  private boolean autoClose = false;
+  private final int closeDelay = 100;
   private FrameCover frameCover = null;
+
+  // dynamic values
+  private boolean mouseOver = false;
 
   protected class MenuBar extends com.google.gwt.user.client.ui.MenuBar {
     private GwtMenubar gwtMenubar;
@@ -69,10 +71,14 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
     @Override
     public void focus() {
-      super.focus();
-      if ( autoClose ) {
-        closeAllChildren( false );
+      if ( gwtMenubar != null ) {
+        XulComponent parent = gwtMenubar.getParent();
+        // not top menu
+        if ( parent != null && parent instanceof GwtMenubar ) {
+          closeAllChildren( false );
+        }
       }
+      super.focus();
     }
 
     public void setGwtMenubar( GwtMenubar gwtMenubar ) {
@@ -144,14 +150,10 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
           if ( isMouseOver() ) {
             setMouseOver( false );
             Scheduler.get().scheduleFixedDelay( new RepeatingCommand() {
-              @SuppressWarnings( "finally" )
               @Override
               public boolean execute() {
-                try {
-                  hide();
-                } finally {
-                  return false;
-                }
+                hide();
+                return false;
               }
             }, closeDelay );
           }
