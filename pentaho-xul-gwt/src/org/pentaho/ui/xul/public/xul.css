@@ -280,13 +280,9 @@ legend {
 
 .toolbar-button{
   opacity: 1;
-  filter: alpha(opacity=100);
-
 }
 .toolbar-button-disabled{
   opacity: 0.4;
-  filter: alpha(opacity=40);
-
 }
 
 .xul-pre {
