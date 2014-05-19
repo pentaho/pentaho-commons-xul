@@ -1,38 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ This library is free software; you can redistribute it and/or
-  ~ modify it under the terms of the GNU Lesser General Public
-  ~ License as published by the Free Software Foundation; either
-  ~ version 2.1 of the License, or (at your option) any later version.
-  ~
-  ~ This library is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  ~ Lesser General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Lesser General Public
-  ~ License along with this library; if not, write to the Free Software
-  ~ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-  ~
-  ~ Copyright 2009 Pentaho Corporation.  All rights reserved.
-  -->
-
 <ivysettings>
-    <property name="ivy.local.default.root" value="${ivy.default.ivy.user.dir}/local" override="true"/>
-    <property name="ivy.local.default.artifact.pattern"
-              value="[organisation]/[module]/[revision]/[type]s/[artifact]-[revision].[ext]" override="false"/>
+  <properties environment="env" />
+  <property name="ivy.local.default.root" value="${ivy.default.ivy.user.dir}/local" override="true" />
+  <property name="ivy.local.default.artifact.pattern" value="[organisation]/[module]/[revision]/[type]s/[artifact]-[revision].[ext]"
+    override="false" />
+    
+  <!-- Repository for Pentaho-hosted artifacts -->  
+  <property name="pentaho.resolve.repo" value="http://repo.pentaho.org/artifactory/repo" override="false" />
+  <!-- Repository for External-hosted artifacts (Optional. Defaults to Pentaho-hosted.) -->
+  <property name="public.resolve.repo" value="${pentaho.resolve.repo}" override="false" />
 
-    <settings defaultResolver="default"/>
-    <include url="${ivy.default.settings.dir}/ivysettings-public.xml"/>
-    <resolvers>
-        <dual name="shared">
-            <url name="shared-ivy">
-                <ivy pattern="http://repo.pentaho.org/artifactory/repo/[organisation]/[module]/[revision]/[module]-[revision].ivy.xml"/>
-            </url>
-            <ibiblio name="shared-mvn" m2compatible="true" root="http://repo.pentaho.org/artifactory/repo"/>
-        </dual>
-    </resolvers>
-    <include url="${ivy.default.settings.dir}/ivysettings-local.xml"/>
-    <include url="${ivy.default.settings.dir}/ivysettings-main-chain.xml"/>
-    <include url="${ivy.default.settings.dir}/ivysettings-default-chain.xml"/>
+  <settings defaultResolver="pentaho-chained-resolver" />
+  <include url="${ivy.default.settings.dir}/ivysettings-public.xml" />
+  <include url="${ivy.default.settings.dir}/ivysettings-local.xml" />
+  <resolvers>
+    <chain name="pentaho-chained-resolver">
+      <resolver ref="local" />
+      <dual name="pentaho">
+        <url name="pentaho-ivy">
+          <ivy pattern="${pentaho.resolve.repo}/[organisation]/[module]/[revision]/[module]-[revision].ivy.xml" />
+        </url>
+        <ibiblio name="pentaho-mvn" m2compatible="true" root="${pentaho.resolve.repo}" />
+      </dual>
+      <ibiblio name="public-maven" root="${public.resolve.repo}" m2compatible="true" />
+    </chain>
+  </resolvers>
+  <caches lockStrategy="artifact-lock" resolutionCacheDir="${ivy.default.ivy.user.dir}/resol-cache${env.EXECUTOR_NUMBER}" />
 </ivysettings>
