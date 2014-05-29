@@ -120,6 +120,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private boolean dropIconsVisible = true;
   private String onedit, onselect, seltype;
 
+  private TreeItem lastSelectedItem = null;
+
   @Bindable
   public boolean isVisible() {
     return visible;
@@ -354,7 +356,21 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   }
 
+  private TreeItem searchItem(TreeItem item, TreeItem tree) {
+    if (tree.equals(item)) {
+      return tree;
+    }
+    for (int i = 0; i < tree.getChildCount(); i++) {
+      TreeItem treeItem = searchItem(item, tree.getChild(i));
+      if (treeItem != null) {
+        return treeItem;
+      }
+    }
+    return null;
+  }
+
   private void populateTree() {
+    this.lastSelectedItem = tree.getSelectedItem();
     tree.removeItems();
     TreeItem topNode = new TreeItem( "placeholder" );
     if ( this.rootChildren == null ) {
@@ -372,6 +388,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
     }
 
+    if (lastSelectedItem != null) {
+      for(int i = 0; i < tree.getItemCount(); i++){
+        tree.setSelectedItem(searchItem(this.lastSelectedItem, this.tree.getItem(i)));
+      }
+    }
+    this.lastSelectedItem = null;
   }
 
   private void madeDraggable( TreeItem item ) {
@@ -460,6 +482,23 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         } else {
           this.getWidget().removeStyleDependentName( "selected" );
         }
+      }
+      @Override
+      public boolean equals( Object other ){
+        if(other == null) return false;
+        TreeItem otherTreeItem = (TreeItem)other;
+        if(this.getText() != otherTreeItem.getText()) return false;
+        TreeItem thisParent = this.getParentItem(),
+                otherTreeItemParent = otherTreeItem.getParentItem();
+        while( thisParent != null || otherTreeItemParent != null ) {
+          if(thisParent == null) return false;
+          if(otherTreeItemParent == null) return false;
+          if(thisParent.getText() != otherTreeItemParent.getText()) return false;
+
+          thisParent = thisParent.getParentItem();
+          otherTreeItemParent = otherTreeItemParent.getParentItem();
+        }
+        return true;
       }
     };
     item.setManagedObject( node );
