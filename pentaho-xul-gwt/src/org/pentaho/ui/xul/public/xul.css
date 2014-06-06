@@ -82,11 +82,14 @@ html, body{
 }
 
 .gwt_file_upload_hidden_div .gwt-StyledFileUpload {
-    visibility: hidden;     /*to remove cursor blinking after selecting file to upload in ie*/
+    /*visibility: hidden;*/ /*to remove cursor blinking after selecting file to upload in ie*/
+    opacity: 0;
+    position: absolute;
+    right:0;
+    top:0;
 }
 
 .gwt_file_upload_hidden_div .gwt_file_upload_label {
-    position: absolute;
     top: 0;
     left: 0;
     z-index: 5;
