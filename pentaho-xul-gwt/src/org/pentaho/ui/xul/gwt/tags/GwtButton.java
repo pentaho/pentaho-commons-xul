@@ -41,6 +41,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -280,9 +281,14 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
             menuBar = new MenuBar( true );
             menuBar.setAutoOpen( true );
             // This is a GwtMenuPopop
-            for ( XulComponent menuItem : popup.getChildNodes() ) {
-              final GwtMenuitem tempItem = ( (GwtMenuitem) menuItem );
-              menuBar.addItem( tempItem.getLabel(), new PopupMenuCommand( tempItem.getCommand(), popupPanel ) );
+            for ( XulComponent item : popup.getChildNodes() ) {
+              if (item instanceof GwtMenuitem) {
+                final GwtMenuitem tempItem = ( (GwtMenuitem) item );
+                menuBar.addItem( tempItem.getLabel(), new PopupMenuCommand( tempItem.getCommand(), popupPanel ) );
+              } else if (item instanceof GwtMenuSeparator) {
+                final GwtMenuSeparator tempItem = ( (GwtMenuSeparator) item );
+                menuBar.addSeparator( (MenuItemSeparator)tempItem.getManagedObject() );
+              }
             }
             popupPanel.setWidget( menuBar );
             popupPanel.setPopupPositionAndShow( new PositionCallback() {
