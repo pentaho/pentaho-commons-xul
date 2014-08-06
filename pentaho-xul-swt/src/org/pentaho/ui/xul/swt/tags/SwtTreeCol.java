@@ -26,6 +26,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.binding.BindingUtil;
 import org.pentaho.ui.xul.binding.InlineBindingExpression;
 import org.pentaho.ui.xul.components.XulTreeCol;
+import org.pentaho.ui.xul.containers.XulTree;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.ColumnType;
@@ -51,6 +52,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   private String tooltipBinding;
   private String comparatorBinding;
   private int width = 0;
+  private XulTree tree;
 
   public SwtTreeCol( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
     super( "treecol" );
@@ -101,8 +103,7 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   }
 
   public boolean isHidden() {
-    // TODO Auto-generated method stub
-    return false;
+    return !isVisible();
   }
 
   public boolean isPrimary() {
@@ -124,8 +125,11 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   }
 
   public void setHidden( boolean hide ) {
-    // TODO Auto-generated method stub
-
+    if ( hide == isVisible() ) {
+      setVisible( !hide );
+      getTree().update();
+      layout();
+    }
   }
 
   public void setLabel( String label ) {
@@ -269,5 +273,19 @@ public class SwtTreeCol extends SwtElement implements XulTreeCol {
   public void setClassnameBinding( String classname ) {
     // Classname does not apply to SWT
   }
-
+  
+  private XulTree getTree() {
+    if ( tree == null ) {
+      tree = (SwtTree) this.getParent().getParent();
+    }
+    return tree;
+  }
+  
+  @Override
+  public int getFlex() {
+    if ( !this.visible ){
+      return 0;
+    }
+    return super.getFlex();
+  }
 }
