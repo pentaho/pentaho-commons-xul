@@ -734,8 +734,14 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     // Column Types have changed
     Object[] xulTreeColArray = this.columns.getChildNodes().toArray();
     for ( int i = 0; i < xulTreeColArray.length; i++ ) {
+      XulTreeCol xulTreeCol = (XulTreeCol) xulTreeColArray[i];
       if ( !currentColumnTypes[i].toString().equalsIgnoreCase( ( (XulTreeCol) xulTreeColArray[i] ).getType() ) ) {
         // A column has changed its type. Columns need updating
+        return true;
+      }
+      if ( ( table.getTable().getColumn( i ).getWidth() > 0 && !xulTreeCol.isVisible() )
+          || table.getTable().getColumn( i ).getWidth() == 0 && xulTreeCol.isVisible() ) {
+        // A column has changed its visible status
         return true;
       }
     }
@@ -772,9 +778,10 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       // Pack the columns
       for ( int i = 0; i < table.getTable().getColumnCount(); i++ ) {
-        table.getTable().getColumn( i ).pack();
+        if ( this.columns.getColumn( i ).isVisible() ) {
+          table.getTable().getColumn( i ).pack();
+        }
       }
-
     }
 
     if ( table.getCellEditors() != null ) {
