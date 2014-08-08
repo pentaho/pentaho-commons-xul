@@ -54,6 +54,7 @@ import org.pentaho.ui.xul.gwt.tags.GwtMenubar;
 import org.pentaho.ui.xul.gwt.tags.GwtMenubarSeparator;
 import org.pentaho.ui.xul.gwt.tags.GwtMenuitem;
 import org.pentaho.ui.xul.gwt.tags.GwtMenupopup;
+import org.pentaho.ui.xul.gwt.tags.GwtMenuSeparator;
 import org.pentaho.ui.xul.gwt.tags.GwtMessageBox;
 import org.pentaho.ui.xul.gwt.tags.GwtOverlay;
 import org.pentaho.ui.xul.gwt.tags.GwtPromptBox;
@@ -154,6 +155,7 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
     GwtMenubarSeparator.register();
     GwtMenuitem.register();
     GwtMenupopup.register();
+    GwtMenuSeparator.register();
     GwtMessageBox.register();
     GwtPromptBox.register();
     GwtConfirmBox.register();
