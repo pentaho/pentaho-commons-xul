@@ -24,6 +24,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.stereotype.Bindable;
 
 public class GwtMenuSeparator extends AbstractGwtXulComponent implements
 		XulMenuseparator {
@@ -47,18 +48,16 @@ public class GwtMenuSeparator extends AbstractGwtXulComponent implements
 	}
 
 	@Override
-	public void init(com.google.gwt.xml.client.Element srcEle,
-			XulDomContainer container) {
-		super.init(srcEle, container);
-	}
-
-	@Override
 	public String toString() {
 		return "-- separator --";
 	}
-	@Override
-	public void layout() {
-		// TODO Auto-generated method stub
-		super.layout();
-	}
+
+    @Bindable
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+
+        separator.getElement().getStyle()
+                .setProperty("display", (this.visible) ? "" : "none");
+    }
 }
