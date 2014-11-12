@@ -414,6 +414,14 @@ public abstract class AbstractXulDomContainer implements XulDomContainer {
 
   }
 
+  @Override
+  public void deRegisterClassLoader(Object loader) {
+    if ( classloaders.contains( loader ) ) {
+      classloaders.remove( loader);
+    }
+    this.xulLoader.deRegisterClassLoader( loader );
+  }
+
   public Object getResourceAsStream( String name ) {
     return this.xulLoader.getResourceAsStream( name );
   }

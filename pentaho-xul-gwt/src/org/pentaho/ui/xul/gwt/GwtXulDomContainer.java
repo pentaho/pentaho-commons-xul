@@ -431,6 +431,10 @@ public class GwtXulDomContainer implements XulDomContainer {
 
   }
 
+  public void deRegisterClassLoader(Object loader) {
+
+  }
+
   public XulSettingsManager getSettingsManager() {
     return settings;
   }

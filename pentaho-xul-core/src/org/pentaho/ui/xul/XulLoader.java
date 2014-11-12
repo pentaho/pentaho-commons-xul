@@ -194,6 +194,8 @@ public interface XulLoader {
   // TODO: create wrapper.
   void registerClassLoader( Object loader );
 
+  void deRegisterClassLoader( Object loader );
+
   Object getResourceAsStream( String name );
 
   void setSettingsManager( XulSettingsManager settings );

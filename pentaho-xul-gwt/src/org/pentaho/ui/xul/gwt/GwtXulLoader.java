@@ -313,6 +313,10 @@ public class GwtXulLoader implements IResourceBundleLoadCallback, XulLoader {
 
   }
 
+  public void deRegisterClassLoader( Object loader ) {
+    // TODO Auto-generated method stub
+
+  }
   public XulSettingsManager getSettingsManager() {
     return settings;
   }

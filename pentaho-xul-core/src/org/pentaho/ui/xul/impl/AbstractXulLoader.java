@@ -877,6 +877,13 @@ public abstract class AbstractXulLoader implements XulLoader {
 
   }
 
+  @Override
+  public void deRegisterClassLoader(Object loader) {
+    if ( classloaders.contains( loader ) ) {
+      classloaders.remove( loader );
+    }
+  }
+
   public InputStream getResourceAsStream( String name ) {
     for ( ClassLoader loader : classloaders ) {
       InputStream str = loader.getResourceAsStream( name );
