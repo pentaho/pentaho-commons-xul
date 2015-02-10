@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.pentaho.ui.xul.XulComponent;
+import org.pentaho.ui.xul.XulContainer;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulToolbarbutton;
 import org.pentaho.ui.xul.containers.XulToolbar;
@@ -86,7 +87,32 @@ public class SwtToolbarbutton extends AbstractSwtXulContainer implements XulTool
       style |= SWT.PUSH;
     }
 
-    button = new ToolItem( (ToolBar) parent.getManagedObject(), style );
+    String insertBefore = self.getAttributeValue( "insertbefore" );
+    String insertAfter = self.getAttributeValue( "insertafter" );
+    String position = self.getAttributeValue( "position" );
+
+    XulContainer sourceContainer = ( (XulContainer) parent );
+    int positionToInsert = -1;
+    if ( insertBefore != null ) {
+      org.pentaho.ui.xul.dom.Element insertBeforeTarget = parent.getElementById( insertBefore );
+      positionToInsert = sourceContainer.getChildNodes().indexOf( insertBeforeTarget );
+    } else if ( insertAfter != null ) {
+      org.pentaho.ui.xul.dom.Element insertAfterTarget = parent.getElementById( insertAfter );
+      positionToInsert = sourceContainer.getChildNodes().indexOf( insertAfterTarget );
+      if ( positionToInsert != -1 ) {
+        positionToInsert += 1;
+      }
+    } else if ( position != null ) {
+      int pos = Integer.parseInt( position );
+      positionToInsert = ( pos <= sourceContainer.getChildNodes().size() ) ? pos : -1;
+    }
+
+    if ( positionToInsert == -1 || positionToInsert == sourceContainer.getChildNodes().size() ) {
+      button = new ToolItem( (ToolBar) parent.getManagedObject(), style );
+    }
+    else {
+      button = new ToolItem( (ToolBar) parent.getManagedObject(), style, positionToInsert );
+    }
 
     button.addSelectionListener( new SelectionAdapter() {
 
