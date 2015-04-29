@@ -43,7 +43,7 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
   private boolean readOnly = false;
   private int maxLength;
   private String text;
-  private TextType type = TextType.NORMAL;
+  protected TextType type = TextType.NORMAL;
   private int max;
   private int min;
   private String oldValue = "";
