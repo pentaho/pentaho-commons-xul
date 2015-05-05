@@ -20,9 +20,11 @@ package org.pentaho.ui.xul.test.dom;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.GraphicsEnvironment;
 import java.util.List;
 
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulComponent;
@@ -36,6 +38,10 @@ public class ElementDom4JTest {
 
   @Before
   public void setUp() throws Exception {
+
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     XulDomContainer container = new SwingXulLoader().loadXul( "resource/documents/splitterTest.xul" );
     ele = container.getDocument( 0 ).getElementById( "testContainerElement" );
   }
