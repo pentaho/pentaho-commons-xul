@@ -19,11 +19,12 @@ package org.pentaho.ui.xul.test.swing;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -39,13 +40,12 @@ public class SwingImageTest {
   @Before
   public void setUp() throws Exception {
 
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     container = new SwingXulLoader().loadXul( "resource/documents/images.xul" );
 
     doc = container.getDocumentRoot();
-  }
-
-  @After
-  public void tearDown() throws Exception {
   }
 
   @Test

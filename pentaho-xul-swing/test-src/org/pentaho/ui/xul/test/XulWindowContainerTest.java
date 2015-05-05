@@ -54,7 +54,9 @@ public class XulWindowContainerTest {
 
   @After
   public void tearDown() throws Exception {
-    runner.stop();
+    if ( runner != null ) {
+      runner.stop();
+    }
   }
 
   @Test
