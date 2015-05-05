@@ -21,8 +21,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.awt.GraphicsEnvironment;
 import java.util.Locale;
 
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -41,6 +43,9 @@ public class BindingsTest {
 
   @Before
   public void setup() throws Exception {
+
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
 
     Locale.setDefault( Locale.US );
     container = new SwingXulLoader().loadXul( "resource/documents/bindingsTest.xul" );

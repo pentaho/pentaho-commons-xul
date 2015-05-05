@@ -20,6 +20,7 @@ package org.pentaho.ui.xul.test.swing;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.Vector;
 import javax.swing.JTable;
 
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -56,6 +58,9 @@ public class SwingTreeTest {
 
   @Before
   public void setUp() throws Exception {
+
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
 
     container = new SwingXulLoader().loadXul( "resource/documents/treeTest.xul" );
 
@@ -107,7 +112,7 @@ public class SwingTreeTest {
 
   @Test
   public void testRowType() throws Exception {
-    XulTreeCols cols = (XulTreeCols) tree.getColumns();
+    XulTreeCols cols = tree.getColumns();
     assertEquals( cols.getColumn( 0 ).getColumnType(), ColumnType.CHECKBOX );
     assertEquals( cols.getColumn( 1 ).getColumnType(), ColumnType.TEXT );
     assertEquals( cols.getColumn( 3 ).getColumnType(), ColumnType.COMBOBOX );
@@ -210,7 +215,7 @@ public class SwingTreeTest {
     runner.initialize();
     runner.start();
 
-    JTable table = (JTable) ( (SwingTree) tree ).getTable();
+    JTable table = ( (SwingTree) tree ).getTable();
     // Edit calls return false if there's a cell editor failure
     assertTrue( table.editCellAt( 0, 0 ) );
     assertTrue( table.editCellAt( 0, 3 ) );
@@ -225,7 +230,7 @@ public class SwingTreeTest {
     runner.initialize();
     runner.start();
 
-    JTable table = (JTable) ( (SwingTree) tree ).getTable();
+    JTable table = ( (SwingTree) tree ).getTable();
     table.setValueAt( "Ted", 0, 1 );
     table.setValueAt( Boolean.FALSE, 0, 0 );
     table.setValueAt( "baz", 0, 3 );

@@ -20,8 +20,11 @@ package org.pentaho.ui.xul.test.swt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.GraphicsEnvironment;
+
 import org.dom4j.Document;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -41,6 +44,9 @@ public class SwtProgressmeterTest {
   @Before
   public void setUp() throws Exception {
 
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     container = new SwtXulLoader().loadXul( "resource/documents/progressmeter.xul" );
 
     runner = new SwtXulRunner();
@@ -52,9 +58,8 @@ public class SwtProgressmeterTest {
 
   @After
   public void tearDown() throws Exception {
-    try {
+    if ( runner != null ) {
       runner.stop();
-    } catch ( Exception e ) {
     }
   }
 
