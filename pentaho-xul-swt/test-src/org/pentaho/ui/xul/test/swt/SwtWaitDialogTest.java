@@ -17,7 +17,10 @@
 
 package org.pentaho.ui.xul.test.swt;
 
+import java.awt.GraphicsEnvironment;
+
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -38,6 +41,9 @@ public class SwtWaitDialogTest {
   @Before
   public void setUp() throws Exception {
 
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     // load anything... doesn't matter for this test.
     container = new SwtXulLoader().loadXul( "resource/documents/buttonTester.xul" );
     document = container.getDocumentRoot();
@@ -52,9 +58,8 @@ public class SwtWaitDialogTest {
 
   @After
   public void tearDown() throws Exception {
-    try {
+    if ( runner != null ) {
       runner.stop();
-    } catch ( Exception e ) {
     }
   }
 

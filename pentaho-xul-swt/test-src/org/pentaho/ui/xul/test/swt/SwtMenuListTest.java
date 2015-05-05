@@ -19,9 +19,11 @@ package org.pentaho.ui.xul.test.swt;
 
 import static org.junit.Assert.assertEquals;
 
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -38,6 +40,10 @@ public class SwtMenuListTest {
 
   @Before
   public void setUp() throws Exception {
+
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     container = new SwtXulLoader().loadXul( "resource/documents/menulist.xul" );
     doc = container.getDocumentRoot();
     list = (XulMenuList) doc.getElementById( "list" );
