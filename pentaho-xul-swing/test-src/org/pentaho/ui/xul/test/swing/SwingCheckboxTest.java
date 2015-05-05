@@ -20,10 +20,13 @@ package org.pentaho.ui.xul.test.swing;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.GraphicsEnvironment;
+
 import javax.swing.JCheckBox;
 
 import org.dom4j.Document;
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -43,6 +46,9 @@ public class SwingCheckboxTest {
   @Before
   public void setUp() throws Exception {
 
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     container = new SwingXulLoader().loadXul( "resource/documents/allTags.xul" );
 
     runner = new SwingXulRunner();
@@ -54,9 +60,8 @@ public class SwingCheckboxTest {
 
   @After
   public void tearDown() throws Exception {
-    try {
+    if ( runner != null ) {
       runner.stop();
-    } catch ( Exception e ) {
     }
   }
 
