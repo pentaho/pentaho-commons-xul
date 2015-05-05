@@ -22,8 +22,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.GraphicsEnvironment;
 import java.util.Map;
 
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulLoader;
@@ -34,6 +37,12 @@ import org.pentaho.ui.xul.samples.TreeHandler;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
 
 public class XulDomContainerTest {
+
+  @Before
+  public void setUp() {
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+  }
 
   @Test
   public void testOnLoad() throws Exception {

@@ -20,10 +20,13 @@ package org.pentaho.ui.xul.test.swing;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.containers.XulGroupbox;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
@@ -31,6 +34,12 @@ import org.pentaho.ui.xul.swing.SwingXulRunner;
 import org.pentaho.ui.xul.util.Orient;
 
 public class SwingGroupboxTest {
+
+  @Before
+  public void setUp() throws Exception {
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+  }
 
   @Test
   public void testHorizontal() throws Exception {
