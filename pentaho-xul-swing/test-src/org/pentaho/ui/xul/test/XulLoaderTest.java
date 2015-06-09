@@ -22,11 +22,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import java.awt.GraphicsEnvironment;
 import java.io.InputStream;
 import java.util.ResourceBundle;
 
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -37,6 +40,12 @@ import org.pentaho.ui.xul.impl.XulFragmentContainer;
 import org.pentaho.ui.xul.swing.SwingXulLoader;
 
 public class XulLoaderTest {
+
+  @Before
+  public void setUp() {
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+  }
 
   @Test
   public void testLoadXulFromInputStream() throws Exception {

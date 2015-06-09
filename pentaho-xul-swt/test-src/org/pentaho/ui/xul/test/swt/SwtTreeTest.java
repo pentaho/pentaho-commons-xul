@@ -20,12 +20,14 @@ package org.pentaho.ui.xul.test.swt;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -55,6 +57,9 @@ public class SwtTreeTest {
   @Before
   public void setUp() throws Exception {
 
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     container = new SwtXulLoader().loadXul( "resource/documents/treeTest.xul" );
 
     runner = new SwtXulRunner();
@@ -72,9 +77,8 @@ public class SwtTreeTest {
 
   @After
   public void tearDown() throws Exception {
-    try {
+    if ( runner != null ) {
       runner.stop();
-    } catch ( Exception e ) {
     }
   }
 
@@ -110,7 +114,7 @@ public class SwtTreeTest {
 
   @Test
   public void testRowType() throws Exception {
-    XulTreeCols cols = (XulTreeCols) tree.getColumns();
+    XulTreeCols cols = tree.getColumns();
     assertEquals( cols.getColumn( 0 ).getColumnType(), ColumnType.CHECKBOX );
     assertEquals( cols.getColumn( 1 ).getColumnType(), ColumnType.TEXT );
     assertEquals( cols.getColumn( 3 ).getColumnType(), ColumnType.COMBOBOX );

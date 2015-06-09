@@ -20,7 +20,10 @@ package org.pentaho.ui.xul.test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
+import java.awt.GraphicsEnvironment;
+
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -38,6 +41,10 @@ public class XulWindowContainerTest {
 
   @Before
   public void setUp() throws Exception {
+
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
+
     container = new SwingXulLoader().loadXul( "resource/documents/windowContainerTest.xul" );
     runner = new SwingXulRunner();
     runner.addContainer( container );
@@ -47,7 +54,9 @@ public class XulWindowContainerTest {
 
   @After
   public void tearDown() throws Exception {
-    runner.stop();
+    if ( runner != null ) {
+      runner.stop();
+    }
   }
 
   @Test

@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.awt.GraphicsEnvironment;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.InputStream;
@@ -33,9 +34,8 @@ import javax.swing.JComponent;
 import org.dom4j.Document;
 import org.dom4j.io.SAXReader;
 import org.junit.After;
-import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -54,16 +54,11 @@ public class SwingElementTest {
   XulDomContainer container;
   SwingElement element;
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
-
   @Before
   public void setUp() throws Exception {
+
+    // Do not run on headless environment
+    Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
 
     InputStream in = SwingXulRunner.class.getClassLoader().getResourceAsStream( "resource/documents/splitterTest.xul" );
     assertNotNull( "XUL input not found.", in );
@@ -80,9 +75,8 @@ public class SwingElementTest {
 
   @After
   public void tearDown() throws Exception {
-    try {
+    if ( runner != null ) {
       runner.stop();
-    } catch ( Exception e ) {
     }
   }
 
