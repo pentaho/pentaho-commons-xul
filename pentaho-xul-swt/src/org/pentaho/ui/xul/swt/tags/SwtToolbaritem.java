@@ -54,6 +54,13 @@ public class SwtToolbaritem extends AbstractSwtXulContainer implements XulToolba
 
   }
 
+  /**
+   * Get item method required because managedObject is parent object.
+   */
+  public ToolItem getItem() {
+    return item;
+  }
+
   @Override
   public void layout() {
     if ( getChildNodes().size() > 0 ) {
