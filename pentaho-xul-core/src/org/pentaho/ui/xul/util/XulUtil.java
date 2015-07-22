@@ -95,7 +95,7 @@ public final class XulUtil {
     }
 
     if ( in == null ) {
-      throw new FileNotFoundException( "Could not locate resoruce: " + src );
+      throw new FileNotFoundException( "Could not locate resource: " + src );
     }
     return in;
 
