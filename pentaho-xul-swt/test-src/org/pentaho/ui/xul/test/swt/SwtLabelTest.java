@@ -17,12 +17,16 @@
 
 package org.pentaho.ui.xul.test.swt;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.GraphicsEnvironment;
 
 import org.dom4j.Document;
+import org.eclipse.swt.custom.CLabel;
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
@@ -32,6 +36,7 @@ import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.components.XulLabel;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
+import org.pentaho.ui.xul.swt.tags.SwtLabel;
 
 public class SwtLabelTest {
 
@@ -74,7 +79,26 @@ public class SwtLabelTest {
     assertTrue( !label.isDisabled() );
     label.setDisabled( true );
     assertTrue( label.isDisabled() );
-
   }
+
+  @Test
+  public void testLink() {
+    SwtLabel swtLabel = (SwtLabel) container.getDocumentRoot().getElementById( "label-four" );
+    assertThat( swtLabel.getManagedObject(), instanceOf( org.eclipse.swt.widgets.Link.class ) );
+    assertThat( swtLabel.getOnclick(), equalTo( "doIt()" ) );
+  }
+
+  @Test
+  public void testMultilineLabel() {
+    SwtLabel swtLabel = (SwtLabel) container.getDocumentRoot().getElementById( "label-three" );
+    assertThat( swtLabel.getManagedObject(), instanceOf( org.eclipse.swt.widgets.Label.class ) );
+  }
+
+  @Test
+  public void testSinglelineLabel() {
+    SwtLabel swtLabel = (SwtLabel) container.getDocumentRoot().getElementById( "label-two" );
+    assertThat( swtLabel.getManagedObject(), instanceOf( CLabel.class ) );
+  }
+
 
 }
