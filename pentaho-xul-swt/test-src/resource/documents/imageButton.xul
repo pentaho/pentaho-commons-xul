@@ -6,7 +6,7 @@
 	 xmlns:HTML="http://www.w3.org/Profiles/XHTML-transitional" height="450" width="650">
 
 	<script src="org.pentaho.ui.xul.samples.ButtonHandler" id="handler"/>
-	
+
 	<button id="plainButton" label="plain button" onclick="handler.doSimpleClick()"/>
 
 	<hbox>
@@ -14,6 +14,7 @@
 		<button id="secondButton"  label="BOTTOM" image="testImage.png"  orient="vertical" dir="forward" group="test" type="radio"/>
 		<button label="RIGHT" image="testImage.png" orient="horizontal" dir="reverse" group="test" type="radio"/>
 		<button label="LEFT" image="testImage.png"  orient="horizontal" dir="forward" group="test" type="radio"/>
+		<button id="imageButton" image="testImage.png" />
 	</hbox>
 
 </window>

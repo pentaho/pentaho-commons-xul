@@ -32,6 +32,8 @@ import org.pentaho.ui.xul.XulRunner;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
 import org.pentaho.ui.xul.swt.SwtXulRunner;
+import org.pentaho.ui.xul.swt.tags.SwtButton;
+import org.pentaho.ui.xul.swt.tags.SwtLabel;
 
 public class SwtButtonTest {
 
@@ -107,5 +109,13 @@ public class SwtButtonTest {
   public void testGetDir() {
     XulButton button1 = (XulButton) container.getDocumentRoot().getElementById( "firstButton" );
     assertEquals( "reverse", button1.getDir() );
+  }
+
+  @Test
+  public void testImageButton() {
+    XulButton button = (XulButton) container.getDocumentRoot().getElementById( "firstButton" );
+    assertTrue( "Button with label and image set should render SwtButton", button.getManagedObject() instanceof SwtButton );
+    button = (XulButton) container.getDocumentRoot().getElementById( "imageButton" );
+    assertTrue( "Button without label and with image set should render SwtLabel", button.getManagedObject() instanceof SwtLabel );
   }
 }

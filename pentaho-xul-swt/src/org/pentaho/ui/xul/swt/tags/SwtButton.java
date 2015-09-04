@@ -42,7 +42,6 @@ import org.pentaho.ui.xul.util.SwtXulUtil;
 
 public class SwtButton extends SwtElement implements XulButton {
   private static final long serialVersionUID = -7218075117194366698L;
-  private static final Log logger = LogFactory.getLog( SwtButton.class );
 
   protected org.eclipse.swt.widgets.Button button;
   private String label;
@@ -79,14 +78,13 @@ public class SwtButton extends SwtElement implements XulButton {
     // Extract custom parameters
     if ( self != null ) {
       disabledImage = self.getAttributeValue( "disabledimage" ); //$NON-NLS-1$
-    }
-
-    if ( self != null ) {
       selectedImage = self.getAttributeValue( "selectedimage" ); //$NON-NLS-1$
+      image = self.getAttributeValue( "image" ); //$NON-NLS-1$
+      label = self.getAttributeValue( "label" ); //$NON-NLS-1$
     }
     // Special creation path for image buttons with no text. We don't want them to appear with the
     // traditional button border.
-    if ( self != null && self.getAttributeValue( "image" ) != null ) {
+    if ( image != null && label == null ) {
       setManagedObject( createImageButton() );
     } else {
       button = createNewButton( (Composite) parent.getManagedObject() );
@@ -100,7 +98,7 @@ public class SwtButton extends SwtElement implements XulButton {
 
       @Override
       public void mouseUp( MouseEvent arg0 ) {
-        if ( disabled == false ) {
+        if ( !disabled ) {
           invoke( onclick );
         }
       }
@@ -144,7 +142,7 @@ public class SwtButton extends SwtElement implements XulButton {
   /**
    * XUL's attribute is "disabled", thus this acts exactly the opposite of SWT. If the property is not available, then
    * the control is enabled.
-   * 
+   *
    * @return boolean true if the control is disabled.
    */
   public boolean isDisabled() {
@@ -166,19 +164,14 @@ public class SwtButton extends SwtElement implements XulButton {
     }
 
     if ( this.disabled ) {
-      if ( disabledImage != null ) {
-        displayImage( disabledImage );
-      }
+      displayImage( disabledImage );
     } else {
-      if ( image != null ) {
-        displayImage( image );
-      }
+      displayImage( image );
     }
   }
 
   public void setOnclick( final String method ) {
     this.onclick = method;
-
   }
 
   public String getLabel() {
@@ -192,20 +185,19 @@ public class SwtButton extends SwtElement implements XulButton {
     } else {
       imageButton.setText( label );
     }
-
   }
 
   public String getImage() {
     return this.image;
   }
 
-  public String getDisabledImage() {
-    return this.disabledImage;
-  }
-
   public void setImage( String src ) {
     this.image = src;
     displayImage( src );
+  }
+
+  public String getDisabledImage() {
+    return this.disabledImage;
   }
 
   public void setDisabledImage( String src ) {
@@ -224,17 +216,16 @@ public class SwtButton extends SwtElement implements XulButton {
     return this.group;
   }
 
-  public String getType() {
-    return this.type.toString();
-  }
-
   public void setGroup( String group ) {
     this.group = group;
   }
 
-  public void setType( String type ) {
-    this.type = Type.valueOf( type.toString().toUpperCase() );
+  public String getType() {
+    return this.type.toString();
+  }
 
+  public void setType( String type ) {
+    this.type = Type.valueOf( type.toUpperCase() );
   }
 
   public String getOnclick() {
@@ -243,7 +234,6 @@ public class SwtButton extends SwtElement implements XulButton {
 
   public void setSelected( String selected ) {
     setSelected( Boolean.parseBoolean( selected ) );
-
   }
 
   public boolean isSelected() {
@@ -257,15 +247,10 @@ public class SwtButton extends SwtElement implements XulButton {
     }
 
     if ( this.selected ) {
-      if ( selectedImage != null ) {
-        displayImage( selectedImage );
-      }
+      displayImage( selectedImage );
     } else {
-      if ( image != null ) {
-        displayImage( image );
-      }
+      displayImage( image );
     }
-
   }
 
   public void doClick() {
@@ -277,6 +262,9 @@ public class SwtButton extends SwtElement implements XulButton {
   }
 
   protected void displayImage( String src ) {
+    if ( src == null ) {
+      return;
+    }
 
     Display d = ( (Composite) parent.getManagedObject() ).getDisplay();
     if ( d == null ) {
@@ -292,5 +280,4 @@ public class SwtButton extends SwtElement implements XulButton {
       }
     }
   }
-
 }
