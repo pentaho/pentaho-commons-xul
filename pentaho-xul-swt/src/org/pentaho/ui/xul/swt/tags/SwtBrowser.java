@@ -89,7 +89,7 @@ public class SwtBrowser extends SwtElement implements XulBrowser {
     if ( StringUtils.isEmpty( src ) ) {
       src = EMPTY_URL;
     }
-    if ( browser != null ) {
+    if ( browser != null && !browser.isDisposed() ) {
       browser.setUrl( src );
       location.setText( src );
     }
