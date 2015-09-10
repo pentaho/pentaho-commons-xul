@@ -97,7 +97,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   protected String buttonlabelextra2;
 
-  protected String[] buttons = new String[] { "accept", "cancel" };
+  protected String[] buttons = new String[]{ "accept", "cancel" };
 
   protected String ondialogaccept;
 
@@ -133,7 +133,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     // TODO: defer this creation until later when all attributes are assigned. For now just get the
     // resizable one
     String resizableStr = self.getAttributeValue( "resizable" );
-    this.setResizable( resizableStr != null && resizableStr.equals( "true" ) );
+    this.setResizable( resizableStr == null || resizableStr.equals( "true" ) );
 
     if ( self != null ) {
       // Extract appIcon
@@ -172,7 +172,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   private BasicDialog createDialog( XulComponent parent ) {
 
     Shell parentShell = getParentShell( parent );
-    final BasicDialog newDialog = new BasicDialog( parentShell, true );
+    final BasicDialog newDialog = new BasicDialog( parentShell, this.getResizable() );
     newDialog.getShell().setBackgroundMode( SWT.INHERIT_DEFAULT );
 
     newDialog.getShell().addListener( SWT.Dispose, new Listener() {
@@ -410,8 +410,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
       SwtButton swtButton = null;
       SwtButton existingButton =
-          ( this.getDocument() != null ) ? (SwtButton) this.getElementById( this.getId() + "_"
-              + buttonName.trim().toLowerCase() ) : null;
+        ( this.getDocument() != null ) ? (SwtButton) this.getElementById( this.getId() + "_"
+          + buttonName.trim().toLowerCase() ) : null;
       if ( this.getId() != null && existingButton != null ) {
         // existing button, just needs a new Widget parent
         swtButton = existingButton;
@@ -487,7 +487,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   public void hide() {
     // dialog.getShell().removeListener(SWT.Dispose, listener);
     if ( closing || dialog.getMainArea().isDisposed() || getParentShell( getParent() ).isDisposed()
-        || ( getParent() instanceof SwtDialog && ( (SwtDialog) getParent() ).isDisposing() ) ) {
+      || ( getParent() instanceof SwtDialog && ( (SwtDialog) getParent() ).isDisposing() ) ) {
       return;
     }
     closing = true;
@@ -599,8 +599,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
 
   /**
-   * @deprecated This will be replaced by an agnostic listener pattern in the next version of Xul
    * @param event
+   * @deprecated This will be replaced by an agnostic listener pattern in the next version of Xul
    */
   @Deprecated
   public void notifyListeners( int event ) {
