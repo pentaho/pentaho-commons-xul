@@ -42,7 +42,7 @@ public class SwtLabel extends SwtElement implements XulLabel {
   public SwtLabel( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
     super( tagName );
 
-    if ( self.getAttributeValue( "onclick" ) != null ) {
+    if ( self != null && self.getAttributeValue( "onclick" ) != null ) {
       link = new Link( (Composite) parent.getManagedObject(), SWT.NONE );
       link.addSelectionListener( new SelectionListener() {
         public void widgetSelected( SelectionEvent selectionEvent ) {
