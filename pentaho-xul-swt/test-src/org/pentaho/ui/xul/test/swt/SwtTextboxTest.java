@@ -22,6 +22,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.awt.GraphicsEnvironment;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Text;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,4 +134,14 @@ public class SwtTextboxTest {
     txt.selectAll();
   }
 
+  @Test
+  public void onInputTest() throws Exception {
+    XulTextbox textbox1 = (XulTextbox) doc.getElementById( "textbox1" );
+    Text text1 = (Text) textbox1.getTextControl();
+    assertEquals( "textbox1 has not 'oninput' attribute", 0, text1.getListeners( SWT.KeyDown ).length );
+
+    XulTextbox textbox2 = (XulTextbox) doc.getElementById( "textbox2" );
+    Text text2 = (Text) textbox2.getTextControl();
+    assertEquals( "textbox2 has 'oninput=foo.bar'", 1, text2.getListeners( SWT.KeyDown ).length );
+  }
 }
