@@ -386,6 +386,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       dialog.getShell().setLocation( new Point( storedLeft, storedTop ) );
     }
 
+    setAppicon( appIcon );
+
     returnCode = dialog.open();
 
     // dialog.setBlockOnOpen(true);
