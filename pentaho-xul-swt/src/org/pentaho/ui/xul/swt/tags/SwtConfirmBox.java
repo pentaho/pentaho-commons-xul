@@ -33,7 +33,10 @@ public class SwtConfirmBox extends MessageDialogBase implements XulConfirmBox {
 
   public SwtConfirmBox( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
     super( tagName );
-
+    if ( parent instanceof SwtWindow ) {
+      SwtWindow swtWindow = (SwtWindow) parent;
+      setModalParent( swtWindow.getShell() );
+    }
   }
 
   protected void createNewMessageBox() {
