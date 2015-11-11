@@ -19,8 +19,6 @@ package org.pentaho.ui.xul.swt.tags.treeutil;
 
 import java.util.Vector;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -48,9 +46,6 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
 
   private XulTree tree;
   private XulDomContainer domContainer;
-  private static Log logger = LogFactory.getLog( XulTableColumnLabelProvider.class );
-
-  private int imageIndex = 0;
 
   public XulTableColumnLabelProvider( XulTree tree, XulDomContainer aDomContainer ) {
     this.tree = tree;
@@ -65,13 +60,12 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
 
   public String getColumnText( Object obj, int i ) {
 
-    final int colIdx = i;
-    XulTreeCell cell = ( (XulTreeItem) obj ).getRow().getCell( colIdx );
+    XulTreeCell cell = ( (XulTreeItem) obj ).getRow().getCell( i );
     if ( cell == null ) {
       return "";
     }
 
-    switch ( tree.getColumns().getColumn( colIdx ).getColumnType() ) {
+    switch ( tree.getColumns().getColumn( i ).getColumnType() ) {
       case CHECKBOX:
         return cell.getLabel() != null ? cell.getLabel() : cell.getLabel();
       case COMBOBOX:
@@ -85,7 +79,7 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
       case TEXT:
         return cell.getLabel() != null ? cell.getLabel() : "";
       case PASSWORD:
-        return String.format( getPasswordString( cell.getLabel().length() ) );
+        return getPasswordString( cell.getLabel().length() );
       default:
         return cell.getLabel() != null ? cell.getLabel() : "";
     }
@@ -130,7 +124,7 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
     return null;
   }
 
-  private Image makeImage( Shell shell, boolean type ) {
+  private Image makeImage( final Shell shell, boolean type ) {
     Shell placeholder = new Shell( shell, SWT.NO_TRIM );
     Button btn = new Button( placeholder, SWT.CHECK );
     btn.setSelection( type );
@@ -140,10 +134,15 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
     btn.setLocation( 0, 0 );
     placeholder.open();
 
-    GC gc = new GC( btn );
-    Image image = new Image( shell.getDisplay(), bsize.x, bsize.y );
-    gc.copyArea( image, 0, 0 );
-    gc.dispose();
+    final GC gc = new GC( btn );
+    final Image image = new Image( shell.getDisplay(), bsize.x, bsize.y );
+    shell.getDisplay().syncExec( new Runnable() {
+      @Override public void run() {
+        shell.getDisplay().readAndDispatch();
+        gc.copyArea( image, 0, 0 );
+        gc.dispose();
+      }
+    } );
 
     placeholder.close();
 
@@ -160,7 +159,7 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
       return false;
     }
     Object val = c.getValue();
-    if ( val == null || val instanceof Boolean == false ) {
+    if ( val == null || !( val instanceof Boolean ) ) {
       return false;
     }
     return (Boolean) c.getValue();
