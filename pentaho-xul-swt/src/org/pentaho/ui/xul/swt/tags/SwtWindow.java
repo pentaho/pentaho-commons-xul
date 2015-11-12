@@ -213,4 +213,8 @@ public class SwtWindow extends AbstractSwtXulContainer implements XulWindow {
 
   }
 
+  Shell getShell() {
+    return shell;
+  }
+
 }
