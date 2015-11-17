@@ -17,7 +17,7 @@
     <dependencies defaultconf="default->default">
         <!--  external dependencies -->
         <dependency org="commons-beanutils"   name="commons-beanutils"   rev="1.8.0" transitive="false" />
-        <dependency org="commons-collections" name="commons-collections" rev="3.2.1"/>
+        <dependency org="commons-collections" name="commons-collections" rev="3.2.2"/>
         <dependency org="commons-lang"        name="commons-lang"        rev="2.6"/>
         <dependency org="commons-logging"     name="commons-logging"     rev="1.1.1" transitive="false" />
         <dependency org="dom4j"               name="dom4j"               rev="1.6.1">
