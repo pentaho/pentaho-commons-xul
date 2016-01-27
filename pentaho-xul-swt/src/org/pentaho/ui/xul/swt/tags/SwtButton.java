@@ -98,7 +98,8 @@ public class SwtButton extends SwtElement implements XulButton {
 
       @Override
       public void mouseUp( MouseEvent arg0 ) {
-        if ( !disabled ) {
+        if ( !disabled && onclick != null ) {
+          // PDI-14535: onclick can be null when menu assigned to control
           invoke( onclick );
         }
       }
