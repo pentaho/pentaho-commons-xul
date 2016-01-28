@@ -811,8 +811,12 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
           final CCombo editableControl = (CCombo) ( (ComboBoxCellEditor) editor ).getControl();
           editableControl.addModifyListener( new ModifyListener() {
             public void modifyText( ModifyEvent modifyEvent ) {
-              XulTreeCell cell = getCell( colIdx );
-              cell.setLabel( editableControl.getText() );
+              domContainer.invokeLater( new Runnable() {
+                @Override public void run() {
+                  XulTreeCell cell = getCell( colIdx );
+                  cell.setLabel( editableControl.getText() );
+                }
+              } );
             }
           } );
 
