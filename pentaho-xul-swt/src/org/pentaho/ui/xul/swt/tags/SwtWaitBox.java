@@ -71,7 +71,7 @@ public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox {
     parentObject = (Shell) parent;
   }
 
-  public void start() {
+  protected Shell createDialog() {
     dialog = new Shell( getParentObject(), SWT.DIALOG_TRIM | SWT.RESIZE );
     if ( getParentObject().getImage() != null ) {
       dialog.setImage( getParentObject().getImage() );
@@ -127,6 +127,11 @@ public class SwtWaitBox extends SwtProgressmeter implements XulWaitBox {
       lbl.setLayoutData( new GridData( SWT.CENTER, SWT.CENTER, true, true, 1, 1 ) );
     }
 
+    return dialog;
+  }
+
+  public void start() {
+    dialog = createDialog();
     dialog.layout( true, true );
     thread = new Thread( runnable );
     thread.start();
