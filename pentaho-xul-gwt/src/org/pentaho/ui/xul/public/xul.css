@@ -289,6 +289,13 @@ legend {
   opacity: 0.4;
 }
 
+.toolbar-toggle-button{
+  opacity: 1;
+}
+.toolbar-toggle-button-disabled{
+  opacity: 0.4;
+}
+
 .xul-pre {
   font-family: "Lucida Console", Monaco, monospace;
   background: white;
