@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2016 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.impl;
@@ -29,6 +29,7 @@ import org.pentaho.ui.xul.binding.DefaultBindingContext;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
+import org.pentaho.ui.xul.util.XmlParserFactoryProducer;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -149,7 +150,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
         throw new XulException( "loadFragment: input document is null" );
       }
 
-      SAXReader rdr = new SAXReader();
+      SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
       final org.dom4j.Document doc = rdr.read( in );
 
       XulDomContainer container = this.xulLoader.loadXulFragment( doc );
@@ -201,7 +202,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
         throw new XulException( "loadFragment: input document is null" );
       }
 
-      SAXReader rdr = new SAXReader();
+      SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
       final org.dom4j.Document doc = rdr.read( in );
 
       XulDomContainer container = this.xulLoader.loadXulFragment( doc );
