@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2016 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -1096,6 +1097,9 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   public void update() {
+    if ( settingElements.get() ) {
+      return;
+    }
     if ( this.isHierarchical ) {
       this.tree.refresh();
 
@@ -1159,6 +1163,8 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private Collection elements;
 
   private boolean suppressEvents = false;
+
+  private final AtomicBoolean settingElements = new AtomicBoolean( false );
 
   private String childrenBinding;
 
@@ -1248,203 +1254,209 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
   public <T> void setElements( Collection<T> elements ) {
 
-    // If preserveselection is set to true in the xul file. We will honor that and save the selection before
-    // setting the elements. After the setElements is done we will set the current selected selection
-    int scrollPos = -1;
-    if ( this.isHierarchical ) {
-      if ( isPreserveexpandedstate() ) {
-        cacheExpandedState();
-      }
-      scrollPos = tree.getTree().getVerticalBar().getSelection();
-    }
-
-    destroyPreviousBindings();
-
-    this.elements = elements;
-    this.getRootChildren().removeAll();
-
-    if ( elements == null ) {
-      update();
-      changeSupport.firePropertyChange( "selectedRows", null, getSelectedRows() );
-      changeSupport.firePropertyChange( "absoluteSelectedRows", null, getAbsoluteSelectedRows() );
-      return;
-    }
-
+    settingElements.set( true );
     try {
+      // If preserveselection is set to true in the xul file. We will honor that and save the selection before
+      // setting the elements. After the setElements is done we will set the current selected selection
+      int scrollPos = -1;
+      if ( this.isHierarchical ) {
+        if ( isPreserveexpandedstate() ) {
+          cacheExpandedState();
+        }
+        scrollPos = tree.getTree().getVerticalBar().getSelection();
+      }
 
-      if ( this.isHierarchical == false ) {
-        for ( T o : elements ) {
-          XulTreeRow row = this.getRootChildren().addNewRow();
+      destroyPreviousBindings();
 
-          // Give the Xul Element a reference back to the domain object
-          ( (XulTreeItem) row.getParent() ).setBoundObject( o );
+      this.elements = elements;
+      this.getRootChildren().removeAll();
 
-          for ( int x = 0; x < this.getColumns().getChildNodes().size(); x++ ) {
-            XulComponent col = this.getColumns().getColumn( x );
-            final XulTreeCell cell = (XulTreeCell) getDocument().createElement( "treecell" );
-            XulTreeCol column = (XulTreeCol) col;
+      if ( elements == null ) {
+        update();
+        changeSupport.firePropertyChange( "selectedRows", null, getSelectedRows() );
+        changeSupport.firePropertyChange( "absoluteSelectedRows", null, getAbsoluteSelectedRows() );
+        return;
+      }
 
-            for ( InlineBindingExpression exp : ( (XulTreeCol) col ).getBindingExpressions() ) {
-              logger.debug( "applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + o
-                  + "]" );
+      try {
 
-              String colType = column.getType();
-              if ( StringUtils.isEmpty( colType ) == false && colType.equals( "dynamic" ) ) {
-                colType = extractDynamicColType( o, x );
-              }
+        if ( this.isHierarchical == false ) {
+          for ( T o : elements ) {
+            XulTreeRow row = this.getRootChildren().addNewRow();
 
-              if ( ( colType.equalsIgnoreCase( "combobox" ) || colType.equalsIgnoreCase( "editablecombobox" ) )
+            // Give the Xul Element a reference back to the domain object
+            ( (XulTreeItem) row.getParent() ).setBoundObject( o );
+
+            for ( int x = 0; x < this.getColumns().getChildNodes().size(); x++ ) {
+              XulComponent col = this.getColumns().getColumn( x );
+              final XulTreeCell cell = (XulTreeCell) getDocument().createElement( "treecell" );
+              XulTreeCol column = (XulTreeCol) col;
+
+              for ( InlineBindingExpression exp : ( (XulTreeCol) col ).getBindingExpressions() ) {
+                if ( logger.isDebugEnabled() ) {
+                  logger
+                    .debug( "applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + o
+                      + "]" );
+                }
+
+                String colType = column.getType();
+                if ( StringUtils.isEmpty( colType ) == false && colType.equals( "dynamic" ) ) {
+                  colType = extractDynamicColType( o, x );
+                }
+
+                if ( ( colType.equalsIgnoreCase( "combobox" ) || colType.equalsIgnoreCase( "editablecombobox" ) )
                   && column.getCombobinding() != null ) {
 
-                Binding binding = createBinding( (XulEventSource) o, column.getCombobinding(), cell, "value" );
-                elementBindings.add( binding );
-                binding.setBindingType( Binding.Type.ONE_WAY );
-                domContainer.addBinding( binding );
-                binding.fireSourceChanged();
-
-                binding = createBinding( (XulEventSource) o, ( (XulTreeCol) col ).getBinding(), cell, "selectedIndex" );
-                elementBindings.add( binding );
-                binding.setConversion( new BindingConvertor<Object, Integer>() {
-
-                  @Override
-                  public Integer sourceToTarget( Object value ) {
-                    int index = ( (Vector) cell.getValue() ).indexOf( value );
-                    return index > -1 ? index : 0;
-                  }
-
-                  @Override
-                  public Object targetToSource( Integer value ) {
-                    return ( (Vector) cell.getValue() ).get( value );
-                  }
-
-                } );
-                domContainer.addBinding( binding );
-                binding.fireSourceChanged();
-
-                if ( colType.equalsIgnoreCase( "editablecombobox" ) ) {
-                  binding = createBinding( (XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr() );
+                  Binding binding = createBinding( (XulEventSource) o, column.getCombobinding(), cell, "value" );
                   elementBindings.add( binding );
-                  if ( !this.editable ) {
-                    binding.setBindingType( Binding.Type.ONE_WAY );
-                  } else {
-                    binding.setBindingType( Binding.Type.BI_DIRECTIONAL );
-                  }
-                  domContainer.addBinding( binding );
-                }
-
-              } else if ( colType.equalsIgnoreCase( "checkbox" ) ) {
-                if ( StringUtils.isNotEmpty( exp.getModelAttr() ) ) {
-                  Binding binding = createBinding( (XulEventSource) o, exp.getModelAttr(), cell, "value" );
-                  elementBindings.add( binding );
-                  if ( !column.isEditable() ) {
-                    binding.setBindingType( Binding.Type.ONE_WAY );
-                  }
+                  binding.setBindingType( Binding.Type.ONE_WAY );
                   domContainer.addBinding( binding );
                   binding.fireSourceChanged();
-                }
-              } else {
 
-                if ( StringUtils.isNotEmpty( exp.getModelAttr() ) ) {
-                  Binding binding = createBinding( (XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr() );
+                  binding =
+                    createBinding( (XulEventSource) o, ( (XulTreeCol) col ).getBinding(), cell, "selectedIndex" );
                   elementBindings.add( binding );
-                  if ( !column.isEditable() ) {
-                    binding.setBindingType( Binding.Type.ONE_WAY );
-                  }
+                  binding.setConversion( new BindingConvertor<Object, Integer>() {
+
+                    @Override
+                    public Integer sourceToTarget( Object value ) {
+                      int index = ( (Vector) cell.getValue() ).indexOf( value );
+                      return index > -1 ? index : 0;
+                    }
+
+                    @Override
+                    public Object targetToSource( Integer value ) {
+                      return ( (Vector) cell.getValue() ).get( value );
+                    }
+
+                  } );
                   domContainer.addBinding( binding );
                   binding.fireSourceChanged();
+
+                  if ( colType.equalsIgnoreCase( "editablecombobox" ) ) {
+                    binding = createBinding( (XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr() );
+                    elementBindings.add( binding );
+                    if ( !this.editable ) {
+                      binding.setBindingType( Binding.Type.ONE_WAY );
+                    } else {
+                      binding.setBindingType( Binding.Type.BI_DIRECTIONAL );
+                    }
+                    domContainer.addBinding( binding );
+                  }
+
+                } else if ( colType.equalsIgnoreCase( "checkbox" ) ) {
+                  if ( StringUtils.isNotEmpty( exp.getModelAttr() ) ) {
+                    Binding binding = createBinding( (XulEventSource) o, exp.getModelAttr(), cell, "value" );
+                    elementBindings.add( binding );
+                    if ( !column.isEditable() ) {
+                      binding.setBindingType( Binding.Type.ONE_WAY );
+                    }
+                    domContainer.addBinding( binding );
+                    binding.fireSourceChanged();
+                  }
                 } else {
-                  cell.setLabel( o.toString() );
+
+                  if ( StringUtils.isNotEmpty( exp.getModelAttr() ) ) {
+                    Binding binding =
+                      createBinding( (XulEventSource) o, exp.getModelAttr(), cell, exp.getXulCompAttr() );
+                    elementBindings.add( binding );
+                    if ( !column.isEditable() ) {
+                      binding.setBindingType( Binding.Type.ONE_WAY );
+                    }
+                    domContainer.addBinding( binding );
+                    binding.fireSourceChanged();
+                  } else {
+                    cell.setLabel( o.toString() );
+                  }
                 }
+
+              }
+              if ( column.getDisabledbinding() != null ) {
+                String prop = column.getDisabledbinding();
+                Binding bind = createBinding( (XulEventSource) o, column.getDisabledbinding(), cell, "disabled" );
+                elementBindings.add( bind );
+                bind.setBindingType( Binding.Type.ONE_WAY );
+                domContainer.addBinding( bind );
+                bind.fireSourceChanged();
               }
 
+              Method imageMethod;
+              String imageSrc = null;
+
+              String method = toGetter( ( (XulTreeCol) this.getColumns().getChildNodes().get( x ) ).getImagebinding() );
+
+              if ( method != null ) {
+                imageMethod = o.getClass().getMethod( method );
+                imageSrc = (String) imageMethod.invoke( o );
+                SwtTreeItem item = (SwtTreeItem) row.getParent();
+                item.setXulDomContainer( this.domContainer );
+                ( (XulTreeItem) row.getParent() ).setImage( imageSrc );
+              }
+
+              row.addCell( cell );
             }
-            if ( column.getDisabledbinding() != null ) {
-              String prop = column.getDisabledbinding();
-              Binding bind = createBinding( (XulEventSource) o, column.getDisabledbinding(), cell, "disabled" );
-              elementBindings.add( bind );
-              bind.setBindingType( Binding.Type.ONE_WAY );
-              domContainer.addBinding( bind );
-              bind.fireSourceChanged();
-            }
-
-            Method imageMethod;
-            String imageSrc = null;
-
-            String method = toGetter( ( (XulTreeCol) this.getColumns().getChildNodes().get( x ) ).getImagebinding() );
-
-            if ( method != null ) {
-              imageMethod = o.getClass().getMethod( method );
-              imageSrc = (String) imageMethod.invoke( o );
-              SwtTreeItem item = (SwtTreeItem) row.getParent();
-              item.setXulDomContainer( this.domContainer );
-              ( (XulTreeItem) row.getParent() ).setImage( imageSrc );
-            }
-
-            row.addCell( cell );
           }
-        }
-      } else {
-        // tree
-        suppressEvents = true;
-        if ( isHiddenrootnode() == false ) {
-          SwtTreeItem item = new SwtTreeItem( this.getRootChildren() );
-          item.setXulDomContainer( this.domContainer );
-
-          item.setBoundObject( elements );
-
-          SwtTreeRow newRow = new SwtTreeRow( item );
-          item.setRow( newRow );
-          this.getRootChildren().addChild( item );
-
-          addTreeChild( elements, newRow );
-
         } else {
-          for ( T o : elements ) {
+          // tree
+          suppressEvents = true;
+          if ( isHiddenrootnode() == false ) {
             SwtTreeItem item = new SwtTreeItem( this.getRootChildren() );
             item.setXulDomContainer( this.domContainer );
-            item.setBoundObject( o );
+
+            item.setBoundObject( elements );
 
             SwtTreeRow newRow = new SwtTreeRow( item );
             item.setRow( newRow );
             this.getRootChildren().addChild( item );
 
-            addTreeChild( o, newRow );
+            addTreeChild( elements, newRow );
+
+          } else {
+            for ( T o : elements ) {
+              SwtTreeItem item = new SwtTreeItem( this.getRootChildren() );
+              item.setXulDomContainer( this.domContainer );
+              item.setBoundObject( o );
+
+              SwtTreeRow newRow = new SwtTreeRow( item );
+              item.setRow( newRow );
+              this.getRootChildren().addChild( item );
+
+              addTreeChild( o, newRow );
+            }
           }
+          suppressEvents = false;
+
         }
-        suppressEvents = false;
 
+        update();
+        if ( this.isHierarchical ) {
+          if ( isPreserveexpandedstate() ) {
+            restoreExpandedState();
+          }
+          final int fScrollPos = scrollPos;
+        }
+        // Now since we are done with setting the elements, we will now see if preserveselection was set to be true
+        // then we will set the selected items to the currently saved one
+        if ( isPreserveselection() && currentSelectedItems != null && currentSelectedItems.size() > 0 ) {
+          setSelectedItems( currentSelectedItems );
+          suppressEvents = false;
+        } else {
+          // treat as a selection change
+          suppressEvents = false;
+          changeSupport.firePropertyChange( "selectedRows", null, getSelectedRows() );
+          changeSupport.firePropertyChange( "absoluteSelectedRows", null, getAbsoluteSelectedRows() );
+          changeSupport.firePropertyChange( "selectedItems", null, Collections.EMPTY_LIST );
+          changeSupport.firePropertyChange( "selectedItem", "", null );
+        }
+
+      } catch ( XulException e ) {
+        logger.error( "error adding elements", e );
+      } catch ( Exception e ) {
+        logger.error( "error adding elements", e );
       }
-
+    } finally {
+      settingElements.set( false );
       update();
-      if ( this.isHierarchical ) {
-        if ( isPreserveexpandedstate() ) {
-          restoreExpandedState();
-        }
-        final int fScrollPos = scrollPos;
-        if ( scrollPos > -1 ) {
-
-          // TreeItem item = tree.getTree().getItem(new Point(5, fScrollPos));
-          // tree.getTree().showItem(item);
-        }
-      }
-      // Now since we are done with setting the elements, we will now see if preserveselection was set to be true
-      // then we will set the selected items to the currently saved one
-      if ( isPreserveselection() && currentSelectedItems != null && currentSelectedItems.size() > 0 ) {
-        setSelectedItems( currentSelectedItems );
-        suppressEvents = false;
-      } else {
-        // treat as a selection change
-        suppressEvents = false;
-        changeSupport.firePropertyChange( "selectedRows", null, getSelectedRows() );
-        changeSupport.firePropertyChange( "absoluteSelectedRows", null, getAbsoluteSelectedRows() );
-        changeSupport.firePropertyChange( "selectedItems", null, Collections.EMPTY_LIST );
-        changeSupport.firePropertyChange( "selectedItem", "", null );
-      }
-
-    } catch ( XulException e ) {
-      logger.error( "error adding elements", e );
-    } catch ( Exception e ) {
-      logger.error( "error adding elements", e );
     }
   }
 
@@ -1458,8 +1470,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
       for ( InlineBindingExpression exp : ( (XulTreeCol) this.getColumns().getChildNodes().get( 0 ) )
           .getBindingExpressions() ) {
-        logger.debug( "applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + element
-            + "]" );
+        if ( logger.isDebugEnabled() ) {
+          logger
+            .debug( "applying binding expression [" + exp + "] to xul tree cell [" + cell + "] and model [" + element
+              + "]" );
+        }
 
         // Tree Bindings are one-way for now as you cannot edit tree nodes
         Binding binding = createBinding( (XulEventSource) element, exp.getModelAttr(), cell, exp.getXulCompAttr() );
@@ -1914,9 +1929,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
               break;
             }
           }
-          if ( pt.y < bounds.y + bounds.height / 3 ) {
-            // HANDLE parent, index
-          } else if ( pt.y > bounds.y + 2 * bounds.height / 3 ) {
+          if ( pt.y > bounds.y + 2 * bounds.height / 3 ) {
             // HANDLE parent, index + 1
             index++;
           } else {
@@ -1933,9 +1946,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
               break;
             }
           }
-          if ( pt.y < bounds.y + bounds.height / 3 ) {
-            // HANDLE null, index
-          } else if ( pt.y > bounds.y + 2 * bounds.height / 3 ) {
+          if ( pt.y > bounds.y + 2 * bounds.height / 3 ) {
             index++;
           } else {
             // item is parent
@@ -1943,8 +1954,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
             index = 0;
           }
         }
-      } else {
-        // ASSUME END OF LIST, null, 0
       }
 
       if ( parent != null ) {
@@ -1987,9 +1996,6 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
       // todo, can i trigger this through another mechanism?
       setElements( elements );
-    } else {
-      // non-binding path
-      // TODO: add necessary xul dom
     }
   }
 
