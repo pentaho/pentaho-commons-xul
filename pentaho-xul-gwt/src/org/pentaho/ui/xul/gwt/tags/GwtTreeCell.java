@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2017 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -33,7 +33,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
 
   private Object value;
   private int selectedIndex;
-
+  private XulTreeRow parentRow;
   // track that bindings have been added to this cell;
   private boolean selIdxBindingsAdded;
   private boolean valBindingsAdded;
@@ -111,7 +111,7 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
   }
 
   public void setTreeRowParent( XulTreeRow row ) {
-    // TODO Auto-generated method stub
+    this.parentRow = row;
 
   }
 
@@ -138,6 +138,11 @@ public class GwtTreeCell extends AbstractGwtXulComponent implements XulTreeCell 
       this.value = value;
     }
     this.firePropertyChange( "value", previousVal, this.value );
+    if ( parentRow != null ) {
+      if ( "true".equals( value ) || ( ( value instanceof Boolean ) && ( true == (Boolean) value ) ) ) {
+        parentRow.getCell( 0 ).setValue( true );
+      }
+    }
   }
 
   private boolean disabled = false;
