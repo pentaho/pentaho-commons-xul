@@ -17,6 +17,7 @@
 
 package org.pentaho.ui.xul.swt.tags;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.pentaho.ui.xul.XulComponent;
@@ -41,6 +42,11 @@ public class SwtConfirmBox extends MessageDialogBase implements XulConfirmBox {
 
   protected void createNewMessageBox() {
     Shell shell = getParentObject();
+
+    // if there is no active shells creating one here
+    if ( shell == null ) {
+      shell = new Shell( Display.getCurrent() );
+    }
 
     dialog = new MessageBox( shell, acceptBtn | cancelBtn );
     dialog.setText( getTitle() );
