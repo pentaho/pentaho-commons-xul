@@ -50,6 +50,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulSettingsManager;
 import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
+import org.pentaho.ui.xul.containers.XulNativeUiDialog;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Element;
@@ -59,7 +60,7 @@ import org.pentaho.ui.xul.swt.custom.BasicDialog;
 import org.pentaho.ui.xul.util.Orient;
 import org.pentaho.ui.xul.util.SwtXulUtil;
 
-public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
+public class SwtDialog extends AbstractSwtXulContainer implements XulDialog, XulNativeUiDialog {
 
   protected XulDomContainer domContainer = null;
 
@@ -410,10 +411,8 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       }
       DialogButton thisButton = DialogButton.valueOf( buttonName.trim().toUpperCase() );
 
-      SwtButton swtButton = null;
-      SwtButton existingButton =
-        ( this.getDocument() != null ) ? (SwtButton) this.getElementById( this.getId() + "_"
-          + buttonName.trim().toLowerCase() ) : null;
+      SwtButton existingButton = getButton( buttonName );
+      SwtButton swtButton;
       if ( this.getId() != null && existingButton != null ) {
         // existing button, just needs a new Widget parent
         swtButton = existingButton;
@@ -426,10 +425,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
         // new button needed
         Button button = d.createButton( thisButton, false );
         swtButton = new SwtButton( button );
-        swtButton.setId( this.getId() + "_" + buttonName.trim().toLowerCase() );
+        swtButton.setId( getButtonIdFor( buttonName ) );
         this.addChild( swtButton );
-
       }
+
       switch ( thisButton ) {
         case ACCEPT:
           if ( ( getButtonlabelaccept() != null ) && ( getButtonlabelaccept().trim().length() > 0 ) ) {
@@ -480,6 +479,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       entry.getValue().button.setLayoutData( gd );
     }
 
+  }
+
+  private String getButtonIdFor( String name ) {
+    return this.getId() + "_" + name.trim().toLowerCase();
   }
 
   public boolean isDisposing() {
@@ -757,4 +760,10 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     this.pack = pack;
   }
 
+
+  @Override
+  public SwtButton getButton( String name ) {
+    return ( name != null && getDocument() != null ) ?
+      (SwtButton) getElementById( getButtonIdFor( name ) ) : null;
+  }
 }

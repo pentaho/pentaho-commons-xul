@@ -49,6 +49,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.components.XulDialogheader;
 import org.pentaho.ui.xul.containers.XulDialog;
+import org.pentaho.ui.xul.containers.XulNativeUiDialog;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
@@ -57,7 +58,7 @@ import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.SwingRoot;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwingDialog extends AbstractSwingContainer implements XulDialog, SwingRoot {
+public class SwingDialog extends AbstractSwingContainer implements XulDialog, XulNativeUiDialog, SwingRoot {
 
   XulDomContainer domContainer = null;
 
@@ -291,15 +292,17 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
         String[] tempButtons = btns.split( "," );
 
         for ( int i = 0; i < tempButtons.length; i++ ) {
+          String buttonName = tempButtons[ i ];
 
-          if ( StringUtils.isEmpty( tempButtons[i].trim() ) ) {
+          if ( StringUtils.isEmpty( buttonName.trim() ) ) {
             continue;
           }
+          BUTTONS buttonEnum = getButtonEnumFor( buttonName );
+
           SwingButton btn = new SwingButton( null, this, this.domContainer, "button" );
           addChild( btn );
-          this.buttons.put( SwingDialog.BUTTONS.valueOf( tempButtons[i].trim().toUpperCase() ), btn );
-          btn.setId( ID + "_"
-              + SwingDialog.BUTTONS.valueOf( tempButtons[i].trim().toUpperCase() ).toString().toLowerCase() );
+          btn.setId( ID + "_" + buttonEnum.toString().toLowerCase() );
+          this.buttons.put( buttonEnum, btn );
         }
       }
       buttonsProcessed = true;
@@ -311,6 +314,10 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     }
     this.initialized = true;
 
+  }
+
+  private BUTTONS getButtonEnumFor( String name ) {
+    return BUTTONS.valueOf( name.trim().toUpperCase() );
   }
 
   public int getHeight() {
@@ -604,4 +611,12 @@ public class SwingDialog extends AbstractSwingContainer implements XulDialog, Sw
     this.pack = pack;
   }
 
+  @Override
+  public XulButton getButton( String name ) {
+    if ( name != null ) {
+      BUTTONS buttonEnum = getButtonEnumFor( name );
+      return ( buttonEnum == null ) ? null : buttons.get( buttonEnum );
+    }
+    return null;
+  }
 }

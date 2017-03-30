@@ -17,7 +17,10 @@
 
 package org.pentaho.ui.xul.swt.tags;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
@@ -238,8 +241,27 @@ public class SwtTextbox extends SwtElement implements XulTextbox {
     return getManagedObject();
   }
 
-  public void setOninput( String method ) {
-    // throw new NotImplementedException();
+  @Override
+  public String getText() {
+    if ( textBoxIsValid() ) {
+      return textBox.getText();
+    }
+    return super.getText();
+  }
+
+  public void setOninput( final String method ) {
+    if ( !StringUtils.isEmpty( method ) && textBoxIsValid() ) {
+      textBox.addKeyListener( new KeyAdapter() {
+        @Override
+        public void keyReleased( KeyEvent keyEvent ) {
+          invoke( method );
+        }
+      } );
+    }
+  }
+
+  private boolean textBoxIsValid() {
+    return textBox != null && !textBox.isDisposed();
   }
 
   public String getMin() {
