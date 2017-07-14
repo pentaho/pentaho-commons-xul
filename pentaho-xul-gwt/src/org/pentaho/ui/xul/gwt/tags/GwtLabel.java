@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2017 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -62,7 +62,6 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     label = new Label();
     setManagedObject( label );
     label.setStyleName( "xul-label" );
-
     // label.setWordWrap(true);
   }
 
@@ -115,6 +114,9 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     label.setTitle( this.getTooltiptext() );
     if ( onclick != null ) {
       label.addStyleName( "hyperlink" );
+    }
+    if ( "level_source_col".equals( this.getId() ) ) {
+      label.getElement().setAttribute( "style", "overflow: hidden;white-space: nowrap; height: 100%;width:232px;text-overflow: ellipsis;" );
     }
     label.setWordWrap( multiline );
 
