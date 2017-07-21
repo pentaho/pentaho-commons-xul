@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2017 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -116,8 +116,12 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
         // no panel for tab
         continue;
       }
-      GwtTabWidget widget =
-          new GwtTabWidget( tabs.getTabByIndex( i ).getLabel(), "", tabPanel, ( (Widget) panel.getManagedObject() ) );
+      String tooltipText = tabs.getTabByIndex( i ).getTooltiptext();
+      if ( StringUtils.isEmpty( tooltipText ) ) {
+        tooltipText = "";
+      }
+      GwtTabWidget widget = new GwtTabWidget( tabs.getTabByIndex( i ).getLabel(), tooltipText,
+              tabPanel, ( (Widget) panel.getManagedObject() ) );
       Widget panelWidget = (Widget) panel.getManagedObject();
       panelWidget.setStylePrimaryName( "pentaho-tabPanel" );
       tabPanel.add( panelWidget, widget );
