@@ -80,7 +80,7 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
     acceptBtn.setText( this.acceptLabel );
     hp.add( acceptBtn );
     hp.setCellWidth( acceptBtn, "100%" );
-    hp.setCellHorizontalAlignment( acceptBtn, hp.ALIGN_CENTER );
+    hp.setCellHorizontalAlignment( acceptBtn, hp.ALIGN_RIGHT );
     return hp;
   }
 
