@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2017 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -80,7 +80,7 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
     acceptBtn.setText( this.acceptLabel );
     hp.add( acceptBtn );
     hp.setCellWidth( acceptBtn, "100%" );
-    hp.setCellHorizontalAlignment( acceptBtn, hp.ALIGN_CENTER );
+    hp.setCellHorizontalAlignment( acceptBtn, hp.ALIGN_RIGHT );
     return hp;
   }
 
