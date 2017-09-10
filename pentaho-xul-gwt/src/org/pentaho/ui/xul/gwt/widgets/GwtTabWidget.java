@@ -78,7 +78,7 @@ public class GwtTabWidget extends HorizontalPanel {
   public void setLabelText( String text ) {
     String trimmedText = text.substring( 0, Math.min( 18, text.length() ) );
     if ( !trimmedText.equals( text ) ) {
-      trimmedText += ".."; //$NON-NLS-1$
+      trimmedText += "\u2026"; // Ellipsis
     }
     textLabel.setText( trimmedText );
   }
