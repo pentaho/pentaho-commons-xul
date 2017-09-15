@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2017 Pentaho Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.widgets;
@@ -78,7 +78,7 @@ public class GwtTabWidget extends HorizontalPanel {
   public void setLabelText( String text ) {
     String trimmedText = text.substring( 0, Math.min( 18, text.length() ) );
     if ( !trimmedText.equals( text ) ) {
-      trimmedText += ".."; //$NON-NLS-1$
+      trimmedText += "\u2026"; // Ellipsis
     }
     textLabel.setText( trimmedText );
   }
