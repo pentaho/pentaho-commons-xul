@@ -1,5 +1,5 @@
 <!--===========================================================================
-  This is the build file for the Pentaho Mantle project.
+  This is the build file for the Hitachi Vantara Mantle project.
   
   This build file will use the common_build.xml file as the default build
   process and should only override the tasks that need to differ from
