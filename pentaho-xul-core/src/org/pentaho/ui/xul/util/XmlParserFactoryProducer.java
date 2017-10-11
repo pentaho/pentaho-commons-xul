@@ -4,7 +4,7 @@ package org.pentaho.ui.xul.util;
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2016-2016 by Pentaho : http://www.pentaho.com
+ * Copyright (C) 2016-2017 by Hitachi Vantara : http://www.pentaho.com
  *
  *******************************************************************************
  *

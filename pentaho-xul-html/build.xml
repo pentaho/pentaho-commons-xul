@@ -1,5 +1,5 @@
 <!--===========================================================================
-  This is the build file for the Pentaho GWT Widgets project.
+  This is the build file for the Hitachi Vantara GWT Widgets project.
   
   This build file will use the build-res/subfloor.xml file as the default build
   process and should only override the tasks that need to differ from
