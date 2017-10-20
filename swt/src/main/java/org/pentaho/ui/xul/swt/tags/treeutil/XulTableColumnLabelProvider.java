@@ -125,24 +125,9 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
   }
 
   private Image makeImage( final Shell shell, boolean type ) {
-    Shell placeholder = new Shell( SWT.NO_TRIM );
-    Button btn = new Button( placeholder, SWT.CHECK );
-    btn.setSelection( type );
-    btn.pack();
-    Point bsize = btn.computeSize( SWT.DEFAULT, SWT.DEFAULT );
-    btn.setLocation( 0, 0 );
-    placeholder.setLocation( -bsize.x * 2, -bsize.y * 2 );
-    placeholder.setSize( bsize );
-    placeholder.open();
-
-    final GC gc = new GC( btn );
-    final Image image = new Image( shell.getDisplay(), bsize.x, bsize.y );
-    gc.copyArea( image, 0, 0 );
-    gc.dispose();
-
-    placeholder.close();
-
-    return image;
+    String location = "org/pentaho/ui/xul/swt/tags/images/";
+    location += type ? "checked.png" : "unchecked.png";
+    return new Image( shell.getDisplay(), this.getClass().getClassLoader().getResourceAsStream( location ) );
   }
 
   private boolean isSelected( Object row, int col ) {

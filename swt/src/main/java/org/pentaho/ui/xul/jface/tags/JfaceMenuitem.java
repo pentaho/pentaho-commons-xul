@@ -89,7 +89,7 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem {
   }
 
   private Action initAction( Element self, Action alternativeAction ) {
-    int style = Action.AS_DROP_DOWN_MENU;
+    int style = Action.AS_PUSH_BUTTON;
     if ( self != null && "checkbox".equals( self.getAttributeValue( "type" ) ) ) {
       style = Action.AS_CHECK_BOX;
     }
@@ -193,8 +193,7 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem {
     if ( contributionItem != null ) {
       int mask = 0;
       if ( accessKey.indexOf( "ctrl" ) > -1 ) { //$NON-NLS-1$
-        boolean isMac = System.getProperty( "os.name" ).toLowerCase().indexOf( "mac" ) >= 0;
-        mask += isMac ? SWT.COMMAND : SWT.CTRL;
+        mask += SWT.CTRL;
       }
       if ( accessKey.indexOf( "shift" ) > -1 ) { //$NON-NLS-1$
         mask += SWT.SHIFT;

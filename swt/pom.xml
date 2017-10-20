@@ -5,7 +5,7 @@
 
   <artifactId>commons-xul-swt</artifactId>
   <packaging>jar</packaging>
-  <version>9.0.0.0-423</version>
+  <version>9.0.0.0-423-21</version>
 
   <name>Commons XUL SWT</name>
 
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>org.pentaho</groupId>
       <artifactId>commons-xul-core</artifactId>
-      <version>${project.version}</version>
+      <version>${project.parent.version}</version>
     </dependency>
     <dependency>
       <groupId>org.dom4j</groupId>
