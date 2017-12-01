@@ -36,7 +36,7 @@
           <artifact name="validation-api" type="source" ext="jar" m:classifier="sources"/>
         </dependency>
         		
-		<dependency org="pentaho" name="pentaho-gwt-widgets" rev="${dependency.pentaho-gwt-widgets.revision}" conf="codegen->default" changing="true" transitive="false">
+		<dependency org="pentaho" name="pentaho-gwt-widgets" rev="${pentaho-gwt-widgets.version}" conf="codegen->default" changing="true" transitive="false">
 			<artifact name="pentaho-gwt-widgets" />
 			<artifact name="pentaho-gwt-widgets" type="source" ext="jar" m:classifier="sources" />
 		</dependency>
