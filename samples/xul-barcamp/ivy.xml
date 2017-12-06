@@ -41,11 +41,11 @@
     <dependency org="com.allen_sauer" name="gwt-dnd" rev="3.0.1" conf="codegen->default"/>
     <dependency org="com.google.code.gwtx" name="gwtx" rev="1.5.2" conf="codegen->default"/>
 
-    <dependency org="pentaho" name="pentaho-gwt-widgets" rev="${pentaho-gwt-widgets.version}"
+    <dependency org="org.pentaho" name="commons-gwt-widgets" rev="${commons-gwt.version}"
                 conf="codegen->default"
                 changing="true">
-      <artifact name="pentaho-gwt-widgets"/>
-      <artifact name="pentaho-gwt-widgets" type="source" ext="jar" m:classifier="sources"/>
+      <artifact name="commons-gwt-widgets"/>
+      <artifact name="commons-gwt-widgets" type="source" ext="jar" m:classifier="sources"/>
     </dependency>
 
     <dependency org="pentaho" name="pentaho-xul-core" rev="${pentaho-xul.version}"

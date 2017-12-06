@@ -104,9 +104,9 @@ html, body{
 }
 
 /*
-	All this stuff is already in the pentaho-gwt-widgets projects, where it belongs. I won't
+	All this stuff is already in the commons-gwt-widgets projects, where it belongs. I won't
 	remove it now cuz I'm unsure of the consequences, but keep in mind that if you need
-	to modify this, you'd better modify the pentaho-gwt-widgets->Widgets.css 
+	to modify this, you'd better modify the commons-gwt-widgets->Widgets.css 
 */
 
 
