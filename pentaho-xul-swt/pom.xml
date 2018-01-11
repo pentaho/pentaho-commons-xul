@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>commons-xul</groupId>
+  <artifactId>commons-xul-swt</artifactId>
+  <packaging>jar</packaging>
+  <version>8.1.0.0-SNAPSHOT</version>
+
+  <name>Pentaho Commons XUL SWT</name>
+
+  <parent>
+    <groupId>org.pentaho</groupId>
+    <artifactId>pentaho-ce-jar-parent-pom</artifactId>
+    <version>8.1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <properties>
+    <license.licenseName>lgpl_v2_1</license.licenseName>
+    <org.eclipse.swt.version>4.6</org.eclipse.swt.version>
+    <jface.version>3.3.0-I20070606-0010</jface.version>
+    <commands.version>3.3.0-I20070605-0010</commands.version>
+    <common.version>3.3.0-v20070426</common.version>
+    <commons-collections.version>3.2.2</commons-collections.version>
+  </properties>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>org.pentaho</groupId>
+      <artifactId>commons-xul-core</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse</groupId>
+      <artifactId>jface</artifactId>
+      <version>${jface.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.core</groupId>
+      <artifactId>commands</artifactId>
+      <version>${commands.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.swt</groupId>
+      <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+      <version>${org.eclipse.swt.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.equinox</groupId>
+      <artifactId>common</artifactId>
+      <version>${common.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>${commons-collections.version}</version>
+    </dependency>
+
+    <!-- test -->
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+      <version>1.1</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+</project>
