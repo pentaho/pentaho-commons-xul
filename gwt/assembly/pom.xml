@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>commons-xul-gwt-package</artifactId>
-  <name>Pentaho GWT XUL Package</name>
+  <name>Commons GWT XUL Package</name>
   <packaging>war</packaging>
 
   <dependencies>
@@ -69,21 +69,21 @@
       <classifier>sources</classifier>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.pentaho</groupId>
       <artifactId>commons-gwt-widgets</artifactId>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.pentaho</groupId>
       <artifactId>commons-gwt-widgets</artifactId>
       <classifier>sources</classifier>
     </dependency>
     <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-xul-core</artifactId>
+      <groupId>org.pentaho</groupId>
+      <artifactId>commons-xul-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-xul-core</artifactId>
+      <groupId>org.pentaho</groupId>
+      <artifactId>commons-xul-core</artifactId>
       <classifier>sources</classifier>
     </dependency>
   </dependencies>
