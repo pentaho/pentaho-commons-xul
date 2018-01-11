@@ -31,7 +31,7 @@ public class HtmlHarness {
 	  public static void main(String[] args){
 		    try{
 		      
-		      InputStream in = HtmlHarness.class.getClassLoader().getResourceAsStream("resource/documents/menutest2.xul"); //$NON-NLS-1$
+		      InputStream in = HtmlHarness.class.getClassLoader().getResourceAsStream("documents/menutest2.xul"); //$NON-NLS-1$
 
 		      if(in == null){
 //		        System.out.println("Input is null"); //$NON-NLS-1$

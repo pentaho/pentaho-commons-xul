@@ -45,7 +45,7 @@ public class CustomizeMenuTest extends TestCase {
 	
 	private XulDomContainer getStartDom() {
 	    try{
-		      InputStream in = HtmlHarness.class.getClassLoader().getResourceAsStream("resource/documents/htmlmenutest.xul"); //$NON-NLS-1$
+		      InputStream in = HtmlHarness.class.getClassLoader().getResourceAsStream("documents/htmlmenutest.xul"); //$NON-NLS-1$
 
 		      assertNotNull( "Test document input stream is null", in ); //$NON-NLS-1$
 
