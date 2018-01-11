@@ -40,7 +40,7 @@ public class MenuTest extends TestCase {
 	private XulMenubar menubar; // we manipulate this menubar in each test
 	
 	private XulDomContainer getMenubar() {
-		return getContainer( "resource/documents/htmlmenutest.xul" ); //$NON-NLS-1$
+		return getContainer( "documents/htmlmenutest.xul" ); //$NON-NLS-1$
 	}	
 	
 	private XulDomContainer getContainer( String filePath ) {

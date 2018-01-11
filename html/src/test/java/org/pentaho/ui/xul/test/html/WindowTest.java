@@ -34,7 +34,7 @@ public class WindowTest extends TestCase {
 	private HtmlWindow window; // we manipulate this window in each test
 	
 	private XulDomContainer getWindow() {
-		return getContainer( "resource/documents/htmlwindow.xul" ); //$NON-NLS-1$
+		return getContainer( "documents/htmlwindow.xul" ); //$NON-NLS-1$
 	}	
 	
 	private XulDomContainer getContainer( String filePath ) {
