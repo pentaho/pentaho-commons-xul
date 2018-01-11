@@ -12,13 +12,9 @@
   <version>8.1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
  
-  <name>Pentaho GWT XUL</name>
+  <name>Commons GWT XUL Impl</name>
 
   <dependencies>
-    <dependency>
-      <groupId>GWT-FX</groupId>
-      <artifactId>GWT-FX</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-user</artifactId>
@@ -37,35 +33,12 @@
       <artifactId>gwt-dnd</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.google.code.gwtx</groupId>
-      <artifactId>gwtx</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-      <classifier>sources</classifier>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
+      <groupId>org.pentaho</groupId>
       <artifactId>commons-gwt-widgets</artifactId>
     </dependency>
     <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>commons-gwt-widgets</artifactId>
-      <classifier>sources</classifier>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-xul-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-xul-core</artifactId>
-      <classifier>sources</classifier>
+      <groupId>org.pentaho</groupId>
+      <artifactId>commons-xul-core</artifactId>
     </dependency>
   </dependencies>
   

@@ -27,6 +27,8 @@
     <module>core</module>
     <module>html</module>
     <module>swing</module>
+    <module>gwt</module>
+    <module>swt</module>
   </modules>
 
   <properties>

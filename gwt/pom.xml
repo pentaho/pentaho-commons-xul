@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
- 
+
   <parent>
     <groupId>org.pentaho</groupId>
-    <artifactId>pentaho-ce-jar-parent-pom</artifactId>
+    <artifactId>commons-xul</artifactId>
     <version>8.1.0.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>commons-xul-gwt</artifactId>
   <packaging>pom</packaging>
  
-  <name>Pentaho GWT XUL Parent</name>
+  <name>Commons GWT XUL</name>
   
   <properties>
     <GWT-FX.version>0.5.0</GWT-FX.version>
@@ -22,8 +22,7 @@
     <gwt-dnd.version>3.1.2</gwt-dnd.version>
     <gwtx.version>1.5.2</gwtx.version>
     <validation-api.version>1.0.0.GA</validation-api.version>
-    <common-gwt.version>${project.version}</common-gwt.version>
-    <pentaho-xul.version>${project.version}</pentaho-xul.version>
+    <common-gwt.version>8.1.0.0-SNAPSHOT</common-gwt.version>
   </properties>
   
   <dependencyManagement>
@@ -118,7 +117,7 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>${project.groupId}</groupId>
+        <groupId>org.pentaho</groupId>
         <artifactId>commons-gwt-widgets</artifactId>
         <version>${common-gwt.version}</version>
         <exclusions>
@@ -129,7 +128,7 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>${project.groupId}</groupId>
+        <groupId>org.pentaho</groupId>
         <artifactId>commons-gwt-widgets</artifactId>
         <version>${common-gwt.version}</version>
         <classifier>sources</classifier>
@@ -141,9 +140,9 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>pentaho</groupId>
-        <artifactId>pentaho-xul-core</artifactId>
-        <version>${pentaho-xul.version}</version>
+        <groupId>org.pentaho</groupId>
+        <artifactId>commons-xul-core</artifactId>
+        <version>${project.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
@@ -152,9 +151,9 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>pentaho</groupId>
-        <artifactId>pentaho-xul-core</artifactId>
-        <version>${pentaho-xul.version}</version>
+        <groupId>org.pentaho</groupId>
+        <artifactId>commons-xul-core</artifactId>
+        <version>${project.version}</version>
         <classifier>sources</classifier>
         <exclusions>
           <exclusion>
