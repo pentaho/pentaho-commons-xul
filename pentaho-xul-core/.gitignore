@@ -1,13 +1,9 @@
 .project
 .classpath
 .settings
-build
 target
-release.properties
-pom.xml.releaseBackup
 *.iml
 .idea
-bin
 *.class
 *.jar
 *.war
