@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<window xmlns="http://www.pentaho.org/there.is.only.xul">
-	<button label="Hello World"/>
-</window>
