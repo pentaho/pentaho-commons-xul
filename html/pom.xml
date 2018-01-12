@@ -5,6 +5,7 @@
 
   <artifactId>commons-xul-html</artifactId>
   <packaging>jar</packaging>
+  <name>Commons XUL HTML</name>
 
   <parent>
     <groupId>org.pentaho</groupId>
