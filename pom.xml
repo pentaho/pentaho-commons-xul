@@ -24,7 +24,9 @@
   </licenses>
 
   <modules>
+    <module>core</module>
     <module>html</module>
+    <module>swing</module>
   </modules>
 
   <properties>
@@ -39,9 +41,14 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
+        <groupId>commons-collections</groupId>
+        <artifactId>commons-collections</artifactId>
+        <version>3.2.2</version>
+      </dependency>
+      <dependency>
         <groupId>jaxen</groupId>
         <artifactId>jaxen</artifactId>
-        <version>1.1</version>
+        <version>1.1.1</version>
         <exclusions>
           <exclusion>
             <groupId>*</groupId>
