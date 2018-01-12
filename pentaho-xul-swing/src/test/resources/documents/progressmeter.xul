@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<window id="general-datasource-window"
+	title="Testing progressmeters for SWT, Swing" orient="vertical" height="80" width="400"
+	xmlns="http://www.pentaho.org/there.is.only.xul">
+  <script src="org.pentaho.ui.xul.swing.tags.ProgressHandler" id="progressHandler"/>
+  <hbox id="all-box">
+    <progressmeter id="determined" mode="determined" value="10" flex="1" minimum="5" maximum="70"/>
+    <button label="Hit me to advance" onclick="progressHandler.addProgress();" />
+    <progressmeter id="undetermined" mode="undetermined" flex="1"/>
+  </hbox>
+</window>
