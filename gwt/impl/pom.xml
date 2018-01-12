@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <parent>
+    <groupId>org.pentaho</groupId>
+    <artifactId>commons-xul-gwt</artifactId>
+    <version>8.1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>commons-xul-gwt-impl</artifactId>
+  <version>8.1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+ 
+  <name>Pentaho GWT XUL</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>GWT-FX</groupId>
+      <artifactId>GWT-FX</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-incubator</artifactId>
+      <version>${gwt-incubator.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.allen_sauer</groupId>
+      <artifactId>gwt-dnd</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gwtx</groupId>
+      <artifactId>gwtx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <classifier>sources</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>commons-gwt-widgets</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>commons-gwt-widgets</artifactId>
+      <classifier>sources</classifier>
+    </dependency>
+    <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-xul-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>pentaho</groupId>
+      <artifactId>pentaho-xul-core</artifactId>
+      <classifier>sources</classifier>
+    </dependency>
+  </dependencies>
+  
+</project>
