@@ -2,3 +2,9 @@ bin/
 dist/
 lib/
 test-lib/
+/pentaho-xul-gwt/impl/target/
+/gwt/assembly/gwt/target/
+/gwt/assembly/plugin/target/
+/gwt/assembly/target/
+/gwt/assemblies/target/
+/gwt/assemblies/xul/target/
