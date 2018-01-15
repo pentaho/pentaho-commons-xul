@@ -168,9 +168,20 @@
   
   <modules>
     <module>impl</module>
-    <module>assembly</module>
   </modules>
   
-  <dependencies>
-  </dependencies>
+  <profiles>
+    <profile>
+      <id>gwt-assembly</id>
+      <activation>
+        <property>
+          <name>gwt-assembly</name>
+        </property>
+      </activation>
+      <modules>
+        <module>assembly</module>
+      </modules>
+    </profile>
+  </profiles>
+
 </project>
