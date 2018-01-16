@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>commons-xul-gwt-package</artifactId>
-  <name>Commons GWT XUL Package</name>
+  <name>Commons XUL GWT Package</name>
   <packaging>war</packaging>
 
   <dependencies>

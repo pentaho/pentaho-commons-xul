@@ -23,6 +23,7 @@
       <artifactId>commons-xul-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+
     <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>

@@ -13,15 +13,11 @@
     <version>8.1.0.0-SNAPSHOT</version>
   </parent>
 
-  <properties>
-
-  </properties>
-
   <dependencies>
     <!-- Compile -->
     <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-xul-core</artifactId>
+      <groupId>org.pentaho</groupId>
+      <artifactId>commons-xul-core</artifactId>
       <version>${project.version}</version>
     </dependency>
 
