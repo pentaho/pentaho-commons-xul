@@ -22,7 +22,7 @@
     <gwt-dnd.version>3.1.2</gwt-dnd.version>
     <gwtx.version>1.5.2</gwtx.version>
     <validation-api.version>1.0.0.GA</validation-api.version>
-    <common-gwt.version>8.1.0.0-SNAPSHOT</common-gwt.version>
+    <commons-gwt.version>8.1.0.0-SNAPSHOT</commons-gwt.version>
   </properties>
   
   <dependencyManagement>
@@ -119,7 +119,7 @@
       <dependency>
         <groupId>org.pentaho</groupId>
         <artifactId>commons-gwt-widgets</artifactId>
-        <version>${common-gwt.version}</version>
+        <version>${commons-gwt.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
@@ -130,7 +130,7 @@
       <dependency>
         <groupId>org.pentaho</groupId>
         <artifactId>commons-gwt-widgets</artifactId>
-        <version>${common-gwt.version}</version>
+        <version>${commons-gwt.version}</version>
         <classifier>sources</classifier>
         <exclusions>
           <exclusion>
