@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -24,14 +24,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.components.XulMenuseparator;
+import org.pentaho.ui.xul.components.XulSeparator;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
 import org.pentaho.ui.xul.util.Orient;
 
-public class SwtSeparator extends SwtElement implements XulMenuseparator {
+public class SwtSeparator extends SwtElement implements XulSeparator {
   public SwtSeparator( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
     super( "separator" );
+
+    String orient = self.getAttributeValue( "orient" );
+    orient = orient == null || orient.isEmpty() ? Orient.HORIZONTAL.toString() : orient;
+    this.setOrient( orient );
+
     int dir = ( getOrientation() == Orient.VERTICAL ) ? SWT.VERTICAL : SWT.HORIZONTAL;
     Label wline = new Label( (Composite) parent.getManagedObject(), SWT.SEPARATOR | dir | SWT.CENTER );
     FormData fdLine = new FormData();
