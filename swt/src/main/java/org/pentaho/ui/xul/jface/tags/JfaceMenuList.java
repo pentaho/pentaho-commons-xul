@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.jface.tags;
@@ -30,7 +30,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -43,7 +43,7 @@ import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
 //TODO: Move creation of combobox to late initialization to support switching from editable to non-editable.
 public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenuList<T> {
 
-  private Combo combobox;
+  private CCombo combobox;
 
   private XulDomContainer xulDomContainer;
 
@@ -78,7 +78,7 @@ public class JfaceMenuList<T> extends AbstractSwtXulContainer implements XulMenu
     if ( !editable ) {
       style |= SWT.READ_ONLY;
     }
-    combobox = new Combo( (Composite) parent.getManagedObject(), style );
+    combobox = new CCombo( (Composite) parent.getManagedObject(), style | SWT.SINGLE | SWT.LEFT | SWT.BORDER  );
 
     setManagedObject( combobox );
 
