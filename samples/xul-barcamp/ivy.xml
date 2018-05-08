@@ -48,21 +48,21 @@
       <artifact name="commons-gwt-widgets" type="source" ext="jar" m:classifier="sources"/>
     </dependency>
 
-    <dependency org="pentaho" name="pentaho-xul-core" rev="${pentaho-xul.version}"
+    <dependency org="pentaho" name="pentaho-xul-core" rev="${commons-xul.version}"
                 conf="codegen->default"
                 changing="true">
       <artifact name="pentaho-xul-core"/>
       <artifact name="pentaho-xul-core" type="source" ext="jar" m:classifier="sources"/>
     </dependency>
 
-    <dependency org="pentaho" name="pentaho-xul-gwt" rev="${pentaho-xul.version}"
+    <dependency org="pentaho" name="pentaho-xul-gwt" rev="${commons-xul.version}"
                 conf="codegen->default"
                 changing="true">
       <artifact name="pentaho-xul-gwt"/>
       <artifact name="pentaho-xul-gwt" type="source" ext="jar" m:classifier="sources"/>
     </dependency>
 
-    <dependency org="pentaho" name="pentaho-xul-swing" rev="${pentaho-xul.version}"
+    <dependency org="pentaho" name="pentaho-xul-swing" rev="${commons-xul.version}"
                 conf="default->default"/>
 
 
