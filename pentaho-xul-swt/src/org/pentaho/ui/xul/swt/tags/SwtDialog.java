@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2013 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2018 Hitachi Vantara Corporation..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -757,4 +757,6 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     this.pack = pack;
   }
 
+  @Override
+  public void center() { }
 }
