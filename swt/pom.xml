@@ -28,6 +28,10 @@
       <artifactId>commons-xul-core</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.dom4j</groupId>
+      <artifactId>dom4j</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.eclipse</groupId>
@@ -40,7 +44,7 @@
       <version>${commons-collections.version}</version>
     </dependency>
 
-    <!-- test -->
+    <!-- test - required by org.dom4j -->
     <dependency>
       <groupId>jaxen</groupId>
       <artifactId>jaxen</artifactId>
