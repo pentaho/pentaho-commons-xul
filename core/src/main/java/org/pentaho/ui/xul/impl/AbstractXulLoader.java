@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.impl;
@@ -24,6 +24,7 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
 import org.dom4j.xpath.DefaultXPath;
@@ -361,14 +362,15 @@ public abstract class AbstractXulLoader implements XulLoader {
 
     xpath.setNamespaceURIs( uris );
 
-    List<Element> eles = xpath.selectNodes( srcDoc );
+    for ( Node node : xpath.selectNodes( srcDoc ) ) {
+      if ( node.getNodeType() != Node.ELEMENT_NODE ) {
+        continue;
+      }
 
-    for ( Element ele : eles ) {
-      String src = "";
+      Element element = (Element) node;
+      String src = this.getRootDir() + element.attributeValue( "src" );
 
-      src = this.getRootDir() + ele.attributeValue( "src" );
-
-      String resourceBundle = ele.attributeValue( "resource" );
+      String resourceBundle = element.attributeValue( "resource" );
       if ( resourceBundle != null ) {
         resourceBundles.add( resourceBundle );
       } else {
@@ -384,7 +386,7 @@ public abstract class AbstractXulLoader implements XulLoader {
           includedSources.add( src );
         } else {
           // try fully qualified name
-          src = ele.attributeValue( "src" );
+          src = element.attributeValue( "src" );
           in = getResourceAsStream( src );
           if ( in != null ) {
             includedSources.add( src );
@@ -406,13 +408,13 @@ public abstract class AbstractXulLoader implements XulLoader {
         final Document doc = getDocFromInputStream( in );
 
         Element root = doc.getRootElement();
-        String ignoreRoot = ele.attributeValue( "ignoreroot" );
+        String ignoreRoot = element.attributeValue( "ignoreroot" );
         if ( root.getName().equals( "overlay" ) ) {
-          processOverlay( root, ele.getDocument().getRootElement() );
+          processOverlay( root, element.getDocument().getRootElement() );
         } else if ( ignoreRoot == null || ignoreRoot.equalsIgnoreCase( "false" ) ) {
           logger.debug( "Including entire file: " + src );
-          List contentOfParent = ele.getParent().content();
-          int index = contentOfParent.indexOf( ele );
+          List contentOfParent = element.getParent().content();
+          int index = contentOfParent.indexOf( element );
           contentOfParent.set( index, root );
 
           if ( root.getName().equals( "dialog" ) ) {
@@ -429,7 +431,7 @@ public abstract class AbstractXulLoader implements XulLoader {
           }
 
           // process any overlay children
-          List<Element> overlays = ele.elements();
+          List<Element> overlays = element.elements();
           for ( Element overlay : overlays ) {
             logger.debug( "Processing overlay within include" );
 
@@ -437,8 +439,8 @@ public abstract class AbstractXulLoader implements XulLoader {
           }
         } else {
           logger.debug( "Including children: " + src );
-          List contentOfParent = ele.getParent().content();
-          int index = contentOfParent.indexOf( ele );
+          List contentOfParent = element.getParent().content();
+          int index = contentOfParent.indexOf( element );
           contentOfParent.remove( index );
           List children = root.elements();
           for ( int i = children.size() - 1; i >= 0; i-- ) {
@@ -460,7 +462,7 @@ public abstract class AbstractXulLoader implements XulLoader {
           }
 
           // process any overlay children
-          List<Element> overlays = ele.elements();
+          List<Element> overlays = element.elements();
           for ( Element overlay : overlays ) {
             logger.debug( "Processing overlay within include" );
 
