@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2016 Pentaho Corporation..  All rights reserved.
+ * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.impl;
@@ -361,7 +361,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
     xpath.setNamespaceURIs( uris );
 
-    List<Element> eles = xpath.selectNodes( srcDoc );
+    List<Element> eles = (List<Element>) (List<?>) xpath.selectNodes( srcDoc );
 
     for ( Element ele : eles ) {
       String src = "";
