@@ -1,4 +1,4 @@
-# Pentaho Commons XUL
+# Pentaho Commons XUL 
 
 ### Project Structure
   
