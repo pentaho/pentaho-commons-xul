@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -162,8 +162,6 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       if ( parentShell == null && parent instanceof XulRoot ) {
         parentShell = (Shell) ( (XulRoot) parent ).getRootObject();
       }
-    } else if ( domContainer.getOuterContext() instanceof Shell ) {
-      parentShell = (Shell) domContainer.getOuterContext();
     }
     if ( parentShell == null ) {
       parentShell = new Shell( SWT.SHELL_TRIM );
