@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags.treeutil;
@@ -125,12 +125,11 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
   }
 
   private Image makeImage( final Shell shell, boolean type ) {
-    Shell placeholder = new Shell( shell, SWT.NO_TRIM );
+    Shell placeholder = new Shell( SWT.NO_TRIM );
     Button btn = new Button( placeholder, SWT.CHECK );
     btn.setSelection( type );
+    btn.pack();
     Point bsize = btn.computeSize( SWT.DEFAULT, SWT.DEFAULT );
-    btn.setSize( bsize );
-    placeholder.setSize( bsize );
     btn.setLocation( 0, 0 );
     placeholder.open();
 
