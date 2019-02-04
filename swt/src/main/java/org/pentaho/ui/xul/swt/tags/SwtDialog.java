@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -140,12 +140,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
       setAppicon( self.getAttributeValue( "appicon" ) );
     }
 
-    dialog = createDialog( parent );
+    dialog = createDialog( self, parent );
     Composite c = createDialogComposite();
     setManagedObject( c );
 
     settingsManager = container.getSettingsManager();
-
   }
 
   protected Shell getParentShell( XulComponent parent ) {
@@ -170,8 +169,21 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
   }
 
   private BasicDialog createDialog( XulComponent parent ) {
+    return createDialog( null, parent );
+  }
 
-    Shell parentShell = getParentShell( parent );
+  private BasicDialog createDialog( Element self, XulComponent parent ) {
+    Shell parentShell;
+
+    if ( self != null
+        && self.getAttributeValue( "proxyoutercontext" ) != null
+        && domContainer.getOuterContext() != null
+        && domContainer.getOuterContext() instanceof Shell ) {
+      parentShell = (Shell) domContainer.getOuterContext();
+    } else {
+      parentShell = getParentShell( parent );
+    }
+
     final BasicDialog newDialog = new BasicDialog( parentShell, this.getResizable() );
     newDialog.getShell().setBackgroundMode( SWT.INHERIT_DEFAULT );
 
