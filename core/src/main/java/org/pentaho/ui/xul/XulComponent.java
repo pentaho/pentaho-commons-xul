@@ -83,7 +83,7 @@ public interface XulComponent extends Element, XulEventSource {
    * 
    * @param flex
    */
-  public void setFlex( int flex );
+  public void setFlex(int flex);
 
   /**
    * Sets the method that will be invoked when this component loses focus. Also hooks up any listeners for this

@@ -65,6 +65,6 @@ public class DomFactoryTest {
   public void testCreateElement() throws XulException {
     Element ele = DocumentFactory.createElement( "testelement", null );
     assertThat( ele, instanceOf( Element.class ) );
-    assertEquals( "testelement", ele.getName() );
+    assertEquals( "testelemnt", ele.getName() );
   }
 }
