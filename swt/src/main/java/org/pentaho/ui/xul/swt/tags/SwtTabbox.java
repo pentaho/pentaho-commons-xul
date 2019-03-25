@@ -12,23 +12,28 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Listener;
 import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
@@ -39,6 +44,8 @@ import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
+
+import java.util.Arrays;
 
 public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
 
@@ -204,7 +211,9 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
     CTabItem[] t = tabFolder.getItems();
 
     for ( int i = 0; i < t.length; i++ ) {
-      t[i].dispose();
+      if ( !t[i].isDisposed() ) {
+        t[i].dispose();
+      }
     }
 
     for ( int i = 0; i < tabs.getChildNodes().size(); i++ ) {
@@ -222,7 +231,14 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
         if ( panels.getChildNodes().size() <= i ) {
           break;
         }
-        item.setControl( (Control) panels.getTabpanelByIndex( i ).getManagedObject() );
+
+        //Set Scrollable tab if overflow is found
+        if ( ( (SwtTabpanel) panels.getTabpanelByIndex( i ) ).getStyle() != null ) {
+          item.setControl( setScrollableTab( (SwtTabpanel) panels.getTabpanelByIndex( i ) ) );
+        } else {
+          item.setControl( (Control) panels.getTabpanelByIndex( i ).getManagedObject() );
+        }
+
         tabFolder.getItem( tabIndex++ ).getControl().setEnabled( !tabs.getTabByIndex( i ).isDisabled() );
       }
     }
@@ -318,4 +334,33 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
     this.onclose = command;
   }
 
+  private ScrolledComposite setScrollableTab( SwtTabpanel tabpanel ) {
+    int overflow = getOverflowProperty( tabpanel.getStyle().split( ";" ) );
+    ScrolledComposite scrolledComposite = new ScrolledComposite( tabFolder, overflow );
+    scrolledComposite.setLayout( new GridLayout() );
+    scrolledComposite.setLayoutData( new GridData() );
+    Composite composite = (Composite) tabpanel.getFirstChild().getManagedObject();
+    composite.setBackground( Display.getCurrent().getSystemColor( SWT.COLOR_WHITE ) );
+    composite.setParent( scrolledComposite );
+    scrolledComposite.setContent( composite );
+    Rectangle bounds = composite.getBounds();
+    scrolledComposite.setExpandHorizontal( true );
+    scrolledComposite.setExpandVertical( true );
+    scrolledComposite.setMinWidth( bounds.width );
+    scrolledComposite.setMinHeight( bounds.height );
+    return scrolledComposite;
+  }
+
+  @VisibleForTesting
+  public int getOverflowProperty( String[] style ) {
+    if ( style == null ) {
+      return SWT.NONE;
+    }
+    //Search for the overflow:auto property
+    long count = Arrays.stream( style )
+      .map( x -> x.toLowerCase().replace( " ", "" ).split( ":" ) )
+      .filter( y -> y[ 0 ].equals( "overflow" ) && y[ 1 ].equals( "auto" ) )
+      .count();
+    return count != 0 ? SWT.V_SCROLL | SWT.H_SCROLL : SWT.NONE;
+  }
 }
