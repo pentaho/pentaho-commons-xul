@@ -13,13 +13,13 @@
 	    <tab label="Last tab" id="tab4"/>
 	  </tabs>
 	  <tabpanels id="tabpanels">
-	    <tabpanel>
+	    <tabpanel id="panel1" style="overflow: auto">
 	      <groupbox>
 	        <caption label="testing"/>
   				<label value="Tab 1"/>
   		  </groupbox>
 			</tabpanel>
-	    <tabpanel>
+	    <tabpanel id="panel2">
 				<label value="Tab 2"/>
 			</tabpanel>
 	    <tabpanel id="panel3">
