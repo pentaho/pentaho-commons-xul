@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.test.swt;
@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.awt.GraphicsEnvironment;
 
-import org.eclipse.swt.SWT;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,8 +33,6 @@ import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
-import org.pentaho.ui.xul.swt.tags.SwtTabbox;
-import org.pentaho.ui.xul.swt.tags.SwtTabpanel;
 
 public class SwtTabboxTest {
 
@@ -45,76 +42,78 @@ public class SwtTabboxTest {
 
   @Before
   public void setUp() throws Exception {
+
     // Do not run on headless environment
     Assume.assumeTrue( !GraphicsEnvironment.isHeadless() );
 
     container = new SwtXulLoader().loadXul( "documents/tabpanel.xul" );
     doc = container.getDocumentRoot();
     tabbox = (XulTabbox) doc.getElementById( "myTabList" );
+
   }
 
   @Test
-  public void selectedIndexTest() {
+  public void selectedIndexTest() throws Exception {
+
     assertEquals( 2, tabbox.getSelectedIndex() );
   }
 
   @Test
-  public void disableTabTest() {
+  public void disableTabTest() throws Exception {
+    XulTabs tabs = (XulTabs) doc.getElementById( "tabs" );
     XulTab tab = (XulTab) doc.getElementById( "tab1" );
+
     tab.setDisabled( false );
     assertTrue( tab.isDisabled() == false );
+
   }
 
   @Test
-  public void tabCountTest() {
+  public void tabCountTest() throws Exception {
     XulTabs tabs = (XulTabs) doc.getElementById( "tabs" );
+
     assertEquals( 4, tabs.getTabCount() );
+
   }
 
   @Test
-  public void removeTabTest() {
+  public void removeTabTest() throws Exception {
     XulTabs tabs = (XulTabs) doc.getElementById( "tabs" );
     XulTab tab = (XulTab) doc.getElementById( "tab1" );
     tabs.removeChild( tab );
     assertEquals( 3, tabs.getTabCount() );
+
   }
 
   @Test
-  public void getTabsTest() {
+  public void getTabsTest() throws Exception {
     XulTabs tabs = (XulTabs) doc.getElementById( "tabs" );
+
     assertEquals( tabs, tabbox.getTabs() );
+
   }
 
   @Test
-  public void getTabPanelsTest() {
+  public void getTabPanelsTest() throws Exception {
     XulTabpanels panels = (XulTabpanels) doc.getElementById( "tabpanels" );
+
     assertEquals( panels, tabbox.getTabpanels() );
+
   }
 
   @Test
-  public void getSelectedPanelTest() {
+  public void getSelectedPanelTest() throws Exception {
     XulTabpanel panel = (XulTabpanel) doc.getElementById( "panel3" );
     assertEquals( panel, tabbox.getSelectedPanel() );
   }
 
   @Test
-  public void removeTabpanelTest() {
+  public void removeTabpanelTest() throws Exception {
     XulTabpanels panels = (XulTabpanels) doc.getElementById( "tabpanels" );
     XulTabpanel panel = (XulTabpanel) doc.getElementById( "panel3" );
     panels.removeChild( panel );
     assertEquals( 3, panels.getChildNodes().size() );
+
   }
 
-  @Test
-  public void getOverflowPropertyStyle() {
-    XulTabpanel panel = (XulTabpanel) doc.getElementById( "panel1" );
-    int overflow = ( (SwtTabbox) tabbox ).getOverflowProperty( ( (SwtTabpanel) panel ).getStyle().split( ";" ) );
-    assertEquals( overflow, SWT.V_SCROLL | SWT.H_SCROLL );
-  }
-
-  @Test
-  public void getOverflowPropertyWithNullStyle() {
-    int overflow = ( (SwtTabbox) tabbox ).getOverflowProperty( null );
-    assertEquals( overflow, SWT.NONE );
-  }
 }

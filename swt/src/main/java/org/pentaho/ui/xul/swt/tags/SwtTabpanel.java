@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -30,14 +30,11 @@ import org.pentaho.ui.xul.util.Orient;
 public class SwtTabpanel extends AbstractSwtXulContainer implements XulTabpanel {
 
   private Composite panel;
-  private String style;
 
   public SwtTabpanel( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
     super( "tabpanel" );
 
     this.orient = Orient.VERTICAL;
-
-    this.style = self.getAttributeValue( "style" );
 
     if ( parent instanceof SwtTabpanels ) {
       panel = new Composite( (Composite) ( (SwtTabpanels) parent ).getTabbox().getManagedObject(), SWT.NONE );
@@ -53,7 +50,4 @@ public class SwtTabpanel extends AbstractSwtXulContainer implements XulTabpanel 
     super.replaceChild( oldElement, newElement );
   }
 
-  public String getStyle() {
-    return style;
-  }
 }
