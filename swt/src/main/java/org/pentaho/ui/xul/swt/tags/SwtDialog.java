@@ -32,6 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Image;
@@ -190,7 +191,11 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     newDialog.getShell().addListener( SWT.Dispose, new Listener() {
       public void handleEvent( Event event ) {
         if ( !letDialogDispose ) {
-          hide();
+          try {
+            hide();
+          } catch ( SWTException e ) {
+            logger.error( e );
+          }
         }
       }
     } );
@@ -224,7 +229,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
 
   public void dispose() {
     letDialogDispose = true;
-    if ( getShell() != null ) {
+    if ( getShell() != null && !getShell().isDisposed() ) {
       getShell().dispose();
     }
   }
@@ -522,7 +527,9 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
     BasicDialog newDialog = createDialog( getParent() );
     Control[] controlz = newDialog.getMainArea().getChildren();
     for ( Control c : controlz ) {
-      c.dispose();
+      if (  c != null && !c.isDisposed() ) {
+        c.dispose();
+      }
     }
 
     Control[] controls = dialog.getMainArea().getChildren();
