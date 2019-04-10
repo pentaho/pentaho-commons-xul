@@ -211,7 +211,9 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
     CTabItem[] t = tabFolder.getItems();
 
     for ( int i = 0; i < t.length; i++ ) {
-      t[i].dispose();
+      if ( !t[i].isDisposed() ) {
+        t[i].dispose();
+      }
     }
 
     for ( int i = 0; i < tabs.getChildNodes().size(); i++ ) {
