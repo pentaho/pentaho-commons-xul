@@ -34,7 +34,7 @@ import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.swt.SwtXulLoader;
-import org.pentaho.ui.xul.swt.tags.SwtTabbox;
+import org.pentaho.ui.xul.swt.tags.Style;
 import org.pentaho.ui.xul.swt.tags.SwtTabpanel;
 
 public class SwtTabboxTest {
@@ -108,13 +108,13 @@ public class SwtTabboxTest {
   @Test
   public void getOverflowPropertyStyle() {
     XulTabpanel panel = (XulTabpanel) doc.getElementById( "panel1" );
-    int overflow = ( (SwtTabbox) tabbox ).getOverflowProperty( ( (SwtTabpanel) panel ).getStyle().split( ";" ) );
+    int overflow = Style.getOverflowProperty( ( (SwtTabpanel) panel ).getStyle() );
     assertEquals( overflow, SWT.V_SCROLL | SWT.H_SCROLL );
   }
 
   @Test
   public void getOverflowPropertyWithNullStyle() {
-    int overflow = ( (SwtTabbox) tabbox ).getOverflowProperty( null );
+    int overflow = Style.getOverflowProperty( null );
     assertEquals( overflow, SWT.NONE );
   }
 }

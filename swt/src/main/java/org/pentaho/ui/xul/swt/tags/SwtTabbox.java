@@ -17,7 +17,6 @@
 
 package org.pentaho.ui.xul.swt.tags;
 
-import com.google.common.annotations.VisibleForTesting;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -44,8 +43,6 @@ import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.AbstractSwtXulContainer;
-
-import java.util.Arrays;
 
 public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
 
@@ -335,7 +332,7 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
   }
 
   private ScrolledComposite setScrollableTab( SwtTabpanel tabpanel ) {
-    int overflow = getOverflowProperty( tabpanel.getStyle().split( ";" ) );
+    int overflow = Style.getOverflowProperty( tabpanel.getStyle() );
     ScrolledComposite scrolledComposite = new ScrolledComposite( tabFolder, overflow );
     scrolledComposite.setLayout( new GridLayout() );
     scrolledComposite.setLayoutData( new GridData() );
@@ -349,18 +346,5 @@ public class SwtTabbox extends AbstractSwtXulContainer implements XulTabbox {
     scrolledComposite.setMinWidth( bounds.width );
     scrolledComposite.setMinHeight( bounds.height );
     return scrolledComposite;
-  }
-
-  @VisibleForTesting
-  public int getOverflowProperty( String[] style ) {
-    if ( style == null ) {
-      return SWT.NONE;
-    }
-    //Search for the overflow:auto property
-    long count = Arrays.stream( style )
-      .map( x -> x.toLowerCase().replace( " ", "" ).split( ":" ) )
-      .filter( y -> y[ 0 ].equals( "overflow" ) && y[ 1 ].equals( "auto" ) )
-      .count();
-    return count != 0 ? SWT.V_SCROLL | SWT.H_SCROLL : SWT.NONE;
   }
 }
