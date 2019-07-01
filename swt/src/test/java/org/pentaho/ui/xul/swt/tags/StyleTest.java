@@ -14,20 +14,18 @@
  *
  * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
-
 package org.pentaho.ui.xul.swt.tags;
 
-import org.pentaho.ui.xul.XulComponent;
-import org.pentaho.ui.xul.XulDomContainer;
-import org.pentaho.ui.xul.containers.XulHbox;
-import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.util.Orient;
+import org.eclipse.swt.SWT;
+import org.junit.Test;
 
-public class SwtHbox extends SwtBox implements XulHbox {
-  private static final long serialVersionUID = 7140735724393002713L;
+import static org.junit.Assert.assertEquals;
 
-  public SwtHbox( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
-    super( self, parent, tagName, container, Orient.HORIZONTAL );
+public class StyleTest {
+
+  @Test
+  public void understandsOverflowAuto() {
+    assertEquals( SWT.V_SCROLL | SWT.H_SCROLL, Style.getOverflowProperty( "overflow:auto;color:red;" ) );
+    assertEquals( SWT.NONE, Style.getOverflowProperty( "overflow:other;" ) );
   }
-
 }

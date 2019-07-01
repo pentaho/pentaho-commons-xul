@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -31,7 +31,7 @@ public class SwtRadioGroup extends SwtBox implements XulRadioGroup {
   private ButtonGroup buttonGroup = new ButtonGroup();
 
   public SwtRadioGroup( Element self, XulComponent parent, XulDomContainer domContainer, String tagName ) {
-    super( parent, tagName, domContainer, Orient.VERTICAL );
+    super( self, parent, tagName, domContainer, Orient.VERTICAL );
   }
 
   @Override

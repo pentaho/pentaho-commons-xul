@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
@@ -22,7 +22,10 @@ import java.awt.Color;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -36,16 +39,18 @@ public class SwtBox extends AbstractSwtXulContainer implements XulBox {
   private static final long serialVersionUID = 582736100041411600L;
 
   protected Composite box;
-  protected String background, bgcolor;
+  protected String background, bgcolor, style;
   protected XulDomContainer container;
   private static Log logger = LogFactory.getLog( SwtBox.class );
 
   public SwtBox( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
-    this( parent, tagName, container, Orient.HORIZONTAL );
+    this( self, parent, tagName, container, Orient.HORIZONTAL );
   }
 
-  public SwtBox( XulComponent parent, String tagName, XulDomContainer container, Orient orient ) {
+  public SwtBox( Element self, XulComponent parent, String tagName, XulDomContainer container,
+                 Orient orient ) {
     super( tagName );
+    style = self != null ? self.getAttributeValue( "style" ) : "";
     box = createNewComposite( (Composite) parent.getManagedObject() );
     box.setBackgroundMode( SWT.INHERIT_DEFAULT );
     setOrient( orient.toString() );
@@ -54,7 +59,19 @@ public class SwtBox extends AbstractSwtXulContainer implements XulBox {
   }
 
   protected Composite createNewComposite( Composite parent ) {
-    return new Composite( parent, SWT.NONE );
+    int overflowProperty = style != null ? Style.getOverflowProperty( style ) : SWT.NONE;
+    if ( overflowProperty == SWT.NONE ) {
+      return new Composite( parent, SWT.NONE );
+    } else {
+      ScrolledComposite scrolledComposite = new ScrolledComposite( parent, overflowProperty );
+      scrolledComposite.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+      Composite composite = new Composite( scrolledComposite, SWT.NONE );
+      composite.setLayout( new GridLayout() );
+      scrolledComposite.setContent( composite );
+      scrolledComposite.setExpandHorizontal( true );
+      scrolledComposite.setExpandVertical( true );
+      return composite;
+    }
   }
 
   public String getBackground() {
@@ -75,6 +92,14 @@ public class SwtBox extends AbstractSwtXulContainer implements XulBox {
 
   public String getBgcolor() {
     return bgcolor;
+  }
+
+  @Override public void layout() {
+    super.layout();
+    Composite composite = (Composite) getManagedObject();
+    if ( composite.getParent() instanceof  ScrolledComposite ) {
+      ( (ScrolledComposite) composite.getParent() ).setMinSize( composite.computeSize( SWT.DEFAULT, SWT.DEFAULT ) );
+    }
   }
 
   public void setBgcolor( String bgcolor ) {

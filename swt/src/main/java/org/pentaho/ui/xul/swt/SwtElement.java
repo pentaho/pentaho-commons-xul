@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt;
@@ -38,6 +38,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -114,7 +115,9 @@ public class SwtElement extends AbstractXulComponent {
     if ( this instanceof XulRoot == false ) {
       if ( mo != null ) {
         if ( mo instanceof Control ) {
-          if ( ( (Control) mo ) != getManagedObject() && getManagedObject() instanceof Composite ) {
+          if ( mo != getManagedObject()
+            && getManagedObject() instanceof Composite
+            && !( ( (Control) mo ).getParent() instanceof ScrolledComposite ) ) {
             ( (Control) mo ).setParent( (Composite) getManagedObject() );
           }
         } else if ( mo instanceof Viewer ) {
