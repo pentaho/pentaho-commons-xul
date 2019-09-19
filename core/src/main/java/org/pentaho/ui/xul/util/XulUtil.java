@@ -12,19 +12,21 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.util;
 
 import org.dom4j.Attribute;
 import org.pentaho.ui.xul.XulDomContainer;
+import org.pentaho.ui.xul.dom.Element;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,9 +36,8 @@ public final class XulUtil {
 
   public static Map<String, String> AttributesToMap( List<Attribute> attMap ) {
 
-    Map<String, String> map = new HashMap<String, String>();
-    for ( int i = 0; i < attMap.size(); i++ ) {
-      Attribute node = attMap.get( i );
+    Map<String, String> map = new HashMap<>();
+    for ( Attribute node : attMap ) {
       String name = node.getName();
       if ( name.equals( "ID" ) ) {
         name = "id";
@@ -48,7 +49,7 @@ public final class XulUtil {
   }
 
   public static List<org.pentaho.ui.xul.dom.Attribute> convertAttributes( List<Attribute> inList ) {
-    List<org.pentaho.ui.xul.dom.Attribute> outList = new ArrayList<org.pentaho.ui.xul.dom.Attribute>();
+    List<org.pentaho.ui.xul.dom.Attribute> outList = new ArrayList<>();
 
     for ( Attribute attr : inList ) {
       outList.add( new org.pentaho.ui.xul.dom.Attribute( attr.getName(), attr.getValue() ) );
@@ -81,7 +82,7 @@ public final class XulUtil {
         (InputStream) domContainer.getXulLoader().getResourceAsStream( domContainer.getXulLoader().getRootDir() + src );
     if ( in == null ) {
       File f = new File( src );
-      if ( f.exists() == false ) {
+      if ( !f.exists() ) {
         f = new File( domContainer.getXulLoader().getRootDir() + src );
       }
       if ( f.exists() ) {
@@ -99,6 +100,17 @@ public final class XulUtil {
     }
     return in;
 
+  }
+
+  public static boolean isAutoScroll( Element element ) {
+    return element.getAttributes().stream()
+      .filter( attribute -> "style".equals( attribute.getName() ) )
+      .flatMap( style -> Arrays.stream( style.getValue().split( ";" ) ) )
+      .filter( stylePart -> stylePart.trim().startsWith( "overflow" ) )
+      .map( overflowStyle -> overflowStyle.split( ":" )[ 1 ].trim() )
+      .map( "auto"::equals )
+      .findFirst()
+      .orElse( false );
   }
 
 }

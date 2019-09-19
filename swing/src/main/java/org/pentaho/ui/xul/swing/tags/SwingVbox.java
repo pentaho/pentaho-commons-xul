@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
  */
 
 /**
@@ -44,6 +44,8 @@ import org.pentaho.ui.xul.swing.AbstractSwingContainer;
 import org.pentaho.ui.xul.swing.ScrollablePanel;
 import org.pentaho.ui.xul.util.Orient;
 
+import static org.pentaho.ui.xul.util.XulUtil.isAutoScroll;
+
 /**
  * @author nbaker
  * 
@@ -73,9 +75,11 @@ public class SwingVbox extends AbstractSwingContainer implements XulVbox {
     container.setOpaque( false );
     setManagedObject( container );
     setPadding( 2 );
+    container.setAutoscrolls( isAutoScroll( self ) );
 
   }
 
+  @Override
   public void resetContainer() {
 
     container.removeAll();
