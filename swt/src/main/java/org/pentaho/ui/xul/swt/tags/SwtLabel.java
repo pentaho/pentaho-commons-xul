@@ -39,6 +39,8 @@ public class SwtLabel extends SwtElement implements XulLabel {
   CLabel cLabel;
   Label label;
 
+  public static final String TAG_NAME = "label";
+
   public SwtLabel( Element self, XulComponent parent, XulDomContainer container, String tagName ) {
     super( tagName );
 
