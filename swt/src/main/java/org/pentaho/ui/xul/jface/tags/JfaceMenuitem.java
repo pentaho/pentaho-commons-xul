@@ -193,8 +193,7 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem {
     if ( contributionItem != null ) {
       int mask = 0;
       if ( accessKey.indexOf( "ctrl" ) > -1 ) { //$NON-NLS-1$
-        boolean isMac = System.getProperty( "os.name" ).toLowerCase().indexOf( "mac" ) >= 0;
-        mask += isMac ? SWT.COMMAND : SWT.CTRL;
+        mask += SWT.CTRL;
       }
       if ( accessKey.indexOf( "shift" ) > -1 ) { //$NON-NLS-1$
         mask += SWT.SHIFT;
