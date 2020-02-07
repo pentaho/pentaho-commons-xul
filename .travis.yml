@@ -22,6 +22,7 @@ deploy:
   file_glob: true
   file:
     - swt/target/commons-xul-swt-*.jar
+  skip_cleanup: true
   on:
     branch: webspoon-9.0
   name: webSpoon/nightly
