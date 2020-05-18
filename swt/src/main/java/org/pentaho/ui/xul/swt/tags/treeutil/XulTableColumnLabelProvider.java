@@ -131,7 +131,7 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
     btn.pack();
     Point bsize = btn.computeSize( SWT.DEFAULT, SWT.DEFAULT );
     btn.setLocation( 0, 0 );
-    placeholder.setLocation( -bsize.x * 2, -bsize.y * 2 );
+    placeholder.setLocation( SWT.DEFAULT, SWT.DEFAULT );
     placeholder.setSize( bsize );
     placeholder.open();
 
