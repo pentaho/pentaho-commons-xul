@@ -5,6 +5,7 @@
 
   <artifactId>commons-xul</artifactId>
   <packaging>pom</packaging>
+  <version>8.2.0.5-C249</version>
 
   <parent>
     <groupId>org.pentaho</groupId>
