@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>commons-xul</artifactId>
-    <version>8.2.0.5-625</version>
+    <version>8.2.0.5-C249</version>
   </parent>
 
   <groupId>org.pentaho</groupId>
   <artifactId>commons-xul-swing</artifactId>
-  <version>8.2.0.5-625</version>
+  <version>8.2.0.5-C249</version>
 
   <name>Commons XUL Swing</name>
 
