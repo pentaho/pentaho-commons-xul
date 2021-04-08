@@ -4,15 +4,16 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>commons-xul-swt</artifactId>
-  <packaging>jar</packaging>
   <version>8.2.0.5-C249</version>
+  <packaging>jar</packaging>
+  
 
   <name>Commons XUL SWT</name>
 
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>commons-xul</artifactId>
-    <version>8.2.0.5-625</version>
+    <version>8.2.0.5-C249</version>
   </parent>
 
   <properties>
@@ -26,7 +27,7 @@
     <dependency>
       <groupId>org.pentaho</groupId>
       <artifactId>commons-xul-core</artifactId>
-      <version>8.2.0.5-625</version>
+      <version>8.2.0.5-C249</version>
     </dependency>
     <dependency>
       <groupId>org.dom4j</groupId>

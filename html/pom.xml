@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>commons-xul</artifactId>
-    <version>8.2.0.5-625</version>
+    <version>8.2.0.5-C249</version>
   </parent>
 
   <dependencies>
