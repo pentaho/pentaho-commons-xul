@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>commons-xul</artifactId>
-  <packaging>pom</packaging>
   <version>8.2.0.5-C249</version>
+  <packaging>pom</packaging>
 
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>pentaho-ce-jar-parent-pom</artifactId>
-    <version>8.2.0.5-625</version>
+    <version>8.2.0.5-C249</version>
   </parent>
 
   <name>Pentaho Commons Xul</name>
