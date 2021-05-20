@@ -1112,7 +1112,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
     if ( settingElements.get() ) {
       return;
     }
-    if ( this.isHierarchical ) {
+    if ( this.isHierarchical && !this.tree.isBusy() ) {
       this.tree.refresh();
 
       if ( "true".equals( getAttributeValue( "expanded" ) ) ) {
@@ -1204,7 +1204,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   private void restoreExpandedState() {
     for ( int i = 0; i < expandCache.length; i++ ) {
       XulTreeItem item = findTreeItemForPos( expandCache[i] );
-      if ( item != null ) {
+      if ( item != null && !tree.isBusy() ) {
         tree.setExpandedState( item, true );
       }
     }
@@ -1832,7 +1832,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
   }
 
   public void setTreeItemExpanded( XulTreeItem item, boolean expanded ) {
-    if ( this.isHierarchical ) {
+    if ( this.isHierarchical && !tree.isBusy() ) {
       tree.setExpandedState( item, expanded );
     }
   }
