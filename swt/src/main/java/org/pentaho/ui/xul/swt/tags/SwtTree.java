@@ -17,24 +17,13 @@
 
 package org.pentaho.ui.xul.swt.tags;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -123,6 +112,19 @@ import org.pentaho.ui.xul.util.SortDirection;
 import org.pentaho.ui.xul.util.SwtDragManager;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
@@ -234,7 +236,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       int style = ( this.selType == TableSelection.MULTIPLE ) ? SWT.MULTI : SWT.None;
       style |= SWT.BORDER;
 
-      tree = new TreeViewer( (Composite) parentComponent.getManagedObject(), style );
+      tree = new PentahoTreeViewer( (Composite) parentComponent.getManagedObject(), style );
       setManagedObject( tree );
 
     } else {
@@ -2340,5 +2342,43 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       return bindingProvider.getBinding( source, prop1, target, prop2 );
     }
     return new DefaultBinding( source, prop1, target, prop2 );
+  }
+
+  /**
+   * THIS IS A FILTHY, UGLY HACK.
+   * What we really need to do is implement lazy-loading properly by making the XulTreeContentProvider an
+   * ILazyTreeContentProvider and work correctly within the expectations of the JFace API.  This subclass
+   * restores behavior from an older version of the JFace library to work around a bug.
+   */
+  private class PentahoTreeViewer extends TreeViewer {
+
+    private ListenerList<ITreeViewerListener> duplicateTreeListenerList = new ListenerList<>();
+
+    public PentahoTreeViewer( Composite parent, int style ) {
+      super( parent, style );
+    }
+
+    public void addTreeListener( ITreeViewerListener listener ) {
+      duplicateTreeListenerList.add( listener );
+      super.addTreeListener( listener );
+    }
+
+    public void removeTreeListener( ITreeViewerListener listener ) {
+      duplicateTreeListenerList.remove( listener );
+      super.removeTreeListener( listener );
+    }
+
+    protected void fireTreeExpanded( final TreeExpansionEvent event ) {
+
+      for ( ITreeViewerListener l : duplicateTreeListenerList ) {
+        SafeRunnable.run( new SafeRunnable() {
+          @Override
+          public void run() {
+            l.treeExpanded( event );
+          }
+        } );
+      }
+    }
+
   }
 }
