@@ -12,29 +12,18 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2018 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2021 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
@@ -123,6 +112,19 @@ import org.pentaho.ui.xul.util.SortDirection;
 import org.pentaho.ui.xul.util.SwtDragManager;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SwtTree extends AbstractSwtXulContainer implements XulTree {
 
@@ -234,7 +236,7 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       int style = ( this.selType == TableSelection.MULTIPLE ) ? SWT.MULTI : SWT.None;
       style |= SWT.BORDER;
 
-      tree = new TreeViewer( (Composite) parentComponent.getManagedObject(), style );
+      tree = new PentahoTreeViewer( (Composite) parentComponent.getManagedObject(), style );
       setManagedObject( tree );
 
     } else {
@@ -2340,5 +2342,51 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       return bindingProvider.getBinding( source, prop1, target, prop2 );
     }
     return new DefaultBinding( source, prop1, target, prop2 );
+  }
+
+  /**
+   * This class should not be necessary if we use JFace correctly.
+   * What we really need to do is implement lazy-loading properly by making the XulTreeContentProvider an
+   * ILazyTreeContentProvider and work within the expectations of the JFace API.  This subclass
+   * restores behavior from an older version of the JFace library to work around a bug.
+   */
+  @SuppressWarnings( "squid:S110" )
+  private class PentahoTreeViewer extends TreeViewer {
+
+    private ListenerList<ITreeViewerListener> duplicateTreeListenerList = new ListenerList<>();
+
+    public PentahoTreeViewer( Composite parent, int style ) {
+      super( parent, style );
+    }
+
+    @Override
+    public void addTreeListener( ITreeViewerListener listener ) {
+      // maintain a duplicate of the list in the parent class so we can call the listeners as needed
+      duplicateTreeListenerList.add( listener );
+      super.addTreeListener( listener );
+    }
+
+    @Override
+    public void removeTreeListener( ITreeViewerListener listener ) {
+      // maintain a duplicate of the list in the parent class so we can call the listeners as needed
+      duplicateTreeListenerList.remove( listener );
+      super.removeTreeListener( listener );
+    }
+
+    @Override
+    protected void fireTreeExpanded( final TreeExpansionEvent event ) {
+      // same behavior as parent class without using the checkBusy method to avoid reentrant updates.
+      // restores the behavior of the older version of the library we were using
+
+      for ( ITreeViewerListener l : duplicateTreeListenerList ) {
+        SafeRunnable.run( new SafeRunnable() {
+          @Override
+          public void run() {
+            l.treeExpanded( event );
+          }
+        } );
+      }
+    }
+
   }
 }
