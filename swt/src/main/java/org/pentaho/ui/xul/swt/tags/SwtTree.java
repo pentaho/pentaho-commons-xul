@@ -2388,5 +2388,20 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       }
     }
 
+    @Override
+    protected void fireTreeCollapsed( final TreeExpansionEvent event ) {
+      // same behavior as parent class without using the checkBusy method to avoid reentrant updates.
+      // restores the behavior of the older version of the library we were using
+
+      for ( ITreeViewerListener l : duplicateTreeListenerList ) {
+        SafeRunnable.run( new SafeRunnable() {
+          @Override
+          public void run() {
+            l.treeCollapsed( event );
+          }
+        } );
+      }
+    }
+
   }
 }
