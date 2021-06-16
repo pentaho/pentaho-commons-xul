@@ -16,7 +16,7 @@
   <name>Commons XUL Core</name>
 
   <properties>
-    <commons-beanutils.version>1.9.3</commons-beanutils.version>
+    <commons-beanutils.version>1.9.4</commons-beanutils.version>
     <commons-lang.version>2.6</commons-lang.version>
   </properties>
 
