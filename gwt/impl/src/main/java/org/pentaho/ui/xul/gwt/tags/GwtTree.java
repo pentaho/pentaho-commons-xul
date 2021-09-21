@@ -372,7 +372,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private void populateTree() {
     this.lastSelectedItem = tree.getSelectedItem();
     tree.removeItems();
-    TreeItem topNode = new TreeItem( "placeholder" );
     if ( this.rootChildren == null ) {
       this.rootChildren = (XulTreeChildren) this.children.get( 1 );
     }
@@ -473,7 +472,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   private TreeItem createNode( final XulTreeItem item ) {
-    TreeItem node = new TreeItem( "empty" ) {
+    TreeItem node = new TreeItem() {
       @Override
       public void setSelected( boolean selected ) {
         super.setSelected( selected );

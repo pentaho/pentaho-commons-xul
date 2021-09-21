@@ -14,15 +14,9 @@
   <name>Commons XUL GWT</name>
   
   <properties>
-    <GWT-FX.version>0.5.0</GWT-FX.version>
-    <gwt.version>2.5.1</gwt.version>
-    <gwt-user.version>2.5.1</gwt-user.version>
-    <gwt-dev.version>2.5.1</gwt-dev.version>
-    <gwt-incubator.version>2.1.0</gwt-incubator.version>
-    <gwt-dnd.version>3.1.2</gwt-dnd.version>
-    <gwtx.version>1.5.2</gwtx.version>
     <validation-api.version>1.0.0.GA</validation-api.version>
     <commons-gwt.version>9.3.0.0-SNAPSHOT</commons-gwt.version>
+    <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
   </properties>
   
   <dependencyManagement>
@@ -30,7 +24,6 @@
       <dependency>
         <groupId>GWT-FX</groupId>
         <artifactId>GWT-FX</artifactId>
-        <version>${GWT-FX.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
@@ -41,7 +34,6 @@
       <dependency>
         <groupId>com.google.gwt</groupId>
         <artifactId>gwt-user</artifactId>
-        <version>${gwt-user.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
@@ -52,7 +44,6 @@
       <dependency>
         <groupId>com.google.gwt</groupId>
         <artifactId>gwt-dev</artifactId>
-        <version>${gwt-dev.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
@@ -63,7 +54,6 @@
       <dependency>
         <groupId>com.google.gwt</groupId>
         <artifactId>gwt-incubator</artifactId>
-        <version>${gwt-incubator.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
@@ -72,9 +62,8 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>com.allen_sauer</groupId>
+        <groupId>com.allen-sauer.gwt.dnd</groupId>
         <artifactId>gwt-dnd</artifactId>
-        <version>${gwt-dnd.version}</version>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
