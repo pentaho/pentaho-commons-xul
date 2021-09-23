@@ -52,12 +52,13 @@
       <artifactId>gwt-incubator</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.allen_sauer</groupId>
+      <groupId>com.allen-sauer.gwt.dnd</groupId>
       <artifactId>gwt-dnd</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.code.gwtx</groupId>
       <artifactId>gwtx</artifactId>
+      <version>${gwtx.version}</version>
     </dependency>
     <dependency>
       <groupId>javax.validation</groupId>
@@ -102,6 +103,7 @@
           </execution>
         </executions>
         <configuration>
+          <extraJvmArgs>-Xms512m -Xmx1024m</extraJvmArgs>
           <modules>
             <module>org.pentaho.ui.xul.Gwt</module>
           </modules>
