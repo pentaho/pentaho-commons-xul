@@ -110,6 +110,7 @@ import org.pentaho.ui.xul.swt.tags.treeutil.XulTreeTextCellEditor;
 import org.pentaho.ui.xul.util.ColumnType;
 import org.pentaho.ui.xul.util.SortDirection;
 import org.pentaho.ui.xul.util.SwtDragManager;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.TreeCellEditor;
 import org.pentaho.ui.xul.util.TreeCellRenderer;
 
@@ -236,7 +237,11 @@ public class SwtTree extends AbstractSwtXulContainer implements XulTree {
       int style = ( this.selType == TableSelection.MULTIPLE ) ? SWT.MULTI : SWT.None;
       style |= SWT.BORDER;
 
-      tree = new PentahoTreeViewer( (Composite) parentComponent.getManagedObject(), style );
+      if ( SwtXulUtil.isRunningOnWebspoonMode() ) {
+        tree = new TreeViewer( (Composite) parentComponent.getManagedObject(), style );
+      } else {
+        tree = new PentahoTreeViewer( (Composite) parentComponent.getManagedObject(), style );
+      }
       setManagedObject( tree );
 
     } else {

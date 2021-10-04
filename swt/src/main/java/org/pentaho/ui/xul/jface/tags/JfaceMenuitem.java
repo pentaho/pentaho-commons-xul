@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2021 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.jface.tags;
@@ -38,6 +38,7 @@ import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.swt.SwtElement;
+import org.pentaho.ui.xul.util.SwtXulUtil;
 import org.pentaho.ui.xul.util.XulUtil;
 
 public class JfaceMenuitem extends SwtElement implements XulMenuitem {
@@ -193,8 +194,12 @@ public class JfaceMenuitem extends SwtElement implements XulMenuitem {
     if ( contributionItem != null ) {
       int mask = 0;
       if ( accessKey.indexOf( "ctrl" ) > -1 ) { //$NON-NLS-1$
-        boolean isMac = System.getProperty( "os.name" ).toLowerCase().indexOf( "mac" ) >= 0;
-        mask += isMac ? SWT.COMMAND : SWT.CTRL;
+        if( SwtXulUtil.isRunningOnWebspoonMode() ) {
+          mask += SWT.CTRL;
+        } else {
+          boolean isMac = System.getProperty( "os.name" ).toLowerCase().indexOf( "mac" ) >= 0;
+          mask += isMac ? SWT.COMMAND : SWT.CTRL;
+        }
       }
       if ( accessKey.indexOf( "shift" ) > -1 ) { //$NON-NLS-1$
         mask += SWT.SHIFT;

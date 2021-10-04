@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2019 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2021 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.swt.tags.treeutil;
@@ -125,24 +125,30 @@ public class XulTableColumnLabelProvider implements ITableLabelProvider {
   }
 
   private Image makeImage( final Shell shell, boolean type ) {
-    Shell placeholder = new Shell( SWT.NO_TRIM );
-    Button btn = new Button( placeholder, SWT.CHECK );
-    btn.setSelection( type );
-    btn.pack();
-    Point bsize = btn.computeSize( SWT.DEFAULT, SWT.DEFAULT );
-    btn.setLocation( 0, 0 );
-    placeholder.setLocation( SWT.DEFAULT, SWT.DEFAULT );
-    placeholder.setSize( bsize );
-    placeholder.open();
+    if ( SwtXulUtil.isRunningOnWebspoonMode() ) {
+      String location = "org/pentaho/ui/xul/swt/tags/images/";
+      location += type ? "checked.png" : "unchecked.png";
+      return new Image( shell.getDisplay(), this.getClass().getClassLoader().getResourceAsStream( location ) );
+    } else {
+      Shell placeholder = new Shell( SWT.NO_TRIM );
+      Button btn = new Button( placeholder, SWT.CHECK );
+      btn.setSelection( type );
+      btn.pack();
+      Point bsize = btn.computeSize( SWT.DEFAULT, SWT.DEFAULT );
+      btn.setLocation( 0, 0 );
+      placeholder.setLocation( SWT.DEFAULT, SWT.DEFAULT );
+      placeholder.setSize( bsize );
+      placeholder.open();
 
-    final GC gc = new GC( btn );
-    final Image image = new Image( shell.getDisplay(), bsize.x, bsize.y );
-    gc.copyArea( image, 0, 0 );
-    gc.dispose();
+      final GC gc = new GC( btn );
+      final Image image = new Image( shell.getDisplay(), bsize.x, bsize.y );
+      gc.copyArea( image, 0, 0 );
+      gc.dispose();
 
-    placeholder.close();
+      placeholder.close();
 
-    return image;
+      return image;
+    }
   }
 
   private boolean isSelected( Object row, int col ) {
