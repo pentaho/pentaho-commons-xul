@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2021 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.util;
@@ -63,4 +63,30 @@ public class SwtXulUtil {
     return img;
   }
 
+  /**
+   * Determines if the RUNNING_ON_WEBSPOON_MODE flag is set and returns its boolean value.
+   * This is per user-basis.
+   *
+   * @return Boolean signalig the use of Webspoon mode.
+   */
+  public static boolean isRunningOnWebspoonMode() {
+    return Boolean.parseBoolean( NVL( System.getenv( "RUNNING_ON_WEBSPOON_MODE" ), NVL( System.getProperty( "RUNNING_ON_WEBSPOON_MODE" ),
+      "false" ) ) );
+  }
+
+  /**
+   * Implements Oracle style NVL function
+   *
+   * @param source
+   *          The source argument
+   * @param def
+   *          The default value in case source is null or the length of the string is 0
+   * @return source if source is not null, otherwise return def
+   */
+  public static String NVL( String source, String def ) {
+    if ( source == null || source.length() == 0 ) {
+      return def;
+    }
+    return source;
+  }
 }
