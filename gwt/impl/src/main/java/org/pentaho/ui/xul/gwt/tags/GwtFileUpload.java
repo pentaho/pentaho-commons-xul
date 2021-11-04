@@ -12,15 +12,28 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2021 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.FileUpload;
+import com.google.gwt.user.client.ui.FormHandler;
+import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
+import com.google.gwt.user.client.ui.FormSubmitEvent;
+import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Hidden;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.mantle.client.csrf.CsrfUtil;
+import org.pentaho.mantle.client.csrf.JsCsrfToken;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulFileUpload;
@@ -31,23 +44,24 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.tags.util.LabelWidget;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormHandler;
-import com.google.gwt.user.client.ui.FormPanel;
-import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
-import com.google.gwt.user.client.ui.FormSubmitEvent;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.DOM;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpload {
+  /**
+   * The name of the CSRF token field to use when CSRF protection is disabled.
+   * <p>
+   * An arbitrary name, yet different from the name it can have when CSRF protection enabled.
+   * This avoids not having to dynamically adding and removing the field from the form depending
+   * on whether CSRF protection is enabled or not.
+   * <p>
+   * When CSRF protection is enabled,
+   * the actual name of the field is set before each submit.
+   */
+  private static final String DISABLED_CSRF_TOKEN_PARAMETER = "csrf_token_disabled";
+
   private String uploadSuccessMethod, uploadFailureMethod;
-  public static final String ERROR = ".ERROR_"; //$NON-NLS-1$
+  public static final String ERROR = ".ERROR_";
   private FormPanel uploadForm = null;
   private FileUpload upload = null;
   private VerticalPanel uploadPanel;
@@ -56,7 +70,18 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
   private GwtLabel uploadTextBox;
   private String action;
   private Map<String, String> parameters = null;
-  private static final String ELEMENT_NAME = "pen:fileupload"; //$NON-NLS-1$
+  private static final String ELEMENT_NAME = "pen:fileupload";
+
+  /**
+   * The CSRF token field/parameter.
+   * Its name and value are set to the expected values before each submit,
+   * to match the obtained {@link JsCsrfToken}.
+   * <p>
+   * The Tomcat's context must have the `allowCasualMultipartParsing` attribute set
+   * so that the `CsrfGateFilter` is able to transparently read this parameter
+   * in a multi-part encoding form, as is the case of `form`.
+   */
+  private Hidden csrfTokenParameter;
 
   public static void register() {
     GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
@@ -69,12 +94,12 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
   public GwtFileUpload() {
     super( ELEMENT_NAME );
     setManagedObject( new VerticalPanel() );
-    this.parameters = new HashMap<String, String>();
+    this.parameters = new HashMap<>();
   }
 
   private String buildActionUrl( String moduleBaseUrl, String anAction ) {
     String url = moduleBaseUrl;
-    while ( anAction.indexOf( "../" ) >= 0 && url.lastIndexOf( "/" ) > -1 ) {
+    while ( anAction.contains( "../" ) && url.lastIndexOf( "/" ) > -1 ) {
       url = url.substring( 0, url.lastIndexOf( "/" ) );
       anAction = anAction.substring( 3 );
     }
@@ -103,23 +128,15 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     uploadForm.setMethod( FormPanel.METHOD_POST );
     uploadForm.setHeight( getHeight() + "px" );
     uploadForm.setWidth( getWidth() + "px" );
+
     // Create a panel to hold all of the form widgets.
     HorizontalPanel panel = new HorizontalPanel();
     uploadForm.setWidget( panel );
     uploadForm.setVisible( true );
+
     // Create a FileUpload widget.
-    upload = new FileUpload();
-    upload.setStylePrimaryName( "gwt-StyledFileUpload" );
-    upload.setName( "uploadFormElement" ); //$NON-NLS-1$
-    upload.getElement().setId( "uploadFormElement" );
-    upload.setVisible( true );
-    upload.setHeight( getHeight() + "px" );
-    upload.setWidth( getWidth() + "px" );
-    upload.addChangeHandler( new ChangeHandler() {
-      public void onChange( ChangeEvent event ) {
-        setSelectedFile( upload.getFilename() );
-      }
-    } );
+    upload = createFileUpload();
+
     uploadPanel = new VerticalPanel();
 
     // -- upload styling -- //
@@ -127,6 +144,9 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     String uploadButtonDisabledImage = srcEle.getAttribute( "disabledimage" );
 
     hiddenPanel = new HTMLPanel( "<div id='hidden_div' class='gwt_file_upload_hidden_div'></div>" );
+
+    csrfTokenParameter = new Hidden( DISABLED_CSRF_TOKEN_PARAMETER );
+
     uploadTextBox = new GwtLabel();
     uploadTextBox.setId( "gwt_FileUpload_uploadTextBox" );
 
@@ -155,6 +175,7 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     uploadButton.layout();
     hiddenPanel.add( upload, "hidden_div" );
     hiddenPanel.add( label, "hidden_div" );
+    hiddenPanel.add( csrfTokenParameter );
     // -- upload styling -- //
 
     uploadPanel.add( hiddenPanel );
@@ -172,13 +193,11 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
         if ( upload.getFilename() == null ) {
           try {
             GwtFileUpload.this.getXulDomContainer().invoke( getOnUploadFailure(),
-                new Object[] { new Throwable( "No file has been selected. Please select the file to upload" ) } );
-            return;
+              new Object[] { new Throwable( "No file has been selected. Please select the file to upload" ) } );
           } catch ( XulException e ) {
             // TODO Auto-generated catch block
             e.printStackTrace();
           }
-
         }
       }
 
@@ -189,7 +208,7 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
             if ( results.indexOf( ERROR ) + ERROR.length() < results.length() ) {
               String result = results.replaceAll( "\\<.*?>", "" );
               GwtFileUpload.this.getXulDomContainer().invoke( getOnUploadFailure(),
-                  new Object[] { new Throwable( result ) } );
+                new Object[] { new Throwable( result ) } );
             }
           } else {
             if ( results != null ) {
@@ -197,8 +216,8 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
               GwtFileUpload.this.getXulDomContainer().invoke( getOnUploadSuccess(), new Object[] { result } );
             } else {
               GwtFileUpload.this.getXulDomContainer().invoke( getOnUploadFailure(),
-                  new Object[] { new Throwable( "Unable to find upload service or "
-                    + "Upload service returned nothing" ) } );
+                new Object[] { new Throwable( "Unable to find upload service or "
+                  + "Upload service returned nothing" ) } );
             }
           }
         } catch ( XulException xule ) {
@@ -208,7 +227,24 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     } );
 
     uploadForm.setWidth( "100%" );
+  }
 
+  private FileUpload createFileUpload() {
+    final FileUpload upload = new FileUpload();
+
+    upload.setStylePrimaryName( "gwt-StyledFileUpload" );
+    upload.setName( "uploadFormElement" );
+    upload.getElement().setId( "uploadFormElement" );
+    upload.setVisible( true );
+    upload.setHeight( getHeight() + "px" );
+    upload.setWidth( getWidth() + "px" );
+    upload.addChangeHandler( new ChangeHandler() {
+      public void onChange( ChangeEvent event ) {
+        setSelectedFile( upload.getFilename() );
+      }
+    } );
+
+    return upload;
   }
 
   public String getAction() {
@@ -223,12 +259,12 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
         StringBuffer buffer = new StringBuffer();
         Object[] keys = this.parameters.keySet().toArray();
         buffer.append( this.action );
-        buffer.append( "?" ); //$NON-NLS-1$
+        buffer.append( "?" );
         for ( Object theKey : keys ) {
           buffer.append( theKey );
-          buffer.append( "=" ); //$NON-NLS-1$
+          buffer.append( "=" );
           buffer.append( this.parameters.get( theKey ) );
-          buffer.append( "&" ); //$NON-NLS-1$
+          buffer.append( "&" );
         }
         fullUrl = buffer.toString();
         fullUrl = fullUrl.substring( 0, fullUrl.lastIndexOf( "&" ) );
@@ -239,6 +275,22 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
       xule.printStackTrace();
     }
     return fullUrl;
+  }
+
+  /**
+   * Obtains a CSRF token for the form's current URL and
+   * fills it in the form's token parameter hidden field.
+   */
+  private void setupCsrfToken() {
+    JsCsrfToken token = CsrfUtil.getCsrfTokenSync( uploadForm.getAction() );
+    if ( token != null ) {
+      csrfTokenParameter.setName( token.getParameter() );
+      csrfTokenParameter.setValue( token.getToken() );
+    } else {
+      // Reset the field.
+      csrfTokenParameter.setName( DISABLED_CSRF_TOKEN_PARAMETER );
+      csrfTokenParameter.setValue( "" );
+    }
   }
 
   public String getOnUploadFailure() {
@@ -270,26 +322,17 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
   public void setSelectedFile( String name ) {
     if ( name == null || name.length() <= 0 ) {
       hiddenPanel.remove( upload );
-      upload = new FileUpload();
-      upload.setStylePrimaryName( "gwt-StyledFileUpload" );
-      upload.setName( "uploadFormElement" ); //$NON-NLS-1$
-      upload.getElement().setId( "uploadFormElement" );
-      upload.setVisible( true );
-      upload.setHeight( getHeight() + "px" ); //$NON-NLS-1$
-      upload.setWidth( getWidth() + "px" ); //$NON-NLS-1$
-      upload.addChangeHandler( new ChangeHandler() {
-        public void onChange( ChangeEvent event ) {
-          setSelectedFile( upload.getFilename() );
-        }
-      } );
+      upload = createFileUpload();
       hiddenPanel.add( upload, "hidden_div" );
     }
+
     uploadTextBox.setValue( name );
-    firePropertyChange( "selectedFile", null, name ); //$NON-NLS-1$
+    firePropertyChange( "selectedFile", null, name );
   }
 
   public void submit() {
     uploadForm.setAction( processParameters() );
+    setupCsrfToken();
     uploadForm.submit();
   }
 
