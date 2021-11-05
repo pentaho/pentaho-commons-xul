@@ -94,7 +94,8 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
   public GwtFileUpload() {
     super( ELEMENT_NAME );
     setManagedObject( new VerticalPanel() );
-    this.parameters = new HashMap<>();
+    // GWT compilation requires explicit generic parameters. Don't remove...
+    this.parameters = new HashMap<String, String>();
   }
 
   private String buildActionUrl( String moduleBaseUrl, String anAction ) {
