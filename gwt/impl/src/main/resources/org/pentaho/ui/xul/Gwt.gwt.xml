@@ -1,10 +1,11 @@
 <module>
     <inherits name="com.google.gwt.user.User"/>
+    <inherits name="org.pentaho.mantle.client.csrf.Csrf"/>
     <inherits name="com.google.gwt.xml.XML"/>
    	<inherits name="org.pentaho.gwt.widgets.Widgets"/>
     <inherits name='com.googlecode.gwtx.Java'/>
     <inherits name='org.pentaho.ui.Xul'/>
-  <inherits name="org.pentaho.gwt.widgets.Widgets"/>
+    <inherits name="org.pentaho.gwt.widgets.Widgets"/>
     <inherits name="com.google.gwt.gen2.table.Table"/>
     <inherits name="com.google.gwt.gen2.table.Table"/>
 
