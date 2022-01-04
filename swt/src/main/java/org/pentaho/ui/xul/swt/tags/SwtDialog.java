@@ -282,7 +282,7 @@ public class SwtDialog extends AbstractSwtXulContainer implements XulDialog {
         newButtons.set( i, newButtons.get( i ).trim().toUpperCase() );
       }
       String[] existingButtons = buttons;
-      buttons = (String[]) newButtons.toArray();
+      buttons = newButtons.stream().toArray( String[]::new );
 
       for ( String existingButton : existingButtons ) {
         if ( !newButtons.contains( existingButton.trim().toUpperCase() ) ) {
