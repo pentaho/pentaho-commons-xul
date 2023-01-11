@@ -17,13 +17,14 @@
 
 package org.pentaho.ui.xul.gwt.util;
 
+import com.google.gwt.aria.client.Roles;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.pentaho.gwt.widgets.client.dialogs.DialogBox;
 import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 
@@ -55,7 +56,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
   }
 
   private void createDialog() {
-    dialog = new DialogBox() {
+    dialog = new DialogBox( true, true ) {
       @Override
       public void hide() {
         // User may press the "ESC" key, invoking this code
@@ -64,6 +65,8 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
         GlassPane.getInstance().hide();
       }
     };
+    Roles.getDialogRole().set( dialog.getElement() );
+    Roles.getDialogRole().setAriaLabelProperty( dialog.getElement(), title );
     dialog.add( contents );
     dialog.setStylePrimaryName( "pentaho-dialog" );
 
