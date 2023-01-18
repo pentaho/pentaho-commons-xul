@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.util;
@@ -25,13 +25,16 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.pentaho.gwt.widgets.client.dialogs.DialogBox;
 import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 
 public abstract class GenericDialog extends AbstractGwtXulContainer {
 
   private SimplePanel glasspane = new SimplePanel();
   protected DialogBox dialog;
-  private VerticalPanel contents = new VerticalPanel();
+  private VerticalPanel contents = new VerticalFlexPanel();
   private String title = "";
 
   public static final int CANCEL = 0;
@@ -43,6 +46,10 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
   // requested height is adjusted by this value.
   private static final int HEADER_HEIGHT = 32;
 
+  private static final String ARIA_ROLE_DIALOG = "dialog";
+  private static final String ARIA_ROLE_ALERTDIALOG = "alertdialog";
+  private static final String ATTRIBUTE_ARIA_DESCRIBEDBY = "pen:aria-describedby";
+
   public GenericDialog( String tagName ) {
     super( tagName );
 
@@ -52,6 +59,8 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     glassPaneStyle.setProperty( "height", "100%" );
     glassPaneStyle.setProperty( "display", "block" );
 
+    // Default ARIA role.
+    setAriaRole( ARIA_ROLE_DIALOG );
   }
 
   private void createDialog() {
@@ -83,11 +92,12 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
       createDialog();
     }
     dialog.setText( title );
+    dialog.setAriaRole( getAriaRole() );
 
     contents.clear();
 
     // implement the buttons
-    VerticalPanel panel = new VerticalPanel();
+    VerticalPanel panel = new VerticalFlexPanel();
 
     Panel p = getDialogContents();
     p.setSize( "100%", "100%" );
@@ -96,7 +106,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
 
     panel.add( p );
     panel.setCellHeight( p, "100%" );
-    panel.setStyleName( "dialog" ); //$NON-NLS-1$
+    panel.addStyleName( "dialog" );
     panel.setWidth( "100%" ); //$NON-NLS-1$
     panel.setSpacing( 0 );
     panel.setHeight( "100%" ); //$NON-NLS-1$
@@ -106,6 +116,14 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     if ( getBgcolor() != null ) {
       p.getElement().getStyle().setProperty( "backgroundColor", getBgcolor() );
     }
+
+    // ARIA describedBy attribute
+    String describedBy = getAriaDescribedBy();
+    if ( isAriaRoleAlertDialog() && StringUtils.isEmpty( describedBy ) ) {
+      describedBy = ElementUtils.ensureId( p );
+    }
+
+    dialog.setAriaDescribedBy( describedBy );
 
     p = this.getButtonPanel();
     p.setWidth( "100%" );
@@ -126,6 +144,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
       int offsetHeight = getHeight() - HEADER_HEIGHT;
       contents.setHeight( offsetHeight + "px" ); //$NON-NLS-1$
     }
+
     dialog.center();
     dialog.show();
 
@@ -137,7 +156,6 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
 
     glasspane.getElement().getStyle().setProperty( "zIndex", "" + ( GenericDialog.dialogPos ) ); //$NON-NLS-1$
     dialog.getElement().getStyle().setProperty( "zIndex", "" + ( ++GenericDialog.dialogPos ) ); //$NON-NLS-1$
-
   }
 
   public Panel getDialogContents() {
@@ -160,4 +178,25 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     return !isHidden();
   }
 
+  protected boolean isAriaRoleAlertDialog() {
+    return ARIA_ROLE_ALERTDIALOG.equals( getAriaRole() );
+  }
+
+  // region ariaDescribedBy attribute
+  /**
+   * Gets the identifier of the ARIA description element.
+   */
+  public String getAriaDescribedBy() {
+    return getAttributeValue( ATTRIBUTE_ARIA_DESCRIBEDBY );
+  }
+
+  /**
+   * Sets the identifier of the ARIA description element.
+   *
+   * @param describedById The description element identifier.
+   */
+  public void setAriaDescribedBy( String describedById ) {
+    setAttribute( ATTRIBUTE_ARIA_DESCRIBEDBY, describedById );
+  }
+  // endregion
 }
