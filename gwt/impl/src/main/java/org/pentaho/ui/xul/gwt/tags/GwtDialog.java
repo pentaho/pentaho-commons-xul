@@ -20,6 +20,13 @@ package org.pentaho.ui.xul.gwt.tags;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -32,11 +39,6 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.util.GenericDialog;
 import org.pentaho.ui.xul.util.Orient;
 
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 
 public class GwtDialog extends GenericDialog implements XulDialog {
@@ -386,6 +388,10 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     // since hover pseudo-classes don't work when not in quirksmode
     ElementUtils.setupButtonHoverEffect();
 
+    Focusable autoFocusWidget = this.dialog.getAutoFocusWidget();
+    if( autoFocusWidget != null ) {
+      autoFocusWidget.setFocus( true );
+    }
   }
 
   public String getOnclose() {

@@ -270,9 +270,17 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                 // Use the popup's key preview hooks to close the dialog when either
                 // enter or escape is pressed.
                 switch ( key ) {
-                  case KeyCodes.KEY_ESCAPE:
+                  case KeyCodes.KEY_ESCAPE: {
                     hide();
+                    if ( button != null ) {
+                      button.setFocus( true );
+                    } else if ( imageButton != null ) {
+                      imageButton.setFocus( true );
+                    } else if ( customButton != null ) {
+                      customButton.setFocus( true );
+                    }
                     break;
+                  }
                 }
                 return true;
               }
@@ -290,6 +298,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                 menuBar.addSeparator( (MenuItemSeparator)tempItem.getManagedObject() );
               }
             }
+            menuBar.focus();
             popupPanel.setWidget( menuBar );
             popupPanel.setPopupPositionAndShow( new PositionCallback() {
               public void setPosition( int offsetWidth, int offsetHeight ) {
