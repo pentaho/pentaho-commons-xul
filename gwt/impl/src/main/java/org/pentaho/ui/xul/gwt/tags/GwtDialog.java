@@ -20,7 +20,13 @@ package org.pentaho.ui.xul.gwt.tags;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
+
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -383,7 +389,9 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     ElementUtils.setupButtonHoverEffect();
 
     Focusable autoFocusWidget = this.dialog.getAutoFocusWidget();
-    autoFocusWidget.setFocus(true);
+    if( autoFocusWidget != null ) {
+      autoFocusWidget.setFocus( true );
+    }
   }
 
   public String getOnclose() {

@@ -272,12 +272,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                 switch ( key ) {
                   case KeyCodes.KEY_ESCAPE: {
                     hide();
-                    if (button != null) {
-                      button.setFocus(true);
-                    } else if (imageButton != null) {
-                      imageButton.setFocus(true);
-                    } else if (customButton != null) {
-                      customButton.setFocus(true);
+                    if ( button != null ) {
+                      button.setFocus( true );
+                    } else if ( imageButton != null ) {
+                      imageButton.setFocus( true );
+                    } else if ( customButton != null ) {
+                      customButton.setFocus( true );
                     }
                     break;
                   }
