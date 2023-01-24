@@ -12,11 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
- */
-
-/**
- *
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt;
@@ -55,7 +51,7 @@ import com.google.gwt.xml.client.Node;
  * 
  */
 public abstract class AbstractGwtXulComponent extends GwtDomElement implements XulComponent, XulEventSource {
-
+  private static final String ATTRIBUTE_ARIA_ROLE = "pen:aria-role";
   protected XulDomContainer xulDomContainer;
   protected Panel container;
   protected Orient orientation;
@@ -394,6 +390,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setManagedObject( Object managed ) {
     managedObject = managed;
+
+    if ( managedObject instanceof UIObject ) {
+      updateDomAriaRole( (UIObject) managedObject );
+    }
   }
 
   public String getId() {
@@ -403,7 +403,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   public void setId( String id ) {
     this.setAttribute( "id", id );
     this.id = id;
-    if ( managedObject != null && managedObject instanceof UIObject ) {
+    if ( managedObject instanceof UIObject ) {
       ( (UIObject) managedObject ).getElement().setId( id );
     }
   }
@@ -516,6 +516,42 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     this.removeElement = flag;
   }
 
+  // region ARIA role attribute
+  /**
+   * Gets the ARIA role attribute of the component.
+   * <p>
+   *   Corresponds to the XUL <code>pen:aria-role</code> attribute.
+   * </p>
+   */
+  public String getAriaRole() {
+    return getAttributeValue( ATTRIBUTE_ARIA_ROLE );
+  }
+
+  /**
+   * Sets the ARIA role attribute of the component.
+   * <p>
+   *   Corresponds to the XUL <code>pen:aria-role</code> attribute.
+   * </p>
+   * <p>
+   *   When the component's managed object, {@link #getManagedObject()}, is set,
+   *   its <code>role</code> DOM attribute is set with this value.
+   * </p>
+   * @param ariaRole The new ARIA <code>role</code> attribute.
+   */
+  public void setAriaRole( String ariaRole ) {
+    setAttribute( ATTRIBUTE_ARIA_ROLE, ariaRole );
+  }
+
+  /**
+   * Updates the DOM ARIA <code>role</code> attribute on a given GWT {@link UIObject}.
+   *
+   * @param gwtObject The GWT <code>UIObject</code> to update.
+   */
+  private void updateDomAriaRole( UIObject gwtObject ) {
+    setDomAttribute( gwtObject, "role", getAriaRole() );
+  }
+  // endregion
+
   public void addPropertyChangeListener( PropertyChangeListener listener ) {
     changeSupport.addPropertyChangeListener( listener );
   }
@@ -585,38 +621,86 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }-*/;
 
   public enum Property {
-    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION
+    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION, ARIA_ROLE;
+  }
+
+  /**
+   * Gets the name of the enum value corresponding to a given XUL attribute name.
+   * @param name The name of the XUL attribute.
+   * @return The name of the corresponding enum value.
+   */
+  protected static String getAttributeEnumName( String name ) {
+    return name
+      .replace( "pen:", "" )
+      .replace( "-", "_" )
+      .toUpperCase();
   }
 
   @Override
   public void setAttribute( String name, String value ) {
-    super.setAttribute( name, value );
+    Property prop;
     try {
-      Property prop = Property.valueOf( name.replace( "pen:", "" ).toUpperCase() );
-      switch ( prop ) {
-        case TOOLTIP:
-          setTooltiptext( value );
-          break;
-        case FLEX:
-          setFlex( Integer.valueOf( value ) );
-          break;
-        case WIDTH:
-          setWidth( Integer.valueOf( value ) );
-          break;
-        case HEIGHT:
-          setHeight( Integer.valueOf( value ) );
-          break;
-        case VISIBLE:
-          setVisible( "true".equals( value ) );
-          break;
-        case POSITION:
-          setPosition( Integer.valueOf( value ) );
-          break;
-      }
+      prop = Property.valueOf( getAttributeEnumName( name ) );
     } catch ( IllegalArgumentException e ) {
-      System.out.println( "Could not find Property in enum for: " + name + " in class" + getClass().getName() );
+      // Property is not known by the base class. No need to log.
+      prop = null;
     }
 
+    // Pre-process
+    if ( prop != null ) {
+      try {
+        switch ( prop ) {
+          case ARIA_ROLE:
+            // Normalize: empty to null.
+            if ( StringUtils.isEmpty( value ) ) {
+              value = null;
+            }
+            break;
+        }
+      } catch ( IllegalArgumentException e ) {
+        System.out.println(
+          "Error pre-processing property '" + name + "' with value '"
+            + value + "' in class " + getClass().getName() );
+        return;
+      }
+    }
+
+    super.setAttribute( name, value );
+
+    // Post-process
+    if ( prop != null ) {
+      try {
+        switch ( prop ) {
+          case TOOLTIP:
+            setTooltiptext( value );
+            break;
+          case FLEX:
+            setFlex( Integer.valueOf( value ) );
+            break;
+          case WIDTH:
+            setWidth( Integer.valueOf( value ) );
+            break;
+          case HEIGHT:
+            setHeight( Integer.valueOf( value ) );
+            break;
+          case VISIBLE:
+            setVisible( "true".equals( value ) );
+            break;
+          case POSITION:
+            setPosition( Integer.valueOf( value ) );
+            break;
+          case ARIA_ROLE:
+            if ( managedObject instanceof UIObject ) {
+              updateDomAriaRole( (UIObject) managedObject );
+            }
+            break;
+        }
+      } catch ( IllegalArgumentException e ) {
+        System.out.println(
+          "Error post-processing property '" + name + "' with value '"
+            + value + "' in class " + getClass().getName() );
+      }
+    }
   }
 
   @Override
@@ -703,5 +787,13 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void adoptAttributes( XulComponent xulComponent ) {
     // To change body of implemented methods use File | Settings | File Templates.
+  }
+
+  private static void setDomAttribute( UIObject gwtUIObject, String attribute, String value ) {
+    if ( value == null ) {
+      gwtUIObject.getElement().removeAttribute( attribute );
+    } else {
+      gwtUIObject.getElement().setAttribute( attribute, value );
+    }
   }
 }
