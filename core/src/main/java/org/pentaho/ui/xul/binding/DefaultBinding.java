@@ -63,6 +63,8 @@ public class DefaultBinding implements Binding {
 
   protected boolean destroyed = false;
 
+  protected boolean DO_NOT_MERGE = false; // DO NOT MERGE
+
   protected Type bindingStrategy = Type.BI_DIRECTIONAL;
 
   private BindingExceptionHandler exceptionHandler;
