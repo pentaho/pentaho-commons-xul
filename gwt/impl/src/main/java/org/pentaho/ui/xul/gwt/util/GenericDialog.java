@@ -17,22 +17,16 @@
 
 package org.pentaho.ui.xul.gwt.util;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import org.pentaho.gwt.widgets.client.dialogs.DialogBox;
-import org.pentaho.gwt.widgets.client.dialogs.GlassPane;
 import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 
 public abstract class GenericDialog extends AbstractGwtXulContainer {
-
-  private SimplePanel glasspane = new SimplePanel();
   protected DialogBox dialog;
   private VerticalPanel contents = new VerticalFlexPanel();
   private String title = "";
@@ -41,7 +35,6 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
   public static final int ACCEPT = 1;
   public static final int EXTRA1 = 2;
   public static final int EXTRA2 = 3;
-  private static int dialogPos = 1100;
 
   // requested height is adjusted by this value.
   private static final int HEADER_HEIGHT = 32;
@@ -53,29 +46,14 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
   public GenericDialog( String tagName ) {
     super( tagName );
 
-    glasspane.setStyleName( "glasspane" );
-    Style glassPaneStyle = glasspane.getElement().getStyle();
-    glassPaneStyle.setProperty( "width", "100%" );
-    glassPaneStyle.setProperty( "height", "100%" );
-    glassPaneStyle.setProperty( "display", "block" );
-
     // Default ARIA role.
     setAriaRole( ARIA_ROLE_DIALOG );
   }
 
   private void createDialog() {
-    dialog = new DialogBox( true, true ) {
-      @Override
-      public void hide() {
-        // User may press the "ESC" key, invoking this code
-        super.hide();
-        RootPanel.get().remove( glasspane );
-        GlassPane.getInstance().hide();
-      }
-    };
-    dialog.add( contents );
-    dialog.setStylePrimaryName( "pentaho-dialog" );
-
+    dialog = new DialogBox();
+    dialog.addStyleName( "pentaho-gwt-xul" );
+    dialog.setWidget( contents );
   }
 
   public void hide() {
@@ -85,9 +63,8 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
   }
 
   public void show() {
-    // Instantiation if delayed to prevent errors with the underlying GWT's not being able to calculate available
-    // size
-    // in the case that the GWT app has been loaded into an iframe that's not visible.
+    // Instantiation is delayed to prevent errors with the underlying GWT's not being able to calculate available
+    // size, in the case that the GWT app has been loaded into an iframe that's not visible.
     if ( dialog == null ) {
       createDialog();
     }
@@ -99,13 +76,13 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     // implement the buttons
     VerticalPanel panel = new VerticalFlexPanel();
 
-    Panel p = getDialogContents();
-    p.setSize( "100%", "100%" );
+    Panel dialogContents = getDialogContents();
+    dialogContents.setSize( "100%", "100%" );
 
-    p.setStyleName( "dialog-content" ); //$NON-NLS-1$
+    dialogContents.setStyleName( "dialog-content" ); //$NON-NLS-1$
 
-    panel.add( p );
-    panel.setCellHeight( p, "100%" );
+    panel.add( dialogContents );
+    panel.setCellHeight( dialogContents, "100%" );
     panel.addStyleName( "dialog" );
     panel.setWidth( "100%" ); //$NON-NLS-1$
     panel.setSpacing( 0 );
@@ -114,24 +91,26 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     contents.setCellHeight( panel, "100%" );
 
     if ( getBgcolor() != null ) {
-      p.getElement().getStyle().setProperty( "backgroundColor", getBgcolor() );
+      dialogContents.getElement().getStyle().setProperty( "backgroundColor", getBgcolor() );
     }
 
     // ARIA describedBy attribute
     String describedBy = getAriaDescribedBy();
     if ( isAriaRoleAlertDialog() && StringUtils.isEmpty( describedBy ) ) {
-      describedBy = ElementUtils.ensureId( p );
+      describedBy = ElementUtils.ensureId( dialogContents );
     }
 
     dialog.setAriaDescribedBy( describedBy );
 
-    p = this.getButtonPanel();
-    p.setWidth( "100%" );
+    Panel buttonPanel = this.getButtonPanel();
+    buttonPanel.setWidth( "100%" );
+
     HorizontalPanel buttonPanelWrapper = new HorizontalPanel();
     buttonPanelWrapper.setStyleName( "button-panel" ); //$NON-NLS-1$
-    buttonPanelWrapper.add( p );
+    buttonPanelWrapper.add( buttonPanel );
     buttonPanelWrapper.setWidth( "100%" ); //$NON-NLS-1$
-    buttonPanelWrapper.setCellWidth( p, "100%" );
+    buttonPanelWrapper.setCellWidth( buttonPanel, "100%" );
+
     contents.add( buttonPanelWrapper );
 
     contents.setWidth( "100%" ); //$NON-NLS-1$
@@ -146,16 +125,6 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     }
 
     dialog.center();
-    dialog.show();
-
-    // Show glasspane element
-    RootPanel.get().add( glasspane );
-
-    // Notify GlassPane listeners
-    GlassPane.getInstance().show();
-
-    glasspane.getElement().getStyle().setProperty( "zIndex", "" + ( GenericDialog.dialogPos ) ); //$NON-NLS-1$
-    dialog.getElement().getStyle().setProperty( "zIndex", "" + ( ++GenericDialog.dialogPos ) ); //$NON-NLS-1$
   }
 
   public Panel getDialogContents() {
@@ -164,6 +133,10 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
 
   public Panel getButtonPanel() {
     return null;
+  }
+
+  public String getTitle() {
+    return title;
   }
 
   public void setTitle( final String title ) {

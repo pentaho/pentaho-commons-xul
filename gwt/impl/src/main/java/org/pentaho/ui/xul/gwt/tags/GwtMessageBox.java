@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -33,8 +33,6 @@ import org.pentaho.ui.xul.gwt.util.GenericDialog;
 public class GwtMessageBox extends GenericDialog implements XulMessageBox {
 
   private static final String OK = "OK"; //$NON-NLS-1$
-
-  private String title;
 
   private String message;
 
@@ -113,10 +111,6 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
 
   public String getMessage() {
     return message;
-  }
-
-  public String getTitle() {
-    return title;
   }
 
   public int open() {
