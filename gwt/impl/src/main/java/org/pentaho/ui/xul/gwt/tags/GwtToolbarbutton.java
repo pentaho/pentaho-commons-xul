@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -33,6 +33,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulToolbarbutton {
 
   private ToolbarButton button;
@@ -41,16 +44,30 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   private String dir, group, image, onclick, tooltip, disabledImage, type, downimage, downimagedisabled;
 
+  private static final String DOM_NAME = "toolbarbutton";
+
+  // WCAG default value for attribute 'alt' when image doesn't alternative text
+  protected static final String DEFAULT_IMAGE_ALT_WCAG_TEXT = "";
+
   private enum Property {
-    ID, LABEL, DISABLED, ONCLICK, IMAGE, TOOLTIPTEXT, VISIBLE
+    ID, LABEL, DISABLED, ONCLICK, IMAGE, TOOLTIPTEXT, VISIBLE, IMAGEALTTEXT
   }
 
   public GwtToolbarbutton() {
-    super( "toolbarbutton" );
+    this( null );
+  }
+
+  public GwtToolbarbutton( ToolbarButton toolbarButton) {
+    this( DOM_NAME, toolbarButton );
+  }
+
+  public GwtToolbarbutton( String name, ToolbarButton toolbarButton ) {
+    super( name );
+    this.button = toolbarButton;
   }
 
   public static void register() {
-    GwtXulParser.registerHandler( "toolbarbutton", new GwtXulHandler() {
+    GwtXulParser.registerHandler( DOM_NAME, new GwtXulHandler() {
       public Element newInstance() {
         return new GwtToolbarbutton();
       }
@@ -82,20 +99,24 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
         case VISIBLE:
           setVisible( "true".equals( value ) );
           break;
+        case IMAGEALTTEXT:
+          setImageAltText( value );
+          break;
       }
     } catch ( IllegalArgumentException e ) {
       System.out.println( "Could not find Property in Enum for: " + name + " in class" + getClass().getName() );
     }
   }
 
+  @Override
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
     super.init( srcEle, container );
     setType( srcEle.getAttribute( "type" ) );
 
     if ( this.type != null && this.type.equals( "toggle" ) ) {
-      button = new ToolbarToggleButton( new Image() );
+      button = new ToolbarToggleButton( setImageDefaults( new Image() ) );
     } else {
-      button = new ToolbarButton( new Image() );
+      button = new ToolbarButton( setImageDefaults( new Image() ) );
     }
     setManagedObject( button );
 
@@ -118,6 +139,8 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
       ( (ToolbarButton) getManagedObject() ).addClassName( className );
     }
 
+    // first checks "pen:imagealttext" then other attributes
+    initSetImageAltText( srcEle );
   }
 
   @Override
@@ -210,6 +233,14 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     return image;
   }
 
+  /**
+   * Retrieve image's alternative text.
+   * @return
+   */
+  public String getImageAltText() {
+    return ( button != null ) ? button.getImageAltText() : null;
+  }
+
   public String getOnclick() {
     return onclick;
   }
@@ -242,7 +273,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
       return;
     }
     if ( src != null && src.length() > 0 ) {
-      Image i = new Image( GWT.getModuleBaseURL() + src );
+      Image i = setImageDefaults( new Image( GWT.getModuleBaseURL() + src ) );
       // WebDriver support.. give the image a direct id we can use as a hook
       if ( !StringUtils.isEmpty( this.getId() ) ) {
         i.getElement().setId( this.getId().concat( "_img" ) );
@@ -251,11 +282,78 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     }
   }
 
+  /**
+   * Set's the image's alternative text.
+   * @param str
+   */
+  @Bindable
+  public void setImageAltText( String str ) {
+    if ( button != null ) {
+      button.setImageAltText( str );
+    }
+  }
+
+  /**
+   * Setting miscellaneous attributes of image after it's image instantiation.
+   * @param image
+   * @return
+   */
+  protected Image setImageDefaults( Image image ) {
+    return setDefaultImageAltTextIfNotSet( image );
+  }
+
+  /**
+   * Set image's alternative text to {@link #DEFAULT_IMAGE_ALT_WCAG_TEXT} if originally undefined.
+   * @param image
+   * @return
+   */
+  protected Image setDefaultImageAltTextIfNotSet( Image image ) {
+    if ( image != null && StringUtils.isEmpty( image.getAltText() ) ) {
+      image.setAltText( DEFAULT_IMAGE_ALT_WCAG_TEXT );
+    }
+    return image;
+  }
+
+  /**
+   * Convert property to internally used naming convention for attributes key.
+   * @param property
+   * @return
+   */
+  String toAttributeKey( Property property ) {
+    return property.name().toLowerCase();
+  }
+
+  /**
+   * Handles initialization of image's alt text.
+   * Calls {@link #setImageAltText(String)} with value based on order of precedence:
+   * <ol>
+   *   <li>attribute {@link Property#IMAGEALTTEXT}'s name processed in
+   *   {@link AbstractGwtXulComponent#init(com.google.gwt.xml.client.Element, XulDomContainer)}</li>
+   *   <li>argument: {@code srcEle}'s attribute "pen:" + {@link Property#IMAGEALTTEXT} </li>
+   *   <li>argument: {@code srcEle}'s attribute "tooltip"</li>
+   *   <li> default value: {@link  #DEFAULT_IMAGE_ALT_WCAG_TEXT} </li>
+   * </ol>
+   * @param srcEle
+   */
+  void initSetImageAltText( com.google.gwt.xml.client.Element srcEle ) {
+    List<String> texts = new ArrayList<>();
+    // assuming super#init will have processed either "pen:imagealttext" or "imagealttext"
+    texts.add( this.getAttributeValue( toAttributeKey( Property.IMAGEALTTEXT ) ) );
+    texts.add( srcEle.getAttribute( "pen:imagealttext" ) ); // access from tag directly
+    texts.add( srcEle.getAttribute( "tooltiptext" ) ); // fall back on "tooltiptext" to mirror hover over text
+
+    String alternativeText = texts.stream()
+        .filter( t -> !StringUtils.isEmpty( t ) )
+        .findFirst()
+        .orElse( DEFAULT_IMAGE_ALT_WCAG_TEXT );  // Per WCAG 2.1 all image tags must have 'alt' attribute
+    setImageAltText( alternativeText );
+  }
+
   @Bindable
   public void setDisabledImage( String src ) {
     this.disabledImage = src;
     if ( src != null && src.length() > 0 && button != null ) {
-      button.setDisabledImage( new Image( GWT.getModuleBaseURL() + disabledImage ) );
+      button.setDisabledImage( setImageDefaults( new Image( GWT.getModuleBaseURL() + disabledImage ) ) );
     }
   }
 
@@ -305,14 +403,14 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   public void setDownimage( String img ) {
     this.downimage = img;
     if ( img != null && img.length() > 0 && button != null ) {
-      button.setDownImage( new Image( GWT.getModuleBaseURL() + img ) );
+      button.setDownImage( setImageDefaults( new Image( GWT.getModuleBaseURL() + img ) ) );
     }
   }
 
   public void setDownimagedisabled( String img ) {
     this.downimagedisabled = img;
     if ( img != null && img.length() > 0 && button != null ) {
-      button.setDownImageDisabled( new Image( GWT.getModuleBaseURL() + img ) );
+      button.setDownImageDisabled( setImageDefaults( new Image( GWT.getModuleBaseURL() + img ) ) );
     }
   }
 
