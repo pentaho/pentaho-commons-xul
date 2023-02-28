@@ -17,6 +17,8 @@
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.event.dom.client.KeyCodes;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -120,6 +122,17 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
           case Event.ONCLICK:
             frameCover.cover();
             break;
+          case Event.ONKEYDOWN:
+            if ( event.getKeyCode() == KeyCodes.KEY_TAB ) {
+              GwtMenubar rootMenu = getRootMenu();
+              if ( event.getShiftKey() ) {
+                ElementUtils.tabPrevious( rootMenu.menubar.getElement() );
+              } else {
+                ElementUtils.tabNext( rootMenu.menubar.getElement() );
+              }
+              event.preventDefault();
+            }
+            break;
         }
         super.onBrowserEvent( event );
       }
@@ -195,6 +208,11 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
         }
       }
     }
+  }
+
+  private GwtMenubar getRootMenu() {
+    XulComponent parent = this.getParent();
+    return parent instanceof GwtMenubar ? ( (GwtMenubar) parent ).getRootMenu() : this;
   }
 
   protected void closeAllChildren( boolean focus ) {
