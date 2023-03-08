@@ -12,14 +12,16 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.user.client.DOM;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper.ButtonLabelType;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -249,6 +251,11 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       handlerRegistration.removeHandler();
     }
 
+    if ( getPopupElement() != null ) {
+      imageButton.getElement().setAttribute( "aria-haspopup", "menu" );
+      imageButton.getElement().setAttribute( "aria-expanded", "false" );
+    }
+
     // Add a new handler
 
     ClickHandler handler = new ClickHandler() {
@@ -270,8 +277,9 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                 // Use the popup's key preview hooks to close the dialog when either
                 // enter or escape is pressed.
                 switch ( key ) {
-                  case KeyCodes.KEY_ESCAPE: {
-                    hide();
+                  case KeyCodes.KEY_ESCAPE:
+                  case KeyCodes.KEY_TAB: {
+                    this.hide();
                     if ( button != null ) {
                       button.setFocus( true );
                     } else if ( imageButton != null ) {
@@ -288,6 +296,15 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
             };
             menuBar = new MenuBar( true );
             menuBar.setAutoOpen( true );
+            menuBar.getElement().setId( DOM.createUniqueId() );
+            imageButton.getElement().setAttribute( "aria-controls", menuBar.getElement().getId() );
+            imageButton.getElement().setAttribute( "aria-expanded", "true" );
+
+            popupPanel.addCloseHandler( ev -> {
+              imageButton.getElement().removeAttribute( "aria-controls" );
+              imageButton.getElement().setAttribute( "aria-expanded", "false" );
+            } );
+
             // This is a GwtMenuPopop
             for ( XulComponent item : popup.getChildNodes() ) {
               if (item instanceof GwtMenuitem) {
@@ -298,7 +315,6 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                 menuBar.addSeparator( (MenuItemSeparator)tempItem.getManagedObject() );
               }
             }
-            menuBar.focus();
             popupPanel.setWidget( menuBar );
             popupPanel.setPopupPositionAndShow( new PositionCallback() {
               public void setPosition( int offsetWidth, int offsetHeight ) {
@@ -321,6 +337,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                 popupPanel.setPopupPosition( absLeft, absTop + offHeight );
               }
             } );
+            menuBar.focus();
           }
         }
       }
@@ -558,6 +575,15 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
         if ( popupPanel != null ) {
           popupPanel.hide();
         }
+
+        if ( button != null ) {
+          ElementUtils.focusSync( button.getElement() );
+        } else if ( imageButton != null ) {
+          ElementUtils.focusSync( imageButton.getElement() );
+        } else if ( customButton != null ) {
+          ElementUtils.focusSync( customButton.getElement() );
+        }
+
         GwtButton.this.getXulDomContainer().invoke( command, new Object[] {} );
       } catch ( XulException e ) {
         System.out.println( "Error invoking method " + command + " " + e.getMessage() );
