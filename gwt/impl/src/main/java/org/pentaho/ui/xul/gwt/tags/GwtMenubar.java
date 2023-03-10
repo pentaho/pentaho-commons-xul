@@ -117,6 +117,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     menubar = new MenuBar( vertical ) {
       @Override
       public void onBrowserEvent( Event event ) {
+        super.onBrowserEvent( event );
         switch ( DOM.eventGetType( event ) ) {
           case Event.ONMOUSEOVER:
           case Event.ONCLICK:
@@ -134,7 +135,6 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
             }
             break;
         }
-        super.onBrowserEvent( event );
       }
     };
 
