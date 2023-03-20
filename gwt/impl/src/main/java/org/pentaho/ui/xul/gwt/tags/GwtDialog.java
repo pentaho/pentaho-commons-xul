@@ -17,17 +17,15 @@
 
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
@@ -40,7 +38,8 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.util.GenericDialog;
 import org.pentaho.ui.xul.util.Orient;
 
-import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GwtDialog extends GenericDialog implements XulDialog {
 
@@ -134,13 +133,13 @@ public class GwtDialog extends GenericDialog implements XulDialog {
       ignoreIndividualButtonAlign = true;
     }
 
-    HorizontalPanel buttonPanel = new HorizontalPanel();
-    HorizontalPanel leftButtonPanel = new HorizontalPanel();
-    HorizontalPanel centerButtonPanel = new HorizontalPanel();
-    HorizontalPanel rightButtonPanel = new HorizontalPanel();
-    rightButtonPanel.setStylePrimaryName( "buttonTable" );
-    centerButtonPanel.setStylePrimaryName( "buttonTable" );
-    leftButtonPanel.setStylePrimaryName( "buttonTable" );
+    HorizontalPanel buttonPanel = new HorizontalFlexPanel();
+    HorizontalPanel leftButtonPanel = new HorizontalFlexPanel();
+    HorizontalPanel centerButtonPanel = new HorizontalFlexPanel();
+    HorizontalPanel rightButtonPanel = new HorizontalFlexPanel();
+    rightButtonPanel.addStyleName( "buttonTable" );
+    centerButtonPanel.addStyleName( "buttonTable" );
+    leftButtonPanel.addStyleName( "buttonTable" );
 
     // keep track of the number in the left and right button cells. If they're not the same, add shims to fix the
     // center
@@ -192,7 +191,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   @Override
   public Panel getDialogContents() {
 
-    VerticalPanel contentPanel = new VerticalPanel();
+    VerticalPanel contentPanel = new VerticalFlexPanel();
     contentPanel.setSpacing( 0 );
     container = contentPanel;
 
