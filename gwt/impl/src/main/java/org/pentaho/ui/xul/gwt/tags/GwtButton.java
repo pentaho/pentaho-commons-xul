@@ -32,6 +32,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.tags.util.ImageUtil;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.core.client.GWT;
@@ -63,7 +64,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   private String dir, group, image, type, onclick, tooltip, disabledImage;
 
   private enum Property {
-    ID, CLASSNAME, LABEL, IMAGE, DISABLEDIMAGE, DISABLED
+    ID, CLASSNAME, LABEL, IMAGE, DISABLEDIMAGE, DISABLED, IMAGEALTTEXT
   }
 
   public static void register() {
@@ -90,12 +91,23 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   private HandlerRegistration handlerRegistration;
 
+  private ImageUtil imageUtil;
+
   public GwtButton() {
     super( ELEMENT_NAME );
     // programatic creation doesn't call init() create here for them
     button = new Button();
     button.setStylePrimaryName( "pentaho-button" );
     setManagedObject( button );
+    imageUtil = new ImageUtil();
+  }
+
+  public GwtButton( Button customButton, Button button, ImageButton imageButton, ImageUtil imageUtil ) {
+    super( ELEMENT_NAME );
+    this.customButton = customButton;
+    this.button = button;
+    this.imageButton = imageButton;
+    this.imageUtil = imageUtil;
   }
 
   @Override
@@ -120,6 +132,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
         case DISABLED:
           setDisabled( "true".equals( value ) );
           break;
+        case IMAGEALTTEXT:
+          setImageAltText( value );
+          break;
+        default:
+          // do nothing
+          break;
       }
     } catch ( IllegalArgumentException e ) {
       System.out.println( "Could not find Property in Enum for: " + name + " in class" + getClass().getName() );
@@ -134,23 +152,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
         && !StringUtils.isEmpty( srcEle.getAttribute( "label" ) ) ) {
 
       if ( !StringUtils.isEmpty( srcEle.getAttribute( "pen:classname" ) ) ) {
-        /*
-         * customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
-         * srcEle.getAttribute("label"),
-         * getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient"
-         * )),,srcEle.getAttribute("pen:classname"));
-         */
         customButton =
             new Button( ButtonHelper.createButtonLabel( new Image( GWT.getModuleBaseURL()
                 + srcEle.getAttribute( "image" ) ), srcEle.getAttribute( "label" ), getButtonLabelOrigin( srcEle
                 .getAttribute( "dir" ), srcEle.getAttribute( "orient" ) ), classNameAttribute ) );
 
       } else {
-        /*
-         * customButton = new CustomButton(new Image(GWT.getModuleBaseURL() + srcEle.getAttribute("image")),
-         * srcEle.getAttribute("label"),
-         * getButtonLabelOrigin(srcEle.getAttribute("dir"),srcEle.getAttribute("orient")));
-         */
         customButton =
             new Button( ButtonHelper.createButtonLabel( new Image( GWT.getModuleBaseURL()
                 + srcEle.getAttribute( "image" ) ), srcEle.getAttribute( "label" ), getButtonLabelOrigin( srcEle
@@ -166,12 +173,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     } else if ( !StringUtils.isEmpty( srcEle.getAttribute( "image" ) ) ) {
       // we create a button by default, remove it here
       button = null;
-      imageButton = new ImageButton();
-      SimplePanel sp = new SimplePanel();
-      setManagedObject( sp );
-      sp.add( imageButton );
-      imageButton.setHeight( "" );
-      imageButton.setWidth( "" );
+      imageButton = initImageButton();
 
       if ( classNameAttribute != null && !classNameAttribute.isEmpty() ) {
         imageButton.addStyleName( classNameAttribute );
@@ -207,6 +209,34 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     }
 
     setDisabled( "true".equals( srcEle.getAttribute( "disabled" ) ) );
+
+    if ( imageButton != null ) {
+      initSetImageAltText( srcEle );
+    }
+  }
+
+  /**
+   * Handles initialization of image's alt text.
+   * @param srcEle
+   */
+  void initSetImageAltText( com.google.gwt.xml.client.Element srcEle ) {
+    String alternativeText = imageUtil.getAltText( srcEle );
+    setImageAltText( alternativeText );
+  }
+
+  /**
+   * Create a new ImageButton instance.
+   * @return
+   */
+  private ImageButton initImageButton() {
+    imageButton = new ImageButton();
+    SimplePanel sp = new SimplePanel();
+    setManagedObject( sp );
+    sp.add( imageButton );
+    imageButton.setHeight( "" );
+    imageButton.setWidth( "" );
+    imageUtil.setImageDefaults( imageButton );
+    return imageButton;
   }
 
   public void setLabel( String label ) {
@@ -379,6 +409,17 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     }
   }
 
+  /**
+   * Set the image's alternative text.
+   * @param str
+   */
+  @Bindable
+  public void setImageAltText( String str ) {
+    if ( imageButton != null ) {
+      imageButton.setAltText( str );
+    }
+  }
+
   public void doClick() {
 
     // button.click(); This was not working for me, TODO: investigate programatic click
@@ -398,6 +439,14 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   public String getGroup() {
     return group;
+  }
+
+  /**
+   * Retrieve image's alternative text.
+   * @return
+   */
+  public String getImageAltText() {
+    return ( imageButton != null ) ? imageButton.getAltText() : null;
   }
 
   @Bindable
@@ -431,12 +480,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   public void setImage( String src ) {
     if ( imageButton == null ) {
       button = null;
-      imageButton = new ImageButton();
-      SimplePanel sp = new SimplePanel();
-      setManagedObject( sp );
-      sp.add( imageButton );
-      imageButton.setHeight( "" );
-      imageButton.setWidth( "" );
+      imageButton = initImageButton();
     }
     if ( imageButton != null ) {
       src = GWT.getModuleBaseURL() + src;
