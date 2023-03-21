@@ -12,23 +12,16 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.pentaho.ui.xul.components.XulPromptBox;
-import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
-import org.pentaho.ui.xul.gwt.GwtXulParser;
-import org.pentaho.ui.xul.util.XulDialogCallback;
-
+import com.google.gwt.aria.client.Roles;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -36,7 +29,16 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.Button;
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
+import org.pentaho.ui.xul.components.XulPromptBox;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.gwt.GwtXulHandler;
+import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.util.XulDialogCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
 
@@ -63,6 +65,11 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
 
   public GwtPromptBox() {
     super( ELEMENT_NAME );
+
+    // ARIA
+    // Revert back role to "dialog".
+    setAriaRole( Roles.getDialogRole().getName() );
+
     textbox.setWidth( "90%" );
     textbox.addKeyDownHandler( new KeyDownHandler() {
       public void onKeyDown( KeyDownEvent event ) {
@@ -120,7 +127,7 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
     acceptBtn.setText( acceptLabel );
     cancelBtn.setText( cancelLabel );
 
-    HorizontalPanel hp = new HorizontalPanel();
+    HorizontalPanel hp = new HorizontalFlexPanel();
     hp.add( acceptBtn );
     hp.setCellWidth( acceptBtn, "100%" );
     hp.setCellHorizontalAlignment( acceptBtn, hp.ALIGN_RIGHT );
@@ -131,7 +138,7 @@ public class GwtPromptBox extends GwtMessageBox implements XulPromptBox {
   @Override
   public Panel getDialogContents() {
 
-    VerticalPanel vp = new VerticalPanel();
+    VerticalPanel vp = new VerticalFlexPanel();
     Label lbl = new Label( getMessage() );
     lbl.addStyleName( "promptBoxLabel" );
     vp.add( lbl );

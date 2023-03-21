@@ -17,6 +17,7 @@
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.aria.client.Roles;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HTML;
@@ -24,6 +25,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.pentaho.gwt.widgets.client.dialogs.DialogBox;
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.ui.xul.components.XulMessageBox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
@@ -66,15 +70,33 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
     } );
 
     acceptBtn.setStylePrimaryName( "pentaho-button" );
+
+    // ARIA
+    // Override role from "dialog" to "alertdialog".
+    setAriaRole( Roles.getAlertdialogRole().getName() );
   }
 
   protected GwtMessageBox( String elementName ) {
     super( elementName );
+
+    // ARIA
+    // Override role from "dialog" to "alertdialog".
+    setAriaRole( Roles.getAlertdialogRole().getName() );
+  }
+
+  @Override
+  protected DialogBox createManagedDialog() {
+    DialogBox dialog = super.createManagedDialog();
+    dialog.setResponsive( true );
+    dialog.setWidthCategory( DialogBox.DialogWidthCategory.TEXT );
+    dialog.setMinimumHeightCategory( DialogBox.DialogMinimumHeightCategory.CONTENT );
+
+    return dialog;
   }
 
   @Override
   public Panel getButtonPanel() {
-    HorizontalPanel hp = new HorizontalPanel();
+    HorizontalPanel hp = new HorizontalFlexPanel();
     acceptBtn.setText( this.acceptLabel );
     hp.add( acceptBtn );
     hp.setCellWidth( acceptBtn, "100%" );
@@ -85,7 +107,7 @@ public class GwtMessageBox extends GenericDialog implements XulMessageBox {
   @Override
   public Panel getDialogContents() {
 
-    VerticalPanel vp = new VerticalPanel();
+    VerticalPanel vp = new VerticalFlexPanel();
     String[] lines = message.split( "\n", -1 );
     StringBuffer sb = new StringBuffer();
     for ( String line : lines ) {

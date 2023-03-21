@@ -12,27 +12,28 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara.  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.pentaho.ui.xul.components.XulConfirmBox;
-import org.pentaho.ui.xul.dom.Element;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
-import org.pentaho.ui.xul.gwt.GwtXulParser;
-import org.pentaho.ui.xul.util.XulDialogCallback;
-
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.ui.Button;
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
+import org.pentaho.ui.xul.components.XulConfirmBox;
+import org.pentaho.ui.xul.dom.Element;
+import org.pentaho.ui.xul.gwt.GwtXulHandler;
+import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.util.XulDialogCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GwtConfirmBox extends GwtMessageBox implements XulConfirmBox {
 
@@ -89,7 +90,7 @@ public class GwtConfirmBox extends GwtMessageBox implements XulConfirmBox {
     acceptBtn.setText( acceptLabel );
     cancelBtn.setText( cancelLabel );
 
-    HorizontalPanel hp = new HorizontalPanel();
+    HorizontalPanel hp = new HorizontalFlexPanel();
     hp.add( acceptBtn );
     hp.setCellWidth( acceptBtn, "100%" );
     hp.setCellHorizontalAlignment( acceptBtn, hp.ALIGN_RIGHT );
@@ -100,7 +101,7 @@ public class GwtConfirmBox extends GwtMessageBox implements XulConfirmBox {
   @Override
   public Panel getDialogContents() {
 
-    VerticalPanel vp = new VerticalPanel();
+    VerticalPanel vp = new VerticalFlexPanel();
     Label lbl = new Label( getMessage() );
     vp.add( lbl );
     vp.setCellHorizontalAlignment( lbl, vp.ALIGN_CENTER );
