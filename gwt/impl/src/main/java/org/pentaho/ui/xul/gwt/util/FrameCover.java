@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.util;
@@ -44,13 +44,8 @@ public class FrameCover {
 
   private static FocusPanel frameLid;
 
-  public FrameCover() {
-    Window.addResizeHandler( new ResizeHandler() {
-      @Override
-      public void onResize( ResizeEvent event ) {
-        setFrameSize();
-      }
-    } );
+  public boolean isCovered() {
+    return frameLid != null && frameLid.isVisible();
   }
 
   public void addClickHandler( ClickHandler handler ) {
@@ -84,7 +79,12 @@ public class FrameCover {
 
       RootPanel.get().add( frameLid, 0, 0 );
       frameLid.setVisible( true );
+
+      // Used for debugging if frame is covered or not.
+      frameLid.addStyleName( "pen-frame-cover" );
+
       setFrameSize();
+      Window.addResizeHandler( event -> setFrameSize() );
     }
     frameLid.getElement().getStyle().setDisplay( Style.Display.BLOCK );
     GlassPane.getInstance().show();
@@ -102,9 +102,6 @@ public class FrameCover {
   }
 
   private void setFrameSize() {
-    if ( frameLid == null ) {
-      return;
-    }
     // get all iFrames on the document
     NodeList<Element> iframes = Document.get().getElementsByTagName( "iframe" );
 
