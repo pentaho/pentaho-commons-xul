@@ -12,19 +12,19 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.user.client.ui.SimplePanel;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulToolbarspacer;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
-
-import com.google.gwt.user.client.ui.SimplePanel;
 
 public class GwtToolbarspacer extends AbstractGwtXulContainer implements XulToolbarspacer {
 
@@ -95,7 +95,9 @@ public class GwtToolbarspacer extends AbstractGwtXulContainer implements XulTool
     super.setWidth( width );
     if ( this.isVisible() ) {
       panel.setWidth( width + "px" );
+
+      // Used by responsive mode.
+      ElementUtils.setStyleProperty( panel.getElement(), "--flex-max-width", width + "px" );
     }
   }
-
 }
