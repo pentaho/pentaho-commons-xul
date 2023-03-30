@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -27,6 +27,7 @@ import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.tags.util.ImageUtil;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.core.client.GWT;
@@ -37,20 +38,48 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
 
   private ToolbarButton button;
 
+  private ImageUtil imageUtil;
+
   private String jscommand;
 
-  private String dir, group, image, onclick, tooltip, disabledImage, type, downimage, downimagedisabled;
+  private String dir;
+
+  private String group;
+
+  private String image;
+
+  private String onclick;
+
+  private String disabledImage;
+
+  private String type;
+
+  private String downimage;
+
+  private String downimagedisabled;
+
+  private static final String DOM_NAME = "toolbarbutton";
 
   private enum Property {
-    ID, LABEL, DISABLED, ONCLICK, IMAGE, TOOLTIPTEXT, VISIBLE
+    ID, LABEL, DISABLED, ONCLICK, IMAGE, TOOLTIPTEXT, VISIBLE, IMAGEALTTEXT
   }
 
   public GwtToolbarbutton() {
-    super( "toolbarbutton" );
+    this( null );
+  }
+
+  public GwtToolbarbutton( ToolbarButton toolbarButton) {
+    this( DOM_NAME, toolbarButton, new ImageUtil() );
+  }
+
+  public GwtToolbarbutton( String name, ToolbarButton toolbarButton, ImageUtil imageUtil ) {
+    super( name );
+    this.button = toolbarButton;
+    this.imageUtil = imageUtil;
   }
 
   public static void register() {
-    GwtXulParser.registerHandler( "toolbarbutton", new GwtXulHandler() {
+    GwtXulParser.registerHandler( DOM_NAME, new GwtXulHandler() {
       public Element newInstance() {
         return new GwtToolbarbutton();
       }
@@ -82,20 +111,27 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
         case VISIBLE:
           setVisible( "true".equals( value ) );
           break;
+        case IMAGEALTTEXT:
+          setImageAltText( value );
+          break;
+        default:
+          // do nothing
+          break;
       }
     } catch ( IllegalArgumentException e ) {
       System.out.println( "Could not find Property in Enum for: " + name + " in class" + getClass().getName() );
     }
   }
 
+  @Override
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
     super.init( srcEle, container );
     setType( srcEle.getAttribute( "type" ) );
 
     if ( this.type != null && this.type.equals( "toggle" ) ) {
-      button = new ToolbarToggleButton( new Image() );
+      button = new ToolbarToggleButton( imageUtil.setImageDefaults( new Image() ) );
     } else {
-      button = new ToolbarButton( new Image() );
+      button = new ToolbarButton( imageUtil.setImageDefaults( new Image() ) );
     }
     setManagedObject( button );
 
@@ -118,6 +154,8 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
       ( (ToolbarButton) getManagedObject() ).addClassName( className );
     }
 
+    // first checks "pen:imagealttext" then other attributes
+    initSetImageAltText( srcEle );
   }
 
   @Override
@@ -186,11 +224,13 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   }
 
   @Bindable
+  @Override
   public boolean isDisabled() {
     return !button.isEnabled();
   }
 
   @Bindable
+  @Override
   public void setDisabled( boolean dis ) {
     if ( button != null ) {
       button.setEnabled( !dis );
@@ -208,6 +248,14 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   @Bindable
   public String getImage() {
     return image;
+  }
+
+  /**
+   * Retrieve image's alternative text.
+   * @return
+   */
+  public String getImageAltText() {
+    return ( button != null ) ? button.getImageAltText() : null;
   }
 
   public String getOnclick() {
@@ -242,7 +290,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
       return;
     }
     if ( src != null && src.length() > 0 ) {
-      Image i = new Image( GWT.getModuleBaseURL() + src );
+      Image i = imageUtil.setImageDefaults( new Image( GWT.getModuleBaseURL() + src ) );
       // WebDriver support.. give the image a direct id we can use as a hook
       if ( !StringUtils.isEmpty( this.getId() ) ) {
         i.getElement().setId( this.getId().concat( "_img" ) );
@@ -251,11 +299,31 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     }
   }
 
+  /**
+   * Set's the image's alternative text.
+   * @param str
+   */
+  @Bindable
+  public void setImageAltText( String str ) {
+    if ( button != null ) {
+      button.setImageAltText( str );
+    }
+  }
+
+  /**
+   * Handles initialization of image's alt text.
+   * @param srcEle
+   */
+  void initSetImageAltText( com.google.gwt.xml.client.Element srcEle ) {
+    String alternativeText = imageUtil.getAltText( srcEle );
+    setImageAltText( alternativeText );
+  }
+
   @Bindable
   public void setDisabledImage( String src ) {
     this.disabledImage = src;
     if ( src != null && src.length() > 0 && button != null ) {
-      button.setDisabledImage( new Image( GWT.getModuleBaseURL() + disabledImage ) );
+      button.setDisabledImage( imageUtil.setImageDefaults( new Image( GWT.getModuleBaseURL() + disabledImage ) ) );
     }
   }
 
@@ -264,7 +332,7 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   }
 
   public void setSelected( String selected ) {
-
+    // NOTE empty on purpose
   }
 
   @Bindable
@@ -305,14 +373,14 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
   public void setDownimage( String img ) {
     this.downimage = img;
     if ( img != null && img.length() > 0 && button != null ) {
-      button.setDownImage( new Image( GWT.getModuleBaseURL() + img ) );
+      button.setDownImage( imageUtil.setImageDefaults( new Image( GWT.getModuleBaseURL() + img ) ) );
     }
   }
 
   public void setDownimagedisabled( String img ) {
     this.downimagedisabled = img;
     if ( img != null && img.length() > 0 && button != null ) {
-      button.setDownImageDisabled( new Image( GWT.getModuleBaseURL() + img ) );
+      button.setDownImageDisabled( imageUtil.setImageDefaults( new Image( GWT.getModuleBaseURL() + img ) ) );
     }
   }
 

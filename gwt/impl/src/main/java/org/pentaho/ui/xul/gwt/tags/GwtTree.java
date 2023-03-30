@@ -1045,14 +1045,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       this.changeSupport.firePropertyChange( "selectedRows", prevSelected, rows );
       this.changeSupport.firePropertyChange( "absoluteSelectedRows", prevSelected, rows );
     }
+    List<Object> selectedObjects = new ArrayList<Object>();
     if ( this.elements != null && this.elements.size() > 0 ) {
       Object[] elementArray = elements.toArray();
-      List<Object> selectedObjects = new ArrayList<Object>();
       for ( int row : rows ) {
         selectedObjects.add( elementArray[row] );
       }
-      this.changeSupport.firePropertyChange( "selectedItems", null, selectedObjects );
     }
+    this.changeSupport.firePropertyChange( "selectedItems", null, selectedObjects );
   }
 
   public String getSeltype() {
@@ -1170,6 +1170,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       if ( elements == null || elements.size() == 0 ) {
         suppressEvents = false;
         suppressLayout = false;
+        clearSelection();
         updateUI();
         return;
       }

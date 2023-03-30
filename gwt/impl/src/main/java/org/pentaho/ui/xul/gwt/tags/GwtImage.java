@@ -12,18 +12,19 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
-import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulImage;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulComponent;
 import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
+import org.pentaho.ui.xul.gwt.tags.util.ImageUtil;
 import org.pentaho.ui.xul.stereotype.Bindable;
 
 import com.google.gwt.core.client.GWT;
@@ -36,7 +37,7 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   static final String ELEMENT_NAME = "image"; //$NON-NLS-1$
 
   private enum Property {
-    ID, DISABLED, SRC, CLASSNAME
+    ID, DISABLED, SRC, CLASSNAME, IMAGEALTTEXT
   }
 
   public static void register() {
@@ -49,13 +50,23 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
 
   private Image image;
 
+  private ImageUtil imageUtil;
+
   private String onclick;
 
   public GwtImage() {
     super( ELEMENT_NAME );
     image = new Image();
+    this.imageUtil = new ImageUtil();
     setManagedObject( image );
+    imageUtil.setImageDefaults( image );
     image.setStyleName( "xul-image" ); //$NON-NLS-1$
+  }
+
+  public GwtImage( Image image, ImageUtil imageUtil ) {
+    super( ELEMENT_NAME );
+    this.image = image;
+    this.imageUtil = imageUtil;
   }
 
   @Override
@@ -74,6 +85,12 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
         case CLASSNAME:
           image.addStyleName( value );
           break;
+        case IMAGEALTTEXT:
+          setImageAltText( value );
+          break;
+        default:
+          // do nothing
+          break;
       }
 
     } catch ( IllegalArgumentException e ) {
@@ -81,18 +98,23 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     }
   }
 
+  @Override
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
     super.init( srcEle, container );
     setSrc( srcEle.getAttribute( "src" ) ); //$NON-NLS-1$
-    if ( StringUtils.isEmpty( srcEle.getAttribute( "onclick" ) ) == false ) {
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "onclick" ) ) ) {
       setOnclick( srcEle.getAttribute( "onclick" ) ); //$NON-NLS-1$
     }
     setDisabled( "true".equals( srcEle.getAttribute( "disabled" ) ) ); //$NON-NLS-1$//$NON-NLS-2$
+
+    // first checks "pen:imagealttext" then other attributes
+    initSetImageAltText( srcEle );
   }
 
+  @Override
   public void layout() {
     image.setTitle( this.getTooltiptext() );
-    if ( StringUtils.isEmpty( this.getTooltiptext() ) == false ) {
+    if ( !StringUtils.isEmpty( this.getTooltiptext() ) ) {
       image.setTitle( this.getTooltiptext() );
     }
   }
@@ -100,6 +122,14 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   @Bindable
   public String getSrc() {
     return image.getUrl();
+  }
+
+  /**
+   * Retrieve image's alternative text.
+   * @return
+   */
+  public String getImageAltText() {
+    return ( image != null ) ? image.getAltText() : null;
   }
 
   @Bindable
@@ -124,7 +154,7 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   }
 
   public void refresh() {
-
+    // NOTE Empty on purpose
   }
 
   @Override
@@ -159,4 +189,25 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     } );
     image.getElement().getStyle().setProperty( "cursor", "pointer" );
   }
+
+  /**
+   * Set the image's alternative text.
+   * @param str
+   */
+  @Bindable
+  public void setImageAltText( String str ) {
+    if ( image != null ) {
+      image.setAltText( str );
+    }
+  }
+
+  /**
+   * Handles initialization of image's alt text.
+   * @param srcEle
+   */
+  void initSetImageAltText( com.google.gwt.xml.client.Element srcEle ) {
+    String alternativeText = imageUtil.getAltText( srcEle );
+    setImageAltText( alternativeText );
+  }
+
 }

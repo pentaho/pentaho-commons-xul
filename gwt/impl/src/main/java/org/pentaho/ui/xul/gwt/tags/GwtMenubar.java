@@ -12,11 +12,13 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.event.dom.client.KeyCodes;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -71,12 +73,8 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
     @Override
     public void focus() {
-      if ( gwtMenubar != null ) {
-        XulComponent parent = gwtMenubar.getParent();
-        // not top menu
-        if ( parent != null && parent instanceof GwtMenubar ) {
-          closeAllChildren( false );
-        }
+      if ( gwtMenubar != null && ( gwtMenubar.getParent() instanceof GwtMenubar ) ) {
+        super.closeAllChildren( false );
       }
       super.focus();
     }
@@ -88,6 +86,11 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     public GwtMenubar getGwtMenubar() {
       return gwtMenubar;
     }
+
+    protected native boolean hasChildPopupMenuShowing() /*-{
+      var popup = this.@com.google.gwt.user.client.ui.MenuBar::popup;
+      return popup != null && popup.@com.google.gwt.user.client.ui.PopupPanel::isShowing()();
+    }-*/;
   }
 
   public static void register() {
@@ -115,13 +118,21 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     menubar = new MenuBar( vertical ) {
       @Override
       public void onBrowserEvent( Event event ) {
+        super.onBrowserEvent( event );
         switch ( DOM.eventGetType( event ) ) {
-          case Event.ONMOUSEOVER:
-          case Event.ONCLICK:
-            frameCover.cover();
+          case Event.ONKEYDOWN:
+            if ( event.getKeyCode() == KeyCodes.KEY_TAB ) {
+              GwtMenubar rootMenu = getRootMenu();
+              if ( event.getShiftKey() ) {
+                ElementUtils.tabPrevious( rootMenu.menubar.getElement() );
+              } else {
+                ElementUtils.tabNext( rootMenu.menubar.getElement() );
+              }
+              event.preventDefault();
+            }
             break;
         }
-        super.onBrowserEvent( event );
+        maybeCover();
       }
     };
 
@@ -137,9 +148,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     menubar.addCloseHandler( new CloseHandler<PopupPanel>() {
       @Override
       public void onClose( CloseEvent<PopupPanel> event ) {
-        if ( !menubar.isVisible() ) {
-          frameCover.remove();
-        }
+        maybeUncover();
       }
     } );
 
@@ -175,6 +184,18 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     super.init( srcEle, container );
   }
 
+  private void maybeCover() {
+    if ( !frameCover.isCovered() && getRootMenu().hasChildPopupMenuShowing() ) {
+      frameCover.cover();
+    }
+  }
+
+  private void maybeUncover() {
+    if ( frameCover.isCovered() && !getRootMenu().hasChildPopupMenuShowing() ) {
+      frameCover.remove();
+    }
+  }
+
   private void hide() {
     XulComponent parentComponent = getParent();
     if ( parentComponent instanceof GwtMenubar ) {
@@ -195,6 +216,15 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
         }
       }
     }
+  }
+
+  private GwtMenubar getRootMenu() {
+    XulComponent parent = this.getParent();
+    return parent instanceof GwtMenubar ? ( (GwtMenubar) parent ).getRootMenu() : this;
+  }
+
+  private boolean hasChildPopupMenuShowing() {
+    return menubar.hasChildPopupMenuShowing();
   }
 
   protected void closeAllChildren( boolean focus ) {

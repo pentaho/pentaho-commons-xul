@@ -52,6 +52,14 @@
       <artifactId>javax.servlet-api</artifactId>
       <version>${javax.servlet-api.version}</version>
     </dependency>
+
+    <!-- have to use gwt's mockito for gwt related code -->
+    <dependency>
+      <groupId>com.google.gwt.gwtmockito</groupId>
+      <artifactId>gwtmockito</artifactId>
+      <version>${gwtmockito.version}</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-  
+
 </project>
