@@ -70,6 +70,7 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
     this.setLabel( srcEle.getAttribute( "label" ) );
     this.setCommand( srcEle.getAttribute( "command" ) );
     this.setJscommand( srcEle.getAttribute( "js-command" ) );
+    this.setOnClick( srcEle.getAttribute( "onClick" ) );
     this.setDisabled( "true".equals( srcEle.getAttribute( "disabled" ) ) );
   }
 
@@ -110,6 +111,10 @@ public class GwtMenuitem extends AbstractGwtXulComponent implements XulMenuitem 
 
   public void setDisabled( boolean disabled ) {
     menuitem.setEnabled( !disabled );
+  }
+
+  public void setOnClick( String onClick ){
+      menuitem.SetOnClick( onClick );
   }
 
   public void setDisabled( String disabled ) {
