@@ -17,6 +17,14 @@
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Event;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulImage;
@@ -56,11 +64,53 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
 
   public GwtImage() {
     super( ELEMENT_NAME );
-    image = new Image();
+    image = new Image() {
+      @Override
+      public void onBrowserEvent( Event event ) {
+
+        if ( ( event.getTypeInt() & Event.ONKEYDOWN ) == Event.ONKEYDOWN  ) {
+          if ( (char) event.getKeyCode() == KeyCodes.KEY_ENTER ) {
+            ElementUtils.click( image.getElement() );
+          }
+        }
+        super.onBrowserEvent( event );
+      }
+    };
     this.imageUtil = new ImageUtil();
     setManagedObject( image );
     imageUtil.setImageDefaults( image );
     image.setStyleName( "xul-image" ); //$NON-NLS-1$
+    image.getElement().setTabIndex( 0 );
+    addKeyboardListener();
+  }
+
+  private void addKeyboardListener() {
+    this.addKeyDownHandler( event -> {
+      switch ( event.getNativeKeyCode() ) {
+        case KeyCodes.KEY_SPACE:
+          event.preventDefault();
+          break;
+        case KeyCodes.KEY_ENTER:
+          event.preventDefault();
+          ElementUtils.click( GwtImage.this.image.getElement() );
+          break;
+      }
+    } );
+
+    this.addKeyUpHandler( event -> {
+      if ( event.getNativeKeyCode() == KeyCodes.KEY_SPACE ) {
+        event.preventDefault();
+        ElementUtils.click( GwtImage.this.image.getElement() );
+      }
+    } );
+  }
+
+  protected HandlerRegistration addKeyDownHandler( KeyDownHandler handler ) {
+    return this.image.addDomHandler( handler, KeyDownEvent.getType() );
+  }
+
+  protected HandlerRegistration addKeyUpHandler( KeyUpHandler handler ) {
+    return this.image.addDomHandler( handler, KeyUpEvent.getType() );
   }
 
   public GwtImage( Image image, ImageUtil imageUtil ) {
