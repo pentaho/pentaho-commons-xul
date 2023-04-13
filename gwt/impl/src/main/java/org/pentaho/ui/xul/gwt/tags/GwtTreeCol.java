@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -44,6 +44,7 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
   private boolean sortActive = false;
   private String sortDirection = null;
   private String classnameBinding;
+  private String alttextBinding;
 
   public static void register() {
     GwtXulParser.registerHandler( "treecol", new GwtXulHandler() {
@@ -80,6 +81,10 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     String classname = srcEle.getAttribute( "pen:classnamebinding" ); //$NON-NLS-1$
     if ( !StringUtils.isEmpty( classname ) ) {
       setClassnameBinding( classname );
+    }
+
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "pen:alttextbinding" ) ) ) {
+      setAlttextBinding( srcEle.getAttribute( "pen:alttextbinding" ) ); //$NON-NLS-1$
     }
   }
 
@@ -283,4 +288,15 @@ public class GwtTreeCol extends AbstractGwtXulComponent implements XulTreeCol {
     this.classnameBinding = classnameBinding;
   }
 
+  @Override
+  public String getAlttextBinding() {
+    return alttextBinding;
+  }
+
+  @Override
+  public void setAlttextBinding( String alttext ) {
+    this.alttextBinding = alttext;
+  }
+
 }
+

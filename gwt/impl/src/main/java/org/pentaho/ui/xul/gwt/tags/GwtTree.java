@@ -1,3 +1,20 @@
+/*!
+ * This program is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU Lesser General Public License, version 2.1 as published by the Free Software
+ * Foundation.
+ *
+ * You should have received a copy of the GNU Lesser General Public License along with this
+ * program; if not, you can obtain a copy at http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html
+ * or from the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Lesser General Public License for more details.
+ *
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
+ */
+
 package org.pentaho.ui.xul.gwt.tags;
 
 import java.beans.PropertyChangeEvent;
@@ -46,6 +63,7 @@ import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingMethod;
+import org.pentaho.ui.xul.gwt.tags.util.ImageUtil;
 import org.pentaho.ui.xul.gwt.tags.util.TreeItemWidget;
 import org.pentaho.ui.xul.gwt.util.Resizable;
 import org.pentaho.ui.xul.gwt.util.XulDragController;
@@ -122,6 +140,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private TreeItem lastSelectedItem = null;
 
+  private ImageUtil imageUtil;
+
   @Bindable
   public boolean isVisible() {
     return visible;
@@ -183,6 +203,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     // the
     // simplePanel, which is the managedObject
     setManagedObject( simplePanel );
+    imageUtil = new ImageUtil();
 
   }
 
@@ -513,16 +534,20 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     PropertyChangeListener listener = new PropertyChangeListener() {
       public void propertyChange( PropertyChangeEvent evt ) {
         if ( evt.getPropertyName().equals( "image" ) && item.getImage() != null ) {
-          Image img = new Image( GWT.getModuleBaseURL() + item.getImage() );
+          Image img = imageUtil.setImageDefaults( new Image( GWT.getModuleBaseURL() + item.getImage() ) );
           if ( item.getClassname() != null ) {
             img.setUrl( GWT.getModuleBaseURL() + spacerPath );
           }
+          setAltText( img, item );
+
           tWidget.setImage( img );
         } else if ( evt.getPropertyName().equals( "label" ) ) {
           tWidget.setLabel( item.getRow().getCell( 0 ).getLabel() );
         } else if ( evt.getPropertyName().equals( "classname" ) && item.getImage() != null ) {
           tWidget.getImage().removeStyleName( (String) evt.getOldValue() );
           tWidget.getImage().addStyleName( item.getClassname() );
+        } else if ( evt.getPropertyName().equals( "altText" ) && item.getImage() != null ) {
+          setAltText( tWidget.getImage(), item );
         }
       }
     };
@@ -532,9 +557,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     ( (GwtTreeCell) item.getRow().getCell( 0 ) ).addPropertyChangeListener( "label", listener );
 
     if ( item.getImage() != null ) {
-      Image img = new Image( GWT.getModuleBaseURL() + item.getImage() );
+      Image img = imageUtil.setImageDefaults( new Image( GWT.getModuleBaseURL() + item.getImage() ) );
 
-      if ( item.getClassname() != null ) {
+      setAltText( img, item );
+
+      if ( item.getClassname() != null && img != null ) {
         img.addStyleName( item.getClassname() );
         img.setUrl( GWT.getModuleBaseURL() + spacerPath );
       }
@@ -562,6 +589,19 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
     }
     return node;
+  }
+
+  /**
+   * Set <code>image</code> alternative text based on <code>xulTreeItem</code>
+   * @param image
+   * @param xulTreeItem
+   */
+  private void setAltText( Image image, XulTreeItem xulTreeItem ) {
+    if ( image != null ) {
+      image.setAltText( !StringUtils.isEmpty( xulTreeItem.getAltText() )
+        ? xulTreeItem.getAltText()
+        : image.getAltText() );
+    }
   }
 
   private String extractDynamicColType( Object row, int columnPos ) {
@@ -1262,6 +1302,15 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         binding.fireSourceChanged();
       }
 
+      String alttextBind = column.getAlttextBinding();
+      if ( alttextBind != null && hasGetMethod( element, alttextBind ) ) {
+        Binding binding = createBinding( (XulEventSource) element, alttextBind, row.getParent(), "altText" );
+        elementBindings.add( binding );
+        binding.setBindingType( Binding.Type.ONE_WAY );
+        domContainer.addBinding( binding );
+        binding.fireSourceChanged();
+      }
+
       row.addCell( cell );
 
       // find children
@@ -1293,6 +1342,16 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       Window.alert( "error adding elements " + e.getMessage() );
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Determines if <code>object</code> has the getter method <code>methodName</code>
+   * @param object
+   * @param methodName
+   * @return true if the method exists for object, false otherwise
+   */
+  private boolean hasGetMethod( Object object, String methodName ){
+    return GwtBindingContext.typeController.findGetMethod( object, methodName ) != null;
   }
 
   public void setEnableColumnDrag( boolean drag ) {
@@ -1476,7 +1535,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
           new ImageButton( GWT.getModuleBaseURL() + "/images/open_new.png", GWT.getModuleBaseURL()
               + "/images/open_new.png", "", 29, 24 );
       btn.getElement().getStyle().setProperty( "margin", "0px" );
-
       hPanel.add( btn );
       hPanel.setSpacing( 0 );
       hPanel.setBorderWidth( 0 );

@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -38,6 +38,7 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
   private String command;
   private String jscommand;
   private String classname;
+  private String alttext;
 
   public static void register() {
     GwtXulParser.registerHandler( "treeitem", new GwtXulHandler() {
@@ -191,5 +192,19 @@ public class GwtTreeItem extends AbstractGwtXulContainer implements XulTreeItem 
     String oldClassname = this.classname;
     this.classname = classname;
     firePropertyChange( "classname", oldClassname, classname ); //$NON-NLS-1$
+  }
+
+  @Bindable
+  @Override
+  public String  getAltText() {
+    return this.alttext;
+  }
+
+  @Bindable
+  @Override
+  public void setAltText( String altText ) {
+    String oldAltText = this.alttext;
+    this.alttext = altText;
+    firePropertyChange( "altText", oldAltText, altText ); //$NON-NLS-1$
   }
 }
