@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.components;
@@ -114,4 +114,12 @@ public interface XulTreeCol extends XulComponent {
   public String getClassnameBinding();
 
   public void setClassnameBinding( String classname );
+
+  default String getAlttextBinding() {
+    throw new UnsupportedOperationException( "getAltTextBinding() not implemented" );
+  }
+
+  default void setAlttextBinding( String altText ) {
+    throw new UnsupportedOperationException( "setAltTextBinding( altText ) not implemented" );
+  }
 }
