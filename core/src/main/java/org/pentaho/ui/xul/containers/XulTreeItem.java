@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
  */
 
 package org.pentaho.ui.xul.containers;
@@ -54,4 +54,12 @@ public interface XulTreeItem extends XulContainer {
   public void setClassname( String classname );
 
   public String getClassname();
+
+  public default void setAltText( String altText ) {
+    throw new UnsupportedOperationException( "setAltText( altText ) not implemented" );
+  }
+
+  public default String getAltText() {
+    throw new UnsupportedOperationException( "getAltText() not implemented" );
+  }
 }

@@ -31,7 +31,9 @@ import java.util.List;
  */
 public class ImageUtil {
 
-  // WCAG 2.1 default value for attribute 'alt' when image doesn't have alternative text
+  /**
+   * WCAG 2.1 default value for attribute 'alt' when image doesn't have alternative text
+   */
   protected static final String DEFAULT_IMAGE_ALT_WCAG_TEXT = "";
 
   public static final String ATTRIBUTE_PEN_IMAGE_ALT_TEXT = "pen:imagealttext";
