@@ -17,7 +17,10 @@
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.Focusable;
+import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.buttons.ImageButton;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper;
 import org.pentaho.gwt.widgets.client.utils.ButtonHelper.ButtonLabelType;
@@ -48,6 +51,9 @@ import com.google.gwt.user.client.ui.MenuItemSeparator;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.PopupPanel.PositionCallback;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
@@ -91,11 +97,13 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   private HandlerRegistration handlerRegistration;
 
+  private Map<ClickHandler, HandlerRegistration> clickHandlerMap = new HashMap<>();
+
   private ImageUtil imageUtil;
 
   public GwtButton() {
     super( ELEMENT_NAME );
-    // programatic creation doesn't call init() create here for them
+    // Programmatic creation doesn't call init() create here for them.
     button = new Button();
     button.setStylePrimaryName( "pentaho-button" );
     setManagedObject( button );
@@ -247,7 +255,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.pentaho.ui.xul.components.XulButton#setOnClick(java.lang.String)
    */
   public void setOnclick( final String method ) {
@@ -265,13 +273,38 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       }
     };
 
-    if ( button != null ) {
-      handlerRegistration = button.addClickHandler( handler );
-    } else if ( imageButton != null ) {
-      handlerRegistration = imageButton.addClickHandler( handler );
-    } else if ( customButton != null ) {
-      handlerRegistration = customButton.addClickHandler( handler );
+    if ( handlerRegistration != null ) {
+      handlerRegistration.removeHandler();
     }
+
+    handlerRegistration = addClickHandlerCore( handler );
+  }
+
+  public HandlerRegistration addClickHandler( ClickHandler handler ) {
+
+    clickHandlerMap.put( handler, addClickHandlerCore( handler ) );
+
+    return () -> {
+      removeClickHandlerCore( handler );
+    };
+  }
+
+  private HandlerRegistration addClickHandlerCore( ClickHandler handler ) {
+    Widget managedButton = getManagedButton();
+    if ( managedButton != null ) {
+      return ( (HasClickHandlers) managedButton ).addClickHandler( handler );
+    }
+
+    return null;
+  }
+
+  private void removeClickHandlerCore( ClickHandler handler ) {
+    HandlerRegistration hr = clickHandlerMap.get( handler );
+    if ( hr != null ) {
+      hr.removeHandler();
+    }
+
+    clickHandlerMap.remove( handler );
   }
 
   private void setupClickHandler() {
@@ -279,6 +312,15 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
     if ( handlerRegistration != null ) {
       handlerRegistration.removeHandler();
+    }
+
+    for ( Map.Entry<ClickHandler, HandlerRegistration> entry : clickHandlerMap.entrySet() ) {
+      HandlerRegistration hr = entry.getValue();
+      if ( hr != null ) {
+        hr.removeHandler();
+      }
+
+      entry.setValue( null );
     }
 
     if ( getPopupElement() != null ) {
@@ -294,10 +336,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
           // Is this a GwtPopup Button and is this already created
           XulMenupopup popup = getPopupElement();
           if ( popup == null ) {
-            try {
-              GwtButton.this.getXulDomContainer().invoke( GwtButton.this.onclick, new Object[] {} );
-            } catch ( XulException e ) {
-              e.printStackTrace();
+            if ( GwtButton.this.onclick != null ) {
+              try {
+                GwtButton.this.getXulDomContainer().invoke( GwtButton.this.onclick, new Object[] {} );
+              } catch ( XulException e ) {
+                e.printStackTrace();
+              }
             }
           } else {
             popupPanel = new PopupPanel( true ) {
@@ -310,13 +354,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
                   case KeyCodes.KEY_ESCAPE:
                   case KeyCodes.KEY_TAB: {
                     this.hide();
-                    if ( button != null ) {
-                      button.setFocus( true );
-                    } else if ( imageButton != null ) {
-                      imageButton.setFocus( true );
-                    } else if ( customButton != null ) {
-                      customButton.setFocus( true );
-                    }
+                    setSelected( true );
                     break;
                   }
                 }
@@ -373,12 +411,10 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       }
     };
 
-    if ( button != null ) {
-      handlerRegistration = button.addClickHandler( handler );
-    } else if ( imageButton != null ) {
-      handlerRegistration = imageButton.addClickHandler( handler );
-    } else if ( customButton != null ) {
-      handlerRegistration = customButton.addClickHandler( handler );
+    handlerRegistration = addClickHandlerCore( handler );
+
+    for ( Map.Entry<ClickHandler, HandlerRegistration> entry : clickHandlerMap.entrySet() ) {
+      entry.setValue( addClickHandlerCore( entry.getKey() ) );
     }
   }
 
@@ -501,18 +537,14 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   @Bindable
   public void setSelected( String selected ) {
-    button.setFocus( Boolean.parseBoolean( selected ) );
-    // TODO: implement selected with button group;
+    setSelected( Boolean.parseBoolean( selected ) );
   }
 
   @Bindable
   public void setSelected( boolean selected ) {
-    if ( button != null ) {
-      button.setFocus( selected );
-    } else if ( imageButton != null ) {
-      imageButton.setFocus( selected );
-    } else if ( customButton != null ) {
-      customButton.setFocus( selected );
+    Widget managedButton = getManagedButton();
+    if ( managedButton != null ) {
+      ( (Focusable) managedButton ).setFocus( selected );
     }
   }
 
@@ -526,14 +558,11 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   @Bindable
   public void setTooltiptext( String tooltip ) {
     super.setTooltiptext( tooltip );
-    if ( button != null ) {
-      button.setTitle( tooltip );
-    } else if ( imageButton != null ) {
-      imageButton.setTitle( tooltip );
-    } else if ( customButton != null ) {
-      customButton.setTitle( tooltip );
-    }
 
+    Widget managedButton = getManagedButton();
+    if ( managedButton != null ) {
+      managedButton.setTitle( tooltip );
+    }
   }
 
   public void layout() {
@@ -547,19 +576,31 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     }
 
     super.layout();
+  }
 
+  private Widget getManagedButton() {
+    if ( button != null ) {
+      return button;
+    }
+
+    if ( imageButton != null ) {
+      return imageButton;
+    }
+
+    if ( customButton != null ) {
+      return customButton;
+    }
+
+    return null;
   }
 
   @Override
   public void setVisible( boolean visible ) {
     super.setVisible( visible );
 
-    if ( button != null ) {
-      button.setVisible( visible );
-    } else if ( imageButton != null ) {
-      imageButton.setVisible( visible );
-    } else if ( customButton != null ) {
-      customButton.setVisible( visible );
+    Widget managedButton = getManagedButton();
+    if ( managedButton != null ) {
+      managedButton.setVisible( visible );
     }
   }
 
