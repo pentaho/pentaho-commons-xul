@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2021 Hitachi Vantara. All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -29,8 +29,11 @@ import com.google.gwt.user.client.ui.FormSubmitEvent;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Hidden;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.StringUtils;
 import org.pentaho.mantle.client.csrf.CsrfUtil;
 import org.pentaho.mantle.client.csrf.JsCsrfToken;
@@ -63,10 +66,9 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
   private String uploadSuccessMethod, uploadFailureMethod;
   public static final String ERROR = ".ERROR_";
   private FormPanel uploadForm = null;
+  private Panel formPanel;
   private FileUpload upload = null;
-  private VerticalPanel uploadPanel;
   private VerticalPanel mainPanel;
-  private HTMLPanel hiddenPanel;
   private GwtLabel uploadTextBox;
   private String action;
   private Map<String, String> parameters = null;
@@ -130,21 +132,18 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     uploadForm.setHeight( getHeight() + "px" );
     uploadForm.setWidth( getWidth() + "px" );
 
-    // Create a panel to hold all of the form widgets.
-    HorizontalPanel panel = new HorizontalPanel();
-    uploadForm.setWidget( panel );
+    // Create a panel to hold all form widgets.
+    formPanel = new HTMLPanel( "" );
+    formPanel.addStyleName( "gwt_FileUpload_formPanel" );
+    uploadForm.setWidget( formPanel );
     uploadForm.setVisible( true );
 
+    HorizontalPanel uploadPanel = new HorizontalFlexPanel();
     // Create a FileUpload widget.
     upload = createFileUpload();
 
-    uploadPanel = new VerticalPanel();
-
-    // -- upload styling -- //
     String uploadButtonImage = srcEle.getAttribute( "image" );
     String uploadButtonDisabledImage = srcEle.getAttribute( "disabledimage" );
-
-    hiddenPanel = new HTMLPanel( "<div id='hidden_div' class='gwt_file_upload_hidden_div'></div>" );
 
     csrfTokenParameter = new Hidden( DISABLED_CSRF_TOKEN_PARAMETER );
 
@@ -154,6 +153,10 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
     GwtButton uploadButton = new GwtButton();
     uploadButton.setId( "gwt_FileUpload_uploadButton" );
     uploadButton.setHeight( 22 );
+    uploadButton.addClickHandler( event -> {
+      event.preventDefault();
+      ElementUtils.click( upload.getElement() );
+    } );
 
     final LabelWidget label = new LabelWidget( "uploadFormElement" );
     label.setStyleName( "gwt_file_upload_label" );
@@ -172,15 +175,15 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
       uploadButton.setDisabledImage( uploadButtonDisabledImage );
     }
 
-    label.add( (Widget) uploadButton.getManagedObject() );
     uploadButton.layout();
-    hiddenPanel.add( upload, "hidden_div" );
-    hiddenPanel.add( label, "hidden_div" );
-    hiddenPanel.add( csrfTokenParameter );
-    // -- upload styling -- //
 
-    uploadPanel.add( hiddenPanel );
-    panel.add( uploadPanel );
+    uploadPanel.add( label );
+    uploadPanel.add( (Widget) uploadButton.getManagedObject() );
+
+    formPanel.add( uploadPanel );
+    formPanel.add( upload );
+    formPanel.add( csrfTokenParameter );
+
     mainPanel.add( uploadForm );
     if ( getHeight() >= 0 ) {
       mainPanel.setHeight( getHeight() + "px" );
@@ -322,9 +325,9 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
   @Bindable
   public void setSelectedFile( String name ) {
     if ( name == null || name.length() <= 0 ) {
-      hiddenPanel.remove( upload );
+      formPanel.remove( upload );
       upload = createFileUpload();
-      hiddenPanel.add( upload, "hidden_div" );
+      formPanel.add( upload );
     }
 
     uploadTextBox.setValue( name );
