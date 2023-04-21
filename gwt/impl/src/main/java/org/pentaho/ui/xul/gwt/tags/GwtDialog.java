@@ -559,4 +559,11 @@ public class GwtDialog extends GenericDialog implements XulDialog {
       dialog.center();
     }
   }
+
+  @Override
+  public void doAutoFocus() {
+    if ( dialog != null ) {
+      dialog.doAutoFocus();
+    }
+  }
 }
