@@ -54,22 +54,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     return new DialogBox();
   }
 
-  public void hide() {
-    if ( dialog != null ) {
-      dialog.hide();
-    }
-  }
-
-  public void show() {
-    // Instantiation is delayed to prevent errors with the underlying GWT's not being able to calculate available
-    // size, in the case that the GWT app has been loaded into an iframe that's not visible.
-    if ( dialog == null ) {
-      dialog = createManagedDialog();
-      dialog.addStyleName( "pentaho-xul-gwt" );
-      dialog.addStyleName( "pentaho-xul-" + getName() );
-      dialog.setWidget( contents );
-    }
-
+  protected void prepareManagedDialog() {
     dialog.setText( title );
     dialog.setAriaRole( getAriaRole() );
 
@@ -126,6 +111,25 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
       int offsetHeight = getHeight() - HEADER_HEIGHT;
       contents.setHeight( offsetHeight + "px" ); //$NON-NLS-1$
     }
+  }
+
+  public void hide() {
+    if ( dialog != null ) {
+      dialog.hide();
+    }
+  }
+
+  public void show() {
+    // Instantiation is delayed to prevent errors with the underlying GWT's not being able to calculate available
+    // size, in the case that the GWT app has been loaded into an iframe that's not visible.
+    if ( dialog == null ) {
+      dialog = createManagedDialog();
+      dialog.addStyleName( "pentaho-xul-gwt" );
+      dialog.addStyleName( "pentaho-xul-" + getName() );
+      dialog.setWidget( contents );
+    }
+
+    prepareManagedDialog();
 
     dialog.center();
   }
