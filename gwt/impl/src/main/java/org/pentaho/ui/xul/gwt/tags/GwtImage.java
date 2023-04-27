@@ -80,7 +80,6 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
     setManagedObject( image );
     imageUtil.setImageDefaults( image );
     image.setStyleName( "xul-image" ); //$NON-NLS-1$
-    image.getElement().setTabIndex( 0 );
     addKeyboardListener();
   }
 
