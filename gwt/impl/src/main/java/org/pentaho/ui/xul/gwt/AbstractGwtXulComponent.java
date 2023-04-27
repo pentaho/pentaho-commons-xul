@@ -21,6 +21,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
+import com.google.gwt.user.client.ui.Focusable;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
@@ -52,6 +53,7 @@ import com.google.gwt.xml.client.Node;
  */
 public abstract class AbstractGwtXulComponent extends GwtDomElement implements XulComponent, XulEventSource {
   private static final String ATTRIBUTE_ARIA_ROLE = "pen:aria-role";
+  private static final String ATTRIBUTE_TABINDEX = "tabindex";
   protected XulDomContainer xulDomContainer;
   protected Panel container;
   protected Orient orientation;
@@ -75,6 +77,17 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected String ondrop;
   protected BindingProvider bindingProvider;
   private String dropVetoMethod;
+  /**
+   * The component's tab index.
+   * <p>
+   * Possible values are:
+   * <ul>
+   * <li>null - defaults to browser default for the specific element</li>
+   * <li>-1 (<0) - can receive focus via code</li>
+   * <li>0 (>= 0) - can receive focus via code or user keyboard (TAB)</li>
+   * </ul>
+   */
+  private Integer tabIndex;
 
   public AbstractGwtXulComponent( String name ) {
     super( name );
@@ -392,7 +405,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     managedObject = managed;
 
     if ( managedObject instanceof UIObject ) {
-      updateDomAriaRole( (UIObject) managedObject );
+      UIObject uiObject = (UIObject) managedObject;
+
+      updateManagedAriaRole( uiObject );
+      updateManagedTabIndex( uiObject );
     }
   }
 
@@ -407,6 +423,35 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       ( (UIObject) managedObject ).getElement().setId( id );
     }
   }
+
+  public Integer getTabIndex() {
+    return tabIndex;
+  }
+
+  public void setTabIndex( Integer tabIndex ) {
+    this.tabIndex = tabIndex;
+
+    if ( managedObject instanceof UIObject ) {
+      updateManagedTabIndex( (UIObject) managedObject );
+    }
+  }
+
+  private void updateManagedTabIndex( UIObject gwtObject ) {
+    Integer tabIndexLocal = getTabIndex();
+    if ( gwtObject instanceof Focusable ) {
+      Focusable focusable = (Focusable) gwtObject;
+      if ( tabIndexLocal == null ) {
+        if ( focusable.getTabIndex() != -1 ) {
+          focusable.setTabIndex( -1 );
+        }
+      } else {
+        focusable.setTabIndex( tabIndexLocal );
+      }
+    } else {
+      setDomAttribute( gwtObject, ATTRIBUTE_TABINDEX, tabIndexLocal != null ? tabIndexLocal.toString() : null );
+    }
+  }
+
 
   public int getFlex() {
     return flex;
@@ -547,7 +592,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
    *
    * @param gwtObject The GWT <code>UIObject</code> to update.
    */
-  private void updateDomAriaRole( UIObject gwtObject ) {
+  private void updateManagedAriaRole( UIObject gwtObject ) {
     setDomAttribute( gwtObject, "role", getAriaRole() );
   }
   // endregion
@@ -621,7 +666,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }-*/;
 
   public enum Property {
-    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION, ARIA_ROLE;
+    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION, ARIA_ROLE, TABINDEX;
   }
 
   /**
@@ -691,8 +736,11 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
             break;
           case ARIA_ROLE:
             if ( managedObject instanceof UIObject ) {
-              updateDomAriaRole( (UIObject) managedObject );
+              updateManagedAriaRole( (UIObject) managedObject );
             }
+            break;
+          case TABINDEX:
+            setTabIndex( StringUtils.isEmpty( value ) ? null : Integer.valueOf( value ) );
             break;
         }
       } catch ( IllegalArgumentException e ) {
