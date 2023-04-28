@@ -440,11 +440,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     Integer tabIndexLocal = getTabIndex();
     if ( gwtObject instanceof Focusable ) {
       Focusable focusable = (Focusable) gwtObject;
-      if ( tabIndexLocal == null ) {
-        if ( focusable.getTabIndex() != -1 ) {
-          focusable.setTabIndex( -1 );
-        }
-      } else {
+      if ( tabIndexLocal != null ) {
         focusable.setTabIndex( tabIndexLocal );
       }
     } else {
