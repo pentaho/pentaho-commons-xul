@@ -118,32 +118,21 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
     menubar = new MenuBar( vertical ) {
       @Override
       public void onBrowserEvent( Event event ) {
-        if (DOM.eventGetType(event) == Event.ONCLICK && getSelectedItem().getElement().getId().contains("close")) {
-          Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-            @Override
-            public void execute() {
-              getSelectedItem().getScheduledCommand().execute();
-            }
-          });
-
-          event.stopPropagation();
-        } else {
-          super.onBrowserEvent( event );
-          switch ( DOM.eventGetType( event ) ) {
-            case Event.ONKEYDOWN:
-              if ( event.getKeyCode() == KeyCodes.KEY_TAB ) {
-                GwtMenubar rootMenu = getRootMenu();
-                if ( event.getShiftKey() ) {
-                  ElementUtils.tabPrevious( rootMenu.menubar.getElement() );
-                } else {
-                  ElementUtils.tabNext( rootMenu.menubar.getElement() );
-                }
-                event.preventDefault();
+        super.onBrowserEvent( event );
+        switch ( DOM.eventGetType( event ) ) {
+          case Event.ONKEYDOWN:
+            if ( event.getKeyCode() == KeyCodes.KEY_TAB ) {
+              GwtMenubar rootMenu = getRootMenu();
+              if ( event.getShiftKey() ) {
+                ElementUtils.tabPrevious( rootMenu.menubar.getElement() );
+              } else {
+                ElementUtils.tabNext( rootMenu.menubar.getElement() );
               }
-              break;
-          }
-          maybeCover();
+              event.preventDefault();
+            }
+            break;
         }
+        maybeCover();
       }
     };
 
