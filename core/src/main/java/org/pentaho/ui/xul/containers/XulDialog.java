@@ -78,4 +78,8 @@ public interface XulDialog extends XulRoot {
   public boolean isPack();
 
   public void center();
+
+  default void doAutoFocus() {
+    // NOOP
+  };
 }
