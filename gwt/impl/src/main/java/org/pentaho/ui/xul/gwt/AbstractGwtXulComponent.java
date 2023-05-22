@@ -56,6 +56,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected Panel container;
   protected Orient orientation;
   private Object managedObject;
+  protected boolean isFlexSpecified = false;
   protected int flex = 0;
   protected String id;
   protected boolean flexLayout = false;
@@ -248,7 +249,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
 
     for ( int i = 0; i < children.size(); i++ ) {
-      XulComponent comp = nodes.get( i );
+      AbstractGwtXulComponent comp = (AbstractGwtXulComponent) nodes.get( i );
 
       Object wrappedWidget = comp.getManagedObject();
       if ( wrappedWidget == null || !( wrappedWidget instanceof Widget ) ) {
@@ -271,9 +272,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         container.setHeight( "100%" );
       }
 
+      int componentFlex = comp.getFlex();
       if ( flexLayout ) {
 
-        int componentFlex = comp.getFlex();
         if ( componentFlex > 0 ) {
 
           String percentage = Math.round( ( componentFlex / totalFlex ) * 100 ) + "%";
@@ -324,6 +325,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         } else if ( comp.getFlex() > 0 ) {
           wrapperStyle.setProperty( "width", "100%" );
         }
+      }
+      if ( comp.isFlexSpecified() ) {
+        ElementUtils.setStyleProperty(  component.getElement(), "--flex-item", componentFlex + " " + componentFlex + " auto" );
       }
     }
 
@@ -414,6 +418,15 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setFlex( int flex ) {
     this.flex = flex;
+    setFlexSpecified( true );
+  }
+
+  public boolean isFlexSpecified() {
+    return isFlexSpecified;
+  }
+
+  public void setFlexSpecified( boolean isFlexSpecified ) {
+    this.isFlexSpecified = isFlexSpecified;
   }
 
   public void addComponent( XulComponent c ) {
