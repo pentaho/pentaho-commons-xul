@@ -12,14 +12,16 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
 import java.util.List;
 
-import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.gwt.widgets.client.panel.ScrollFlexPanel;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulColumns;
@@ -41,7 +43,7 @@ public class GwtGrid extends AbstractGwtXulContainer implements XulGrid {
   private boolean firstLayout = true;
 
   public static void register() {
-    GwtXulParser.registerHandler( "grid", //$NON-NLS-1$
+    GwtXulParser.registerHandler( "grid",
         new GwtXulHandler() {
           public Element newInstance() {
             return new GwtGrid();
@@ -50,7 +52,7 @@ public class GwtGrid extends AbstractGwtXulContainer implements XulGrid {
   }
 
   public GwtGrid() {
-    super( "grid" ); //$NON-NLS-1$
+    super( "grid" );
   }
 
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
@@ -74,21 +76,27 @@ public class GwtGrid extends AbstractGwtXulContainer implements XulGrid {
 
     if ( grid == null ) {
       grid = new Grid();
-      sp = new ScrollPanel( grid );
+      grid.addStyleName( "gwt-grid" );
+
+      sp = new ScrollFlexPanel( grid );
+
       SimplePanel div = new SimplePanel();
+      div.addStyleName( "gwt-grid-panel" );
+      div.addStyleName( "flex-column" );
+
       div.add( sp );
       container = div;
       setManagedObject( container );
     }
 
     if ( getFlex() > 0 ) {
-      grid.setHeight( "100%" ); //$NON-NLS-1$
-      grid.setWidth( "100%" ); //$NON-NLS-1$
-      sp.setHeight( "100%" ); //$NON-NLS-1$
-      sp.setWidth( "100%" ); //$NON-NLS-1$
+      grid.setHeight( "100%" );
+      grid.setWidth( "100%" );
+      sp.setHeight( "100%" );
+      sp.setWidth( "100%" );
     } else if ( getWidth() > 0 ) {
-      sp.setWidth( getWidth() + "px" ); //$NON-NLS-1$
-      sp.setHeight( getHeight() + "px" ); //$NON-NLS-1$
+      sp.setWidth( getWidth() + "px" );
+      sp.setHeight( getHeight() + "px" );
     }
     grid.setCellSpacing( 1 );
     if ( getPadding() > 0 ) {
@@ -102,51 +110,79 @@ public class GwtGrid extends AbstractGwtXulContainer implements XulGrid {
     XulColumns columns = getColumns();
 
     int colFlexTotal = 0;
-    boolean columnFlexLayout = false;
+    StringBuilder cssGridTemplateColumns = new StringBuilder();
 
     for ( XulComponent col : columns.getChildNodes() ) {
-      if ( col.getFlex() > 0 ) {
-        columnFlexLayout = true;
-        colFlexTotal += col.getFlex();
+      int flex = col.getFlex();
+      if ( flex > 0 ) {
+        colFlexTotal += flex;
+        cssGridTemplateColumns.append( flex ).append( "fr " );
+      } else {
+        cssGridTemplateColumns.append( "auto " );
       }
     }
+
+    ElementUtils.setStyleProperty( grid.getElement(), "--grid-template-columns", cssGridTemplateColumns.toString().trim() );
 
     // Resizing the Grid
     grid.resize( getRowCount(), getColumnCount() );
 
     // Adding rows to the grid
     List<XulComponent> rowComponents = rows.getChildNodes();
-    for ( int rowCount = 0; rowCount < getRowCount(); rowCount++ ) {
-      XulComponent component = rowComponents.get( rowCount );
-      List<XulComponent> rowList = component.getChildNodes();
-      List<XulComponent> colList = columns.getChildNodes();
-      for ( int colCount = 0; colCount < getColumnCount(); colCount++ ) {
-        XulComponent rowComponent = rowList.get( colCount );
-        Widget widget = (Widget) rowComponent.getManagedObject();
-        grid.setWidget( rowCount, colCount, widget );
-        if ( rowCount == 0 ) {
-          grid.getRowFormatter().setStyleName( rowCount, "rowHeaderFormat" );
-        } else {
-          grid.getRowFormatter().setStyleName( rowCount, "cellFormat" );
-        }
-        if ( !columnFlexLayout ) {
-          grid.getCellFormatter().setWidth( rowCount, colCount, component.getWidth() + "%" ); //$NON-NLS-1$
-        } else {
-          int pct = Math.round( ( colList.get( colCount ).getFlex() * 100 / colFlexTotal ) );
-          String percentage = pct + "%"; //$NON-NLS-1$
-          if ( pct > 0 ) {
-            grid.getCellFormatter().setWidth( rowCount, colCount, percentage );
-          }
-        }
+    for ( int rowIndex = 0; rowIndex < getRowCount(); rowIndex++ ) {
+
+      XulComponent rowComponent = rowComponents.get( rowIndex );
+
+      updateUIRow( columns, colFlexTotal, rowIndex, rowComponent );
+    }
+
+    this.initialized = true;
+  }
+
+  private void updateUIRow( XulColumns columns, int colFlexTotal, int rowIndex, XulComponent rowComponent ) {
+    List<XulComponent> cellList = rowComponent.getChildNodes();
+    List<XulComponent> colList = columns.getChildNodes();
+
+    for ( int colIndex = 0; colIndex < getColumnCount(); colIndex++ ) {
+      XulComponent cellComponent = cellList.get( colIndex );
+      Widget cellWidget = (Widget) cellComponent.getManagedObject();
+
+      XulComponent colComponent = colList.get( colIndex );
+
+      updateUICell( colFlexTotal, rowIndex, colIndex, rowComponent, colComponent, cellWidget );
+    }
+  }
+
+  private void updateUICell( int colFlexTotal, int rowIndex, int colIndex, XulComponent rowComponent,
+                             XulComponent colComponent, Widget cellWidget ) {
+
+    grid.setWidget( rowIndex, colIndex, cellWidget );
+
+    // CSS Grid auto-placement would result out-of-sync. for items which are display:none.
+    ElementUtils.setStyleProperty( cellWidget.getElement(), "--grid-row", String.valueOf( rowIndex + 1 ) );
+    ElementUtils.setStyleProperty( cellWidget.getElement(), "--grid-column", String.valueOf( colIndex + 1 ) );
+
+    if ( rowIndex == 0 ) {
+      grid.getRowFormatter().setStyleName( rowIndex, "rowHeaderFormat" );
+    } else {
+      grid.getRowFormatter().setStyleName( rowIndex, "cellFormat" );
+    }
+
+    if ( colFlexTotal == 0 ) {
+      grid.getCellFormatter().setWidth( rowIndex, colIndex, rowComponent.getWidth() + "%" );
+    } else {
+      int colFlex = colComponent.getFlex();
+      if ( colFlex > 0 ) {
+        int pct = colFlex * 100 / colFlexTotal;
+        grid.getCellFormatter().setWidth( rowIndex, colIndex, pct + "%" );
       }
     }
-    this.initialized = true;
   }
 
   public XulRows getRows() {
     List<XulComponent> components = this.getChildNodes();
     for ( XulComponent component : components ) {
-      if ( !StringUtils.isEmpty( component.getName() ) && component.getName().equals( "rows" ) ) { //$NON-NLS-1$
+      if ( !StringUtils.isEmpty( component.getName() ) && component.getName().equals( "rows" ) ) {
         return (XulRows) component;
       }
     }
@@ -156,7 +192,7 @@ public class GwtGrid extends AbstractGwtXulContainer implements XulGrid {
   public XulColumns getColumns() {
     List<XulComponent> components = this.getChildNodes();
     for ( XulComponent component : components ) {
-      if ( !StringUtils.isEmpty( component.getName() ) && component.getName().equals( "columns" ) ) { //$NON-NLS-1$
+      if ( !StringUtils.isEmpty( component.getName() ) && component.getName().equals( "columns" ) ) {
         return (XulColumns) component;
       }
     }
