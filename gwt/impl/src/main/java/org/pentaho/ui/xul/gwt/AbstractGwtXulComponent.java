@@ -20,6 +20,9 @@ package org.pentaho.ui.xul.gwt;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
+import java.util.Objects;
+
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
@@ -52,10 +55,12 @@ import com.google.gwt.xml.client.Node;
  */
 public abstract class AbstractGwtXulComponent extends GwtDomElement implements XulComponent, XulEventSource {
   private static final String ATTRIBUTE_ARIA_ROLE = "pen:aria-role";
+  private static final String ATTRIBUTE_CLASSNAME = "pen:classname";
   protected XulDomContainer xulDomContainer;
   protected Panel container;
   protected Orient orientation;
   private Object managedObject;
+  protected boolean isFlexSpecified = false;
   protected int flex = 0;
   protected String id;
   protected boolean flexLayout = false;
@@ -248,7 +253,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
 
     for ( int i = 0; i < children.size(); i++ ) {
-      XulComponent comp = nodes.get( i );
+      AbstractGwtXulComponent comp = (AbstractGwtXulComponent) nodes.get( i );
 
       Object wrappedWidget = comp.getManagedObject();
       if ( wrappedWidget == null || !( wrappedWidget instanceof Widget ) ) {
@@ -271,9 +276,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         container.setHeight( "100%" );
       }
 
+      int componentFlex = comp.getFlex();
       if ( flexLayout ) {
 
-        int componentFlex = comp.getFlex();
         if ( componentFlex > 0 ) {
 
           String percentage = Math.round( ( componentFlex / totalFlex ) * 100 ) + "%";
@@ -324,6 +329,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         } else if ( comp.getFlex() > 0 ) {
           wrapperStyle.setProperty( "width", "100%" );
         }
+      }
+      if ( comp.isFlexSpecified() ) {
+        ElementUtils.setStyleProperty(  component.getElement(), "--flex-item", componentFlex + " " + componentFlex + " auto" );
       }
     }
 
@@ -389,11 +397,21 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   public void setManagedObject( Object managed ) {
-    managedObject = managed;
+    Object oldManagedObject = managedObject;
+    if ( oldManagedObject != managed ) {
+      managedObject = managed;
 
-    if ( managedObject instanceof UIObject ) {
-      updateDomAriaRole( (UIObject) managedObject );
+      onManagedObjectChanged( oldManagedObject );
     }
+  }
+
+  /**
+   * Called when the managed object has changed.
+   * @param oldManagedObject The old managed object.
+   */
+  protected void onManagedObjectChanged( Object oldManagedObject ) {
+    updateManagedAriaRole();
+    updateManagedClassName( null );
   }
 
   public String getId() {
@@ -414,6 +432,15 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
 
   public void setFlex( int flex ) {
     this.flex = flex;
+    setFlexSpecified( true );
+  }
+
+  public boolean isFlexSpecified() {
+    return isFlexSpecified;
+  }
+
+  public void setFlexSpecified( boolean isFlexSpecified ) {
+    this.isFlexSpecified = isFlexSpecified;
   }
 
   public void addComponent( XulComponent c ) {
@@ -543,13 +570,82 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   /**
-   * Updates the DOM ARIA <code>role</code> attribute on a given GWT {@link UIObject}.
-   *
-   * @param gwtObject The GWT <code>UIObject</code> to update.
+   * Updates the DOM ARIA <code>role</code> attribute on the current managed object, if any.
    */
-  private void updateDomAriaRole( UIObject gwtObject ) {
-    setDomAttribute( gwtObject, "role", getAriaRole() );
+  private void updateManagedAriaRole() {
+    if ( managedObject instanceof UIObject ) {
+      UIObject uiObject = (UIObject) managedObject;
+
+      setDomAttribute( uiObject, "role", getAriaRole() );
+    }
   }
+  // endregion
+
+  // region classname attribute
+  /**
+   * Gets the class name attribute of the component.
+   * <p>
+   *   Corresponds to the XUL <code>pen:classname</code> attribute.
+   * </p>
+   */
+  public String getClassName() {
+    return getAttributeValue( ATTRIBUTE_CLASSNAME );
+  }
+
+  /**
+   * Sets the class name attribute of the component.
+   * <p>
+   *   Corresponds to the XUL <code>pen:classname</code> attribute.
+   * </p>
+   * <p>
+   *   When the component's managed object, {@link #getManagedObject()}, is set,
+   *   its <code>class</code> DOM attribute is updated to contain this value.
+   * </p>
+   * @param className The new class name attribute.
+   */
+  public void setClassName( String className ) {
+    if ( StringUtils.isEmpty( className ) ) {
+      className = null;
+    }
+
+    String prevClassName = getClassName();
+    if ( Objects.equals( prevClassName, className ) ) {
+      return;
+    }
+
+    super.setAttribute( ATTRIBUTE_CLASSNAME, className );
+
+    updateManagedClassName( prevClassName );
+  }
+
+  /**
+   * Gets the managed object on which the class name should be updated on.
+   * @return A managed object.
+   */
+  protected Object getManagedClassNameObject() {
+    return managedObject;
+  }
+
+  /**
+   * Updates the managed object's class attribute on the current managed object, if any.
+   *
+   * @param prevClassName The previous class name value.
+   */
+    protected void updateManagedClassName( String prevClassName ) {
+      Object classNameObject = getManagedClassNameObject();
+      if ( classNameObject instanceof UIObject ) {
+        UIObject uiObject = ( UIObject ) classNameObject;
+
+        if ( !StringUtils.isEmpty( prevClassName ) ) {
+          uiObject.removeStyleName( prevClassName );
+        }
+
+        String curClassName = getClassName();
+        if ( !StringUtils.isEmpty( curClassName ) ) {
+          uiObject.addStyleName( curClassName );
+        }
+      }
+    }
   // endregion
 
   public void addPropertyChangeListener( PropertyChangeListener listener ) {
@@ -621,7 +717,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }-*/;
 
   public enum Property {
-    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION, ARIA_ROLE;
+    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION, ARIA_ROLE, CLASSNAME;
   }
 
   /**
@@ -656,6 +752,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
               value = null;
             }
             break;
+          case CLASSNAME:
+            setClassName( value );
+            return;
         }
       } catch ( IllegalArgumentException e ) {
         System.out.println(
@@ -690,9 +789,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
             setPosition( Integer.valueOf( value ) );
             break;
           case ARIA_ROLE:
-            if ( managedObject instanceof UIObject ) {
-              updateDomAriaRole( (UIObject) managedObject );
-            }
+            updateManagedAriaRole();
             break;
         }
       } catch ( IllegalArgumentException e ) {

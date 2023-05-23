@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.dialogs.DialogBox;
 import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
-import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
@@ -252,11 +251,8 @@ public class GwtDialog extends GenericDialog implements XulDialog {
 
   @Override
   public Panel getDialogContents() {
-
-    VerticalPanel contentPanel = new VerticalFlexPanel();
-    contentPanel.setSpacing( 0 );
+    VerticalPanel contentPanel = GwtVbox.createManagedPanel( 0 );
     container = contentPanel;
-
     return contentPanel;
   }
 
@@ -555,6 +551,7 @@ public class GwtDialog extends GenericDialog implements XulDialog {
 
     // Also calls doAutoFocus().
     this.dialog.setFocusButtons( this.getFocusButtonWidgets() );
+    this.dialog.getElement().setId( getId() );
     this.dialog.center();
   }
 
