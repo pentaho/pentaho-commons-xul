@@ -55,7 +55,10 @@ public class GwtDeck extends AbstractGwtXulContainer implements XulDeck {
 
   public GwtDeck( Orient orient ) {
     super( ELEMENT_NAME );
-    container = new DeckPanel();
+    DeckPanel deckPanel = new DeckPanel();
+    deckPanel.addStyleName( "deck-panel" );
+    deckPanel.addStyleName( "flex-column" );
+    container = deckPanel;
     setManagedObject( container );
   }
 

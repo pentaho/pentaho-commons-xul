@@ -12,11 +12,13 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.containers.XulHbox;
 import org.pentaho.ui.xul.dom.Element;
@@ -51,12 +53,8 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
   public GwtHbox() {
     super( ELEMENT_NAME );
     this.orientation = Orient.HORIZONTAL;
-    HorizontalPanel hp;
-    container = hp = new HorizontalPanel();
+    container = createManagedPanel();
     setManagedObject( container );
-    hp.setSpacing( GwtUIConst.PANEL_SPACING ); // IE_6_FIX, move to CSS
-    hp.setStyleName( "hbox" );
-
   }
 
   @Override
@@ -110,5 +108,28 @@ public class GwtHbox extends AbstractGwtXulContainer implements XulHbox {
     if ( container != null ) {
       container.getElement().getStyle().setProperty( "backgroundColor", bgcolor );
     }
+  }
+
+  public static HorizontalPanel createManagedPanel() {
+    return createManagedPanel( GwtUIConst.PANEL_SPACING );
+  }
+
+  public static HorizontalPanel createManagedPanel( int defaultSpacing ) {
+    return new HorizontalFlexPanel() {
+      {
+        addStyleName( "hbox" );
+        super.setSpacing( defaultSpacing );
+      }
+
+      @Override
+      public void setSpacing( int spacing ) {
+        // IE_6_FIX, move to CSS
+        super.setSpacing( spacing );
+
+        // For responsive mode, convert the cell spacing into the flex layout gap.
+        ElementUtils.setStyleProperty( getElement(), "--layout-gap-h-local", spacing + "px" );
+        ElementUtils.setStyleProperty( getElement(), "--layout-gap-v-local", spacing + "px" );
+      }
+    };
   }
 }

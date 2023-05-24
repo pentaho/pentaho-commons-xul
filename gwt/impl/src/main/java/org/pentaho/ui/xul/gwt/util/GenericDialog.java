@@ -27,6 +27,7 @@ import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
+import org.pentaho.ui.xul.gwt.tags.GwtVbox;
 
 public abstract class GenericDialog extends AbstractGwtXulContainer {
   protected DialogBox dialog;
@@ -61,7 +62,7 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     contents.clear();
 
     // implement the buttons
-    VerticalPanel panel = new VerticalFlexPanel();
+    VerticalPanel panel = GwtVbox.createManagedPanel();
 
     Panel dialogContents = getDialogContents();
     dialogContents.setSize( "100%", "100%" );

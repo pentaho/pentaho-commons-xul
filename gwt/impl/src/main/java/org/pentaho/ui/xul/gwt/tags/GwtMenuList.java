@@ -87,6 +87,10 @@ public class GwtMenuList<T> extends AbstractGwtXulContainer implements XulMenuLi
       }
 
     };
+    wrapper.addStyleName( "gwt-menu-list" );
+    wrapper.addStyleName( "flex-row" );
+    wrapper.addStyleName( "flex-item-h" );
+
     listbox = new CustomListBox();
     wrapper.add( listbox );
     setManagedObject( wrapper );

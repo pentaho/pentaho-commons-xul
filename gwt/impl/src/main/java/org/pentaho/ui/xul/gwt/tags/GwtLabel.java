@@ -61,7 +61,7 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     super( ELEMENT_NAME );
     label = new Label();
     setManagedObject( label );
-    label.setStyleName( "xul-label" );
+    label.addStyleName( "xul-label" );
     // label.setWordWrap(true);
   }
 
@@ -119,6 +119,13 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
       label.getElement().setAttribute( "style", "overflow: hidden;white-space: nowrap; height: 100%;width:232px;text-overflow: ellipsis;" );
     }
     label.setWordWrap( multiline );
+    if ( multiline ) {
+      label.addStyleName( "flex-column" );
+      label.addStyleName( "multiline" );
+    } else {
+      label.removeStyleName( "flex-column" );
+      label.removeStyleName( "multiline" );
+    }
 
     if ( StringUtils.isEmpty( this.getTooltiptext() ) == false ) {
 
@@ -184,17 +191,21 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
       String style = "";
       if ( getWidth() > 0 || getHeight() > 0 ) {
         style = "style=\"";
+
+        if ( getWidth() > 0 ) {
+          style += "width:" + getWidth() + "px;";
+        }
+        if ( getHeight() > 0 ) {
+          style += "height:" + getHeight() + "px;";
+        }
+
+        style += "\"";
       }
-      if ( getWidth() > 0 ) {
-        style += "width:" + getWidth() + "px;";
-      }
-      if ( getHeight() > 0 ) {
-        style += "height:" + getHeight() + "px;";
-      }
-      style += "\"";
+
       label.getElement().setInnerHTML(
-          "<div class='label-scroll-panel xul-pre' " + style + "> <pre class='xul-pre' " + style + ">" + value
-              + "</pre></div>" );
+          "<div class='label-scroll-panel xul-pre flex-column' " + style + "> <pre class='xul-pre' " + style + ">"
+            + value
+            + "</pre></div>" );
 
     }
   }
