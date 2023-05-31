@@ -193,7 +193,8 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   public GwtTree() {
     super( ELEMENT_NAME );
 
-    simplePanel.setStylePrimaryName( "tree-panel" );
+    simplePanel.addStyleName( "xul-" + ELEMENT_NAME );
+    simplePanel.addStyleName( "flex-column" );
 
     imageUtil = new ImageUtil();
 

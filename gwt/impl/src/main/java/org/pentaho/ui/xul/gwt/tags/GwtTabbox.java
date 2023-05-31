@@ -63,9 +63,9 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     super( ELEMENT_NAME );
 
     tabPanel = new TabPanel();
-    tabPanel.setStylePrimaryName( ELEMENT_NAME );
+    tabPanel.setStylePrimaryName( "xul-" + ELEMENT_NAME );
     tabPanel.addStyleName( VerticalFlexPanel.STYLE_NAME );
-    tabPanel.addStyleName( "with-layout-gap-none" );
+    tabPanel.addStyleName( "gap-none" );
 
     setManagedObject( tabPanel );
   }
@@ -127,8 +127,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
       Widget panelWidget = (Widget) panel.getManagedObject();
       GwtTabWidget widget = new GwtTabWidget( tabs.getTabByIndex( i ).getLabel(), tooltipText, tabPanel, panelWidget );
 
-      panelWidget.setStylePrimaryName( "pentaho-tabPanel" );
-      panelWidget.addStyleName( VerticalFlexPanel.STYLE_NAME );
+      panelWidget.addStyleName( "pentaho-tabPanel" );
       tabPanel.add( panelWidget, widget );
     }
 
