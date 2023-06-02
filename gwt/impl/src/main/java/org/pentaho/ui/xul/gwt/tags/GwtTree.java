@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -58,7 +58,6 @@ import org.pentaho.ui.xul.dnd.DropPosition;
 import org.pentaho.ui.xul.dom.Document;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.binding.GwtBinding;
 import org.pentaho.ui.xul.gwt.binding.GwtBindingContext;
@@ -98,6 +97,7 @@ import com.google.gwt.user.client.ui.TreeListener;
 import com.google.gwt.user.client.ui.Widget;
 
 public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizable, TableColumnSortListener {
+  static final String ELEMENT_NAME = "tree";
 
   /**
    * Cached elements.
@@ -107,11 +107,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private XulEventHandler dropVetoerController;
 
   public static void register() {
-    GwtXulParser.registerHandler( "tree", new GwtXulHandler() {
-      public Element newInstance() {
-        return new GwtTree();
-      }
-    } );
+    GwtXulParser.registerHandler( ELEMENT_NAME, GwtTree::new );
   }
 
   XulTreeCols columns = null;
@@ -125,11 +121,11 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   private boolean isSortable = false;
   private String command;
 
-  private Map<String, TreeCellEditor> customEditors = new HashMap<String, TreeCellEditor>();
-  private Map<String, TreeCellRenderer> customRenderers = new HashMap<String, TreeCellRenderer>();
+  private Map<String, TreeCellEditor> customEditors = new HashMap<>();
+  private Map<String, TreeCellRenderer> customRenderers = new HashMap<>();
 
-  private List<Binding> elementBindings = new ArrayList<Binding>();
-  private List<Binding> expandBindings = new ArrayList<Binding>();
+  private List<Binding> elementBindings = new ArrayList<>();
+  private List<Binding> expandBindings = new ArrayList<>();
   private boolean suppressExpansionScrollEvents;
   private DropPositionIndicator dropPosIndicator = new DropPositionIndicator();
 
@@ -195,7 +191,12 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
   }
 
   public GwtTree() {
-    super( "tree" );
+    super( ELEMENT_NAME );
+
+    simplePanel.addStyleName( "xul-" + ELEMENT_NAME );
+    simplePanel.addStyleName( "flex-column" );
+
+    imageUtil = new ImageUtil();
 
     // managedObject is neither a native GWT tree nor a table since the entire native GWT object is thrown away
     // each
@@ -203,8 +204,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     // the
     // simplePanel, which is the managedObject
     setManagedObject( simplePanel );
-    imageUtil = new ImageUtil();
-
   }
 
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {

@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -21,53 +21,50 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.ui.xul.components.XulCaption;
 import org.pentaho.ui.xul.containers.XulEditpanel;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.util.Orient;
 
-/**
- * User: nbaker Date: 5/3/11
- */
 public class GwtEditPanel extends AbstractGwtXulContainer implements XulEditpanel {
-
-  static final String ELEMENT_NAME = "editpanel"; //$NON-NLS-1$
+  static final String ELEMENT_NAME = "editpanel";
   private String type;
 
   public static void register() {
-    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
-      public Element newInstance() {
-        return new GwtEditPanel();
-      }
-    } );
+    GwtXulParser.registerHandler( ELEMENT_NAME, GwtEditPanel::new );
   }
 
-  private FlowPanel outterPanel = new FlowPanel();
-  private SimplePanel titlePanel = new SimplePanel();
   private Label title = new Label();
-  private VerticalPanel contentPanel = new VerticalPanel();
 
   public GwtEditPanel() {
     super( ELEMENT_NAME );
     this.orientation = Orient.VERTICAL;
-    setManagedObject( outterPanel );
-    outterPanel.setStylePrimaryName( "xul-editPanel" );
+
+    FlowPanel outerPanel = new FlowPanel();
+    outerPanel.setStylePrimaryName( "xul-editPanel" );
+
+    setManagedObject( outerPanel );
+
+    SimplePanel titlePanel = new SimplePanel();
     titlePanel.setStylePrimaryName( "xul-editPanel-title" );
-    contentPanel.setStylePrimaryName( "xul-editPanel-content" );
+    outerPanel.add( titlePanel );
+
     title.setStylePrimaryName( "xul-editPanel-title-label" );
+    titlePanel.add( title );
+
+    VerticalPanel contentPanel = new VerticalFlexPanel();
+    contentPanel.addStyleName( "xul-editPanel-content" );
+    contentPanel.addStyleName( "vbox" );
 
     contentPanel.setHeight( "100%" );
     contentPanel.setSpacing( 2 );
-    container = contentPanel;
-    container.setWidth( "100%" );
-    contentPanel.addStyleName( "vbox" );
+    contentPanel.setWidth( "100%" );
 
-    outterPanel.add( titlePanel );
-    titlePanel.add( title );
-    outterPanel.add( contentPanel );
+    container = contentPanel;
+    outerPanel.add( contentPanel );
   }
 
   @Override
@@ -91,8 +88,8 @@ public class GwtEditPanel extends AbstractGwtXulContainer implements XulEditpane
     return type;
   }
 
-  public void setType( String s ) {
-    this.type = s;
+  public void setType( String type ) {
+    this.type = type;
   }
 
   public void open() {

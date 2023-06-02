@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -33,7 +33,6 @@ import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.tags.util.ImageUtil;
 import org.pentaho.ui.xul.stereotype.Bindable;
@@ -57,11 +56,11 @@ import java.util.Map;
 
 public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
-  static final String ELEMENT_NAME = "button"; //$NON-NLS-1$
+  static final String ELEMENT_NAME = "button";
 
   enum DIRECTION {
     forward, reverse
-  };
+  }
 
   enum ORIENT {
     horizontal, vertical
@@ -74,11 +73,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   public static void register() {
-    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
-      public Element newInstance() {
-        return new GwtButton();
-      }
-    } );
+    GwtXulParser.registerHandler( ELEMENT_NAME, GwtButton::new );
   }
 
   private Button customButton;
@@ -215,9 +210,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     SimplePanel sp = new SimplePanel();
     setManagedObject( sp );
     sp.add( imageButton );
+
+    imageButton.addStyleName( "icon-zoomable" );
     imageButton.setHeight( "" );
     imageButton.setWidth( "" );
     imageUtil.setImageDefaults( imageButton );
+
     return imageButton;
   }
 
@@ -491,8 +489,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     if ( imageButton == null ) {
       button = null;
       imageButton = initImageButton();
-    }
-    if ( imageButton != null ) {
+    } else {
       src = GWT.getModuleBaseURL() + src;
       this.image = src;
       this.imageButton.setEnabledUrl( src );
@@ -523,9 +520,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   public void setType( String type ) {
-
-    // TODO Auto-generated method stub
-
+    // noop
   }
 
   @Override
