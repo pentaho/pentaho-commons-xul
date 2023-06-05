@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.text.ToolTip;
-import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulLabel;
@@ -41,6 +41,7 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   private String onclick;
   private XulDomContainer domContainer;
   private boolean multiline = false;
+  private boolean isMultilineSpecified = false;
 
   public static void register() {
     GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
@@ -71,9 +72,12 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     setValue( srcEle.getAttribute( "value" ) );
     setDisabled( "true".equals( srcEle.getAttribute( "disabled" ) ) );
     setPre( "true".equals( srcEle.getAttribute( "pre" ) ) );
-    setMultiline( "true".equals( srcEle.getAttribute( "multiline" ) ) );
 
-    if ( StringUtils.isEmpty( srcEle.getAttribute( "onclick" ) ) == false ) {
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "multiline" ) ) ) {
+      setMultiline( "true".equals( srcEle.getAttribute( "multiline" ) ) );
+    }
+
+    if ( !StringUtils.isEmpty( srcEle.getAttribute("onclick" ) ) ) {
       setOnclick( srcEle.getAttribute( "onclick" ) );
     }
 
@@ -125,6 +129,12 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     } else {
       label.removeStyleName( "flex-column" );
       label.removeStyleName( "multiline" );
+    }
+
+    if ( isMultilineSpecified ) {
+      label.addStyleName( "multiline-specified" );
+    } else {
+      label.removeStyleName( "multiline-specified" );
     }
 
     if ( StringUtils.isEmpty( this.getTooltiptext() ) == false ) {
@@ -248,7 +258,12 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     return this.multiline;
   }
 
+  public boolean isMultilineSpecified() {
+    return this.isMultilineSpecified;
+  }
+
   public void setMultiline( boolean multi ) {
     this.multiline = multi;
+    this.isMultilineSpecified = true;
   }
 }
