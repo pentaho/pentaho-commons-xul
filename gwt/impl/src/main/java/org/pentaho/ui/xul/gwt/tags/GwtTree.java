@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Vector;
 
@@ -77,7 +78,6 @@ import com.allen_sauer.gwt.dnd.client.VetoDragException;
 import com.allen_sauer.gwt.dnd.client.drop.AbstractPositioningDropController;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.gen2.table.client.SelectionGrid;
-import com.google.gwt.gen2.table.event.client.RowSelectionEvent;
 import com.google.gwt.gen2.table.event.client.RowSelectionHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -174,7 +174,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   /**
    * Clears the parent panel and adds the given widget.
-   * 
+   *
    * @param widget
    *          tree or table to set in parent panel
    */
@@ -445,7 +445,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     table.populateTable( currentData, elements );
     int totalFlex = 0;
-    boolean allFlexing = true;
     for ( int i = 0; i < colCount; i++ ) {
       XulTreeCol col = (XulTreeCol) colCollection.get( i );
       // Get the direction of the sort
@@ -455,14 +454,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       if ( col.isSortActive() ) {
         isSortable = true;
         table.setSortingEnabled( true );
-        table.sortColumn( i, sortDirection != null && sortDirection.equals( "ASCENDING" ) ? true : false ); //$NON-NLS-1$
+        table.sortColumn( i, sortDirection != null && sortDirection.equals( "ASCENDING" ) );
       }
+
       int fx = colCollection.get( i ).getFlex();
       totalFlex += fx;
-      if ( fx == 0 ) {
-        allFlexing = false;
-      }
     }
+
     // If the table is sortable then set all columns to be sortable. This enables the sorting by clicking the
     // column header
     if ( isSortable ) {
@@ -470,20 +468,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         table.setColumnSortable( i, true );
       }
     }
+
     if ( totalFlex > 0 ) {
       table.fillWidth();
     } else {
       table.noFill();
     }
-    // If all flexing need to hide horizontal scrolling to fix an IE7 issue
-    if ( allFlexing ) {
-      table.suppressHorizontalScrolling();
-    }
-    colCollection = new ArrayList<XulComponent>();
 
-    if ( this.selectedRows != null && this.selectedRows.length > 0 ) {
-      for ( int i = 0; i < this.selectedRows.length; i++ ) {
-        int idx = this.selectedRows[i];
+    colCollection = new ArrayList<>();
+
+    if ( this.selectedRows != null ) {
+      for ( int idx : this.selectedRows ) {
         if ( idx > -1 && idx < currentData.length ) {
           table.selectRow( idx );
         }
@@ -502,17 +497,32 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
           this.getWidget().removeStyleDependentName( "selected" );
         }
       }
+
       @Override
-      public boolean equals( Object other ){
-        if(other == null) return false;
-        TreeItem otherTreeItem = (TreeItem)other;
-        if(this.getText() != otherTreeItem.getText()) return false;
-        TreeItem thisParent = this.getParentItem(),
-                otherTreeItemParent = otherTreeItem.getParentItem();
-        while( thisParent != null || otherTreeItemParent != null ) {
-          if(thisParent == null) return false;
-          if(otherTreeItemParent == null) return false;
-          if(thisParent.getText() != otherTreeItemParent.getText()) return false;
+      public boolean equals( Object other ) {
+        if ( other == null ) {
+          return false;
+        }
+
+        TreeItem otherTreeItem = (TreeItem) other;
+        if ( !Objects.equals( this.getText(), otherTreeItem.getText() ) ) {
+          return false;
+        }
+
+        TreeItem thisParent = this.getParentItem();
+        TreeItem otherTreeItemParent = otherTreeItem.getParentItem();
+        while ( thisParent != null || otherTreeItemParent != null ) {
+          if ( thisParent == null ) {
+            return false;
+          }
+
+          if ( otherTreeItemParent == null ) {
+            return false;
+          }
+
+          if ( !Objects.equals( thisParent.getText(), otherTreeItemParent.getText() ) ) {
+            return false;
+          }
 
           thisParent = thisParent.getParentItem();
           otherTreeItemParent = otherTreeItemParent.getParentItem();
@@ -520,10 +530,13 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
         return true;
       }
     };
+
     item.setManagedObject( node );
-    if ( item == null || item.getRow() == null || item.getRow().getChildNodes().size() == 0 ) {
+
+    if ( item.getRow() == null || item.getRow().getChildNodes().isEmpty() ) {
       return node;
     }
+
     TreeItemWidget tempWidget = new TreeItemWidget( item );
     tempWidget.setDropIconsVisible( isDropIconsVisible() );
     final TreeItemWidget tWidget = tempWidget;
@@ -877,97 +890,138 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
   private void setupTable() {
     List<XulComponent> colCollection = getColumns().getChildNodes();
-    String[] cols = new String[colCollection.size()];
+    int columnCount = colCollection.size();
+    String[] colLabels = new String[columnCount];
+    int[] widths = new int[columnCount];
 
-    SelectionGrid.SelectionPolicy selectionPolicy = null;
-    if ( "single".equals( getSeltype() ) ) {
-      selectionPolicy = SelectionGrid.SelectionPolicy.ONE_ROW;
-    } else if ( "multiple".equals( getSeltype() ) ) {
-      selectionPolicy = SelectionGrid.SelectionPolicy.MULTI_ROW;
-    }
+    setupTableColumns( colCollection, colLabels, widths );
 
-    int[] widths = new int[cols.length];
-    int totalFlex = 0;
-
-    for ( int i = 0; i < cols.length; i++ ) {
-      totalFlex += colCollection.get( i ).getFlex();
-    }
-
-    boolean allFlexing = true;
-    int totalWidth = 0;
-    for ( int i = 0; i < cols.length; i++ ) {
-      cols[i] = ( (XulTreeCol) colCollection.get( i ) ).getLabel();
-      if ( totalFlex > 0 && getWidth() > 0 ) {
-        widths[i] = (int) ( getWidth() * ( (double) colCollection.get( i ).getFlex() / totalFlex ) );
-        totalWidth += widths[i];
-      } else if ( getColumns().getColumn( i ).getWidth() > 0 ) {
-        allFlexing = false;
-        widths[i] = getColumns().getColumn( i ).getWidth();
-        totalWidth += widths[i];
-      }
-    }
-
-    table = new BaseTable( cols, widths, new BaseColumnComparator[cols.length], selectionPolicy, this );
+    table = new BaseTable( colLabels, widths, new BaseColumnComparator[columnCount], getSelectionPolicy(), this );
 
     if ( getHeight() != 0 ) {
       table.setHeight( getHeight() + "px" );
     } else {
       table.setHeight( "100%" );
     }
+
     if ( getWidth() != 0 ) {
       table.setWidth( getWidth() + "px" );
     } else {
       table.setWidth( "100%" );
     }
-    if ( allFlexing ) {
-      table.fillWidth();
-    }
 
-    RowSelectionHandler handler = new RowSelectionHandler() {
-      @Override
-      public void onRowSelection( RowSelectionEvent event ) {
-        // To change body of implemented methods use File | Settings | File Templates.
-        try {
-          Integer[] selectedRows = table.getSelectedRows().toArray( new Integer[table.getSelectedRows().size()] );
-
-          if ( getOnselect() != null && getOnselect().trim().length() > 0 ) {
-            getXulDomContainer().invoke( getOnselect(),
-                new Object[] { selectedRows.length > 0 ? selectedRows[0] : null } );
-          }
-
-          // set.toArray(new Integer[]) doesn't unwrap ><
-          int[] rows = new int[selectedRows.length];
-          for ( int i = 0; i < selectedRows.length; i++ ) {
-            rows[i] = selectedRows[i];
-          }
-          GwtTree.this.setSelectedRows( rows );
-          GwtTree.this.colCollection = getColumns().getChildNodes();
-          if ( GwtTree.this.isShowalleditcontrols() == false ) {
-            if ( curSelectedRow > -1 ) {
-              Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
-
-              for ( int j = 0; j < getColumns().getColumnCount(); j++ ) {
-                curSelectedRowOriginal[j] = getColumnEditor( j, curSelectedRow );
-              }
-              table.replaceRow( curSelectedRow, curSelectedRowOriginal );
-            }
-            curSelectedRow = rows[0];
-            Object[] newRow = new Object[getColumns().getColumnCount()];
-
-            for ( int j = 0; j < getColumns().getColumnCount(); j++ ) {
-              newRow[j] = getColumnEditor( j, rows[0] );
-            }
-            table.replaceRow( rows[0], newRow );
-          }
-        } catch ( XulException e ) {
-          e.printStackTrace();
-        }
-      }
-    };
-    table.addRowSelectionHandler( handler );
+    table.addRowSelectionHandler( createRowSelectionHandler() );
 
     setWidgetInPanel( table );
     updateUI();
+  }
+
+  private SelectionGrid.SelectionPolicy getSelectionPolicy() {
+
+    switch ( getSeltype() ) {
+      case "single":
+        return SelectionGrid.SelectionPolicy.ONE_ROW;
+      case "multiple":
+        return SelectionGrid.SelectionPolicy.MULTI_ROW;
+    }
+
+    return null;
+  }
+
+  private int getTotalFlex() {
+    int totalFlex = 0;
+    for ( XulComponent xulComponent : getColumns().getChildNodes() ) {
+      totalFlex += xulComponent.getFlex();
+    }
+
+    return totalFlex;
+  }
+
+  private void setupTableColumns( List<XulComponent> colCollection, String[] colLabels, int[] widths ) {
+    // Table width for flex purposes.
+    // Lacking the current width of the table to determine pixels to evaluate the flexProportion,
+    // opt to use 100 pixels (and hope no other columns exist with no flex and a fixed width...).
+    // This will transmit the proportions between the columns to the HTML. The fillWidth method will
+    // later transform the column widths so that these fill / occupy all the actual table width,
+    // maintaining these proportions.
+    int tableWidth = getWidth();
+    int flexTableWidth = tableWidth > 0 ? tableWidth : 100;
+    int totalFlex = getTotalFlex();
+
+    for ( int i = 0; i < colLabels.length; i++ ) {
+      XulTreeCol col = (XulTreeCol) colCollection.get( i );
+
+      colLabels[i] = col.getLabel();
+
+      int flex = col.getFlex();
+      if ( flex > 0 ) {
+        // A flex column. Ignores the column width.
+        assert totalFlex > 0;
+        double flexProportion = ((double) flex) / totalFlex;
+        widths[i] = (int) (flexTableWidth * flexProportion);
+      } else {
+        widths[i] = Math.max( 0, col.getWidth() );
+      }
+    }
+  }
+
+  private RowSelectionHandler createRowSelectionHandler() {
+    return event -> {
+      // To change body of implemented methods use File | Settings | File Templates.
+      try {
+        Integer[] selectedRows1 = table.getSelectedRows().toArray( new Integer[table.getSelectedRows().size()] );
+
+        fireOnSelect( selectedRows1 );
+
+        int[] rows = copyArrayUnboxed( selectedRows1 );
+
+        GwtTree.this.setSelectedRows( rows );
+        GwtTree.this.colCollection = getColumns().getChildNodes();
+
+        if ( !GwtTree.this.isShowalleditcontrols() ) {
+          if ( curSelectedRow > -1 ) {
+            Object[] curSelectedRowOriginal = new Object[getColumns().getColumnCount()];
+
+            for ( int j = 0; j < getColumns().getColumnCount(); j++ ) {
+              curSelectedRowOriginal[j] = getColumnEditor( j, curSelectedRow );
+            }
+            table.replaceRow( curSelectedRow, curSelectedRowOriginal );
+          }
+          curSelectedRow = rows[0];
+          table.replaceRow( curSelectedRow, createEditRow( curSelectedRow ) );
+        }
+      } catch ( XulException e ) {
+        e.printStackTrace();
+      }
+    };
+  }
+
+  private void fireOnSelect( Integer[] selectedRows ) throws XulException {
+    if ( getOnselect() != null && !getOnselect().trim().isEmpty() ) {
+      Integer selectedRow = selectedRows.length > 0 ? selectedRows[0] : null;
+      getXulDomContainer().invoke( getOnselect(), new Object[] { selectedRow } );
+    }
+  }
+
+  private Object[] createEditRow( int row ) {
+    int columnCount = getColumns().getColumnCount();
+    Object[] newRow = new Object[columnCount];
+
+    for ( int j = 0; j < columnCount; j++ ) {
+      newRow[j] = getColumnEditor( j, row );
+    }
+
+    return newRow;
+  }
+
+  private static int[] copyArrayUnboxed( Integer[] source ) {
+    // set.toArray(new Integer[]) doesn't unwrap ><
+    int[] target = new int[ source.length ];
+    for ( int i = 0; i < source.length; i++ ) {
+      target[i] = source[i];
+    }
+
+    return target;
   }
 
   public void updateUI() {
