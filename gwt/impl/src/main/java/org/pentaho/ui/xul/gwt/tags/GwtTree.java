@@ -477,13 +477,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
 
     colCollection = new ArrayList<>();
 
-    if ( this.selectedRows != null ) {
-      for ( int idx : this.selectedRows ) {
-        if ( idx > -1 && idx < currentData.length ) {
-          table.selectRow( idx );
-        }
-      }
-    }
+    updateSelectedRowsInTable();
   }
 
   private TreeItem createNode( final XulTreeItem item ) {
@@ -1130,7 +1124,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       // this only works after the table has been materialized
       return;
     }
-
+    updateSelectedRowsInTable();
     int[] prevSelected = selectedRows;
     selectedRows = rows;
 
@@ -1146,6 +1140,17 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       }
     }
     this.changeSupport.firePropertyChange( "selectedItems", null, selectedObjects );
+  }
+
+  private void updateSelectedRowsInTable() {
+    if ( this.selectedRows != null && this.selectedRows.length > 0 ) {
+      for ( int i = 0; i < this.selectedRows.length; i++ ) {
+        int idx = this.selectedRows[i];
+        if ( idx > -1 && idx < currentData.length ) {
+          table.selectRow( idx );
+        }
+      }
+    }
   }
 
   public String getSeltype() {
