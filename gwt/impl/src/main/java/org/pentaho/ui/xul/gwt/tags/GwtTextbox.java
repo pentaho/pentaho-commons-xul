@@ -218,15 +218,6 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 
       public void onKeyUp( Widget sender, char keyCode, int modifiers ) {
         setValue( textBox.getText() );
-        if ( keyCode == KeyboardListener.KEY_ENTER ) {
-          if ( !GwtTextbox.this.multiline ) {
-            try {
-              GwtTextbox.this.getXulDomContainer().invoke( GwtTextbox.this.getOncommand(), new Object[] {} );
-            } catch ( XulException e ) {
-              e.printStackTrace();
-            }
-          }
-        }
       }
 
     } );
