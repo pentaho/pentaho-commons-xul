@@ -888,10 +888,14 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     int columnCount = colCollection.size();
     String[] colLabels = new String[columnCount];
     int[] widths = new int[columnCount];
+    int totalFlex = getTotalFlex();
 
-    setupTableColumns( colCollection, colLabels, widths );
+    setupTableColumns( colCollection, colLabels, widths, totalFlex );
 
-    table = new BaseTable( colLabels, widths, new BaseColumnComparator[columnCount], getSelectionPolicy(), this );
+    boolean fixedWidthColumns = totalFlex == 0;
+
+    table = new BaseTable( colLabels, widths, fixedWidthColumns, new BaseColumnComparator[columnCount],
+            getSelectionPolicy(), this );
 
     if ( getHeight() != 0 ) {
       table.setHeight( getHeight() + "px" );
@@ -932,7 +936,7 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     return totalFlex;
   }
 
-  private void setupTableColumns( List<XulComponent> colCollection, String[] colLabels, int[] widths ) {
+  private void setupTableColumns( List<XulComponent> colCollection, String[] colLabels, int[] widths, int totalFlex ) {
     // Table width for flex purposes.
     // Lacking the current width of the table to determine pixels to evaluate the flexProportion,
     // opt to use 100 pixels (and hope no other columns exist with no flex and a fixed width...).
@@ -941,7 +945,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
     // maintaining these proportions.
     int tableWidth = getWidth();
     int flexTableWidth = tableWidth > 0 ? tableWidth : 100;
-    int totalFlex = getTotalFlex();
 
     for ( int i = 0; i < colLabels.length; i++ ) {
       XulTreeCol col = (XulTreeCol) colCollection.get( i );
