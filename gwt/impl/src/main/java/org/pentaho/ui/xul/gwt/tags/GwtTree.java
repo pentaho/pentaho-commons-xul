@@ -1128,7 +1128,6 @@ public class GwtTree extends AbstractGwtXulContainer implements XulTree, Resizab
       // this only works after the table has been materialized
       return;
     }
-    updateSelectedRowsInTable();
     int[] prevSelected = selectedRows;
     selectedRows = rows;
 
