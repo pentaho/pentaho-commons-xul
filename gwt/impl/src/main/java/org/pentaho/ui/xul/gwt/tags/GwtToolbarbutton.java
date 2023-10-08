@@ -336,16 +336,6 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     }
   }
 
-  public void addClassSelected( boolean isSelected ) {
-    if ( button != null ) {
-      if ( isSelected ) {
-        button.addClassName( "selected" );
-      } else {
-        button.getImage().getElement().removeClassName( "selected" );
-      }
-    }
-  }
-
   @Bindable
   public void setSelected( boolean selected, boolean fireEvent ) {
     if ( button instanceof ToolbarToggleButton ) {
