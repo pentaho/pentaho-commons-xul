@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MouseListener;
 import com.google.gwt.user.client.ui.Widget;
 import org.pentaho.gwt.widgets.client.text.ToolTip;
-import org.pentaho.gwt.widgets.client.utils.StringUtils;
+import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulLabel;
@@ -41,6 +41,7 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
   private String onclick;
   private XulDomContainer domContainer;
   private boolean multiline = false;
+  private boolean isMultilineSpecified = false;
 
   public static void register() {
     GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
@@ -61,7 +62,7 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     super( ELEMENT_NAME );
     label = new Label();
     setManagedObject( label );
-    label.setStyleName( "xul-label" );
+    label.addStyleName( "xul-label" );
     // label.setWordWrap(true);
   }
 
@@ -71,9 +72,12 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     setValue( srcEle.getAttribute( "value" ) );
     setDisabled( "true".equals( srcEle.getAttribute( "disabled" ) ) );
     setPre( "true".equals( srcEle.getAttribute( "pre" ) ) );
-    setMultiline( "true".equals( srcEle.getAttribute( "multiline" ) ) );
 
-    if ( StringUtils.isEmpty( srcEle.getAttribute( "onclick" ) ) == false ) {
+    if ( !StringUtils.isEmpty( srcEle.getAttribute( "multiline" ) ) ) {
+      setMultiline( "true".equals( srcEle.getAttribute( "multiline" ) ) );
+    }
+
+    if ( !StringUtils.isEmpty( srcEle.getAttribute("onclick" ) ) ) {
       setOnclick( srcEle.getAttribute( "onclick" ) );
     }
 
@@ -119,6 +123,19 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
       label.getElement().setAttribute( "style", "overflow: hidden;white-space: nowrap; height: 100%;width:232px;text-overflow: ellipsis;" );
     }
     label.setWordWrap( multiline );
+    if ( multiline ) {
+      label.addStyleName( "flex-column" );
+      label.addStyleName( "multiline" );
+    } else {
+      label.removeStyleName( "flex-column" );
+      label.removeStyleName( "multiline" );
+    }
+
+    if ( isMultilineSpecified ) {
+      label.addStyleName( "multiline-specified" );
+    } else {
+      label.removeStyleName( "multiline-specified" );
+    }
 
     if ( StringUtils.isEmpty( this.getTooltiptext() ) == false ) {
 
@@ -184,17 +201,21 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
       String style = "";
       if ( getWidth() > 0 || getHeight() > 0 ) {
         style = "style=\"";
+
+        if ( getWidth() > 0 ) {
+          style += "width:" + getWidth() + "px;";
+        }
+        if ( getHeight() > 0 ) {
+          style += "height:" + getHeight() + "px;";
+        }
+
+        style += "\"";
       }
-      if ( getWidth() > 0 ) {
-        style += "width:" + getWidth() + "px;";
-      }
-      if ( getHeight() > 0 ) {
-        style += "height:" + getHeight() + "px;";
-      }
-      style += "\"";
+
       label.getElement().setInnerHTML(
-          "<div class='label-scroll-panel xul-pre' " + style + "> <pre class='xul-pre' " + style + ">" + value
-              + "</pre></div>" );
+          "<div class='label-scroll-panel xul-pre flex-column' " + style + "> <pre class='xul-pre' " + style + ">"
+            + value
+            + "</pre></div>" );
 
     }
   }
@@ -237,7 +258,12 @@ public class GwtLabel extends AbstractGwtXulComponent implements XulLabel {
     return this.multiline;
   }
 
+  public boolean isMultilineSpecified() {
+    return this.isMultilineSpecified;
+  }
+
   public void setMultiline( boolean multi ) {
     this.multiline = multi;
+    this.isMultilineSpecified = true;
   }
 }

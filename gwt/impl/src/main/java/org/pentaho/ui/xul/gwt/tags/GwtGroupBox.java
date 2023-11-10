@@ -53,17 +53,16 @@ public class GwtGroupBox extends AbstractGwtXulContainer implements XulGroupbox 
     this.orientation = Orient.VERTICAL;
     captionPanel = new CaptionPanel();
     setManagedObject( captionPanel );
-    captionPanel.setStylePrimaryName( "xul-fieldset" );
+    captionPanel.addStyleName( "xul-fieldset" );
+    captionPanel.addStyleName( "flex-column" );
+    captionPanel.addStyleName( "with-scroll-child" );
 
-    VerticalPanel vp;
-    container = vp = new VerticalPanel();
+    VerticalPanel vp = GwtVbox.createManagedPanel( 2 );
     vp.setHeight( "100%" );
-    vp.setSpacing( 2 );
-    container.setWidth( "100%" );
+    vp.setWidth( "100%" );
 
-    vp.setStyleName( "vbox" );
+    container = vp;
 
-    ( (VerticalPanel) container ).setStyleName( "vbox" );
     captionPanel.add( vp );
   }
 

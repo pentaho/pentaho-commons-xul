@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -33,7 +33,6 @@ import org.pentaho.ui.xul.components.XulButton;
 import org.pentaho.ui.xul.containers.XulMenupopup;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.tags.util.ImageUtil;
 import org.pentaho.ui.xul.stereotype.Bindable;
@@ -57,11 +56,11 @@ import java.util.Map;
 
 public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
-  static final String ELEMENT_NAME = "button"; //$NON-NLS-1$
+  static final String ELEMENT_NAME = "button";
 
   enum DIRECTION {
     forward, reverse
-  };
+  }
 
   enum ORIENT {
     horizontal, vertical
@@ -70,18 +69,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   private String dir, group, image, type, onclick, tooltip, disabledImage;
 
   private enum Property {
-    ID, CLASSNAME, LABEL, IMAGE, DISABLEDIMAGE, DISABLED, IMAGEALTTEXT
+    ID, LABEL, IMAGE, DISABLEDIMAGE, DISABLED, IMAGEALTTEXT
   }
 
   public static void register() {
-    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
-      public Element newInstance() {
-        return new GwtButton();
-      }
-    } );
+    GwtXulParser.registerHandler( ELEMENT_NAME, GwtButton::new );
   }
-
-  private String className;
 
   private Button customButton;
 
@@ -125,9 +118,6 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       Property prop = Property.valueOf( name.replace( "pen:", "" ).toUpperCase() );
       switch ( prop ) {
 
-        case CLASSNAME:
-          this.setClassName( value );
-          break;
         case LABEL:
           setLabel( value );
           break;
@@ -154,46 +144,28 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
 
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
 
-    String classNameAttribute = srcEle.getAttribute( "pen:classname" );
 
     if ( !StringUtils.isEmpty( srcEle.getAttribute( "dir" ) ) && !StringUtils.isEmpty( srcEle.getAttribute( "image" ) )
         && !StringUtils.isEmpty( srcEle.getAttribute( "label" ) ) ) {
 
-      if ( !StringUtils.isEmpty( srcEle.getAttribute( "pen:classname" ) ) ) {
-        customButton =
-            new Button( ButtonHelper.createButtonLabel( new Image( GWT.getModuleBaseURL()
-                + srcEle.getAttribute( "image" ) ), srcEle.getAttribute( "label" ), getButtonLabelOrigin( srcEle
-                .getAttribute( "dir" ), srcEle.getAttribute( "orient" ) ), classNameAttribute ) );
-
-      } else {
-        customButton =
-            new Button( ButtonHelper.createButtonLabel( new Image( GWT.getModuleBaseURL()
-                + srcEle.getAttribute( "image" ) ), srcEle.getAttribute( "label" ), getButtonLabelOrigin( srcEle
-                .getAttribute( "dir" ), srcEle.getAttribute( "orient" ) ) ) );
-      }
-      setManagedObject( customButton );
+      String classNameAttribute = StringUtils.defaultIfEmpty( srcEle.getAttribute( "pen:classname" ), null );
+      customButton =
+              new Button( ButtonHelper.createButtonLabel(
+                      new Image( GWT.getModuleBaseURL() + srcEle.getAttribute( "image" ) ),
+                      srcEle.getAttribute( "label" ),
+                      getButtonLabelOrigin( srcEle.getAttribute( "dir" ), srcEle.getAttribute( "orient" ) ),
+                      classNameAttribute ) );
       button = null;
-
-      if ( classNameAttribute != null && !classNameAttribute.isEmpty() ) {
-        customButton.addStyleName( classNameAttribute );
-      }
+      setManagedObject( customButton );
 
     } else if ( !StringUtils.isEmpty( srcEle.getAttribute( "image" ) ) ) {
       // we create a button by default, remove it here
       button = null;
-      imageButton = initImageButton();
-
-      if ( classNameAttribute != null && !classNameAttribute.isEmpty() ) {
-        imageButton.addStyleName( classNameAttribute );
-      }
+      initImageButton();
     } else {
       button = new Button();
       button.setStylePrimaryName( "pentaho-button" );
       setManagedObject( button );
-
-      if ( classNameAttribute != null && !classNameAttribute.isEmpty() ) {
-        button.addStyleName( classNameAttribute );
-      }
     }
 
     super.init( srcEle, container );
@@ -211,9 +183,6 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     }
     if ( !StringUtils.isEmpty( srcEle.getAttribute( "pen:disabledimage" ) ) ) {
       this.setDisabledImage( srcEle.getAttribute( "pen:disabledimage" ) );
-    }
-    if ( !StringUtils.isEmpty( classNameAttribute ) ) {
-      this.setClassName( srcEle.getAttribute( "pen:classname" ) );
     }
 
     setDisabled( "true".equals( srcEle.getAttribute( "disabled" ) ) );
@@ -241,9 +210,12 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     SimplePanel sp = new SimplePanel();
     setManagedObject( sp );
     sp.add( imageButton );
+
+    imageButton.addStyleName( "icon-zoomable" );
     imageButton.setHeight( "" );
     imageButton.setWidth( "" );
     imageUtil.setImageDefaults( imageButton );
+
     return imageButton;
   }
 
@@ -517,8 +489,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
     if ( imageButton == null ) {
       button = null;
       imageButton = initImageButton();
-    }
-    if ( imageButton != null ) {
+    } else {
       src = GWT.getModuleBaseURL() + src;
       this.image = src;
       this.imageButton.setEnabledUrl( src );
@@ -549,9 +520,7 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   public void setType( String type ) {
-
-    // TODO Auto-generated method stub
-
+    // noop
   }
 
   @Override
@@ -595,6 +564,11 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
   }
 
   @Override
+  protected Object getManagedClassNameObject() {
+    return getManagedButton();
+  }
+
+  @Override
   public void setVisible( boolean visible ) {
     super.setVisible( visible );
 
@@ -624,14 +598,6 @@ public class GwtButton extends AbstractGwtXulContainer implements XulButton {
       }
     }
     return ButtonLabelType.NO_TEXT;
-  }
-
-  public void setClassName( String className ) {
-    this.className = className;
-  }
-
-  public String getClassName() {
-    return className;
   }
 
   private GwtMenupopup getPopupElement() {
