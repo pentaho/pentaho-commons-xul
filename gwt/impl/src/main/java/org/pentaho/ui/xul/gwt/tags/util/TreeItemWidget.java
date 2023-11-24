@@ -12,11 +12,12 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags.util;
 
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
 import org.pentaho.gwt.widgets.client.ui.Draggable;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.containers.XulTreeItem;
@@ -43,10 +44,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
-/**
- * User: nbaker Date: Jul 13, 2010
- * 
- */
 public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Draggable {
   private static final String DROP_INVALID_PNG = "drop_invalid.png";
   private static final String DROP_VALID_PNG = "drop_valid.png";
@@ -63,8 +60,11 @@ public class TreeItemWidget extends FlexTable implements HasAllMouseHandlers, Dr
   public TreeItemWidget() {
     setWidth( "100%" );
     this.setStylePrimaryName( "tree-item-custom-widget" );
+    this.addStyleName( HorizontalFlexPanel.STYLE_NAME );
+
     this.setWidget( 0, 1, label );
     this.getCellFormatter().setWidth( 0, 1, "100%" );
+
     ElementUtils.preventTextSelection( this.getElement() );
   }
 

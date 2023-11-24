@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2023 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt;
@@ -20,7 +20,11 @@ package org.pentaho.ui.xul.gwt;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
+import java.util.Objects;
 
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+
+import com.google.gwt.user.client.ui.Focusable;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulContainer;
@@ -48,14 +52,17 @@ import com.google.gwt.xml.client.Node;
 
 /**
  * @author OEM
- * 
  */
 public abstract class AbstractGwtXulComponent extends GwtDomElement implements XulComponent, XulEventSource {
   private static final String ATTRIBUTE_ARIA_ROLE = "pen:aria-role";
+  private static final String ATTRIBUTE_CLASSNAME = "pen:classname";
+  private static final String DOM_ATTRIBUTE_TABINDEX = "tabindex";
+
   protected XulDomContainer xulDomContainer;
   protected Panel container;
   protected Orient orientation;
   private Object managedObject;
+  protected boolean isFlexSpecified = false;
   protected int flex = 0;
   protected String id;
   protected boolean flexLayout = false;
@@ -75,6 +82,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   protected String ondrop;
   protected BindingProvider bindingProvider;
   private String dropVetoMethod;
+
+  private int tabIndex = -1;
+  private boolean isTabIndexSpecified;
 
   public AbstractGwtXulComponent( String name ) {
     super( name );
@@ -187,7 +197,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   public void layout() {
-    if ( this instanceof XulContainer == false ) {
+    if ( !( this instanceof XulContainer ) ) {
       // Core version of parser doesn't call layout unless the node is a container...
       return;
     }
@@ -212,19 +222,16 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
       }
     }
 
-    // if(flexLayout)
-    // gc.fill = GridBagConstraints.BOTH;
-
     List<XulComponent> nodes = this.getChildNodes();
 
     XulContainer thisContainer = (XulContainer) this;
 
     Align alignment =
-        ( StringUtils.isEmpty( thisContainer.getAlign() ) == false ) ? Align.valueOf( thisContainer.getAlign()
-            .toUpperCase() ) : null;
+            ( !StringUtils.isEmpty( thisContainer.getAlign() ) ) ? Align.valueOf( thisContainer.getAlign()
+                    .toUpperCase() ) : null;
 
     // TODO: this is a different behavior than we implemented in Swing.
-    if ( !flexLayout && StringUtils.isEmpty( thisContainer.getAlign() ) == false ) {
+    if ( !flexLayout && !StringUtils.isEmpty( thisContainer.getAlign() ) ) {
       SimplePanel fillerPanel = new SimplePanel();
       switch ( alignment ) {
         case END:
@@ -248,18 +255,15 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
 
     for ( int i = 0; i < children.size(); i++ ) {
-      XulComponent comp = nodes.get( i );
+      AbstractGwtXulComponent comp = (AbstractGwtXulComponent) nodes.get( i );
 
       Object wrappedWidget = comp.getManagedObject();
-      if ( wrappedWidget == null || !( wrappedWidget instanceof Widget ) ) {
+      if ( !( wrappedWidget instanceof Widget ) ) {
         continue;
       }
       Widget component = (Widget) wrappedWidget;
       component.getElement().setId( comp.getId() );
 
-      if ( component == null ) {
-        continue;
-      }
       SimplePanel componentWrapper = new SimplePanel();
       componentWrapper.add( component );
       container.add( componentWrapper );
@@ -271,9 +275,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
         container.setHeight( "100%" );
       }
 
+      int componentFlex = comp.getFlex();
       if ( flexLayout ) {
 
-        int componentFlex = comp.getFlex();
         if ( componentFlex > 0 ) {
 
           String percentage = Math.round( ( componentFlex / totalFlex ) * 100 ) + "%";
@@ -325,6 +329,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
           wrapperStyle.setProperty( "width", "100%" );
         }
       }
+      if ( comp.isFlexSpecified() ) {
+        ElementUtils.setStyleProperty(  component.getElement(), "--flex-item", componentFlex + " " + componentFlex + " auto" );
+      }
     }
 
     // TODO: this is a different behavior than we implemented in Swing.
@@ -357,10 +364,10 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   private native void printInnerHTML( Widget w )/*-{
-                                                if(w){
-                                                alert(w);
-                                                }
-                                                }-*/;
+    if(w){
+      alert(w);
+    }
+  }-*/;
 
   public Orient getOrientation() {
     return this.orientation;
@@ -389,11 +396,22 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   public void setManagedObject( Object managed ) {
-    managedObject = managed;
+    Object oldManagedObject = managedObject;
+    if ( oldManagedObject != managed ) {
+      managedObject = managed;
 
-    if ( managedObject instanceof UIObject ) {
-      updateDomAriaRole( (UIObject) managedObject );
+      onManagedObjectChanged( oldManagedObject );
     }
+  }
+
+  /**
+   * Called when the managed object has changed.
+   * @param oldManagedObject The old managed object.
+   */
+  protected void onManagedObjectChanged( Object oldManagedObject ) {
+    updateManagedAriaRole();
+    updateManagedClassName( null );
+    updateManagedTabIndex();
   }
 
   public String getId() {
@@ -408,13 +426,93 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     }
   }
 
+  // region tab index attribute
+  /**
+   * Gets the tab index of the component.
+   * <p>
+   *   Possible values are:
+   *   <ul>
+   *     <li>-1 (<0) - can receive focus via code (the default)</li>
+   *     <li>0 (>= 0) - can receive focus via code or user keyboard (TAB)</li>
+   *   </ul>
+   * </p>
+   * <p>
+   *   Ignored when {@link #isTabIndexSpecified()} is <code>false</code> (the default).
+   * </p>
+   * @return The tab index if one is set; <code>null</code>, otherwise.
+   */
+  public int getTabIndex() {
+    return tabIndex;
+  }
+
+  /**
+   * Sets the tab index attribute of the component.
+   * <p>
+   *   Calling this method also sets the tab index as "specified", as indicated by {@link #isTabIndexSpecified()},
+   *   after which it cannot become unspecified.
+   * </p>
+   * @param tabIndex The tab index.
+   */
+  public void setTabIndex( int tabIndex ) {
+    this.tabIndex = tabIndex;
+    this.isTabIndexSpecified = true;
+
+    updateManagedTabIndex();
+  }
+
+  /**
+   * Gets a value that indicates if the tab index attribute is specified.
+   * <p>
+   *   Defaults to <code>false</code>.
+   * </p>
+   * @return <code>true</code> if the tab index attribute is specified; <code>false</code>, otherwise.
+   */
+  public boolean isTabIndexSpecified() {
+    return isTabIndexSpecified;
+  }
+
+  private void updateManagedTabIndex() {
+    // When tabindex has not been specified, then the UIObject's or the Browser/HTML's default value is used.
+    // Caveat: this will only work if the tabindex is never specified. Once specified, there's no way to unspecify...
+    //
+    // If managedObject is a Focusable, just like the HTML Element.tabindex property (not the attribute) that is wraps,
+    // there's no way to reset the tab index, to ensure that the UIObject or Browser/HTML default is used.
+    //
+    // Otherwise, if managedObject is not a Focusable, removing the HTML attribute directly, albeit possible, would
+    // revert a tabindex attribute default value set by the UIObject class itself (e.g. MenuBar).
+
+    if ( managedObject instanceof UIObject && isTabIndexSpecified() ) {
+      UIObject uiObject = (UIObject) managedObject;
+
+      // Respect the abstraction layer offered/imposed by the Focusable interface.
+      if ( uiObject instanceof Focusable ) {
+        Focusable focusable = (Focusable) uiObject;
+        focusable.setTabIndex( getTabIndex() );
+      } else {
+        setDomAttribute( uiObject, DOM_ATTRIBUTE_TABINDEX, Integer.toString( getTabIndex() ) );
+      }
+    }
+  }
+  // endregion
+
+  // region flex attribute
   public int getFlex() {
     return flex;
   }
 
   public void setFlex( int flex ) {
     this.flex = flex;
+    setFlexSpecified( true );
   }
+
+  public boolean isFlexSpecified() {
+    return isFlexSpecified;
+  }
+
+  public void setFlexSpecified( boolean isFlexSpecified ) {
+    this.isFlexSpecified = isFlexSpecified;
+  }
+  // endregion
 
   public void addComponent( XulComponent c ) {
     throw new UnsupportedOperationException( "addComponent not supported" );
@@ -543,12 +641,81 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   /**
-   * Updates the DOM ARIA <code>role</code> attribute on a given GWT {@link UIObject}.
-   *
-   * @param gwtObject The GWT <code>UIObject</code> to update.
+   * Updates the DOM ARIA <code>role</code> attribute on the current managed object, if any.
    */
-  private void updateDomAriaRole( UIObject gwtObject ) {
-    setDomAttribute( gwtObject, "role", getAriaRole() );
+  private void updateManagedAriaRole() {
+    if ( managedObject instanceof UIObject ) {
+      UIObject uiObject = (UIObject) managedObject;
+
+      setDomAttribute( uiObject, "role", getAriaRole() );
+    }
+  }
+  // endregion
+
+  // region classname attribute
+  /**
+   * Gets the class name attribute of the component.
+   * <p>
+   *   Corresponds to the XUL <code>pen:classname</code> attribute.
+   * </p>
+   */
+  public String getClassName() {
+    return getAttributeValue( ATTRIBUTE_CLASSNAME );
+  }
+
+  /**
+   * Sets the class name attribute of the component.
+   * <p>
+   *   Corresponds to the XUL <code>pen:classname</code> attribute.
+   * </p>
+   * <p>
+   *   When the component's managed object, {@link #getManagedObject()}, is set,
+   *   its <code>class</code> DOM attribute is updated to contain this value.
+   * </p>
+   * @param className The new class name attribute.
+   */
+  public void setClassName( String className ) {
+    if ( StringUtils.isEmpty( className ) ) {
+      className = null;
+    }
+
+    String prevClassName = getClassName();
+    if ( Objects.equals( prevClassName, className ) ) {
+      return;
+    }
+
+    super.setAttribute( ATTRIBUTE_CLASSNAME, className );
+
+    updateManagedClassName( prevClassName );
+  }
+
+  /**
+   * Gets the managed object on which the class name should be updated on.
+   * @return A managed object.
+   */
+  protected Object getManagedClassNameObject() {
+    return managedObject;
+  }
+
+  /**
+   * Updates the managed object's class attribute on the current managed object, if any.
+   *
+   * @param prevClassName The previous class name value.
+   */
+  protected void updateManagedClassName( String prevClassName ) {
+    Object classNameObject = getManagedClassNameObject();
+    if ( classNameObject instanceof UIObject ) {
+      UIObject uiObject = (UIObject) classNameObject;
+
+      if ( !StringUtils.isEmpty( prevClassName ) ) {
+        uiObject.removeStyleName( prevClassName );
+      }
+
+      String curClassName = getClassName();
+      if ( !StringUtils.isEmpty( curClassName ) ) {
+        uiObject.addStyleName( curClassName );
+      }
+    }
   }
   // endregion
 
@@ -581,7 +748,7 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     this.visible = visible;
 
     if ( this.container != null ) {
-      ( (Widget) this.container ).getElement().getStyle().setProperty( "display", ( this.visible ) ? "" : "none" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      this.container.getElement().getStyle().setProperty( "display", this.visible ? "" : "none" );
     }
   }
 
@@ -612,16 +779,16 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
   }
 
   protected native void executeJS( String js )
-  /*-{
-    try{
-      $wnd.eval(js);
-    } catch (e){
-      alert("Javascript Error: " + e.message+"\n\n"+js);
-    }
-  }-*/;
+    /*-{
+      try{
+        $wnd.eval(js);
+      } catch (e){
+        alert("Javascript Error: " + e.message+"\n\n"+js);
+      }
+    }-*/;
 
   public enum Property {
-    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION, ARIA_ROLE;
+    TOOLTIP, FLEX, WIDTH, HEIGHT, VISIBLE, POSITION, ARIA_ROLE, CLASSNAME, TABINDEX;
   }
 
   /**
@@ -631,9 +798,9 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
    */
   protected static String getAttributeEnumName( String name ) {
     return name
-      .replace( "pen:", "" )
-      .replace( "-", "_" )
-      .toUpperCase();
+            .replace( "pen:", "" )
+            .replace( "-", "_" )
+            .toUpperCase();
   }
 
   @Override
@@ -656,11 +823,14 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
               value = null;
             }
             break;
+          case CLASSNAME:
+            setClassName( value );
+            return;
         }
       } catch ( IllegalArgumentException e ) {
         System.out.println(
-          "Error pre-processing property '" + name + "' with value '"
-            + value + "' in class " + getClass().getName() );
+                "Error pre-processing property '" + name + "' with value '"
+                        + value + "' in class " + getClass().getName() );
         return;
       }
     }
@@ -675,30 +845,33 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
             setTooltiptext( value );
             break;
           case FLEX:
-            setFlex( Integer.valueOf( value ) );
+            setFlex( Integer.parseInt( value ) );
             break;
           case WIDTH:
-            setWidth( Integer.valueOf( value ) );
+            setWidth( Integer.parseInt( value ) );
             break;
           case HEIGHT:
-            setHeight( Integer.valueOf( value ) );
+            setHeight( Integer.parseInt( value ) );
             break;
           case VISIBLE:
             setVisible( "true".equals( value ) );
             break;
           case POSITION:
-            setPosition( Integer.valueOf( value ) );
+            setPosition( Integer.parseInt( value ) );
             break;
           case ARIA_ROLE:
-            if ( managedObject instanceof UIObject ) {
-              updateDomAriaRole( (UIObject) managedObject );
+            updateManagedAriaRole();
+            break;
+          case TABINDEX:
+            if ( !StringUtils.isEmpty( value ) ) {
+              setTabIndex( Integer.parseInt( value ) );
             }
             break;
         }
       } catch ( IllegalArgumentException e ) {
         System.out.println(
-          "Error post-processing property '" + name + "' with value '"
-            + value + "' in class " + getClass().getName() );
+                "Error post-processing property '" + name + "' with value '"
+                        + value + "' in class " + getClass().getName() );
       }
     }
   }
@@ -789,11 +962,11 @@ public abstract class AbstractGwtXulComponent extends GwtDomElement implements X
     // To change body of implemented methods use File | Settings | File Templates.
   }
 
-  private static void setDomAttribute( UIObject gwtUIObject, String attribute, String value ) {
+  private static void setDomAttribute( UIObject uiObject, String attribute, String value ) {
     if ( value == null ) {
-      gwtUIObject.getElement().removeAttribute( attribute );
+      uiObject.getElement().removeAttribute( attribute );
     } else {
-      gwtUIObject.getElement().setAttribute( attribute, value );
+      uiObject.getElement().setAttribute( attribute, value );
     }
   }
 }

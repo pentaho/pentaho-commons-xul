@@ -23,6 +23,7 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.TextBox;
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulRadio;
@@ -64,8 +65,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
   public GwtRadio() {
     super( ELEMENT_NAME );
 
-    radioContainer = new HorizontalPanel();
-    radioContainer.setSpacing( 0 );
+    radioContainer = new HorizontalFlexPanel();
 
     customValueTextBox = new TextBox();
     customValueTextBox.setEnabled( false );
@@ -78,7 +78,7 @@ public class GwtRadio extends AbstractGwtXulComponent implements XulRadio {
     radioContainer.add( radioButton );
 
     setManagedObject( radioContainer );
-    radioContainer.setStylePrimaryName( "radio" );
+    radioContainer.addStyleName( "radio" );
     radioButton.addClickHandler( new ClickHandler() {
       public void onClick( ClickEvent event ) {
         try {

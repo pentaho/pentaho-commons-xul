@@ -148,12 +148,6 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
       setVisible( "true".equals( vis ) );
     }
 
-    // Add class name to toolbar button
-    String className = srcEle.getAttribute( "pen:classname" );
-    if ( className != null && !className.isEmpty() ) {
-      ( (ToolbarButton) getManagedObject() ).addClassName( className );
-    }
-
     // first checks "pen:imagealttext" then other attributes
     initSetImageAltText( srcEle );
   }
@@ -393,4 +387,10 @@ public class GwtToolbarbutton extends AbstractGwtXulComponent implements XulTool
     }
   }
 
+  @Override
+  protected void updateManagedClassName( String prevClassName ) {
+    if ( button != null ) {
+      button.addClassName( StringUtils.defaultString( getClassName(), "" ) );
+    }
+  }
 }

@@ -23,8 +23,8 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.pentaho.gwt.widgets.client.dialogs.DialogBox;
 import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
-import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulComponent;
@@ -51,6 +51,59 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     } );
   }
 
+  // region Enums
+  public enum Property {
+    RESPONSIVE, SIZINGMODE, WIDTHCATEGORY, MINIMUMHEIGHTCATEGORY;
+  }
+
+  public enum SizingMode {
+    SIZETOCONTENT, FILLVIEWPORTWIDTH, FILLVIEWPORT, FULLVIEWPORT;
+
+    DialogBox.DialogSizingMode getGwtValue() {
+      switch ( this ) {
+        case SIZETOCONTENT: return DialogBox.DialogSizingMode.SIZE_TO_CONTENT;
+        case FILLVIEWPORTWIDTH: return DialogBox.DialogSizingMode.FILL_VIEWPORT_WIDTH;
+        case FILLVIEWPORT: return DialogBox.DialogSizingMode.FILL_VIEWPORT;
+        case FULLVIEWPORT: return DialogBox.DialogSizingMode.FULL_VIEWPORT;
+      }
+
+      throw new IllegalArgumentException( "Undefined sizing mode value" );
+    }
+  }
+
+  public enum WidthCategory {
+    MINIMUM, TEXT, EXTRASMALL, SMALL, MEDIUM, LARGE, EXTRALARGE, MAXIMUM;
+
+    DialogBox.DialogWidthCategory getGwtValue() {
+      switch ( this ) {
+        case MINIMUM: return DialogBox.DialogWidthCategory.MINIMUM;
+        case TEXT: return DialogBox.DialogWidthCategory.TEXT;
+        case EXTRASMALL: return DialogBox.DialogWidthCategory.EXTRA_SMALL;
+        case SMALL: return DialogBox.DialogWidthCategory.SMALL;
+        case MEDIUM: return DialogBox.DialogWidthCategory.MEDIUM;
+        case LARGE: return DialogBox.DialogWidthCategory.LARGE;
+        case EXTRALARGE: return DialogBox.DialogWidthCategory.EXTRA_LARGE;
+        case MAXIMUM: return DialogBox.DialogWidthCategory.MAXIMUM;
+      }
+
+      throw new IllegalArgumentException( "Undefined width category value" );
+    }
+  }
+
+  public enum MinimumHeightCategory {
+    CONTENT, MINIMUM;
+
+    DialogBox.DialogMinimumHeightCategory getGwtValue() {
+      switch ( this ) {
+        case CONTENT: return DialogBox.DialogMinimumHeightCategory.CONTENT;
+        case MINIMUM: return DialogBox.DialogMinimumHeightCategory.MINIMUM;
+      }
+
+      throw new IllegalArgumentException( "Undefined minimum height category value" );
+    }
+  }
+  // endregion
+
   /**
    * Standard GWT <code>dialog</code> tag button identifiers in order of
    * most to least impactful.
@@ -63,12 +116,20 @@ public class GwtDialog extends GenericDialog implements XulDialog {
   private String bgColor = null;
   private List<XulButton> dialogButtons = new ArrayList<XulButton>();
   private boolean pack;
+  private boolean responsive;
+  private SizingMode sizingMode;
+  private WidthCategory widthCategory;
+  private MinimumHeightCategory minimumHeightCategory;
 
   public GwtDialog() {
     super( "dialog" );
 
     setManagedObject( null );
     this.orientation = Orient.VERTICAL;
+    this.setResponsive( false );
+    this.setSizingMode( (SizingMode) null );
+    this.setWidthCategory( (WidthCategory) null );
+    this.setMinimumHeightCategory( (MinimumHeightCategory) null );
   }
 
   // we don't add ourselves to the main screen
@@ -190,11 +251,8 @@ public class GwtDialog extends GenericDialog implements XulDialog {
 
   @Override
   public Panel getDialogContents() {
-
-    VerticalPanel contentPanel = new VerticalFlexPanel();
-    contentPanel.setSpacing( 0 );
+    VerticalPanel contentPanel = GwtVbox.createManagedPanel( 0 );
     container = contentPanel;
-
     return contentPanel;
   }
 
@@ -374,6 +432,34 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     this.setAttribute( "ondialogextra2", command );
   }
 
+  public void setResponsive( boolean responsive ) {
+    this.responsive = responsive;
+  }
+
+  public void setSizingMode( String sizingMode ) {
+    setSizingMode( StringUtils.isEmpty( sizingMode ) ? null : SizingMode.valueOf( sizingMode.toUpperCase() ) );
+  }
+
+  public void setSizingMode( SizingMode sizingMode ) {
+    this.sizingMode = sizingMode != null ? sizingMode : SizingMode.SIZETOCONTENT;
+  }
+
+  public void setWidthCategory( String widthCategory ) {
+    setWidthCategory( StringUtils.isEmpty( widthCategory ) ? null : WidthCategory.valueOf( widthCategory.toUpperCase() ) );
+  }
+
+  public void setWidthCategory( WidthCategory widthCategory ) {
+    this.widthCategory = widthCategory != null ? widthCategory : WidthCategory.MAXIMUM;
+  }
+
+  public void setMinimumHeightCategory( String minimumHeightCategory ) {
+    setMinimumHeightCategory( StringUtils.isEmpty( minimumHeightCategory ) ? null : MinimumHeightCategory.valueOf( minimumHeightCategory.toUpperCase() ) );
+  }
+
+  public void setMinimumHeightCategory( MinimumHeightCategory minimumHeightCategory ) {
+    this.minimumHeightCategory = minimumHeightCategory != null ? minimumHeightCategory : MinimumHeightCategory.MINIMUM;
+  }
+
   public void setVisible( boolean visible ) {
     if ( isVisible() == visible ) {
       return;
@@ -385,6 +471,54 @@ public class GwtDialog extends GenericDialog implements XulDialog {
     } else {
       hide();
     }
+  }
+
+  @Override
+  public void setAttribute( String name, String value ) {
+    Property prop;
+    try {
+      prop = Property.valueOf( getAttributeEnumName( name ) );
+    } catch ( IllegalArgumentException e ) {
+      // Property is not known by the base class. No need to log.
+      prop = null;
+    }
+
+    if ( prop != null ) {
+      try {
+        switch ( prop ) {
+          case RESPONSIVE:
+            setResponsive( Boolean.parseBoolean( value ) );
+            break;
+          case SIZINGMODE:
+            setSizingMode( value );
+            break;
+          case WIDTHCATEGORY:
+            setWidthCategory( value );
+            break;
+          case MINIMUMHEIGHTCATEGORY:
+            setMinimumHeightCategory( value );
+            break;
+        }
+      } catch ( IllegalArgumentException e ) {
+        System.out.println(
+                "Error pre-processing property '" + name + "' with value '"
+                        + value + "' in class " + getClass().getName() );
+        return;
+      }
+    }
+
+    super.setAttribute( name, value );
+  }
+
+  @Override
+  protected void prepareManagedDialog() {
+
+    super.prepareManagedDialog();
+
+    dialog.setResponsive( responsive );
+    dialog.setSizingMode( sizingMode.getGwtValue() );
+    dialog.setWidthCategory( widthCategory.getGwtValue() );
+    dialog.setMinimumHeightCategory( minimumHeightCategory.getGwtValue() );
   }
 
   public void show() {
@@ -417,6 +551,8 @@ public class GwtDialog extends GenericDialog implements XulDialog {
 
     // Also calls doAutoFocus().
     this.dialog.setFocusButtons( this.getFocusButtonWidgets() );
+    this.dialog.getElement().setId( getId() );
+    this.dialog.center();
   }
 
   /**

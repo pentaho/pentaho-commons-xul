@@ -12,12 +12,14 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
+import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.ui.xul.containers.XulVbox;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
@@ -65,11 +67,8 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
   public GwtVbox( String elementName ) {
     super( elementName );
     this.orientation = Orient.VERTICAL;
-    VerticalPanel vp;
-    container = vp = new VerticalPanel();
+    container = createManagedPanel();
     setManagedObject( container );
-    vp.setSpacing( GwtUIConst.PANEL_SPACING ); // IE_6_FIX, move to CSS
-    vp.setStyleName( "vbox" ); //$NON-NLS-1$
   }
 
   @Override
@@ -100,4 +99,26 @@ public class GwtVbox extends AbstractGwtXulContainer implements XulVbox {
     }
   }
 
+  public static VerticalPanel createManagedPanel() {
+    return createManagedPanel( GwtUIConst.PANEL_SPACING );
+  }
+
+  public static VerticalPanel createManagedPanel( int defaultSpacing ) {
+    return new VerticalFlexPanel() {
+      {
+        addStyleName( "vbox" );
+        super.setSpacing( defaultSpacing );
+      }
+
+      @Override
+      public void setSpacing( int spacing ) {
+        // IE_6_FIX, move to CSS
+        super.setSpacing( spacing );
+
+        // For responsive mode, convert the cell spacing into the flex layout gap.
+        ElementUtils.setStyleProperty( getElement(), "--layout-gap-h-local", spacing + "px" );
+        ElementUtils.setStyleProperty( getElement(), "--layout-gap-v-local", spacing + "px" );
+      }
+    };
+  }
 }

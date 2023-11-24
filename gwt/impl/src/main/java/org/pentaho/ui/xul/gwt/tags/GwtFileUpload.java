@@ -160,11 +160,13 @@ public class GwtFileUpload extends AbstractGwtXulContainer implements XulFileUpl
 
     final LabelWidget label = new LabelWidget( "uploadFormElement" );
     label.setStyleName( "gwt_file_upload_label" );
+    label.addStyleName( "flex-row" );
     // If "image" attribute has been defined in the fileupload control do not display the file textfield AND do not
     // set the button label.
     if ( StringUtils.isEmpty( uploadButtonImage ) ) {
       uploadButton.setLabel( "..." );
       final Widget labelWidget = (Widget) uploadTextBox.getManagedObject();
+      labelWidget.addStyleName( "flex-row" );
       label.add( labelWidget );
       uploadTextBox.layout();
       labelWidget.setHeight( getHeight() + "px" );

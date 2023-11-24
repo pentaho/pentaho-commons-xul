@@ -18,7 +18,9 @@
 package org.pentaho.ui.xul.gwt.tags;
 
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
+import org.pentaho.gwt.widgets.client.utils.MenuBarUtils;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulMenuitem;
@@ -52,6 +54,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   private MenuBar menubar;
   private boolean loaded;
   private boolean vertical = true;
+  private boolean scrollable = false;
   private boolean autoClose = false;
   private final int closeDelay = 100;
   private FrameCover frameCover = null;
@@ -113,6 +116,7 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
   @Override
   public void init( com.google.gwt.xml.client.Element srcEle, XulDomContainer container ) {
     setHorizontal( "vertical".equalsIgnoreCase( srcEle.getAttribute( "layout" ) ) );
+    setScrollable( "true".equalsIgnoreCase( srcEle.getAttribute( "scroll" ) ));
     frameCover = new FrameCover();
 
     menubar = new MenuBar( vertical ) {
@@ -120,6 +124,11 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
       public void onBrowserEvent( Event event ) {
         super.onBrowserEvent( event );
         switch ( DOM.eventGetType( event ) ) {
+          case Event.ONCLICK:
+            if ( scrollable ){
+              doPopupScrollLogic();
+            }
+            break;
           case Event.ONKEYDOWN:
             if ( event.getKeyCode() == KeyCodes.KEY_TAB ) {
               GwtMenubar rootMenu = getRootMenu();
@@ -182,6 +191,21 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
     // init AFTER we set the managed object and we get "id" set for us
     super.init( srcEle, container );
+  }
+
+  private void doPopupScrollLogic() {
+    String height, maxHeight;
+    int left, top;
+    DecoratedPopupPanel popup = MenuBarUtils.getPopup( menubar );
+    if ( getSelectedItem() != null && popup != null && popup.isVisible() ) {
+      left = 0;
+      top = popup.getAbsoluteTop();
+      height = "calc( 100vh - " + top + "px )";
+      maxHeight = MenuBarUtils.calculatePopupHeight( getSelectedItem().getSubMenu() ) + "px";
+      popup.getWidget().getElement().getStyle().setProperty( "height", height );
+      popup.getWidget().getElement().getStyle().setProperty( "maxHeight", maxHeight );
+      popup.setPopupPosition( left, top );
+    }
   }
 
   private void maybeCover() {
@@ -249,6 +273,10 @@ public class GwtMenubar extends AbstractGwtXulContainer implements XulMenubar {
 
   public void setHorizontal( boolean horizontal ) {
     vertical = horizontal;
+  }
+
+  private void setScrollable( boolean scrollable ) {
+    this.scrollable = scrollable;
   }
 
   public String getMenubarName() {

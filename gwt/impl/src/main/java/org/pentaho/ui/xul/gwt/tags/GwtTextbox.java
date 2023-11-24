@@ -67,7 +67,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
   public GwtTextbox() {
     super( ELEMENT_NAME );
     textBox = new TextBox();
-    textBox.setStylePrimaryName( "xul-textbox" );
+    initManagedObject( textBox );
 
     // Firefox 2 and sometimes 3 fails to render cursors in Textboxes if they're contained in absolutely
     // positioned div's, such as when they're in dialogs. The workaround is to wrap the <input> in a div
@@ -152,11 +152,13 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     switch ( this.type ) {
       case PASSWORD:
         textBox = new PasswordTextBox();
+        initManagedObject( textBox );
         break;
       case NUMERIC:
       default: // regular text
         if ( multiline ) {
           textBox = new TextArea();
+          initManagedObject( textBox );
 
           if ( cols != null && cols > -1 ) {
             ( (TextArea) textBox ).setCharacterWidth( cols );
@@ -183,6 +185,15 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     setupListeners();
   }
 
+  private void initManagedObject( Widget widget ) {
+    String stylePrimaryName = widget.getStylePrimaryName();
+    widget.setStylePrimaryName( "xul-textbox" );
+    if ( !StringUtils.isEmpty( stylePrimaryName ) ) {
+      widget.addStyleName( stylePrimaryName );
+    }
+    widget.addStyleName( "flex-item-h" );
+  }
+
   @SuppressWarnings( "deprecation" )
   private void setupListeners() {
     textBox.addKeyboardListener( new KeyboardListener() {
@@ -207,15 +218,6 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 
       public void onKeyUp( Widget sender, char keyCode, int modifiers ) {
         setValue( textBox.getText() );
-        if ( keyCode == KeyboardListener.KEY_ENTER ) {
-          if ( !GwtTextbox.this.multiline ) {
-            try {
-              GwtTextbox.this.getXulDomContainer().invoke( GwtTextbox.this.getOncommand(), new Object[] {} );
-            } catch ( XulException e ) {
-              e.printStackTrace();
-            }
-          }
-        }
       }
 
     } );

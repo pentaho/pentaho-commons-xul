@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/commands-3.3.0-I20070605-0010.jar"/>
-	<classpathentry kind="lib" path="lib/commons-beanutils-1.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.0.4.jar"/>

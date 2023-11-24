@@ -45,7 +45,7 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
   static final String ELEMENT_NAME = "image"; //$NON-NLS-1$
 
   private enum Property {
-    ID, DISABLED, SRC, CLASSNAME, IMAGEALTTEXT
+    ID, DISABLED, SRC, IMAGEALTTEXT
   }
 
   public static void register() {
@@ -130,9 +130,6 @@ public class GwtImage extends AbstractGwtXulComponent implements XulImage {
           break;
         case SRC:
           setSrc( value );
-          break;
-        case CLASSNAME:
-          image.addStyleName( value );
           break;
         case IMAGEALTTEXT:
           setImageAltText( value );

@@ -20,25 +20,18 @@ package org.pentaho.ui.xul.gwt.tags;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomException;
 import org.pentaho.ui.xul.components.XulTabpanel;
-import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
-import org.pentaho.ui.xul.gwt.util.GwtUIConst;
 import org.pentaho.ui.xul.util.Orient;
 
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 public class GwtTabPanel extends AbstractGwtXulContainer implements XulTabpanel {
 
-  static final String ELEMENT_NAME = "tabpanel"; //$NON-NLS-1$
+  static final String ELEMENT_NAME = "tabpanel";
 
   public static void register() {
-    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
-      public Element newInstance() {
-        return new GwtTabPanel();
-      }
-    } );
+    GwtXulParser.registerHandler( ELEMENT_NAME, GwtTabPanel::new );
   }
 
   protected VerticalPanel verticalPanel;
@@ -49,9 +42,11 @@ public class GwtTabPanel extends AbstractGwtXulContainer implements XulTabpanel 
 
   public GwtTabPanel( Orient orient ) {
     super( ELEMENT_NAME );
+
     this.orientation = orient;
-    verticalPanel = new VerticalPanel();
-    verticalPanel.setSpacing( GwtUIConst.PANEL_SPACING ); // IE_6_FIX, move to CSS
+    verticalPanel = GwtVbox.createManagedPanel();
+    verticalPanel.addStyleName( "xul-" + ELEMENT_NAME );
+
     container = verticalPanel;
     setManagedObject( container );
   }
@@ -60,7 +55,8 @@ public class GwtTabPanel extends AbstractGwtXulContainer implements XulTabpanel 
     for ( int i = 0; i < verticalPanel.getWidgetCount(); i++ ) {
       verticalPanel.remove( i );
     }
-    verticalPanel = new VerticalPanel();
+
+    verticalPanel = GwtVbox.createManagedPanel();
   }
 
   @Override

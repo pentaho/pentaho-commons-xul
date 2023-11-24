@@ -12,7 +12,7 @@
  * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU Lesser General Public License for more details.
  *
- * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2023 Hitachi Vantara. All rights reserved.
  */
 
 package org.pentaho.ui.xul.gwt.tags;
@@ -21,8 +21,11 @@ import com.google.gwt.event.logical.shared.BeforeSelectionEvent;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.user.client.ui.TabBar;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
+import org.pentaho.gwt.widgets.client.panel.HorizontalFlexPanel;
+import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.XulException;
 import org.pentaho.ui.xul.components.XulTabpanel;
@@ -31,7 +34,6 @@ import org.pentaho.ui.xul.containers.XulTabpanels;
 import org.pentaho.ui.xul.containers.XulTabs;
 import org.pentaho.ui.xul.dom.Element;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
-import org.pentaho.ui.xul.gwt.GwtXulHandler;
 import org.pentaho.ui.xul.gwt.GwtXulParser;
 import org.pentaho.ui.xul.gwt.widgets.GwtTabWidget;
 import org.pentaho.ui.xul.stereotype.Bindable;
@@ -39,7 +41,7 @@ import org.pentaho.ui.xul.util.Orient;
 
 public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
 
-  static final String ELEMENT_NAME = "tabbox"; //$NON-NLS-1$
+  static final String ELEMENT_NAME = "tabbox";
 
   private TabPanel tabPanel;
 
@@ -50,11 +52,7 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
   private int selectedIndex;
 
   public static void register() {
-    GwtXulParser.registerHandler( ELEMENT_NAME, new GwtXulHandler() {
-      public Element newInstance() {
-        return new GwtTabbox();
-      }
-    } );
+    GwtXulParser.registerHandler( ELEMENT_NAME, GwtTabbox::new );
   }
 
   public GwtTabbox() {
@@ -63,7 +61,12 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
 
   public GwtTabbox( Orient orient ) {
     super( ELEMENT_NAME );
+
     tabPanel = new TabPanel();
+    tabPanel.setStylePrimaryName( "xul-" + ELEMENT_NAME );
+    tabPanel.addStyleName( VerticalFlexPanel.STYLE_NAME );
+    tabPanel.addStyleName( "gap-none" );
+
     setManagedObject( tabPanel );
   }
 
@@ -75,7 +78,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
     } else if ( ele instanceof GwtTabPanels ) {
       this.panels = (GwtTabPanels) ele;
     }
-
   }
 
   @Bindable
@@ -116,19 +118,26 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
         // no panel for tab
         continue;
       }
+
       String tooltipText = tabs.getTabByIndex( i ).getTooltiptext();
       if ( StringUtils.isEmpty( tooltipText ) ) {
         tooltipText = "";
       }
-      GwtTabWidget widget = new GwtTabWidget( tabs.getTabByIndex( i ).getLabel(), tooltipText,
-              tabPanel, ( (Widget) panel.getManagedObject() ) );
+
       Widget panelWidget = (Widget) panel.getManagedObject();
-      panelWidget.setStylePrimaryName( "pentaho-tabPanel" );
+      GwtTabWidget widget = new GwtTabWidget( tabs.getTabByIndex( i ).getLabel(), tooltipText, tabPanel, panelWidget );
+
+      panelWidget.addStyleName( "pentaho-tabPanel" );
       tabPanel.add( panelWidget, widget );
     }
+
     setSelectedIndex( selectedIndex );
     initialized = true;
-    tabPanel.getTabBar().setStylePrimaryName( "pentaho-tabBar" );
+
+    TabBar tabBarPanel = tabPanel.getTabBar();
+    tabBarPanel.setStylePrimaryName( "pentaho-tabBar" );
+    tabBarPanel.addStyleName( HorizontalFlexPanel.STYLE_NAME );
+
     tabPanel.addBeforeSelectionHandler( new BeforeSelectionHandler<Integer>() {
 
       public void onBeforeSelection( BeforeSelectionEvent<Integer> event ) {
@@ -152,7 +161,6 @@ public class GwtTabbox extends AbstractGwtXulContainer implements XulTabbox {
       }
 
     } );
-
     tabPanel.addSelectionHandler( new SelectionHandler<Integer>() {
       public void onSelection( final SelectionEvent<Integer> event ) {
         if ( event != null && event.getSelectedItem() >= 0 ) {

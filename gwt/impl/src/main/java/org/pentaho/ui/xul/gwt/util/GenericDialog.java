@@ -27,6 +27,7 @@ import org.pentaho.gwt.widgets.client.panel.VerticalFlexPanel;
 import org.pentaho.gwt.widgets.client.utils.ElementUtils;
 import org.pentaho.gwt.widgets.client.utils.string.StringUtils;
 import org.pentaho.ui.xul.gwt.AbstractGwtXulContainer;
+import org.pentaho.ui.xul.gwt.tags.GwtVbox;
 
 public abstract class GenericDialog extends AbstractGwtXulContainer {
   protected DialogBox dialog;
@@ -54,29 +55,14 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
     return new DialogBox();
   }
 
-  public void hide() {
-    if ( dialog != null ) {
-      dialog.hide();
-    }
-  }
-
-  public void show() {
-    // Instantiation is delayed to prevent errors with the underlying GWT's not being able to calculate available
-    // size, in the case that the GWT app has been loaded into an iframe that's not visible.
-    if ( dialog == null ) {
-      dialog = createManagedDialog();
-      dialog.addStyleName( "pentaho-xul-gwt" );
-      dialog.addStyleName( "pentaho-xul-" + getName() );
-      dialog.setWidget( contents );
-    }
-
+  protected void prepareManagedDialog() {
     dialog.setText( title );
     dialog.setAriaRole( getAriaRole() );
 
     contents.clear();
 
     // implement the buttons
-    VerticalPanel panel = new VerticalFlexPanel();
+    VerticalPanel panel = GwtVbox.createManagedPanel();
 
     Panel dialogContents = getDialogContents();
     dialogContents.setSize( "100%", "100%" );
@@ -126,6 +112,25 @@ public abstract class GenericDialog extends AbstractGwtXulContainer {
       int offsetHeight = getHeight() - HEADER_HEIGHT;
       contents.setHeight( offsetHeight + "px" ); //$NON-NLS-1$
     }
+  }
+
+  public void hide() {
+    if ( dialog != null ) {
+      dialog.hide();
+    }
+  }
+
+  public void show() {
+    // Instantiation is delayed to prevent errors with the underlying GWT's not being able to calculate available
+    // size, in the case that the GWT app has been loaded into an iframe that's not visible.
+    if ( dialog == null ) {
+      dialog = createManagedDialog();
+      dialog.addStyleName( "pentaho-xul-gwt" );
+      dialog.addStyleName( "pentaho-xul-" + getName() );
+      dialog.setWidget( contents );
+    }
+
+    prepareManagedDialog();
 
     dialog.center();
   }
