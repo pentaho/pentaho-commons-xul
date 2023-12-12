@@ -19,7 +19,6 @@
     <org.eclipse.swt.version>4.6</org.eclipse.swt.version>
     <jface.version>3.22.0</jface.version>
     <commons-collections.version>3.2.2</commons-collections.version>
-    <guava.version>17.0</guava.version>
   </properties>
 
   <dependencies>
