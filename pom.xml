@@ -33,7 +33,7 @@
 
   <properties>
     <license.licenseName>lgpl_v2_1</license.licenseName>
-    <mockito-core.version>4.11.0</mockito-core.version>
+    <mockito-core.version>5.10.0</mockito-core.version>
   </properties>
 
   <scm>
