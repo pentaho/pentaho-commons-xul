@@ -29,7 +29,7 @@ import org.pentaho.ui.xul.binding.DefaultBindingContext;
 import org.pentaho.ui.xul.containers.XulRoot;
 import org.pentaho.ui.xul.containers.XulWindow;
 import org.pentaho.ui.xul.dom.Document;
-import org.pentaho.di.core.xml.XMLParserFactoryProducer;
+import org.pentaho.ui.xul.util.XmlParserFactoryProducer;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -150,7 +150,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
         throw new XulException( "loadFragment: input document is null" );
       }
 
-      SAXReader rdr = XMLParserFactoryProducer.getSAXReader( null );
+      SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
       final org.dom4j.Document doc = rdr.read( in );
 
       XulDomContainer container = this.xulLoader.loadXulFragment( doc );
@@ -202,7 +202,7 @@ public class XulWindowContainer extends AbstractXulDomContainer {
         throw new XulException( "loadFragment: input document is null" );
       }
 
-      SAXReader rdr =XMLParserFactoryProducer.getSAXReader( null );
+      SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
       final org.dom4j.Document doc = rdr.read( in );
 
       XulDomContainer container = this.xulLoader.loadXulFragment( doc );
