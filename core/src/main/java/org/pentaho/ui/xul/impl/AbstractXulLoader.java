@@ -38,7 +38,7 @@ import org.pentaho.ui.xul.dom.DocumentFactory;
 import org.pentaho.ui.xul.dom.dom4j.DocumentDom4J;
 import org.pentaho.ui.xul.dom.dom4j.ElementDom4J;
 import org.pentaho.ui.xul.util.ResourceBundleTranslator;
-import org.pentaho.ui.xul.util.XmlParserFactoryProducer;
+import org.pentaho.di.core.xml.XMLParserFactoryProducer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -117,7 +117,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       String localOutput =
           ( mainBundle != null ) ? ResourceBundleTranslator.translate( processedDoc, mainBundle ) : processedDoc;
 
-      SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
+      SAXReader rdr = XMLParserFactoryProducer.getSAXReader( null );
       final Document doc = rdr.read( new StringReader( localOutput ) );
       XulDomContainer container = new XulWindowContainer( this );
       container.setOuterContext( outerContext );
@@ -274,7 +274,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       try {
         resourceBundleList.add( bundle );
         final String localOutput = ResourceBundleTranslator.translate( in, (ResourceBundle) bundle );
-        final SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
+        final SAXReader rdr = XMLParserFactoryProducer.getSAXReader( null );
         final Document doc = rdr.read( new StringReader( localOutput ) );
 
         setRootDir( resource );
@@ -496,7 +496,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       in.close();
 
       String upperedIdDoc = this.upperCaseIDAttrs( buf.toString() );
-      SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
+      SAXReader rdr = XMLParserFactoryProducer.getSAXReader( null );
       return rdr.read( new StringReader( upperedIdDoc ) );
     } catch ( Exception e ) {
       e.printStackTrace();
@@ -718,7 +718,7 @@ public abstract class AbstractXulLoader implements XulLoader {
 
         runningTranslatedOutput = ResourceBundleTranslator.translate( runningTranslatedOutput, this.mainBundle );
         try {
-          SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
+          SAXReader rdr = XMLParserFactoryProducer.getSAXReader( null );
           String upperedIdDoc = this.upperCaseIDAttrs( runningTranslatedOutput.toString() );
           doc = rdr.read( new StringReader( upperedIdDoc ) );
         } catch ( DocumentException e ) {
@@ -729,7 +729,7 @@ public abstract class AbstractXulLoader implements XulLoader {
       }
     } else {
       try {
-        SAXReader rdr = XmlParserFactoryProducer.getSAXReader( null );
+        SAXReader rdr = XMLParserFactoryProducer.getSAXReader( null );
         String upperedIdDoc = this.upperCaseIDAttrs( runningTranslatedOutput.toString() );
         doc = rdr.read( new StringReader( upperedIdDoc ) );
       } catch ( DocumentException e ) {
