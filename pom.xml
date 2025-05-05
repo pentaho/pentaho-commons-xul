@@ -35,8 +35,6 @@
     <license.licenseName>lgpl_v2_1</license.licenseName>
     <mockito-core.version>3.12.4</mockito-core.version>
     <junit.version>4.13.2</junit.version>
-    <bytebuddy.version>1.14.12</bytebuddy.version>
-    <bytebuddy-agent.version>1.14.12</bytebuddy-agent.version>
   </properties>
 
   <scm>
