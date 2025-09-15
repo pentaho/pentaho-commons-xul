@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.pentaho</groupId>
     <artifactId>commons-xul-gwt</artifactId>
-    <version>11.0.0.0-SNAPSHOT</version>
+    <version>11.0.0.0-99</version>
   </parent>
 
   <artifactId>commons-xul-gwt-package</artifactId>
