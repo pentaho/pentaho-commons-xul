@@ -216,6 +216,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
           if ( this.multiline ) {
             if ( editingStyleLanguage != null ) {
               var syntaxTextArea = new RSyntaxTextArea();
+              syntaxTextArea.setText( ( value != null ) ? value : "" );
               syntaxTextArea.setSyntaxEditingStyle(
                 editingStyleLanguage ); // If no valid value is provided, defaults to text/plain
               syntaxTextArea.setWrapStyleWord( true );
