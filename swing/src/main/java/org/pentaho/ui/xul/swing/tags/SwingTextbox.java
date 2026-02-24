@@ -221,7 +221,6 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
                 editingStyleLanguage ); // If no valid value is provided, defaults to text/plain
               syntaxTextArea.setWrapStyleWord( true );
               syntaxTextArea.setLineWrap( true );
-              syntaxTextArea.setRows( 5 );
               textArea = syntaxTextArea;
             } else {
               textArea = new JTextArea( ( value != null ) ? value : "" );
