@@ -30,6 +30,7 @@ import javax.swing.text.PlainDocument;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTextbox;
@@ -39,9 +40,12 @@ import org.pentaho.ui.xul.util.TextType;
 
 /**
  * @author nbaker
- * 
  */
 public class SwingTextbox extends SwingElement implements XulTextbox {
+
+  // Using this name to maintain consistency with org.fife.ui.rsyntaxtextarea.SyntaxConstants
+  private static final String ATTRIBUTE_EDITING_STYLE = "editingstyle";
+
   private JTextField textField;
 
   private boolean multiline = false;
@@ -208,8 +212,19 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
           break;
         case NUMERIC:
         default: // regular text
+          String editingStyleLanguage = getAttributeValue( ATTRIBUTE_EDITING_STYLE );
           if ( this.multiline ) {
-            textArea = new JTextArea( ( value != null ) ? value : "" );
+            if ( editingStyleLanguage != null ) {
+              var syntaxTextArea = new RSyntaxTextArea();
+              syntaxTextArea.setText( ( value != null ) ? value : "" );
+              syntaxTextArea.setSyntaxEditingStyle(
+                editingStyleLanguage ); // If no valid value is provided, defaults to text/plain
+              syntaxTextArea.setWrapStyleWord( true );
+              syntaxTextArea.setLineWrap( true );
+              textArea = syntaxTextArea;
+            } else {
+              textArea = new JTextArea( ( value != null ) ? value : "" );
+            }
             scrollPane = new JScrollPane( textArea );
             textComp = textArea;
             setManagedObject( scrollPane );
@@ -219,7 +234,7 @@ public class SwingTextbox extends SwingElement implements XulTextbox {
             textField = new JTextField( ( value != null ) ? value : "" );
             textField.setPreferredSize( new Dimension( getWidth(), textField.getPreferredSize().height ) );
             textField.setMinimumSize( new Dimension( textField.getPreferredSize().width,
-                textField.getPreferredSize().height ) );
+              textField.getPreferredSize().height ) );
             textField.setEditable( !readonly );
             setManagedObject( textField );
             textComp = textField;
