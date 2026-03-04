@@ -1555,7 +1555,12 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       while ( ( newRowCount = tree.getRowCount() ) > 0 && newRowCount > rowCount ) {
         rowCount = newRowCount;
         for ( int i = 0; i < rowCount; i++ ) {
-          tree.expandRow( i );
+          //RKM handling expand or collapse... was only doing expand previously
+          if ( expanded ) {
+            tree.expandRow( i );
+          } else {
+            tree.collapseRow( i );
+          }
         }
       }
     }
