@@ -308,8 +308,11 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
 
     treeSelectionListener = new TreeSelectionListener() {
       public void valueChanged( TreeSelectionEvent e ) {
-        if ( tree != null && tree.getSelectionRows() != null ) {
-          invoke( select, new Object[] { tree.getSelectionRows()[ 0 ] } );
+        if ( tree != null ) {
+          int[] selectedRows = tree.getSelectionRows();
+          if ( selectedRows != null && selectedRows.length > 0 ) {
+            invoke( select, new Object[] { selectedRows[ 0 ] } );
+          }
         }
       }
     };
@@ -1455,7 +1458,7 @@ public class SwingTree extends AbstractSwingContainer implements XulTree {
       while ( ( newRowCount = tree.getRowCount() ) > 0 && newRowCount > rowCount ) {
         rowCount = newRowCount;
         for ( int i = 0; i < rowCount; i++ ) {
-          //RKM handling expand or collapse... was only doing expand previously
+          // Handle expanding or collapsing all visible tree rows
           if ( expanded ) {
             tree.expandRow( i );
           } else {
