@@ -178,6 +178,7 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
     }
     textBox.setText( getValue() );
     textBox.setEnabled( !this.isDisabled() );
+    textBox.setVisible( this.isVisible() );
     setupListeners();
   }
 
@@ -351,5 +352,12 @@ public class GwtTextbox extends AbstractGwtXulComponent implements XulTextbox {
 
   public void setCommand( String command ) {
     throw new RuntimeException( "command not implemented on textbox" );
+  }
+
+  @Bindable
+  @Override
+  public void setVisible( boolean visible ) {
+    super.setVisible( visible );
+    textBox.setVisible( visible );
   }
 }
