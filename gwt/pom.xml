@@ -14,7 +14,6 @@
   <name>Commons XUL GWT</name>
   
   <properties>
-    <validation-api.version>1.0.0.GA</validation-api.version>
     <commons-gwt.version>10.2.0.0-SNAPSHOT</commons-gwt.version>
     <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
   </properties>
@@ -75,29 +74,6 @@
         <groupId>com.google.code.gwtx</groupId>
         <artifactId>gwtx</artifactId>
         <version>${gwtx.version}</version>
-        <exclusions>
-          <exclusion>
-            <artifactId>*</artifactId>
-            <groupId>*</groupId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>javax.validation</groupId>
-        <artifactId>validation-api</artifactId>
-        <version>${validation-api.version}</version>
-        <exclusions>
-          <exclusion>
-            <artifactId>*</artifactId>
-            <groupId>*</groupId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>javax.validation</groupId>
-        <artifactId>validation-api</artifactId>
-        <version>${validation-api.version}</version>
-        <classifier>sources</classifier>
         <exclusions>
           <exclusion>
             <artifactId>*</artifactId>
