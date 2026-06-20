@@ -13,7 +13,7 @@
 
 package org.pentaho.ui.xul.util;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class ResourceBundleTranslator {
 
   private static String getTranslatedValue( String key, ResourceBundle bundle ) {
     try {
-      return StringEscapeUtils.escapeXml( bundle.getString( key ) );
+      return StringEscapeUtils.escapeXml10( bundle.getString( key ) );
     } catch ( MissingResourceException e ) {
       // return unchanged so later ResourceBundles can have a go at it
       return "\\${" + key + "}"; //$NON-NLS-1$ //$NON-NLS-2$

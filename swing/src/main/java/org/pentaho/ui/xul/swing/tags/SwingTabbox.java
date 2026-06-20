@@ -17,7 +17,7 @@ import java.awt.Component;
 
 import javax.swing.JTabbedPane;
 
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.pentaho.ui.xul.XulComponent;
 import org.pentaho.ui.xul.XulDomContainer;
 import org.pentaho.ui.xul.components.XulTabpanel;
