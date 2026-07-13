@@ -21,7 +21,8 @@
     <org.eclipse.swt.win32.win32.x86_64.version>3.115.100</org.eclipse.swt.win32.win32.x86_64.version>
     <org.eclipse.swt.cocoa.macosx.x86_64.version>3.115.100</org.eclipse.swt.cocoa.macosx.x86_64.version>
     <org.eclipse.swt.cocoa.macosx.aarch64.version>3.122.0</org.eclipse.swt.cocoa.macosx.aarch64.version>
-    <jface.version>3.22.0</jface.version>
+    <!-- Eclipse UI libs bumped together to remediate CVE-2023-4218 (jface XXE); aligned with pentaho-kettle PPP-6529 (jface 3.31.0 / commands 3.12.100 / common 3.18.0). jface 3.31.0 requires equinox.common [3.18.0,4.0.0). -->
+    <jface.version>3.31.0</jface.version>
     <commons-collections.version>3.2.2</commons-collections.version>
   </properties>
 
@@ -51,12 +52,12 @@
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.equinox.common</artifactId>
-      <version>3.14.0</version>
+      <version>3.18.0</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.platform</groupId>
       <artifactId>org.eclipse.core.commands</artifactId>
-      <version>3.9.800</version>
+      <version>3.12.100</version>
     </dependency>
     <dependency>
       <groupId>commons-collections</groupId>
