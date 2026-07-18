@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- ******************************************************************************
+ *
+ * Pentaho
+ *
+ * Copyright (C) 2026 by Pentaho Canada Inc. : http://www.pentaho.com
+ *
+ * Use of this software is governed by the Business Source License included
+ * in the LICENSE.TXT file.
+ *
+ * Change Date: 2030-06-15
+ ******************************************************************************* -->
 <window width="400" height="275" title="Testing..." xmlns="http://www.pentaho.org/there.is.only.xul">
   <script src="org.pentaho.ui.xul.samples.SampleEventHandler" id="testHandler"/>
   <script src="org.pentaho.ui.xul.samples.SampleEventHandler2" id="testHandler2"/>

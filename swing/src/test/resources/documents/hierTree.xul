@@ -1,4 +1,15 @@
 <?xml version="1.0"?>
+<!-- ******************************************************************************
+ *
+ * Pentaho
+ *
+ * Copyright (C) 2026 by Pentaho Canada Inc. : http://www.pentaho.com
+ *
+ * Use of this software is governed by the Business Source License included
+ * in the LICENSE.TXT file.
+ *
+ * Change Date: 2030-06-15
+ ******************************************************************************* -->
 <window id="general-window" title="Grids" orient="vertical" height="500" width="700"
   xmlns="http://www.pentaho.org/there.is.only.xul">
   <tree id="tree2" flex="1" hidecolumnpicker="true">
